@@ -253,7 +253,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
         editor.apply();
     }
 
-    private String getFilterPreferenceKey(int appWidgetId) {
+    private static String getFilterPreferenceKey(int appWidgetId) {
         return "widget-filter-" + appWidgetId;
     }
 
