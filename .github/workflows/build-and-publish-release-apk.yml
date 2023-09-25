@@ -4,7 +4,8 @@ on:
   # Trigger by pushing a version tag (which are protected)
   push:
     tags:
-      - v*
+      - 'v*.*.*'
+      - '!v*.*.*-*'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
