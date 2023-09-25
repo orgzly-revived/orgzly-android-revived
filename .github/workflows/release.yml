@@ -37,18 +37,7 @@ jobs:
         env:
           BUILD_TOOLS_VERSION: "30.0.2"
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v2
+      - name: Create release from APK
+        uses: softprops/action-gh-release@v1
         with:
-          name: orgzly-revived-premium-release.apk
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
-
-      - name: Echo APK name
-        run: echo Signed APK file ${{steps.sign_app.outputs.signedReleaseFile}}
-
-      - name: Release signed APK
-        uses: MicahSphelele/action-publish-signed-apk@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_CREATION_TOKEN }}
-          APP_FOLDER: app
-          FILE_DIR: ${{steps.sign_app.outputs.signedReleaseFile}}
+          files: ${{steps.sign_app.outputs.signedReleaseFile}}
