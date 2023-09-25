@@ -28,7 +28,7 @@ jobs:
         uses: r0adkll/sign-android-release@v1
         id: sign_app
         with:
-          releaseDirectory: app/build/outputs/apk/release
+          releaseDirectory: app/premium/release
           signingKeyBase64: ${{ secrets.KEY_STORE }}
           alias: ${{ secrets.KEY_STORE_ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASS }}
@@ -39,7 +39,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
-          name: app-release.apk
+          name: orgzly-revived-premium-release.apk
           path: ${{steps.sign_app.outputs.signedReleaseFile}}
 
       - name: Echo APK name
@@ -48,6 +48,6 @@ jobs:
       - name: Release signed APK
         uses: MicahSphelele/action-publish-signed-apk@main
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_CREATION_TOKEN }}
           APP_FOLDER: app
           FILE_DIR: ${{steps.sign_app.outputs.signedReleaseFile}}
