@@ -1,4 +1,4 @@
-name: Release
+name: Build and release
 
 on:
   # Trigger by pushing a version tag (which are protected)
@@ -36,7 +36,7 @@ jobs:
         env:
           BUILD_TOOLS_VERSION: "30.0.2"
 
-      - name: Upload release APK
+      - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
           name: app-release.apk
