@@ -29,8 +29,8 @@ jobs:
         id: sign_app
         with:
           releaseDirectory: app/premium/release
-          signingKeyBase64: ${{ secrets.KEY_STORE }}
-          alias: ${{ secrets.KEY_STORE_ALIAS }}
+          signingKeyBase64: ${{ secrets.RELEASE_SIGNING_KEY_STORE }}
+          alias: key0
           keyStorePassword: ${{ secrets.KEY_STORE_PASS }}
           keyPassword: ${{ secrets.KEY_STORE_PASS }}
         env:
