@@ -3,7 +3,7 @@
 <a title="Crowdin" target="_blank" href="https://crowdin.com/project/orgzly"><img src="https://d322cqt584bo4o.cloudfront.net/orgzly/localized.svg"></a>
 #+END_HTML
 
-* Orgzly
+* Orgzly Revived
 
 Orgzly is an outliner for taking notes and managing to-do lists.
 
@@ -14,6 +14,9 @@ Notebooks are saved in /Org mode/'s file format. “Org mode is for
 keeping notes, maintaining TODO lists, planning projects, and
 authoring documents with a fast and effective plain-text system.” See
 http://orgmode.org for more information.
+
+Orgzly Revived is a community fork of Orgzly, launched because the creator of
+the original app seems to have disappeared.
 
 #+BEGIN_HTML
 <a href="https://play.google.com/store/apps/details?id=com.orgzly">
