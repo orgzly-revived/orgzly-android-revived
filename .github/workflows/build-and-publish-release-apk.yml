@@ -1,4 +1,4 @@
-name: Build and release
+name: Build and publish release APK
 
 on:
   # Trigger by pushing a version tag (which are protected)
@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-release-apk:
+  build-and-publish-release-apk:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code for app release
