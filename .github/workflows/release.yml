@@ -43,7 +43,7 @@ jobs:
           path: ${{steps.sign_app.outputs.signedReleaseFile}}
 
       - name: Echo APK name
-        run: echo "Signed APK file: ${{steps.sign_app.outputs.signedReleaseFile}}"
+        run: echo Signed APK file ${{steps.sign_app.outputs.signedReleaseFile}}
 
       - name: Release signed APK
         uses: MicahSphelele/action-publish-signed-apk@main
