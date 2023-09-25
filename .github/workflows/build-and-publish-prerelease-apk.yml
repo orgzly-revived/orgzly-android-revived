@@ -1,0 +1,44 @@
+name: Build and publish pre-release APK
+
+on:
+  # Trigger by pushing a version tag (which are protected)
+  push:
+    tags:
+      - v*.*.*-*
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-and-publish-release-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      - name: Generate F-Droid debug APK
+        run: ./gradlew assembleFdroidDebug --stacktrace
+
+      - name: Sign APK with keystore
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        with:
+          releaseDirectory: app/build/outputs/apk/fdroid/debug
+          signingKeyBase64: ${{ secrets.RELEASE_SIGNING_KEY_STORE }}
+          alias: key0
+          keyStorePassword: ${{ secrets.KEY_STORE_PASS }}
+          keyPassword: ${{ secrets.KEY_STORE_PASS }}
+        env:
+          BUILD_TOOLS_VERSION: "30.0.2"
+
+      - name: Publish pre-release APK
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{steps.sign_app.outputs.signedReleaseFile}}
+          prerelease: true
