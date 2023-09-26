@@ -10,14 +10,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-publish-release-apk:
+  build-and-publish-prerelease-apk:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Setup JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '11'
@@ -25,19 +25,16 @@ jobs:
       - name: Generate F-Droid debug APK
         run: ./gradlew assembleFdroidDebug --stacktrace
 
-      - name: Sign APK with keystore
+      - name: Sign APK using key store from repo secrets
         uses: r0adkll/sign-android-release@v1
         id: sign_app
         with:
           releaseDirectory: app/build/outputs/apk/fdroid/debug
-          signingKeyBase64: ${{ secrets.RELEASE_SIGNING_KEY_STORE }}
-          alias: key0
-          keyStorePassword: ${{ secrets.KEY_STORE_PASS }}
-          keyPassword: ${{ secrets.KEY_STORE_PASS }}
-        env:
-          BUILD_TOOLS_VERSION: "30.0.2"
+          signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
+          alias: mykey
+          keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
 
-      - name: Publish pre-release APK
+      - name: Publish pre-release APK as Github pre-release
         uses: softprops/action-gh-release@v1
         with:
           files: ${{steps.sign_app.outputs.signedReleaseFile}}
