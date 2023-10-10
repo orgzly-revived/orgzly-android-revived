@@ -11,9 +11,9 @@ android {
     defaultConfig {
         minSdkVersion 21 // Lollipop (5.0)
         targetSdkVersion 32 // Android 12L
-        applicationId "com.orgzly"
-        versionCode 171
-        versionName "1.8.10"
+        applicationId "com.orgzlyrevived"
+        versionCode 172
+        versionName "1.8.11-beta.3"
 
         testInstrumentationRunner "com.orgzly.android.OrgzlyTestRunner"
         // testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

@@ -9,7 +9,7 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-  
+
 jobs:
   build-and-publish-release-apk:
     runs-on: ubuntu-latest
@@ -30,7 +30,7 @@ jobs:
         uses: r0adkll/sign-android-release@v1
         id: sign_app
         with:
-          releaseDirectory: app/build/outputs/apk/premium/release
+          releaseDirectory: app/build/outputs/apk/fdroid/release
           signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
           alias: mykey
           keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
