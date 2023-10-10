@@ -1,4 +1,4 @@
-name: Build and publish release APK
+name: Build and publish F-Droid release APK
 
 on:
   # Trigger by pushing a version tag (which are protected)
@@ -23,19 +23,19 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
 
-      - name: Generate release APK
-        run: ./gradlew assemblePremiumRelease --stacktrace
+      - name: Generate F-Droid release APK
+        run: ./gradlew assembleFdroidRelease --stacktrace
 
       - name: Sign APK using key store from repo secrets
         uses: r0adkll/sign-android-release@v1
         id: sign_app
         with:
-          releaseDirectory: app/build/outputs/apk/premium/release
+          releaseDirectory: app/build/outputs/apk/fdroid/release
           signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
           alias: mykey
           keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
 
-      - name: Publish APK as Github release
+      - name: Publish APK as a Github release artifact
         uses: softprops/action-gh-release@v1
         with:
           files: ${{steps.sign_app.outputs.signedReleaseFile}}
