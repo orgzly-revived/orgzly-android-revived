@@ -11,6 +11,7 @@ import com.orgzly.android.ui.SingleLiveEvent
 import com.orgzly.android.usecase.RepoCreate
 import com.orgzly.android.usecase.RepoUpdate
 import com.orgzly.android.usecase.UseCase
+import com.orgzly.android.usecase.UseCaseResult
 import com.orgzly.android.usecase.UseCaseRunner
 
 open class RepoViewModel(private val dataRepository: DataRepository, open var repoId: Long) : CommonViewModel() {

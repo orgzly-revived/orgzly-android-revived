@@ -916,31 +916,11 @@ public class AppPreferences {
                 context.getResources().getString(R.string.pref_key_git_is_enabled),
                 context.getResources().getBoolean(R.bool.pref_default_git_is_enabled));
     }
-    
-    public static String defaultRepositoryStorageDirectory(Context context) {
-        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        return getStringFromSelector(
-                context, R.string.pref_key_git_default_repository_directory, path.toString());
+
+    public static String gitRepoStoragePathForRepoId(Context context, Long repoId)  {
+        return new File(context.getCacheDir(), "gitrepo" + repoId).getAbsolutePath();
     }
 
-    public static String repositoryStoragePathForUri(Context context, Uri repoUri)  {
-        String directoryFilename = repoUri.toString();
-        try {
-            directoryFilename = new URIish(directoryFilename).getPath();
-        } catch (URISyntaxException e) {
-            directoryFilename = directoryFilename.replaceAll("/[^A-Za-z0-9 ]/", "");
-        }
-        Uri baseUri = Uri.parse(defaultRepositoryStorageDirectory(context));
-        return baseUri.buildUpon().appendPath(directoryFilename).build().getPath();
-    }
-
-    private static String getStringFromSelector(Context context, int selector, String def) {
-        return getStateSharedPreferences(context).getString(getSelector(context, selector), def);
-    }
-
-    private static String getSelector(Context context, int selector) {
-        return context.getResources().getString(selector);
-    }
 
     /*
      * Last used version.

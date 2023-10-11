@@ -132,14 +132,8 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
      */
     private static Git cloneRepo(Uri repoUri, File directoryFile, GitTransportSetter transportSetter,
                       ProgressMonitor pm) throws IOException {
-        if (!directoryFile.exists()) {
-            throw new IOException(String.format("The directory %s does not exist", directoryFile.toString()), new FileNotFoundException());
-        }
-
-        // Using list() can be resource intensive if there's many files, but since we just call it
-        // at the time of cloning once we should be fine for now
-        if (directoryFile.list().length != 0) {
-            throw new IOException(String.format("The directory must be empty"), new DirectoryNotEmpty(directoryFile));
+        if (!directoryFile.mkdir()) {
+            throw new IOException(String.format("Failed to create Git workdir %s", directoryFile));
         }
 
         try {

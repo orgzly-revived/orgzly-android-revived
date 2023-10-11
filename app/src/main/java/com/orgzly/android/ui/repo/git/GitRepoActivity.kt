@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.Settings
 import android.text.TextUtils
 import android.view.ContextMenu
@@ -31,18 +30,15 @@ import com.orgzly.android.prefs.RepoPreferences
 import com.orgzly.android.repos.GitRepo
 import com.orgzly.android.repos.RepoType
 import com.orgzly.android.ui.CommonActivity
-import com.orgzly.android.ui.repo.BrowserActivity
 import com.orgzly.android.ui.repo.RepoViewModel
 import com.orgzly.android.ui.repo.RepoViewModelFactory
 import com.orgzly.android.ui.showSnackbar
-import com.orgzly.android.util.AppPermissions
 import com.orgzly.android.util.MiscUtils
 import com.orgzly.databinding.ActivityRepoGitBinding
 import org.eclipse.jgit.errors.TransportException
 import org.eclipse.jgit.errors.NoRemoteRepositoryException
 import org.eclipse.jgit.errors.NotSupportedException
 import org.eclipse.jgit.lib.ProgressMonitor
-import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 
@@ -65,10 +61,6 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
         setContentView(binding.root)
 
         fields = arrayOf(
-                Field(
-                        binding.activityRepoGitDirectory,
-                        binding.activityRepoGitDirectoryLayout,
-                        R.string.pref_key_git_repository_filepath),
                 Field(
                         binding.activityRepoGitHttpsUsername,
                         binding.activityRepoGitHttpsUsernameLayout,
@@ -100,10 +92,6 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
             MiscUtils.clearErrorOnTextChange(it.editText, it.layout)
         }
 
-        binding.activityRepoGitDirectoryBrowse.setOnClickListener {
-            startLocalFileBrowser(binding.activityRepoGitDirectory, ACTIVITY_REQUEST_CODE_FOR_DIRECTORY_SELECTION)
-        }
-
         val repoId = intent.getLongExtra(ARG_REPO_ID, 0)
 
         val factory = RepoViewModelFactory.getInstance(dataRepository, repoId)
@@ -118,7 +106,6 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
             }
         } else {
             /* Set default values for new repo being added. */
-            createDefaultRepoFolder()
             binding.activityRepoGitAuthor.setText("Orgzly")
             binding.activityRepoGitBranch.setText(R.string.git_default_branch)
             val userDeviceName: String = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) {
@@ -131,9 +118,7 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
 
         viewModel.finishEvent.observeSingle(this, Observer {
             saveToPreferences(viewModel.repoId)
-
-            // TODO: Check permission on start
-            runWithPermission(AppPermissions.Usage.LOCAL_REPO, Runnable { finish() })
+            finish()
         })
 
         viewModel.alreadyExistsEvent.observeSingle(this, Observer {
@@ -203,23 +188,6 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
         }
     }
 
-    // TODO: Since we can create multiple syncs, this folder might be re-used, do we want to create
-    //       a new one if this directory is already used up?
-    private fun createDefaultRepoFolder() {
-        if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
-            return
-        }
-        val externalPath = Environment.getExternalStorageDirectory().path
-        val orgzlyGitPath = File("$externalPath/orgzly-git/")
-        var success = false
-        try {
-            success = orgzlyGitPath.mkdirs()
-        } catch(error: SecurityException) {}
-        if (success || (orgzlyGitPath.exists() && orgzlyGitPath.list().size == 0)) {
-            binding.activityRepoGitDirectory.setText(orgzlyGitPath.path)
-        }
-    }
-
     private fun setFromPreferences() {
         val prefs = RepoPreferences.fromId(this, viewModel.repoId, dataRepository)
         for (field in fields) {
@@ -271,13 +239,9 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
             if (repoId != 0L) {
                 save()
             } else {
-                val targetDirectory = File(binding.activityRepoGitDirectory.text.toString())
-                if (targetDirectory.list()!!.isNotEmpty()) {
-                    binding.activityRepoGitDirectoryLayout.error = getString(R.string.git_clone_error_target_not_empty)
-                } else {
-                    // TODO: If this fails we should notify the user in a nice way and mark the git repo field as bad
-                    RepoCloneTask(this).execute()
-                }
+                save() // Create the new repo in the database, so that viewModel knows its repoId.
+                // TODO: If this fails we should notify the user in a nice way and mark the git repo field as bad
+                RepoCloneTask(this).execute()
             }
         }
     }
@@ -339,11 +303,6 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
             hasEmptyFields = true
         }
 
-        val targetDirectory = File(binding.activityRepoGitDirectory.text.toString())
-        if (!targetDirectory.exists()) {
-            binding.activityRepoGitDirectoryLayout.error = getString(R.string.git_clone_error_invalid_target_dir)
-        }
-
         for (field in fields) {
             if (field.layout.visibility == View.GONE || field.allowEmpty) {
                 continue;
@@ -398,12 +357,7 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
     }
 
     override fun repositoryFilepath(): String {
-        val v = binding.activityRepoGitDirectory.text.toString()
-        return if (v.isNotEmpty()) {
-            v
-        } else {
-            AppPreferences.repositoryStoragePathForUri(this, remoteUri())
-        }
+        return AppPreferences.gitRepoStoragePathForRepoId(this, viewModel.repoId)
     }
 
     override fun remoteName(): String {
@@ -418,34 +372,6 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
     override fun remoteUri(): Uri {
         val remoteUriString = binding.activityRepoGitUrl.text.toString()
         return Uri.parse(remoteUriString)
-    }
-
-    private fun startLocalFileBrowser(editText: EditText, requestCode: Int, isFileSelectable: Boolean = false) {
-        val intent = Intent(Intent.ACTION_VIEW).setClass(this, BrowserActivity::class.java)
-
-        if (!TextUtils.isEmpty(editText.text)) {
-            val uri = editText.text.toString()
-            val path = Uri.parse(uri).path
-            intent.putExtra(BrowserActivity.ARG_STARTING_DIRECTORY, path)
-        }
-
-        if (isFileSelectable) {
-            intent.putExtra(BrowserActivity.ARG_IS_FILE_SELECTABLE, true)
-        }
-
-        startActivityForResult(intent, requestCode)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            ACTIVITY_REQUEST_CODE_FOR_DIRECTORY_SELECTION ->
-                if (resultCode == Activity.RESULT_OK && data != null) {
-                    val uri = data.data
-                    binding.activityRepoGitDirectory.setText(uri?.path)
-                }
-        }
     }
 
     internal inner class CloneProgressUpdate(var amount: Int, var setMax: Boolean)
@@ -516,8 +442,6 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
         private val TAG = GitRepoActivity::class.java.name
 
         private const val ARG_REPO_ID = "repo_id"
-
-        const val ACTIVITY_REQUEST_CODE_FOR_DIRECTORY_SELECTION = 0
 
         @JvmStatic
         @JvmOverloads

@@ -42,8 +42,9 @@ public class GitPreferencesFromRepoPrefs implements GitPreferences {
     public String repositoryFilepath() {
         return repoPreferences.getStringValueWithGlobalDefault(
                 R.string.pref_key_git_repository_filepath,
-                AppPreferences.repositoryStoragePathForUri(
-                        repoPreferences.getContext(), remoteUri()));
+                AppPreferences.gitRepoStoragePathForRepoId(
+                        repoPreferences.getContext(),
+                        repoPreferences.getRepoId()));
     }
 
     @Override
