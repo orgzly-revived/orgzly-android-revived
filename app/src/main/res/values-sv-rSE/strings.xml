@@ -621,4 +621,9 @@
     <string name="error_generate_ssh_key">Fel vid generering av SSH-nyckelpar</string>
     <string name="ssh_key_error_dialog_text">Meddelande: \n</string>
     <string name="ssh_key_locked_and_no_activity">Fel: SSH-nyckeln kan bara låsas upp från appen</string>
+
+    <!-- Sync status -->
+    <string name="sync_status_no_change">Oförändrad</string>
+    <string name="sync_status_loaded">Lästes in från %s</string>
+    <string name="sync_status_saved">Sparades till %s</string>
 </resources>

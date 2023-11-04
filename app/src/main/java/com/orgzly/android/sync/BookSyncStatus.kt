@@ -1,5 +1,8 @@
 package com.orgzly.android.sync
 
+import com.orgzly.R
+import com.orgzly.android.App
+
 // TODO: Write tests for *all* cases.
 enum class BookSyncStatus {
     NO_CHANGE,
@@ -31,18 +34,19 @@ enum class BookSyncStatus {
     // TODO: Extract string resources
     @JvmOverloads
     fun msg(arg: Any = ""): String {
+        val context = App.getAppContext()
         when (this) {
             NO_CHANGE ->
-                return "No change"
+                return context.getString(R.string.sync_status_no_change)
 
             BOOK_WITHOUT_LINK_AND_ONE_OR_MORE_ROOKS_EXIST ->
-                return "Notebook has no link and one or more remote notebooks with the same name exist"
+                return context.getString(R.string.sync_status_book_without_link_and_one_or_more_rooks_exist)
 
             DUMMY_WITHOUT_LINK_AND_MULTIPLE_ROOKS ->
-                return "Notebook has no link and multiple remote notebooks with the same name exist"
+                return context.getString(R.string.sync_status_dummy_without_link_and_multiple_rooks)
 
             NO_BOOK_MULTIPLE_ROOKS ->
-                return "No notebook and multiple remote notebooks with the same name exist"
+                return context.getString(R.string.sync_status_no_book_multiple_rooks)
 
             ONLY_BOOK_WITHOUT_LINK_AND_MULTIPLE_REPOS ->
                 return "Notebook has no link and multiple repositories exist"
@@ -66,10 +70,10 @@ enum class BookSyncStatus {
                 return "Last synced notebook and latest remote notebook differ"
 
             NO_BOOK_ONE_ROOK, DUMMY_WITHOUT_LINK_AND_ONE_ROOK, BOOK_WITH_LINK_AND_ROOK_MODIFIED, DUMMY_WITH_LINK ->
-                return "Loaded from $arg"
+                return context.getString(R.string.sync_status_loaded, "$arg")
 
             ONLY_BOOK_WITHOUT_LINK_AND_ONE_REPO, BOOK_WITH_LINK_LOCAL_MODIFIED, ONLY_BOOK_WITH_LINK ->
-                return "Saved to $arg"
+                return context.getString(R.string.sync_status_saved, "$arg")
 
             else ->
                 throw IllegalArgumentException("Unknown sync status " + this)
