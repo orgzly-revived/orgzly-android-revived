@@ -22,6 +22,31 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.12"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Add preference to hide empty days in agenda" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Show ranged timestamps in agenda queries" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Consider time and date ranges when querying events" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Add menu option to sort lines in a note" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Add preference to trigger auto-sync upon suspend" />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.11"
             tools:ignore="HardcodedText" />
 
