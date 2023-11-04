@@ -126,6 +126,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
 
         /* Update preferences which depend on multiple others. */
         updateRemindersScreen()
+        updateWidgetScreen()
     }
 
     private fun setupVersionPreference() {
@@ -326,6 +327,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         }
 
         updateRemindersScreen()
+        updateWidgetScreen()
 
         /* Always notify about possibly changed data, if settings are modified.
          *
@@ -360,6 +362,16 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             preference(R.string.pref_key_snooze_time)?.isEnabled = remindersEnabled
             preference(R.string.pref_key_snooze_type)?.isEnabled = remindersEnabled
             preference(R.string.pref_key_daily_reminder_time)?.isEnabled = remindersEnabled
+        }
+    }
+
+    private fun updateWidgetScreen() {
+        val colorScheme = preference(R.string.pref_key_widget_color_scheme)
+
+        if (colorScheme != null) {
+            /* Widget opacity isn't supported on the dynamic color scheme. */
+            val opacityEnabled = (colorScheme as ListPreference).value != "dynamic"
+            preference(R.string.pref_key_widget_opacity)?.isEnabled = opacityEnabled
         }
     }
 
