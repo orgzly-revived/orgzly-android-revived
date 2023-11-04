@@ -27,6 +27,10 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
+            app:text="Add sync button to widget" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
             app:text="Add clocking/time capture feature" />
 
         <com.orgzly.android.ui.views.WhatsNewChange
