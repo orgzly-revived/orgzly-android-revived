@@ -25,6 +25,7 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
 
+      # Build the standard version binary.
       - name: Generate "premium" debug APK
         run: ./gradlew assemblePremiumDebug --stacktrace
 
@@ -49,3 +50,30 @@ jobs:
           files: 'orgzly-revived-*.apk'
           prerelease: true
           draft: true
+
+      # Now do the same for the F-Droid flavor.
+      - name: Generate "fdroid" release APK
+        run: ./gradlew assembleFdroidRelease --stacktrace
+  
+      - name: Sign APK using key store from repo secrets
+        uses: r0adkll/sign-android-release@v1
+        id: sign_fdroid_apk
+        with:
+          releaseDirectory: app/build/outputs/apk/fdroid/release
+          signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
+          alias: orgzly-revived-20231013
+          keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+
+      - name: Get version name from git tag
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Rename APK file
+        run: mv ${{steps.sign_fdroid_apk.outputs.signedReleaseFile}} orgzly-revived-fdroid-${{ env.VERSION }}.apk
+
+      - name: Upload APK and attach to the  existing release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: 'orgzly-revived-fdroid-*.apk'
+          asset_name: orgzly-revive-fdroid.apk
+          asset_content_type: application/octet-stream
