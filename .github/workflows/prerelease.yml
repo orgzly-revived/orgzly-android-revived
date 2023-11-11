@@ -25,6 +25,7 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
 
+      # Build the standard version binary.
       - name: Generate "premium" debug APK
         run: ./gradlew assemblePremiumDebug --stacktrace
 
@@ -43,6 +44,26 @@ jobs:
       - name: Rename APK file
         run: mv ${{steps.sign_apk.outputs.signedReleaseFile}} orgzly-revived-${{ env.VERSION }}-debug.apk
 
+      # Now do the same for the F-Droid flavor.
+      - name: Generate "fdroid" release APK
+        run: ./gradlew assembleFdroidRelease --stacktrace
+  
+      - name: Sign APK using key store from repo secrets
+        uses: r0adkll/sign-android-release@v1
+        id: sign_fdroid_apk
+        with:
+          releaseDirectory: app/build/outputs/apk/fdroid/release
+          signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
+          alias: orgzly-revived-20231013
+          keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+
+      - name: Get version name from git tag
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Rename APK file
+        run: mv ${{steps.sign_fdroid_apk.outputs.signedReleaseFile}} orgzly-revived-fdroid-${{ env.VERSION }}.apk
+
+      # Now upload all the binaries and create a release
       - name: Upload APK and create Github pre-release draft
         uses: softprops/action-gh-release@v1
         with:
