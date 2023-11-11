@@ -70,8 +70,10 @@ jobs:
       - name: Rename APK file
         run: mv ${{steps.sign_fdroid_apk.outputs.signedReleaseFile}} orgzly-revived-fdroid-${{ env.VERSION }}.apk
 
-      - name: Upload APK and create Github release draft
-        uses: softprops/action-gh-release@v1
+      - name: Upload APK and attach to the  existing release
+        uses: actions/upload-release-asset@v1
         with:
-          files: 'orgzly-revived-fdroid-*.apk'
-          draft: true
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: 'orgzly-revived-fdroid-*.apk'
+          asset_name: orgzly-revive-fdroid.apk
+          asset_content_type: application/octet-stream
