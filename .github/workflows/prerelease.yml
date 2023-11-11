@@ -44,13 +44,6 @@ jobs:
       - name: Rename APK file
         run: mv ${{steps.sign_apk.outputs.signedReleaseFile}} orgzly-revived-${{ env.VERSION }}-debug.apk
 
-      - name: Upload APK and create Github pre-release draft
-        uses: softprops/action-gh-release@v1
-        with:
-          files: 'orgzly-revived-*.apk'
-          prerelease: true
-          draft: true
-
       # Now do the same for the F-Droid flavor.
       - name: Generate "fdroid" release APK
         run: ./gradlew assembleFdroidRelease --stacktrace
@@ -70,10 +63,10 @@ jobs:
       - name: Rename APK file
         run: mv ${{steps.sign_fdroid_apk.outputs.signedReleaseFile}} orgzly-revived-fdroid-${{ env.VERSION }}.apk
 
-      - name: Upload APK and attach to the  existing release
-        uses: actions/upload-release-asset@v1
+      # Now upload all the binaries and create a release
+      - name: Upload APK and create Github pre-release draft
+        uses: softprops/action-gh-release@v1
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: 'orgzly-revived-fdroid-*.apk'
-          asset_name: orgzly-revive-fdroid.apk
-          asset_content_type: application/octet-stream
+          files: 'orgzly-revived-*.apk'
+          prerelease: true
+          draft: true
