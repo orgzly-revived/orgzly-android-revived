@@ -46,13 +46,13 @@ jobs:
 
       # Now do the same for the F-Droid flavor.
       - name: Generate "fdroid" release APK
-        run: ./gradlew assembleFdroidRelease --stacktrace
+        run: ./gradlew assembleFdroidDebug --stacktrace
   
       - name: Sign APK using key store from repo secrets
         uses: r0adkll/sign-android-release@v1
         id: sign_fdroid_apk
         with:
-          releaseDirectory: app/build/outputs/apk/fdroid/release
+          releaseDirectory: app/build/outputs/apk/fdroid/debug
           signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
           alias: orgzly-revived-20231013
           keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
