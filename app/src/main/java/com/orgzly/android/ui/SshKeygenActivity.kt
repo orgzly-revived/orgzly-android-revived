@@ -4,6 +4,7 @@ import android.app.KeyguardManager
 import android.os.Build
 import android.os.Bundle
 import android.security.keystore.UserNotAuthenticatedException
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -19,8 +20,8 @@ import com.orgzly.databinding.ActivitySshKeygenBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.IOException
 
+@RequiresApi(Build.VERSION_CODES.M)
 private enum class KeyGenType(val generateKey: suspend (requireAuthentication: Boolean) -> Unit) {
     Rsa({ requireAuthentication ->
         SshKey.generateKeystoreNativeKey(SshKey.Algorithm.Rsa, requireAuthentication)
@@ -33,6 +34,7 @@ private enum class KeyGenType(val generateKey: suspend (requireAuthentication: B
     }),
 }
 
+@RequiresApi(Build.VERSION_CODES.M)
 class SshKeygenActivity : CommonActivity() {
 
     private var keyGenType = KeyGenType.Ecdsa
@@ -125,7 +127,7 @@ class SshKeygenActivity : CommonActivity() {
         result.fold(
             onSuccess = { ShowSshKeyDialogFragment().show(supportFragmentManager, "public_key") },
             onFailure = { e ->
-                e.printStackTrace()
+                Log.e(TAG, "Error while generating SSH key:", e)
                 MaterialAlertDialogBuilder(this)
                     .setTitle(getString(R.string.error_generate_ssh_key))
                     .setMessage(getString(R.string.ssh_key_error_dialog_text) + e.message)
@@ -145,5 +147,9 @@ class SshKeygenActivity : CommonActivity() {
             view = View(this)
         }
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    companion object {
+        private val TAG = SshKeygenActivity::class.java.name
     }
 }
