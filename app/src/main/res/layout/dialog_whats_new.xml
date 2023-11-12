@@ -45,6 +45,10 @@
             style="@style/WhatsNewChange"
             app:text="Add preference to trigger auto-sync upon suspend" />
 
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Add tooltips to popup buttons" />
+
         <TextView
             style="@style/WhatsNewVersion"
             android:text="v1.8.11"
