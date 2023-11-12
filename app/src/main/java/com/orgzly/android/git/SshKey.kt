@@ -7,6 +7,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyInfo
 import android.security.keystore.KeyProperties
 import android.security.keystore.UserNotAuthenticatedException
+import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedFile
 import androidx.security.crypto.MasterKey
@@ -55,7 +56,7 @@ fun toSshPublicKey(publicKey: PublicKey): String {
     return PublicKeyEntry.toString(publicKey)
 }
 
-object SshKey {
+@RequiresApi(Build.VERSION_CODES.M) object SshKey {
     val sshPublicKey
         get() = if (publicKeyFile.exists()) publicKeyFile.readText() else null
     val canShowSshPublicKey
@@ -192,7 +193,6 @@ object SshKey {
         }
 
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun generateKeystoreWrappedEd25519Key(requireAuthentication: Boolean) =
         withContext(Dispatchers.IO) {
             delete()
