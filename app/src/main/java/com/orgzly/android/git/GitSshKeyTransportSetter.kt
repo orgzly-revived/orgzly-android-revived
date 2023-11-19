@@ -1,12 +1,8 @@
 package com.orgzly.android.git
 
-import android.content.Intent
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.orgzly.R
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.orgzly.android.App
-import com.orgzly.android.ui.SshKeygenActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import org.eclipse.jgit.annotations.NonNull
 import org.eclipse.jgit.api.TransportCommand
 import org.eclipse.jgit.api.TransportConfigCallback
@@ -21,7 +17,6 @@ import java.security.KeyPair
 
 class GitSshKeyTransportSetter: GitTransportSetter {
     private val configCallback: TransportConfigCallback
-    private val activity = App.getCurrentActivity()
     private val context = App.getAppContext()
 
     init {
@@ -42,11 +37,12 @@ class GitSshKeyTransportSetter: GitTransportSetter {
                 )
             }
 
+            @RequiresApi(Build.VERSION_CODES.M)
             override fun getDefaultKeys(@NonNull sshDir: File): Iterable<KeyPair>? {
                 return if (SshKey.exists) {
                     listOf(SshKey.getKeyPair())
                 } else {
-                    onMissingSshKeyFile()
+                    SshKey.promptForKeyGeneration()
                     null
                 }
             }
@@ -69,20 +65,4 @@ class GitSshKeyTransportSetter: GitTransportSetter {
         return tc
     }
 
-    private fun onMissingSshKeyFile() {
-        if (activity != null) {
-            val builder = MaterialAlertDialogBuilder(activity)
-                .setMessage(R.string.git_ssh_on_missing_key_dialog_text)
-                .setTitle(R.string.git_ssh_on_missing_key_dialog_title)
-            builder.setPositiveButton(activity.getString(R.string.yes)) { _, _ ->
-                val intent =
-                    Intent(activity.applicationContext, SshKeygenActivity::class.java)
-                activity.startActivity(intent)
-            }
-            builder.setNegativeButton(activity.getString(R.string.not_now)) {
-                    dialog, _ -> dialog.dismiss()
-            }
-            runBlocking(Dispatchers.Main) { activity.alertDialog = builder.show() }
-        }
-    }
 }

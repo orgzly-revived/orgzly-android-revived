@@ -1,19 +1,23 @@
 package com.orgzly.android.git
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyInfo
 import android.security.keystore.KeyProperties
 import android.security.keystore.UserNotAuthenticatedException
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedFile
 import androidx.security.crypto.MasterKey
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.ui.SshKeygenActivity
 import com.orgzly.android.util.BiometricAuthenticator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -56,7 +60,8 @@ fun toSshPublicKey(publicKey: PublicKey): String {
     return PublicKeyEntry.toString(publicKey)
 }
 
-@RequiresApi(Build.VERSION_CODES.M) object SshKey {
+object SshKey {
+    private val TAG = SshKey::class.java.name
     val sshPublicKey
         get() = if (publicKeyFile.exists()) publicKeyFile.readText() else null
     val canShowSshPublicKey
@@ -64,6 +69,7 @@ fun toSshPublicKey(publicKey: PublicKey): String {
     val exists
         get() = type != null
     private val mustAuthenticate: Boolean
+        @RequiresApi(Build.VERSION_CODES.M)
         get() {
             return runCatching {
                 if (type !in listOf(Type.KeystoreNative, Type.KeystoreWrappedEd25519)) return false
@@ -122,6 +128,7 @@ fun toSshPublicKey(publicKey: PublicKey): String {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     enum class Algorithm(
         val algorithm: String,
         val applyToSpec: KeyGenParameterSpec.Builder.() -> Unit
@@ -210,6 +217,7 @@ fun toSshPublicKey(publicKey: PublicKey): String {
             type = Type.KeystoreWrappedEd25519
         }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun generateKeystoreNativeKey(algorithm: Algorithm, requireAuthentication: Boolean) {
         delete()
 
@@ -240,6 +248,7 @@ fun toSshPublicKey(publicKey: PublicKey): String {
         type = Type.KeystoreNative
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun getKeyPair(): KeyPair {
         var privateKey: PrivateKey? = null
         var privateKeyLoadAttempts = 0
@@ -311,6 +320,7 @@ fun toSshPublicKey(publicKey: PublicKey): String {
                 if (privateKeyLoadAttempts > 0) {
                     // We expect this exception before trying auth, but after that, this means
                     // we have failed to unlock the SSH key.
+                    Log.e(TAG, context.getString(R.string.ssh_key_failed_unlock_private), e)
                     throw IOException(context.getString(R.string.ssh_key_failed_unlock_private))
                 }
             } catch (e: Exception) {
@@ -337,4 +347,24 @@ fun toSshPublicKey(publicKey: PublicKey): String {
         }
         return KeyPair(publicKey, privateKey)
     }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun promptForKeyGeneration() {
+        val activity = App.getCurrentActivity()
+        if (activity != null) {
+            val builder = MaterialAlertDialogBuilder(activity)
+                .setMessage(R.string.git_ssh_on_missing_key_dialog_text)
+                .setTitle(R.string.git_ssh_on_missing_key_dialog_title)
+            builder.setPositiveButton(activity.getString(R.string.yes)) { _, _ ->
+                val intent =
+                    Intent(activity.applicationContext, SshKeygenActivity::class.java)
+                activity.startActivity(intent)
+            }
+            builder.setNegativeButton(activity.getString(R.string.not_now)) {
+                    dialog, _ -> dialog.dismiss()
+            }
+            runBlocking { activity.alertDialog = builder.show() }
+        }
+    }
+
 }
