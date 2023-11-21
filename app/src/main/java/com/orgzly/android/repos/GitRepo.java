@@ -158,10 +158,8 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            e.printStackTrace();
-            throw new IOException(
-                    String.format("Failed to clone repository %s, %s", repoUri.toString(),
-                            e.getCause().getMessage()), e.getCause());
+            Log.e(TAG, "JGit error:", e);
+            throw new IOException(e);
         }
     }
 

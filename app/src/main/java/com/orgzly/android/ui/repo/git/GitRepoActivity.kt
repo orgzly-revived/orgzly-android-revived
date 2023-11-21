@@ -12,11 +12,13 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
 import android.text.TextUtils
+import android.util.Log
 import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputLayout
@@ -26,6 +28,7 @@ import com.orgzly.android.git.GitPreferences
 import com.orgzly.android.git.GitSshKeyTransportSetter
 import com.orgzly.android.git.GitTransportSetter
 import com.orgzly.android.git.HTTPSTransportSetter
+import com.orgzly.android.git.SshKey
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.prefs.RepoPreferences
 import com.orgzly.android.repos.GitRepo
@@ -274,10 +277,16 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
                 val targetDirectory = File(binding.activityRepoGitDirectory.text.toString())
                 if (targetDirectory.list()!!.isNotEmpty()) {
                     binding.activityRepoGitDirectoryLayout.error = getString(R.string.git_clone_error_target_not_empty)
-                } else {
-                    // TODO: If this fails we should notify the user in a nice way and mark the git repo field as bad
-                    RepoCloneTask(this).execute()
+                    return
                 }
+                val repoScheme = getRepoScheme()
+                @RequiresApi(Build.VERSION_CODES.M)
+                if (repoScheme != "https" && !SshKey.exists) {
+                    SshKey.promptForKeyGeneration()
+                    return
+                }
+                // TODO: If this fails we should notify the user in a nice way and mark the git repo field as bad
+                RepoCloneTask(this).execute()
             }
         }
     }
@@ -463,6 +472,7 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
             try {
                 GitRepo.ensureRepositoryExists(fragment, true, this)
             } catch (e: IOException) {
+                Log.e(TAG, "Error while cloning Git repository:", e)
                 return e
             }
 
