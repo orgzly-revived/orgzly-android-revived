@@ -76,7 +76,7 @@ class ListWidgetService : RemoteViewsService() {
         }
 
         override fun getLoadingView(): RemoteViews? {
-            return null
+            return RemoteViews(context.packageName, R.layout.item_list_widget_loading)
         }
 
         override fun getItemId(position: Int): Long {
