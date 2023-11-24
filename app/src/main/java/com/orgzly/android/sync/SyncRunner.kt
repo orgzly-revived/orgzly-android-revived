@@ -12,6 +12,7 @@ import com.orgzly.android.App
 import com.orgzly.android.ui.repos.ReposActivity
 import com.orgzly.android.ui.showSnackbar
 import com.orgzly.android.util.LogUtils
+import java.util.concurrent.TimeUnit
 
 object SyncRunner {
     const val IS_AUTO_SYNC = "auto-sync"
@@ -30,6 +31,24 @@ object SyncRunner {
     fun startSync(autoSync: Boolean = false) {
         val workManager = WorkManager.getInstance(App.getAppContext())
 
+
+        // There is a bug in WorkManager, documented here https://issuetracker.google.com/issues/115575872,
+        // due to which an ACTION_UPDATE intent is sent to AppWidgetProviders when the last worker finishes.
+        // This leads to an ugly flickering and resetting of the scroll position when using the Orgzly widget,
+        // especially in th case of marking a task done, while having auto update activated.
+        // The provided solution is to schedule a worker in the "infinite" future, thus preventing the case
+        // of the last worker finishing.
+        val infiniteScheduledWorkerToPreventWidgetUpdate = OneTimeWorkRequestBuilder<SyncWorker>()
+            .setInitialDelay(10 * 365, TimeUnit.DAYS)
+            .build()
+
+        workManager.beginUniqueWork(
+            "infiniteScheduledWorkerToPreventWidgetUpdate",
+            ExistingWorkPolicy.REPLACE,
+            infiniteScheduledWorkerToPreventWidgetUpdate
+        ).enqueue()
+
+        // Enqueue the sync worker
         val syncWorker = OneTimeWorkRequestBuilder<SyncWorker>()
             // On Android >= 12 notification from overridden getForegroundInfo might not be shown
             // Sync-in-progress notification cannot be canceled if app is killed by the system,
@@ -85,7 +104,10 @@ object SyncRunner {
     private fun logStateChange(tag: String, state: SyncState?, workInfoList: List<WorkInfo>?) {
         if (BuildConfig.LOG_DEBUG) {
             // LogUtils.d(TAG, "-> ($tag) Workers changed state to $state <- $workInfoList")
-            LogUtils.d(TAG, "-> ($tag) Workers changed state to $state <- ${workInfoList?.map { it.state }}")
+            LogUtils.d(
+                TAG,
+                "-> ($tag) Workers changed state to $state <- ${workInfoList?.map { it.state }}"
+            )
         }
     }
 
