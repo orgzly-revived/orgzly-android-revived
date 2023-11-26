@@ -47,8 +47,14 @@
 
 -dontwarn org.joda.convert.**
 
--dontwarn org.eclipse.jgit.**
 -dontwarn com.jcraft.**
 -dontwarn org.slf4j.**
 
 -keepclassmembers enum com.orgzly.android.ui.refile.RefileLocation$Type { *; }
+
+-keep public class org.apache.sshd.common.util.security.bouncycastle.BouncyCastleSecurityProviderRegistrar
+-keep public class org.apache.sshd.common.util.security.eddsa.EdDSASecurityProviderRegistrar
+-keep public class net.i2p.crypto.eddsa.**
+
+-keepnames public class * extends org.eclipse.jgit.nls.TranslationBundle
+-keepclassmembers class * extends org.eclipse.jgit.nls.TranslationBundle { *; }
