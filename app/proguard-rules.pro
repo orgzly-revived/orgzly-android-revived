@@ -55,3 +55,6 @@
 -keep public class org.apache.sshd.common.util.security.bouncycastle.BouncyCastleSecurityProviderRegistrar
 -keep public class org.apache.sshd.common.util.security.eddsa.EdDSASecurityProviderRegistrar
 -keep public class net.i2p.crypto.eddsa.**
+
+-keepnames public class * extends org.eclipse.jgit.nls.TranslationBundle
+-keepclassmembers class * extends org.eclipse.jgit.nls.TranslationBundle { *; }
