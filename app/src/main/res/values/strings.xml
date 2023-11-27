@@ -766,4 +766,12 @@
     <string name="error_generate_ssh_key">Error while trying to generate the SSH key pair</string>
     <string name="ssh_key_error_dialog_text">Message: \n</string>
     <string name="ssh_key_locked_and_no_activity">Error: SSH key can only be unlocked from an activity</string>
+
+    <!-- Sync status -->
+    <string name="sync_status_no_change">No change</string>
+    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">Notebook has no link and one or more remote notebooks with the same name exist</string>
+    <string name="sync_status_dummy_without_link_and_multiple_rooks">Notebook has no link and multiple remote notebooks with the same name exist</string>
+    <string name="sync_status_no_book_multiple_rooks">No notebook and multiple remote notebooks with the same name exist</string>
+    <string name="sync_status_loaded">Loaded from %s</string>
+    <string name="sync_status_saved">Saved to %s</string>
 </resources>
