@@ -72,7 +72,7 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
         config.setString("remote", prefs.remoteName(), "url", prefs.remoteUri().toString());
         config.setString("user", null, "name", prefs.getAuthor());
         config.setString("user", null, "email", prefs.getEmail());
-        config.setString("gc", null, "auto", "3000");
+        config.setString("gc", null, "auto", "1500");
         config.save();
 
         return new GitRepo(id, git, prefs);
