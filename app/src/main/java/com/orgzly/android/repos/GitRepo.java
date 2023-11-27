@@ -72,7 +72,7 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
         config.setString("remote", prefs.remoteName(), "url", prefs.remoteUri().toString());
         config.setString("user", null, "name", prefs.getAuthor());
         config.setString("user", null, "email", prefs.getEmail());
-        config.setString("gc", null, "auto", "3000");
+        config.setString("gc", null, "auto", "1500");
         config.save();
 
         return new GitRepo(id, git, prefs);
@@ -315,34 +315,39 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
     @Override
     public TwoWaySyncResult syncBook(
             Uri uri, VersionedRook current, File fromDB) throws IOException {
-        boolean onMainBranch = true;
         String fileName = uri.getPath().replaceFirst("^/", "");
+        boolean merged = true;
         if (current != null) {
             RevCommit rookCommit = getCommitFromRevisionString(current.getRevision());
             if (BuildConfig.LOG_DEBUG) {
                 LogUtils.d(TAG, String.format("Syncing file %s, rookCommit: %s", fileName, rookCommit));
             }
-            boolean merged = synchronizer.updateAndCommitFileFromRevisionAndMerge(
+            merged = synchronizer.updateAndCommitFileFromRevisionAndMerge(
                     fromDB, fileName,
                     synchronizer.getFileRevision(fileName, rookCommit),
                     rookCommit);
 
-            // We have attempted a merge. Are we back on the main branch, or still on a temp branch?
-            onMainBranch = git.getRepository().getBranch().equals(preferences.branchName());
-
-            if (merged && !onMainBranch) {
-                onMainBranch = synchronizer.attemptReturnToMainBranch();
+            if (merged) {
+                // Our change was successfully merged. Make an attempt
+                // to return to the main branch, if we are not on it.
+                if (!git.getRepository().getBranch().equals(preferences.branchName())) {
+                    synchronizer.attemptReturnToMainBranch();
+                }
             }
         } else {
             Log.w(TAG, "Unable to find previous commit, loading from repository.");
         }
         File writeBackFile = synchronizer.repoDirectoryFile(fileName);
         return new TwoWaySyncResult(
-                currentVersionedRook(Uri.EMPTY.buildUpon().appendPath(fileName).build()), onMainBranch,
+                currentVersionedRook(Uri.EMPTY.buildUpon().appendPath(fileName).build()), merged,
                 writeBackFile);
     }
 
     public void tryPushIfHeadDiffersFromRemote() {
         synchronizer.tryPushIfHeadDiffersFromRemote();
+    }
+
+    public String getCurrentBranch() throws IOException {
+        return git.getRepository().getBranch();
     }
 }

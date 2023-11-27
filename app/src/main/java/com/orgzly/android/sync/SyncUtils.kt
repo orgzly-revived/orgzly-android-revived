@@ -96,17 +96,16 @@ object SyncUtils {
         // FIXME: This is a pretty nasty hack that completely circumvents the existing code path
         if (namesake.rooks.isNotEmpty()) {
             val rook = namesake.rooks[0]
-            if (rook != null && namesake.status !== BookSyncStatus.NO_CHANGE && namesake.status !== BookSyncStatus.BOOK_WITH_LINK_LOCAL_MODIFIED) {
+            if (rook != null && namesake.status !== BookSyncStatus.NO_CHANGE) {
                 val repo = dataRepository.getRepoInstance(
                     rook.repoId, rook.repoType, rook.repoUri.toString())
-                if (repo is TwoWaySyncRepo) {
-                    return if (handleTwoWaySync(dataRepository, repo as TwoWaySyncRepo, namesake)) {
-                        BookAction.forNow(
-                            BookAction.Type.INFO,
-                            namesake.status.msg(repo.uri.toString()))
-                    } else {
+                if (repo is GitRepo) {
+                    if (!handleTwoWaySync(dataRepository, repo as TwoWaySyncRepo, namesake)) {
                         throw Exception("Merge conflict; saved to temporary branch.")
                     }
+                    return BookAction.forNow(
+                        BookAction.Type.INFO,
+                        namesake.status.msg(String.format("branch '%s'", repo.currentBranch)))
                 }
             }
         }
@@ -180,35 +179,39 @@ object SyncUtils {
         val (book, _, _, currentRook) = namesake.book
         val someRook = currentRook ?: namesake.rooks[0]
         val newRook: VersionedRook?
-        val onMainBranch: Boolean
-        val dbFile = dataRepository.getTempBookFile()
-        try {
-            NotesOrgExporter(dataRepository).exportBook(book, dbFile)
-            val (newRook1, onMainBranch1, loadFile) =
-                repo.syncBook(someRook.uri, currentRook, dbFile)
-            onMainBranch = onMainBranch1
-            newRook = newRook1
-            // We only need to write it if syncback is needed
-            if (loadFile != null) {
-                val fileName = BookName.getFileName(App.getAppContext(), newRook.uri)
-                val bookName = BookName.fromFileName(fileName)
-                if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Loading from file '$loadFile'")
-                dataRepository.loadBookFromFile(
-                    bookName.name,
-                    bookName.format,
-                    loadFile,
-                    newRook)
-                // TODO: db.book().updateIsModified(bookView.book.id, false)
-                // Instead of:
-                // dataRepository.updateBookMtime(loadedBook.getBook().getId(), 0);
+        var noNewMergeConflicts = true
+        // If there are only local changes, the GitRepo.syncBook method is overly complicated.
+        if (namesake.status == BookSyncStatus.BOOK_WITH_LINK_LOCAL_MODIFIED) {
+            val fileName = BookName.getFileName(App.getAppContext(), namesake.book.syncedTo!!.uri)
+            dataRepository.saveBookToRepo(namesake.book.linkRepo!!, fileName, namesake.book, BookFormat.ORG)
+        } else {
+            val dbFile = dataRepository.getTempBookFile()
+            try {
+                NotesOrgExporter(dataRepository).exportBook(book, dbFile)
+                val (newRook1, merged, loadFile) =
+                    repo.syncBook(someRook.uri, currentRook, dbFile)
+                noNewMergeConflicts = merged
+                newRook = newRook1
+                // We only need to write it if syncback is needed
+                if (loadFile != null) {
+                    val fileName = BookName.getFileName(App.getAppContext(), newRook.uri)
+                    val bookName = BookName.fromFileName(fileName)
+                    if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Loading from file '$loadFile'")
+                    dataRepository.loadBookFromFile(
+                        bookName.name,
+                        bookName.format,
+                        loadFile,
+                        newRook)
+                    // TODO: db.book().updateIsModified(bookView.book.id, false)
+                    // Instead of:
+                    // dataRepository.updateBookMtime(loadedBook.getBook().getId(), 0);
+                }
+            } finally {
+                /* Delete temporary files. */
+                dbFile.delete()
             }
-        } finally {
-            /* Delete temporary files. */
-            dbFile.delete()
+            dataRepository.updateBookLinkAndSync(book.id, newRook!!)
         }
-
-        dataRepository.updateBookLinkAndSync(book.id, newRook!!)
-
-        return onMainBranch
+        return noNewMergeConflicts
     }
 }
