@@ -26,14 +26,14 @@ jobs:
           java-version: '11'
 
       # Build the standard version binary.
-      - name: Generate "premium" debug APK
-        run: ./gradlew assemblePremiumDebug --stacktrace
+      - name: Generate "premium" release APK
+        run: ./gradlew assemblePremiumRelease --stacktrace
 
       - name: Sign APK using key store from repo secrets
         uses: r0adkll/sign-android-release@v1
         id: sign_apk
         with:
-          releaseDirectory: app/build/outputs/apk/premium/debug
+          releaseDirectory: app/build/outputs/apk/premium/release
           signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
           alias: orgzly-revived-20231013
           keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
@@ -42,17 +42,17 @@ jobs:
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
       - name: Rename APK file
-        run: mv ${{steps.sign_apk.outputs.signedReleaseFile}} orgzly-revived-${{ env.VERSION }}-debug.apk
+        run: mv ${{steps.sign_apk.outputs.signedReleaseFile}} orgzly-revived-${{ env.VERSION }}.apk
 
       # Now do the same for the F-Droid flavor.
       - name: Generate "fdroid" release APK
-        run: ./gradlew assembleFdroidDebug --stacktrace
+        run: ./gradlew assembleFdroidRelease --stacktrace
   
       - name: Sign APK using key store from repo secrets
         uses: r0adkll/sign-android-release@v1
         id: sign_fdroid_apk
         with:
-          releaseDirectory: app/build/outputs/apk/fdroid/debug
+          releaseDirectory: app/build/outputs/apk/fdroid/release
           signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
           alias: orgzly-revived-20231013
           keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
