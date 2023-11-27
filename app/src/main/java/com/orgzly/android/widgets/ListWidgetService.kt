@@ -39,8 +39,13 @@ class ListWidgetService : RemoteViewsService() {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG)
 
         val queryString = intent.getStringExtra(AppIntent.EXTRA_QUERY_STRING).orEmpty()
+        val searchId = intent.getLongExtra(AppIntent.EXTRA_SAVED_SEARCH_ID, -1)
 
-        return ListWidgetViewsFactory(applicationContext, queryString)
+        val factory = ListWidgetViewsFactory(applicationContext, queryString, searchId)
+
+        if (searchId >= 0) ListWidgetFactoryRegistry.registerFactory(searchId, factory)
+
+        return factory
     }
 
     private sealed class WidgetEntry(open val id: Long) {
@@ -56,10 +61,8 @@ class ListWidgetService : RemoteViewsService() {
     }
 
     inner class ListWidgetViewsFactory(
-            val context: Context,
-            private val queryString: String
+        val context: Context, private val queryString: String, private val searchId: Long
     ) : RemoteViewsFactory {
-
         private val query: Query by lazy {
             val parser = InternalQueryParser()
             parser.parse(queryString)
@@ -75,8 +78,8 @@ class ListWidgetService : RemoteViewsService() {
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG)
         }
 
-        override fun getLoadingView(): RemoteViews? {
-            return null
+        override fun getLoadingView(): RemoteViews {
+            return RemoteViews(context.packageName, R.layout.item_list_widget_loading)
         }
 
         override fun getItemId(position: Int): Long {
@@ -151,6 +154,7 @@ class ListWidgetService : RemoteViewsService() {
 
         override fun onDestroy() {
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG)
+            ListWidgetFactoryRegistry.unregisterFactory(searchId)
         }
 
         private fun setupRemoteViews(views: RemoteViews) {
