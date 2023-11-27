@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.RemoteViewsService;
 
 import com.orgzly.BuildConfig;
 import com.orgzly.R;
@@ -83,6 +84,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
                 Intent serviceIntent = new Intent(context, ListWidgetService.class);
                 serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
                 serviceIntent.putExtra(AppIntent.EXTRA_QUERY_STRING, savedSearch.getQuery());
+                serviceIntent.putExtra(AppIntent.EXTRA_SAVED_SEARCH_ID, savedSearch.getId());
                 serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
                 // Tell ListView where to get the data from
@@ -95,54 +97,31 @@ public class ListWidgetProvider extends AppWidgetProvider {
                 onClickIntent.setAction(AppIntent.ACTION_CLICK_LIST_WIDGET);
                 onClickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
                 onClickIntent.setData(Uri.parse(onClickIntent.toUri(Intent.URI_INTENT_SCHEME)));
-                final PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(
-                        context,
-                        0,
-                        onClickIntent,
-                        ActivityUtils.mutable(PendingIntent.FLAG_UPDATE_CURRENT));
+                final PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(context, 0, onClickIntent, ActivityUtils.mutable(PendingIntent.FLAG_UPDATE_CURRENT));
 
                 remoteViews.setPendingIntentTemplate(R.id.list_widget_list_view, onClickPendingIntent);
 
                 // Plus icon - new note
-                remoteViews.setOnClickPendingIntent(
-                        R.id.list_widget_header_add,
-                        ShareActivity.createNewNotePendingIntent(context, "widget-" + appWidgetId, savedSearch));
+                remoteViews.setOnClickPendingIntent(R.id.list_widget_header_add, ShareActivity.createNewNotePendingIntent(context, "widget-" + appWidgetId, savedSearch));
 
                 // Sync icon - sync start
                 final Intent onSyncIntent = new Intent(context, ActionReceiver.class);
                 onSyncIntent.setAction(AppIntent.ACTION_SYNC_START);
-                final PendingIntent onSyncPendingIntent = PendingIntent.getBroadcast(
-                        context,
-                        0,
-                        onSyncIntent,
-                        ActivityUtils.mutable(PendingIntent.FLAG_UPDATE_CURRENT));
+                final PendingIntent onSyncPendingIntent = PendingIntent.getBroadcast(context, 0, onSyncIntent, ActivityUtils.mutable(PendingIntent.FLAG_UPDATE_CURRENT));
                 remoteViews.setOnClickPendingIntent(R.id.list_widget_header_sync, onSyncPendingIntent);
 
                 // Logo - open query
                 Intent openIntent = Intent.makeRestartActivityTask(new ComponentName(context, MainActivity.class));
                 openIntent.putExtra(AppIntent.EXTRA_QUERY_STRING, savedSearch.getQuery());
                 openIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
-                remoteViews.setOnClickPendingIntent(
-                        R.id.list_widget_header_logo,
-                        PendingIntent.getActivity(
-                                context,
-                                0,
-                                openIntent,
-                                ActivityUtils.immutable(PendingIntent.FLAG_UPDATE_CURRENT)));
+                remoteViews.setOnClickPendingIntent(R.id.list_widget_header_logo, PendingIntent.getActivity(context, 0, openIntent, ActivityUtils.immutable(PendingIntent.FLAG_UPDATE_CURRENT)));
 
                 Intent selectionIntent = new Intent(context, ListWidgetSelectionActivity.class);
                 selectionIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
                 selectionIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
-                remoteViews.setOnClickPendingIntent(
-                        R.id.list_widget_header_bar,
-                        PendingIntent.getActivity(context,
-                                0,
-                                selectionIntent,
-                                ActivityUtils.immutable(PendingIntent.FLAG_UPDATE_CURRENT)));
+                remoteViews.setOnClickPendingIntent(R.id.list_widget_header_bar, PendingIntent.getActivity(context, 0, selectionIntent, ActivityUtils.immutable(PendingIntent.FLAG_UPDATE_CURRENT)));
 
-                remoteViews.setTextViewText(
-                        R.id.list_widget_header_selection,
-                        savedSearch.getName());
+                remoteViews.setTextViewText(R.id.list_widget_header_selection, savedSearch.getName());
 
                 appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
             });
@@ -186,7 +165,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         SharedPreferences.Editor editor = context.getSharedPreferences(PREFERENCES_ID, Context.MODE_PRIVATE).edit();
-        for (int id: appWidgetIds) {
+        for (int id : appWidgetIds) {
             editor.remove(getFilterPreferenceKey(id));
         }
         editor.apply();
@@ -204,7 +183,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
         alarmManager.cancel(intent);
 
         int intervalMin = AppPreferences.widgetUpdateFrequency(context);
-        long intervalMillis = intervalMin * 60 * 1000;
+        long intervalMillis = ((long) intervalMin) * 60 * 1000;
 
         long now = System.currentTimeMillis();
         Calendar triggerAt = Calendar.getInstance();
@@ -216,11 +195,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
             triggerAt.add(Calendar.MINUTE, intervalMin);
         } while (triggerAt.getTimeInMillis() < now);
 
-        alarmManager.setInexactRepeating(
-                AlarmManager.RTC,
-                triggerAt.getTimeInMillis(),
-                intervalMillis,
-                intent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC, triggerAt.getTimeInMillis(), intervalMillis, intent);
 
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, triggerAt.getTimeInMillis(), intervalMillis);
     }
@@ -232,11 +207,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
     private PendingIntent getAlarmIntent(Context context) {
         Intent intent = new Intent(context, ListWidgetProvider.class);
         intent.setAction(AppIntent.ACTION_UPDATE_LIST_WIDGET);
-        return PendingIntent.getBroadcast(
-                context,
-                0,
-                intent,
-                ActivityUtils.immutable(PendingIntent.FLAG_UPDATE_CURRENT));
+        return PendingIntent.getBroadcast(context, 0, intent, ActivityUtils.immutable(PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
     private void setSelectionFromIntent(Context context, Intent intent) {
@@ -247,14 +218,19 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
         setFilter(context, appWidgetId, savedSearchId);
 
+        // Update the list in the widget manually because notifyAppWidgetViewDataChanged triggers
+        // the current list (RemoteViewsFactory) to reload instead of the one we are switching to.
+        RemoteViewsService.RemoteViewsFactory factory = ListWidgetFactoryRegistry.getFactory(savedSearchId);
+        if (factory != null) {
+            factory.onDataSetChanged();
+        }
+
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         updateAppWidgetLayout(context, appWidgetManager, appWidgetId);
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.list_widget_list_view);
     }
 
     private SavedSearch getSavedSearch(Context context, int appWidgetId) {
-        long filterId = context.getSharedPreferences(PREFERENCES_ID, Context.MODE_PRIVATE)
-                .getLong(getFilterPreferenceKey(appWidgetId), -1);
+        long filterId = context.getSharedPreferences(PREFERENCES_ID, Context.MODE_PRIVATE).getLong(getFilterPreferenceKey(appWidgetId), -1);
 
         SavedSearch savedSearch = null;
         if (filterId != -1) {
@@ -270,6 +246,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
         return savedSearch;
     }
 
+
     private void setFilter(Context context, int appWidgetId, long id) {
         SharedPreferences.Editor editor = context.getSharedPreferences(PREFERENCES_ID, Context.MODE_PRIVATE).edit();
         editor.putLong(getFilterPreferenceKey(appWidgetId), id);
@@ -283,8 +260,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
     private void setNoteDone(Intent intent) {
         final long noteId = intent.getLongExtra(AppIntent.EXTRA_NOTE_ID, 0L);
 
-        App.EXECUTORS.diskIO().execute(() ->
-                UseCaseRunner.run(new NoteUpdateStateToggle(Collections.singleton(noteId))));
+        App.EXECUTORS.diskIO().execute(() -> UseCaseRunner.run(new NoteUpdateStateToggle(Collections.singleton(noteId))));
     }
 
     private void openNote(Context context, Intent intent) {
