@@ -22,6 +22,15 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.14"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Git: Work around bug in the SSH transport library" />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.13"
             tools:ignore="HardcodedText" />
 
