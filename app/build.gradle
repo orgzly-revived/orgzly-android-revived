@@ -194,9 +194,6 @@ dependencies {
     // Git sync via SSH
     implementation "org.eclipse.jgit:org.eclipse.jgit:$versions.jgit"
     implementation "org.eclipse.jgit:org.eclipse.jgit.ssh.apache:$versions.jgit"
-    implementation("javax.management:jmx:$versions.javax_management") {
-        because 'Jgit uses ReflectionException'
-    }
     implementation("androidx.security:security-crypto:$versions.security_crypto") {
         because 'SSH key generation'
     }

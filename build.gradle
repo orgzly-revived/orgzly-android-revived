@@ -67,8 +67,6 @@ buildscript {
 
     versions.jgit = '6.7.0.202309050840-r'
 
-    versions.javax_management = '1.2.1'
-
     versions.security_crypto = '1.1.0-alpha03'
 
     versions.biometric_ktx = '1.2.0-alpha04'
@@ -99,11 +97,6 @@ allprojects {
         // For sardine-android
         maven {
             url 'https://jitpack.io'
-        }
-
-        // For javax.management
-        maven {
-            url 'https://www.datanucleus.org/downloads/maven2/'
         }
     }
 
