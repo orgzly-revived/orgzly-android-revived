@@ -27,6 +27,18 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
+            app:text="Git: Show current branch in notebook sync status" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Eliminate jitter in widget agenda" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Bug fixes around SSH key generation and Git cloning" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
             app:text="Fix broken notification settings" />
 
         <com.orgzly.android.ui.views.WhatsNewChange
