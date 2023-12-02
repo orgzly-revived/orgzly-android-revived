@@ -100,7 +100,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         }
 
         // Disable Git repos completely on API < 23
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             preference(R.string.pref_key_git_is_enabled)?.let {
                 preferenceScreen.removePreference(it)
             }
