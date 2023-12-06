@@ -280,7 +280,7 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
                     return
                 }
                 val repoScheme = getRepoScheme()
-                @RequiresApi(Build.VERSION_CODES.M)
+                @RequiresApi(Build.VERSION_CODES.N)
                 if (repoScheme != "https" && !SshKey.exists) {
                     SshKey.promptForKeyGeneration()
                     return

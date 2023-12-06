@@ -21,7 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@RequiresApi(Build.VERSION_CODES.M)
+@RequiresApi(Build.VERSION_CODES.N)
 private enum class KeyGenType(val generateKey: suspend (requireAuthentication: Boolean) -> Unit) {
     Rsa({ requireAuthentication ->
         SshKey.generateKeystoreNativeKey(SshKey.Algorithm.Rsa, requireAuthentication)
@@ -34,7 +34,7 @@ private enum class KeyGenType(val generateKey: suspend (requireAuthentication: B
     }),
 }
 
-@RequiresApi(Build.VERSION_CODES.M)
+@RequiresApi(Build.VERSION_CODES.N)
 class SshKeygenActivity : CommonActivity() {
 
     private var keyGenType = KeyGenType.Ecdsa
@@ -84,7 +84,7 @@ class SshKeygenActivity : CommonActivity() {
                 }
             }
             val keyguardManager: KeyguardManager = getSystemService(KEYGUARD_SERVICE) as KeyguardManager
-            keyRequireAuthentication.isEnabled = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            keyRequireAuthentication.isEnabled = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                 false
             } else {
                 keyguardManager.isDeviceSecure

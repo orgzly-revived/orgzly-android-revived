@@ -69,7 +69,7 @@ object SshKey {
     val exists
         get() = type != null
     private val mustAuthenticate: Boolean
-        @RequiresApi(Build.VERSION_CODES.M)
+        @RequiresApi(Build.VERSION_CODES.N)
         get() {
             return runCatching {
                 if (type !in listOf(Type.KeystoreNative, Type.KeystoreWrappedEd25519)) return false
@@ -128,7 +128,7 @@ object SshKey {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
+    @RequiresApi(Build.VERSION_CODES.N)
     enum class Algorithm(
         val algorithm: String,
         val applyToSpec: KeyGenParameterSpec.Builder.() -> Unit
@@ -217,7 +217,7 @@ object SshKey {
             type = Type.KeystoreWrappedEd25519
         }
 
-    @RequiresApi(Build.VERSION_CODES.M)
+    @RequiresApi(Build.VERSION_CODES.N)
     fun generateKeystoreNativeKey(algorithm: Algorithm, requireAuthentication: Boolean) {
         delete()
 
@@ -248,7 +248,7 @@ object SshKey {
         type = Type.KeystoreNative
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
+    @RequiresApi(Build.VERSION_CODES.N)
     fun getKeyPair(): KeyPair {
         var privateKey: PrivateKey? = null
         var privateKeyLoadAttempts = 0
@@ -348,7 +348,7 @@ object SshKey {
         return KeyPair(publicKey, privateKey)
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
+    @RequiresApi(Build.VERSION_CODES.N)
     fun promptForKeyGeneration() {
         val activity = App.getCurrentActivity()
         if (activity != null) {

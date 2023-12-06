@@ -38,7 +38,7 @@ class GitSshKeyTransportSetter: GitTransportSetter {
                 )
             }
 
-            @RequiresApi(Build.VERSION_CODES.M)
+            @RequiresApi(Build.VERSION_CODES.N)
             override fun getDefaultKeys(@NonNull sshDir: File): Iterable<KeyPair>? {
                 return if (SshKey.exists) {
                     listOf(SshKey.getKeyPair())
