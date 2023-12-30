@@ -8,6 +8,12 @@ class NoteCreate(val notePayload: NotePayload, val notePlace: NotePlace) : UseCa
     override fun run(dataRepository: DataRepository): UseCaseResult {
         val note = dataRepository.createNote(notePayload, notePlace)
 
+        notePayload.attachments.forEach {
+            if (!it.isDeleted) {
+                dataRepository.storeAttachment(notePlace.bookId, notePayload, it.uri)
+            }
+        }
+
         return UseCaseResult(
                 modifiesLocalData = true,
                 triggersSync = SYNC_NOTE_CREATED,

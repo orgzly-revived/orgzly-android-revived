@@ -3,9 +3,12 @@ package com.orgzly.android.repos;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.documentfile.provider.DocumentFile;
+
 import com.orgzly.android.BookName;
 import com.orgzly.android.LocalStorage;
 import com.orgzly.android.db.entity.Repo;
+import com.orgzly.android.ui.note.NoteAttachmentData;
 import com.orgzly.android.util.MiscUtils;
 import com.orgzly.android.util.UriUtils;
 
@@ -110,6 +113,18 @@ public class DirectoryRepo implements SyncRepo {
     }
 
     @Override
+    public List<NoteAttachmentData> listFilesInPath(String pathInRepo) {
+        File path = new File(mDirectory, pathInRepo);
+        File[] files = path.listFiles();
+        ArrayList<NoteAttachmentData> list = new ArrayList<>(files.length);
+        for (File file : files) {
+            list.add(new NoteAttachmentData(Uri.fromFile(file), file.getName(), false, false));
+        }
+
+        return list;
+    }
+
+    @Override
     public VersionedRook retrieveBook(String fileName, File destinationFile) throws IOException {
         Uri uri = repoUri.buildUpon().appendPath(fileName).build();
 
@@ -156,6 +171,11 @@ public class DirectoryRepo implements SyncRepo {
         Uri uri = repoUri.buildUpon().appendPath(fileName).build();
 
         return new VersionedRook(repoId, RepoType.DIRECTORY, repoUri, uri, rev, mtime);
+    }
+
+    @Override
+    public VersionedRook storeFile(File file, String pathInRepo, String fileName) throws IOException {
+        return storeBook(file, pathInRepo + File.separator + fileName);
     }
 
     @Override

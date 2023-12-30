@@ -1,7 +1,12 @@
 package com.orgzly.android.ui.note
 
+import android.content.Context
+import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
+import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.ui.share.ShareActivity
+import com.orgzly.android.util.AttachmentUtils
 import com.orgzly.org.OrgProperties
 
 data class NotePayload @JvmOverloads constructor(
@@ -13,7 +18,8 @@ data class NotePayload @JvmOverloads constructor(
         val deadline: String? = null,
         val closed: String? = null,
         val tags: List<String> = emptyList(),
-        val properties: OrgProperties = OrgProperties()
+        val properties: OrgProperties = OrgProperties(),
+        var attachments: List<NoteAttachmentData> = emptyList(),
 ) : Parcelable {
 
     override fun describeContents(): Int {
@@ -40,6 +46,33 @@ data class NotePayload @JvmOverloads constructor(
                 out.writeString(property.value)
             }
         }
+
+        out.writeInt(attachments.size)
+        attachments.forEach() {
+            it.writeToParcel(out, flags)
+        }
+    }
+
+    /** Returns the path to store the attachment. */
+    fun attachDir(context: Context): String {
+        val idStr = properties.get("ID")
+        // TODO idStr could be null. Throw a warning exception, show a toast, don't attach anything
+        if (idStr == null) {
+            return ""
+        }
+        when(AppPreferences.attachMethod(context)) {
+            ShareActivity.ATTACH_METHOD_LINK -> return ""
+            ShareActivity.ATTACH_METHOD_COPY_DIR -> return AppPreferences.attachDirDefaultPath(context)
+            ShareActivity.ATTACH_METHOD_COPY_ID -> {
+                return AttachmentUtils.getAttachDir(context, idStr)
+            }
+        }
+        return ""
+    }
+
+    fun hasEligibleIdDirectory(context: Context): Boolean {
+        // TODO: Support DIR property.
+        return AppPreferences.attachMethod(context) == ShareActivity.ATTACH_METHOD_COPY_ID && properties.get("ID") != null;
     }
 
     companion object {
@@ -69,6 +102,12 @@ data class NotePayload @JvmOverloads constructor(
                 properties.put(name!!, value!!)
             }
 
+            val attachments = mutableListOf<NoteAttachmentData>().apply {
+                repeat(parcel.readInt()) {
+                    this.add(parcel.readParcelable(NoteAttachmentData::class.java.classLoader)!!)
+                }
+            }.toList()
+
             return NotePayload(
                     title!!,
                     content,
@@ -78,7 +117,8 @@ data class NotePayload @JvmOverloads constructor(
                     deadline,
                     closed,
                     tags,
-                    properties
+                    properties,
+                    attachments
             )
         }
 

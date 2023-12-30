@@ -1,8 +1,12 @@
 package com.orgzly.android.espresso
 
+import android.app.Activity
+import android.app.Instrumentation
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.widget.DatePicker
 import android.widget.TimePicker
+import androidx.documentfile.provider.DocumentFile
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.Espresso.pressBack
@@ -10,15 +14,25 @@ import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.PickerActions.setDate
 import androidx.test.espresso.contrib.PickerActions.setTime
+import androidx.test.espresso.core.internal.deps.guava.collect.Iterables
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers.anyIntent
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.orgzly.R
 import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.espresso.util.EspressoUtils.*
+import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.repos.RepoType
 import com.orgzly.android.ui.main.MainActivity
+import com.orgzly.android.ui.share.ShareActivity
+import com.orgzly.android.util.MiscUtils
 import org.hamcrest.Matchers.*
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import java.io.File
 
 class NoteFragmentTest : OrgzlyTest() {
     private lateinit var scenario: ActivityScenario<MainActivity>
@@ -544,5 +558,90 @@ class NoteFragmentTest : OrgzlyTest() {
         pressBack() // Leave note
 
         onView(withId(R.id.fragment_book_view_flipper)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testAttachmentsHiddenByDefault() {
+        onNoteInBook(1).perform(click())
+        // By default attachments list is hidden.
+        onView(withId(R.id.attachments_header_up_icon)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.attachments_header_down_icon)).check(matches(not(isDisplayed())))
+
+        // The attachments header is hidden.
+        onView(withId(R.id.attachments_header)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.attachments_header_add_button)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun testAttachmentsAddFirst() {
+        onNoteInBook(1).perform(click())
+
+        // Stub response to pick a file.
+        Intents.init()
+        stubFilePicker()
+
+        // Click attach file in the menu.
+        openActionBarOverflowOrOptionsMenu(context)
+        onView(withText(R.string.attachment_add)).perform(click())
+
+        // Verify the intent was sent correctly.
+        val receivedIntent = Iterables.getOnlyElement(Intents.getIntents())
+        Assert.assertThat(receivedIntent, hasAction(Intent.ACTION_CHOOSER))
+        val extraIntent : Intent = receivedIntent.extras?.get(Intent.EXTRA_INTENT) as Intent
+        Assert.assertThat(extraIntent, hasAction(Intent.ACTION_GET_CONTENT))
+
+        // Verify the list.
+        onView(withId(R.id.attachments_header)).check(matches(isDisplayed()))
+        onView(withId(R.id.attachments_header_up_icon)).check(matches(isDisplayed()))
+        onView(withId(R.id.attachments_header_down_icon)).check(matches(not(isDisplayed())))
+        onView(withText(ATTACHMENT_FILE_NAME)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testNewNoteAddAttachment_autoAddIdProperty() {
+        AppPreferences.attachMethod(context, ShareActivity.ATTACH_METHOD_COPY_ID);
+        val dataDir = File(context.cacheDir, "data")
+        testUtils.setupRepo(RepoType.DIRECTORY, dataDir.toURI().toString())
+
+        onNoteInBook(1).perform(longClick())
+        onActionItemClick(R.id.new_note, R.string.new_note)
+        onView(withText(R.string.new_above)).perform(click())
+
+        onView(withId(R.id.title_edit)).perform(*replaceTextCloseKeyboard("Note with attachment"))
+
+        // Stub response to pick a file.
+        Intents.init()
+        stubFilePicker()
+
+        // Click attach file in the menu.
+        openActionBarOverflowOrOptionsMenu(context)
+        onView(withText(R.string.attachment_add)).perform(click())
+
+        // Verify ID property is set.
+        onView(allOf(withId(R.id.name), withText("ID"))).check(matches(isDisplayed()))
+
+        // Save and reopen the note.
+        onView(withId(R.id.done)).perform(click())
+        onNoteInBook(1).perform(click())
+
+        // Verify ID property is saved.
+        onView(allOf(withId(R.id.name), withText("ID"))).check(matches(isDisplayed()))
+        // Verify the attachment list is shown
+        onView(withId(R.id.attachments_header_up_icon)).check(matches(isDisplayed()))
+        onView(withId(R.id.attachments_header_down_icon)).check(matches(not(isDisplayed())))
+        onView(withText(EXPECTED_ATTACHMENT_FILE_NAME)).check(matches(isDisplayed()))
+    }
+
+    private val ATTACHMENT_FILE_NAME = "cat.jpg"
+    // Filename cannot be mocked in DocumentFile easily, it is "null" during storeFile.
+    private val EXPECTED_ATTACHMENT_FILE_NAME = "null"
+
+    private fun stubFilePicker() {
+        val resultData = Intent()
+        val file = File(context.cacheDir, ATTACHMENT_FILE_NAME)
+        MiscUtils.writeStringToFile("cat image", file)
+        resultData.data = DocumentFile.fromFile(file).uri
+        val result = Instrumentation.ActivityResult(Activity.RESULT_OK, resultData)
+        Intents.intending(anyIntent()).respondWith(result)
     }
 }

@@ -9,12 +9,14 @@ import com.burgstaller.okhttp.digest.CachingAuthenticator
 import com.burgstaller.okhttp.digest.Credentials
 import com.burgstaller.okhttp.digest.DigestAuthenticator
 import com.orgzly.android.BookName
+import com.orgzly.android.ui.note.NoteAttachmentData
 import com.orgzly.android.util.UriUtils
 import com.thegrizzlylabs.sardineandroid.DavResource
 import com.thegrizzlylabs.sardineandroid.impl.OkHttpSardine
 import okhttp3.OkHttpClient
 import okio.Buffer
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.security.KeyStore
@@ -192,6 +194,43 @@ class WebdavRepo(
         sardine.put(fileUrl, file, null)
 
         return sardine.list(fileUrl).first().toVersionedRook()
+    }
+
+    override fun storeFile(file: File?, pathInRepo: String?, fileName: String?): VersionedRook {
+        if (file == null || !file.exists()) {
+            throw FileNotFoundException("File $file does not exist")
+        }
+
+        val folderUri = Uri.withAppendedPath(uri, pathInRepo)
+        val fileUrl = Uri.withAppendedPath(folderUri, fileName).toUrl()
+
+        createRecursive(uri.toUrl(), pathInRepo!!)
+
+        sardine.put(fileUrl, file, null)
+
+        return sardine.list(fileUrl).first().toVersionedRook()
+    }
+
+    override fun listFilesInPath(pathInRepo: String?): MutableList<NoteAttachmentData> {
+        TODO("Not yet implemented")
+    }
+
+    private fun createRecursive(parent: String, path: String): String {
+        if ("." == path || "" == path) {
+            return parent
+        }
+        val l = path.lastIndexOf('/')
+        val p = if (l >= 0) {
+            createRecursive(parent, path.substring(0, l))
+        } else {
+            parent
+        }
+        val subdir = path.substring(l + 1)
+        val folder = p + "/" + subdir
+        if (!sardine.exists(folder)) {
+            sardine.createDirectory(folder)
+        }
+        return folder
     }
 
     override fun renameBook(from: Uri, name: String?): VersionedRook {

@@ -644,6 +644,10 @@
     <string name="file_absolute_root">Root for absolute links (e.g. file:/readme.txt)</string>
     <string name="file_relative_root">Root for relative links (e.g. file:readme.txt)</string>
 
+    <string name="attachments">Attachments</string>
+    <string name="attachment_add">Attach file</string>
+    <string name="attachments_none">No attachments</string>
+
     <string name="argument_used">%s used</string>
     <string name="argument_detected">%s detected</string>
     <string name="argument_selected">%s selected</string>
@@ -717,6 +721,13 @@
 
     <string name="prepend">Prepend</string>
     <string name="insert_new_note_at_beginning">Insert new note at beginning</string>
+
+    <string name="attach_method">Method used to add attachments</string>
+    <string name="attach_method_link">Link</string>
+    <string name="attach_method_copy_dir">Copy to the attachment directory root</string>
+    <string name="attach_method_copy_id">Copy to ID property based directory under attachment directory</string>
+
+    <string name="attach_dir_default_path">Attachment directory, a relative path under the repository</string>
 
     <string name="developer_options">Developer options</string>
     <string name="git_repository_type">Git repository type</string>

@@ -12,6 +12,7 @@ import com.orgzly.android.git.GitPreferences;
 import com.orgzly.android.git.GitPreferencesFromRepoPrefs;
 import com.orgzly.android.git.GitTransportSetter;
 import com.orgzly.android.prefs.RepoPreferences;
+import com.orgzly.android.ui.note.NoteAttachmentData;
 import com.orgzly.android.util.LogUtils;
 
 import org.eclipse.jgit.api.CloneCommand;
@@ -192,6 +193,16 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
         }
         synchronizer.tryPush();
         return currentVersionedRook(Uri.EMPTY.buildUpon().appendPath(fileName).build());
+    }
+
+    @Override
+    public VersionedRook storeFile(File file, String pathInRepo, String fileName) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<NoteAttachmentData> listFilesInPath(String pathInRepo) {
+        throw new UnsupportedOperationException();
     }
 
     private RevWalk walk() {

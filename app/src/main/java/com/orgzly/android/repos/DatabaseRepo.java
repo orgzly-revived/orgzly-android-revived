@@ -3,6 +3,7 @@ package com.orgzly.android.repos;
 import android.net.Uri;
 
 import com.orgzly.android.data.DbRepoBookRepository;
+import com.orgzly.android.ui.note.NoteAttachmentData;
 import com.orgzly.android.util.MiscUtils;
 import com.orgzly.android.util.UriUtils;
 
@@ -64,6 +65,16 @@ public class DatabaseRepo implements SyncRepo {
         VersionedRook vrook = new VersionedRook(repoId, RepoType.MOCK, repoUri, uri, rev, mtime);
 
         return dbRepo.createBook(repoId, vrook, content);
+    }
+
+    @Override
+    public VersionedRook storeFile(File file, String pathInRepo, String fileName) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<NoteAttachmentData> listFilesInPath(String pathInRepo) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

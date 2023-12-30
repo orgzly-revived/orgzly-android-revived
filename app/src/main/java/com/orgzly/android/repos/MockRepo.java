@@ -5,6 +5,7 @@ import android.os.SystemClock;
 
 
 import com.orgzly.android.data.DbRepoBookRepository;
+import com.orgzly.android.ui.note.NoteAttachmentData;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,6 +61,17 @@ public class MockRepo implements SyncRepo {
     public VersionedRook storeBook(File file, String fileName) throws IOException {
         SystemClock.sleep(SLEEP_FOR_STORE_BOOK);
         return databaseRepo.storeBook(file, fileName);
+    }
+
+    @Override
+    public VersionedRook storeFile(File file, String pathInRepo, String fileName) throws IOException {
+        SystemClock.sleep(SLEEP_FOR_STORE_BOOK);
+        return databaseRepo.storeFile(file, pathInRepo, fileName);
+    }
+
+    @Override
+    public List<NoteAttachmentData> listFilesInPath(String pathInRepo) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
