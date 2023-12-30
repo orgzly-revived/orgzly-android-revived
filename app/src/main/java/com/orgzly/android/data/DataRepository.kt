@@ -8,6 +8,7 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Handler
 import android.text.TextUtils
+import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -36,6 +37,7 @@ import com.orgzly.android.savedsearch.FileSavedSearchStore
 import com.orgzly.android.sync.BookSyncStatus
 import com.orgzly.android.ui.NotePlace
 import com.orgzly.android.ui.Place
+import com.orgzly.android.ui.note.NoteAttachmentData
 import com.orgzly.android.ui.note.NoteBuilder
 import com.orgzly.android.ui.note.NotePayload
 import com.orgzly.android.usecase.RepoCreate
@@ -1595,6 +1597,52 @@ class DataRepository @Inject constructor(
                 db.noteEvent().replace(NoteEvent(noteId, orgRangeId))
             }
         }
+    }
+
+    /**
+     * Store the attachment content, in the repo for [bookId].
+     *
+     * @throws IOException
+     */
+    @Throws(IOException::class)
+    fun storeAttachment(bookId: Long, notePayload: NotePayload, attachmentUri: Uri) {
+        // Get the fileName from the provider.
+        // TODO provide a way to customize the fileName
+        val uri = attachmentUri
+        val documentFile: DocumentFile = DocumentFile.fromSingleUri(context, uri)
+                ?: throw IOException("Cannot get the fileName for Uri $uri")
+        val fileName = documentFile.name
+
+        val attachDir = notePayload.attachDir(context)
+
+        val book = getBookView(bookId)
+                ?: throw IOException(resources.getString(R.string.book_does_not_exist_anymore))
+
+        // Not quite sure what repo to use.
+        val repoEntity = book.linkRepo ?: defaultRepoForSavingBook()
+        val repo = getRepoInstance(repoEntity.id, repoEntity.type, repoEntity.url)
+
+        val tempFile: File
+        // Get the InputStream of the content and write it to a File.
+        context.contentResolver.openInputStream(uri).use { inputStream ->
+            tempFile = getTempBookFile()
+            MiscUtils.writeStreamToFile(inputStream, tempFile)
+            LogUtils.d(TAG, "Wrote to file $tempFile")
+        }
+
+        repo.storeFile(tempFile, attachDir, fileName)
+        LogUtils.d(TAG, "Stored file to repo")
+        tempFile.delete()
+    }
+
+    fun listFiles(bookId: Long, notePayload: NotePayload): List<NoteAttachmentData> {
+        val book = getBookView(bookId)
+                ?: throw IOException(resources.getString(R.string.book_does_not_exist_anymore))
+        val repoEntity = book.linkRepo ?: defaultRepoForSavingBook()
+        val repo = getRepoInstance(repoEntity.id, repoEntity.type, repoEntity.url)
+        val attachDir = notePayload.attachDir(context)
+
+        return repo.listFilesInPath(attachDir)
     }
 
     /**

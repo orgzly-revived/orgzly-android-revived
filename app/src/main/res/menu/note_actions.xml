@@ -62,6 +62,11 @@
         android:title="@string/keep_screen_on"/>
 
     <item
+        android:id="@+id/attach_file"
+        app:showAsAction="never"
+        android:title="@string/attachment_add"/>
+
+    <item
         android:id="@+id/delete"
         android:icon="@drawable/ic_delete"
         app:showAsAction="never"
