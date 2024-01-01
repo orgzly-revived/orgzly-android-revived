@@ -18,8 +18,8 @@ class DatabaseAppLogsRepository @Inject constructor(db: OrgzlyDatabase) : AppLog
         dbAppLog.insert(entry)
     }
 
-    override fun getFlow(type: String): Flow<List<LogEntry>> {
-        return dbAppLog.getFlow(type).map { logEntries ->
+    override fun getFlow(): Flow<List<LogEntry>> {
+        return dbAppLog.getFlow().map { logEntries ->
             logEntries.map { entry ->
                 LogEntry(entry.timestamp, entry.name, entry.message)
             }
