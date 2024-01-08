@@ -544,6 +544,9 @@
     <string name="pref_title_sync_after_note_create">Note created</string>
     <string name="pref_summary_sync_after_note_create">Sync after creating a new note</string>
 
+    <string name="pref_title_sync_before_quick_note_create">Quick Note created</string>
+    <string name="pref_summary_sync_before_quick_note_create">Sync before creating a new quick note</string>
+
     <string name="pref_title_sync_after_note_update">Note updated or deleted</string>
     <string name="pref_summary_sync_after_note_update">Sync after updating or deleting a note</string>
 
