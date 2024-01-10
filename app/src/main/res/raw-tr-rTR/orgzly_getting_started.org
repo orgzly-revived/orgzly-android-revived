@@ -1,66 +1,66 @@
 Orgzly'e Hoşgeldiniz!
 
 * Notlar
-** Açmak için nota tıklayın
-** Notu seçmek için tıklayın ve basılı tutun
+** Açmak için nota tıkla
+** Seçmek için nota tıklayıp basılı tut
 
-Birden fazla not seçebilirsiniz.
+Birden fazla not seçebilirsin.
 
-** Hızlı menüyü açmak için notu sağa kaydırın
+** Hızlı menüyü açmak için notu sağa kaydır
 
-Farklı bir menüye ulaşmak için notu sola kaydırın.
+Farklı bir menüye ulaşmak için notu sola kaydır.
 
-** Bir notun alt notlarını yanındaki simgeye tıklayarak gizleyebilirsiniz
+** Yanındaki simgeye tıklayarak alt notlar içeren bir notu katlayabilirsin
 
-Tüm alt ağacı açmak için simgeye uzun tıklayın.
+Alt ağacın tamamını açmak için simgeye basılı tut.
 
-*** Sahip olabileceğiniz seviyelerin sınırı yoktur
-Notlarınızı daha iyi düzenlemek için bunu kullanın
+*** Sahip olabileceğiniz seviyelerin sınırı yok
+**** Notlarınızı daha iyi düzenlemek için bunu kullanın
 
 ** Notların etiketleri olabilir :tag1:tag2:
-Alt not etiketleri devralır :tag3:
+*** Alt not etiketleri devralır :tag3:
 
-If you search for notes with tag “tag1” using “t.tag1” query, this note will be included in search results.
+“t.tag1” sorgusunu kullanarak “tag1” etiketli notları ararsan bu not arama sonuçlarına dahil edilir.
 
-*** A note that has the =ARCHIVE= tag set is grayed out :ARCHIVE:
+*** =ARCHIVE= olarak etiketli bir not gri renkte görünür :ARCHIVE:
 
 ** TODO Notlar bir durum belirtebilir
 
-Ayarlardan TODO, NEXT, DONE gibi istediğiniz kadar durum yapılandırabilirsiniz.
+Kullanılacak istediğiniz sayıda durumu yapılandırabilirsiniz: YAPILACAKLAR, SONRAKİ, YAPILDI vb.
 
-*** İki tür durum vardır: to-do ve done
+*** İki tür/durum vardır: yapılacak ve yapılan
 
-*** DONE bu /done/ durumda bir nottur
-CLOSED: [2021-07-20 Sal. 11:10]
+*** TAMAMLANDI Bu, /done/ türünde bir durum içeren bir nottur
+CLOSED: [2024-01-10 Çrş 22:09]
 
 ** Notların yapılması için bir zaman belirlenebilir
-SCHEDULED: <2015-02-20 Cuma 15:15>
+SCHEDULED: <2024-01-10 Çrş 22:09>
 
-Belirlenen zamanlara tekrarlayıcı ekleyebilirsiniz
-SCHEDULED: <2015-02-16 Pzt. .+1d>
+Belirlenen zamanlara tekrarlayıcı eklenebilir
+SCHEDULED: <2024-01-10 Çrş .+3d>
 
-** Notlara son teslim tarihi de ekleyebilirsiniz
-DEADLINE: <2015-02-20 Cuma>
+** Notlara bitiş tarihi de eklenebilir
+DEADLINE: <2024-01-10 Çrş>
 
-** Belirlenen zamanlar ve son teslim tarihleri için hatırlatıcılar desteklenmektedir
+** Planlamalar ve bitiş tarihleri için hatırlatma desteği
 
-Hatırlatıcılar başlangıçta devredışı olacak şekilde tanımlandılar ve ayarlardan etkinleştirilebilinirler.
+Varsayılan olarak devre dışıdırlar ve Ayarlar'da etkinleştirilmeleri gerekir.
 
 ** [#A] Notların öncelikleri olabilir
 
-Önceliklerin numarasını ayarlardan değiştirebilirsiniz. You can also change default priority - assumed priority for notes without one set.
+Önceliklerin numarasını ayarlardan değiştirebilirsiniz. Ayrıca varsayılan önceliği değiştirebilirsiniz - tek notlar için varsayılan öncelik.
 
 ** Not bağlantılar içerebilir
 
-Bir telefon numarası çevirin (tel:555-0199), SMS gönderin (sms:555-0199), e-posta oluşturun (mailto:support@orgzly.com) veya bir web sayfasını ziyaret edin ([[https://www.orgzly.com][Orgzly.com]]).
+Bir telefon numarası çevirin (tel:555-0199), SMS gönderin (sms:555-0199), e-posta oluşturun (mailto:support@orgzly.com) veya bir web sayfasını ziyaret edin ([[http://www.orgzly.com][Orgzly.com]]).
 
-Ayrıca uygulama içinde başka bir nota veya not defterine bağlantı verebilirsiniz.
+Ayrıca uygulama içindeki başka bir nota veya deftere bağlantı verilebilir.
 
-Daha fazla bilgi için https://www.orgzly.com/help#links adresine bakın.
+Daha fazla bilgi için http://www.orgzly.com/help#links adresine bakın.
 
-** Temel yazı karakteri önemi desteklenmektedir
+** Temel tipografik vurgu desteklenmekte
 
-Kelimeleri * kalın *, / italik /, _altıçizili_, = kelimesi kelimesine =, ~ kod ~ ve + doğrudan vurgulama + yapabilirsiniz.
+Kelimeler *kalın*, /italik/, _altı çizili_, =verbatim=, ~kod~ ve +üstü çizili+ yapılabilir.
 
 ** Onay kutusu listesi kullanılabilir
 
@@ -73,22 +73,22 @@ Değiştirmek için onay kutusunu tıklayın. Yeni bir öğe oluşturmak için s
 * Arama
 ** Birçok arama operatörü desteklenmektedir
 
-Notları sınıfına, etiketine, zamanlanmış veya son teslim zamanı vb. Göre arayabilirsiniz.
+Notlar durumlara, etiketlere, planlanma durumuna veya bitiş tarihlerine vb. göre aranabilir.
 
-Daha fazlası için https://www.orgzly.com/help#search siteyi görün.
+Daha fazla bilgi edinmek için http://www.orgzly.com/help#search adresine göz at.
 
-** Arama sorguları hızlı sorgu için kaydedilebilir
+** Hızlı erişim için arama sorguları kaydedilebilir
 
-Gezinme penceresinden örnek aramaları deneyin ve kullandıkları soruları not edin.
+Gezinme çekmecesinden örnek aramaları dene ve kullandıkları sorguları not et.
 
-Gezinme penceresinde bulunan "Aramalar" ı tıklayarak kendi kaydedilmiş aramalarınızı oluşturabilirsiniz.
+Gezinme çekmecesindeki "Aramalar"ı tıklayarak kendi kayıtlı aramalarını oluşturabilirsin.
 
 * Senkronizasyon
 
-** Dizüstü bilgisayarlar düz metin dosyaları olarak kaydedilebilir
+** Defterler düz metin dosyaları olarak kaydedilebilir
 
-Dosyalar "Org mode" tarafından kullanılmış formatları içerir.
+Dosyalar “Org mod” tarafından kullanılan formattadır.
 
 ** Konum (depo) türü
 
-Dizüstü bilgisayarlarınızı mobil cihazınızdaki, SD kartınızdaki veya Dropbox'taki bir dizinde senkronize şekilde tutabilirsiniz.
+Defterleri mobil cihazındaki bir dizine, SD kartına veya Dropbox'a eşitleyebilirsin.
