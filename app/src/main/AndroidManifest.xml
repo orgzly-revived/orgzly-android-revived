@@ -34,7 +34,6 @@
         android:supportsRtl="true"
         android:icon="@mipmap/cic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppLightTheme.Light"
         android:fullBackupContent="@xml/backup_config"
         android:requestLegacyExternalStorage="true">
 
