@@ -25,6 +25,13 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
 
+      - name: Setup build tool version variable
+        shell: bash
+        run: |
+          BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
+          echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+          echo Last build tool version is: $BUILD_TOOL_VERSION
+
       # Build the standard version binary.
       - name: Generate "premium" release APK
         run: ./gradlew assemblePremiumRelease --stacktrace
@@ -37,6 +44,8 @@ jobs:
           signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
           alias: orgzly-revived-20231013
           keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
 
       - name: Get version name from git tag
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
@@ -56,6 +65,8 @@ jobs:
           signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
           alias: orgzly-revived-20231013
           keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
 
       - name: Rename APK file
         run: mv ${{steps.sign_fdroid_apk.outputs.signedReleaseFile}} orgzly-revived-fdroid-${{ env.VERSION }}.apk
