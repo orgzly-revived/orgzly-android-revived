@@ -13,6 +13,7 @@ class LogMajorEvents {
     companion object {
 
         const val REMINDERS = "reminders"
+        const val SYNC = "sync"
 
         fun isEnabled(): Boolean {
             return AppPreferences.logMajorEvents(App.getAppContext())
