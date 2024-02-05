@@ -27,6 +27,10 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
+            app:text="Log sync events to major events app log" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
             app:text="Removed forced Light theme for splash screen" />
 
         <com.orgzly.android.ui.views.WhatsNewChange
