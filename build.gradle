@@ -45,7 +45,7 @@ buildscript {
 
     versions.android_test_uiautomator = '2.2.0'
 
-    versions.org_java = '1.3-SNAPSHOT'
+    versions.org_java = '1.3.1'
 
     versions.loremipsum = '1.0'
 
@@ -97,6 +97,16 @@ allprojects {
         // For sardine-android
         maven {
             url 'https://jitpack.io'
+        }
+
+        // For  com.orgzlyrevived.org-java
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/orgzly-revived/org-java")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
         }
     }
 
