@@ -11,8 +11,8 @@ android {
         def application_id = "com.orgzlyrevived"
         minSdkVersion 21 // Lollipop (5.0)
         targetSdkVersion 32 // Android 12L
-        versionCode 187
-        versionName "1.8.15-beta.4"
+        versionCode 188
+        versionName "1.8.15"
         applicationId application_id
 
         testInstrumentationRunner "com.orgzly.android.OrgzlyTestRunner"
