@@ -36,6 +36,8 @@ jobs:
       # Build the standard version binary.
       - name: Generate "premium" release APK
         run: ./gradlew assemblePremiumRelease --stacktrace
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sign APK using key store from repo secrets
         uses: r0adkll/sign-android-release@v1
@@ -57,6 +59,8 @@ jobs:
       # Now do the same for the F-Droid flavor.
       - name: Generate "fdroid" release APK
         run: ./gradlew assembleFdroidRelease --stacktrace
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
       - name: Sign APK using key store from repo secrets
         uses: r0adkll/sign-android-release@v1
