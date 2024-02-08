@@ -175,7 +175,6 @@
     <string name="git_verifying_settings">Depo ayarlarının çalışacağından emin ol.</string>
     <string name="git_url_hint">Uzak Bağlantı (örn. git@github.com:orgzly/orgzly-android.git)</string>
     <string name="git_directory_hint">Dizin konumu (örn. \"/sdcard/orgzly\")</string>
-    <string name="git_ssh_key_hint">SSH anahtar konumu (örn. \"/sdcard/id_rsa\")</string>
     <string name="git_https_username_hint">Kullanıcı adı</string>
     <string name="git_https_password_hint">Parola</string>
     <string name="git_author_hint">Yazar (örn. Sarı Çizmeli Mehmet)</string>

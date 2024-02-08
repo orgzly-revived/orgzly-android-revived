@@ -62,7 +62,7 @@
         android:summary="@string/notification_channel_settings_summary">
         <intent android:action="android.settings.CHANNEL_NOTIFICATION_SETTINGS">
             <extra android:name="android.provider.extra.CHANNEL_ID" android:value="reminders" />
-            <extra android:name="android.provider.extra.APP_PACKAGE" android:value="com.orgzlyrevived" />
+            <extra android:name="android.provider.extra.APP_PACKAGE" android:value="@string/application_id" />
         </intent>
     </androidx.preference.PreferenceScreen>
 
