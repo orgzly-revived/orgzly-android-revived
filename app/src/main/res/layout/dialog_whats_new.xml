@@ -22,6 +22,15 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.16"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Prevent adding undesired newline between drawers in header" />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.15"
             tools:ignore="HardcodedText" />
 
