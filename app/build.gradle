@@ -192,11 +192,13 @@ dependencies {
 
     implementation "io.github.rburgst:okhttp-digest:$versions.okhttp_digest"
 
-    // Git sync over SSH
-    implementation "org.eclipse.jgit:org.eclipse.jgit:$versions.jgit"
+    implementation("org.eclipse.jgit:org.eclipse.jgit:$versions.jgit") {
+        because 'Git repo support'
+    }
     implementation("org.eclipse.jgit:org.eclipse.jgit.ssh.apache:$versions.jgit") {
-        // Resolves DuplicatePlatformClasses lint error
-        exclude group: 'org.apache.sshd', module: 'sshd-osgi'
+        because 'SSH transport support for Git repos'
+        // Avoid DuplicatePlatformClasses error:
+        exclude group: 'org.apache.sshd', module: 'sshd-sftp'
     }
     implementation("androidx.security:security-crypto:$versions.security_crypto") {
         because 'SSH key generation'
