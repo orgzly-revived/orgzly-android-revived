@@ -158,7 +158,6 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            Log.e(TAG, "JGit error:", e);
             throw new IOException(e);
         }
     }

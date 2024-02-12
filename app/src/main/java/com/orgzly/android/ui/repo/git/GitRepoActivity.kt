@@ -3,6 +3,7 @@ package com.orgzly.android.ui.repo.git
 
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -21,6 +22,7 @@ import android.widget.EditText
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.orgzly.R
 import com.orgzly.android.App
@@ -38,15 +40,14 @@ import com.orgzly.android.ui.repo.BrowserActivity
 import com.orgzly.android.ui.repo.RepoViewModel
 import com.orgzly.android.ui.repo.RepoViewModelFactory
 import com.orgzly.android.ui.showSnackbar
+import com.orgzly.android.ui.util.copyPlainTextToClipboard
 import com.orgzly.android.util.AppPermissions
 import com.orgzly.android.util.MiscUtils
 import com.orgzly.databinding.ActivityRepoGitBinding
-import org.eclipse.jgit.errors.TransportException
 import org.eclipse.jgit.errors.NoRemoteRepositoryException
 import org.eclipse.jgit.errors.NotSupportedException
 import org.eclipse.jgit.lib.ProgressMonitor
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.IOException
 
 class GitRepoActivity : CommonActivity(), GitPreferences {
@@ -275,8 +276,14 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
                 save()
             } else {
                 val targetDirectory = File(binding.activityRepoGitDirectory.text.toString())
+                if (!targetDirectory.exists()) {
+                    binding.activityRepoGitDirectoryLayout.error =
+                        getString(R.string.git_clone_error_invalid_target_dir)
+                    return
+                }
                 if (targetDirectory.list()!!.isNotEmpty()) {
-                    binding.activityRepoGitDirectoryLayout.error = getString(R.string.git_clone_error_target_not_empty)
+                    binding.activityRepoGitDirectoryLayout.error =
+                        getString(R.string.git_clone_error_target_not_empty)
                     return
                 }
                 val repoScheme = getRepoScheme()
@@ -295,28 +302,28 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
         if (e == null) {
             save()
         } else {
-            val error = when (e.cause) {
-                is NoRemoteRepositoryException -> R.string.git_clone_error_invalid_repo
-                is TransportException -> {
-                    // JGit's catch-all "remote hung up unexpectedly" message is not very useful.
-                    if (Regex("hung up unexpectedly").containsMatchIn(e.cause!!.message!!)) {
-                        String.format(getString(R.string.git_clone_error_ssh), e.cause!!.cause!!.message)
-                    } else {
-                        String.format(getString(R.string.git_clone_error_ssh), e.cause!!.message)
-                    }
+            val error = when (val rootException = getRootException(e)) {
+                is NoRemoteRepositoryException -> getString(R.string.git_clone_error_invalid_repo)
+                is NotSupportedException -> getString(R.string.git_clone_error_uri_not_supported)
+                else -> rootException.localizedMessage?.toString()
+            }
+            MaterialAlertDialogBuilder(this)
+                .setPositiveButton(R.string.ok, null)
+                .setNeutralButton("Copy stack trace") { _: DialogInterface?, _: Int ->
+                    this.copyPlainTextToClipboard("Error during cloning", e.stackTraceToString())
                 }
-                // TODO: This should be checked when the user enters a directory by hand
-                is FileNotFoundException -> R.string.git_clone_error_invalid_target_dir
-                is GitRepo.DirectoryNotEmpty -> R.string.git_clone_error_target_not_empty
-                is NotSupportedException -> R.string.git_clone_error_uri_not_supported
-                else -> R.string.git_clone_error_unknown
-            }
-            when (error) {
-                is Int -> { showSnackbar(error) }
-                is String -> { showSnackbar(error) }
-            }
-            e.printStackTrace()
+                .setMessage(error)
+                .show()
+            Log.e(TAG, "Error during repo cloning:", e)
         }
+    }
+
+    private fun getRootException(e: Throwable): Throwable {
+        var result = e
+        while (result.cause != null) {
+            result = result.cause as Throwable
+        }
+        return result
     }
 
     private fun saveToPreferences(id: Long): Boolean {
@@ -355,7 +362,7 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
 
         for (field in fields) {
             if (field.layout.visibility == View.GONE || field.allowEmpty) {
-                continue;
+                continue
             }
             if (errorIfEmpty(field.editText, field.layout)) {
                 hasEmptyFields = true
@@ -472,10 +479,8 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
             try {
                 GitRepo.ensureRepositoryExists(fragment, true, this)
             } catch (e: IOException) {
-                Log.e(TAG, "Error while cloning Git repository:", e)
                 return e
             }
-
             return null
         }
 
