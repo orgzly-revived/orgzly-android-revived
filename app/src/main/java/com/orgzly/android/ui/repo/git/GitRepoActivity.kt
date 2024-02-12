@@ -525,10 +525,6 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
         override fun endTask() {
 
         }
-
-        override fun showDuration(enabled: Boolean) {
-            TODO("Not yet implemented")
-        }
     }
 
     companion object {

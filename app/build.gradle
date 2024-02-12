@@ -192,16 +192,18 @@ dependencies {
 
     implementation "io.github.rburgst:okhttp-digest:$versions.okhttp_digest"
 
-    // Git sync via SSH
+    // Git sync over SSH
     implementation "org.eclipse.jgit:org.eclipse.jgit:$versions.jgit"
-    implementation "org.eclipse.jgit:org.eclipse.jgit.ssh.apache:$versions.jgit"
+    implementation("org.eclipse.jgit:org.eclipse.jgit.ssh.apache:$versions.jgit") {
+        // Resolves DuplicatePlatformClasses lint error
+        exclude group: 'org.apache.sshd', module: 'sshd-osgi'
+    }
     implementation("androidx.security:security-crypto:$versions.security_crypto") {
         because 'SSH key generation'
     }
     implementation("androidx.biometric:biometric-ktx:$versions.biometric_ktx") {
         because 'Protect SSH key with biometric prompt'
     }
-
 }
 
 repositories {
