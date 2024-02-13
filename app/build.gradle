@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 android {
     namespace 'com.orgzly'
 
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         def application_id = "com.orgzlyrevived"

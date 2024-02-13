@@ -5,10 +5,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyInfo
 import android.security.keystore.KeyProperties
 import android.security.keystore.UserNotAuthenticatedException
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedFile
@@ -22,6 +20,7 @@ import com.orgzly.android.util.BiometricAuthenticator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import net.i2p.crypto.eddsa.EdDSAEngine
 import net.i2p.crypto.eddsa.EdDSAPrivateKey
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable
 import net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec
@@ -31,8 +30,6 @@ import java.io.File
 import java.io.IOException
 import java.security.*
 import java.security.interfaces.RSAKey
-import javax.crypto.SecretKey
-import javax.crypto.SecretKeyFactory
 
 private const val PROVIDER_ANDROID_KEY_STORE = "AndroidKeyStore"
 private const val KEYSTORE_ALIAS = "orgzly_sshkey"
@@ -60,63 +57,29 @@ fun toSshPublicKey(publicKey: PublicKey): String {
     return PublicKeyEntry.toString(publicKey)
 }
 
+@RequiresApi(Build.VERSION_CODES.N)
 object SshKey {
-    private val TAG = SshKey::class.java.name
     val sshPublicKey
         get() = if (publicKeyFile.exists()) publicKeyFile.readText() else null
     val canShowSshPublicKey
         get() = type in listOf(Type.KeystoreNative, Type.KeystoreWrappedEd25519)
     val exists
         get() = type != null
-    private val mustAuthenticate: Boolean
-        @RequiresApi(Build.VERSION_CODES.N)
-        get() {
-            return runCatching {
-                if (type !in listOf(Type.KeystoreNative, Type.KeystoreWrappedEd25519)) return false
-                when (val key = androidKeystore.getKey(KEYSTORE_ALIAS, null)) {
-                    is PrivateKey -> {
-                        val factory =
-                            KeyFactory.getInstance(key.algorithm, PROVIDER_ANDROID_KEY_STORE)
-                        return factory.getKeySpec(
-                            key,
-                            KeyInfo::class.java
-                        ).isUserAuthenticationRequired
-                    }
-                    is SecretKey -> {
-                        val factory =
-                            SecretKeyFactory.getInstance(key.algorithm, PROVIDER_ANDROID_KEY_STORE)
-                        (factory.getKeySpec(
-                            key,
-                            KeyInfo::class.java
-                        ) as KeyInfo).isUserAuthenticationRequired
-                    }
-                    else -> throw IllegalStateException("SSH key does not exist in Keystore")
-                }
-            }
-                .getOrElse {
-                    // It is fine to swallow the exception here since it will reappear when the key
-                    // is used for SSH authentication and can then be shown in the UI.
-                    false
-                }
-        }
-
     private val context: Context
         get() = App.getAppContext()
-
     private val privateKeyFile
         get() = File(context.filesDir, "ssh_key")
     private val publicKeyFile
         get() = File(context.filesDir, "ssh_key.pub")
-
     private var type: Type?
         get() = Type.fromValue(AppPreferences.gitSshKeyType(context))
         set(value) = AppPreferences.gitSshKeyType(context, value?.value)
-
     private val isStrongBoxSupported by unsafeLazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
             context.packageManager.hasSystemFeature(PackageManager.FEATURE_STRONGBOX_KEYSTORE)
         else false
     }
+    private var privateKeyLoadAttempts = 0
 
     private enum class Type(val value: String) {
         KeystoreNative("keystore_native"),
@@ -128,7 +91,6 @@ object SshKey {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     enum class Algorithm(
         val algorithm: String,
         val applyToSpec: KeyGenParameterSpec.Builder.() -> Unit
@@ -217,7 +179,6 @@ object SshKey {
             type = Type.KeystoreWrappedEd25519
         }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     fun generateKeystoreNativeKey(algorithm: Algorithm, requireAuthentication: Boolean) {
         delete()
 
@@ -248,10 +209,9 @@ object SshKey {
         type = Type.KeystoreNative
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     fun getKeyPair(): KeyPair {
+        privateKeyLoadAttempts = 0
         var privateKey: PrivateKey? = null
-        var privateKeyLoadAttempts = 0
         val publicKey: PublicKey? = when (type) {
             Type.KeystoreNative -> {
                 kotlin.runCatching { androidKeystore.sshPublicKey }
@@ -282,70 +242,75 @@ object SshKey {
                         }
                 }
                 Type.KeystoreWrappedEd25519 -> {
-                    runCatching {
-                        // The current MasterKey API does not allow getting a reference to an existing
-                        // one without specifying the KeySpec for a new one. However, the value for
-                        // passed here for `requireAuthentication` is not used as the key already exists
-                        // at this point.
-                        val encryptedPrivateKeyFile = runBlocking {
-                            getOrCreateWrappedPrivateKeyFile(false)
-                        }
-                        val rawPrivateKey =
-                            encryptedPrivateKeyFile.openFileInput().use { it.readBytes() }
-                        EdDSAPrivateKey(
-                            EdDSAPrivateKeySpec(
-                                rawPrivateKey, EdDSANamedCurveTable.ED_25519_CURVE_SPEC
-                            )
-                        )
-                    }.getOrElse { error ->
-                        throw IOException(context.getString(R.string.ssh_key_failed_get_private), error)
+                    try {
+                        tryToReadEd25519PrivateKey()
+                    } catch (e: UserNotAuthenticatedException) {
+                        tryBiometricAuthOrFail(e)
+                        tryToReadEd25519PrivateKey()
+                    } catch (e: Exception) {
+                        throw IOException(context.getString(R.string.ssh_key_failed_get_private), e)
                     }
                 }
                 else -> throw IllegalStateException("SSH key does not exist in Keystore")
             }
             try {
                 // Try to sign something to see if the key is unlocked
-                val algorithm: String = if (privateKey is RSAKey) {
-                    "SHA256withRSA"
-                } else {
-                    "SHA256withECDSA"
+                val signature = when (privateKey) {
+                    is EdDSAPrivateKey -> EdDSAEngine(MessageDigest.getInstance(
+                        EdDSANamedCurveTable.getByName(EdDSANamedCurveTable.ED_25519).hashAlgorithm))
+                    is RSAKey -> Signature.getInstance("SHA256withRSA")
+                    else -> Signature.getInstance("SHA256withECDSA")
                 }
-                Signature.getInstance(algorithm).apply {
+                signature.apply {
                     initSign(privateKey)
                     update("loremipsum".toByteArray())
                 }.sign()
                 // The key is unlocked; exit the loop.
                 break
             } catch (e: UserNotAuthenticatedException) {
-                if (privateKeyLoadAttempts > 0) {
-                    // We expect this exception before trying auth, but after that, this means
-                    // we have failed to unlock the SSH key.
-                    Log.e(TAG, context.getString(R.string.ssh_key_failed_unlock_private), e)
-                    throw IOException(context.getString(R.string.ssh_key_failed_unlock_private))
-                }
+                tryBiometricAuthOrFail(e)
             } catch (e: Exception) {
-                // Our attempt to use the key for signing may go wrong in many unforeseen ways.
-                // Such failures are unimportant.
-                e.printStackTrace()
+                throw e
             }
-            if (mustAuthenticate && privateKeyLoadAttempts == 0) {
-                // Time to try biometric auth
-                val currentActivity = App.getCurrentActivity()
-                checkNotNull(currentActivity) {
-                    throw IOException(context.getString(R.string.ssh_key_locked_and_no_activity))
-                }
-                val biometricAuthenticator = BiometricAuthenticator(currentActivity)
-                runBlocking(Dispatchers.Main) {
-                    biometricAuthenticator.authenticate(
-                        context.getString(
-                            R.string.biometric_prompt_title_unlock_ssh_key
-                        )
-                    )
-                }
-            }
-            privateKeyLoadAttempts++
         }
         return KeyPair(publicKey, privateKey)
+    }
+
+    private fun tryToReadEd25519PrivateKey(): EdDSAPrivateKey {
+        // The current MasterKey API does not allow getting a reference to an existing
+        // one without specifying the KeySpec for a new one. However, the value for
+        // passed here for `requireAuthentication` is not used as the key already exists
+        // at this point.
+        val encryptedPrivateKeyFile = runBlocking {
+            getOrCreateWrappedPrivateKeyFile(false)
+        }
+        val rawPrivateKey =
+            encryptedPrivateKeyFile.openFileInput().use { it.readBytes() }
+        return EdDSAPrivateKey(
+            EdDSAPrivateKeySpec(
+                rawPrivateKey, EdDSANamedCurveTable.ED_25519_CURVE_SPEC
+            )
+        )
+    }
+
+    private fun tryBiometricAuthOrFail(e: UserNotAuthenticatedException) {
+        if (privateKeyLoadAttempts == 0) {
+            val currentActivity = App.getCurrentActivity()
+            checkNotNull(currentActivity) {
+                throw IOException(context.getString(R.string.ssh_key_locked_and_no_activity))
+            }
+            val biometricAuthenticator = BiometricAuthenticator(currentActivity)
+            runBlocking(Dispatchers.Main) {
+                biometricAuthenticator.authenticate(
+                    context.getString(
+                        R.string.biometric_prompt_title_unlock_ssh_key
+                    )
+                )
+            }
+            privateKeyLoadAttempts++
+        } else {
+            throw e
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
