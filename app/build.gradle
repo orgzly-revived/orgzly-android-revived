@@ -109,7 +109,7 @@ android {
 }
 
 dependencies {
-    implementation orgJavaLocation()
+    implementation "com.github.orgzly-revived:org-java:$versions.org_java"
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.kotlin_coroutines")
 
@@ -206,18 +206,4 @@ dependencies {
 
 repositories {
     mavenCentral()
-}
-
-/*
- * If "orgJavaDir" property is set, load org-java as a module. If property is not set,
- * use org-java from Maven repository. See settings.gradle.
- */
-def orgJavaLocation() {
-    if (gradle.ext.has('orgJavaDir')) {
-        logger.info("app: Using org-java from ${gradle.ext.orgJavaDir}")
-        return project(':org-java')
-    } else {
-        logger.info("app: Using com.orgzlyrevived:org-java:$versions.org_java from Maven repository")
-        return "com.orgzlyrevived:org-java:$versions.org_java"
-    }
 }
