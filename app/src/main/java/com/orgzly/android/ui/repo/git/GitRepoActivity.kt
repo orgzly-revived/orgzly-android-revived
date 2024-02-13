@@ -125,10 +125,14 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
             createDefaultRepoFolder()
             binding.activityRepoGitAuthor.setText("Orgzly")
             binding.activityRepoGitBranch.setText(R.string.git_default_branch)
-            val userDeviceName: String = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) {
-                Settings.Global.getString(contentResolver, Settings.Global.DEVICE_NAME)
-            } else {
-                Settings.Secure.getString(contentResolver, "bluetooth_name")
+            val userDeviceName: String = try {
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) {
+                    Settings.Global.getString(contentResolver, Settings.Global.DEVICE_NAME)
+                } else {
+                    Settings.Secure.getString(contentResolver, "bluetooth_name")
+                }
+            } catch (e: Exception) {
+                "MyPhone"
             }
             binding.activityRepoGitEmail.setText(String.format("orgzly@%s", userDeviceName))
         }
