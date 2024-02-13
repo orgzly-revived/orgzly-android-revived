@@ -8,12 +8,12 @@ android {
     compileSdkVersion 32
 
     defaultConfig {
-        def application_id = "com.orgzlyrevived"
         minSdkVersion 21 // Lollipop (5.0)
         targetSdkVersion 32 // Android 12L
         versionCode 189
         versionName "1.8.16-beta.1"
-        applicationId application_id
+        applicationId = "com.orgzlyrevived"
+        resValue "string", "application_id", "com.orgzlyrevived"
 
         testInstrumentationRunner "com.orgzly.android.OrgzlyTestRunner"
         // testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -23,8 +23,6 @@ android {
         buildConfigField "String", "DROPBOX_APP_KEY", gradle.ext.appProperties.getProperty("dropbox.app_key", '""')
 
         resValue "string", "dropbox_app_key_schema", gradle.ext.appProperties.getProperty("dropbox.app_key_schema", '')
-
-        resValue "string", "application_id", application_id
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -217,7 +215,7 @@ def orgJavaLocation() {
         logger.info("app: Using org-java from ${gradle.ext.orgJavaDir}")
         return project(':org-java')
     } else {
-        logger.info("app: Using com.orgzlyrevived:org-java:$versions.org_java from Maven repository")
-        return "com.orgzlyrevived:org-java:$versions.org_java"
+        logger.info("app: Using com.github.orgzly-revived:org-java:$versions.org_java from Maven repository")
+        return "com.github.orgzly-revived:org-java:$versions.org_java"
     }
 }
