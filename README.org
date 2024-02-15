@@ -53,6 +53,8 @@ We generally plan to leave existing open issues in the original
 [[https://github.com/orgzly/orgzly-android][repository]] and reference them here as 
 they are addressed.
 
+There is also a Matrix chat room where anyone is welcome to join: #orgzly:matrix.org.
+
 * License
 
 The project is licensed under the [[https://github.com/orgzly-revived/orgzly-android-revived/blob/master/LICENSE][GNU General Public License version 3 (or newer)]].
