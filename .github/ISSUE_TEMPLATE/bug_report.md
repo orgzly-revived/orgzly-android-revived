@@ -12,5 +12,5 @@ assignees: ''
 Please complete the following information:
 
     Device: 
-    OS: 
+    Android Version: 
     Orgzly Revived Version: 
