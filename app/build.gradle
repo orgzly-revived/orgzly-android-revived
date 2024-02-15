@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 android {
     namespace 'com.orgzly'
 
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         minSdkVersion 21 // Lollipop (5.0)
@@ -190,16 +190,20 @@ dependencies {
 
     implementation "io.github.rburgst:okhttp-digest:$versions.okhttp_digest"
 
-    // Git sync via SSH
-    implementation "org.eclipse.jgit:org.eclipse.jgit:$versions.jgit"
-    implementation "org.eclipse.jgit:org.eclipse.jgit.ssh.apache:$versions.jgit"
+    implementation("org.eclipse.jgit:org.eclipse.jgit:$versions.jgit") {
+        because 'Git repo support'
+    }
+    implementation("org.eclipse.jgit:org.eclipse.jgit.ssh.apache:$versions.jgit") {
+        because 'SSH transport support for Git repos'
+        // Avoid DuplicatePlatformClasses error:
+        exclude group: 'org.apache.sshd', module: 'sshd-sftp'
+    }
     implementation("androidx.security:security-crypto:$versions.security_crypto") {
         because 'SSH key generation'
     }
     implementation("androidx.biometric:biometric-ktx:$versions.biometric_ktx") {
         because 'Protect SSH key with biometric prompt'
     }
-
 }
 
 repositories {
