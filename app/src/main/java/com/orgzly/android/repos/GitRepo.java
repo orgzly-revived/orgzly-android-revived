@@ -1,5 +1,7 @@
 package com.orgzly.android.repos;
 
+import static com.orgzly.android.git.GitFileSynchronizer.PRE_SYNC_MARKER_BRANCH;
+
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
@@ -245,7 +247,12 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
         // Check if the current head is unchanged.
         // If so, we can read all the VersionedRooks from the database.
         synchronizer.setBranchAndGetLatest();
-        return synchronizer.currentHead().equals(synchronizer.getCommit("orgzly-pre-sync-marker"));
+        // If current HEAD is null, there are no commits, and this means there are no remote
+        // changes to handle.
+        if (synchronizer.currentHead() == null) return true;
+        if (synchronizer.currentHead().equals(synchronizer.getCommit(PRE_SYNC_MARKER_BRANCH)))
+            return true;
+        return false;
     }
 
     public List<VersionedRook> getBooks() throws IOException {
