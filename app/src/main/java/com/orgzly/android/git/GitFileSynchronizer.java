@@ -38,6 +38,7 @@ import java.util.TimeZone;
 
 public class GitFileSynchronizer {
     private final static String TAG = GitFileSynchronizer.class.getName();
+    public final static String PRE_SYNC_MARKER_BRANCH = "orgzly-pre-sync-marker";
 
     private final Git git;
     private final GitPreferences preferences;
@@ -138,8 +139,8 @@ public class GitFileSynchronizer {
         boolean mergeSucceeded = false;
         try {
             RevCommit mergeTarget = currentHead();
-            // Try to use the branch "orgzly-pre-sync-marker" to find a good point for branching off.
-            RevCommit branchStartPoint = getCommit("orgzly-pre-sync-marker");
+            // Try to use our "pre sync marker" to find a good point in history for branching off.
+            RevCommit branchStartPoint = getCommit(PRE_SYNC_MARKER_BRANCH);
             if (branchStartPoint == null) {
                 branchStartPoint = revision;
             }
@@ -295,13 +296,19 @@ public class GitFileSynchronizer {
         try {
             // Point a "marker" branch to the current head, so that we know a good starting commit
             // for merge conflict branches.
-            git.branchCreate().setName("orgzly-pre-sync-marker").setForce(true).call();
+            git.branchCreate().setName(PRE_SYNC_MARKER_BRANCH).setForce(true).call();
         } catch (GitAPIException e) {
-            throw new IOException(context.getString(R.string.git_sync_error_failed_set_marker_branch));
+            // We may end up here when syncing an empty Git repo for the first time. So don't
+            // panic, just log an info message.
+            Log.i(TAG, context.getString(R.string.git_sync_error_failed_set_marker_branch));
         }
         fetch();
         try {
             RevCommit current = currentHead();
+            if (current == null) {
+                Log.i(TAG, "Git repo does not seem to have any commits.");
+                return;
+            }
             RevCommit mergeTarget = getCommit(
                     String.format("%s/%s", preferences.remoteName(), git.getRepository().getBranch()));
             if (mergeTarget != null) {
