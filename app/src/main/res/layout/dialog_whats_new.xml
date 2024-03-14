@@ -27,7 +27,7 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Support syncing empty Git repo" />
+            app:text="Support syncing to empty Git repository" />
 
         <TextView
             style="@style/WhatsNewVersion"
