@@ -1,0 +1,2 @@
+• Various fixes for Git repos
+• Fix broken app shortcuts

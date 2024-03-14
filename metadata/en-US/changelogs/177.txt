@@ -1,0 +1,8 @@
+• Show ranged timestamps in agenda queries
+• Consider time and date ranges when querying events
+• Hide empty days in agenda
+• Add menu option to sort lines in a note
+• Add auto-sync on suspend
+• Disable widget opacity on unsupported color scheme
+• Add tooltips to popup buttons
+• Set a lower threshold for Git garbage collection

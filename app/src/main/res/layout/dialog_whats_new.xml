@@ -22,6 +22,28 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.18"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Support syncing to empty Git repository" />
+
+        <TextView
+            style="@style/WhatsNewVersion"
+            android:text="v1.8.17"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Various fixes for Git repos" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix broken app shortcuts" />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.16"
             tools:ignore="HardcodedText" />
 

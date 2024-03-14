@@ -1,0 +1,6 @@
+• Add clocking/time capture feature
+• Add support for opening org-protocol://org-id-goto links
+• Make popup buttons configurable
+• Generate SSH key for Git syncing on the device
+• Various Git-related improvements (feature still in beta)
+• Add monochrome icon definition

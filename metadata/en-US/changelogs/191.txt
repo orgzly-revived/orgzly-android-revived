@@ -1,0 +1,1 @@
+• Prevent adding of undesired newline between drawers in header

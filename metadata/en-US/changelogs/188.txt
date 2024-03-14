@@ -1,0 +1,5 @@
+• Add a public receiver for Tasker, Automate, etc.
+• Disable Git repos on API <24 (Android <7)
+• Turkish translation updated
+• Removed forced Light theme for splash screen during cold start
+• Add sync times to "major events" log
