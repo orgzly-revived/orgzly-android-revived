@@ -33,7 +33,7 @@ http://orgmode.org for more information.
 
 * End-user documentation
 
-Find out more here: https://github.com/orgzly/documentation
+Find out more here: https://github.com/orgzly-revived/documentation
 
 * Building & testing
 
