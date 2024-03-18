@@ -275,6 +275,9 @@
     <string name="pref_key_auto_sync_on_note_create" translatable="false">pref_key_auto_sync_on_note_create</string>
     <bool name="pref_default_auto_sync_on_note_create" translatable="false">false</bool>
 
+    <string name="pref_key_auto_sync_on_quick_note_pre_create" translatable="false">pref_key_auto_sync_on_quick_note_pre_create</string>
+    <bool name="pref_default_auto_sync_on_quick_note_pre_create" translatable="false">false</bool>
+
     <string name="pref_key_auto_sync_on_note_update" translatable="false">pref_key_auto_sync_on_note_update</string>
     <bool name="pref_default_auto_sync_on_note_update" translatable="false">false</bool>
 

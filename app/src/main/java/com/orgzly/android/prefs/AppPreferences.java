@@ -1045,6 +1045,12 @@ public class AppPreferences {
                 context.getResources().getBoolean(R.bool.pref_default_auto_sync_on_note_create));
     }
 
+    public static boolean syncOnNoteQuickPreCreate(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_auto_sync_on_quick_note_pre_create),
+                context.getResources().getBoolean(R.bool.pref_default_auto_sync_on_quick_note_pre_create));
+    }
+
     public static boolean syncOnNoteUpdate(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(
                 context.getResources().getString(R.string.pref_key_auto_sync_on_note_update),
