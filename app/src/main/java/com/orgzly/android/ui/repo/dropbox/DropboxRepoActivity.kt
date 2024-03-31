@@ -1,13 +1,11 @@
 package com.orgzly.android.ui.repo.dropbox
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
-import android.widget.EditText
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.lifecycle.Observer
@@ -58,11 +56,6 @@ class DropboxRepoActivity : CommonActivity() {
             } else {
                 toggleLink()
             }
-        }
-
-        binding.activityRepoDropboxLinkButton.setOnLongClickListener {
-            editAccessToken()
-            true
         }
 
         // Not working when done in XML
@@ -123,47 +116,6 @@ class DropboxRepoActivity : CommonActivity() {
         binding.fab.setOnClickListener {
             saveAndFinish()
         }
-    }
-
-    private fun editAccessToken() {
-        @SuppressLint("InflateParams")
-        val view = layoutInflater.inflate(R.layout.dialog_simple_one_liner, null, false)
-
-        val editView = view.findViewById<EditText>(R.id.dialog_input).apply {
-            setSelectAllOnFocus(true)
-
-            setHint(R.string.access_token)
-
-            client.token?.let {
-                setText(it)
-            }
-        }
-
-        alertDialog = MaterialAlertDialogBuilder(this)
-                .setView(view)
-                .setTitle(R.string.access_token)
-                .setPositiveButton(R.string.set) { _, _ ->
-                    editView.text.toString().let { value ->
-                        if (TextUtils.isEmpty(value)) {
-                            client.unlink()
-                        } else {
-                            client.setToken(value)
-                        }
-                    }
-                    updateDropboxLinkUnlinkButton()
-                }
-                .setNeutralButton(R.string.clear) { _, _ ->
-                    client.unlink()
-                    updateDropboxLinkUnlinkButton()
-                }
-                .setNegativeButton(R.string.cancel) { _, _ -> }
-                .create().apply {
-                    setOnShowListener {
-                        KeyboardUtils.openSoftKeyboard(editView)
-                    }
-
-                    show()
-                }
     }
 
     public override fun onResume() {

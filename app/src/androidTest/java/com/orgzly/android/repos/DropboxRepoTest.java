@@ -7,6 +7,7 @@ import com.orgzly.android.db.entity.BookView;
 import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.util.MiscUtils;
 
+import org.json.JSONObject;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +27,12 @@ public class DropboxRepoTest extends OrgzlyTest {
         super.setUp();
         Assume.assumeTrue(BuildConfig.IS_DROPBOX_ENABLED);
 
-        AppPreferences.dropboxToken(context, BuildConfig.DROPBOX_TOKEN);
+        JSONObject mockSerializedDbxCredential = new JSONObject();
+        mockSerializedDbxCredential.put("access_token", "dummy");
+        mockSerializedDbxCredential.put("expires_at", System.currentTimeMillis());
+        mockSerializedDbxCredential.put("refresh_token", BuildConfig.DROPBOX_REFRESH_TOKEN);
+        mockSerializedDbxCredential.put("app_key", BuildConfig.DROPBOX_APP_KEY);
+        AppPreferences.dropboxSerializedCredential(context, mockSerializedDbxCredential.toString());
     }
 
     @Test

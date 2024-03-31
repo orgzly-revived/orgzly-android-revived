@@ -892,13 +892,13 @@ public class AppPreferences {
      * Dropbox token.
      */
 
-    public static String dropboxToken(Context context) {
-        String key = context.getResources().getString(R.string.pref_key_dropbox_token);
+    public static String dropboxSerializedCredential(Context context) {
+        String key = context.getResources().getString(R.string.pref_key_dropbox_credential);
         return getStateSharedPreferences(context).getString(key, null);
     }
 
-    public static void dropboxToken(Context context, String value) {
-        String key = context.getResources().getString(R.string.pref_key_dropbox_token);
+    public static void dropboxSerializedCredential(Context context, String value) {
+        String key = context.getResources().getString(R.string.pref_key_dropbox_credential);
         SharedPreferences.Editor editor = getStateSharedPreferences(context).edit();
         if (value == null) {
             editor.remove(key);

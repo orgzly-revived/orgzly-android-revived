@@ -2,7 +2,6 @@ package com.orgzly.android.repos;
 
 import android.net.Uri;
 
-import com.orgzly.BuildConfig;
 import com.orgzly.android.BookName;
 import com.orgzly.android.LocalStorage;
 import com.orgzly.android.OrgzlyTest;
@@ -10,7 +9,6 @@ import com.orgzly.android.db.entity.Book;
 import com.orgzly.android.db.entity.BookView;
 import com.orgzly.android.db.entity.NoteView;
 import com.orgzly.android.db.entity.Repo;
-import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.sync.BookNamesake;
 import com.orgzly.android.sync.BookSyncStatus;
 import com.orgzly.android.util.EncodingDetect;
@@ -38,8 +36,6 @@ public class SyncTest extends OrgzlyTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-
-        AppPreferences.dropboxToken(context, BuildConfig.DROPBOX_TOKEN);
     }
 
     @Test

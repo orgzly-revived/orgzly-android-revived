@@ -7,6 +7,8 @@ import android.net.Uri;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.android.Auth;
+import com.dropbox.core.json.JsonReadException;
+import com.dropbox.core.oauth.DbxCredential;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.FolderMetadata;
@@ -45,7 +47,8 @@ public class DropboxClient {
 
     final private Context mContext;
     final private long repoId;
-
+    final private DbxRequestConfig requestConfig;
+    private DbxCredential credential;
     private DbxClientV2 dbxClient;
 
     private boolean tryLinking = false;
@@ -55,14 +58,31 @@ public class DropboxClient {
 
         repoId = id;
 
+        requestConfig = getRequestConfig();
+
         createClient();
     }
 
-    private void createClient() {
-        String accessToken = getToken();
+    private DbxRequestConfig getRequestConfig() {
+        String userLocale = Locale.getDefault().toString();
+        String clientId = String.format("%s/%s",
+                BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME);
+        return DbxRequestConfig
+                .newBuilder(clientId)
+                .withUserLocale(userLocale)
+                .build();
+    }
 
-        if (accessToken != null) {
-            dbxClient = getDbxClient(accessToken);
+    private void createClient() {
+        String serializedCredential = AppPreferences.dropboxSerializedCredential(mContext);
+        if (serializedCredential != null && serializedCredential.length() > 0) {
+            try {
+                credential =
+                        DbxCredential.Reader.readFully(serializedCredential);
+            } catch (JsonReadException e) {
+                throw new RuntimeException(e);
+            }
+            dbxClient = new DbxClientV2(requestConfig, credential);
         }
     }
 
@@ -78,65 +98,33 @@ public class DropboxClient {
 
     public void unlink() {
         dbxClient = null;
-        deleteToken();
+        deleteCredential();
         tryLinking = false;
     }
 
     public void beginAuthentication(Activity activity) {
         tryLinking = true;
-        Auth.startOAuth2Authentication(activity, BuildConfig.DROPBOX_APP_KEY);
+        Auth.startOAuth2PKCE(activity, BuildConfig.DROPBOX_APP_KEY, requestConfig);
     }
 
     public boolean finishAuthentication() {
         if (dbxClient == null && tryLinking) {
-            String accessToken = getToken();
-
-            if (accessToken == null) {
-                accessToken = Auth.getOAuth2Token();
-
-                if (accessToken != null) {
-                    saveToken(accessToken);
-                }
-            }
-
-            if (accessToken != null) {
-                dbxClient = getDbxClient(accessToken);
+            credential = Auth.getDbxCredential();
+            if (credential != null) {
+                saveCredential();
+                createClient();
                 return true;
             }
         }
-
         return false;
     }
 
-    private DbxClientV2 getDbxClient(String accessToken) {
-        String userLocale = Locale.getDefault().toString();
-
-        String clientId = String.format("%s/%s",
-                BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME);
-
-        DbxRequestConfig requestConfig = DbxRequestConfig
-                .newBuilder(clientId)
-                .withUserLocale(userLocale)
-                .build();
-
-        return new DbxClientV2(requestConfig, accessToken);
+    private void saveCredential() {
+        AppPreferences.dropboxSerializedCredential(mContext, credential.toString());
     }
 
-    public void setToken(String token) {
-        saveToken(token);
-        createClient();
-    }
-
-    private void saveToken(String token) {
-        AppPreferences.dropboxToken(mContext, token);
-    }
-
-    public String getToken() {
-        return AppPreferences.dropboxToken(mContext);
-    }
-
-    private void deleteToken() {
-        AppPreferences.dropboxToken(mContext, null);
+    private void deleteCredential() {
+        AppPreferences.dropboxSerializedCredential(mContext, null);
     }
 
     public List<VersionedRook> getBooks(Uri repoUri) throws IOException {
