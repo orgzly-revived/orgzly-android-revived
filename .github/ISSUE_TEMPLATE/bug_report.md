@@ -14,3 +14,4 @@ Please complete the following information:
     Device: 
     Android Version: 
     Orgzly Revived Version: 
+    Repository type(s) used: 
