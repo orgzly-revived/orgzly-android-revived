@@ -32,6 +32,10 @@ jobs:
           echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
           echo Last build tool version is: $BUILD_TOOL_VERSION
 
+      - name: Add Dropbox app identifier
+        shell: bash
+        run: echo "dropbox.app_key = \"${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
+        
       # Build the standard version binary.
       - name: Generate "premium" release APK
         run: ./gradlew assemblePremiumRelease --stacktrace

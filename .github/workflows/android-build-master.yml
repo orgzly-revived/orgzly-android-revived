@@ -24,6 +24,10 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '11'
+
+      - name: Add Dropbox app identifier
+        shell: bash
+        run: echo "dropbox.app_key = \"${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
       
       - name: Build APK
         run: ./gradlew assembleDebug
