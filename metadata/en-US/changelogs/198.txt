@@ -1,0 +1,1 @@
+• Check .orgzlyignore when writing to Git repos
