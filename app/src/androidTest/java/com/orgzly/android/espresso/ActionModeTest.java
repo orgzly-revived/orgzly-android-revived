@@ -8,6 +8,7 @@ import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
 import com.orgzly.android.ui.main.MainActivity;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -63,6 +64,13 @@ public class ActionModeTest extends OrgzlyTest {
         scenario = ActivityScenario.launch(MainActivity.class);
 
         onView(allOf(withText("book-one"), isDisplayed())).perform(click());
+    }
+
+    @After
+    @Override
+    public void tearDown() throws Exception {
+        super.tearDown();
+        scenario.close();
     }
 
     @Test

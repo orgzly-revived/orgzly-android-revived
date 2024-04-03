@@ -8,6 +8,7 @@ import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
 import com.orgzly.android.ui.main.MainActivity;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,6 +31,9 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.allOf;
 
 public class CreatedAtPropertyTest extends OrgzlyTest {
+
+    private ActivityScenario<MainActivity> scenario;
+
     @Before
     public void setUp() throws Exception {
         super.setUp();
@@ -52,7 +56,13 @@ public class CreatedAtPropertyTest extends OrgzlyTest {
                 "SCHEDULED: <2014-01-01>\n"
         );
 
-        ActivityScenario.launch(MainActivity.class);
+        scenario = ActivityScenario.launch(MainActivity.class);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        super.tearDown();
+        scenario.close();
     }
 
     @Test
