@@ -10,8 +10,8 @@ android {
     defaultConfig {
         minSdkVersion 21 // Lollipop (5.0)
         targetSdkVersion 32 // Android 12L
-        versionCode 198
-        versionName "1.8.19"
+        versionCode 199
+        versionName "1.8.20-beta.1"
         applicationId = "com.orgzlyrevived"
         resValue "string", "application_id", "com.orgzlyrevived"
 
