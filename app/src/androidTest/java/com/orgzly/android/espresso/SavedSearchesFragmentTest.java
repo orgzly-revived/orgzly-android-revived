@@ -24,6 +24,7 @@ import static org.hamcrest.Matchers.allOf;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.os.SystemClock;
 
 import androidx.documentfile.provider.DocumentFile;
 import androidx.test.core.app.ActivityScenario;
@@ -74,6 +75,7 @@ public class SavedSearchesFragmentTest extends OrgzlyTest {
     public void testUpdateSameNameSavedSearch() {
         onView(withId(R.id.fragment_saved_searches_flipper)).check(matches(isDisplayed()));
         onSavedSearch(0).perform(click());
+        SystemClock.sleep(500);
         onView(withId(R.id.fragment_saved_search_flipper)).check(matches(isDisplayed()));
         onView(withId(R.id.fragment_saved_search_query)).perform(typeText(" edited"));
         onView(withId(R.id.done)).perform(click()); // Saved search done

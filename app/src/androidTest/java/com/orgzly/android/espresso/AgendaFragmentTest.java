@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 
 import android.content.pm.ActivityInfo;
+import android.os.SystemClock;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
@@ -30,25 +31,16 @@ import androidx.test.espresso.contrib.PickerActions;
 
 import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
-import com.orgzly.android.RetryTestRule;
 import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.ui.main.MainActivity;
 
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
-
-import kotlin.jvm.JvmField;
 
 public class AgendaFragmentTest extends OrgzlyTest {
     private ActivityScenario<MainActivity> scenario;
-
-    @Rule
-    @JvmField
-    public final TestRule mRetryTestRule = new RetryTestRule();
 
     private ActivityScenario<MainActivity> defaultSetUp() {
         testUtils.setupBook("book-one",
@@ -183,6 +175,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
                         tomorrow.getMonthOfYear(),
                         tomorrow.getDayOfMonth()));
         onView(withText(android.R.string.ok)).perform(click());
+        SystemClock.sleep(500);
         onView(withText(R.string.set)).perform(click());
         onNotesInAgenda().check(matches(recyclerViewItemCount(23)));
     }
@@ -263,6 +256,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
 
         onItemInAgenda(1).perform(click());
 
+        SystemClock.sleep(500);
         onView(withId(R.id.scroll_view)).check(matches(isDisplayed()));
         onView(withId(R.id.title_view)).check(matches(withText("Note A")));
     }
@@ -295,6 +289,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
         scenario = ActivityScenario.launch(MainActivity.class);
         searchForTextCloseKeyboard("ad.1");
         // Overdue, note (scheduled), today
+        SystemClock.sleep(500);
         onNotesInAgenda().check(matches(recyclerViewItemCount(3)));
     }
 

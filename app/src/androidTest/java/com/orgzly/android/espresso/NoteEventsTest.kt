@@ -1,5 +1,6 @@
 package com.orgzly.android.espresso
 
+import android.os.SystemClock
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -8,24 +9,17 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.orgzly.R
 import com.orgzly.android.OrgzlyTest
-import com.orgzly.android.RetryTestRule
 import com.orgzly.android.espresso.util.EspressoUtils.*
 import com.orgzly.android.ui.main.MainActivity
 import com.orgzly.org.datetime.OrgDateTime
 import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.startsWith
 import org.junit.After
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 
 
 class NoteEventsTest : OrgzlyTest() {
     private lateinit var scenario: ActivityScenario<MainActivity>
-
-    @Rule
-    @JvmField
-    val mRetryTestRule: TestRule = RetryTestRule()
 
     private val now: String
             get() = OrgDateTime(true).toString()
@@ -160,6 +154,8 @@ class NoteEventsTest : OrgzlyTest() {
 
         onNotesInAgenda().check(matches(recyclerViewItemCount(10)))
 
+        SystemClock.sleep(2000)
+        
         // Today: deadline
         onItemInAgenda(1, R.id.item_head_scheduled_text).check(matches(not(isDisplayed())))
         onItemInAgenda(1, R.id.item_head_deadline_text).check(matches(isDisplayed()))
@@ -226,6 +222,7 @@ class NoteEventsTest : OrgzlyTest() {
         scenario = ActivityScenario.launch(MainActivity::class.java)
 
         searchForTextCloseKeyboard("ad.2")
+        SystemClock.sleep(500)
         onNotesInAgenda().check(matches(recyclerViewItemCount(2)))
     }
 

@@ -232,7 +232,7 @@ public class MiscTest extends OrgzlyTest {
         try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             scenario.onActivity(activity ->
                     activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE));
-
+            SystemClock.sleep(500);
             onView(withId(R.id.fab)).perform(click());
             onView(withId(R.id.dialog_new_book_container)).check(matches(isDisplayed()));
 
@@ -357,6 +357,7 @@ public class MiscTest extends OrgzlyTest {
         try (ActivityScenario<MainActivity> ignored = ActivityScenario.launch(MainActivity.class)) {
             settingsSetDoneKeywords("DONE OLD");
 
+            SystemClock.sleep(500);
             onView(allOf(withText("book-name"), isDisplayed())).perform(click());
 
             onNoteInBook(1).perform(click());
@@ -461,6 +462,7 @@ public class MiscTest extends OrgzlyTest {
 
             // Search results
             onView(withId(R.id.drawer_layout)).perform(open());
+            SystemClock.sleep(500);
             onView(withText("Scheduled")).perform(click());
             fragmentTest(activity, true, withId(R.id.fragment_query_search_view_flipper));
 
@@ -496,6 +498,7 @@ public class MiscTest extends OrgzlyTest {
     }
 
     private void fragmentTest(Activity activity, boolean hasSearchMenuItem, Matcher<View> matcher) {
+        SystemClock.sleep(500);
         onView(matcher).check(matches(isDisplayed()));
 
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -692,6 +695,7 @@ public class MiscTest extends OrgzlyTest {
 
             onView(withId(R.id.item_preface_text_view)).perform(clickClickableSpan("[ ]"));
 
+            SystemClock.sleep(500);
             onView(allOf(withId(R.id.item_preface_text_view), withText(containsString("- [X] Item"))))
                     .check(matches(isDisplayed()));
         }

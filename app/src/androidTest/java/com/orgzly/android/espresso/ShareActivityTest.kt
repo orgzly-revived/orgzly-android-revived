@@ -3,6 +3,7 @@ package com.orgzly.android.espresso
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
+import android.os.SystemClock
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -133,6 +134,7 @@ class ShareActivityTest : OrgzlyTest() {
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
+        SystemClock.sleep(1000)
         onView(withId(R.id.done)).perform(click()); // Note done
     }
 
