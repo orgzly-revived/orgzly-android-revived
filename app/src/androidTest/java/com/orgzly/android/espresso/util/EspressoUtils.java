@@ -327,9 +327,10 @@ public class EspressoUtils {
                 withClassName(endsWith("OverflowMenuButton"))));
     }
 
-    public static void searchForText(String str) {
+    public static void searchForTextCloseKeyboard(String str) {
         onView(allOf(withId(R.id.search_view), isDisplayed())).perform(click());
         onView(withId(R.id.search_src_text)).perform(replaceText(str), pressKey(KeyEvent.KEYCODE_ENTER));
+        closeSoftKeyboardWithDelay();
     }
 
     public static ViewAction[] replaceTextCloseKeyboard(String str) {

@@ -21,7 +21,7 @@ import static com.orgzly.android.espresso.util.EspressoUtils.onBook;
 import static com.orgzly.android.espresso.util.EspressoUtils.onItemInAgenda;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNoteInSearch;
-import static com.orgzly.android.espresso.util.EspressoUtils.searchForText;
+import static com.orgzly.android.espresso.util.EspressoUtils.searchForTextCloseKeyboard;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasToString;
@@ -46,7 +46,7 @@ public class SettingsChangeTest extends OrgzlyTest {
 
     @Test
     public void testChangeDefaultPrioritySearchResultsShouldBeReordered() {
-        searchForText("o.p");
+        searchForTextCloseKeyboard("o.p");
 
         onNoteInSearch(0, R.id.item_head_title_view)
                 .check(matches(allOf(withText(containsString("#B  Note [a-1]")), isDisplayed())));
@@ -63,7 +63,7 @@ public class SettingsChangeTest extends OrgzlyTest {
 
     @Test
     public void testChangeDefaultPriorityAgendaResultsShouldBeReordered() {
-        searchForText("o.p ad.2");
+        searchForTextCloseKeyboard("o.p ad.2");
 
         onItemInAgenda(1, R.id.item_head_title_view)
                 .check(matches(allOf(withText(containsString("#B  Note [a-1]")), isDisplayed())));

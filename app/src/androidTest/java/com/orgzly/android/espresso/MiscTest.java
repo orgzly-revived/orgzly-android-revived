@@ -26,7 +26,7 @@ import static com.orgzly.android.espresso.util.EspressoUtils.onPreface;
 import static com.orgzly.android.espresso.util.EspressoUtils.onSavedSearch;
 import static com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard;
 import static com.orgzly.android.espresso.util.EspressoUtils.scroll;
-import static com.orgzly.android.espresso.util.EspressoUtils.searchForText;
+import static com.orgzly.android.espresso.util.EspressoUtils.searchForTextCloseKeyboard;
 import static com.orgzly.android.espresso.util.EspressoUtils.settingsSetDoneKeywords;
 import static com.orgzly.android.espresso.util.EspressoUtils.settingsSetTodoKeywords;
 import static org.hamcrest.Matchers.allOf;
@@ -465,7 +465,7 @@ public class MiscTest extends OrgzlyTest {
         fragmentTest(activity, true, withId(R.id.fragment_query_search_view_flipper));
 
         // Agenda
-        searchForText("t.tag3 ad.3");
+        searchForTextCloseKeyboard("t.tag3 ad.3");
         fragmentTest(activity, true, withId(R.id.fragment_query_agenda_view_flipper));
     }
 
@@ -727,7 +727,7 @@ public class MiscTest extends OrgzlyTest {
 
         onBook(0).perform(click());
 
-        searchForText("note");
+        searchForTextCloseKeyboard("note");
 
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(allOf(withText("booky-one"), isDescendantOfA(withId(R.id.drawer_navigation_view))))

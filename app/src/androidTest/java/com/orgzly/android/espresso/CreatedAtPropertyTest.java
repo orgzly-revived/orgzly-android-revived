@@ -25,7 +25,7 @@ import static com.orgzly.android.espresso.util.EspressoUtils.onNoteInSearch;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNotesInSearch;
 import static com.orgzly.android.espresso.util.EspressoUtils.recyclerViewItemCount;
 import static com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard;
-import static com.orgzly.android.espresso.util.EspressoUtils.searchForText;
+import static com.orgzly.android.espresso.util.EspressoUtils.searchForTextCloseKeyboard;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.allOf;
 
@@ -59,7 +59,7 @@ public class CreatedAtPropertyTest extends OrgzlyTest {
     public void testCondition() {
         enableCreatedAt();
 
-        searchForText("cr.le.today");
+        searchForTextCloseKeyboard("cr.le.today");
         onNotesInSearch().check(matches(recyclerViewItemCount(2)));
 
         // TODO: Search before/after 2018-01-03 expecting 1 note
@@ -69,18 +69,18 @@ public class CreatedAtPropertyTest extends OrgzlyTest {
     public void testSortOrder() {
         enableCreatedAt();
 
-        searchForText("o.cr");
+        searchForTextCloseKeyboard("o.cr");
         onNoteInSearch(0, R.id.item_head_title_view)
                 .check(matches(allOf(withText("Note [a-2]"), isDisplayed())));
 
-        searchForText(".o.cr");
+        searchForTextCloseKeyboard(".o.cr");
         onNoteInSearch(0, R.id.item_head_title_view)
                 .check(matches(allOf(withText("Note [a-1]"), isDisplayed())));
     }
 
     @Test
     public void testChangeCreatedAtPropertyResultsShouldBeReordered() {
-        searchForText("o.cr");
+        searchForTextCloseKeyboard("o.cr");
 
         onNoteInSearch(0, R.id.item_head_title_view).check(matches(withText("Note [a-1]")));
         onNoteInSearch(1, R.id.item_head_title_view).check(matches(withText("Note [a-2]")));
@@ -110,11 +110,11 @@ public class CreatedAtPropertyTest extends OrgzlyTest {
         onNoteInBook(3, R.id.item_head_title_view)
                 .check(matches(allOf(withText("new note created by test"), isDisplayed())));
 
-        searchForText("o.cr");
+        searchForTextCloseKeyboard("o.cr");
         onNoteInSearch(0, R.id.item_head_title_view)
                 .check(matches(allOf(withText("Note [a-2]"), isDisplayed())));
 
-        searchForText(".o.cr");
+        searchForTextCloseKeyboard(".o.cr");
         onNoteInSearch(0, R.id.item_head_title_view)
                 .check(matches(allOf(withText("new note created by test"), isDisplayed())));
     }
