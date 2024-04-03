@@ -19,6 +19,8 @@ import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import android.os.SystemClock;
+
 public class DropboxRepoTest extends OrgzlyTest {
     private static final String DROPBOX_TEST_DIR = "/orgzly-android-tests";
 

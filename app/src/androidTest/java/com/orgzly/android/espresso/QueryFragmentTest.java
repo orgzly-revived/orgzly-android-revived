@@ -35,6 +35,7 @@ import static org.hamcrest.Matchers.startsWith;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.os.SystemClock;
 
 import androidx.test.core.app.ActivityScenario;
 
@@ -585,6 +586,7 @@ public class QueryFragmentTest extends OrgzlyTest {
                 "* Note D\n");
         scenario = ActivityScenario.launch(MainActivity.class);
 
+        SystemClock.sleep(500);
         onView(allOf(withText("notebook"), isDisplayed())).perform(click());
         searchForTextCloseKeyboard(".t.b");
         onView(withId(R.id.fragment_query_search_view_flipper)).check(matches(isDisplayed()));

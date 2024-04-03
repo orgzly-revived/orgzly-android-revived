@@ -30,6 +30,7 @@ import static org.junit.Assume.assumeTrue;
 import android.app.Activity;
 import android.app.Instrumentation.ActivityResult;
 import android.content.Intent;
+import android.os.SystemClock;
 
 import androidx.documentfile.provider.DocumentFile;
 import androidx.test.core.app.ActivityScenario;
@@ -111,6 +112,7 @@ public class BooksTest extends OrgzlyTest {
         onView(withId(R.id.fab)).check(matches(not(isDisplayed())));
         pressBack();
 
+        SystemClock.sleep(500);
         onView(withId(R.id.fragment_books_view_flipper)).check(matches(isDisplayed()));
         onView(allOf(withText("book-2"), withId(R.id.item_book_title))).perform(click());
         onView(allOf(withText(R.string.book_does_not_exist_anymore), isDisplayed())).check(doesNotExist());

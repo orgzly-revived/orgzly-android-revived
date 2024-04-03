@@ -4,7 +4,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -29,6 +28,7 @@ import static org.hamcrest.Matchers.startsWith;
 
 import android.content.pm.ActivityInfo;
 import android.widget.DatePicker;
+import android.os.SystemClock;
 
 import androidx.test.core.app.ActivityScenario;
 
@@ -37,6 +37,7 @@ import com.orgzly.android.OrgzlyTest;
 import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.ui.main.MainActivity;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -105,6 +106,13 @@ public class BookTest extends OrgzlyTest {
         scenario = ActivityScenario.launch(MainActivity.class);
 
         onView(allOf(withText("book-name"), isDisplayed())).perform(click());
+    }
+
+    @After
+    @Override
+    public void tearDown() throws Exception {
+        super.tearDown();
+        scenario.close();
     }
 
     @Test
@@ -180,6 +188,7 @@ public class BookTest extends OrgzlyTest {
         scenario.onActivity(activity ->
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE));
 
+        SystemClock.sleep(500);
         onNoteInBook(40).check(matches(isDisplayed())); // Scroll to note
 
         scenario.onActivity(activity ->

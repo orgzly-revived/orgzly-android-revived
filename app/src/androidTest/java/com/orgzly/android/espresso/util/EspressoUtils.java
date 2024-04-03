@@ -20,6 +20,7 @@ import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.Matchers.anything;
 
 import android.content.res.Resources;
+import android.os.SystemClock;
 import android.text.Spanned;
 import android.text.style.ClickableSpan;
 import android.view.KeyEvent;
@@ -179,7 +180,7 @@ public class EspressoUtils {
 
     public static ViewInteraction onRecyclerViewItem(@IdRes int recyclerView, int position, @IdRes int childView) {
         onView(withId(recyclerView)).perform(RecyclerViewActions.scrollToPosition(position));
-
+        SystemClock.sleep(500);
         return onView(new EspressoRecyclerViewMatcher(recyclerView)
                 .atPositionOnView(position, childView));
     }

@@ -830,7 +830,7 @@ public class SyncingTest extends OrgzlyTest {
         onView(withText(R.string.delete)).perform(click());
         onView(withId(R.id.delete_linked_checkbox)).perform(click());
         onView(withText(R.string.delete)).perform(click());
-
+        SystemClock.sleep(500);
         Assert.assertEquals(0, dbRepoBookRepository.getBooks(
                 repo.getId(), Uri.parse("mock://repo-a")).size());
     }
