@@ -15,15 +15,21 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.orgzly.R
 import com.orgzly.android.OrgzlyTest
+import com.orgzly.android.RetryTestRule
 import com.orgzly.android.espresso.util.EspressoUtils.*
 import com.orgzly.android.ui.main.MainActivity
 import org.hamcrest.Matchers.*
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class NoteFragmentTest : OrgzlyTest() {
     private lateinit var scenario: ActivityScenario<MainActivity>
+
+    @Rule
+    @JvmField
+    val mRetryTestRule = RetryTestRule()
 
     @Before
     @Throws(Exception::class)
@@ -492,6 +498,7 @@ class NoteFragmentTest : OrgzlyTest() {
         onView(withId(R.id.content)).perform(click())
         onView(withId(R.id.content_edit)).perform(typeTextIntoFocusedView("a\nb\nc"))
         onView(withId(R.id.done)).perform(click()) // Note done
+        SystemClock.sleep(500)
         onNoteInBook(1, R.id.item_head_fold_button).perform(click())
         onNoteInBook(1, R.id.item_head_title_view).check(matches(withText(endsWith("3"))))
     }

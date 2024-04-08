@@ -49,6 +49,7 @@ import androidx.test.core.app.ActivityScenario;
 import com.orgzly.BuildConfig;
 import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
+import com.orgzly.android.RetryTestRule;
 import com.orgzly.android.db.entity.NotePosition;
 import com.orgzly.android.repos.RepoType;
 import com.orgzly.android.ui.main.MainActivity;
@@ -56,12 +57,18 @@ import com.orgzly.android.ui.repos.ReposActivity;
 
 import org.hamcrest.Matcher;
 import org.junit.Assume;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class MiscTest extends OrgzlyTest {
+
+    @Rule
+    public TestRule mRetryTestRule = new RetryTestRule();
+
     @Test
     public void testLftRgt() {
         testUtils.setupBook("booky", "Preface\n* Note 1\n** Note 2\n* Note 3\n");

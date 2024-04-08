@@ -64,6 +64,8 @@ import java.util.concurrent.TimeoutException;
  * - replaceText() is preferred over typeText() as it is much faster.
  */
 public class EspressoUtils {
+
+
     public static ViewInteraction onListView() {
         return onView(allOf(isAssignableFrom(ListView.class), isDisplayed()));
     }
