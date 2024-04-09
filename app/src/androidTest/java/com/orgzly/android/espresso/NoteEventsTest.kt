@@ -1,6 +1,7 @@
 package com.orgzly.android.espresso
 
 import android.os.SystemClock
+import android.icu.util.Calendar
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -165,10 +166,16 @@ class NoteEventsTest : OrgzlyTest() {
         onItemInAgenda(2, R.id.item_head_event_text).check(matches(isDisplayed()))
 
         // Today: event
-        onItemInAgenda(3, R.id.item_head_scheduled_text).check(matches(not(isDisplayed())))
-        onItemInAgenda(3, R.id.item_head_deadline_text).check(matches(not(isDisplayed())))
-        onItemInAgenda(3, R.id.item_head_event_text).check(matches(isDisplayed()))
-
+        // Item gets a different position close to midnight
+        if ((Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) < 23) {
+            onItemInAgenda(3, R.id.item_head_scheduled_text).check(matches(not(isDisplayed())))
+            onItemInAgenda(3, R.id.item_head_deadline_text).check(matches(not(isDisplayed())))
+            onItemInAgenda(3, R.id.item_head_event_text).check(matches(isDisplayed()))
+        } else {
+            onItemInAgenda(4, R.id.item_head_scheduled_text).check(matches(not(isDisplayed())))
+            onItemInAgenda(4, R.id.item_head_deadline_text).check(matches(not(isDisplayed())))
+            onItemInAgenda(4, R.id.item_head_event_text).check(matches(isDisplayed()))
+        }
         // Tomorrow: event
         onItemInAgenda(5, R.id.item_head_scheduled_text).check(matches(not(isDisplayed())))
         onItemInAgenda(5, R.id.item_head_deadline_text).check(matches(not(isDisplayed())))
