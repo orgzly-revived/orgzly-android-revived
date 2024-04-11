@@ -28,6 +28,8 @@ public class DropboxRepoTest extends OrgzlyTest {
     public void setUp() throws Exception {
         super.setUp();
         Assume.assumeTrue(BuildConfig.IS_DROPBOX_ENABLED);
+        Assume.assumeTrue(BuildConfig.DROPBOX_APP_KEY.length() > 0);
+        Assume.assumeTrue(BuildConfig.DROPBOX_REFRESH_TOKEN.length() > 0);
 
         JSONObject mockSerializedDbxCredential = new JSONObject();
         mockSerializedDbxCredential.put("access_token", "dummy");
