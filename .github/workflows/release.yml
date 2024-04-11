@@ -35,7 +35,9 @@ jobs:
 
       - name: Add Dropbox app identifier
         shell: bash
-        run: echo "dropbox.app_key = \"${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
+        run: |
+          echo "dropbox.app_key = \"${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
+          echo "dropbox.app_key_schema = \"db-${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
         
       # Build the standard version binary.
       - name: Generate "premium" release APK
