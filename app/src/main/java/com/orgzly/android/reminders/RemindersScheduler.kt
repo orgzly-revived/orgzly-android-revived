@@ -86,11 +86,16 @@ class RemindersScheduler @Inject constructor(val context: Application, val logs:
             }
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (!alarmManager.canScheduleExactAlarms()) {
+                throw SecurityException("Missing permission to schedule alarm")
+            }
+        }
+
         // TODO: Add preferences to control *how* to schedule the alarms
         if (hasTime) {
             if (AppPreferences.remindersUseAlarmClockForTodReminders(context)) {
                 scheduleAlarmClock(alarmManager, intent, inMs, origin)
-
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     scheduleExactAndAllowWhileIdle(alarmManager, intent, inMs, origin)

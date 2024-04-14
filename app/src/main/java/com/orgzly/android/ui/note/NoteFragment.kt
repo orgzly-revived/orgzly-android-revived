@@ -3,13 +3,20 @@ package com.orgzly.android.ui.note
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
@@ -28,7 +35,13 @@ import com.orgzly.android.db.entity.BookView
 import com.orgzly.android.db.entity.Note
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.sync.SyncRunner
-import com.orgzly.android.ui.*
+import com.orgzly.android.ui.Breadcrumbs
+import com.orgzly.android.ui.CommonFragment
+import com.orgzly.android.ui.NotePlace
+import com.orgzly.android.ui.NotePriorities
+import com.orgzly.android.ui.NoteStates
+import com.orgzly.android.ui.Place
+import com.orgzly.android.ui.TimeType
 import com.orgzly.android.ui.dialogs.TimestampDialogFragment
 import com.orgzly.android.ui.drawer.DrawerItem
 import com.orgzly.android.ui.main.MainActivity
@@ -36,7 +49,14 @@ import com.orgzly.android.ui.main.SharedMainActivityViewModel
 import com.orgzly.android.ui.notes.book.BookFragment
 import com.orgzly.android.ui.settings.SettingsActivity
 import com.orgzly.android.ui.share.ShareActivity
-import com.orgzly.android.ui.util.*
+import com.orgzly.android.ui.showSnackbar
+import com.orgzly.android.ui.util.ActivityUtils
+import com.orgzly.android.ui.util.KeyboardUtils
+import com.orgzly.android.ui.util.getAlarmManager
+import com.orgzly.android.ui.util.goneIf
+import com.orgzly.android.ui.util.goneUnless
+import com.orgzly.android.ui.util.invisibleIf
+import com.orgzly.android.ui.util.invisibleUnless
 import com.orgzly.android.util.LogUtils
 import com.orgzly.android.util.OrgFormatter
 import com.orgzly.android.util.SpaceTokenizer
@@ -45,7 +65,8 @@ import com.orgzly.databinding.FragmentNoteBinding
 import com.orgzly.org.OrgProperties
 import com.orgzly.org.datetime.OrgDateTime
 import com.orgzly.org.datetime.OrgRange
-import java.util.*
+import java.util.Collections
+import java.util.TreeSet
 import javax.inject.Inject
 
 /**
@@ -863,17 +884,30 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         when (id) {
             R.id.scheduled_button -> {
                 updateTimestampView(TimeType.SCHEDULED, range)
+                ensureAlarmPermissions(time)
                 viewModel.updatePayloadScheduledTime(range)
             }
 
             R.id.deadline_button -> {
                 updateTimestampView(TimeType.DEADLINE, range)
+                ensureAlarmPermissions(time)
                 viewModel.updatePayloadDeadlineTime(range)
             }
 
             R.id.closed_button -> {
                 updateTimestampView(TimeType.CLOSED, range)
                 viewModel.updatePayloadClosedTime(range)
+            }
+        }
+    }
+
+    private fun ensureAlarmPermissions(time: OrgDateTime?) {
+        if ((time != null) && time.hasTime()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (!requireContext().getAlarmManager().canScheduleExactAlarms()) {
+                    val uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+                    activity?.startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM, uri))
+                }
             }
         }
     }
