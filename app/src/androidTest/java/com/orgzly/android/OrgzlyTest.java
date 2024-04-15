@@ -1,7 +1,10 @@
 package com.orgzly.android;
 
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+
 import android.Manifest;
 import android.app.Activity;
+import android.app.UiAutomation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -17,6 +20,7 @@ import com.orgzly.android.prefs.AppPreferencesValues;
 import com.orgzly.android.repos.RepoFactory;
 import com.orgzly.android.util.UserTimeFormatter;
 import com.orgzly.org.datetime.OrgDateTime;
+import com.orgzly.test.BuildConfig;
 
 import org.junit.After;
 import org.junit.Before;
@@ -56,9 +60,12 @@ public class OrgzlyTest {
     public GrantPermissionRule grantPermissionRule;
 
     public OrgzlyTest() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             this.grantPermissionRule =
                     GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        } else {
+            getInstrumentation().getUiAutomation().grantRuntimePermission(App.getProcessName(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             InstrumentationRegistry.getInstrumentation().getUiAutomation().grantRuntimePermission(App.getProcessName(),

@@ -16,6 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static com.orgzly.android.espresso.util.EspressoUtils.contextualToolbarOverflowMenu;
+import static com.orgzly.android.espresso.util.EspressoUtils.grantAlarmsAndRemindersPermission;
 import static com.orgzly.android.espresso.util.EspressoUtils.onActionItemClick;
 import static com.orgzly.android.espresso.util.EspressoUtils.onBook;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook;
@@ -256,6 +257,7 @@ public class QueryFragmentTest extends OrgzlyTest {
     @Test
     public void testSchedulingNote() {
         defaultSetUp();
+        grantAlarmsAndRemindersPermission();
 
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withText("Scheduled")).perform(click());

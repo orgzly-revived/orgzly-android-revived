@@ -15,13 +15,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.Matchers.anything;
 
 import android.content.res.Resources;
-import android.os.SystemClock;
+import android.os.Build;
 import android.text.Spanned;
 import android.text.style.ClickableSpan;
 import android.view.KeyEvent;
@@ -43,7 +44,6 @@ import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.espresso.util.HumanReadables;
 import androidx.test.espresso.util.TreeIterables;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.orgzly.R;
 import com.orgzly.android.ui.SpanUtils;
@@ -297,7 +297,7 @@ public class EspressoUtils {
 
             // Open the overflow menu OR open the options menu,
             // depending on if the device has a hardware or software overflow menu button.
-            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getTargetContext());
+            openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
             onView(withText(resourceId)).perform(click());
         }
     }
@@ -500,5 +500,12 @@ public class EspressoUtils {
                         .build();
             }
         };
+    }
+
+    public static void grantAlarmsAndRemindersPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            String shellCmd = "appops set --uid com.orgzlyrevived SCHEDULE_EXACT_ALARM allow";
+            getInstrumentation().getUiAutomation().executeShellCommand(shellCmd);
+        }
     }
 }
