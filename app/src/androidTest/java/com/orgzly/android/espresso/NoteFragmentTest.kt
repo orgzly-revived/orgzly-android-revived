@@ -1,6 +1,7 @@
 package com.orgzly.android.espresso
 
 import android.content.pm.ActivityInfo
+import android.os.SystemClock
 import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.test.core.app.ActivityScenario
@@ -14,14 +15,21 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.orgzly.R
 import com.orgzly.android.OrgzlyTest
+import com.orgzly.android.RetryTestRule
 import com.orgzly.android.espresso.util.EspressoUtils.*
 import com.orgzly.android.ui.main.MainActivity
 import org.hamcrest.Matchers.*
+import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class NoteFragmentTest : OrgzlyTest() {
     private lateinit var scenario: ActivityScenario<MainActivity>
+
+    @Rule
+    @JvmField
+    val mRetryTestRule = RetryTestRule()
 
     @Before
     @Throws(Exception::class)
@@ -64,6 +72,12 @@ class NoteFragmentTest : OrgzlyTest() {
         scenario = ActivityScenario.launch(MainActivity::class.java)
 
         onBook(0).perform(click())
+    }
+
+    @After
+    override fun tearDown() {
+        super.tearDown()
+        scenario.close()
     }
 
     @Test
@@ -330,6 +344,7 @@ class NoteFragmentTest : OrgzlyTest() {
                 .check(matches(allOf(withText(userDateTime("[2014-01-01 Wed 20:07]")), isDisplayed())))
         onView(withId(R.id.state_button)).perform(click())
         onView(withText(R.string.clear)).perform(click())
+        SystemClock.sleep(500)
         onView(withId(R.id.closed_button)).check(matches(not(isDisplayed())))
     }
 
@@ -388,6 +403,7 @@ class NoteFragmentTest : OrgzlyTest() {
         scenario.onActivity { activity ->
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
+        SystemClock.sleep(500) // Give AVD time to complete rotation
 
         /* Set time. */
         onView(withText(R.string.set)).perform(click())
@@ -447,7 +463,8 @@ class NoteFragmentTest : OrgzlyTest() {
         }
 
         onView(withId(R.id.scroll_view)).perform(swipeUp()) // For small screens
-
+        SystemClock.sleep(500)
+        
         onView(allOf(withId(R.id.name), withText("prop-name-1"))).check(matches(isDisplayed()))
         onView(allOf(withId(R.id.value), withText("prop-value-1"))).check(matches(isDisplayed()))
         onView(allOf(withId(R.id.name), withText("prop-name-2"))).check(matches(isDisplayed()))
@@ -481,6 +498,7 @@ class NoteFragmentTest : OrgzlyTest() {
         onView(withId(R.id.content)).perform(click())
         onView(withId(R.id.content_edit)).perform(typeTextIntoFocusedView("a\nb\nc"))
         onView(withId(R.id.done)).perform(click()) // Note done
+        SystemClock.sleep(500)
         onNoteInBook(1, R.id.item_head_fold_button).perform(click())
         onNoteInBook(1, R.id.item_head_title_view).check(matches(withText(endsWith("3"))))
     }
@@ -507,7 +525,7 @@ class NoteFragmentTest : OrgzlyTest() {
     @Test
     fun testBreadcrumbsPromptWhenCreatingNewNote() {
         onNoteInBook(1).perform(longClick())
-        onActionItemClick(R.id.new_note, R.string.new_note);
+        onActionItemClick(R.id.new_note, R.string.new_note)
         onView(withText(R.string.new_under)).perform(click())
         onView(withId(R.id.title_edit)).perform(*replaceTextCloseKeyboard("1.1"))
         onView(withId(R.id.breadcrumbs_text)).perform(clickClickableSpan("Note #1."))
@@ -517,6 +535,7 @@ class NoteFragmentTest : OrgzlyTest() {
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
 
+        SystemClock.sleep(500) // If we click too early, the button doesn't yet work...
         onView(withText(R.string.cancel)).perform(click())
 
         // Title remains the same

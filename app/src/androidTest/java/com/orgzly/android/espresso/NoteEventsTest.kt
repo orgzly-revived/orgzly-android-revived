@@ -1,5 +1,7 @@
 package com.orgzly.android.espresso
 
+import android.os.SystemClock
+import android.icu.util.Calendar
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -13,10 +15,13 @@ import com.orgzly.android.ui.main.MainActivity
 import com.orgzly.org.datetime.OrgDateTime
 import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.startsWith
+import org.junit.After
 import org.junit.Test
 
 
 class NoteEventsTest : OrgzlyTest() {
+    private lateinit var scenario: ActivityScenario<MainActivity>
+
     private val now: String
             get() = OrgDateTime(true).toString()
 
@@ -55,66 +60,72 @@ class NoteEventsTest : OrgzlyTest() {
                 .build()
                 .toString()
 
+    @After
+    override fun tearDown() {
+        super.tearDown()
+        scenario.close()
+    }
+
     @Test
     fun search_OneInTitle() {
         testUtils.setupBook("book-a", "* Note $now")
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText("e.ge.today")
+        searchForTextCloseKeyboard("e.ge.today")
         onNotesInSearch().check(matches(recyclerViewItemCount(1)))
     }
 
     @Test
     fun search_OneInContent() {
         testUtils.setupBook("book-a", "* Note\n$now")
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText("e.ge.today")
+        searchForTextCloseKeyboard("e.ge.today")
         onNotesInSearch().check(matches(recyclerViewItemCount(1)))
     }
 
     @Test
     fun search_TwoSameInContent() {
         testUtils.setupBook("book-a", "* Note\n$now $now")
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText("e.ge.today")
+        searchForTextCloseKeyboard("e.ge.today")
         onNotesInSearch().check(matches(recyclerViewItemCount(1)))
     }
 
     @Test
     fun agenda_OneInTitle() {
         testUtils.setupBook("book-a", "* Note $now")
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText("ad.1")
+        searchForTextCloseKeyboard("ad.1")
         onNotesInAgenda().check(matches(recyclerViewItemCount(2)))
     }
 
     @Test
     fun agenda_TwoInTitle() {
         testUtils.setupBook("book-a", "* Note $now $tomorrow")
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText("ad.2")
+        searchForTextCloseKeyboard("ad.2")
         onNotesInAgenda().check(matches(recyclerViewItemCount(4)))
     }
 
     @Test
     fun agenda_OneInContent() {
         testUtils.setupBook("book-a", "* Note\n$now")
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText("ad.1")
+        searchForTextCloseKeyboard("ad.1")
         onNotesInAgenda().check(matches(recyclerViewItemCount(2)))
     }
 
     @Test
     fun agenda_TwoInContent() {
         testUtils.setupBook("book-a", "* Note\n$now $tomorrow")
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText("ad.2")
+        searchForTextCloseKeyboard("ad.2")
         onNotesInAgenda().check(matches(recyclerViewItemCount(4)))
     }
 
@@ -138,9 +149,9 @@ class NoteEventsTest : OrgzlyTest() {
             Tomorrow: ${time(1000 * 60 * 60 * 24, hasTime = true)}"
         """.trimIndent())
 
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText("ad.5")
+        searchForTextCloseKeyboard("ad.5")
 
         onNotesInAgenda().check(matches(recyclerViewItemCount(10)))
 
@@ -155,10 +166,16 @@ class NoteEventsTest : OrgzlyTest() {
         onItemInAgenda(2, R.id.item_head_event_text).check(matches(isDisplayed()))
 
         // Today: event
-        onItemInAgenda(3, R.id.item_head_scheduled_text).check(matches(not(isDisplayed())))
-        onItemInAgenda(3, R.id.item_head_deadline_text).check(matches(not(isDisplayed())))
-        onItemInAgenda(3, R.id.item_head_event_text).check(matches(isDisplayed()))
-
+        // Item gets a different position close to midnight
+        if ((Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) < 23) {
+            onItemInAgenda(3, R.id.item_head_scheduled_text).check(matches(not(isDisplayed())))
+            onItemInAgenda(3, R.id.item_head_deadline_text).check(matches(not(isDisplayed())))
+            onItemInAgenda(3, R.id.item_head_event_text).check(matches(isDisplayed()))
+        } else {
+            onItemInAgenda(4, R.id.item_head_scheduled_text).check(matches(not(isDisplayed())))
+            onItemInAgenda(4, R.id.item_head_deadline_text).check(matches(not(isDisplayed())))
+            onItemInAgenda(4, R.id.item_head_event_text).check(matches(isDisplayed()))
+        }
         // Tomorrow: event
         onItemInAgenda(5, R.id.item_head_scheduled_text).check(matches(not(isDisplayed())))
         onItemInAgenda(5, R.id.item_head_deadline_text).check(matches(not(isDisplayed())))
@@ -182,9 +199,9 @@ class NoteEventsTest : OrgzlyTest() {
             Tomorrow: ${time(1000 * 60 * 60 * 24, hasTime = true)}"
         """.trimIndent())
 
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText("b.book-a")
+        searchForTextCloseKeyboard("b.book-a")
 
         onNotesInSearch().check(matches(recyclerViewItemCount(1)))
 
@@ -198,27 +215,28 @@ class NoteEventsTest : OrgzlyTest() {
         testUtils.setupBook(
                 "book-a",
                 "* Today $today\n* In few days $inFewDays\n* Today & In few days $today $inFewDays")
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText("e.gt.1d")
+        searchForTextCloseKeyboard("e.gt.1d")
         onNotesInSearch().check(matches(recyclerViewItemCount(2)))
     }
 
     @Test
     fun agenda_PastEvent() {
         testUtils.setupBook("book-a", "* Few days ago\n$fewDaysAgo")
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText("ad.2")
+        searchForTextCloseKeyboard("ad.2")
+        SystemClock.sleep(500)
         onNotesInAgenda().check(matches(recyclerViewItemCount(2)))
     }
 
     @Test
     fun agendaSearch_TwoWithScheduledTime() {
         testUtils.setupBook("book-a", "* $yesterday $fewDaysAgo\nSCHEDULED: $tomorrow")
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText("e.lt.now ad.3")
+        searchForTextCloseKeyboard("e.lt.now ad.3")
         onNotesInAgenda().check(matches(recyclerViewItemCount(4)))
     }
 
@@ -230,9 +248,9 @@ class NoteEventsTest : OrgzlyTest() {
                 * Note A-01
                   $today $tomorrow
                 """.trimIndent())
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText("e.today")
+        searchForTextCloseKeyboard("e.today")
         onNotesInSearch().check(matches(recyclerViewItemCount(1)))
         onNoteInSearch(0, R.id.item_head_title_view).check(matches(withText(startsWith("Note A-01"))))
     }
@@ -247,9 +265,9 @@ class NoteEventsTest : OrgzlyTest() {
                 * Note A-02
                   <2000-01-12>
                 """.trimIndent())
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText("e.lt.now o.e")
+        searchForTextCloseKeyboard("e.lt.now o.e")
         onNotesInSearch().check(matches(recyclerViewItemCount(2)))
         onNoteInSearch(0, R.id.item_head_title_view).check(matches(withText(startsWith("Note A-01"))))
         onNoteInSearch(1, R.id.item_head_title_view).check(matches(withText(startsWith("Note A-02"))))
@@ -265,9 +283,9 @@ class NoteEventsTest : OrgzlyTest() {
                 * Note A-02
                   <2000-01-12>
                 """.trimIndent())
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText("e.lt.now .o.e")
+        searchForTextCloseKeyboard("e.lt.now .o.e")
         onNotesInSearch().check(matches(recyclerViewItemCount(2)))
         onNoteInSearch(0, R.id.item_head_title_view).check(matches(withText(startsWith("Note A-01"))))
         onNoteInSearch(1, R.id.item_head_title_view).check(matches(withText(startsWith("Note A-02"))))
@@ -276,7 +294,7 @@ class NoteEventsTest : OrgzlyTest() {
     @Test
     fun shiftFromList() {
         testUtils.setupBook("Book A", "* Note A-01 <2000-01-10 +1d>")
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
         onBook(0).perform(click())
         onNoteInBook(1, R.id.item_head_title_view).check(matches(withText("Note A-01 <2000-01-10 +1d>")))
@@ -288,7 +306,7 @@ class NoteEventsTest : OrgzlyTest() {
     @Test
     fun shiftFromNote() {
         testUtils.setupBook("Book A", "* Note A-01 <2000-01-10 +1d>")
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
         onBook(0).perform(click())
         onNoteInBook(1).perform(click())
@@ -306,9 +324,9 @@ class NoteEventsTest : OrgzlyTest() {
                 * Note A-01
                   SCHEDULED: $tomorrow
                 """.trimIndent())
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        searchForText(".it.done ad.7 o.e")
+        searchForTextCloseKeyboard(".it.done ad.7 o.e")
 
         onNotesInAgenda().check(matches(recyclerViewItemCount(8)))
         onItemInAgenda(2, R.id.item_head_title_view).check(matches(withText(startsWith("Note A-01"))))

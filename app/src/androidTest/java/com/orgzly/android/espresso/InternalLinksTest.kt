@@ -1,5 +1,6 @@
 package com.orgzly.android.espresso
 
+import android.os.SystemClock
 import android.widget.TextView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
@@ -12,12 +13,15 @@ import com.orgzly.android.espresso.util.EspressoUtils.*
 import com.orgzly.android.ui.main.MainActivity
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.instanceOf
+import org.junit.After
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 
 
 class InternalLinksTest : OrgzlyTest() {
+    private lateinit var scenario: ActivityScenario<MainActivity>
+
     @Before
     @Throws(Exception::class)
     override fun setUp() {
@@ -77,15 +81,22 @@ class InternalLinksTest : OrgzlyTest() {
                 """.trimIndent()
         )
 
-        ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
 
         onBook(0).perform(click())
+    }
+
+    @After
+    override fun tearDown() {
+        super.tearDown()
+        scenario.close()
     }
 
     @Test
     fun testDifferentCaseUuidInternalLink() {
         onNoteInBook(1, R.id.item_head_content_view)
                 .perform(clickClickableSpan("id:bdce923b-C3CD-41ED-B58E-8BDF8BABA54F"))
+        SystemClock.sleep(500)
         onView(withId(R.id.title_view)).check(matches(withText("Note [b-2]")))
     }
 
@@ -93,6 +104,7 @@ class InternalLinksTest : OrgzlyTest() {
     fun testDifferentCaseCustomIdInternalLink() {
         onNoteInBook(2, R.id.item_head_content_view)
                 .perform(clickClickableSpan("#Different case custom id"))
+        SystemClock.sleep(500)
         onView(withId(R.id.title_view)).check(matches(withText("Note [b-1]")))
     }
 
@@ -100,6 +112,7 @@ class InternalLinksTest : OrgzlyTest() {
     fun testCustomIdLink() {
         onNoteInBook(3, R.id.item_head_content_view)
                 .perform(clickClickableSpan("#Link to note in a different book"))
+        SystemClock.sleep(500)
         onView(withId(R.id.title_view)).check(matches(withText("Note [b-3]")))
     }
 
@@ -123,6 +136,7 @@ class InternalLinksTest : OrgzlyTest() {
     fun testNonExistentId() {
         onNoteInBook(6, R.id.item_head_content_view)
             .perform(clickClickableSpan("id:note-with-this-id-does-not-exist"))
+        SystemClock.sleep(500)
         onSnackbar()
             .check(matches(withText("Note with “ID” property set to “note-with-this-id-does-not-exist” not found")))
     }

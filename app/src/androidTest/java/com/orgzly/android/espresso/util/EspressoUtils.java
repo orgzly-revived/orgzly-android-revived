@@ -10,6 +10,7 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -20,6 +21,7 @@ import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.Matchers.anything;
 
 import android.content.res.Resources;
+import android.os.SystemClock;
 import android.text.Spanned;
 import android.text.style.ClickableSpan;
 import android.view.KeyEvent;
@@ -32,12 +34,15 @@ import androidx.annotation.IdRes;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.DataInteraction;
+import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.action.CloseKeyboardAction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.espresso.util.HumanReadables;
+import androidx.test.espresso.util.TreeIterables;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.orgzly.R;
@@ -48,6 +53,8 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 
+import java.util.concurrent.TimeoutException;
+
 /*
  * Few espresso-related notes:
  *
@@ -57,6 +64,8 @@ import org.hamcrest.TypeSafeMatcher;
  * - replaceText() is preferred over typeText() as it is much faster.
  */
 public class EspressoUtils {
+
+
     public static ViewInteraction onListView() {
         return onView(allOf(isAssignableFrom(ListView.class), isDisplayed()));
     }
@@ -178,8 +187,8 @@ public class EspressoUtils {
     }
 
     public static ViewInteraction onRecyclerViewItem(@IdRes int recyclerView, int position, @IdRes int childView) {
+        onView(isRoot()).perform(waitId(recyclerView, 5000));
         onView(withId(recyclerView)).perform(RecyclerViewActions.scrollToPosition(position));
-
         return onView(new EspressoRecyclerViewMatcher(recyclerView)
                 .atPositionOnView(position, childView));
     }
@@ -327,9 +336,10 @@ public class EspressoUtils {
                 withClassName(endsWith("OverflowMenuButton"))));
     }
 
-    public static void searchForText(String str) {
+    public static void searchForTextCloseKeyboard(String str) {
         onView(allOf(withId(R.id.search_view), isDisplayed())).perform(click());
         onView(withId(R.id.search_src_text)).perform(replaceText(str), pressKey(KeyEvent.KEYCODE_ENTER));
+        closeSoftKeyboardWithDelay();
     }
 
     public static ViewAction[] replaceTextCloseKeyboard(String str) {
@@ -444,5 +454,51 @@ public class EspressoUtils {
 
     public static ViewAction scroll() {
         return new NestedScrollViewExtension();
+    }
+
+    /**
+     * Perform action of waiting for a specific view id. Copied from https://stackoverflow.com/a/49814995.
+     * @param viewId The id of the view to wait for.
+     * @param millis The timeout of until when to wait for.
+     */
+    public static ViewAction waitId(final int viewId, final long millis) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isRoot();
+            }
+
+            @Override
+            public String getDescription() {
+                return "wait for a specific view with id <" + viewId + "> during " + millis + " millis.";
+            }
+
+            @Override
+            public void perform(final UiController uiController, final View view) {
+                uiController.loopMainThreadUntilIdle();
+                final long startTime = System.currentTimeMillis();
+                final long endTime = startTime + millis;
+                final Matcher<View> viewMatcher = withId(viewId);
+
+                do {
+                    for (View child : TreeIterables.breadthFirstViewTraversal(view)) {
+                        // found view with required ID
+                        if (viewMatcher.matches(child)) {
+                            return;
+                        }
+                    }
+
+                    uiController.loopMainThreadForAtLeast(50);
+                }
+                while (System.currentTimeMillis() < endTime);
+
+                // timeout happens
+                throw new PerformException.Builder()
+                        .withActionDescription(this.getDescription())
+                        .withViewDescription(HumanReadables.describe(view))
+                        .withCause(new TimeoutException())
+                        .build();
+            }
+        };
     }
 }

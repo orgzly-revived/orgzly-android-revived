@@ -8,6 +8,7 @@ import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
 import com.orgzly.android.ui.main.MainActivity;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,11 +26,14 @@ import static com.orgzly.android.espresso.util.EspressoUtils.onNoteInSearch;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNotesInSearch;
 import static com.orgzly.android.espresso.util.EspressoUtils.recyclerViewItemCount;
 import static com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard;
-import static com.orgzly.android.espresso.util.EspressoUtils.searchForText;
+import static com.orgzly.android.espresso.util.EspressoUtils.searchForTextCloseKeyboard;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.allOf;
 
 public class CreatedAtPropertyTest extends OrgzlyTest {
+
+    private ActivityScenario<MainActivity> scenario;
+
     @Before
     public void setUp() throws Exception {
         super.setUp();
@@ -52,14 +56,20 @@ public class CreatedAtPropertyTest extends OrgzlyTest {
                 "SCHEDULED: <2014-01-01>\n"
         );
 
-        ActivityScenario.launch(MainActivity.class);
+        scenario = ActivityScenario.launch(MainActivity.class);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        super.tearDown();
+        scenario.close();
     }
 
     @Test
     public void testCondition() {
         enableCreatedAt();
 
-        searchForText("cr.le.today");
+        searchForTextCloseKeyboard("cr.le.today");
         onNotesInSearch().check(matches(recyclerViewItemCount(2)));
 
         // TODO: Search before/after 2018-01-03 expecting 1 note
@@ -69,18 +79,18 @@ public class CreatedAtPropertyTest extends OrgzlyTest {
     public void testSortOrder() {
         enableCreatedAt();
 
-        searchForText("o.cr");
+        searchForTextCloseKeyboard("o.cr");
         onNoteInSearch(0, R.id.item_head_title_view)
                 .check(matches(allOf(withText("Note [a-2]"), isDisplayed())));
 
-        searchForText(".o.cr");
+        searchForTextCloseKeyboard(".o.cr");
         onNoteInSearch(0, R.id.item_head_title_view)
                 .check(matches(allOf(withText("Note [a-1]"), isDisplayed())));
     }
 
     @Test
     public void testChangeCreatedAtPropertyResultsShouldBeReordered() {
-        searchForText("o.cr");
+        searchForTextCloseKeyboard("o.cr");
 
         onNoteInSearch(0, R.id.item_head_title_view).check(matches(withText("Note [a-1]")));
         onNoteInSearch(1, R.id.item_head_title_view).check(matches(withText("Note [a-2]")));
@@ -110,11 +120,11 @@ public class CreatedAtPropertyTest extends OrgzlyTest {
         onNoteInBook(3, R.id.item_head_title_view)
                 .check(matches(allOf(withText("new note created by test"), isDisplayed())));
 
-        searchForText("o.cr");
+        searchForTextCloseKeyboard("o.cr");
         onNoteInSearch(0, R.id.item_head_title_view)
                 .check(matches(allOf(withText("Note [a-2]"), isDisplayed())));
 
-        searchForText(".o.cr");
+        searchForTextCloseKeyboard(".o.cr");
         onNoteInSearch(0, R.id.item_head_title_view)
                 .check(matches(allOf(withText("new note created by test"), isDisplayed())));
     }
