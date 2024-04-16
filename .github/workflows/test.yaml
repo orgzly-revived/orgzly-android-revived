@@ -1,4 +1,4 @@
-name: Run tests
+name: Tests
 
 on:
   pull_request:
@@ -8,6 +8,7 @@ on:
     branches:
       - 'master'
     paths-ignore:
+      - '.github/**'
       - 'app/build.gradle'
       - 'metadata/**'
       - 'app/src/main/res/layout/dialog_whats_new.xml'
