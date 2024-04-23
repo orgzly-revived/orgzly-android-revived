@@ -32,6 +32,7 @@ import static com.orgzly.android.espresso.util.EspressoUtils.settingsSetTodoKeyw
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.matchesPattern;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertTrue;
@@ -39,7 +40,6 @@ import static org.junit.Assert.assertTrue;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.SystemClock;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -49,25 +49,18 @@ import androidx.test.core.app.ActivityScenario;
 import com.orgzly.BuildConfig;
 import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
-import com.orgzly.android.RetryTestRule;
 import com.orgzly.android.db.entity.NotePosition;
+import com.orgzly.android.espresso.util.EspressoUtils;
 import com.orgzly.android.repos.RepoType;
 import com.orgzly.android.ui.main.MainActivity;
 import com.orgzly.android.ui.repos.ReposActivity;
 
 import org.hamcrest.Matcher;
 import org.junit.Assume;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class MiscTest extends OrgzlyTest {
-
-    @Rule
-    public TestRule mRetryTestRule = new RetryTestRule();
 
     @Test
     public void testLftRgt() {
@@ -191,6 +184,7 @@ public class MiscTest extends OrgzlyTest {
                         "*** DONE Note #5.\n" +
                         "CLOSED: [2014-06-03 Tue 13:34]\n" +
                         "");
+        EspressoUtils.grantAlarmsAndRemindersPermission();
         try (ActivityScenario<MainActivity> ignored = ActivityScenario.launch(MainActivity.class)) {
             onView(allOf(withText("book-name"), isDisplayed())).perform(click());
 
@@ -272,6 +266,7 @@ public class MiscTest extends OrgzlyTest {
 
     @Test
     public void testTimestampDialogTimeButtonValueWhenToggling() {
+        EspressoUtils.grantAlarmsAndRemindersPermission();
         testUtils.setupBook("book-name", "Sample book used for tests\n" +
                 "* TODO Note #1.\n" +
                 "SCHEDULED: <2015-01-18 04:05 +6d>\n" +
@@ -282,15 +277,14 @@ public class MiscTest extends OrgzlyTest {
 
             onNoteInBook(1).perform(click());
 
-            Calendar cal = new GregorianCalendar(2015, 0, 18, 4, 5);
-            String s = DateFormat.getTimeFormat(context).format(cal.getTime());
+            String regex = "4:05\\sAM";
 
             onView(withId(R.id.scheduled_button)).perform(click());
-            onView(withId(R.id.time_picker_button)).check(matches(withText(containsString(s))));
+            onView(withId(R.id.time_picker_button)).check(matches(withText(matchesPattern(regex))));
             onView(withId(R.id.time_used_checkbox)).perform(scroll(), click());
-            onView(withId(R.id.time_picker_button)).check(matches(withText(containsString(s))));
+            onView(withId(R.id.time_picker_button)).check(matches(withText(matchesPattern(regex))));
             onView(withId(R.id.time_used_checkbox)).perform(click());
-            onView(withId(R.id.time_picker_button)).check(matches(withText(containsString(s))));
+            onView(withId(R.id.time_picker_button)).check(matches(withText(matchesPattern(regex))));
         }
     }
 
