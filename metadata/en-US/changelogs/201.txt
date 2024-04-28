@@ -1,0 +1,1 @@
+• Fix broken Dropbox account linking (not available in F-Droid version)
