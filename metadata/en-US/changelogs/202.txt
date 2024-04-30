@@ -1,0 +1,1 @@
+• Fix F-Droid build not being reproducible
