@@ -33,6 +33,9 @@ jobs:
           echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
           echo Last build tool version is: $BUILD_TOOL_VERSION
 
+      - name: Get version name from git tag
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
       - name: Generate "fdroid" release APK
         run: ./gradlew assembleFdroidRelease --stacktrace
         env:
@@ -73,9 +76,6 @@ jobs:
           keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
         env:
           BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
-
-      - name: Get version name from git tag
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
       - name: Rename APK file
         run: mv ${{steps.sign_apk.outputs.signedReleaseFile}} orgzly-revived-${{ env.VERSION }}.apk
