@@ -54,6 +54,8 @@ android {
 
             buildConfigField "boolean", "LOG_DEBUG", "false"
 
+            buildConfigField "String", "GIT_COMMIT", "\"${getCheckedOutGitCommitHash()}\""
+
             // signingConfig signingConfigs.debug
         }
 
@@ -61,6 +63,8 @@ android {
             buildConfigField "boolean", "LOG_DEBUG", "true"
 
             buildConfigField "String", "DROPBOX_REFRESH_TOKEN", gradle.ext.appProperties.getProperty("dropbox.refresh_token", '""')
+
+            buildConfigField "String", "GIT_COMMIT", "\"${getCheckedOutGitCommitHash()}\""
         }
     }
 
@@ -227,4 +231,23 @@ def orgJavaLocation() {
         logger.info("app: Using com.github.orgzly-revived:org-java:$versions.org_java from Maven repository")
         return "com.github.orgzly-revived:org-java:$versions.org_java"
     }
+}
+
+// https://gist.github.com/JonasGroeger/7620911
+def getCheckedOutGitCommitHash() {
+    def gitFolder = "$projectDir/../.git/"
+    def takeFromHash = 12
+    /*
+     * '.git/HEAD' contains either
+     *      in case of detached head: the currently checked out commit hash
+     *      otherwise: a reference to a file containing the current commit hash
+     */
+    def head = new File(gitFolder + "HEAD").text.split(":") // .git/HEAD
+    def isCommit = head.length == 1 // e5a7c79edabbf7dd39888442df081b1c9d8e88fd
+    // def isRef = head.length > 1     // ref: refs/heads/master
+
+    if(isCommit) return head[0].trim().take(takeFromHash) // e5a7c79edabb
+
+    def refHead = new File(gitFolder + head[1].trim()) // .git/refs/heads/master
+    refHead.text.trim().take takeFromHash
 }

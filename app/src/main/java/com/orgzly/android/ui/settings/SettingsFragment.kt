@@ -79,6 +79,8 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
 
         setupVersionPreference()
 
+        setupGitCommitPreference()
+
         setDefaultStateForNewNote()
 
         preference(R.string.pref_key_file_absolute_root)?.let {
@@ -153,6 +155,12 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 listener?.onWhatsNewDisplayRequest()
                 true
             }
+        }
+    }
+
+    private fun setupGitCommitPreference() {
+        preference(R.string.pref_key_git_commit)?.let { pref ->
+            pref.summary = BuildConfig.GIT_COMMIT
         }
     }
 
