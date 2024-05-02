@@ -22,6 +22,15 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.21"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix F-Droid build not being reproducible" />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.20"
             tools:ignore="HardcodedText" />
 
