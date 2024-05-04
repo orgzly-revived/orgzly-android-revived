@@ -1,4 +1,4 @@
-name: name: Build beta AAB
+name: Build beta AAB
 
 on:
   # Trigger by pushing a version tag (which are protected)
@@ -56,6 +56,11 @@ jobs:
 
       - name: Get version name from git tag
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
-        
+
       - name: Rename AAB file
         run: mv ${{steps.sign_premium_aab.outputs.signedReleaseFile}} orgzly-revived-premium-${{ env.VERSION }}.aab
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: orgzly-revived-premium-${{ env.VERSION }}.aab
