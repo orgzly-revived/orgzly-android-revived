@@ -43,6 +43,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: tree
+        run: tree app/build/outputs
+        
       - name: Sign bundle using key store from repo secrets
         uses: r0adkll/sign-android-release@v1
         id: sign_premium_aab
