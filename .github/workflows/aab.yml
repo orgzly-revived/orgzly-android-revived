@@ -1,0 +1,61 @@
+name: name: Build beta AAB
+
+on:
+  # Trigger by pushing a version tag (which are protected)
+  push:
+    tags:
+      - v*.*.*-*
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  prerelease:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      - name: Setup build tool version variable
+        shell: bash
+        run: |
+          BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
+          echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+          echo Last build tool version is: $BUILD_TOOL_VERSION
+
+      - name: Add Dropbox app identifier
+        shell: bash
+        run: |
+          echo "dropbox.app_key = \"${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
+          echo "dropbox.app_key_schema = \"db-${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
+
+      - name: Generate "premium" release app bundle
+        run: ./gradlew bundlePremiumRelease --stacktrace
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sign bundle using key store from repo secrets
+        uses: r0adkll/sign-android-release@v1
+        id: sign_premium_aab
+        with:
+          releaseDirectory: app/build/outputs/bundle/premium/release
+          signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
+          alias: orgzly-revived-20231013
+          keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+
+      - name: Get version name from git tag
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+        
+      - name: Rename AAB file
+        run: mv ${{steps.sign_premium_aab.outputs.signedReleaseFile}} orgzly-revived-premium-${{ env.VERSION }}.aab
