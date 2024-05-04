@@ -43,14 +43,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: tree
-        run: tree app/build/outputs
-        
       - name: Sign bundle using key store from repo secrets
         uses: r0adkll/sign-android-release@v1
         id: sign_premium_aab
         with:
-          releaseDirectory: app/build/outputs/bundle/premium/release
+          releaseDirectory: app/build/outputs/bundle/premiumRelease
           signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
           alias: orgzly-revived-20231013
           keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
