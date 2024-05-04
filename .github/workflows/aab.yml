@@ -1,4 +1,4 @@
-name: Build beta AAB
+name: Build beta app bundle
 
 on:
   # Trigger by pushing a version tag (which are protected)
@@ -13,7 +13,7 @@ permissions:
   contents: write
 
 jobs:
-  prerelease:
+  build-beta-app-bundle:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
