@@ -250,6 +250,10 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             getString(R.string.pref_key_ongoing_notification),
             getString(R.string.pref_key_ongoing_notification_priority) -> {
                 if (AppPreferences.newNoteNotification(context)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        AppPermissions.isGrantedOrRequest(
+                            activity, AppPermissions.Usage.POST_NOTIFICATIONS)
+                    }
                     Notifications.showOngoingNotification(context)
                 } else {
                     Notifications.cancelNewNoteNotification(context)
@@ -303,17 +307,44 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 context?.sendBroadcast(intent)
             }
 
-            // Reminders for scheduled notes - reset last run time
-            getString(R.string.pref_key_use_reminders_for_scheduled_times) ->
+            // Reminders for scheduled notes
+            getString(R.string.pref_key_use_reminders_for_scheduled_times) -> {
+                // Reset last run time
                 AppPreferences.reminderLastRunForScheduled(context, 0L)
+                if (AppPreferences.remindersForScheduledEnabled(context)) {
+                    // Ensure notifications permission
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        AppPermissions.isGrantedOrRequest(
+                            activity, AppPermissions.Usage.POST_NOTIFICATIONS)
+                    }
+                }
+            }
 
-            // Reminders for deadlines - reset last run time
-            getString(R.string.pref_key_use_reminders_for_deadline_times) ->
+            // Reminders for deadlines
+            getString(R.string.pref_key_use_reminders_for_deadline_times) -> {
+                // Reset last run time
                 AppPreferences.reminderLastRunForDeadline(context, 0L)
+                if (AppPreferences.remindersForDeadlineEnabled(context)) {
+                    // Ensure notifications permission
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        AppPermissions.isGrantedOrRequest(
+                            activity, AppPermissions.Usage.POST_NOTIFICATIONS)
+                    }
+                }
+            }
 
-            // Reminders for events - reset last run time
-            getString(R.string.pref_key_use_reminders_for_event_times) ->
+            // Reminders for events
+            getString(R.string.pref_key_use_reminders_for_event_times) -> {
+                // Reset last run time
                 AppPreferences.reminderLastRunForEvents(context, 0L)
+                if (AppPreferences.remindersForEventsEnabled(context)) {
+                    // Ensure notifications permission
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        AppPermissions.isGrantedOrRequest(
+                            activity, AppPermissions.Usage.POST_NOTIFICATIONS)
+                    }
+                }
+            }
 
             // Display images inline enabled - request permission
             getString(R.string.pref_key_images_enabled) -> {
@@ -321,6 +352,16 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                     Handler().post {
                         AppPermissions.isGrantedOrRequest(
                                 activity, AppPermissions.Usage.EXTERNAL_FILES_ACCESS)
+                    }
+                }
+            }
+
+            // Notification on failed sync - request permission
+            getString(R.string.pref_key_show_sync_notifications) -> {
+                if (AppPreferences.showSyncNotifications(context)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        AppPermissions.isGrantedOrRequest(
+                            activity, AppPermissions.Usage.POST_NOTIFICATIONS)
                     }
                 }
             }

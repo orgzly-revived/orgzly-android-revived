@@ -60,6 +60,10 @@ public class OrgzlyTest {
             this.grantPermissionRule =
                     GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            InstrumentationRegistry.getInstrumentation().getUiAutomation().grantRuntimePermission(App.getProcessName(),
+                    Manifest.permission.POST_NOTIFICATIONS);
+        }
     }
 
     @Before

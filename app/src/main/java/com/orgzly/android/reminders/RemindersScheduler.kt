@@ -10,11 +10,13 @@ import android.os.Build
 import android.os.SystemClock
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.orgzly.android.App
 import com.orgzly.android.AppIntent
 import com.orgzly.android.data.logs.AppLogsRepository
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.util.ActivityUtils
 import com.orgzly.android.ui.util.getAlarmManager
+import com.orgzly.android.util.AppPermissions
 import com.orgzly.android.util.LogMajorEvents
 import org.joda.time.DateTime
 import javax.inject.Inject
@@ -74,6 +76,15 @@ class RemindersScheduler @Inject constructor(val context: Application, val logs:
 
     private fun schedule(intent: PendingIntent, inMs: Long, hasTime: Boolean, origin: String) {
         val alarmManager = context.getAlarmManager()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (!AppPermissions.isGrantedOrRequest(
+                    App.getCurrentActivity(), AppPermissions.Usage.POST_NOTIFICATIONS
+                )
+            ) {
+                return
+            }
+        }
 
         // TODO: Add preferences to control *how* to schedule the alarms
         if (hasTime) {
