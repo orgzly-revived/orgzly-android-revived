@@ -105,7 +105,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            '*.apk'
-            '*.aab'
+            *.apk
+            *.aab
           prerelease: true
           draft: true
