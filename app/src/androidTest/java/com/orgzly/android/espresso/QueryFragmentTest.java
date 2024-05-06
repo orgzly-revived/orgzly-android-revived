@@ -268,6 +268,7 @@ public class QueryFragmentTest extends OrgzlyTest {
         onView(withId(R.id.date_picker_button)).perform(click());
         onView(withClassName(equalTo(DatePicker.class.getName()))).perform(setDate(2014, 4, 1));
         onView(withText(android.R.string.ok)).perform(click());
+        SystemClock.sleep(500);
         onView(isRoot()).perform(waitId(R.id.time_picker_button, 5000));
         onView(withId(R.id.time_picker_button)).perform(scroll(), click());
         onView(withClassName(equalTo(TimePicker.class.getName()))).perform(setTime(9, 15));
