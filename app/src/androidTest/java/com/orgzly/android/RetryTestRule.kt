@@ -1,6 +1,7 @@
 package com.orgzly.android
 
 import android.util.Log
+import org.junit.AssumptionViolatedException
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -29,6 +30,9 @@ class RetryTestRule(val retryCount: Int = 3) : TestRule {
                         return
                     } catch (t: Throwable) {
                         caughtThrowable = t
+                        if (caughtThrowable is AssumptionViolatedException) {
+                            throw caughtThrowable
+                        }
                         Log.e(TAG, description.displayName + ": run " + (i + 1) + " failed")
                     }
                 }
