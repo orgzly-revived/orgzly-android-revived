@@ -208,6 +208,13 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
             binding.activityRepoGitHttpsAuthInfo.visibility = View.GONE
             binding.activityRepoGitHttpsUsernameLayout.visibility = View.GONE
             binding.activityRepoGitHttpsPasswordLayout.visibility = View.GONE
+            // Using SSH transport requires notification permission (for server key verification)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                AppPermissions.isGrantedOrRequest(
+                    App.getCurrentActivity(),
+                    AppPermissions.Usage.POST_NOTIFICATIONS
+                )
+            }
         }
     }
 
@@ -512,7 +519,6 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
             progressDialog.dismiss()
             fragment.repoCheckComplete(e)
         }
-
 
         override fun start(totalTasks: Int) {
             publishProgress(CloneProgressUpdate(totalTasks, true))
