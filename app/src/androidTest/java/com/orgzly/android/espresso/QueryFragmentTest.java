@@ -16,6 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static com.orgzly.android.espresso.util.EspressoUtils.contextualToolbarOverflowMenu;
+import static com.orgzly.android.espresso.util.EspressoUtils.grantAlarmsAndRemindersPermission;
 import static com.orgzly.android.espresso.util.EspressoUtils.onActionItemClick;
 import static com.orgzly.android.espresso.util.EspressoUtils.onBook;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook;
@@ -256,6 +257,7 @@ public class QueryFragmentTest extends OrgzlyTest {
     @Test
     public void testSchedulingNote() {
         defaultSetUp();
+        grantAlarmsAndRemindersPermission();
 
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withText("Scheduled")).perform(click());
@@ -266,6 +268,7 @@ public class QueryFragmentTest extends OrgzlyTest {
         onView(withId(R.id.date_picker_button)).perform(click());
         onView(withClassName(equalTo(DatePicker.class.getName()))).perform(setDate(2014, 4, 1));
         onView(withText(android.R.string.ok)).perform(click());
+        SystemClock.sleep(500);
         onView(isRoot()).perform(waitId(R.id.time_picker_button, 5000));
         onView(withId(R.id.time_picker_button)).perform(scroll(), click());
         onView(withClassName(equalTo(TimePicker.class.getName()))).perform(setTime(9, 15));

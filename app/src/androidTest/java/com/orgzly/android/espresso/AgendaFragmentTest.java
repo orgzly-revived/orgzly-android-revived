@@ -31,6 +31,7 @@ import androidx.test.espresso.contrib.PickerActions;
 
 import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
+import com.orgzly.android.espresso.util.EspressoUtils;
 import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.ui.main.MainActivity;
 
@@ -163,6 +164,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
 
     @Test
     public void testMoveTaskWithRepeaterToTomorrow() {
+        EspressoUtils.grantAlarmsAndRemindersPermission();
         DateTime tomorrow = DateTime.now().withTimeAtStartOfDay().plusDays(1);
         scenario = defaultSetUp();
         searchForTextCloseKeyboard(".it.done ad.7");

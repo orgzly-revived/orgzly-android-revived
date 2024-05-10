@@ -14,11 +14,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static com.orgzly.android.espresso.util.EspressoUtils.contextualToolbarOverflowMenu;
 import static com.orgzly.android.espresso.util.EspressoUtils.onActionItemClick;
 import static com.orgzly.android.espresso.util.EspressoUtils.onSavedSearch;
 import static com.orgzly.android.espresso.util.EspressoUtils.onSnackbar;
 import static com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard;
+import static com.orgzly.android.espresso.util.EspressoUtils.waitId;
 import static org.hamcrest.Matchers.allOf;
 
 import android.app.Activity;
@@ -75,9 +77,8 @@ public class SavedSearchesFragmentTest extends OrgzlyTest {
     public void testUpdateSameNameSavedSearch() {
         onView(withId(R.id.fragment_saved_searches_flipper)).check(matches(isDisplayed()));
         onSavedSearch(0).perform(click());
-        SystemClock.sleep(500);
         onView(withId(R.id.fragment_saved_search_flipper)).check(matches(isDisplayed()));
-        onView(withId(R.id.fragment_saved_search_query)).perform(typeText(" edited"));
+        onView(withId(R.id.fragment_saved_search_query)).perform(replaceTextCloseKeyboard(" edited"));
         onView(withId(R.id.done)).perform(click()); // Saved search done
         onView(withId(R.id.fragment_saved_searches_flipper)).check(matches(isDisplayed()));
     }

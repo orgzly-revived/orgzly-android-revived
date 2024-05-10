@@ -38,6 +38,7 @@ import androidx.test.core.app.ActivityScenario;
 import com.orgzly.BuildConfig;
 import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
+import com.orgzly.android.RetryTestRule;
 import com.orgzly.android.db.entity.Repo;
 import com.orgzly.android.repos.RepoType;
 import com.orgzly.android.sync.BookSyncStatus;
@@ -47,16 +48,17 @@ import com.orgzly.android.ui.main.MainActivity;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Assume;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
 
 @SuppressWarnings("unchecked")
 public class SyncingTest extends OrgzlyTest {
-    /**
-     * Utility method for starting sync using drawer button.
-     */
     private ActivityScenario<MainActivity> scenario;
+
+    @Rule
+    public RetryTestRule mRetryTestRule = new RetryTestRule();
 
     @After
     @Override
@@ -67,6 +69,9 @@ public class SyncingTest extends OrgzlyTest {
         }
     }
 
+    /**
+     * Utility method for starting sync using drawer button.
+     */
     private void sync() {
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.sync_button_container)).perform(click());

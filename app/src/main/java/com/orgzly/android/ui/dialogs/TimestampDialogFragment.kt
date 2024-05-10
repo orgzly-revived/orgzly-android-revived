@@ -3,7 +3,11 @@ package com.orgzly.android.ui.dialogs
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +19,7 @@ import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.ui.TimeType
 import com.orgzly.android.ui.util.KeyboardUtils
+import com.orgzly.android.ui.util.getAlarmManager
 import com.orgzly.android.util.LogUtils
 import com.orgzly.android.util.UserTimeFormatter
 import com.orgzly.databinding.DialogTimestampBinding
@@ -83,6 +88,9 @@ class TimestampDialogFragment : DialogFragment(), View.OnClickListener {
         binding.timePickerButton.setOnClickListener(this)
         binding.timeUsedCheckbox.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setIsTimeUsed(isChecked)
+            if (isChecked) {
+                ensureAlarmPermissions()
+            }
         }
 
         binding.endTimePickerButton.setOnClickListener(this)
@@ -116,7 +124,13 @@ class TimestampDialogFragment : DialogFragment(), View.OnClickListener {
             .setView(binding.root)
             .setPositiveButton(R.string.set) { _, _ ->
                 val time = viewModel.getOrgDateTime()
-                listener?.onDateTimeSet(dialogId, noteIds, time)
+                if (time != null && time.hasTime()) {
+                    if (isAlarmPermissionGranted()) {
+                        listener?.onDateTimeSet(dialogId, noteIds, time)
+                    }
+                } else {
+                    listener?.onDateTimeSet(dialogId, noteIds, time)
+                }
             }
             .setNeutralButton(R.string.clear) { _, _ ->
                 listener?.onDateTimeSet(dialogId, noteIds, null)
@@ -125,6 +139,29 @@ class TimestampDialogFragment : DialogFragment(), View.OnClickListener {
                 listener?.onDateTimeAborted(dialogId, noteIds)
             }
             .show()
+    }
+
+    private fun isAlarmPermissionGranted(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (!requireContext().getAlarmManager().canScheduleExactAlarms()) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Alarms & reminders permission needed")
+                    .setMessage("The app needs the \"alarms & reminders\" permission to set exact times for scheduled/deadline. Please grant the permission in the \"app info\" screen.")
+                    .setPositiveButton(R.string.ok, null)
+                    .show()
+                return false
+            }
+        }
+        return true
+    }
+
+    private fun ensureAlarmPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (!requireContext().getAlarmManager().canScheduleExactAlarms()) {
+                val uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+                activity?.startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, uri))
+            }
+        }
     }
 
     /**
