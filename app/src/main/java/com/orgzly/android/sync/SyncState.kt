@@ -24,6 +24,7 @@ data class SyncState(val type: Type, val message: String? = null, val current: I
         FAILED_NO_CONNECTION,
         FAILED_NO_STORAGE_PERMISSION,
         FAILED_NO_BOOKS_FOUND,
+        FAILED_NO_ALARMS_PERMISSION,
         FAILED_EXCEPTION
     }
 
@@ -33,6 +34,7 @@ data class SyncState(val type: Type, val message: String? = null, val current: I
             Type.FAILED_NO_CONNECTION,
             Type.FAILED_NO_STORAGE_PERMISSION,
             Type.FAILED_NO_BOOKS_FOUND,
+            Type.FAILED_NO_ALARMS_PERMISSION,
             Type.FAILED_EXCEPTION ->
                 true
             else ->
@@ -83,6 +85,7 @@ data class SyncState(val type: Type, val message: String? = null, val current: I
                 Type.FAILED_NO_REPOS -> getString(R.string.no_repos)
                 Type.FAILED_NO_CONNECTION -> getString(R.string.no_connection)
                 Type.FAILED_NO_STORAGE_PERMISSION -> getString(R.string.storage_permissions_missing)
+                Type.FAILED_NO_ALARMS_PERMISSION -> getString(R.string.alarms_permissions_missing)
                 Type.FAILED_NO_BOOKS_FOUND -> getString(R.string.no_books)
                 Type.FAILED_EXCEPTION -> message
             }
