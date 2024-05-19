@@ -1,6 +1,10 @@
 package com.orgzly.android.sync
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
@@ -15,6 +19,7 @@ import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.reminders.RemindersScheduler
 import com.orgzly.android.repos.*
 import com.orgzly.android.ui.notifications.SyncNotifications
+import com.orgzly.android.ui.util.getAlarmManager
 import com.orgzly.android.ui.util.haveNetworkConnection
 import com.orgzly.android.util.AppPermissions
 import com.orgzly.android.util.LogMajorEvents
@@ -161,6 +166,31 @@ class SyncWorker(val context: Context, val params: WorkerParameters) :
                 return SyncState.getInstance(SyncState.Type.FAILED_NO_STORAGE_PERMISSION)
             }
         }
+
+        /* Make sure we have permission to set alarms & reminders,
+         * since this typically happens when new books are parsed.
+         */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (!context.getAlarmManager().canScheduleExactAlarms()) {
+                if (
+                    AppPreferences.remindersForDeadlineEnabled(context) ||
+                    AppPreferences.remindersForScheduledEnabled(context) ||
+                    AppPreferences.remindersForEventsEnabled(context)
+                ) {
+                    if (App.getCurrentActivity() != null) {
+                        val uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+                        App.getCurrentActivity().startActivity(
+                            Intent(
+                                Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
+                                uri
+                            )
+                        )
+                    }
+                    return SyncState.getInstance((SyncState.Type.FAILED_NO_ALARMS_PERMISSION))
+                }
+            }
+        }
+
 
         return null
     }
