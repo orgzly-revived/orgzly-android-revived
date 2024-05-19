@@ -10,12 +10,14 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.orgzly.R
+import com.orgzly.BuildConfig
 import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.espresso.util.EspressoUtils
 import com.orgzly.android.ui.main.MainActivity
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import org.junit.Assume
 
 
 @RunWith(value = Parameterized::class)
@@ -35,6 +37,7 @@ class SshKeyCreationTest(private val param: Parameter) : OrgzlyTest() {
 
     @Test
     fun testCreateUnprotectedKey() {
+        Assume.assumeFalse(BuildConfig.IS_GIT_REMOVED);
         ActivityScenario.launch(MainActivity::class.java).use {
             EspressoUtils.onActionItemClick(R.id.activity_action_settings, R.string.settings)
             EspressoUtils.clickSetting(null, R.string.app)
