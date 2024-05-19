@@ -20,6 +20,7 @@ import com.orgzly.android.*
 import com.orgzly.android.data.mappers.OrgMapper
 import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.OrgzlyDatabase
+import com.orgzly.android.db.dao.BookSyncDao
 import com.orgzly.android.db.dao.NoteDao
 import com.orgzly.android.db.dao.NoteViewDao
 import com.orgzly.android.db.dao.ReminderTimeDao
@@ -438,6 +439,10 @@ class DataRepository @Inject constructor(
 
         db.bookLink().upsert(bookId, repoId)
         db.bookSync().upsert(bookId, versionedRookId)
+    }
+
+    fun removeBookSyncedTo(bookId: Long) {
+        db.bookSync().delete(bookId)
     }
 
     private fun updateBookIsModified(bookId: Long, isModified: Boolean, time: Long = System.currentTimeMillis()) {
