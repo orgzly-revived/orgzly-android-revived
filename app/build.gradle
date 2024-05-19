@@ -67,6 +67,9 @@ android {
         premium {
             buildConfigField "boolean", "IS_DROPBOX_ENABLED", "true"
 
+            // Remove Git feature because of Play restrictions on external storage permissions
+            buildConfigField "boolean", "IS_GIT_REMOVED", "true"
+
             buildConfigField "String", "VERSION_NAME_SUFFIX", '""'
 
             dimension "store"
@@ -78,6 +81,8 @@ android {
              * Properties file which contains the required API key is not included with the code.
              */
             buildConfigField "boolean", "IS_DROPBOX_ENABLED", "false"
+
+            buildConfigField "boolean", "IS_GIT_REMOVED", "false"
 
             buildConfigField "String", "VERSION_NAME_SUFFIX", '" (fdroid)"'
 
