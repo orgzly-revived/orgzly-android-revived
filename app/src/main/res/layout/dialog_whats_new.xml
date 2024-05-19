@@ -35,6 +35,10 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
+            app:text="Enable sync failure notifications by default" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
             app:text="Target Android 13" />
 
         <TextView
