@@ -20,7 +20,6 @@ import com.orgzly.android.*
 import com.orgzly.android.data.mappers.OrgMapper
 import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.OrgzlyDatabase
-import com.orgzly.android.db.dao.BookSyncDao
 import com.orgzly.android.db.dao.NoteDao
 import com.orgzly.android.db.dao.NoteViewDao
 import com.orgzly.android.db.dao.ReminderTimeDao
