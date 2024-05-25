@@ -41,6 +41,10 @@
             style="@style/WhatsNewChange"
             app:text="Target Android 13" />
 
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Git repos: Lower the garbage collection threshold" />
+
         <TextView
             style="@style/WhatsNewVersion"
             android:text="v1.8.21"
