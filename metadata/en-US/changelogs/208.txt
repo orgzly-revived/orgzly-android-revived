@@ -1,0 +1,4 @@
+• Target Android 13
+• Prompt user to grant permission for alarms, notifications
+• Enable sync failure notifications by default
+• Git repos: Lower the garbage collection threshold
