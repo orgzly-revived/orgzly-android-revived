@@ -204,6 +204,7 @@ class SyncFragment : Fragment() {
                 SyncState.Type.FAILED_NO_REPOS,
                 SyncState.Type.FAILED_NO_CONNECTION,
                 SyncState.Type.FAILED_NO_STORAGE_PERMISSION,
+                SyncState.Type.FAILED_NO_ALARMS_PERMISSION,
                 SyncState.Type.FAILED_NO_BOOKS_FOUND,
                 SyncState.Type.FAILED_EXCEPTION -> {
                     setAnimation(false)

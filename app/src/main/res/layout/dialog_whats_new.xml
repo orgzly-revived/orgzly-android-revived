@@ -22,6 +22,31 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.22"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Prompt user to grant permission for alarms, notifications" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Temporarily disable Git repos in Play Store build" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Enable sync failure notifications by default" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Target Android 13" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Git repos: Lower the garbage collection threshold" />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.21"
             tools:ignore="HardcodedText" />
 

@@ -69,6 +69,7 @@ open class CommonFragment : Fragment() {
             FAILED_NO_REPOS,
             FAILED_NO_CONNECTION,
             FAILED_NO_STORAGE_PERMISSION,
+            FAILED_NO_ALARMS_PERMISSION,
             FAILED_NO_BOOKS_FOUND,
             FAILED_EXCEPTION ->
                 progressIndicator.visibility = View.GONE
