@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 
+import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.android.Auth;
@@ -25,6 +26,7 @@ import com.orgzly.android.prefs.AppPreferences;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -233,6 +235,29 @@ public class DropboxClient {
         }
     }
 
+    public InputStream streamFile(Uri repoUri, String fileName) throws IOException {
+        linkedOrThrow();
+
+        Uri uri = repoUri.buildUpon().appendPath(fileName).build();
+        FileMetadata metadata;
+        String rev;
+        DbxDownloader<FileMetadata> downloader;
+
+        try {
+            Metadata pathMetadata = dbxClient.files().getMetadata(uri.getPath());
+            metadata = (FileMetadata) pathMetadata;
+            rev = metadata.getRev();
+            downloader = dbxClient.files().download(metadata.getPathLower(), rev);
+        } catch (DbxException e) {
+            if (e instanceof GetMetadataErrorException) {
+                if (((GetMetadataErrorException) e).errorValue.getPathValue() == LookupError.NOT_FOUND) {
+                    throw new FileNotFoundException();
+                }
+            }
+            throw new RuntimeException(e);
+        }
+        return downloader.getInputStream();
+    }
 
     /** Upload file to Dropbox. */
     public VersionedRook upload(File file, Uri repoUri, String fileName) throws IOException {

@@ -770,7 +770,7 @@
     <string name="error_generate_ssh_key">Error while trying to generate the SSH key pair</string>
     <string name="ssh_key_error_dialog_text">Message: \n</string>
     <string name="ssh_key_locked_and_no_activity">Error: SSH key can only be unlocked from an activity</string>
-    <string name="error_file_matches_repo_ignore_rule">Repository filename matches a rule in %s</string>
+    <string name="error_file_matches_repo_ignore_rule">Error: Repository file name matches a rule in %s</string>
 
     <!-- Sync status -->
     <string name="sync_status_no_change">No change</string>

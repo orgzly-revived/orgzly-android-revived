@@ -12,8 +12,10 @@ import com.orgzly.android.util.UriUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -128,6 +130,11 @@ public class DirectoryRepo implements SyncRepo {
         long mtime = sourceFile.lastModified();
 
         return new VersionedRook(repoId, RepoType.DIRECTORY, repoUri, uri, rev, mtime);
+    }
+
+    @Override
+    public InputStream openRepoFileInputStream(String fileName) throws IOException {
+        return new FileInputStream(repoUri.buildUpon().appendPath(fileName).build().getPath());
     }
 
     @Override

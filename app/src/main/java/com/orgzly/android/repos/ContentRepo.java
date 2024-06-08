@@ -127,6 +127,13 @@ public class ContentRepo implements SyncRepo {
     }
 
     @Override
+    public InputStream openRepoFileInputStream(String fileName) throws IOException {
+        DocumentFile sourceFile = repoDocumentFile.findFile(fileName);
+        if (sourceFile == null) throw new FileNotFoundException();
+        return context.getContentResolver().openInputStream(sourceFile.getUri());
+    }
+
+    @Override
     public VersionedRook storeBook(File file, String fileName) throws IOException {
         if (!file.exists()) {
             throw new FileNotFoundException("File " + file + " does not exist");

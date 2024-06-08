@@ -29,8 +29,10 @@ import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.treewalk.TreeWalk;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -59,6 +61,10 @@ public class GitFileSynchronizer {
     public void retrieveLatestVersionOfFile(
             String repositoryPath, File destination) throws IOException {
         MiscUtils.copyFile(repoDirectoryFile(repositoryPath), destination);
+    }
+
+    public InputStream openRepoFileInputStream(String repositoryPath) throws FileNotFoundException {
+        return new FileInputStream(repoDirectoryFile(repositoryPath));
     }
 
     private void fetch() throws IOException {

@@ -15,6 +15,7 @@ import com.thegrizzlylabs.sardineandroid.impl.OkHttpSardine
 import okhttp3.OkHttpClient
 import okio.Buffer
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.security.KeyStore
@@ -185,6 +186,13 @@ class WebdavRepo(
 
         return sardine.list(fileUrl).first().toVersionedRook()
     }
+
+    override fun openRepoFileInputStream(fileName: String): InputStream {
+        val fileUrl = Uri.withAppendedPath(uri, fileName).toUrl()
+        if (!sardine.exists(fileUrl))
+            throw FileNotFoundException()
+        return sardine.get(fileUrl)
+     }
 
     override fun storeBook(file: File?, fileName: String?): VersionedRook {
         val fileUrl = Uri.withAppendedPath(uri, fileName).toUrl()

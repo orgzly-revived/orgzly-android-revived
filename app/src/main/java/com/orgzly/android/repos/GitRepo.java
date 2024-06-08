@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -219,6 +220,12 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
         synchronizer.retrieveLatestVersionOfFile(sourceUri.getPath(), destination);
 
         return currentVersionedRook(sourceUri);
+    }
+
+    @Override
+    public InputStream openRepoFileInputStream(String fileName) throws IOException {
+        Uri sourceUri = Uri.parse(fileName);
+        return synchronizer.openRepoFileInputStream(sourceUri.getPath());
     }
 
     private VersionedRook currentVersionedRook(Uri uri) {
