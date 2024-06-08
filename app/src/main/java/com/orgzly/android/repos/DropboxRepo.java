@@ -39,7 +39,8 @@ public class DropboxRepo implements SyncRepo {
 
     @Override
     public List<VersionedRook> getBooks() throws IOException {
-        return client.getBooks(repoUri);
+        RepoIgnoreNode ignores = new RepoIgnoreNode(this);
+        return client.getBooks(repoUri, ignores);
     }
 
     @Override

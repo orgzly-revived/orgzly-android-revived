@@ -3,6 +3,7 @@ package com.orgzly.android.repos;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 
 import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
@@ -129,7 +130,7 @@ public class DropboxClient {
         AppPreferences.dropboxSerializedCredential(mContext, null);
     }
 
-    public List<VersionedRook> getBooks(Uri repoUri) throws IOException {
+    public List<VersionedRook> getBooks(Uri repoUri, RepoIgnoreNode ignores) throws IOException {
         linkedOrThrow();
 
         List<VersionedRook> list = new ArrayList<>();
@@ -152,6 +153,12 @@ public class DropboxClient {
                     for (Metadata metadata : result.getEntries()) {
                         if (metadata instanceof FileMetadata) {
                             FileMetadata file = (FileMetadata) metadata;
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                if (ignores.isPathIgnored(file.getName(), false)) {
+                                    continue;
+                                }
+                            }
 
                             if (BookName.isSupportedFormatFileName(file.getName())) {
                                 Uri uri = repoUri.buildUpon().appendPath(file.getName()).build();

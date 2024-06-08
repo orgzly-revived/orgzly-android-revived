@@ -291,14 +291,18 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
         walk.reset();
         walk.setRecursive(true);
         walk.addTree(synchronizer.currentHead().getTree());
-        final IgnoreNode ignores = getIgnores();
+        final RepoIgnoreNode ignores = new RepoIgnoreNode(this);
         walk.setFilter(new TreeFilter() {
             @Override
             public boolean include(TreeWalk walker) {
-                final FileMode mode = walker.getFileMode(0);
-                final String filePath = walker.getPathString();
+                final FileMode mode = walk.getFileMode();
                 final boolean isDirectory = mode == FileMode.TREE;
-                return !(ignores.isIgnored(filePath, isDirectory) == IgnoreNode.MatchResult.IGNORED);
+                final String filePath = walk.getPathString();
+                if (ignores.isIgnored(filePath, isDirectory) == IgnoreNode.MatchResult.IGNORED)
+                    return false;
+                if (isDirectory)
+                    return true;
+                return BookName.isSupportedFormatFileName(filePath);
             }
 
             @Override
@@ -312,15 +316,7 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
             }
         });
         while (walk.next()) {
-            final FileMode mode = walk.getFileMode(0);
-            final boolean isDirectory = mode == FileMode.TREE;
-            final String filePath = walk.getPathString();
-            if (isDirectory)
-                continue;
-            if (BookName.isSupportedFormatFileName(filePath))
-                result.add(
-                        currentVersionedRook(
-                                Uri.withAppendedPath(Uri.EMPTY, walk.getPathString())));
+            result.add(currentVersionedRook(Uri.withAppendedPath(Uri.EMPTY, walk.getPathString())));
         }
         return result;
     }

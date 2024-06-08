@@ -1,6 +1,7 @@
 package com.orgzly.android.repos
 
 import android.net.Uri
+import android.os.Build
 import com.burgstaller.okhttp.AuthenticationCacheInterceptor
 import com.burgstaller.okhttp.CachingAuthenticatorDecorator
 import com.burgstaller.okhttp.DispatchingAuthenticator
@@ -26,7 +27,6 @@ import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
-import kotlin.time.Duration
 
 
 class WebdavRepo(
@@ -163,13 +163,23 @@ class WebdavRepo(
             sardine.createDirectory(url)
         }
 
+        val ignores = RepoIgnoreNode(this)
+
         return sardine
                 .list(url)
                 .mapNotNull {
-                    if (it.isDirectory || !BookName.isSupportedFormatFileName(it.name)) {
-                        null
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        if (it.isDirectory || !BookName.isSupportedFormatFileName(it.name) || ignores.isPathIgnored(it.name, false)) {
+                            null
+                        } else {
+                            it.toVersionedRook()
+                        }
                     } else {
-                        it.toVersionedRook()
+                        if (it.isDirectory || !BookName.isSupportedFormatFileName(it.name)) {
+                            null
+                        } else {
+                            it.toVersionedRook()
+                        }
                     }
                 }
                 .toMutableList()
