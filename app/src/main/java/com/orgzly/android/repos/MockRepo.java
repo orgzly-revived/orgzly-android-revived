@@ -7,6 +7,7 @@ import android.os.SystemClock;
 import com.orgzly.android.data.DbRepoBookRepository;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -59,7 +60,7 @@ public class MockRepo implements SyncRepo {
 
     @Override
     public InputStream openRepoFileInputStream(String fileName) throws IOException {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new FileNotFoundException();
     }
 
     @Override
