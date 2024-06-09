@@ -188,8 +188,8 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
     }
 
     public VersionedRook storeBook(File file, String fileName) throws IOException {
+        ensureFileNameIsNotIgnored(fileName);
         File destination = synchronizer.repoDirectoryFile(fileName);
-        ensureRepoPathIsNotIgnored(destination.getPath());
 
         if (destination.exists()) {
             synchronizer.updateAndCommitExistingFile(file, fileName);
@@ -248,9 +248,15 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
         return ignores;
     }
 
-    private void ensureRepoPathIsNotIgnored(String filePath) throws IOException {
+    /**
+     * Since subdirectories are currently not supported, we only check the file name against the
+     * ignore rules.
+     * @param fileName Name of the file which the user tries to write to
+     * @throws IOException
+     */
+    private void ensureFileNameIsNotIgnored(String fileName) throws IOException {
         IgnoreNode ignores = getIgnores();
-        if (ignores.isIgnored(filePath, false) == IgnoreNode.MatchResult.IGNORED) {
+        if (ignores.isIgnored(fileName, false) == IgnoreNode.MatchResult.IGNORED) {
             throw new IOException(context.getString(R.string.error_file_matches_repo_ignore_rule,
                     context.getString(R.string.repo_ignore_rules_file)));
         }
@@ -323,7 +329,7 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
     public VersionedRook renameBook(Uri oldUri, String newRookName) throws IOException {
         String oldFileName = oldUri.toString().replaceFirst("^/", "");
         String newFileName = newRookName + ".org";
-        ensureRepoPathIsNotIgnored(newFileName);
+        ensureFileNameIsNotIgnored(newFileName);
         if (synchronizer.renameFileInRepo(oldFileName, newFileName)) {
             synchronizer.tryPush();
             return currentVersionedRook(Uri.EMPTY.buildUpon().appendPath(newFileName).build());
