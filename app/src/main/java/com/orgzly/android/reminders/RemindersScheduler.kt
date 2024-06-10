@@ -81,10 +81,7 @@ class RemindersScheduler @Inject constructor(val context: Application, val logs:
             if (!AppPermissions.isGranted(context, AppPermissions.Usage.POST_NOTIFICATIONS)) {
                 val activity = App.getCurrentActivity()
                 if (activity != null) {
-                    AppPermissions.isGrantedOrRequest(
-                        App.getCurrentActivity(),
-                        AppPermissions.Usage.POST_NOTIFICATIONS
-                    )
+                    AppPermissions.isGrantedOrRequest(activity, AppPermissions.Usage.POST_NOTIFICATIONS)
                 }
                 return
             }
