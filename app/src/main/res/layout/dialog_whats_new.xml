@@ -22,6 +22,19 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.23"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix crash when scheduling reminders" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Git repos: Fix broken .orgzlyignore rule check" />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.22"
             tools:ignore="HardcodedText" />
 
