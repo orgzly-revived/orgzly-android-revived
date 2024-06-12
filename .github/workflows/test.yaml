@@ -4,6 +4,12 @@ on:
   pull_request:
     branches:
       - 'master'
+    paths-ignore:
+      - 'README.org'
+      - '.github/**'
+      - 'app/build.gradle'
+      - 'metadata/**'
+      - 'app/src/main/res/layout/dialog_whats_new.xml'
   push:
     branches:
       - 'master'
@@ -13,7 +19,7 @@ on:
       - 'app/build.gradle'
       - 'metadata/**'
       - 'app/src/main/res/layout/dialog_whats_new.xml'
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   test:
