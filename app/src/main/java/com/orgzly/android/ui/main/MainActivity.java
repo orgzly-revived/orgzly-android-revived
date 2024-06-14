@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -71,6 +72,7 @@ import com.orgzly.android.usecase.SavedSearchUpdate;
 import com.orgzly.android.usecase.UseCase;
 import com.orgzly.android.usecase.UseCaseResult;
 import com.orgzly.android.usecase.UseCaseWorker;
+import com.orgzly.android.util.AppPermissions;
 import com.orgzly.android.util.LogUtils;
 import com.orgzly.org.datetime.OrgDateTime;
 
@@ -142,6 +144,13 @@ public class MainActivity extends CommonActivity
         setupViewModel();
 
         setupDisplay(savedInstanceState);
+
+        if (AppPreferences.anyNotificationsEnabled(this)) {
+            if (Build.VERSION.SDK_INT >= 33) {
+                // Ensure we have the POST_NOTIFICATIONS permission
+                AppPermissions.isGrantedOrRequest(this, AppPermissions.Usage.POST_NOTIFICATIONS);
+            }
+        }
 
         if (AppPreferences.newNoteNotification(this)) {
             Notifications.showOngoingNotification(this);
