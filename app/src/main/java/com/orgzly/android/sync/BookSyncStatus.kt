@@ -14,7 +14,7 @@ enum class BookSyncStatus {
     BOOK_WITH_LINK_AND_ROOK_EXISTS_BUT_LINK_POINTING_TO_DIFFERENT_ROOK,
     ONLY_DUMMY,
     ROOK_AND_VROOK_HAVE_DIFFERENT_REPOS,
-    BOOK_WITHOUT_LINK_AND_PREVIOUS_ERROR,
+    BOOK_WITH_PREVIOUS_ERROR_AND_NO_LINK,
 
     /* Conflict. */
     CONFLICT_BOTH_BOOK_AND_ROOK_MODIFIED,
@@ -64,7 +64,7 @@ enum class BookSyncStatus {
             ROOK_AND_VROOK_HAVE_DIFFERENT_REPOS ->
                 return "Linked and synced notebooks have different repositories"
 
-            BOOK_WITHOUT_LINK_AND_PREVIOUS_ERROR ->
+            BOOK_WITH_PREVIOUS_ERROR_AND_NO_LINK ->
                 return context.getString(R.string.sync_status_no_link_and_previous_error)
 
             CONFLICT_BOTH_BOOK_AND_ROOK_MODIFIED ->

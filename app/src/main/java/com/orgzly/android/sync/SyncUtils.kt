@@ -124,7 +124,7 @@ object SyncUtils {
             BookSyncStatus.CONFLICT_LAST_SYNCED_ROOK_AND_LATEST_ROOK_ARE_DIFFERENT,
             BookSyncStatus.ROOK_AND_VROOK_HAVE_DIFFERENT_REPOS,
             BookSyncStatus.ONLY_DUMMY,
-            BookSyncStatus.BOOK_WITHOUT_LINK_AND_PREVIOUS_ERROR ->
+            BookSyncStatus.BOOK_WITH_PREVIOUS_ERROR_AND_NO_LINK ->
                 bookAction = BookAction.forNow(BookAction.Type.ERROR, namesake.status.msg())
 
             BookSyncStatus.ROOK_NO_LONGER_EXISTS -> {

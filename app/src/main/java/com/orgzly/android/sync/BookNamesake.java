@@ -156,7 +156,7 @@ public class BookNamesake {
                         BookAction lastAction = book.getBook().getLastAction();
                         if (lastAction != null && lastAction.getType() == BookAction.Type.ERROR) {
                             // Book is an error state.
-                            status = BookSyncStatus.BOOK_WITHOUT_LINK_AND_PREVIOUS_ERROR;
+                            status = BookSyncStatus.BOOK_WITH_PREVIOUS_ERROR_AND_NO_LINK;
                         } else {
                             // Book is not in an error state (automatic linking may be
                             // attempted).

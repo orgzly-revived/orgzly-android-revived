@@ -531,6 +531,6 @@ public class SyncTest extends OrgzlyTest {
         testUtils.sync();
         book = dataRepository.getBooks().get(0);
         assertNull(book.getLinkRepo());
-        assertEquals(BookSyncStatus.BOOK_WITHOUT_LINK_AND_PREVIOUS_ERROR.toString(), book.getBook().getSyncStatus());
+        assertEquals(BookSyncStatus.BOOK_WITH_PREVIOUS_ERROR_AND_NO_LINK.toString(), book.getBook().getSyncStatus());
     }
 }
