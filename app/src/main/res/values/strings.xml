@@ -776,7 +776,7 @@
     <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">Notebook has no link and one or more remote notebooks with the same name exist</string>
     <string name="sync_status_dummy_without_link_and_multiple_rooks">Notebook has no link and multiple remote notebooks with the same name exist</string>
     <string name="sync_status_no_book_multiple_rooks">No notebook and multiple remote notebooks with the same name exist</string>
-    <string name="sync_status_rook_no_longer_exists">Remote file no longer exists. Repository link removed.</string>
+    <string name="sync_status_rook_no_longer_exists">Remote file no longer exists; repository link removed. Set a link if you want to sync to a repository.</string>
     <string name="sync_status_no_link_and_previous_error">Notebook has no repository link</string>
     <string name="sync_status_loaded">Loaded from %s</string>
     <string name="sync_status_saved">Saved to %s</string>
