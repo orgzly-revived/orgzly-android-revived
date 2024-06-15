@@ -649,6 +649,7 @@ public class QueryFragmentTest extends OrgzlyTest {
                 "* Note D\n");
         scenario = ActivityScenario.launch(MainActivity.class);
 
+        SystemClock.sleep(200);
         onView(allOf(withText("notebook"), isDisplayed())).perform(click());
         searchForTextCloseKeyboard(".o.p");
         onView(withId(R.id.fragment_query_search_view_flipper)).check(matches(isDisplayed()));
@@ -779,6 +780,7 @@ public class QueryFragmentTest extends OrgzlyTest {
     public void testNoNotesFoundMessageIsDisplayedInSearch() {
         scenario = ActivityScenario.launch(MainActivity.class);
         searchForTextCloseKeyboard("Note");
+        SystemClock.sleep(200);
         onView(withText(R.string.no_notes_found_after_search)).check(matches(isDisplayed()));
     }
 
