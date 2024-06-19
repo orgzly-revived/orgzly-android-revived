@@ -307,6 +307,16 @@ public class AppPreferences {
         getDefaultSharedPreferences(context).edit().putBoolean(key, value).apply();
     }
 
+    public static boolean anyNotificationsEnabled(Context context) {
+        return (
+                showSyncNotifications(context) ||
+                newNoteNotification(context) ||
+                remindersForScheduledEnabled(context) ||
+                remindersForDeadlineEnabled(context) ||
+                remindersForEventsEnabled(context)
+        );
+    }
+
     public static boolean remindersSound(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(
                 context.getResources().getString(R.string.pref_key_reminders_sound),

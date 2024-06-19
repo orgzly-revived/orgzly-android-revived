@@ -211,7 +211,7 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
             // Using SSH transport requires notification permission (for server key verification)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 AppPermissions.isGrantedOrRequest(
-                    App.getCurrentActivity(),
+                    this,
                     AppPermissions.Usage.POST_NOTIFICATIONS
                 )
             }

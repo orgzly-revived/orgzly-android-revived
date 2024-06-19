@@ -3,6 +3,7 @@ package com.orgzly.android.sync;
 import android.content.Context;
 
 import com.orgzly.android.BookName;
+import com.orgzly.android.db.entity.BookAction;
 import com.orgzly.android.db.entity.BookView;
 import com.orgzly.android.db.entity.Repo;
 import com.orgzly.android.repos.VersionedRook;
@@ -116,7 +117,6 @@ public class BookNamesake {
      *   - Book has a last-synced-with remote book
      * - Remote book exists
      */
-    /* TODO: Case: Remote book deleted? */
     public void updateStatus(int reposCount) {
         /* Sanity check. Group's name must come from somewhere - local or remote books. */
         if (book == null && versionedRooks.isEmpty()) {
@@ -142,17 +142,29 @@ public class BookNamesake {
 
             } else {
                 if (book.hasLink()) { /* Only local book with a link. */
-                    status = BookSyncStatus.ONLY_BOOK_WITH_LINK;
-
+                    if (book.hasSync()) {
+                        // Book was previously synced with a remote book which no longer exists.
+                        status = BookSyncStatus.ROOK_NO_LONGER_EXISTS;
+                    } else {
+                        // Book is linked to a repo, but not yet synced.
+                        status = BookSyncStatus.ONLY_BOOK_WITH_LINK;
+                    }
                 } else { /* Only local book without link. */
                     if (reposCount > 1) {
                         status = BookSyncStatus.ONLY_BOOK_WITHOUT_LINK_AND_MULTIPLE_REPOS;
-                    } else {
-                        status = BookSyncStatus.ONLY_BOOK_WITHOUT_LINK_AND_ONE_REPO;
-                    } // TODO: What about no repos?
+                    } else { // Only one repository configured
+                        BookAction lastAction = book.getBook().getLastAction();
+                        if (lastAction != null && lastAction.getType() == BookAction.Type.ERROR) {
+                            // Book is an error state.
+                            status = BookSyncStatus.BOOK_WITH_PREVIOUS_ERROR_AND_NO_LINK;
+                        } else {
+                            // Book is not in an error state (automatic linking may be
+                            // attempted).
+                            status = BookSyncStatus.ONLY_BOOK_WITHOUT_LINK_AND_ONE_REPO;
+                        }
+                    }
                 }
             }
-
             return;
         }
 

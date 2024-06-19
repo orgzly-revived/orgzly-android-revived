@@ -226,6 +226,28 @@ public class SyncTest extends OrgzlyTest {
     }
 
     @Test
+    public void testOnlyBookWithoutLinkAndOneRepo() {
+        testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
+        testUtils.setupBook("book-1", "Content");
+        testUtils.sync();
+
+        BookView book = dataRepository.getBooks().get(0);
+        assertEquals(BookSyncStatus.ONLY_BOOK_WITHOUT_LINK_AND_ONE_REPO.toString(), book.getBook().getSyncStatus());
+    }
+
+    @Test
+    public void testOnlyBookWithoutLinkAndMultipleRepos() {
+        testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
+        testUtils.setupRepo(RepoType.MOCK, "mock://repo-b");
+        testUtils.setupBook("book-1", "Content");
+        testUtils.sync();
+
+        BookView book = dataRepository.getBooks().get(0);
+        assertEquals(BookSyncStatus.ONLY_BOOK_WITHOUT_LINK_AND_MULTIPLE_REPOS.toString(),
+                book.getBook().getSyncStatus());
+    }
+
+    @Test
     public void testMultipleRooks() {
         Repo repoA = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
         testUtils.setupRook(repoA, "mock://repo-a/book.org", "Content A", "revA", 1234567890000L);
@@ -466,5 +488,49 @@ public class SyncTest extends OrgzlyTest {
         assertEquals(BookSyncStatus.ROOK_AND_VROOK_HAVE_DIFFERENT_REPOS.toString(), book.getBook().getSyncStatus());
         assertEquals("mock://repo-b", book.getLinkRepo().getUrl());
         assertEquals("mock://repo-a/Booky.org", book.getSyncedTo().getUri().toString());
+    }
+
+    /**
+     * We remove the local book's' syncedTo attribute and repository link when its remote file
+     * has been deleted, to make it easier to ascertain the book's state during subsequent sync
+     * attempts.
+     */
+    @Test
+    public void testRemoteFileDeletion() throws IOException {
+        BookView book;
+        Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
+        testUtils.setupRook(repo, "mock://repo-a/book.org", "", "1abcdef", 1400067156);
+        testUtils.sync();
+        book = dataRepository.getBooks().get(0);
+        assertNotNull(book.getLinkRepo());
+        assertNotNull(book.getSyncedTo());
+        dbRepoBookRepository.deleteBook(Uri.parse("mock://repo-a/book.org"));
+        testUtils.sync();
+        book = dataRepository.getBooks().get(0);
+        assertEquals(BookSyncStatus.ROOK_NO_LONGER_EXISTS.toString(), book.getBook().getSyncStatus());
+        assertNull(book.getLinkRepo());
+        assertNull(book.getSyncedTo());
+    }
+
+    /**
+     * The "remote file has been deleted" error status is only shown once, and then the book's
+     * repo link is removed. Subsequent syncing of the same book should result in a more general
+     * message, indicating that the user may sync the book again by explicitly setting a repo link.
+     */
+    @Test
+    public void testBookStatusAfterMultipleSyncsFollowingRemoteFileDeletion() throws IOException {
+        BookView book;
+        Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
+        testUtils.setupRook(repo, "mock://repo-a/book.org", "", "1abcdef", 1400067156);
+        testUtils.sync();
+        book = dataRepository.getBooks().get(0);
+        assertEquals(BookSyncStatus.DUMMY_WITHOUT_LINK_AND_ONE_ROOK.toString(), book.getBook().getSyncStatus());
+
+        dbRepoBookRepository.deleteBook(Uri.parse("mock://repo-a/book.org"));
+        testUtils.sync();
+        testUtils.sync();
+        book = dataRepository.getBooks().get(0);
+        assertNull(book.getLinkRepo());
+        assertEquals(BookSyncStatus.BOOK_WITH_PREVIOUS_ERROR_AND_NO_LINK.toString(), book.getBook().getSyncStatus());
     }
 }

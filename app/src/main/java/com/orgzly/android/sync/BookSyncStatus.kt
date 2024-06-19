@@ -14,6 +14,7 @@ enum class BookSyncStatus {
     BOOK_WITH_LINK_AND_ROOK_EXISTS_BUT_LINK_POINTING_TO_DIFFERENT_ROOK,
     ONLY_DUMMY,
     ROOK_AND_VROOK_HAVE_DIFFERENT_REPOS,
+    BOOK_WITH_PREVIOUS_ERROR_AND_NO_LINK,
 
     /* Conflict. */
     CONFLICT_BOTH_BOOK_AND_ROOK_MODIFIED,
@@ -29,7 +30,10 @@ enum class BookSyncStatus {
     /* Book can be saved. */
     ONLY_BOOK_WITHOUT_LINK_AND_ONE_REPO,
     BOOK_WITH_LINK_LOCAL_MODIFIED,
-    ONLY_BOOK_WITH_LINK;
+    ONLY_BOOK_WITH_LINK,
+
+    /* Previously synced remote book no longer exists. */
+    ROOK_NO_LONGER_EXISTS;
 
     // TODO: Extract string resources
     @JvmOverloads
@@ -49,7 +53,7 @@ enum class BookSyncStatus {
                 return context.getString(R.string.sync_status_no_book_multiple_rooks)
 
             ONLY_BOOK_WITHOUT_LINK_AND_MULTIPLE_REPOS ->
-                return "Notebook has no link and multiple repositories exist"
+                return context.getString(R.string.sync_status_no_link_and_multiple_repos)
 
             BOOK_WITH_LINK_AND_ROOK_EXISTS_BUT_LINK_POINTING_TO_DIFFERENT_ROOK ->
                 return "Notebook has link and remote notebook with the same name exists, but link is pointing to a different remote notebook which does not exist"
@@ -59,6 +63,9 @@ enum class BookSyncStatus {
 
             ROOK_AND_VROOK_HAVE_DIFFERENT_REPOS ->
                 return "Linked and synced notebooks have different repositories"
+
+            BOOK_WITH_PREVIOUS_ERROR_AND_NO_LINK ->
+                return context.getString(R.string.sync_status_no_link_and_previous_error)
 
             CONFLICT_BOTH_BOOK_AND_ROOK_MODIFIED ->
                 return "Both local and remote notebook have been modified"
@@ -74,6 +81,9 @@ enum class BookSyncStatus {
 
             ONLY_BOOK_WITHOUT_LINK_AND_ONE_REPO, BOOK_WITH_LINK_LOCAL_MODIFIED, ONLY_BOOK_WITH_LINK ->
                 return context.getString(R.string.sync_status_saved, "$arg")
+
+            ROOK_NO_LONGER_EXISTS ->
+                return context.getString(R.string.sync_status_rook_no_longer_exists)
 
             else ->
                 throw IllegalArgumentException("Unknown sync status " + this)

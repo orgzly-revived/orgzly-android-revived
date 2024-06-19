@@ -31,10 +31,8 @@ object SyncUtils {
         for (repo in repoList) {
             if (repo is GitRepo && repo.isUnchanged) {
                 for (book in dataRepository.getBooks()) {
-                    if (book.hasLink()) {
-                        if (book.linkRepo!!.url == repo.uri.toString()) {
-                            result.add(book.syncedTo!!)
-                        }
+                    if (book.hasLink() && book.linkRepo!!.url == repo.uri.toString() && book.hasSync()) {
+                        result.add(book.syncedTo!!)
                     }
                 }
                 if (result.isNotEmpty()) {
@@ -114,6 +112,8 @@ object SyncUtils {
             BookSyncStatus.NO_CHANGE ->
                 bookAction = BookAction.forNow(BookAction.Type.INFO, namesake.status.msg())
 
+            /* Error states */
+
             BookSyncStatus.BOOK_WITHOUT_LINK_AND_ONE_OR_MORE_ROOKS_EXIST,
             BookSyncStatus.DUMMY_WITHOUT_LINK_AND_MULTIPLE_ROOKS,
             BookSyncStatus.NO_BOOK_MULTIPLE_ROOKS,
@@ -123,8 +123,17 @@ object SyncUtils {
             BookSyncStatus.CONFLICT_BOOK_WITH_LINK_AND_ROOK_BUT_NEVER_SYNCED_BEFORE,
             BookSyncStatus.CONFLICT_LAST_SYNCED_ROOK_AND_LATEST_ROOK_ARE_DIFFERENT,
             BookSyncStatus.ROOK_AND_VROOK_HAVE_DIFFERENT_REPOS,
-            BookSyncStatus.ONLY_DUMMY ->
+            BookSyncStatus.ONLY_DUMMY,
+            BookSyncStatus.BOOK_WITH_PREVIOUS_ERROR_AND_NO_LINK ->
                 bookAction = BookAction.forNow(BookAction.Type.ERROR, namesake.status.msg())
+
+            BookSyncStatus.ROOK_NO_LONGER_EXISTS -> {
+                /* Remove repository link and "synced to" information. User must set a repo link if
+                 * they want to keep the book and sync it. */
+                dataRepository.setLink(namesake.book.book.id, null)
+                dataRepository.removeBookSyncedTo(namesake.book.book.id)
+                bookAction = BookAction.forNow(BookAction.Type.ERROR, namesake.status.msg())
+            }
 
             /* Load remote book. */
 
@@ -168,8 +177,6 @@ object SyncUtils {
                 bookAction = BookAction.forNow(BookAction.Type.INFO, namesake.status.msg(repoUrl))
             }
         }
-
-        // if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Syncing $namesake: $bookAction")
 
         return bookAction
     }
