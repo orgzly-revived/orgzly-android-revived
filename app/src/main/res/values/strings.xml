@@ -782,4 +782,6 @@
     <string name="sync_status_no_link_and_previous_error">Notebook has no repository link</string>
     <string name="sync_status_loaded">Loaded from %s</string>
     <string name="sync_status_saved">Saved to %s</string>
+
+    <string name="moving_between_subdirectories_requires_api_24">Renaming notebook to a different subdirectory requires Android 7 or higher</string>
 </resources>

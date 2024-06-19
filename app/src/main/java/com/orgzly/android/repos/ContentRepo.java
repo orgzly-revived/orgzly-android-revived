@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.documentfile.provider.DocumentFile;
 
 import com.orgzly.BuildConfig;
+import com.orgzly.R;
 import com.orgzly.android.BookName;
 import com.orgzly.android.db.entity.Repo;
 import com.orgzly.android.util.LogUtils;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -68,20 +70,11 @@ public class ContentRepo implements SyncRepo {
     public List<VersionedRook> getBooks() throws IOException {
         List<VersionedRook> result = new ArrayList<>();
 
-        DocumentFile[] files = repoDocumentFile.listFiles();
+        List<DocumentFile> files = walkFileTree();
 
-        RepoIgnoreNode ignores = new RepoIgnoreNode(this);
-
-        if (files != null) {
-            // Can't compare TreeDocumentFile
-            // Arrays.sort(files);
-
+        if (files.size() > 0) {
             for (DocumentFile file : files) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    if (ignores.isPathIgnored(Objects.requireNonNull(file.getName()), false)) {
-                        continue;
-                    }
-                } if (BookName.isSupportedFormatFileName(file.getName())) {
+                if (BookName.isSupportedFormatFileName(file.getName())) {
 
                     if (BuildConfig.LOG_DEBUG) {
                         LogUtils.d(TAG,
@@ -111,9 +104,45 @@ public class ContentRepo implements SyncRepo {
         return result;
     }
 
+    /**
+     * @return All file nodes in the repo tree which are not excluded by .orgzlyignore
+     */
+    private List<DocumentFile> walkFileTree() {
+        List<DocumentFile> result = new ArrayList<>();
+        List<DocumentFile> directoryNodes = new ArrayList<>();
+        RepoIgnoreNode ignores = new RepoIgnoreNode(this);
+        directoryNodes.add(repoDocumentFile);
+        while (!directoryNodes.isEmpty()) {
+            DocumentFile currentDir = directoryNodes.remove(0);
+            for (DocumentFile node : currentDir.listFiles()) {
+                String relativeFileName = BookName.getFileName(repoUri, node.getUri());
+                if (node.isDirectory()) {
+                    if (Build.VERSION.SDK_INT >= 26) {
+                        if (ignores.isPathIgnored(relativeFileName, true)) {
+                            continue;
+                        }
+                    }
+                    directoryNodes.add(node);
+                } else {
+                    if (Build.VERSION.SDK_INT >= 26) {
+                        if (ignores.isPathIgnored(relativeFileName, false)) {
+                            continue;
+                        }
+                    } result.add(node);
+                }
+            }
+        }
+        return result;
+    }
+
+    private DocumentFile getDocumentFileFromFileName(String fileName) {
+        String fullUri = repoDocumentFile.getUri() + Uri.encode("/" + fileName);
+        return DocumentFile.fromSingleUri(context, Uri.parse(fullUri));
+    }
+
     @Override
     public VersionedRook retrieveBook(String fileName, File destinationFile) throws IOException {
-        DocumentFile sourceFile = repoDocumentFile.findFile(fileName);
+        DocumentFile sourceFile = getDocumentFileFromFileName(fileName);
         if (sourceFile == null) {
             throw new FileNotFoundException("Book " + fileName + " not found in " + repoUri);
         } else {
@@ -135,8 +164,8 @@ public class ContentRepo implements SyncRepo {
 
     @Override
     public InputStream openRepoFileInputStream(String fileName) throws IOException {
-        DocumentFile sourceFile = repoDocumentFile.findFile(fileName);
-        if (sourceFile == null) throw new FileNotFoundException();
+        DocumentFile sourceFile = getDocumentFileFromFileName(fileName);
+        if (!sourceFile.exists()) throw new FileNotFoundException();
         return context.getContentResolver().openInputStream(sourceFile.getUri());
     }
 
@@ -145,24 +174,17 @@ public class ContentRepo implements SyncRepo {
         if (!file.exists()) {
             throw new FileNotFoundException("File " + file + " does not exist");
         }
-
-        /* Delete existing file. */
-        DocumentFile existingFile = repoDocumentFile.findFile(fileName);
-        if (existingFile != null) {
-            existingFile.delete();
+        DocumentFile destinationFile = getDocumentFileFromFileName(fileName);
+        if (!destinationFile.exists()) {
+            if (fileName.contains("/")) {
+                DocumentFile destinationDir = ensureDirectoryHierarchy(fileName);
+                destinationFile = destinationDir.createFile("text/*", Uri.parse(fileName).getLastPathSegment());
+            } else {
+                repoDocumentFile.createFile("text/*", fileName);
+            }
         }
+        OutputStream out = context.getContentResolver().openOutputStream(destinationFile.getUri());
 
-        /* Create new file. */
-        DocumentFile destinationFile = repoDocumentFile.createFile("text/*", fileName);
-
-        if (destinationFile == null) {
-            throw new IOException("Failed creating " + fileName + " in " + repoUri);
-        }
-
-        Uri uri = destinationFile.getUri();
-
-        /* Write file content to uri. */
-        OutputStream out = context.getContentResolver().openOutputStream(uri);
         try {
             MiscUtils.writeFileToStream(file, out);
         } finally {
@@ -174,27 +196,94 @@ public class ContentRepo implements SyncRepo {
         long mtime = destinationFile.lastModified();
         String rev = String.valueOf(mtime);
 
-        return new VersionedRook(repoId, RepoType.DOCUMENT, getUri(), uri, rev, mtime);
+        return new VersionedRook(repoId, RepoType.DOCUMENT, getUri(), destinationFile.getUri(), rev, mtime);
     }
 
-    @Override
-    public VersionedRook renameBook(Uri from, String name) throws IOException {
-        DocumentFile fromDocFile = DocumentFile.fromSingleUri(context, from);
-        BookName bookName = BookName.fromFileName(fromDocFile.getName());
-        String newFileName = BookName.fileName(name, bookName.getFormat());
+    /**
+     * Given a relative path, ensures that all directory levels are created unless they already
+     * exist.
+     * @param relativePath Path relative to the repository root directory
+     * @return The DocumentFile object of the leaf directory where the file should be placed.
+     */
+    private DocumentFile ensureDirectoryHierarchy(String relativePath) {
+        List<String> levels = new ArrayList<>(Arrays.asList(relativePath.split("/")));
+        DocumentFile currentDir = repoDocumentFile;
+        while (levels.size() > 1) {
+            String nextDirName = levels.remove(0);
+            DocumentFile nextDir = currentDir.findFile(nextDirName);
+            if (nextDir == null) {
+                currentDir = currentDir.createDirectory(nextDirName);
+            } else {
+                currentDir = nextDir;
+            }
+        }
+        return currentDir;
+    }
 
-        /* Check if document already exists. */
-        DocumentFile existingFile = repoDocumentFile.findFile(newFileName);
+    /**
+     * Allows renaming a notebook to any subdirectory (indicated with a "/"), ensuring that all
+     * required subdirectories are created, if they do not already exist. Note that the file is
+     * moved, but no "abandoned" directories are deleted.
+     * @param oldUri
+     * @param newName
+     * @return
+     * @throws IOException
+     */
+    @Override
+    public VersionedRook renameBook(Uri oldUri, String newName) throws IOException {
+        DocumentFile oldDocFile = DocumentFile.fromSingleUri(context, oldUri);
+        long mtime = oldDocFile.lastModified();
+        String rev = String.valueOf(mtime);
+        String oldDocFileName = oldDocFile.getName();
+        Uri oldDirUri = Uri.parse(
+                oldUri.toString().replace(
+                        Uri.encode("/" + oldDocFile.getName()),
+                        ""
+                )
+        );
+        BookName oldBookName = BookName.fromFileName(BookName.getFileName(repoUri, oldUri));
+        String newRelativePath = BookName.fileName(newName, oldBookName.getFormat());
+        String newDocFileName = Uri.parse(newRelativePath).getLastPathSegment();
+        DocumentFile newDir;
+        Uri newUri = oldUri;
+
+        if (newName.contains("/")) {
+            newDir = ensureDirectoryHierarchy(newName);
+        } else {
+            newDir = repoDocumentFile;
+        }
+
+        /* Abort if destination file already exists. */
+        DocumentFile existingFile = newDir.findFile(newDocFileName);
         if (existingFile != null) {
             throw new IOException("File at " + existingFile.getUri() + " already exists");
         }
 
-        Uri newUri = DocumentsContract.renameDocument(context.getContentResolver(), from, newFileName);
+        if (!newDir.getUri().toString().equals(oldDirUri.toString())) {
+            // File should be moved to a different directory
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                newUri = DocumentsContract.moveDocument(
+                        context.getContentResolver(),
+                        oldUri,
+                        oldDirUri,
+                        newDir.getUri()
+                );
+            } else {
+                throw new IllegalArgumentException(
+                        context.getString(R.string.moving_between_subdirectories_requires_api_24));
+            }
+        }
 
-        long mtime = fromDocFile.lastModified();
-        String rev = String.valueOf(mtime);
+        if (!Objects.equals(newDocFileName, oldDocFileName)) {
+            // File should be renamed
+            newUri = DocumentsContract.renameDocument(
+                    context.getContentResolver(),
+                    newUri,
+                    newDocFileName
+            );
+        }
 
-        return new VersionedRook(repoId, RepoType.DOCUMENT, getUri(), newUri, rev, mtime);
+        return new VersionedRook(repoId, RepoType.DOCUMENT, repoUri, newUri, rev, mtime);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.orgzly.android.sync
 
+import androidx.core.net.toUri
 import com.orgzly.BuildConfig
 import com.orgzly.android.App
 import com.orgzly.android.BookFormat
@@ -166,7 +167,7 @@ object SyncUtils {
             BookSyncStatus.BOOK_WITH_LINK_LOCAL_MODIFIED -> {
                 repoEntity = namesake.book.linkRepo
                 repoUrl = repoEntity!!.url
-                fileName = BookName.getFileName(App.getAppContext(), namesake.book.syncedTo!!.uri)
+                fileName = BookName.getFileName(repoUrl.toUri(), namesake.book.syncedTo!!.uri)
                 dataRepository.saveBookToRepo(repoEntity, fileName, namesake.book, BookFormat.ORG)
                 bookAction = BookAction.forNow(BookAction.Type.INFO, namesake.status.msg(repoUrl))
             }

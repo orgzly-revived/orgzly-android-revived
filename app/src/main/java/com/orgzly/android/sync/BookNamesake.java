@@ -49,7 +49,7 @@ public class BookNamesake {
 
         /* Set repo books. */
         for (VersionedRook book: versionedRooks) {
-            String fileName = BookName.getFileName(context, book.getUri());
+            String fileName = BookName.getFileName(book.getRepoUri(), book.getUri());
             String name = BookName.fromFileName(fileName).getName();
 
             BookNamesake pair = namesakes.get(name);

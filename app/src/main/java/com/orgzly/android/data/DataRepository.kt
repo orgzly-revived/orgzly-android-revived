@@ -1625,7 +1625,7 @@ class DataRepository @Inject constructor(
 
     @Throws(IOException::class)
     fun loadBookFromRepo(rook: Rook): BookView? {
-        val fileName = BookName.getFileName(context, rook.uri)
+        val fileName = BookName.getFileName(rook.repoUri, rook.uri)
 
         return loadBookFromRepo(rook.repoId, rook.repoType, rook.repoUri.toString(), fileName)
     }

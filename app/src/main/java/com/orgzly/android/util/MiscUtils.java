@@ -1,15 +1,18 @@
 package com.orgzly.android.util;
 
 
+import android.content.ContentResolver;
 import android.net.Uri;
-import com.google.android.material.textfield.TextInputLayout;
 import android.text.Editable;
-import android.text.Html;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.widget.TextView;
 
 import androidx.core.text.HtmlCompat;
+import androidx.documentfile.provider.DocumentFile;
+
+import com.google.android.material.textfield.TextInputLayout;
+import com.orgzly.android.App;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -66,6 +69,20 @@ public class MiscUtils {
     public static void writeStringToFile(String str, File file) throws FileNotFoundException {
         try (PrintWriter out = new PrintWriter(file)) {
             out.write(str);
+        }
+    }
+
+    public static void writeStringToDocumentFile(String content, String displayName, Uri directory) throws IOException {
+        DocumentFile file = DocumentFile.fromTreeUri(App.getAppContext(), directory)
+                .createFile("", displayName);
+        ContentResolver contentResolver = App.getAppContext().getContentResolver();
+        try (OutputStream out = contentResolver.openOutputStream(file.getUri())) {
+            if (out != null) {
+                out.write(content.getBytes());
+                out.flush();
+            } else {
+                throw new IOException("Failed to open output stream for writing to " + file.getUri());
+            }
         }
     }
 
