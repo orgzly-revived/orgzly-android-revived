@@ -5,7 +5,6 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.DrawerActions.close;
 import static androidx.test.espresso.contrib.DrawerActions.open;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -23,6 +22,7 @@ import static com.orgzly.android.espresso.util.EspressoUtils.onSnackbar;
 import static com.orgzly.android.espresso.util.EspressoUtils.recyclerViewItemCount;
 import static com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard;
 import static com.orgzly.android.espresso.util.EspressoUtils.settingsSetTodoKeywords;
+import static com.orgzly.android.espresso.util.EspressoUtils.sync;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.endsWith;
@@ -67,15 +67,6 @@ public class SyncingTest extends OrgzlyTest {
         if (scenario != null) {
             scenario.close();
         }
-    }
-
-    /**
-     * Utility method for starting sync using drawer button.
-     */
-    private void sync() {
-        onView(withId(R.id.drawer_layout)).perform(open());
-        onView(withId(R.id.sync_button_container)).perform(click());
-        onView(withId(R.id.drawer_layout)).perform(close());
     }
 
     @Test

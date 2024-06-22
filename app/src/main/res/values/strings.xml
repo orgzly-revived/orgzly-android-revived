@@ -24,6 +24,7 @@
     <string name="edit_note">Edit note</string>
     <string name="delete">Delete</string>
     <string name="delete_with_quoted_argument">Delete “%s”</string>
+    <string name="delete_amount_of_books">Delete %d notebooks</string>
     <string name="name">Name</string>
     <string name="query">Query</string>
     <string name="done">Done</string>
@@ -290,8 +291,9 @@
     <string name="renamed_book_from">Renamed from “%s”</string>
 
     <string name="also_delete_linked_book">Delete linked remote notebook</string>
-    <string name="message_deleting_book_failed">Deleting notebook failed: %s</string>
-    <string name="message_book_deleted">Notebook deleted</string>
+    <string name="also_delete_linked_books">Delete any linked remote notebooks</string>
+    <string name="message_deleting_book_failed">Deleting notebook(s) failed: %s</string>
+    <string name="message_book_deleted">Notebook(s) deleted</string>
 
     <string name="priority_with_argument">Priority %s</string>
     <string name="default_priority">Default priority</string>
@@ -614,8 +616,8 @@
     <string name="notification_channel_settings">Notifications</string>
     <string name="notification_channel_settings_summary">Sound, vibrate, notification dot</string>
     <string name="hide_note_metadata">Hide metadata</string>
-    <string name="overwrite_local_notebook_question">Overwrite local notebook?</string>
-    <string name="overwrite_remote_notebook_question">Overwrite remote notebook?</string>
+    <string name="overwrite_local_notebook_question">Overwrite local notebook(s)?</string>
+    <string name="overwrite_remote_notebook_question">Overwrite remote notebook(s)?</string>
     <string name="drawers_folded_by_default">Drawers folded</string>
     <string name="drawers_folded_by_default_summary">Fold drawers by default</string>
     <string name="log_on_time_shift">Log to drawer on time shift</string>

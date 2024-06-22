@@ -15,7 +15,6 @@ import com.orgzly.android.ui.CommonViewModel
 import com.orgzly.android.ui.SingleLiveEvent
 import com.orgzly.android.usecase.*
 import com.orgzly.android.util.LogUtils
-import java.io.File
 
 
 class BooksViewModel(private val dataRepository: DataRepository) : CommonViewModel() {
@@ -24,7 +23,7 @@ class BooksViewModel(private val dataRepository: DataRepository) : CommonViewMod
     // Book being operated on (deleted, renamed, etc.)
     private var lastBook = MutableLiveData<Pair<Book, BookFormat>>()
 
-    val bookToDeleteEvent: SingleLiveEvent<BookView> = SingleLiveEvent()
+    val booksToDeleteEvent: SingleLiveEvent<Set<BookView>> = SingleLiveEvent()
     val bookDeletedEvent: SingleLiveEvent<UseCaseResult> = SingleLiveEvent()
     val bookToRenameEvent: SingleLiveEvent<BookView> = SingleLiveEvent()
     val bookToExportEvent: SingleLiveEvent<Pair<Book, BookFormat>> = SingleLiveEvent()
@@ -64,9 +63,10 @@ class BooksViewModel(private val dataRepository: DataRepository) : CommonViewMod
         }
     }
 
-    fun deleteBookRequest(bookId: Long) {
+    fun deleteBooksRequest(bookIds: Set<Long>) {
+        val bookViews = bookIds.map { requireNotNull(dataRepository.getBookView(it)) }.toSet()
         App.EXECUTORS.diskIO().execute {
-            bookToDeleteEvent.postValue(dataRepository.getBookView(bookId))
+            booksToDeleteEvent.postValue(bookViews)
         }
     }
 
@@ -94,29 +94,28 @@ class BooksViewModel(private val dataRepository: DataRepository) : CommonViewMod
     }
 
     data class BookLinkOptions(
-        val book: Book, val links: List<Repo>, val urls: List<String>, val selected: Int)
+        val bookIds: Set<Long>, val links: List<Repo>, val urls: List<String>, val selected: Int)
 
-    fun setBookLinkRequest(bookId: Long) {
+    fun setBookLinksRequest(bookIds: Set<Long>) {
         App.EXECUTORS.diskIO().execute {
-            val bookView = dataRepository.getBookView(bookId)
-
-            if (bookView == null) {
-                errorEvent.postValue(Throwable("Book not found"))
-
+            if (bookIds.isEmpty()) {
+                errorEvent.postValue(Throwable("No books found"))
             } else {
                 val repos = dataRepository.getRepos()
 
                 val options = if (repos.isEmpty()) {
-                    BookLinkOptions(bookView.book, emptyList(), emptyList(), -1)
-
+                    BookLinkOptions(bookIds, emptyList(), emptyList(), -1)
                 } else {
-                    val currentLink = bookView.linkRepo
-
-                    val selectedLink = repos.indexOfFirst {
-                        it.url == currentLink?.url
+                    if (bookIds.size == 1) {
+                        val bookView = dataRepository.getBookView(bookIds.first())
+                        val currentLink = bookView?.linkRepo
+                        val selectedLink = repos.indexOfFirst {
+                            it.url == currentLink?.url
+                        }
+                        BookLinkOptions(bookIds, repos, repos.map { it.url }, selectedLink)
+                    } else {
+                        BookLinkOptions(bookIds, repos, repos.map { it.url }, -1)
                     }
-
-                    BookLinkOptions(bookView.book, repos, repos.map { it.url }, selectedLink)
                 }
 
                 setBookLinkRequestEvent.postValue(options)
@@ -124,26 +123,32 @@ class BooksViewModel(private val dataRepository: DataRepository) : CommonViewMod
         }
     }
 
-    fun setBookLink(bookId: Long, repo: Repo? = null) {
-        App.EXECUTORS.diskIO().execute {
-            catchAndPostError {
-                UseCaseRunner.run(BookLinkUpdate(bookId, repo))
+    fun setBookLinks(bookIds: Set<Long>, repo: Repo? = null) {
+        for (bookId in bookIds) {
+            App.EXECUTORS.diskIO().execute {
+                catchAndPostError {
+                    UseCaseRunner.run(BookLinkUpdate(bookId, repo))
+                }
             }
         }
     }
 
-    fun forceSaveBookRequest(bookId: Long) {
-        App.EXECUTORS.diskIO().execute {
-            catchAndPostError {
-                UseCaseRunner.run(BookForceSave(bookId))
+    fun forceSaveBookRequest(bookIds: Set<Long>) {
+        for (bookId in bookIds) {
+            App.EXECUTORS.diskIO().execute {
+                catchAndPostError {
+                    UseCaseRunner.run(BookForceSave(bookId))
+                }
             }
         }
     }
 
-    fun forceLoadBookRequest(bookId: Long) {
-        App.EXECUTORS.diskIO().execute {
-            catchAndPostError {
-                UseCaseRunner.run(BookForceLoad(bookId))
+    fun forceLoadBookRequest(bookIds: Set<Long>) {
+        for (bookId in bookIds) {
+            App.EXECUTORS.diskIO().execute {
+                catchAndPostError {
+                    UseCaseRunner.run(BookForceLoad(bookId))
+                }
             }
         }
     }
