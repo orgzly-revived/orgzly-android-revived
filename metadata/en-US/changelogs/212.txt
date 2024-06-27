@@ -1,0 +1,2 @@
+• Better handling of remotely deleted files
+• Better handling of the notifications permission
