@@ -8,6 +8,7 @@ import com.orgzly.android.util.UriUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -50,6 +51,11 @@ public class DatabaseRepo implements SyncRepo {
     public VersionedRook retrieveBook(String fileName, File file) {
         Uri uri = repoUri.buildUpon().appendPath(fileName).build();
         return dbRepo.retrieveBook(repoId, repoUri, uri, file);
+    }
+
+    @Override
+    public InputStream openRepoFileInputStream(String fileName) throws IOException {
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override

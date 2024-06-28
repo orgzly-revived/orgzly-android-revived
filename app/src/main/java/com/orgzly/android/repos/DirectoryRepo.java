@@ -1,6 +1,7 @@
 package com.orgzly.android.repos;
 
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
 import com.orgzly.android.BookName;
@@ -12,8 +13,10 @@ import com.orgzly.android.util.UriUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -81,10 +84,21 @@ public class DirectoryRepo implements SyncRepo {
 
     @Override
     public List<VersionedRook> getBooks() {
+        RepoIgnoreNode ignores = new RepoIgnoreNode(this);
+
         List<VersionedRook> result = new ArrayList<>();
 
-        File[] files = mDirectory.listFiles((dir, filename) ->
-                BookName.isSupportedFormatFileName(filename));
+        File[] files;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            files = mDirectory.listFiles(
+                (dir, filename) -> BookName.isSupportedFormatFileName(filename)
+                    && !ignores.isPathIgnored(filename, false)
+            );
+        } else {
+            files = mDirectory.listFiles(
+                (dir, filename) -> BookName.isSupportedFormatFileName(filename)
+            );
+        }
 
         if (files != null) {
             Arrays.sort(files);
@@ -128,6 +142,11 @@ public class DirectoryRepo implements SyncRepo {
         long mtime = sourceFile.lastModified();
 
         return new VersionedRook(repoId, RepoType.DIRECTORY, repoUri, uri, rev, mtime);
+    }
+
+    @Override
+    public InputStream openRepoFileInputStream(String fileName) throws IOException {
+        return new FileInputStream(repoUri.buildUpon().appendPath(fileName).build().getPath());
     }
 
     @Override

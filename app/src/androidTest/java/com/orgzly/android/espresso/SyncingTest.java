@@ -14,6 +14,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.orgzly.android.espresso.util.EspressoUtils.clickSetting;
 import static com.orgzly.android.espresso.util.EspressoUtils.contextualToolbarOverflowMenu;
+import static com.orgzly.android.espresso.util.EspressoUtils.grantAlarmsAndRemindersPermission;
 import static com.orgzly.android.espresso.util.EspressoUtils.onActionItemClick;
 import static com.orgzly.android.espresso.util.EspressoUtils.onBook;
 import static com.orgzly.android.espresso.util.EspressoUtils.onListItem;
@@ -35,7 +36,6 @@ import android.widget.TextView;
 
 import androidx.test.core.app.ActivityScenario;
 
-import com.orgzly.BuildConfig;
 import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
 import com.orgzly.android.RetryTestRule;
@@ -45,9 +45,9 @@ import com.orgzly.android.sync.BookSyncStatus;
 import com.orgzly.android.sync.SyncRunner;
 import com.orgzly.android.ui.main.MainActivity;
 
+import org.json.JSONException;
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -73,6 +73,7 @@ public class SyncingTest extends OrgzlyTest {
      * Utility method for starting sync using drawer button.
      */
     private void sync() {
+        grantAlarmsAndRemindersPermission();
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.sync_button_container)).perform(click());
         onView(withId(R.id.drawer_layout)).perform(close());
@@ -592,9 +593,8 @@ public class SyncingTest extends OrgzlyTest {
     }
 
     @Test
-    public void testSettingLinkToRenamedRepo() {
-        Assume.assumeTrue(BuildConfig.IS_DROPBOX_ENABLED);
-
+    public void testSettingLinkToRenamedRepo() throws JSONException {
+        testUtils.dropboxTestPreflight();
         Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
         testUtils.setupRook(repo, "mock://repo-a/booky.org", "Täht", "1abcde", 1400067156000L);
         scenario = ActivityScenario.launch(MainActivity.class);
@@ -648,8 +648,8 @@ public class SyncingTest extends OrgzlyTest {
     }
 
     @Test
-    public void testRenamingReposRemovesLinksWhatUsedThem() {
-        Assume.assumeTrue(BuildConfig.IS_DROPBOX_ENABLED);
+    public void testRenamingReposRemovesLinksWhatUsedThem() throws JSONException {
+        testUtils.dropboxTestPreflight();
 
         testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
         testUtils.setupRepo(RepoType.MOCK, "mock://repo-b");

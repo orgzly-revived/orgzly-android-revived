@@ -936,6 +936,10 @@ public class AppPreferences {
                 context.getResources().getString(R.string.pref_key_git_is_enabled),
                 context.getResources().getBoolean(R.bool.pref_default_git_is_enabled));
     }
+
+    public static void gitIsEnabled(Context context, Boolean value) {
+        getDefaultSharedPreferences(context).edit().putBoolean(context.getResources().getString(R.string.pref_key_git_is_enabled), value).apply();
+    }
     
     public static String defaultRepositoryStorageDirectory(Context context) {
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);

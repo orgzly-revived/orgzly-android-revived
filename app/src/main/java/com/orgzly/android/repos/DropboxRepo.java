@@ -8,6 +8,7 @@ import com.orgzly.android.util.UriUtils;
 import java.io.File;
 import java.io.IOException;
 
+import java.io.InputStream;
 import java.util.List;
 
 public class DropboxRepo implements SyncRepo {
@@ -38,12 +39,18 @@ public class DropboxRepo implements SyncRepo {
 
     @Override
     public List<VersionedRook> getBooks() throws IOException {
-        return client.getBooks(repoUri);
+        RepoIgnoreNode ignores = new RepoIgnoreNode(this);
+        return client.getBooks(repoUri, ignores);
     }
 
     @Override
     public VersionedRook retrieveBook(String fileName, File file) throws IOException {
         return client.download(repoUri, fileName, file);
+    }
+
+    @Override
+    public InputStream openRepoFileInputStream(String fileName) throws IOException {
+        return client.streamFile(repoUri, fileName);
     }
 
     @Override

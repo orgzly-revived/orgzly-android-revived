@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -31,6 +32,14 @@ public interface SyncRepo {
      * Download the latest available revision of the book and store its content to {@code File}.
      */
     VersionedRook retrieveBook(String fileName, File destination) throws IOException;
+
+    /**
+     * Open a file in the repository for reading. Originally added for parsing the .orgzlyignore
+     * file.
+     * @param fileName The file to open
+     * @throws IOException
+     */
+    InputStream openRepoFileInputStream(String fileName) throws IOException;
 
     /**
      * Uploads book storing it under given filename under repo's url.

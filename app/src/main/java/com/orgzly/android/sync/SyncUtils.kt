@@ -157,6 +157,8 @@ object SyncUtils {
                 repoEntity = dataRepository.getRepos().iterator().next()
                 repoUrl = repoEntity.url
                 fileName = BookName.fileName(namesake.book.book.name, BookFormat.ORG)
+                /* Set repo link before saving to ensure repo ignore rules are checked */
+                dataRepository.setLink(namesake.book.book.id, repoEntity)
                 dataRepository.saveBookToRepo(repoEntity, fileName, namesake.book, BookFormat.ORG)
                 bookAction = BookAction.forNow(BookAction.Type.INFO, namesake.status.msg(repoUrl))
             }

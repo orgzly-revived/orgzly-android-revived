@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Using DocumentFile, for devices running Lollipop or later.
@@ -69,12 +70,18 @@ public class ContentRepo implements SyncRepo {
 
         DocumentFile[] files = repoDocumentFile.listFiles();
 
+        RepoIgnoreNode ignores = new RepoIgnoreNode(this);
+
         if (files != null) {
             // Can't compare TreeDocumentFile
             // Arrays.sort(files);
 
             for (DocumentFile file : files) {
-                if (BookName.isSupportedFormatFileName(file.getName())) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (ignores.isPathIgnored(Objects.requireNonNull(file.getName()), false)) {
+                        continue;
+                    }
+                } if (BookName.isSupportedFormatFileName(file.getName())) {
 
                     if (BuildConfig.LOG_DEBUG) {
                         LogUtils.d(TAG,
@@ -124,6 +131,13 @@ public class ContentRepo implements SyncRepo {
         long mtime = sourceFile.lastModified();
 
         return new VersionedRook(repoId, RepoType.DOCUMENT, repoUri, sourceFile.getUri(), rev, mtime);
+    }
+
+    @Override
+    public InputStream openRepoFileInputStream(String fileName) throws IOException {
+        DocumentFile sourceFile = repoDocumentFile.findFile(fileName);
+        if (sourceFile == null) throw new FileNotFoundException();
+        return context.getContentResolver().openInputStream(sourceFile.getUri());
     }
 
     @Override
