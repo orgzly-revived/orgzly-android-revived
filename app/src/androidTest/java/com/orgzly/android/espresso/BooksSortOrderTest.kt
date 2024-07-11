@@ -60,8 +60,8 @@ class BooksSortOrderTest : OrgzlyTest() {
 
     private fun setBooksSortOrder(@StringRes id: Int) {
         onActionItemClick(R.id.activity_action_settings, R.string.settings)
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks)
-        clickSetting("pref_key_notebooks_sort_order", R.string.sort_order)
+        clickSetting(R.string.pref_title_notebooks)
+        clickSetting(R.string.sort_order)
         onData(hasToString(context.getString(id))).perform(click())
         pressBack()
         pressBack()

@@ -306,7 +306,7 @@ public class EspressoUtils {
         }
     }
 
-    public static void clickSetting(String key, int title) {
+    public static void clickSetting(int title) {
         onView(withId(R.id.recycler_view))
                 .perform(RecyclerViewActions.actionOnItem(
                         hasDescendant(withText(title)), click()));
@@ -323,8 +323,8 @@ public class EspressoUtils {
     private static void settingsSetKeywords(int viewId, String keywords) {
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
 
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks);
-        clickSetting("pref_key_states", R.string.states);
+        clickSetting(R.string.pref_title_notebooks);
+        clickSetting(R.string.states);
 
         onView(withId(viewId)).perform(replaceTextCloseKeyboard(keywords));
         onView(withText(android.R.string.ok)).perform(click());

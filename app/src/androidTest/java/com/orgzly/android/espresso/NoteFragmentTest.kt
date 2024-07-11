@@ -419,8 +419,8 @@ class NoteFragmentTest : OrgzlyTest() {
 
         /* Change lowest priority to A. */
         onActionItemClick(R.id.activity_action_settings, R.string.settings)
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks)
-        clickSetting("pref_key_min_priority", R.string.lowest_priority)
+        clickSetting(R.string.pref_title_notebooks)
+        clickSetting(R.string.lowest_priority)
         onData(hasToString(containsString("A"))).perform(click())
         pressBack()
         pressBack()
@@ -431,8 +431,8 @@ class NoteFragmentTest : OrgzlyTest() {
 
         /* Change lowest priority to C. */
         onActionItemClick(R.id.activity_action_settings, R.string.settings)
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks)
-        clickSetting("pref_key_min_priority", R.string.lowest_priority)
+        clickSetting(R.string.pref_title_notebooks)
+        clickSetting(R.string.lowest_priority)
         onData(hasToString(containsString("C"))).perform(click())
         pressBack()
         pressBack()

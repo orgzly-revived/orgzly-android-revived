@@ -106,10 +106,10 @@ public class SyncingTest extends OrgzlyTest {
 
         // Set preference
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
-        clickSetting("prefs_screen_sync", R.string.sync);
-        clickSetting("prefs_screen_auto_sync", R.string.auto_sync);
-        clickSetting("pref_key_auto_sync", R.string.auto_sync);
-        clickSetting("pref_key_auto_sync_on_note_create", R.string.pref_title_sync_after_note_create);
+        clickSetting(R.string.sync);
+        clickSetting(R.string.auto_sync);
+        clickSetting(R.string.auto_sync);
+        clickSetting(R.string.pref_title_sync_after_note_create);
         pressBack();
         pressBack();
         pressBack();
@@ -678,8 +678,8 @@ public class SyncingTest extends OrgzlyTest {
 
         /* Rename repository. */
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
-        clickSetting("prefs_screen_sync", R.string.sync);
-        clickSetting("pref_key_repos", R.string.repos_preference_title);
+        clickSetting(R.string.sync);
+        clickSetting(R.string.repos_preference_title);
         onListItem(0).perform(click());
         onView(withId(R.id.activity_repo_dropbox_directory)).perform(replaceTextCloseKeyboard("repo-b"));
         onView(withId(R.id.fab)).perform(click()); // Repo done
@@ -730,8 +730,8 @@ public class SyncingTest extends OrgzlyTest {
 
         /* Rename all repositories. */
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
-        clickSetting("prefs_screen_sync", R.string.sync);
-        clickSetting("pref_key_repos", R.string.repos_preference_title);
+        clickSetting(R.string.sync);
+        clickSetting(R.string.repos_preference_title);
         onListItem(0).perform(click());
         onView(withId(R.id.activity_repo_dropbox_directory)).perform(replaceTextCloseKeyboard("repo-1"));
         onView(withId(R.id.fab)).perform(click()); // Repo done

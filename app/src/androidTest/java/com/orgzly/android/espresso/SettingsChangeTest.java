@@ -86,8 +86,8 @@ public class SettingsChangeTest extends OrgzlyTest {
                 .check(matches(allOf(withText(containsString("Content for [a-1]")), isDisplayed())));
 
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks);
-        clickSetting("pref_key_is_notes_content_displayed_in_list", R.string.display_content);
+        clickSetting(R.string.pref_title_notebooks);
+        clickSetting(R.string.display_content);
         pressBack();
         pressBack();
 
@@ -96,8 +96,8 @@ public class SettingsChangeTest extends OrgzlyTest {
 
     private void setDefaultPriority(String priority) {
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks);
-        clickSetting("pref_key_default_priority", R.string.default_priority);
+        clickSetting(R.string.pref_title_notebooks);
+        clickSetting(R.string.default_priority);
         onData(hasToString(containsString(priority))).perform(click());
         pressBack();
         pressBack();
