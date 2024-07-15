@@ -185,16 +185,16 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
         return true;
     }
 
-    public VersionedRook storeBook(File file, String fileName) throws IOException {
-        File destination = synchronizer.repoDirectoryFile(fileName);
+    public VersionedRook storeBook(File file, String repositoryPath) throws IOException {
+        File destination = synchronizer.repoDirectoryFile(repositoryPath);
 
         if (destination.exists()) {
-            synchronizer.updateAndCommitExistingFile(file, fileName);
+            synchronizer.updateAndCommitExistingFile(file, repositoryPath);
         } else {
-            synchronizer.addAndCommitNewFile(file, fileName);
+            synchronizer.addAndCommitNewFile(file, repositoryPath);
         }
         synchronizer.tryPush();
-        return currentVersionedRook(Uri.EMPTY.buildUpon().appendPath(fileName).build());
+        return currentVersionedRook(Uri.EMPTY.buildUpon().appendPath(repositoryPath).build());
     }
 
     private RevWalk walk() {

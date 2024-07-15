@@ -396,17 +396,28 @@ public class GitFileSynchronizer {
         if (destinationFile.exists()) {
             throw new IOException("Can't add new file " + repositoryPath + " that already exists.");
         }
+        ensureDirectoryHierarchy(repositoryPath);
         updateAndCommitFile(sourceFile, repositoryPath);
     }
 
+    private void ensureDirectoryHierarchy(String repositoryPath) throws IOException {
+        if (repositoryPath.contains("/")) {
+            File targetDir = repoDirectoryFile(repositoryPath).getParentFile();
+            if (!(targetDir.exists() || targetDir.mkdirs())) {
+                throw new IOException("The directory " + targetDir.getAbsolutePath() + " could " +
+                        "not be created");
+            }
+        }
+    }
+
     private void updateAndCommitFile(
-            File sourceFile, String repositoryPath) throws IOException {
-        File destinationFile = repoDirectoryFile(repositoryPath);
+            File sourceFile, String fileName) throws IOException {
+        File destinationFile = repoDirectoryFile(fileName);
         MiscUtils.copyFile(sourceFile, destinationFile);
         try {
-            git.add().addFilepattern(repositoryPath).call();
+            git.add().addFilepattern(fileName).call();
             if (!gitRepoIsClean())
-                commit(String.format("Orgzly update: %s", repositoryPath));
+                commit(String.format("Orgzly update: %s", fileName));
         } catch (GitAPIException e) {
             throw new IOException("Failed to commit changes.");
         }
@@ -490,8 +501,9 @@ public class GitFileSynchronizer {
             File newFile = repoDirectoryFile(newFileName);
             // Abort if destination file exists
             if (newFile.exists()) {
-                throw new IOException("Can't add new file " + newFileName + " that already exists.");
+                throw new IOException("Repository file " + newFileName + " already exists.");
             }
+            ensureDirectoryHierarchy(newFileName);
             // Copy the file contents and add it to the index
             MiscUtils.copyFile(oldFile, newFile);
             try {

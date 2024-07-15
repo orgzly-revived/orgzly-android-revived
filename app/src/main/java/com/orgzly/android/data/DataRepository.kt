@@ -103,7 +103,7 @@ class DataRepository @Inject constructor(
         val book = getBookView(bookId)
                 ?: throw IOException(resources.getString(R.string.book_does_not_exist_anymore))
 
-        val fileName: String = BookName.getFileName(context, book)
+        val repositoryPath: String = BookName.getFileName(context, book)
 
         try {
             /* Prefer link. */
@@ -113,7 +113,7 @@ class DataRepository @Inject constructor(
                     BookAction.Type.PROGRESS,
                     resources.getString(R.string.force_saving_to_uri, repoEntity)))
 
-            saveBookToRepo(repoEntity, fileName, book, BookFormat.ORG)
+            saveBookToRepo(repoEntity, repositoryPath, book, BookFormat.ORG)
 
             val savedBook = getBookView(bookId)
 
@@ -144,7 +144,7 @@ class DataRepository @Inject constructor(
     @Throws(IOException::class)
     fun saveBookToRepo(
             repoEntity: Repo,
-            fileName: String,
+            repositoryPath: String,
             bookView: BookView,
             @Suppress("UNUSED_PARAMETER") format: BookFormat) {
 
@@ -158,7 +158,7 @@ class DataRepository @Inject constructor(
             NotesOrgExporter(this).exportBook(bookView.book, tmpFile)
 
             /* Upload to repo. */
-            uploadedBook = repo.storeBook(tmpFile, fileName)
+            uploadedBook = repo.storeBook(tmpFile, repositoryPath)
 
         } finally {
             /* Delete temporary file. */
