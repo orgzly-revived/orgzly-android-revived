@@ -171,8 +171,8 @@ public class ContentRepo implements SyncRepo {
             }
         }
 
-        String rev = String.valueOf(destinationFile.lastModified());
-        long mtime = System.currentTimeMillis();
+        long mtime = destinationFile.lastModified();
+        String rev = String.valueOf(mtime);
 
         return new VersionedRook(repoId, RepoType.DOCUMENT, getUri(), uri, rev, mtime);
     }
