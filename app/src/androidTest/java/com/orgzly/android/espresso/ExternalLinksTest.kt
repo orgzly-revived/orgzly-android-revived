@@ -6,6 +6,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.rule.GrantPermissionRule
 import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.OrgzlyTest
@@ -15,6 +16,7 @@ import com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook
 import com.orgzly.android.espresso.util.EspressoUtils.onSnackbar
 import com.orgzly.android.ui.main.MainActivity
 import org.hamcrest.Matchers.startsWith
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -24,6 +26,11 @@ import org.junit.runners.Parameterized
 class ExternalLinksTest(private val param: Parameter) : OrgzlyTest() {
 
     data class Parameter(val link: String, val check: () -> Any)
+
+    @get:Rule
+    val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
+        android.Manifest.permission.READ_MEDIA_IMAGES
+    )
 
     companion object {
         @JvmStatic
