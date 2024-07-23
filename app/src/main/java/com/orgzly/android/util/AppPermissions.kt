@@ -70,7 +70,10 @@ object AppPermissions {
             Usage.BOOK_EXPORT -> Manifest.permission.WRITE_EXTERNAL_STORAGE
             Usage.SYNC_START -> Manifest.permission.WRITE_EXTERNAL_STORAGE
             Usage.SAVED_SEARCHES_EXPORT_IMPORT -> Manifest.permission.WRITE_EXTERNAL_STORAGE
-            Usage.EXTERNAL_FILES_ACCESS -> Manifest.permission.READ_EXTERNAL_STORAGE
+            Usage.EXTERNAL_FILES_ACCESS -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                Manifest.permission.READ_MEDIA_IMAGES
+            else
+                Manifest.permission.READ_EXTERNAL_STORAGE
             Usage.POST_NOTIFICATIONS -> Manifest.permission.POST_NOTIFICATIONS
         }
     }
