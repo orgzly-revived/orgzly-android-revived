@@ -5,6 +5,7 @@ import android.net.Uri;
 import androidx.documentfile.provider.DocumentFile;
 
 import com.orgzly.BuildConfig;
+import com.orgzly.android.db.entity.BookView;
 import com.orgzly.android.repos.Rook;
 import com.orgzly.android.util.LogUtils;
 
@@ -31,9 +32,9 @@ public class BookName {
         mFormat = format;
     }
 
-    public static String getFileName(Context context, com.orgzly.android.db.entity.BookView bookView) {
+    public static String getFileName(BookView bookView) {
         if (bookView.getSyncedTo() != null) {
-            return getFileName(context, bookView.getSyncedTo().getUri());
+            return getFileName(bookView.getSyncedTo().getRepoUri(), bookView.getSyncedTo().getUri());
 
         } else {
             return fileName(bookView.getBook().getName(), BookFormat.ORG);

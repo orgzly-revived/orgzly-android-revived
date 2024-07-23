@@ -80,7 +80,7 @@ class DataRepository @Inject constructor(
                     BookAction.Type.PROGRESS,
                     resources.getString(R.string.force_loading_from_uri, book.linkRepo.url)))
 
-            val fileName = BookName.getFileName(context, book)
+            val fileName = BookName.getFileName(book)
 
             val loadedBook = loadBookFromRepo(book.linkRepo.id, book.linkRepo.type, book.linkRepo.url, fileName)
 
@@ -103,7 +103,7 @@ class DataRepository @Inject constructor(
         val book = getBookView(bookId)
                 ?: throw IOException(resources.getString(R.string.book_does_not_exist_anymore))
 
-        val repositoryPath: String = BookName.getFileName(context, book)
+        val repositoryPath: String = BookName.getFileName(book)
 
         try {
             /* Prefer link. */
