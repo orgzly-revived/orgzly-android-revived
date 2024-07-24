@@ -1,5 +1,6 @@
 package com.orgzly.android.espresso
 
+import android.os.Build
 import android.os.Environment
 import android.os.SystemClock
 import androidx.test.core.app.ActivityScenario
@@ -28,9 +29,11 @@ class ExternalLinksTest(private val param: Parameter) : OrgzlyTest() {
     data class Parameter(val link: String, val check: () -> Any)
 
     @get:Rule
-    val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
-        android.Manifest.permission.READ_MEDIA_IMAGES
-    )
+    val grantPermissionRule: GrantPermissionRule = if (Build.VERSION.SDK_INT >= 33) {
+        GrantPermissionRule.grant(android.Manifest.permission.READ_MEDIA_IMAGES)
+    } else {
+        GrantPermissionRule.grant()
+    }
 
     companion object {
         @JvmStatic
