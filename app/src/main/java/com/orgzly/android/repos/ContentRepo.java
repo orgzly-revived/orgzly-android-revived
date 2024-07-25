@@ -170,27 +170,25 @@ public class ContentRepo implements SyncRepo {
     }
 
     @Override
-    public VersionedRook storeBook(File file, String fileName) throws IOException {
+    public VersionedRook storeBook(File file, String path) throws IOException {
         if (!file.exists()) {
             throw new FileNotFoundException("File " + file + " does not exist");
         }
-        DocumentFile destinationFile = getDocumentFileFromFileName(fileName);
-        if (!destinationFile.exists()) {
-            if (fileName.contains("/")) {
-                DocumentFile destinationDir = ensureDirectoryHierarchy(fileName);
-                destinationFile = destinationDir.createFile("text/*", Uri.parse(fileName).getLastPathSegment());
-            } else {
-                repoDocumentFile.createFile("text/*", fileName);
+        DocumentFile destinationFile = getDocumentFileFromFileName(path);
+        if (path.contains("/")) {
+            DocumentFile destinationDir = ensureDirectoryHierarchy(path);
+            String fileName = Uri.parse(path).getLastPathSegment();
+            if (destinationDir.findFile(fileName) == null) {
+                destinationFile = destinationDir.createFile("text/*", fileName);
+            }
+        } else {
+            if (!destinationFile.exists()) {
+                repoDocumentFile.createFile("text/*", path);
             }
         }
-        OutputStream out = context.getContentResolver().openOutputStream(destinationFile.getUri());
 
-        try {
+        try (OutputStream out = context.getContentResolver().openOutputStream(destinationFile.getUri())) {
             MiscUtils.writeFileToStream(file, out);
-        } finally {
-            if (out != null) {
-                out.close();
-            }
         }
 
         long mtime = destinationFile.lastModified();
