@@ -7,6 +7,8 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.contrib.DrawerActions.close;
+import static androidx.test.espresso.contrib.DrawerActions.open;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -512,5 +514,15 @@ public class EspressoUtils {
             String shellCmd = "appops set --uid com.orgzlyrevived SCHEDULE_EXACT_ALARM allow";
             getInstrumentation().getUiAutomation().executeShellCommand(shellCmd);
         }
+    }
+
+    /**
+     * Utility method for starting sync using drawer button.
+     */
+    public static void sync() {
+        grantAlarmsAndRemindersPermission();
+        onView(withId(R.id.drawer_layout)).perform(open());
+        onView(withId(R.id.sync_button_container)).perform(click());
+        onView(withId(R.id.drawer_layout)).perform(close());
     }
 }

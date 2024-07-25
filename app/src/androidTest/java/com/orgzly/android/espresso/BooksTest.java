@@ -11,8 +11,12 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.orgzly.android.espresso.util.EspressoUtils.contextualToolbarOverflowMenu;
@@ -21,7 +25,9 @@ import static com.orgzly.android.espresso.util.EspressoUtils.onBook;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook;
 import static com.orgzly.android.espresso.util.EspressoUtils.onSnackbar;
 import static com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard;
+import static com.orgzly.android.espresso.util.EspressoUtils.sync;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
@@ -41,6 +47,7 @@ import androidx.test.uiautomator.UiDevice;
 import com.orgzly.R;
 import com.orgzly.android.BookFormat;
 import com.orgzly.android.OrgzlyTest;
+import com.orgzly.android.repos.RepoType;
 import com.orgzly.android.ui.main.MainActivity;
 
 import org.junit.Before;
@@ -298,5 +305,107 @@ public class BooksTest extends OrgzlyTest {
 
         // Make sure we're still in the app
         onBook(0, R.id.item_book_title).check(matches(withText("book-1")));
+    }
+
+    @Test
+    public void testSetLinkOnSingleBookCurrentRepoIsSelected() {
+        testUtils.setupRepo(RepoType.MOCK, "mock://repo");
+        sync();
+        onBook(0, R.id.item_book_link_repo).check(matches(withText("mock://repo")));
+        onBook(0).perform(longClick());
+        contextualToolbarOverflowMenu().perform(click());
+        onView(withText(R.string.books_context_menu_item_set_link)).perform(click());
+        onView(withText("mock://repo")).check(matches(isChecked()));
+    }
+
+    /**
+     * When setting the link of multiple books, no repo should be pre-selected,
+     * no matter how many repos there are, and no matter whether the books
+     * already have a link or not. The reason for this is that we have no
+     * intuitive way of displaying links to multiple repos.
+     */
+    @Test
+    public void testSetLinkOnMultipleBooksNoRepoIsSelected() {
+        testUtils.setupRepo(RepoType.MOCK, "mock://repo");
+        sync();
+        onBook(0, R.id.item_book_link_repo).check(matches(withText("mock://repo")));
+        onBook(1, R.id.item_book_link_repo).check(matches(withText("mock://repo")));
+        onBook(0).perform(longClick());
+        onBook(1).perform(click());
+        contextualToolbarOverflowMenu().perform(click());
+        onView(withText(R.string.books_context_menu_item_set_link)).perform(click());
+        onView(withText("mock://repo")).check(matches(isNotChecked()));
+    }
+
+    @Test
+    public void testDeleteSingleBookLinkedUrlIsShown() {
+        testUtils.setupRepo(RepoType.MOCK, "mock://repo");
+        sync();
+        onBook(0, R.id.item_book_link_repo).check(matches(withText("mock://repo")));
+        onBook(0).perform(longClick());
+        contextualToolbarOverflowMenu().perform(click());
+        onView(withText(R.string.delete)).perform(click());
+        onView(withText(R.string.also_delete_linked_book)).check(matches(isDisplayed()));
+        onView(withId(R.id.delete_linked_url)).check(matches(withText("mock://repo/book-1.org")));
+    }
+
+    @Test
+    public void testDeleteMultipleBooksLinkedUrlIsNotShown() {
+        testUtils.setupRepo(RepoType.MOCK, "mock://repo");
+        sync();
+        onBook(0, R.id.item_book_link_repo).check(matches(withText("mock://repo")));
+        onBook(1, R.id.item_book_link_repo).check(matches(withText("mock://repo")));
+        onBook(0).perform(longClick());
+        onBook(1).perform(click());
+        contextualToolbarOverflowMenu().perform(click());
+        onView(withText(R.string.delete)).perform(click());
+        onView(withText(R.string.also_delete_linked_books)).check(matches(isDisplayed()));
+        onView(withId(R.id.delete_linked_url)).check(matches(withText("")));
+    }
+
+    @Test
+    public void testDeleteMultipleBooksWithNoLinks() {
+        onBook(0).perform(longClick());
+        onBook(1).perform(click());
+        contextualToolbarOverflowMenu().perform(click());
+        onView(withText(R.string.delete)).perform(click());
+        onView(withText(R.string.delete)).perform(click());
+        assert dataRepository.getBooks().size() == 1;
+    }
+
+    @Test
+    public void testDeleteMultipleBooksAndRooks() {
+        testUtils.setupRepo(RepoType.MOCK, "mock://repo");
+        sync();
+        onBook(0, R.id.item_book_link_repo).check(matches(withText("mock://repo")));
+        onBook(1, R.id.item_book_link_repo).check(matches(withText("mock://repo")));
+        onBook(0).perform(longClick());
+        onBook(1).perform(click());
+        contextualToolbarOverflowMenu().perform(click());
+        onView(withText(R.string.delete)).perform(click());
+        onView(withId(R.id.delete_linked_checkbox)).perform(click());
+        onView(withText(R.string.delete)).perform(click());
+        assert dataRepository.getBooks().size() == 1;
+    }
+
+    /**
+     * When multiple books are selected, the "rename" and "export" actions should be removed from
+     * the context menu. By also testing that only the expected number of actions are shown, we
+     * protect against someone later adding actions to the menu without fully considering the support for
+     * multiple selected books. When such support is added, this test will need to be updated.
+     */
+    @Test
+    public void testMultipleBooksSelectedContextMenuShowsSupportedActionsOnly() {
+        onBook(0).perform(longClick());
+        contextualToolbarOverflowMenu().perform(click());
+        onView(withText(R.string.rename)).check(matches(isDisplayed()));
+        onView(withText(R.string.export)).check(matches(isDisplayed()));
+        onView(withClassName(containsString("MenuDropDownListView"))).check(matches(hasChildCount(4)));
+        pressBack();
+        onBook(1).perform(click());
+        contextualToolbarOverflowMenu().perform(click());
+        onView(withText(R.string.rename)).check(doesNotExist());
+        onView(withText(R.string.export)).check(doesNotExist());
+        onView(withClassName(containsString("MenuDropDownListView"))).check(matches(hasChildCount(2)));
     }
 }
