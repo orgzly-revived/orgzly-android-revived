@@ -208,7 +208,7 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
     @Override
     public VersionedRook retrieveBook(String fileName, File destination) throws IOException {
 
-        Uri sourceUri = Uri.parse(fileName);
+        Uri sourceUri = Uri.parse("/" + fileName);
 
         // Ensure our repo copy is up-to-date. This is necessary when force-loading a book.
         synchronizer.mergeWithRemote();
