@@ -59,9 +59,9 @@ public class DropboxRepo implements SyncRepo {
     }
 
     @Override
-    public VersionedRook renameBook(Uri fromUri, String name) throws IOException {
-        Uri toUri = UriUtils.getUriForNewName(fromUri, name);
-        return client.move(repoUri, fromUri, toUri);
+    public VersionedRook renameBook(Uri oldFullUri, String newName) throws IOException {
+        Uri toUri = UriUtils.getUriForNewName(oldFullUri, newName);
+        return client.move(repoUri, oldFullUri, toUri);
     }
 
     @Override

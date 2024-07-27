@@ -70,9 +70,9 @@ public class MockRepo implements SyncRepo {
     }
 
     @Override
-    public VersionedRook renameBook(Uri fromUri, String name) throws IOException {
+    public VersionedRook renameBook(Uri oldFullUri, String newName) throws IOException {
         SystemClock.sleep(SLEEP_FOR_STORE_BOOK);
-        return databaseRepo.renameBook(fromUri, name);
+        return databaseRepo.renameBook(oldFullUri, newName);
     }
 
     @Override

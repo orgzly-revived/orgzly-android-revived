@@ -73,9 +73,9 @@ public class DatabaseRepo implements SyncRepo {
     }
 
     @Override
-    public VersionedRook renameBook(Uri fromUri, String name) {
-        Uri toUri = UriUtils.getUriForNewName(fromUri, name);
-        return dbRepo.renameBook(repoId, fromUri, toUri);
+    public VersionedRook renameBook(Uri oldFullUri, String newName) {
+        Uri toUri = UriUtils.getUriForNewName(oldFullUri, newName);
+        return dbRepo.renameBook(repoId, oldFullUri, toUri);
     }
 
     @Override

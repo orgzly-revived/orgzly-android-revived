@@ -222,28 +222,28 @@ public class ContentRepo implements SyncRepo {
      * Allows renaming a notebook to any subdirectory (indicated with a "/"), ensuring that all
      * required subdirectories are created, if they do not already exist. Note that the file is
      * moved, but no "abandoned" directories are deleted.
-     * @param oldUri
+     * @param oldFullUri
      * @param newName
      * @return
      * @throws IOException
      */
     @Override
-    public VersionedRook renameBook(Uri oldUri, String newName) throws IOException {
-        DocumentFile oldDocFile = DocumentFile.fromSingleUri(context, oldUri);
+    public VersionedRook renameBook(Uri oldFullUri, String newName) throws IOException {
+        DocumentFile oldDocFile = DocumentFile.fromSingleUri(context, oldFullUri);
         long mtime = oldDocFile.lastModified();
         String rev = String.valueOf(mtime);
         String oldDocFileName = oldDocFile.getName();
         Uri oldDirUri = Uri.parse(
-                oldUri.toString().replace(
+                oldFullUri.toString().replace(
                         Uri.encode("/" + oldDocFile.getName()),
                         ""
                 )
         );
-        BookName oldBookName = BookName.fromFileName(BookName.getFileName(repoUri, oldUri));
+        BookName oldBookName = BookName.fromFileName(BookName.getFileName(repoUri, oldFullUri));
         String newRelativePath = BookName.fileName(newName, oldBookName.getFormat());
         String newDocFileName = Uri.parse(newRelativePath).getLastPathSegment();
         DocumentFile newDir;
-        Uri newUri = oldUri;
+        Uri newUri = oldFullUri;
 
         if (newName.contains("/")) {
             newDir = ensureDirectoryHierarchy(newName);
@@ -261,8 +261,7 @@ public class ContentRepo implements SyncRepo {
             // File should be moved to a different directory
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 newUri = DocumentsContract.moveDocument(
-                        context.getContentResolver(),
-                        oldUri,
+                        context.getContentResolver(), oldFullUri,
                         oldDirUri,
                         newDir.getUri()
                 );

@@ -48,7 +48,7 @@ public interface SyncRepo {
      */
     VersionedRook storeBook(File file, String fileName) throws IOException;
 
-    VersionedRook renameBook(Uri from, String name) throws IOException;
+    VersionedRook renameBook(Uri oldFullUri, String newName) throws IOException;
 
     // VersionedRook moveBook(Uri from, Uri uri) throws IOException;
 

@@ -178,15 +178,15 @@ public class DirectoryRepo implements SyncRepo {
     }
 
     @Override
-    public VersionedRook renameBook(Uri fromUri, String name) throws IOException {
-        String fromFilePath = fromUri.getPath();
+    public VersionedRook renameBook(Uri oldFullUri, String newName) throws IOException {
+        String fromFilePath = oldFullUri.getPath();
         if (fromFilePath == null) {
-            throw new IllegalArgumentException("No path in " + fromUri);
+            throw new IllegalArgumentException("No path in " + oldFullUri);
         }
 
         File fromFile = new File(fromFilePath);
 
-        Uri newUri = UriUtils.getUriForNewName(fromUri, name);
+        Uri newUri = UriUtils.getUriForNewName(oldFullUri, newName);
 
         String toFilePath = newUri.getPath();
         if (toFilePath == null) {
