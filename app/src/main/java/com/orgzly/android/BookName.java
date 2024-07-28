@@ -19,7 +19,7 @@ public class BookName {
     private static final String TAG = BookName.class.getName();
 
     private static final Pattern PATTERN = Pattern.compile("(.*)\\.(org)(\\.txt)?$");
-    private static final Pattern SKIP_PATTERN = Pattern.compile("^\\.#.*");
+    private static final Pattern SKIP_PATTERN = Pattern.compile("(.*conflict.*)|(^\\.#.*)");
 
     private final String mFileName;
     private final String mName;

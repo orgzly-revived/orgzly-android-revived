@@ -6,3 +6,12 @@
          https://issuetracker.google.com/issues/37125252#comment20 -->
     <root-path name="root-path-storage" path="/storage/" />
 </paths>
+<!-- Calismasi lazim -->
+content://com.android.externalstorage.documents/tree/primary%3Asyncroam
+
+content://com.orgzlyrevived.fileprovider/external-path-current/syncroam/test.txt
+
+
+
+
+content://com.android.externalstorage.documents/tree/primary%3Asyncroam/test.txt

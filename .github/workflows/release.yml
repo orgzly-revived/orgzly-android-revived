@@ -62,45 +62,45 @@ jobs:
           echo "dropbox.app_key = \"${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
           echo "dropbox.app_key_schema = \"db-${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
 
-      - name: Assemble "premium" APK
-        run: ./gradlew assemblePremiumRelease --stacktrace
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Assemble "premium" APK
+      #   run: ./gradlew assemblePremiumRelease --stacktrace
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Sign "premium" APK
-        uses: r0adkll/sign-android-release@v1
-        id: sign_premium_apk
-        with:
-          releaseDirectory: app/build/outputs/apk/premium/release
-          signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
-          alias: orgzly-revived-20231013
-          keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
-        env:
-          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+      # - name: Sign "premium" APK
+      #   uses: r0adkll/sign-android-release@v1
+      #   id: sign_premium_apk
+      #   with:
+      #     releaseDirectory: app/build/outputs/apk/premium/release
+      #     signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
+      #     alias: orgzly-revived-20231013
+      #     keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+      #   env:
+      #     BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
 
-      - name: Rename "premium" APK file
-        run: mv ${{steps.sign_premium_apk.outputs.signedReleaseFile}} orgzly-revived-${{ env.VERSION }}.apk
+      # - name: Rename "premium" APK file
+      #   run: mv ${{steps.sign_premium_apk.outputs.signedReleaseFile}} orgzly-revived-${{ env.VERSION }}.apk
 
       # "Premium" AAB
 
-      - name: Assemble "premium" AAB
-        run: ./gradlew bundlePremiumRelease --stacktrace
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Assemble "premium" AAB
+      #   run: ./gradlew bundlePremiumRelease --stacktrace
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Sign "premium" AAB
-        uses: r0adkll/sign-android-release@v1
-        id: sign_premium_aab
-        with:
-          releaseDirectory: app/build/outputs/bundle/premiumRelease
-          signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
-          alias: orgzly-revived-20231013
-          keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
-        env:
-          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+      # - name: Sign "premium" AAB
+      #   uses: r0adkll/sign-android-release@v1
+      #   id: sign_premium_aab
+      #   with:
+      #     releaseDirectory: app/build/outputs/bundle/premiumRelease
+      #     signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
+      #     alias: orgzly-revived-20231013
+      #     keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+      #   env:
+      #     BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
 
-      - name: Rename "premium" AAB file
-        run: mv ${{steps.sign_premium_aab.outputs.signedReleaseFile}} orgzly-revived-${{ env.VERSION }}.aab
+      # - name: Rename "premium" AAB file
+      #   run: mv ${{steps.sign_premium_aab.outputs.signedReleaseFile}} orgzly-revived-${{ env.VERSION }}.aab
 
       - name: Upload artifacts and create Github release draft
         uses: softprops/action-gh-release@v1
