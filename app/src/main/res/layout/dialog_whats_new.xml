@@ -22,6 +22,19 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.25"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix broken image linking on Android 13 and above" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Support selecting multiple notebooks" />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.24"
             tools:ignore="HardcodedText" />
 
