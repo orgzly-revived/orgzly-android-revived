@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
@@ -52,7 +53,6 @@ import com.orgzly.org.parser.OrgParser
 import com.orgzly.org.parser.OrgParserWriter
 import com.orgzly.org.utils.StateChangeLogic
 import java.io.*
-import java.lang.IllegalStateException
 import java.util.*
 import java.util.concurrent.Callable
 import javax.inject.Inject
@@ -384,6 +384,10 @@ class DataRepository @Inject constructor(
         bookView.syncedTo?.let { vrook ->
             val repo = getRepoInstance(vrook.repoId, vrook.repoType, vrook.repoUri.toString())
 
+            /* Do not rename if the new filename will be ignored */
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                RepoUtils.ensureFileNameIsNotIgnored(repo, BookName.fileName(name, BookFormat.ORG))
+
             val movedVrook = repo.renameBook(vrook.uri, name)
 
             updateBookLinkAndSync(book.id, movedVrook)
@@ -504,6 +508,14 @@ class DataRepository @Inject constructor(
         val repoId = checkNotNull(db.repo().get(repo.url)) {
             "Repo ${repo.url} not found"
         }.id
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Ensure that the resulting file name is not ignored in this repo
+            val syncRepo = getRepoInstance(repo.id, repo.type, repo.url)
+            val bookName = getBook(bookId)!!.name
+            val fileName = BookName.fileName(bookName, BookFormat.ORG)
+            RepoUtils.ensureFileNameIsNotIgnored(syncRepo, fileName)
+        }
 
         db.bookLink().upsert(bookId, repoId)
     }

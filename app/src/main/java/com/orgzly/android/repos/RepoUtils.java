@@ -1,5 +1,9 @@
 package com.orgzly.android.repos;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.util.Collection;
 
 public class RepoUtils {
@@ -25,6 +29,11 @@ public class RepoUtils {
             }
         }
         return true;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static void ensureFileNameIsNotIgnored(SyncRepo repo, String fileName) {
+        new RepoIgnoreNode(repo).ensureFileNameIsNotIgnored(fileName);
     }
 }
 

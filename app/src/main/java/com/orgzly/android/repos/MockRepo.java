@@ -7,7 +7,9 @@ import android.os.SystemClock;
 import com.orgzly.android.data.DbRepoBookRepository;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -54,6 +56,11 @@ public class MockRepo implements SyncRepo {
     public VersionedRook retrieveBook(String fileName, File file) throws IOException {
         SystemClock.sleep(SLEEP_FOR_RETRIEVE_BOOK);
         return databaseRepo.retrieveBook(fileName, file);
+    }
+
+    @Override
+    public InputStream openRepoFileInputStream(String fileName) throws IOException {
+        throw new FileNotFoundException();
     }
 
     @Override

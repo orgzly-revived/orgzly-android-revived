@@ -1,6 +1,7 @@
 package com.orgzly.android.repos
 
 import android.net.Uri
+import android.os.Build
 import com.burgstaller.okhttp.AuthenticationCacheInterceptor
 import com.burgstaller.okhttp.CachingAuthenticatorDecorator
 import com.burgstaller.okhttp.DispatchingAuthenticator
@@ -15,6 +16,7 @@ import com.thegrizzlylabs.sardineandroid.impl.OkHttpSardine
 import okhttp3.OkHttpClient
 import okio.Buffer
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.security.KeyStore
@@ -25,7 +27,6 @@ import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
-import kotlin.time.Duration
 
 
 class WebdavRepo(
@@ -162,13 +163,23 @@ class WebdavRepo(
             sardine.createDirectory(url)
         }
 
+        val ignores = RepoIgnoreNode(this)
+
         return sardine
                 .list(url)
                 .mapNotNull {
-                    if (it.isDirectory || !BookName.isSupportedFormatFileName(it.name)) {
-                        null
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        if (it.isDirectory || !BookName.isSupportedFormatFileName(it.name) || ignores.isPathIgnored(it.name, false)) {
+                            null
+                        } else {
+                            it.toVersionedRook()
+                        }
                     } else {
-                        it.toVersionedRook()
+                        if (it.isDirectory || !BookName.isSupportedFormatFileName(it.name)) {
+                            null
+                        } else {
+                            it.toVersionedRook()
+                        }
                     }
                 }
                 .toMutableList()
@@ -185,6 +196,13 @@ class WebdavRepo(
 
         return sardine.list(fileUrl).first().toVersionedRook()
     }
+
+    override fun openRepoFileInputStream(fileName: String): InputStream {
+        val fileUrl = Uri.withAppendedPath(uri, fileName).toUrl()
+        if (!sardine.exists(fileUrl))
+            throw FileNotFoundException()
+        return sardine.get(fileUrl)
+     }
 
     override fun storeBook(file: File?, fileName: String?): VersionedRook {
         val fileUrl = Uri.withAppendedPath(uri, fileName).toUrl()
