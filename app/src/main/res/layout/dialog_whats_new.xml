@@ -31,7 +31,7 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Allow selecting multiple notebooks" />
+            app:text="Support selecting multiple notebooks" />
 
         <TextView
             style="@style/WhatsNewVersion"
