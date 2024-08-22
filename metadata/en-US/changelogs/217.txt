@@ -1,0 +1,1 @@
+• Support the .orgzlyignore file in all repository types

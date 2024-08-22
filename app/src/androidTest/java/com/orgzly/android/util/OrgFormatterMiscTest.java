@@ -12,28 +12,28 @@ public class OrgFormatterMiscTest extends OrgFormatterTest {
     @Test
     public void testLinksMultiLine() {
         ParseResult spannable = new ParseResult(
-                "[[https://www.orgzly.com]]\n" +
-                "[[https://www.orgzly.com]]");
+                "[[https://www.orgzlyrevived.com]]\n" +
+                "[[https://www.orgzlyrevived.com]]");
 
-        assertThat(spannable.outputString, is("https://www.orgzly.com\nhttps://www.orgzly.com"));
+        assertThat(spannable.outputString, is("https://www.orgzlyrevived.com\nhttps://www.orgzlyrevived.com"));
 
         assertThat(spannable.foundSpans.length, is(2));
 
         assertThat(spannable.foundSpans[0].start, is(0));
-        assertThat(spannable.foundSpans[0].end, is(22));
+        assertThat(spannable.foundSpans[0].end, is(29));
         assertThat(spannable.foundSpans[0].span, instanceOf(UrlLinkSpan.class));
-        assertThat(spannable.foundSpans[0].url, is("https://www.orgzly.com"));
+        assertThat(spannable.foundSpans[0].url, is("https://www.orgzlyrevived.com"));
 
-        assertThat(spannable.foundSpans[1].start, is(23));
-        assertThat(spannable.foundSpans[1].end, is(45));
+        assertThat(spannable.foundSpans[1].start, is(30));
+        assertThat(spannable.foundSpans[1].end, is(59));
         assertThat(spannable.foundSpans[0].span, instanceOf(UrlLinkSpan.class));
-        assertThat(spannable.foundSpans[1].url, is("https://www.orgzly.com"));
+        assertThat(spannable.foundSpans[1].url, is("https://www.orgzlyrevived.com"));
     }
 
     @Test
     public void testLinksNamed() {
         ParseResult spannable = new ParseResult(
-                "[[https://www.orgzly.com][Orgzly]]");
+                "[[https://www.orgzlyrevived.com][Orgzly]]");
 
         assertThat(spannable.outputString, is("Orgzly"));
 
@@ -42,7 +42,7 @@ public class OrgFormatterMiscTest extends OrgFormatterTest {
         assertThat(spannable.foundSpans[0].start, is(0));
         assertThat(spannable.foundSpans[0].end, is(6));
         assertThat(spannable.foundSpans[0].span, instanceOf(UrlLinkSpan.class));
-        assertThat(spannable.foundSpans[0].url, is("https://www.orgzly.com"));
+        assertThat(spannable.foundSpans[0].url, is("https://www.orgzlyrevived.com"));
     }
 
     @Test
@@ -97,8 +97,8 @@ public class OrgFormatterMiscTest extends OrgFormatterTest {
 
     @Test
     public void testPlainLinkWithTrailingSlash() {
-        ParseResult spannable = new ParseResult("https://www.orgzly.com/");
-        assertThat(spannable.outputString, is("https://www.orgzly.com/"));
+        ParseResult spannable = new ParseResult("https://www.orgzlyrevived.com/");
+        assertThat(spannable.outputString, is("https://www.orgzlyrevived.com/"));
     }
 
 }

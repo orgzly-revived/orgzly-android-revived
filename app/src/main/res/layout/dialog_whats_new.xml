@@ -22,6 +22,16 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.26"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Support &lt;a href=&quot;https://www.orgzlyrevived.com/docs#orgc553add&quot;&gt;the .orgzlyignore file&lt;/a&gt; in all repo types" />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.25"
             tools:ignore="HardcodedText" />
 
