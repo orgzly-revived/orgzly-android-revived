@@ -25,7 +25,7 @@ public class OrgFormatterMiscTest extends OrgFormatterTest {
         assertThat(spannable.foundSpans[0].url, is("https://www.orgzlyrevived.com"));
 
         assertThat(spannable.foundSpans[1].start, is(30));
-        assertThat(spannable.foundSpans[1].end, is(52));
+        assertThat(spannable.foundSpans[1].end, is(59));
         assertThat(spannable.foundSpans[0].span, instanceOf(UrlLinkSpan.class));
         assertThat(spannable.foundSpans[1].url, is("https://www.orgzlyrevived.com"));
     }
