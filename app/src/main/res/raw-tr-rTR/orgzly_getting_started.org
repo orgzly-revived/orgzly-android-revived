@@ -52,11 +52,11 @@ Varsayılan olarak devre dışıdırlar ve Ayarlar'da etkinleştirilmeleri gerek
 
 ** Not bağlantılar içerebilir
 
-Bir telefon numarası çevirin (tel:555-0199), SMS gönderin (sms:555-0199), e-posta oluşturun (mailto:support@orgzly.com) veya bir web sayfasını ziyaret edin ([[http://www.orgzly.com][Orgzly.com]]).
+Bir telefon numarası çevirin (tel:555-0199), SMS gönderin (sms:555-0199), e-posta oluşturun (mailto:support@orgzlyrevived.com) veya bir web sayfasını ziyaret edin ([[http://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
 Ayrıca uygulama içindeki başka bir nota veya deftere bağlantı verilebilir.
 
-Daha fazla bilgi için http://www.orgzly.com/help#links adresine bakın.
+Daha fazla bilgi için http://www.orgzlyrevived.com/docs#links adresine bakın.
 
 ** Temel tipografik vurgu desteklenmekte
 
@@ -75,7 +75,7 @@ Değiştirmek için onay kutusunu tıklayın. Yeni bir öğe oluşturmak için s
 
 Notlar durumlara, etiketlere, planlanma durumuna veya bitiş tarihlerine vb. göre aranabilir.
 
-Daha fazla bilgi edinmek için http://www.orgzly.com/help#search adresine göz at.
+Daha fazla bilgi edinmek için http://www.orgzlyrevived.com/docs#search adresine göz at.
 
 ** Hızlı erişim için arama sorguları kaydedilebilir
 
