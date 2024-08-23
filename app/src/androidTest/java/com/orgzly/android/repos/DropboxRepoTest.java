@@ -137,7 +137,8 @@ public class DropboxRepoTest extends OrgzlyTest {
 
         assertEquals(1, repo.getBooks().size());
         assertEquals(repo.getUri() + "/notebook-renamed.org", repo.getBooks().get(0).getUri().toString());
-        assertEquals("notebook-renamed.org", BookName.getInstance(context, repo.getBooks().get(0)).getFileName());
+        assertEquals("notebook-renamed.org",
+                BookName.fromRook(repo.getBooks().get(0)).getFileName());
     }
 
     private void uploadFileToRepo(Uri repoUri, String fileName, String fileContents) throws IOException {

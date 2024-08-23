@@ -78,8 +78,8 @@ public class BookName {
         }
     }
 
-    public static BookName getInstance(Context context, Rook rook) {
-        return fromFileName(getFileName(context, rook.getUri()));
+    public static BookName fromRook(Rook rook) {
+        return fromFileName(getFileName(rook.getRepoUri(), rook.getUri()));
     }
 
     public static boolean isSupportedFormatFileName(String fileName) {

@@ -2,7 +2,6 @@ package com.orgzly.android.sync
 
 import androidx.core.net.toUri
 import com.orgzly.BuildConfig
-import com.orgzly.android.App
 import com.orgzly.android.BookFormat
 import com.orgzly.android.BookName
 import com.orgzly.android.NotesOrgExporter
@@ -64,8 +63,7 @@ object SyncUtils {
         val versionedRooks = getBooksFromAllRepos(dataRepository, repos)
 
         /* Group local and remote books by name. */
-        val namesakes = BookNamesake.getAll(
-            App.getAppContext(), localBooks, versionedRooks)
+        val namesakes = BookNamesake.getAll(localBooks, versionedRooks)
 
         /* If there is no local book, create empty "dummy" one. */
         for (namesake in namesakes.values) {

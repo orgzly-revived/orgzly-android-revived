@@ -1,7 +1,5 @@
 package com.orgzly.android.sync;
 
-import android.content.Context;
-
 import com.orgzly.android.BookName;
 import com.orgzly.android.db.entity.BookAction;
 import com.orgzly.android.db.entity.BookView;
@@ -37,7 +35,7 @@ public class BookNamesake {
     /**
      * Create links between each local book and each remote book with the same name.
      */
-    public static Map<String, BookNamesake> getAll(Context context, List<BookView> books, List<VersionedRook> versionedRooks) {
+    public static Map<String, BookNamesake> getAll(List<BookView> books, List<VersionedRook> versionedRooks) {
         Map<String, BookNamesake> namesakes = new HashMap<>();
 
         /* Create links from all local books first. */

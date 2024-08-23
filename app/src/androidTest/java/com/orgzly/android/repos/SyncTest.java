@@ -387,7 +387,7 @@ public class SyncTest extends OrgzlyTest {
         vrooks = repo.getBooks();
 
         assertEquals(1, vrooks.size());
-        assertEquals("Booky", BookName.getInstance(context, vrooks.get(0)).getName());
+        assertEquals("Booky", BookName.fromRook(vrooks.get(0)).getName());
 
         long mtime = vrooks.get(0).getMtime();
         String rev = vrooks.get(0).getRevision();
@@ -401,7 +401,7 @@ public class SyncTest extends OrgzlyTest {
         vrooks = repo.getBooks();
 
         assertEquals(1, vrooks.size());
-        assertEquals("BookyRenamed", BookName.getInstance(context, vrooks.get(0)).getName());
+        assertEquals("BookyRenamed", BookName.fromRook(vrooks.get(0)).getName());
         assertEquals("mock://repo-a/BookyRenamed.org", vrooks.get(0).getUri().toString());
         assertTrue(mtime < vrooks.get(0).getMtime());
         assertNotSame(rev, vrooks.get(0).getRevision());
@@ -431,7 +431,7 @@ public class SyncTest extends OrgzlyTest {
 
         assertEquals(1, repo.getBooks().size());
         assertEquals(repo.getUri() + "/notebook-renamed.org", repo.getBooks().get(0).getUri().toString());
-        assertEquals("notebook-renamed.org", BookName.getInstance(context, repo.getBooks().get(0)).getFileName());
+        assertEquals("notebook-renamed.org", BookName.fromRook(repo.getBooks().get(0)).getFileName());
 
         LocalStorage.deleteRecursive(new File(repoDir));
     }
