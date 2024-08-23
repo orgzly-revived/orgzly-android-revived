@@ -28,8 +28,8 @@ import java.util.Objects;
 /**
  * Using DocumentFile, for devices running Lollipop or later.
  */
-public class ContentRepo implements SyncRepo {
-    private static final String TAG = ContentRepo.class.getName();
+public class DocumentRepo implements SyncRepo {
+    private static final String TAG = DocumentRepo.class.getName();
 
     public static final String SCHEME = "content";
 
@@ -40,7 +40,7 @@ public class ContentRepo implements SyncRepo {
 
     private final DocumentFile repoDocumentFile;
 
-    public ContentRepo(RepoWithProps repoWithProps, Context context) {
+    public DocumentRepo(RepoWithProps repoWithProps, Context context) {
         Repo repo = repoWithProps.getRepo();
 
         this.repoId = repo.getId();

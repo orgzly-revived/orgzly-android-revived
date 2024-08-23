@@ -25,8 +25,10 @@ class RepoFactory @Inject constructor(
             type == RepoType.DIRECTORY.id ->
                 DirectoryRepo(repoWithProps, false)
 
-            type == RepoType.DOCUMENT.id ->
-                ContentRepo(repoWithProps, context)
+            type == RepoType.DOCUMENT.id -> DocumentRepo(
+                repoWithProps,
+                context
+            )
 
             type == RepoType.WEBDAV.id ->
                 WebdavRepo.getInstance(repoWithProps)
