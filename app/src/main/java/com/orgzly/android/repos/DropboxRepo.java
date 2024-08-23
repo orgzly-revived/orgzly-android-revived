@@ -3,11 +3,12 @@ package com.orgzly.android.repos;
 import android.content.Context;
 import android.net.Uri;
 
-import com.orgzly.android.util.UriUtils;
+import androidx.annotation.NonNull;
+
+import com.orgzly.android.BookName;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.io.InputStream;
 import java.util.List;
 
@@ -60,8 +61,11 @@ public class DropboxRepo implements SyncRepo {
 
     @Override
     public VersionedRook renameBook(Uri oldFullUri, String newName) throws IOException {
-        Uri toUri = UriUtils.getUriForNewName(oldFullUri, newName);
-        return client.move(repoUri, oldFullUri, toUri);
+        BookName oldBookName = BookName.fromFileName(BookName.getFileName(repoUri, oldFullUri));
+        String newRelativePath = BookName.fileName(newName, oldBookName.getFormat());
+        String newEncodedRelativePath = Uri.encode(newRelativePath, "/");
+        Uri newFullUri = repoUri.buildUpon().appendEncodedPath(newEncodedRelativePath).build();
+        return client.move(repoUri, oldFullUri, newFullUri);
     }
 
     @Override
@@ -71,12 +75,12 @@ public class DropboxRepo implements SyncRepo {
 
     /**
      * Intended for tests. The delete() method does not allow deleting directories.
-     * @param uri
      */
     public void deleteDirectory(Uri uri) throws IOException {
         client.deleteFolder(uri.getPath());
     }
 
+    @NonNull
     @Override
     public String toString() {
         return repoUri.toString();

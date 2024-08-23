@@ -343,6 +343,12 @@ public class DropboxClient {
     public VersionedRook move(Uri repoUri, Uri from, Uri to) throws IOException {
         linkedOrThrow();
 
+        /* Abort if destination file already exists. */
+        try {
+            if (dbxClient.files().getMetadata(to.getPath()) instanceof FileMetadata)
+                throw new IOException("File at " + to.getPath() + " already exists");
+        } catch (DbxException ignored) {}
+
         try {
             RelocationResult relocationRes = dbxClient.files().moveV2(from.getPath(), to.getPath());
             Metadata metadata = relocationRes.getMetadata();
