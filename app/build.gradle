@@ -38,9 +38,11 @@ android {
         viewBinding true
     }
 
-//    testOptions {
-//        execution 'ANDROIDX_TEST_ORCHESTRATOR'
-//    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 
     buildTypes {
         release {
@@ -91,12 +93,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = 11
+        jvmTarget = 17
     }
 
     packagingOptions {
@@ -149,7 +151,9 @@ dependencies {
 
     implementation "androidx.work:work-runtime-ktx:$versions.android_workmanager"
 
-    testImplementation "junit:junit:$versions.junit"
+    testImplementation "androidx.test.ext:junit:$versions.android_test_ext_junit"
+    testImplementation 'org.robolectric:robolectric:4.13'
+    testImplementation "io.github.atetzner:webdav-embedded-server:0.2.1"
 
     // AndroidX Test
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.android_test_espresso"
@@ -209,6 +213,8 @@ dependencies {
     implementation("androidx.biometric:biometric-ktx:$versions.biometric_ktx") {
         because 'Protect SSH key with biometric prompt'
     }
+    testImplementation(project(":shared-test"))
+    androidTestImplementation(project(":shared-test"))
 }
 
 repositories {

@@ -118,7 +118,6 @@ public class DirectoryRepoTest extends OrgzlyTest {
         assertNotNull(repo.getBooks());
     }
 
-    // TODO: Do the same for dropbox repo
     @Test
     public void testRenameBook() {
         BookView bookView;

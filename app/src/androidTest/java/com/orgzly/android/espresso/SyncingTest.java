@@ -75,29 +75,6 @@ public class SyncingTest extends OrgzlyTest {
     }
 
     @Test
-    public void testForceLoadingBookWithLink() {
-        Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
-        testUtils.setupRook(repo, "mock://repo-a/booky.org", "New content", "abc", 1234567890000L);
-        testUtils.setupBook("booky", "First book used for testing\n* Note A");
-        scenario = ActivityScenario.launch(MainActivity.class);
-
-        onView(allOf(withText("booky"), isDisplayed())).perform(longClick());
-        contextualToolbarOverflowMenu().perform(click());
-        onView(withText(R.string.books_context_menu_item_set_link)).perform(click());
-        onView(withText("mock://repo-a")).perform(click());
-
-        onView(allOf(withText("booky"), isDisplayed())).perform(longClick());
-        onView(withId(R.id.books_context_menu_force_load)).perform(click());
-        onView(withText(R.string.overwrite)).perform(click());
-        onBook(0, R.id.item_book_last_action)
-                .check(matches((withText(containsString(context.getString(R.string.force_loaded_from_uri, "mock://repo-a/booky.org"))))));
-
-        onView(allOf(withText("booky"), isDisplayed())).perform(click());
-        onView(allOf(withId(R.id.item_preface_text_view), withText("New content")))
-                .check(matches(isDisplayed()));
-    }
-
-    @Test
     public void testAutoSyncIsTriggeredAfterCreatingNote() {
         Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
         testUtils.setupRook(repo, "mock://repo-a/booky.org", "", "abc", 1234567890000L);
@@ -169,64 +146,6 @@ public class SyncingTest extends OrgzlyTest {
         onBook(0, R.id.item_book_sync_needed_icon).check(matches(not(isDisplayed())));
     }
 
-    @Test
-    public void testForceLoadingBookWithNoLinkNoRepos() {
-        testUtils.setupBook("booky", "First book used for testing\n* Note A");
-        testUtils.setupBook("book-two", "Second book used for testing\n* Note 1\n* Note 2");
-        scenario = ActivityScenario.launch(MainActivity.class);
-
-        onView(allOf(withText("booky"), isDisplayed())).perform(longClick());
-        onView(withId(R.id.books_context_menu_force_load)).perform(click());
-        onView(withText(R.string.overwrite)).perform(click());
-        onSnackbar().check(matches(withText(endsWith(context.getString(R.string.message_book_has_no_link)))));
-    }
-
-    @Test
-    public void testForceLoadingBookWithNoLinkSingleRepo() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
-        testUtils.setupBook("booky", "First book used for testing\n* Note A");
-        testUtils.setupBook("book-two", "Second book used for testing\n* Note 1\n* Note 2");
-        scenario = ActivityScenario.launch(MainActivity.class);
-
-        onView(allOf(withText("booky"), isDisplayed())).perform(longClick());
-        onView(withId(R.id.books_context_menu_force_load)).perform(click());
-        onView(withText(R.string.overwrite)).perform(click());
-        onSnackbar().check(matches(withText(endsWith(context.getString(R.string.message_book_has_no_link)))));
-    }
-
-    /* Books view was returning multiple entries for the same book, due to duplicates in encodings
-     * table. The last statement in this method will fail if there are multiple books matching.
-     */
-    @Test
-    public void testForceLoadingMultipleTimes() {
-        Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
-        testUtils.setupRook(repo, "mock://repo-a/book-one.org", "New content", "abc", 1234567890000L);
-        testUtils.setupBook("book-one", "First book used for testing\n* Note A");
-        testUtils.setupBook("book-two", "Second book used for testing\n* Note 1\n* Note 2");
-        scenario = ActivityScenario.launch(MainActivity.class);
-
-        onView(allOf(withText("book-one"), isDisplayed())).perform(longClick());
-        contextualToolbarOverflowMenu().perform(click());
-        onView(withText(R.string.books_context_menu_item_set_link)).perform(click());
-        onView(withText("mock://repo-a")).perform(click());
-
-        onView(allOf(withText("book-one"), isDisplayed())).perform(longClick());
-        onView(withId(R.id.books_context_menu_force_load)).perform(click());
-        onView(withText(R.string.overwrite)).perform(click());
-
-        onBook(0, R.id.item_book_last_action)
-                .check(matches(withText(endsWith(
-                        context.getString(R.string.force_loaded_from_uri, "mock://repo-a/book-one.org")))));
-
-        onView(allOf(withText("book-one"), isDisplayed())).perform(longClick());
-        onView(withId(R.id.books_context_menu_force_load)).perform(click());
-        onView(withText(R.string.overwrite)).perform(click());
-
-        onBook(0, R.id.item_book_last_action)
-                .check(matches(withText(endsWith(
-                        context.getString(R.string.force_loaded_from_uri, "mock://repo-a/book-one.org")))));
-    }
-
     /*
      * Book is left with out-of-sync icon when it's modified, then force-loaded.
      * This is because book's mtime was not being updated and was greater then remote book's mtime.
@@ -294,69 +213,6 @@ public class SyncingTest extends OrgzlyTest {
         // Check that the content of book 2 was restored
         onBook(1).perform(click());
         onNoteInBook(1, R.id.item_head_title_view).check(matches(withText("Note 1")));
-    }
-
-    @Test
-    public void testForceSavingBookWithNoLinkAndMultipleRepos() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo-b");
-        testUtils.setupBook("book-one", "First book used for testing\n* Note A");
-        testUtils.setupBook("book-two", "Second book used for testing\n* Note 1\n* Note 2");
-        scenario = ActivityScenario.launch(MainActivity.class);
-
-        onView(allOf(withText("book-one"), isDisplayed())).perform(longClick());
-        onView(withId(R.id.books_context_menu_force_save)).perform(click());
-        onView(withText(R.string.overwrite)).perform(click());
-
-        onBook(0, R.id.item_book_last_action)
-                .check(matches(withText(endsWith(
-                        context.getString(R.string.force_saving_failed, context.getString(R.string.multiple_repos))))));
-
-    }
-
-    @Test
-    public void testForceSavingBookWithNoLinkNoRepos() {
-        testUtils.setupBook("book-one", "First book used for testing\n* Note A");
-        testUtils.setupBook("book-two", "Second book used for testing\n* Note 1\n* Note 2");
-        scenario = ActivityScenario.launch(MainActivity.class);
-
-        onView(allOf(withText("book-one"), isDisplayed())).perform(longClick());
-        onView(withId(R.id.books_context_menu_force_save)).perform(click());
-        onView(withText(R.string.overwrite)).perform(click());
-        onBook(0, R.id.item_book_last_action)
-                .check(matches(withText(endsWith(
-                        context.getString(R.string.force_saving_failed, context.getString(R.string.no_repos))))));
-    }
-
-    @Test
-    public void testForceSavingBookWithNoLinkSingleRepo() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
-        testUtils.setupBook("book-one", "First book used for testing\n* Note A");
-        testUtils.setupBook("book-two", "Second book used for testing\n* Note 1\n* Note 2");
-        scenario = ActivityScenario.launch(MainActivity.class);
-
-        onView(allOf(withText("book-one"), isDisplayed())).perform(longClick());
-        onView(withId(R.id.books_context_menu_force_save)).perform(click());
-        onView(withText(R.string.overwrite)).perform(click());
-
-        onBook(0, R.id.item_book_last_action)
-                .check(matches(withText(endsWith(
-                        context.getString(R.string.force_saved_to_uri, "mock://repo-a/book-one.org")))));
-    }
-
-    @Test
-    public void testForceSavingBookWithLink() {
-        Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
-        testUtils.setupBook("booky", "First book used for testing\n* Note A", repo);
-        scenario = ActivityScenario.launch(MainActivity.class);
-
-        onView(allOf(withText("booky"), isDisplayed())).perform(longClick());
-        onView(withId(R.id.books_context_menu_force_save)).perform(click());
-        onView(withText(R.string.overwrite)).perform(click());
-
-        onBook(0, R.id.item_book_last_action)
-                .check(matches(withText(endsWith(
-                        context.getString(R.string.force_saved_to_uri, "mock://repo-a/booky.org")))));
     }
 
     @Test
@@ -782,21 +638,6 @@ public class SyncingTest extends OrgzlyTest {
 
         onBook(0, R.id.item_book_link_repo).check(matches(allOf(withText("mock://repo-a"), isDisplayed())));
         onBook(0, R.id.item_book_synced_url).check(matches(allOf(withText("mock://repo-a/booky.org.txt"), isDisplayed())));
-    }
-
-    @Test
-    public void testSpaceSeparatedBookName() {
-        Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
-        testUtils.setupRook(repo, "mock://repo-a/Book%20Name.org", "", "1abcdef", 1400067155);
-
-        scenario = ActivityScenario.launch(MainActivity.class);
-
-        sync();
-
-        onBook(0, R.id.item_book_synced_url)
-                .check(matches(allOf(withText("mock://repo-a/Book%20Name.org"), isDisplayed())));
-        onBook(0, R.id.item_book_last_action)
-                .check(matches(allOf(withText(endsWith("Loaded from mock://repo-a/Book%20Name.org")), isDisplayed())));
     }
 
     @Test
