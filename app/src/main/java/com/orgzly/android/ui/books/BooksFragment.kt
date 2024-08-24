@@ -312,7 +312,7 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
         }
 
     private fun exportBook(book: Book, format: BookFormat) {
-        val defaultFileName = BookName.fileName(book.name, format)
+        val defaultFileName = BookName.lastPathSegment(book.name, format)
         pickFileForBookExport.launch(defaultFileName)
     }
 
@@ -599,7 +599,7 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
     private fun guessBookNameFromUri(uri: Uri): String? {
         val fileName: String = BookName.getFileName(requireContext(), uri)
         return if (BookName.isSupportedFormatFileName(fileName)) {
-            val bookName = BookName.fromFileName(fileName)
+            val bookName = BookName.fromRepoRelativePath(fileName)
             bookName.name
         } else {
             null

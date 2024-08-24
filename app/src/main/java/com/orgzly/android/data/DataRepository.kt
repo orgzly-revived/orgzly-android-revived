@@ -80,9 +80,9 @@ class DataRepository @Inject constructor(
                     BookAction.Type.PROGRESS,
                     resources.getString(R.string.force_loading_from_uri, book.linkRepo.url)))
 
-            val fileName = BookName.getFileName(book)
+            val repoRelativePath = BookName.getRepoRelativePath(book)
 
-            val loadedBook = loadBookFromRepo(book.linkRepo.id, book.linkRepo.type, book.linkRepo.url, fileName)
+            val loadedBook = loadBookFromRepo(book.linkRepo.id, book.linkRepo.type, book.linkRepo.url, repoRelativePath)
 
             setBookLastActionAndSyncStatus(loadedBook!!.book.id, BookAction.forNow(
                     BookAction.Type.INFO,
@@ -103,7 +103,7 @@ class DataRepository @Inject constructor(
         val book = getBookView(bookId)
                 ?: throw IOException(resources.getString(R.string.book_does_not_exist_anymore))
 
-        val repositoryPath: String = BookName.getFileName(book)
+        val repositoryPath: String = BookName.getRepoRelativePath(book)
 
         try {
             /* Prefer link. */
@@ -386,7 +386,7 @@ class DataRepository @Inject constructor(
 
             /* Do not rename if the new filename will be ignored */
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                RepoUtils.ensureFileNameIsNotIgnored(repo, BookName.fileName(name, BookFormat.ORG))
+                RepoUtils.ensurePathIsNotIgnored(repo, BookName.repoRelativePath(name, BookFormat.ORG))
 
             val movedVrook = repo.renameBook(vrook.uri, name)
 
@@ -513,8 +513,8 @@ class DataRepository @Inject constructor(
             // Ensure that the resulting file name is not ignored in this repo
             val syncRepo = getRepoInstance(repo.id, repo.type, repo.url)
             val bookName = getBook(bookId)!!.name
-            val fileName = BookName.fileName(bookName, BookFormat.ORG)
-            RepoUtils.ensureFileNameIsNotIgnored(syncRepo, fileName)
+            val repoRelativePath = BookName.repoRelativePath(bookName, BookFormat.ORG)
+            RepoUtils.ensurePathIsNotIgnored(syncRepo, repoRelativePath)
         }
 
         db.bookLink().upsert(bookId, repoId)
@@ -1625,13 +1625,13 @@ class DataRepository @Inject constructor(
 
     @Throws(IOException::class)
     fun loadBookFromRepo(rook: Rook): BookView? {
-        val fileName = BookName.getFileName(rook.repoUri, rook.uri)
+        val repoRelativePath = BookName.getRepoRelativePath(rook.repoUri, rook.uri)
 
-        return loadBookFromRepo(rook.repoId, rook.repoType, rook.repoUri.toString(), fileName)
+        return loadBookFromRepo(rook.repoId, rook.repoType, rook.repoUri.toString(), repoRelativePath)
     }
 
     @Throws(IOException::class)
-    fun loadBookFromRepo(repoId: Long, repoType: RepoType, repoUrl: String, fileName: String): BookView? {
+    fun loadBookFromRepo(repoId: Long, repoType: RepoType, repoUrl: String, repoRelativePath: String): BookView? {
         val book: BookView?
 
         val repo = getRepoInstance(repoId, repoType, repoUrl)
@@ -1639,9 +1639,9 @@ class DataRepository @Inject constructor(
         val tmpFile = getTempBookFile()
         try {
             /* Download from repo. */
-            val vrook = repo.retrieveBook(fileName, tmpFile)
+            val vrook = repo.retrieveBook(repoRelativePath, tmpFile)
 
-            val bookName = BookName.fromFileName(fileName)
+            val bookName = BookName.fromRepoRelativePath(repoRelativePath)
 
             /* Store from file to Shelf. */
             book = loadBookFromFile(bookName.name, bookName.format, tmpFile, vrook)

@@ -66,6 +66,22 @@ public class MiscUtils {
         return fileData.toString();
     }
 
+    public static String readStringFromDocumentFile(DocumentFile file) throws IOException {
+        ContentResolver contentResolver = App.getAppContext().getContentResolver();
+        StringBuilder fileData = new StringBuilder();
+        try (InputStream inputStream = contentResolver.openInputStream(file.getUri())) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                char[] buf = new char[1024];
+                int numRead;
+                while ((numRead = reader.read(buf)) != -1) {
+                    String readData = String.valueOf(buf, 0, numRead);
+                    fileData.append(readData);
+                }
+            }
+        }
+        return fileData.toString();
+    }
+
     public static void writeStringToFile(String str, File file) throws FileNotFoundException {
         try (PrintWriter out = new PrintWriter(file)) {
             out.write(str);

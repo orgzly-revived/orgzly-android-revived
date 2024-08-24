@@ -63,7 +63,7 @@ public class DirectoryRepoTest extends OrgzlyTest {
 
         assertEquals(1, books.size());
         assertEquals("booky", BookName.fromRook(books.get(0)).getName());
-        assertEquals("booky.org", BookName.fromRook(books.get(0)).getFileName());
+        assertEquals("booky.org", BookName.fromRook(books.get(0)).getRepoRelativePath());
         assertEquals(repoUriString, books.get(0).getRepoUri().toString());
         assertEquals(repoUriString + "/booky.org", books.get(0).getUri().toString());
     }
@@ -80,7 +80,7 @@ public class DirectoryRepoTest extends OrgzlyTest {
 
         assertEquals(1, books.size());
         assertEquals("03", BookName.fromRook(books.get(0)).getName());
-        assertEquals("03.org", BookName.fromRook(books.get(0)).getFileName());
+        assertEquals("03.org", BookName.fromRook(books.get(0)).getRepoRelativePath());
         assertEquals(13, books.get(0).getRepoId());
         assertEquals(repoUriString, books.get(0).getRepoUri().toString());
         assertEquals(repoUriString + "/03.org", books.get(0).getUri().toString());

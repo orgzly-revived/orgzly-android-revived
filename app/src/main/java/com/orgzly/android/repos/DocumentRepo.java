@@ -115,17 +115,17 @@ public class DocumentRepo implements SyncRepo {
         while (!directoryNodes.isEmpty()) {
             DocumentFile currentDir = directoryNodes.remove(0);
             for (DocumentFile node : currentDir.listFiles()) {
-                String relativeFileName = BookName.getFileName(repoUri, node.getUri());
+                String repoRelativePath = BookName.getRepoRelativePath(repoUri, node.getUri());
                 if (node.isDirectory()) {
                     if (Build.VERSION.SDK_INT >= 26) {
-                        if (ignores.isPathIgnored(relativeFileName, true)) {
+                        if (ignores.isPathIgnored(repoRelativePath, true)) {
                             continue;
                         }
                     }
                     directoryNodes.add(node);
                 } else {
                     if (Build.VERSION.SDK_INT >= 26) {
-                        if (ignores.isPathIgnored(relativeFileName, false)) {
+                        if (ignores.isPathIgnored(repoRelativePath, false)) {
                             continue;
                         }
                     } result.add(node);
@@ -135,19 +135,19 @@ public class DocumentRepo implements SyncRepo {
         return result;
     }
 
-    private DocumentFile getDocumentFileFromFileName(String fileName) {
-        String fullUri = repoDocumentFile.getUri() + Uri.encode("/" + fileName);
+    private DocumentFile getDocumentFileFromPath(String path) {
+        String fullUri = repoDocumentFile.getUri() + Uri.encode("/" + path);
         return DocumentFile.fromSingleUri(context, Uri.parse(fullUri));
     }
 
     @Override
-    public VersionedRook retrieveBook(String fileName, File destinationFile) throws IOException {
-        DocumentFile sourceFile = getDocumentFileFromFileName(fileName);
+    public VersionedRook retrieveBook(String repoRelativePath, File destinationFile) throws IOException {
+        DocumentFile sourceFile = getDocumentFileFromPath(repoRelativePath);
         if (sourceFile == null) {
-            throw new FileNotFoundException("Book " + fileName + " not found in " + repoUri);
+            throw new FileNotFoundException("Book " + repoRelativePath + " not found in " + repoUri);
         } else {
             if (BuildConfig.LOG_DEBUG) {
-                LogUtils.d(TAG, "Found DocumentFile for " + fileName + ": " + sourceFile.getUri());
+                LogUtils.d(TAG, "Found DocumentFile for " + repoRelativePath + ": " + sourceFile.getUri());
             }
         }
 
@@ -163,27 +163,27 @@ public class DocumentRepo implements SyncRepo {
     }
 
     @Override
-    public InputStream openRepoFileInputStream(String fileName) throws IOException {
-        DocumentFile sourceFile = getDocumentFileFromFileName(fileName);
+    public InputStream openRepoFileInputStream(String repoRelativePath) throws IOException {
+        DocumentFile sourceFile = getDocumentFileFromPath(repoRelativePath);
         if (!sourceFile.exists()) throw new FileNotFoundException();
         return context.getContentResolver().openInputStream(sourceFile.getUri());
     }
 
     @Override
-    public VersionedRook storeBook(File file, String path) throws IOException {
+    public VersionedRook storeBook(File file, String repoRelativePath) throws IOException {
         if (!file.exists()) {
             throw new FileNotFoundException("File " + file + " does not exist");
         }
-        DocumentFile destinationFile = getDocumentFileFromFileName(path);
-        if (path.contains("/")) {
-            DocumentFile destinationDir = ensureDirectoryHierarchy(path);
-            String fileName = Uri.parse(path).getLastPathSegment();
+        DocumentFile destinationFile = getDocumentFileFromPath(repoRelativePath);
+        if (repoRelativePath.contains("/")) {
+            DocumentFile destinationDir = ensureDirectoryHierarchy(repoRelativePath);
+            String fileName = Uri.parse(repoRelativePath).getLastPathSegment();
             if (destinationDir.findFile(fileName) == null) {
                 destinationFile = destinationDir.createFile("text/*", fileName);
             }
         } else {
             if (!destinationFile.exists()) {
-                repoDocumentFile.createFile("text/*", path);
+                repoDocumentFile.createFile("text/*", repoRelativePath);
             }
         }
 
@@ -239,8 +239,8 @@ public class DocumentRepo implements SyncRepo {
                         ""
                 )
         );
-        BookName oldBookName = BookName.fromFileName(BookName.getFileName(repoUri, oldFullUri));
-        String newRelativePath = BookName.fileName(newName, oldBookName.getFormat());
+        BookName oldBookName = BookName.fromRepoRelativePath(BookName.getRepoRelativePath(repoUri, oldFullUri));
+        String newRelativePath = BookName.repoRelativePath(newName, oldBookName.getFormat());
         String newDocFileName = Uri.parse(newRelativePath).getLastPathSegment();
         DocumentFile newDir;
         Uri newUri = oldFullUri;

@@ -431,7 +431,7 @@ public class SyncTest extends OrgzlyTest {
 
         assertEquals(1, repo.getBooks().size());
         assertEquals(repo.getUri() + "/notebook-renamed.org", repo.getBooks().get(0).getUri().toString());
-        assertEquals("notebook-renamed.org", BookName.fromRook(repo.getBooks().get(0)).getFileName());
+        assertEquals("notebook-renamed.org", BookName.fromRook(repo.getBooks().get(0)).getRepoRelativePath());
 
         LocalStorage.deleteRecursive(new File(repoDir));
     }

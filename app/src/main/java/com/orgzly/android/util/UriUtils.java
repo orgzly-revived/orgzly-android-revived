@@ -47,10 +47,10 @@ public class UriUtils {
      * Replaces the name part of the uri, leaving everything (including the extension) the same.
      */
     public static Uri getUriForNewName(Uri uri, String name) {
-        BookName bookName = BookName.fromFileName(uri.getLastPathSegment());
+        BookName bookName = BookName.fromRepoRelativePath(uri.getLastPathSegment());
         BookFormat format = bookName.getFormat();
 
-        String newFilename = BookName.fileName(name, format);
+        String newFilename = BookName.repoRelativePath(name, format);
 
         return UriUtils.dirUri(uri) // Old Uri without file name
                 .buildUpon()

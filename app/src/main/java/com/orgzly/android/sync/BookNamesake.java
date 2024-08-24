@@ -47,8 +47,8 @@ public class BookNamesake {
 
         /* Set repo books. */
         for (VersionedRook book: versionedRooks) {
-            String fileName = BookName.getFileName(book.getRepoUri(), book.getUri());
-            String name = BookName.fromFileName(fileName).getName();
+            String repoRelativePath = BookName.getRepoRelativePath(book.getRepoUri(), book.getUri());
+            String name = BookName.fromRepoRelativePath(repoRelativePath).getName();
 
             BookNamesake pair = namesakes.get(name);
             if (pair == null) {

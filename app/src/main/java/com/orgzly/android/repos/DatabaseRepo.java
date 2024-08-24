@@ -48,24 +48,24 @@ public class DatabaseRepo implements SyncRepo {
     }
 
     @Override
-    public VersionedRook retrieveBook(String fileName, File file) {
-        Uri uri = repoUri.buildUpon().appendPath(fileName).build();
+    public VersionedRook retrieveBook(String repoRelativePath, File file) {
+        Uri uri = repoUri.buildUpon().appendPath(repoRelativePath).build();
         return dbRepo.retrieveBook(repoId, repoUri, uri, file);
     }
 
     @Override
-    public InputStream openRepoFileInputStream(String fileName) throws IOException {
+    public InputStream openRepoFileInputStream(String repoRelativePath) throws IOException {
         throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
-    public VersionedRook storeBook(File file, String fileName) throws IOException {
+    public VersionedRook storeBook(File file, String repoRelativePath) throws IOException {
         String content = MiscUtils.readStringFromFile(file);
 
         String rev = "MockedRevision-" + System.currentTimeMillis();
         long mtime = System.currentTimeMillis();
 
-        Uri uri = repoUri.buildUpon().appendPath(fileName).build();
+        Uri uri = repoUri.buildUpon().appendPath(repoRelativePath).build();
 
         VersionedRook vrook = new VersionedRook(repoId, RepoType.MOCK, repoUri, uri, rev, mtime);
 

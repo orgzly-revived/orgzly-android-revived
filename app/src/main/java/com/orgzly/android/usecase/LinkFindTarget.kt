@@ -39,7 +39,7 @@ class LinkFindTarget(val path: String) : UseCase() {
         val file = File(path)
 
         return if (!hasParent(file) && BookName.isSupportedFormatFileName(file.name)) {
-            BookName.fromFileName(file.name)
+            BookName.fromRepoRelativePath(file.name)
         } else {
             null
         }

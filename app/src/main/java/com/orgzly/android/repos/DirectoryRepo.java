@@ -124,8 +124,8 @@ public class DirectoryRepo implements SyncRepo {
     }
 
     @Override
-    public VersionedRook retrieveBook(String fileName, File destinationFile) throws IOException {
-        Uri uri = repoUri.buildUpon().appendPath(fileName).build();
+    public VersionedRook retrieveBook(String repoRelativePath, File destinationFile) throws IOException {
+        Uri uri = repoUri.buildUpon().appendPath(repoRelativePath).build();
 
         String path = uri.getPath();
 
@@ -145,17 +145,17 @@ public class DirectoryRepo implements SyncRepo {
     }
 
     @Override
-    public InputStream openRepoFileInputStream(String fileName) throws IOException {
-        return new FileInputStream(repoUri.buildUpon().appendPath(fileName).build().getPath());
+    public InputStream openRepoFileInputStream(String repoRelativePath) throws IOException {
+        return new FileInputStream(repoUri.buildUpon().appendPath(repoRelativePath).build().getPath());
     }
 
     @Override
-    public VersionedRook storeBook(File file, String fileName) throws IOException {
+    public VersionedRook storeBook(File file, String repoRelativePath) throws IOException {
         if (!file.exists()) {
             throw new FileNotFoundException("File " + file + " does not exist");
         }
 
-        File destinationFile = new File(mDirectory, fileName);
+        File destinationFile = new File(mDirectory, repoRelativePath);
 
         File destinationFileParent = destinationFile.getParentFile();
 
@@ -172,7 +172,7 @@ public class DirectoryRepo implements SyncRepo {
         String rev = String.valueOf(destinationFile.lastModified());
         long mtime = destinationFile.lastModified();
 
-        Uri uri = repoUri.buildUpon().appendPath(fileName).build();
+        Uri uri = repoUri.buildUpon().appendPath(repoRelativePath).build();
 
         return new VersionedRook(repoId, RepoType.DIRECTORY, repoUri, uri, rev, mtime);
     }

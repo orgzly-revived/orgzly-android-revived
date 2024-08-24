@@ -44,7 +44,7 @@ class RepoIgnoreNode(repo: SyncRepo) : IgnoreNode() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun ensureFileNameIsNotIgnored(filePath: String) {
+    fun ensurePathIsNotIgnored(filePath: String) {
         if (isPathIgnored(filePath, false)) {
             throw IOException(
                 App.getAppContext().getString(
