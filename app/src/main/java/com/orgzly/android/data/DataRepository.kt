@@ -45,6 +45,7 @@ import com.orgzly.org.OrgActiveTimestamps
 import com.orgzly.org.OrgFile
 import com.orgzly.org.OrgFileSettings
 import com.orgzly.org.OrgProperties
+import com.orgzly.org.OrgProperty
 import com.orgzly.org.datetime.OrgDateTime
 import com.orgzly.org.datetime.OrgRange
 import com.orgzly.org.parser.OrgNestedSetParserListener
@@ -720,7 +721,7 @@ class DataRepository @Inject constructor(
             }
 
             insertNoteProperties(lastNoteId, properties)
-            insertNoteEvents(lastNoteId, note.title, note.content)
+            insertNoteEvents(lastNoteId, note.title, note.content, properties)
 
             idsMap[entry.note.id] = lastNoteId
 
@@ -1148,7 +1149,7 @@ class DataRepository @Inject constructor(
                         getOrgRangeId(scl.closed))
 
                     if (scl.isShifted) {
-                        replaceNoteEvents(note.noteId, title, content)
+                        replaceNoteEvents(note.noteId, title, content, null)
                     }
                 }
 
@@ -1499,7 +1500,7 @@ class DataRepository @Inject constructor(
         val noteId = db.note().insert(noteEntity)
 
         replaceNoteProperties(noteId, notePayload.properties)
-        replaceNoteEvents(noteId, notePayload.title, notePayload.content)
+        replaceNoteEvents(noteId, notePayload.title, notePayload.content, notePayload.properties)
 
         db.noteAncestor().insertAncestorsForNote(noteId)
 
@@ -1549,7 +1550,7 @@ class DataRepository @Inject constructor(
             updateBookIsModified(note.position.bookId, true)
 
             replaceNoteProperties(noteId, notePayload.properties)
-            replaceNoteEvents(noteId, notePayload.title, notePayload.content)
+            replaceNoteEvents(noteId, notePayload.title, notePayload.content, notePayload.properties)
 
             val newNote = note.copy(
                     title = notePayload.title,
@@ -1589,19 +1590,28 @@ class DataRepository @Inject constructor(
         return db.noteEvent().get(noteId)
     }
 
-    private fun replaceNoteEvents(noteId: Long, title: String, content: String?) {
+    private fun replaceNoteEvents(noteId: Long, title: String, content: String?, properties: OrgProperties?) {
         db.noteEvent().deleteForNote(noteId)
 
-        insertNoteEvents(noteId, title, content)
+        insertNoteEvents(noteId, title, content, properties)
     }
 
-    private fun insertNoteEvents(noteId: Long, title: String, content: String?) {
+    /**
+     * Events may come from the note's title, content or properties
+     */
+    private fun insertNoteEvents(noteId: Long, title: String, content: String?, properties: OrgProperties?) {
         if (title.isNotEmpty()) {
             parseAndInsertEvents(noteId, title)
         }
 
         if (!content.isNullOrEmpty()) {
             parseAndInsertEvents(noteId, content)
+        }
+
+        if (properties != null && !properties.isEmpty) {
+            for (property: OrgProperty in properties.all) {
+                parseAndInsertEvents(noteId, property.value)
+            }
         }
     }
 
@@ -1802,7 +1812,7 @@ class DataRepository @Inject constructor(
                             val noteId = db.note().insert(note)
 
                             insertNoteProperties(noteId, node.head.properties)
-                            insertNoteEvents(noteId, note.title, note.content)
+                            insertNoteEvents(noteId, note.title, note.content, node.head.properties)
 
                             /*
                              * Update notes' parent IDs and insert ancestors.
