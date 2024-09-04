@@ -1,5 +1,9 @@
 package com.orgzly.android.widgets;
 
+import static android.app.ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED;
+import static android.app.ActivityOptions.makeBasic;
+
+import android.app.ActivityOptions;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -9,6 +13,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -273,7 +279,15 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
         PendingIntent pi = ActivityUtils.mainActivityPendingIntent(context, bookId, noteId);
         try {
-            pi.send();
+            if (Build.VERSION.SDK_INT >= 34) {
+                Bundle options = ActivityOptions.makeBasic()
+                        .setPendingIntentBackgroundActivityStartMode(
+                                MODE_BACKGROUND_ACTIVITY_START_ALLOWED
+                        ).toBundle();
+                pi.send(options);
+            } else {
+                pi.send();
+            }
         } catch (PendingIntent.CanceledException e) {
             Log.e(TAG, "Error opening note: " + e);
         }
