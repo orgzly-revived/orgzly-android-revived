@@ -22,6 +22,23 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.27"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Support subfolders in all repository types" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Leverage timestamps in PROPERTIES drawers" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix race condition when deleting multiple notebooks" />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.26"
             tools:ignore="HardcodedText"
             android:autoLink="web" />
