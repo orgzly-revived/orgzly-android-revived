@@ -1,16 +1,25 @@
 package com.orgzly.android.espresso
 
-import android.os.SystemClock
 import android.icu.util.Calendar
+import android.os.SystemClock
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.orgzly.R
 import com.orgzly.android.OrgzlyTest
-import com.orgzly.android.espresso.util.EspressoUtils.*
+import com.orgzly.android.espresso.util.EspressoUtils.onBook
+import com.orgzly.android.espresso.util.EspressoUtils.onItemInAgenda
+import com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook
+import com.orgzly.android.espresso.util.EspressoUtils.onNoteInSearch
+import com.orgzly.android.espresso.util.EspressoUtils.onNotesInAgenda
+import com.orgzly.android.espresso.util.EspressoUtils.onNotesInSearch
+import com.orgzly.android.espresso.util.EspressoUtils.recyclerViewItemCount
+import com.orgzly.android.espresso.util.EspressoUtils.searchForTextCloseKeyboard
 import com.orgzly.android.ui.main.MainActivity
 import com.orgzly.org.datetime.OrgDateTime
 import org.hamcrest.Matchers.not
@@ -117,6 +126,7 @@ class NoteEventsTest : OrgzlyTest() {
         scenario = ActivityScenario.launch(MainActivity::class.java)
 
         searchForTextCloseKeyboard("ad.1")
+        SystemClock.sleep(500)
         onNotesInAgenda().check(matches(recyclerViewItemCount(2)))
     }
 

@@ -71,6 +71,10 @@ buildscript {
 
     versions.biometric_ktx = '1.2.0-alpha04'
 
+    versions.robolectric = '4.13'
+
+    versions.webdav_embedded_server = '0.2.1'
+
     ext.versions = versions
 
     repositories {

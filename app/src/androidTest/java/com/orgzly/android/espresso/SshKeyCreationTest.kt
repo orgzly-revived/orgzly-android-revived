@@ -40,13 +40,13 @@ class SshKeyCreationTest(private val param: Parameter) : OrgzlyTest() {
         Assume.assumeFalse(BuildConfig.IS_GIT_REMOVED);
         ActivityScenario.launch(MainActivity::class.java).use {
             EspressoUtils.onActionItemClick(R.id.activity_action_settings, R.string.settings)
-            EspressoUtils.clickSetting(null, R.string.app)
-            EspressoUtils.clickSetting(null, R.string.developer_options)
-            EspressoUtils.clickSetting(null, R.string.git_repository_type)
+            EspressoUtils.clickSetting(R.string.app)
+            EspressoUtils.clickSetting(R.string.developer_options)
+            EspressoUtils.clickSetting(R.string.git_repository_type)
             pressBack()
             pressBack()
-            EspressoUtils.clickSetting(null, R.string.sync)
-            EspressoUtils.clickSetting(null, R.string.ssh_keygen_preference_title)
+            EspressoUtils.clickSetting(R.string.sync)
+            EspressoUtils.clickSetting(R.string.ssh_keygen_preference_title)
             onView(withText(param.keyType)).perform(click())
             onView(withText(R.string.ssh_keygen_generate)).perform(click())
             getInstrumentation().waitForIdleSync()

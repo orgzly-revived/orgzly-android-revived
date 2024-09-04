@@ -34,7 +34,7 @@ public class LocalStorage {
      * @throws IOException if external directory is not available
      */
     public File getExportFile(String name, BookFormat format) throws IOException {
-        return new File(downloadsDirectory(), BookName.fileName(name, format));
+        return new File(downloadsDirectory(), BookName.repoRelativePath(name, format));
     }
 
     /**

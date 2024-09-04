@@ -136,8 +136,8 @@ public class CreatedAtPropertyTest extends OrgzlyTest {
 
     private void enableCreatedAt() {
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
-        clickSetting("prefs_screen_sync", R.string.sync);
-        clickSetting("pref_key_is_created_at_added", R.string.use_created_at_property);
+        clickSetting(R.string.sync);
+        clickSetting(R.string.use_created_at_property);
         onView(withText(R.string.yes)).perform(click());
         pressBack();
         pressBack();
@@ -145,8 +145,8 @@ public class CreatedAtPropertyTest extends OrgzlyTest {
 
     private void changeCreatedAtProperty(String propName) {
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
-        clickSetting("prefs_screen_sync", R.string.sync);
-        clickSetting("pref_key_created_at_property", R.string.created_at_property);
+        clickSetting(R.string.sync);
+        clickSetting(R.string.created_at_property);
         onView(instanceOf(EditText.class)).perform(replaceTextCloseKeyboard(propName));
         onView(withText(android.R.string.ok)).perform(click());
         onView(withText(R.string.yes)).perform(click());

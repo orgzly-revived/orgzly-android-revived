@@ -32,8 +32,8 @@ public class RepoUtils {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static void ensureFileNameIsNotIgnored(SyncRepo repo, String fileName) {
-        new RepoIgnoreNode(repo).ensureFileNameIsNotIgnored(fileName);
+    public static void ensurePathIsNotIgnored(SyncRepo repo, String repoRelativePath) {
+        new RepoIgnoreNode(repo).ensurePathIsNotIgnored(repoRelativePath);
     }
 }
 

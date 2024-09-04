@@ -60,11 +60,11 @@ public class GitFileSynchronizer {
 
     public void retrieveLatestVersionOfFile(
             String repositoryPath, File destination) throws IOException {
-        MiscUtils.copyFile(repoDirectoryFile(repositoryPath), destination);
+        MiscUtils.copyFile(workTreeFile(repositoryPath), destination);
     }
 
     public InputStream openRepoFileInputStream(String repositoryPath) throws FileNotFoundException {
-        return new FileInputStream(repoDirectoryFile(repositoryPath));
+        return new FileInputStream(workTreeFile(repositoryPath));
     }
 
     private void fetch() throws IOException {
@@ -119,13 +119,13 @@ public class GitFileSynchronizer {
     }
 
     public boolean updateAndCommitFileFromRevisionAndMerge(
-            File sourceFile, String repositoryPath,
+            File sourceFile, String repoRelativePath,
             ObjectId fileRevision, RevCommit revision)
             throws IOException {
         ensureRepoIsClean();
-        if (updateAndCommitFileFromRevision(sourceFile, repositoryPath, fileRevision)) {
+        if (updateAndCommitFileFromRevision(sourceFile, repoRelativePath, fileRevision)) {
             if (BuildConfig.LOG_DEBUG) {
-                LogUtils.d(TAG, String.format("File '%s' committed without conflicts.", repositoryPath));
+                LogUtils.d(TAG, String.format("File '%s' committed without conflicts.", repoRelativePath));
             }
             return true;
         }
@@ -134,7 +134,7 @@ public class GitFileSynchronizer {
         if (BuildConfig.LOG_DEBUG) {
             LogUtils.d(TAG, String.format("originalBranch is set to %s", originalBranch));
         }
-        String mergeBranch = createMergeBranchName(repositoryPath, fileRevision);
+        String mergeBranch = createMergeBranchName(repoRelativePath, fileRevision);
         if (BuildConfig.LOG_DEBUG) {
             LogUtils.d(TAG, String.format("originalBranch is set to %s", originalBranch));
             LogUtils.d(TAG, String.format("Temporary mergeBranch is set to %s", mergeBranch));
@@ -157,12 +157,12 @@ public class GitFileSynchronizer {
                     setStartPoint(branchStartPoint).setName(mergeBranch).call();
             if (!currentHead().equals(branchStartPoint))
                 throw new IOException("Failed to create new branch at " + branchStartPoint.toString());
-            if (!updateAndCommitFileFromRevision(sourceFile, repositoryPath, fileRevision))
+            if (!updateAndCommitFileFromRevision(sourceFile, repoRelativePath, fileRevision))
                 throw new IOException(
                         String.format(
                                 "The provided file revision %s for %s is " +
                                         "not the same as the one found in the provided commit %s.",
-                                fileRevision.toString(), repositoryPath, revision.toString()));
+                                fileRevision.toString(), repoRelativePath, revision.toString()));
             mergeSucceeded = doMerge(mergeTarget);
             if (mergeSucceeded) {
                 RevCommit merged = currentHead();
@@ -287,11 +287,11 @@ public class GitFileSynchronizer {
     }
 
     public boolean updateAndCommitFileFromRevision(
-            File sourceFile, String repositoryPath, ObjectId revision) throws IOException {
+            File sourceFile, String repoRelativePath, ObjectId revision) throws IOException {
         ensureRepoIsClean();
-        ObjectId repositoryRevision = getFileRevision(repositoryPath, currentHead());
+        ObjectId repositoryRevision = getFileRevision(repoRelativePath, currentHead());
         if (repositoryRevision.equals(revision)) {
-            updateAndCommitFile(sourceFile, repositoryPath);
+            updateAndCommitFile(sourceFile, repoRelativePath);
             return true;
         }
         return false;
@@ -377,7 +377,7 @@ public class GitFileSynchronizer {
 
     public void updateAndCommitExistingFile(File sourceFile, String repositoryPath) throws IOException {
         ensureRepoIsClean();
-        File destinationFile = repoDirectoryFile(repositoryPath);
+        File destinationFile = workTreeFile(repositoryPath);
         if (!destinationFile.exists()) {
             throw new FileNotFoundException("File " + destinationFile + " does not exist");
         }
@@ -392,21 +392,32 @@ public class GitFileSynchronizer {
      */
     public void addAndCommitNewFile(File sourceFile, String repositoryPath) throws IOException {
         ensureRepoIsClean();
-        File destinationFile = repoDirectoryFile(repositoryPath);
+        File destinationFile = workTreeFile(repositoryPath);
         if (destinationFile.exists()) {
             throw new IOException("Can't add new file " + repositoryPath + " that already exists.");
         }
+        ensureDirectoryHierarchy(repositoryPath);
         updateAndCommitFile(sourceFile, repositoryPath);
     }
 
+    private void ensureDirectoryHierarchy(String repositoryPath) throws IOException {
+        if (repositoryPath.contains("/")) {
+            File targetDir = workTreeFile(repositoryPath).getParentFile();
+            if (!(targetDir.exists() || targetDir.mkdirs())) {
+                throw new IOException("The directory " + targetDir.getAbsolutePath() + " could " +
+                        "not be created");
+            }
+        }
+    }
+
     private void updateAndCommitFile(
-            File sourceFile, String repositoryPath) throws IOException {
-        File destinationFile = repoDirectoryFile(repositoryPath);
+            File sourceFile, String repoRelativePath) throws IOException {
+        File destinationFile = workTreeFile(repoRelativePath);
         MiscUtils.copyFile(sourceFile, destinationFile);
         try {
-            git.add().addFilepattern(repositoryPath).call();
+            git.add().addFilepattern(repoRelativePath).call();
             if (!gitRepoIsClean())
-                commit(String.format("Orgzly update: %s", repositoryPath));
+                commit(String.format("Orgzly update: %s", repoRelativePath));
         } catch (GitAPIException e) {
             throw new IOException("Failed to commit changes.");
         }
@@ -432,11 +443,11 @@ public class GitFileSynchronizer {
     }
 
     public RevCommit getLastCommitOfFile(Uri uri) throws GitAPIException {
-        String fileName = uri.toString().replaceFirst("^/", "");
-        return git.log().setMaxCount(1).addPath(fileName).call().iterator().next();
+        String repoRelativePath = uri.toString().replaceFirst("^/", "");
+        return git.log().setMaxCount(1).addPath(repoRelativePath).call().iterator().next();
     }
 
-    public String repoPath() {
+    public String workTreePath() {
         return git.getRepository().getWorkTree().getAbsolutePath();
     }
 
@@ -454,8 +465,8 @@ public class GitFileSynchronizer {
             throw new IOException("Refusing to update because there are uncommitted changes.");
     }
 
-    public File repoDirectoryFile(String filePath) {
-        return new File(repoPath(), filePath);
+    public File workTreeFile(String filePath) {
+        return new File(workTreePath(), filePath);
     }
 
     public boolean isEmptyRepo() throws IOException{
@@ -469,37 +480,38 @@ public class GitFileSynchronizer {
 
     public boolean deleteFileFromRepo(Uri uri) throws IOException {
         if (mergeWithRemote()) {
-            String fileName = uri.toString().replaceFirst("^/", "");
+            String repoRelativePath = uri.toString().replaceFirst("^/", "");
             try {
-                git.rm().addFilepattern(fileName).call();
+                git.rm().addFilepattern(repoRelativePath).call();
                 if (!gitRepoIsClean())
-                    commit(String.format("Orgzly deletion: %s", fileName));
+                    commit(String.format("Orgzly deletion: %s", repoRelativePath));
                 return true;
             } catch (GitAPIException e) {
-                throw new IOException(String.format("Failed to commit deletion of %s, %s", fileName, e.getMessage()));
+                throw new IOException(String.format("Failed to commit deletion of %s, %s", repoRelativePath, e.getMessage()));
             }
         } else {
             return false;
         }
     }
 
-    public boolean renameFileInRepo(String oldFileName, String newFileName) throws IOException {
+    public boolean renameFileInRepo(String oldPath, String newPath) throws IOException {
         ensureRepoIsClean();
         if (mergeWithRemote()) {
-            File oldFile = repoDirectoryFile(oldFileName);
-            File newFile = repoDirectoryFile(newFileName);
+            File oldFile = workTreeFile(oldPath);
+            File newFile = workTreeFile(newPath);
             // Abort if destination file exists
             if (newFile.exists()) {
-                throw new IOException("Can't add new file " + newFileName + " that already exists.");
+                throw new IOException("Repository file " + newPath + " already exists.");
             }
+            ensureDirectoryHierarchy(newPath);
             // Copy the file contents and add it to the index
             MiscUtils.copyFile(oldFile, newFile);
             try {
-                git.add().addFilepattern(newFileName).call();
+                git.add().addFilepattern(newPath).call();
                 if (!gitRepoIsClean()) {
                     // Remove the old file from the Git index
-                    git.rm().addFilepattern(oldFileName).call();
-                    commit(String.format("Orgzly: rename %s to %s", oldFileName, newFileName));
+                    git.rm().addFilepattern(oldPath).call();
+                    commit(String.format("Orgzly: rename %s to %s", oldPath, newPath));
                     return true;
                 }
             } catch (GitAPIException e) {

@@ -39,16 +39,16 @@ public class SettingsFragmentTest extends OrgzlyTest {
     @Test
     public void testImportingGettingStartedFromGettingStartedNotebook() {
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
-        clickSetting("prefs_screen_app", R.string.app);
-        clickSetting("pref_key_reload_getting_started", R.string.reload_getting_started);
+        clickSetting(R.string.app);
+        clickSetting(R.string.reload_getting_started);
         pressBack();
         pressBack();
         onView(withId(R.id.fragment_books_view_flipper)).check(matches(isDisplayed()));
         onView(allOf(withText(R.string.getting_started_notebook_name), isDisplayed())).perform(click());
         onView(withId(R.id.fragment_book_view_flipper)).check(matches(isDisplayed()));
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
-        clickSetting("prefs_screen_app", R.string.app);
-        clickSetting("pref_key_reload_getting_started", R.string.reload_getting_started);
+        clickSetting(R.string.app);
+        clickSetting(R.string.reload_getting_started);
         pressBack();
         pressBack();
         onView(withId(R.id.fragment_book_view_flipper)).check(matches(isDisplayed()));
@@ -60,15 +60,15 @@ public class SettingsFragmentTest extends OrgzlyTest {
     public void testAddingNewTodoKeywordInSettingsAndChangingStateToItForNewNote() {
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
 
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks);
-        clickSetting("pref_key_states", R.string.states);
+        clickSetting(R.string.pref_title_notebooks);
+        clickSetting(R.string.states);
 
         onView(withId(R.id.todo_states)).perform(replaceTextCloseKeyboard("TODO AAA BBB CCC"));
 
         onView(withText(android.R.string.ok)).perform(click());
         onView(withText(R.string.not_now)).perform(click());
 
-        clickSetting("pref_key_new_note_state", R.string.state);
+        clickSetting(R.string.state);
 
         onData(hasToString(containsString("CCC"))).perform(click());
     }
@@ -77,14 +77,14 @@ public class SettingsFragmentTest extends OrgzlyTest {
     public void testAddingNewTodoKeywordInSettingsNewNoteShouldHaveDefaultState() {
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
 
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks);
-        clickSetting("pref_key_states", R.string.states);
+        clickSetting(R.string.pref_title_notebooks);
+        clickSetting(R.string.states);
 
         onView(withId(R.id.todo_states)).perform(replaceTextCloseKeyboard("TODO CCC"));
         onView(withText(android.R.string.ok)).perform(click());
         onView(withText(R.string.not_now)).perform(click());
 
-        clickSetting("pref_key_new_note_state", R.string.state);
+        clickSetting(R.string.state);
 
         onData(hasToString(containsString("NOTE"))).perform(click());
     }
@@ -94,8 +94,8 @@ public class SettingsFragmentTest extends OrgzlyTest {
         AppPreferences.states(context, "|");
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
 
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks);
-        clickSetting("pref_key_states", R.string.states);
+        clickSetting(R.string.pref_title_notebooks);
+        clickSetting(R.string.states);
         onView(withId(R.id.todo_states)).perform(replaceTextCloseKeyboard("TODO"));
         onView(withText(android.R.string.ok)).perform(click());
         onView(withText(R.string.not_now)).perform(click());
@@ -106,8 +106,8 @@ public class SettingsFragmentTest extends OrgzlyTest {
     public void testStatesDuplicateDetectedIgnoringCase() {
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
 
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks);
-        clickSetting("pref_key_states", R.string.states);
+        clickSetting(R.string.pref_title_notebooks);
+        clickSetting(R.string.states);
 
         onView(withId(R.id.todo_states)).perform(replaceTextCloseKeyboard("TODO NEXT next"));
 
@@ -121,8 +121,8 @@ public class SettingsFragmentTest extends OrgzlyTest {
         AppPreferences.newNoteState(context, "BBB");
 
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks);
-        clickSetting("pref_key_new_note_state", R.string.state);
+        clickSetting(R.string.pref_title_notebooks);
+        clickSetting(R.string.state);
 
         onView(withText("BBB")).check(matches(isDisplayed()));
     }
@@ -133,8 +133,8 @@ public class SettingsFragmentTest extends OrgzlyTest {
         AppPreferences.newNoteState(context, "BBB");
 
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks);
-        clickSetting("pref_key_new_note_state", R.string.state);
+        clickSetting(R.string.pref_title_notebooks);
+        clickSetting(R.string.state);
 
         onData(hasToString(containsString("BBB"))).perform(click());
     }
@@ -145,11 +145,11 @@ public class SettingsFragmentTest extends OrgzlyTest {
         AppPreferences.minPriority(context, "E");
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
 
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks);
-        clickSetting("pref_key_min_priority", R.string.lowest_priority);
+        clickSetting(R.string.pref_title_notebooks);
+        clickSetting(R.string.lowest_priority);
         onData(hasToString(containsString("B"))).perform(click());
 
-        clickSetting("pref_key_default_priority", R.string.default_priority);
+        clickSetting(R.string.default_priority);
         onData(hasToString("B")).check(matches(isChecked()));
     }
 
@@ -159,11 +159,11 @@ public class SettingsFragmentTest extends OrgzlyTest {
         AppPreferences.minPriority(context, "E");
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
 
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks);
-        clickSetting("pref_key_default_priority", R.string.default_priority);
+        clickSetting(R.string.pref_title_notebooks);
+        clickSetting(R.string.default_priority);
         onData(hasToString(containsString("X"))).perform(click());
 
-        clickSetting("pref_key_min_priority", R.string.lowest_priority);
+        clickSetting(R.string.lowest_priority);
         onData(hasToString("X")).check(matches(isChecked()));
     }
 
@@ -171,8 +171,8 @@ public class SettingsFragmentTest extends OrgzlyTest {
     public void testLowercaseStateConvertedToUppercase() {
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
 
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks);
-        clickSetting("pref_key_states", R.string.states);
+        clickSetting(R.string.pref_title_notebooks);
+        clickSetting(R.string.states);
 
         onView(withId(R.id.todo_states)).perform(replaceTextCloseKeyboard("TODO NEXT wait"));
 

@@ -185,16 +185,16 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
         return true;
     }
 
-    public VersionedRook storeBook(File file, String fileName) throws IOException {
-        File destination = synchronizer.repoDirectoryFile(fileName);
+    public VersionedRook storeBook(File file, String repoRelativePath) throws IOException {
+        File destination = synchronizer.workTreeFile(repoRelativePath);
 
         if (destination.exists()) {
-            synchronizer.updateAndCommitExistingFile(file, fileName);
+            synchronizer.updateAndCommitExistingFile(file, repoRelativePath);
         } else {
-            synchronizer.addAndCommitNewFile(file, fileName);
+            synchronizer.addAndCommitNewFile(file, repoRelativePath);
         }
         synchronizer.tryPush();
-        return currentVersionedRook(Uri.EMPTY.buildUpon().appendPath(fileName).build());
+        return currentVersionedRook(Uri.EMPTY.buildUpon().appendPath(repoRelativePath).build());
     }
 
     private RevWalk walk() {
@@ -206,9 +206,9 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
     }
 
     @Override
-    public VersionedRook retrieveBook(String fileName, File destination) throws IOException {
+    public VersionedRook retrieveBook(String repoRelativePath, File destination) throws IOException {
 
-        Uri sourceUri = Uri.parse(fileName);
+        Uri sourceUri = Uri.parse("/" + repoRelativePath);
 
         // Ensure our repo copy is up-to-date. This is necessary when force-loading a book.
         synchronizer.mergeWithRemote();
@@ -219,8 +219,8 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
     }
 
     @Override
-    public InputStream openRepoFileInputStream(String fileName) throws IOException {
-        Uri sourceUri = Uri.parse(fileName);
+    public InputStream openRepoFileInputStream(String repoRelativePath) throws IOException {
+        Uri sourceUri = Uri.parse(repoRelativePath);
         return synchronizer.openRepoFileInputStream(sourceUri.getPath());
     }
 
@@ -265,12 +265,12 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
             public boolean include(TreeWalk walker) {
                 final FileMode mode = walk.getFileMode();
                 final boolean isDirectory = mode == FileMode.TREE;
-                final String filePath = walk.getPathString();
-                if (ignores.isIgnored(filePath, isDirectory) == IgnoreNode.MatchResult.IGNORED)
+                final String repoRelativePath = walk.getPathString();
+                if (ignores.isIgnored(repoRelativePath, isDirectory) == IgnoreNode.MatchResult.IGNORED)
                     return false;
                 if (isDirectory)
                     return true;
-                return BookName.isSupportedFormatFileName(filePath);
+                return BookName.isSupportedFormatFileName(repoRelativePath);
             }
 
             @Override
@@ -297,12 +297,12 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
         if (synchronizer.deleteFileFromRepo(uri)) synchronizer.tryPush();
     }
 
-    public VersionedRook renameBook(Uri oldUri, String newBookName) throws IOException {
-        String oldFileName = oldUri.toString().replaceFirst("^/", "");
-        String newFileName = BookName.fileName(newBookName, BookFormat.ORG);
-        if (synchronizer.renameFileInRepo(oldFileName, newFileName)) {
+    public VersionedRook renameBook(Uri oldFullUri, String newName) throws IOException {
+        String oldPath = oldFullUri.toString().replaceFirst("^/", "");
+        String newPath = BookName.repoRelativePath(newName, BookFormat.ORG);
+        if (synchronizer.renameFileInRepo(oldPath, newPath)) {
             synchronizer.tryPush();
-            return currentVersionedRook(Uri.EMPTY.buildUpon().appendPath(newFileName).build());
+            return currentVersionedRook(Uri.EMPTY.buildUpon().appendPath(newPath).build());
         } else {
             return null;
         }
@@ -311,16 +311,16 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
     @Override
     public TwoWaySyncResult syncBook(
             Uri uri, VersionedRook current, File fromDB) throws IOException {
-        String fileName = uri.getPath().replaceFirst("^/", "");
+        String repoRelativePath = uri.getPath().replaceFirst("^/", "");
         boolean merged = true;
         if (current != null) {
             RevCommit rookCommit = getCommitFromRevisionString(current.getRevision());
             if (BuildConfig.LOG_DEBUG) {
-                LogUtils.d(TAG, String.format("Syncing file %s, rookCommit: %s", fileName, rookCommit));
+                LogUtils.d(TAG, String.format("Syncing file %s, rookCommit: %s", repoRelativePath, rookCommit));
             }
             merged = synchronizer.updateAndCommitFileFromRevisionAndMerge(
-                    fromDB, fileName,
-                    synchronizer.getFileRevision(fileName, rookCommit),
+                    fromDB, repoRelativePath,
+                    synchronizer.getFileRevision(repoRelativePath, rookCommit),
                     rookCommit);
 
             if (merged) {
@@ -333,9 +333,9 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
         } else {
             Log.w(TAG, "Unable to find previous commit, loading from repository.");
         }
-        File writeBackFile = synchronizer.repoDirectoryFile(fileName);
+        File writeBackFile = synchronizer.workTreeFile(repoRelativePath);
         return new TwoWaySyncResult(
-                currentVersionedRook(Uri.EMPTY.buildUpon().appendPath(fileName).build()), merged,
+                currentVersionedRook(Uri.EMPTY.buildUpon().appendPath(repoRelativePath).build()), merged,
                 writeBackFile);
     }
 

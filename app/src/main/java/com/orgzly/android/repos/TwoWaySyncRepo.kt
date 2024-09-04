@@ -9,4 +9,6 @@ interface TwoWaySyncRepo {
     fun syncBook(uri: Uri, current: VersionedRook?, fromDB: File): TwoWaySyncResult
 
     fun tryPushIfHeadDiffersFromRemote()
+
+    fun getUri(): Uri
 }

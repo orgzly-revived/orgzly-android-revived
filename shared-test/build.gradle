@@ -1,0 +1,51 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    namespace = "com.orgzly.shared.test"
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+        buildConfigField "String", "DROPBOX_APP_KEY", gradle.ext.appProperties.getProperty("dropbox.app_key", '""')
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "String", "DROPBOX_REFRESH_TOKEN", gradle.ext.appProperties.getProperty("dropbox.refresh_token", '""') 
+        }
+    }
+    flavorDimensions "store"
+    productFlavors {
+        premium {
+            dimension "store"
+        }
+
+        fdroid {
+            dimension "store"
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = 11
+    }
+
+    packagingOptions {
+        resources.merges.add("plugin.properties")
+    }
+}
+
+dependencies {
+    implementation project(":app")
+    implementation "junit:junit:$versions.junit"
+    implementation 'androidx.documentfile:documentfile:1.0.1'
+    implementation "org.eclipse.jgit:org.eclipse.jgit:$versions.jgit"
+}

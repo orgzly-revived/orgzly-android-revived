@@ -5,7 +5,9 @@ import android.net.Uri;
 import androidx.documentfile.provider.DocumentFile;
 
 import com.orgzly.BuildConfig;
+import com.orgzly.android.db.entity.BookView;
 import com.orgzly.android.repos.Rook;
+import com.orgzly.android.repos.VersionedRook;
 import com.orgzly.android.util.LogUtils;
 
 import java.util.regex.Matcher;
@@ -21,34 +23,39 @@ public class BookName {
     private static final Pattern PATTERN = Pattern.compile("(.*)\\.(org)(\\.txt)?$");
     private static final Pattern SKIP_PATTERN = Pattern.compile("^\\.#.*");
 
-    private final String mFileName;
+    private final String mRepoRelativePath;
     private final String mName;
     private final BookFormat mFormat;
 
-    private BookName(String fileName, String name, BookFormat format) {
-        mFileName = fileName;
+    private BookName(String repoRelativePath, String name, BookFormat format) {
+        mRepoRelativePath = repoRelativePath;
         mName = name;
         mFormat = format;
     }
 
-    public static String getFileName(Context context, com.orgzly.android.db.entity.BookView bookView) {
+    public static String getRepoRelativePath(BookView bookView) {
         if (bookView.getSyncedTo() != null) {
-            return getFileName(context, bookView.getSyncedTo().getUri());
-
+            VersionedRook vrook = bookView.getSyncedTo();
+            return getRepoRelativePath(vrook.getRepoUri(), vrook.getUri());
         } else {
-            return fileName(bookView.getBook().getName(), BookFormat.ORG);
+            // There is no remote book; we can only guess the repo path from the book's name.
+            return repoRelativePath(bookView.getBook().getName(), BookFormat.ORG);
         }
     }
 
+    /**
+     * Used when creating a Book from an imported file.
+     * @param context Used for getting a DocumentFile, if possible
+     * @param uri URI provided by the file picker
+     * @return The book's file name
+     */
     public static String getFileName(Context context, Uri uri) {
         String fileName;
-
         DocumentFile documentFile = DocumentFile.fromSingleUri(context, uri);
 
         if ("content".equals(uri.getScheme()) && documentFile != null) {
             // Try using DocumentFile first (KitKat and above)
             fileName = documentFile.getName();
-
         } else { // Just get the last path segment
             fileName = uri.getLastPathSegment();
         }
@@ -62,38 +69,60 @@ public class BookName {
         return fileName;
     }
 
-    public static BookName getInstance(Context context, Rook rook) {
-        return fromFileName(getFileName(context, rook.getUri()));
+    public static String getRepoRelativePath(Uri repoUri, Uri fileUri) {
+        /* The content:// repository type requires special handling */
+        if ("content".equals(repoUri.getScheme())) {
+            String repoUriLastSegment = repoUri.toString().replaceAll("^.*/", "");
+            String repoRootUriSegment = repoUri + "/document/" + repoUriLastSegment + "%2F";
+            return Uri.decode(fileUri.toString().replace(repoRootUriSegment, ""));
+        } else {
+            // Just return the decoded fileUri stripped of the repoUri (if present), and stripped
+            // of any leading / (if present).
+            return Uri.decode(
+                    fileUri.toString().replace(repoUri.toString(), "")
+            ).replaceFirst("^/", "");
+        }
     }
 
-    public static boolean isSupportedFormatFileName(String fileName) {
-        return PATTERN.matcher(fileName).matches() && !SKIP_PATTERN.matcher(fileName).matches();
+    public static BookName fromRook(Rook rook) {
+        return fromRepoRelativePath(getRepoRelativePath(rook.getRepoUri(), rook.getUri()));
     }
 
-    public static String fileName(String name, BookFormat format) {
+    public static boolean isSupportedFormatFileName(String path) {
+        return PATTERN.matcher(path).matches() && !SKIP_PATTERN.matcher(path).matches();
+    }
+
+    public static String repoRelativePath(String name, BookFormat format) {
         if (format == BookFormat.ORG) {
             return name + ".org";
-
         } else {
             throw new IllegalArgumentException("Unsupported format " + format);
         }
     }
 
-    public static BookName fromFileName(String fileName) {
-        if (fileName != null) {
-            Matcher m = PATTERN.matcher(fileName);
+    public static String lastPathSegment(String name, BookFormat format) {
+        if (format == BookFormat.ORG) {
+            return Uri.parse(name).getLastPathSegment() + ".org";
+        } else {
+            throw new IllegalArgumentException("Unsupported format " + format);
+        }
+    }
+
+    public static BookName fromRepoRelativePath(String repoRelativePath) {
+        if (repoRelativePath != null) {
+            Matcher m = PATTERN.matcher(repoRelativePath);
 
             if (m.find()) {
                 String name = m.group(1);
                 String extension = m.group(2);
 
                 if (extension.equals("org")) {
-                    return new BookName(fileName, name, BookFormat.ORG);
+                    return new BookName(repoRelativePath, name, BookFormat.ORG);
                 }
             }
         }
 
-        throw new IllegalArgumentException("Unsupported book file name " + fileName);
+        throw new IllegalArgumentException("Unsupported book file name " + repoRelativePath);
     }
 
     public String getName() {
@@ -104,8 +133,8 @@ public class BookName {
         return mFormat;
     }
 
-    public String getFileName() {
-        return mFileName;
+    public String getRepoRelativePath() {
+        return mRepoRelativePath;
     }
 
 }

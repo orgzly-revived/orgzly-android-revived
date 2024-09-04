@@ -169,8 +169,8 @@ class ScreenshotsTakingNotATest : OrgzlyTest() {
     fun settings() {
         startActivity(SettingsActivity::class.java)
 
-        clickSetting("", R.string.sync)
-        clickSetting("", R.string.repositories)
+        clickSetting(R.string.sync)
+        clickSetting(R.string.repositories)
 
         takeScreenshot("repos.png")
     }
