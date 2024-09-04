@@ -13,7 +13,16 @@ import com.orgzly.android.db.entity.Repo
 import com.orgzly.android.ui.AppBar
 import com.orgzly.android.ui.CommonViewModel
 import com.orgzly.android.ui.SingleLiveEvent
-import com.orgzly.android.usecase.*
+import com.orgzly.android.usecase.BookCreate
+import com.orgzly.android.usecase.BookDelete
+import com.orgzly.android.usecase.BookExportToUri
+import com.orgzly.android.usecase.BookForceLoad
+import com.orgzly.android.usecase.BookForceSave
+import com.orgzly.android.usecase.BookImportFromUri
+import com.orgzly.android.usecase.BookLinkUpdate
+import com.orgzly.android.usecase.BookRename
+import com.orgzly.android.usecase.UseCaseResult
+import com.orgzly.android.usecase.UseCaseRunner
 import com.orgzly.android.util.LogUtils
 
 
@@ -70,10 +79,10 @@ class BooksViewModel(private val dataRepository: DataRepository) : CommonViewMod
         }
     }
 
-    fun deleteBook(bookId: Long, deleteLinked: Boolean) {
+    fun deleteBooks(bookIds: Set<Long>, deleteLinked: Boolean) {
         App.EXECUTORS.diskIO().execute {
             catchAndPostError {
-                val result = UseCaseRunner.run(BookDelete(bookId, deleteLinked))
+                val result = UseCaseRunner.run(BookDelete(bookIds, deleteLinked))
                 bookDeletedEvent.postValue(result)
             }
         }
