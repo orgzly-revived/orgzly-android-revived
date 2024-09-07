@@ -80,6 +80,7 @@
     <string name="ssh_keygen_preference_summary">Generate key pair for Git repo sync</string>
     <string name="ssh_show_public_key_preference_title">View generated SSH public key</string>
     <string name="message_book_has_no_link">Notebook has no repository link</string>
+    <string name="message_book_has_no_rook">Notebook has no known remote namesake</string>
     <string name="message_note_created">Note created</string>
     <string name="drawer_close">Close drawer</string>
     <string name="drawer_open">Open drawer</string>

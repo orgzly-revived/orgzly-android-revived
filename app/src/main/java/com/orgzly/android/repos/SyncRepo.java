@@ -31,7 +31,7 @@ public interface SyncRepo {
     /**
      * Download the latest available revision of the book and store its content to {@code File}.
      */
-    VersionedRook retrieveBook(String repoRelativePath, File destination) throws IOException;
+    VersionedRook retrieveBook(Uri uri, File destination) throws IOException;
 
     /**
      * Open a file in the repository for reading. Originally added for parsing the .orgzlyignore

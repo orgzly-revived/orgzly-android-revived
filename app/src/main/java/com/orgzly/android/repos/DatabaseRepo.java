@@ -48,8 +48,7 @@ public class DatabaseRepo implements SyncRepo {
     }
 
     @Override
-    public VersionedRook retrieveBook(String repoRelativePath, File file) {
-        Uri uri = repoUri.buildUpon().appendPath(repoRelativePath).build();
+    public VersionedRook retrieveBook(Uri uri, File file) {
         return dbRepo.retrieveBook(repoId, repoUri, uri, file);
     }
 
