@@ -39,7 +39,7 @@ buildscript {
 
     versions.android_test_espresso = '3.4.0'
 
-    versions.android_test = '1.4.0'
+    versions.android_test = '1.6.1'
 
     versions.android_test_ext_junit = '1.1.3'
 
