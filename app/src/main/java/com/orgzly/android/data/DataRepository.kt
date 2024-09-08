@@ -11,7 +11,7 @@ import android.os.Handler
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.sqlite.db.SupportSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
@@ -2119,7 +2119,7 @@ class DataRepository @Inject constructor(
      * Return all known tags
      */
     fun selectAllTagsLiveData(): LiveData<List<String>> {
-        return Transformations.map(db.note().getDistinctTagsLiveData()) { tagsList ->
+        return db.note().getDistinctTagsLiveData().map { tagsList ->
             tagsList.flatMap { Note.dbDeSerializeTags(it) }.distinct().sorted()
         }
     }

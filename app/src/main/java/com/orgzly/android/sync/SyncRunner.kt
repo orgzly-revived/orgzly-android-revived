@@ -4,8 +4,13 @@ import android.content.Intent
 import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import androidx.work.*
+import androidx.lifecycle.map
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
@@ -83,8 +88,8 @@ object SyncRunner {
     }
 
     @JvmStatic
-    fun onStateChange(tag: String): LiveData<SyncState> {
-        return Transformations.map(onAllWorkInfo()) { workInfoList ->
+    fun onStateChange(tag: String): LiveData<SyncState?> {
+        return onAllWorkInfo().map { workInfoList ->
             syncStateFromWorkInfoList(workInfoList).also { state ->
                 logStateChange(tag, state, workInfoList)
             }
