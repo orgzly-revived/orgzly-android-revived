@@ -1,5 +1,6 @@
 package com.orgzly.android.espresso
 
+import android.os.SystemClock
 import androidx.core.net.toUri
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
@@ -66,6 +67,7 @@ class GitRepoTest : OrgzlyTest() {
         assertEquals(3, dataRepository.getBooks().size)
         ActivityScenario.launch(MainActivity::class.java).use {
             sync()
+            SystemClock.sleep(500)
             onBook(0, R.id.item_book_link_repo).check(ViewAssertions.matches(withText(repo.url)))
             onBook(1, R.id.item_book_link_repo).check(ViewAssertions.matches(withText(repo.url)))
             onBook(2, R.id.item_book_link_repo).check(ViewAssertions.matches(withText(repo.url)))
