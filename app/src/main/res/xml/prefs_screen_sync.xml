@@ -15,6 +15,12 @@
             android:targetClass="com.orgzly.android.ui.repos.ReposActivity"/>
     </Preference>
 
+    <SwitchPreference
+        android:key="@string/pref_key_enable_repo_subfolders"
+        android:title="@string/enable_repo_subfolders_preferences_title"
+        android:summary="@string/enable_repo_subfolders_preferences_summary"
+        android:defaultValue="@bool/pref_default_enable_repo_subfolders"/>
+
     <androidx.preference.PreferenceScreen
         android:key="prefs_screen_auto_sync"
         android:title="@string/auto_sync"
