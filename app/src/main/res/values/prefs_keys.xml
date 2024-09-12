@@ -561,6 +561,10 @@
     <string name="pref_key_highlight_edited_rich_text" translatable="false">pref_key_highlight_edited_rich_text</string>
     <bool name="pref_default_highlight_edited_rich_text" translatable="false">false</bool>
 
+    <!-- Subfolder support -->
+    <string name="pref_key_enable_repo_subfolders" translatable="false">pref_key_enable_repo_subfolders</string>
+    <bool name="pref_default_enable_repo_subfolders" translatable="false">false</bool>
+
     <!-- Git preferences -->
     <string name="pref_key_git_ssh_key_type" translatable="false">pref_key_git_ssh_key_type</string>
     <string name="pref_key_git_author" traslatable="false">pref_key_git_author</string>

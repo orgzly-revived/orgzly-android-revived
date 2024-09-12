@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Build
 import androidx.documentfile.provider.DocumentFile
+import com.orgzly.android.App
 import com.orgzly.android.BookName
+import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.util.MiscUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
@@ -17,18 +19,22 @@ import java.io.IOException
 interface SyncRepoTest {
 
     fun testGetBooks_singleOrgFile()
-    fun testGetBooks_singleFileInSubfolder()
+    fun testGetBooks_singleFileInSubfolderWhenEnabled()
+    fun testGetBooks_singleFileInSubfolderWhenDisabled()
     fun testGetBooks_allFilesAreIgnored()
     fun testGetBooks_specificFileInSubfolderIsIgnored()
     fun testGetBooks_specificFileIsUnignored()
     fun testGetBooks_ignoredExtensions()
     fun testStoreBook_expectedUri()
-    fun testStoreBook_producesSameUriAsRetrieveBook()
+    fun testStoreBook_producesSameUriAsRetrieveBookWithSubfolder()
+    fun testStoreBook_producesSameUriAsRetrieveBookWithoutSubfolder()
     fun testStoreBook_producesSameUriAsGetBooks()
     fun testStoreBook_inSubfolder()
+    fun testStoreBook_inSubfolderWhenDisabled()
     fun testRenameBook_expectedUri()
     fun testRenameBook_repoFileAlreadyExists()
-    fun testRenameBook_fromRootToSubfolder()
+    fun testRenameBook_fromRootToSubfolderWhenEnabled()
+    fun testRenameBook_fromRootToSubfolderWhenDisabled()
     fun testRenameBook_fromSubfolderToRoot()
     fun testRenameBook_newSubfolderSameLeafName()
     fun testRenameBook_newSubfolderAndLeafName()
@@ -61,8 +67,9 @@ interface SyncRepoTest {
             assertEquals(fileName, BookName.getRepoRelativePath(syncRepo.uri, books[0].uri))
         }
 
-        fun testGetBooks_singleFileInSubfolder(repoManipulationPoint: Any, syncRepo: SyncRepo) {
+        fun testGetBooks_singleFileInSubfolderWhenEnabled(repoManipulationPoint: Any, syncRepo: SyncRepo) {
             // Given
+            AppPreferences.subfolderSupport(App.getAppContext(), true)
             val repoFilePath = "Folder/Book one.org"
             val fileContent = "\n\n...\n\n"
             val expectedRookUri = writeFileToRepo(fileContent, syncRepo, repoManipulationPoint, "Book one.org", "Folder")
@@ -79,6 +86,19 @@ interface SyncRepoTest {
             assertEquals(fileContent, retrieveBookDestinationFile.readText())
         }
 
+        fun testGetBooks_singleFileInSubfolderWhenDisabled(repoManipulationPoint: Any, syncRepo: SyncRepo) {
+            // Given
+            AppPreferences.subfolderSupport(App.getAppContext(), false)
+            val fileContent = "\n\n...\n\n"
+            writeFileToRepo(fileContent, syncRepo, repoManipulationPoint, "Book one.org", "Folder")
+
+            // When
+            val books = syncRepo.books
+
+            // Then
+            assertEquals(0, books.size)
+        }
+
         fun testGetBooks_allFilesAreIgnored(repoManipulationPoint: Any, syncRepo: SyncRepo) {
             // Given
             val ignoreFileContent = "*\n"
@@ -92,6 +112,7 @@ interface SyncRepoTest {
 
         fun testGetBooks_specificFileInSubfolderIsIgnored(repoManipulationPoint: Any, syncRepo: SyncRepo) {
             // Given
+            AppPreferences.subfolderSupport(App.getAppContext(), true)
             val ignoreFileContent = "folder/book one.org\n"
             writeFileToRepo("...", syncRepo, repoManipulationPoint, "book one.org", "folder")
             writeFileToRepo(ignoreFileContent, syncRepo, repoManipulationPoint, RepoIgnoreNode.IGNORE_FILE)
@@ -100,8 +121,10 @@ interface SyncRepoTest {
             // Then
             assertEquals(0, books.size)
         }
+
         fun testGetBooks_specificFileIsUnignored(repoManipulationPoint: Any, syncRepo: SyncRepo) {
             // Given
+            AppPreferences.subfolderSupport(App.getAppContext(), true)
             val folderName = "My Folder"
             val fileName = "My file.org"
             val ignoreFileContent = "folder/**\n!$folderName/$fileName\n"
@@ -142,8 +165,9 @@ interface SyncRepoTest {
             assertEquals(expectedRookUri, vrook.uri.toString())
         }
 
-        fun testStoreBook_producesSameUriAsRetrieveBook(syncRepo: SyncRepo) {
+        fun testStoreBook_producesSameUriAsRetrieveBookWithSubfolder(syncRepo: SyncRepo) {
             // Given
+            AppPreferences.subfolderSupport(App.getAppContext(), true)
             val tmpFile = kotlin.io.path.createTempFile().toFile()
             val repositoryPath = "a folder/a book.org"
             MiscUtils.writeStringToFile("...", tmpFile)
@@ -155,8 +179,23 @@ interface SyncRepoTest {
             assertEquals(retrievedBook.uri, storedRook.uri)
         }
 
+        fun testStoreBook_producesSameUriAsRetrieveBookWithoutSubfolder(syncRepo: SyncRepo) {
+            // Given
+            AppPreferences.subfolderSupport(App.getAppContext(), false)
+            val tmpFile = kotlin.io.path.createTempFile().toFile()
+            val repositoryPath = "A book.org"
+            MiscUtils.writeStringToFile("...", tmpFile)
+            // When
+            val storedRook = syncRepo.storeBook(tmpFile, repositoryPath)
+            val retrievedBook = syncRepo.retrieveBook(repositoryPath, tmpFile)
+            tmpFile.delete()
+            // Then
+            assertEquals(retrievedBook.uri, storedRook.uri)
+        }
+
         fun testStoreBook_producesSameUriAsGetBooks(repoManipulationPoint: Any, syncRepo: SyncRepo) {
             // Given
+            AppPreferences.subfolderSupport(App.getAppContext(), true)
             val tmpFile = kotlin.io.path.createTempFile().toFile()
             val folderName = "A folder"
             val fileName = "A book.org"
@@ -172,6 +211,7 @@ interface SyncRepoTest {
 
         fun testStoreBook_inSubfolder(repoManipulationPoint: Any, syncRepo: SyncRepo) {
             // Given
+            AppPreferences.subfolderSupport(App.getAppContext(), true)
             val tmpFile = kotlin.io.path.createTempFile().toFile()
             val repositoryPath = "A folder/A book.org"
             val testBookContent = "\n\n...\n\n"
@@ -224,6 +264,22 @@ interface SyncRepoTest {
             }
         }
 
+        fun testStoreBook_inSubfolderWhenDisabled(syncRepo: SyncRepo) {
+            // Given
+            AppPreferences.subfolderSupport(App.getAppContext(), false)
+            val tmpFile = kotlin.io.path.createTempFile().toFile()
+            val repositoryPath = "A folder/A book.org"
+            val testBookContent = "\n\n...\n\n"
+            MiscUtils.writeStringToFile(testBookContent, tmpFile)
+            // Then
+            try {
+                syncRepo.storeBook(tmpFile, repositoryPath)
+            } catch (e: IOException) {
+                assertTrue(e.message!!.contains("Support for subfolders is disabled"))
+                throw e
+            }
+        }
+
         fun testRenameBook_expectedUri(syncRepo: SyncRepo) {
             // Given
             val tmpFile = kotlin.io.path.createTempFile().toFile()
@@ -264,8 +320,9 @@ interface SyncRepoTest {
             }
         }
 
-        fun testRenameBook_fromRootToSubfolder(syncRepo: SyncRepo) {
+        fun testRenameBook_fromRootToSubfolderWhenEnabled(syncRepo: SyncRepo) {
             // Given
+            AppPreferences.subfolderSupport(App.getAppContext(), true)
             val tmpFile = kotlin.io.path.createTempFile().toFile()
             MiscUtils.writeStringToFile("...", tmpFile)
             // When
@@ -281,8 +338,26 @@ interface SyncRepoTest {
             assertEquals(expectedRookUri, renamedRook.uri.toString())
         }
 
+        fun testRenameBook_fromRootToSubfolderWhenDisabled(syncRepo: SyncRepo) {
+            // Given
+            AppPreferences.subfolderSupport(App.getAppContext(), false)
+            val tmpFile = kotlin.io.path.createTempFile().toFile()
+            MiscUtils.writeStringToFile("...", tmpFile)
+            // When
+            val originalRook = syncRepo.storeBook(tmpFile, "Original book.org")
+            tmpFile.delete()
+            // Then
+            try {
+                syncRepo.renameBook(originalRook.uri, "A folder/Renamed book")
+            } catch (e: IOException) {
+                assertTrue(e.message!!.contains("Support for subfolders is disabled"))
+                throw e
+            }
+        }
+
         fun testRenameBook_fromSubfolderToRoot(syncRepo: SyncRepo) {
             // Given
+            AppPreferences.subfolderSupport(App.getAppContext(), true)
             val tmpFile = kotlin.io.path.createTempFile().toFile()
             MiscUtils.writeStringToFile("...", tmpFile)
             // When
@@ -300,6 +375,7 @@ interface SyncRepoTest {
 
         fun testRenameBook_newSubfolderSameLeafName(syncRepo: SyncRepo) {
             // Given
+            AppPreferences.subfolderSupport(App.getAppContext(), true)
             val tmpFile = kotlin.io.path.createTempFile().toFile()
             MiscUtils.writeStringToFile("...", tmpFile)
             // When
@@ -317,6 +393,7 @@ interface SyncRepoTest {
 
         fun testRenameBook_newSubfolderAndLeafName(syncRepo: SyncRepo) {
             // Given
+            AppPreferences.subfolderSupport(App.getAppContext(), true)
             val tmpFile = kotlin.io.path.createTempFile().toFile()
             MiscUtils.writeStringToFile("...", tmpFile)
             // When
@@ -334,6 +411,7 @@ interface SyncRepoTest {
 
         fun testRenameBook_sameSubfolderNewLeafName(syncRepo: SyncRepo) {
             // Given
+            AppPreferences.subfolderSupport(App.getAppContext(), true)
             val tmpFile = kotlin.io.path.createTempFile().toFile()
             MiscUtils.writeStringToFile("...", tmpFile)
             // When
