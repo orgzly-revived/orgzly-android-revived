@@ -12,6 +12,7 @@ import com.orgzly.BuildConfig;
 import com.orgzly.R;
 import com.orgzly.android.BookName;
 import com.orgzly.android.db.entity.Repo;
+import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.util.LogUtils;
 import com.orgzly.android.util.MiscUtils;
 
@@ -117,6 +118,8 @@ public class DocumentRepo implements SyncRepo {
             for (DocumentFile node : currentDir.listFiles()) {
                 String repoRelativePath = BookName.getRepoRelativePath(repoUri, node.getUri());
                 if (node.isDirectory()) {
+                    if (!AppPreferences.subfolderSupport(context))
+                        continue;
                     if (Build.VERSION.SDK_INT >= 26) {
                         if (ignores.isPathIgnored(repoRelativePath, true)) {
                             continue;
@@ -176,10 +179,14 @@ public class DocumentRepo implements SyncRepo {
         }
         DocumentFile destinationFile = getDocumentFileFromPath(repoRelativePath);
         if (repoRelativePath.contains("/")) {
-            DocumentFile destinationDir = ensureDirectoryHierarchy(repoRelativePath);
-            String fileName = Uri.parse(repoRelativePath).getLastPathSegment();
-            if (destinationDir.findFile(fileName) == null) {
-                destinationFile = destinationDir.createFile("text/*", fileName);
+            if (AppPreferences.subfolderSupport(context)) {
+                DocumentFile destinationDir = ensureDirectoryHierarchy(repoRelativePath);
+                String fileName = Uri.parse(repoRelativePath).getLastPathSegment();
+                if (destinationDir.findFile(fileName) == null) {
+                    destinationFile = destinationDir.createFile("text/*", fileName);
+                }
+            } else {
+                throw new IOException(context.getString(R.string.subfolder_support_disabled));
             }
         } else {
             if (!destinationFile.exists()) {
@@ -246,7 +253,11 @@ public class DocumentRepo implements SyncRepo {
         Uri newUri = oldFullUri;
 
         if (newName.contains("/")) {
-            newDir = ensureDirectoryHierarchy(newName);
+            if (AppPreferences.subfolderSupport(context)) {
+                newDir = ensureDirectoryHierarchy(newName);
+            } else {
+                throw new IOException(context.getString(R.string.subfolder_support_disabled));
+            }
         } else {
             newDir = repoDocumentFile;
         }

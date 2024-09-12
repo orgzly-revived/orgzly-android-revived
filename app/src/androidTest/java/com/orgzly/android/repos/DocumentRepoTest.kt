@@ -51,8 +51,13 @@ class DocumentRepoTest : SyncRepoTest, OrgzlyTest() {
     }
 
     @Test
-    override fun testGetBooks_singleFileInSubfolder() {
-        SyncRepoTest.testGetBooks_singleFileInSubfolder(repoDirectory, syncRepo)
+    override fun testGetBooks_singleFileInSubfolderWhenEnabled() {
+        SyncRepoTest.testGetBooks_singleFileInSubfolderWhenEnabled(repoDirectory, syncRepo)
+    }
+
+    @Test
+    override fun testGetBooks_singleFileInSubfolderWhenDisabled() {
+        SyncRepoTest.testGetBooks_singleFileInSubfolderWhenDisabled(repoDirectory, syncRepo)
     }
 
     @Test
@@ -81,8 +86,13 @@ class DocumentRepoTest : SyncRepoTest, OrgzlyTest() {
     }
 
     @Test
-    override fun testStoreBook_producesSameUriAsRetrieveBook() {
-        SyncRepoTest.testStoreBook_producesSameUriAsRetrieveBook(syncRepo)
+    override fun testStoreBook_producesSameUriAsRetrieveBookWithSubfolder() {
+        SyncRepoTest.testStoreBook_producesSameUriAsRetrieveBookWithSubfolder(syncRepo)
+    }
+
+    @Test
+    override fun testStoreBook_producesSameUriAsRetrieveBookWithoutSubfolder() {
+        SyncRepoTest.testStoreBook_producesSameUriAsRetrieveBookWithoutSubfolder(syncRepo)
     }
 
     @Test
@@ -93,6 +103,11 @@ class DocumentRepoTest : SyncRepoTest, OrgzlyTest() {
     @Test
     override fun testStoreBook_inSubfolder() {
         SyncRepoTest.testStoreBook_inSubfolder(repoDirectory, syncRepo)
+    }
+
+    @Test(expected = IOException::class)
+    override fun testStoreBook_inSubfolderWhenDisabled() {
+        SyncRepoTest.testStoreBook_inSubfolderWhenDisabled(syncRepo)
     }
 
     @Test
@@ -106,8 +121,13 @@ class DocumentRepoTest : SyncRepoTest, OrgzlyTest() {
     }
 
     @Test
-    override fun testRenameBook_fromRootToSubfolder() {
-        SyncRepoTest.testRenameBook_fromRootToSubfolder(syncRepo)
+    override fun testRenameBook_fromRootToSubfolderWhenEnabled() {
+        SyncRepoTest.testRenameBook_fromRootToSubfolderWhenEnabled(syncRepo)
+    }
+
+    @Test(expected = IOException::class)
+    override fun testRenameBook_fromRootToSubfolderWhenDisabled() {
+        SyncRepoTest.testRenameBook_fromRootToSubfolderWhenDisabled(syncRepo)
     }
 
     @Test

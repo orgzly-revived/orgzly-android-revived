@@ -5,7 +5,10 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
+import com.orgzly.R;
+import com.orgzly.android.App;
 import com.orgzly.android.BookName;
+import com.orgzly.android.prefs.AppPreferences;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,11 +59,17 @@ public class DropboxRepo implements SyncRepo {
 
     @Override
     public VersionedRook storeBook(File file, String repoRelativePath) throws IOException {
+        Context context = App.getAppContext();
+        if (repoRelativePath.contains("/") && !AppPreferences.subfolderSupport(context))
+            throw new IOException(context.getString(R.string.subfolder_support_disabled));
         return client.upload(file, repoUri, repoRelativePath);
     }
 
     @Override
     public VersionedRook renameBook(Uri oldFullUri, String newName) throws IOException {
+        Context context = App.getAppContext();
+        if (newName.contains("/") && !AppPreferences.subfolderSupport(context))
+            throw new IOException(context.getString(R.string.subfolder_support_disabled));
         BookName oldBookName = BookName.fromRepoRelativePath(BookName.getRepoRelativePath(repoUri, oldFullUri));
         String newRelativePath = BookName.repoRelativePath(newName, oldBookName.getFormat());
         String newEncodedRelativePath = Uri.encode(newRelativePath, "/");
