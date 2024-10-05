@@ -127,7 +127,7 @@ interface SyncRepoTest {
             AppPreferences.subfolderSupport(App.getAppContext(), true)
             val folderName = "My Folder"
             val fileName = "My file.org"
-            val ignoreFileContent = "folder/**\n!$folderName/$fileName\n"
+            val ignoreFileContent = "$folderName/**\n!$folderName/$fileName\n"
             writeFileToRepo("...", syncRepo, repoManipulationPoint, fileName, folderName)
             writeFileToRepo(ignoreFileContent, syncRepo, repoManipulationPoint, RepoIgnoreNode.IGNORE_FILE)
             // When
