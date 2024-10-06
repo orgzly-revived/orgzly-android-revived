@@ -47,7 +47,6 @@
 
 -dontwarn org.joda.convert.**
 
--dontwarn org.eclipse.jgit.**
 -dontwarn com.jcraft.**
 -dontwarn org.slf4j.**
 
@@ -59,3 +58,59 @@
 
 -keepnames public class * extends org.eclipse.jgit.nls.TranslationBundle
 -keepclassmembers class * extends org.eclipse.jgit.nls.TranslationBundle { *; }
+
+# Added when upgrading to AGP 8
+-keep public class org.apache.sshd.common.**
+-dontwarn com.google.errorprone.annotations.CanIgnoreReturnValue
+-dontwarn com.google.errorprone.annotations.CheckReturnValue
+-dontwarn com.google.errorprone.annotations.Immutable
+-dontwarn java.lang.management.ManagementFactory
+-dontwarn java.lang.management.RuntimeMXBean
+-dontwarn javax.management.InstanceAlreadyExistsException
+-dontwarn javax.management.InstanceNotFoundException
+-dontwarn javax.management.JMException
+-dontwarn javax.management.MBeanException
+-dontwarn javax.management.MBeanRegistrationException
+-dontwarn javax.management.MBeanServer
+-dontwarn javax.management.MalformedObjectNameException
+-dontwarn javax.management.NotCompliantMBeanException
+-dontwarn javax.management.ObjectInstance
+-dontwarn javax.management.ObjectName
+-dontwarn javax.management.ReflectionException
+-dontwarn javax.security.auth.login.CredentialException
+-dontwarn javax.security.auth.login.FailedLoginException
+-dontwarn org.apache.sshd.sftp.SftpModuleProperties
+-dontwarn org.apache.sshd.sftp.client.SftpClient$Attributes
+-dontwarn org.apache.sshd.sftp.client.SftpClient$CloseableHandle
+-dontwarn org.apache.sshd.sftp.client.SftpClient$CopyMode
+-dontwarn org.apache.sshd.sftp.client.SftpClient$DirEntry
+-dontwarn org.apache.sshd.sftp.client.SftpClient$Handle
+-dontwarn org.apache.sshd.sftp.client.SftpClient
+-dontwarn org.apache.sshd.sftp.client.SftpClientFactory
+-dontwarn org.apache.sshd.sftp.common.SftpException
+-dontwarn org.bouncycastle.crypto.prng.RandomGenerator
+-dontwarn org.bouncycastle.crypto.prng.VMPCRandomGenerator
+-dontwarn org.bouncycastle.jsse.BCSSLParameters
+-dontwarn org.bouncycastle.jsse.BCSSLSocket
+-dontwarn org.bouncycastle.jsse.provider.BouncyCastleJsseProvider
+-dontwarn org.bouncycastle.openssl.PEMDecryptorProvider
+-dontwarn org.bouncycastle.openssl.PEMEncryptedKeyPair
+-dontwarn org.bouncycastle.openssl.PEMKeyPair
+-dontwarn org.bouncycastle.openssl.PEMParser
+-dontwarn org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
+-dontwarn org.bouncycastle.openssl.jcajce.JcaPEMWriter
+-dontwarn org.bouncycastle.openssl.jcajce.JcePEMDecryptorProviderBuilder
+-dontwarn org.conscrypt.Conscrypt$Version
+-dontwarn org.conscrypt.Conscrypt
+-dontwarn org.conscrypt.ConscryptHostnameVerifier
+-dontwarn org.ietf.jgss.GSSContext
+-dontwarn org.ietf.jgss.GSSCredential
+-dontwarn org.ietf.jgss.GSSException
+-dontwarn org.ietf.jgss.GSSManager
+-dontwarn org.ietf.jgss.GSSName
+-dontwarn org.ietf.jgss.MessageProp
+-dontwarn org.ietf.jgss.Oid
+-dontwarn org.openjsse.javax.net.ssl.SSLParameters
+-dontwarn org.openjsse.javax.net.ssl.SSLSocket
+-dontwarn org.openjsse.net.ssl.OpenJSSE
+-dontwarn sun.security.x509.X509Key

@@ -8,7 +8,7 @@ import com.orgzly.android.sync.SyncState
 import com.orgzly.android.util.LogUtils
 
 class SyncViewModel : ViewModel() {
-    val state: LiveData<SyncState> = SyncRunner.onStateChange("sync-view-model")
+    val state: LiveData<SyncState?> = SyncRunner.onStateChange("sync-view-model")
 
     fun isSyncRunning(): Boolean {
         val currentState = state.value

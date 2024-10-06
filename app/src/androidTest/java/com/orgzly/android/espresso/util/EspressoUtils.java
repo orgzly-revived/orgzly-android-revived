@@ -341,8 +341,10 @@ public class EspressoUtils {
     }
 
     public static void searchForTextCloseKeyboard(String str) {
+        SystemClock.sleep(200);
         onView(isRoot()).perform(waitId(R.id.search_view, 5000));
         onView(allOf(withId(R.id.search_view), isDisplayed())).perform(click());
+        SystemClock.sleep(200);
         onView(isRoot()).perform(waitId(R.id.search_src_text, 5000));
         onView(withId(R.id.search_src_text)).perform(replaceText(str), pressKey(KeyEvent.KEYCODE_ENTER));
         closeSoftKeyboardWithDelay();

@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 
 import com.orgzly.android.App;
 import com.orgzly.android.ui.notifications.Notifications;
@@ -103,7 +104,12 @@ public class SshCredentialsProvider extends CredentialsProvider {
             intentFilter.addAction(ACTION_REJECT_REMOTE_HOST_KEY);
             intentFilter.addAction(ACTION_ACCEPT_REMOTE_HOST_KEY);
             intentFilter.addAction(ACTION_ACCEPT_AND_STORE_REMOTE_HOST_KEY);
-            context.registerReceiver(broadcastReceiver, intentFilter);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.registerReceiver(broadcastReceiver, intentFilter,
+                        Context.RECEIVER_EXPORTED);
+            } else {
+                context.registerReceiver(broadcastReceiver, intentFilter);
+            }
 
             // Send the notification and wait up to 30 seconds for the user to respond
             Notifications.showSshRemoteHostKeyPrompt(context, uri, items);

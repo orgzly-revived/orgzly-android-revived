@@ -31,6 +31,12 @@ public class BookChooserActivityTest extends OrgzlyTest {
         return ActivityScenario.launch(intent);
     }
 
+    private ActivityScenario<BookChooserActivity> startActivityForResult() {
+        Intent intent = new Intent(context, BookChooserActivity.class);
+        intent.setAction(Intent.ACTION_CREATE_SHORTCUT);
+        return ActivityScenario.launchActivityForResult(intent);
+    }
+
     @Before
     public void setUp() throws Exception {
         super.setUp();
@@ -60,7 +66,7 @@ public class BookChooserActivityTest extends OrgzlyTest {
 
     @Test
     public void testCreateShortcut() {
-        ActivityScenario<BookChooserActivity> scenario = startActivityWithCreateShortcutAction();
+        ActivityScenario<BookChooserActivity> scenario = startActivityForResult();
 
         onView(allOf(withText("book-one"), isDisplayed())).perform(click());
 

@@ -246,7 +246,6 @@ public class QueryFragmentTest extends OrgzlyTest {
         defaultSetUp();
 
         onView(allOf(withText("book-two"), isDisplayed())).perform(click());
-        SystemClock.sleep(200);
         searchForTextCloseKeyboard("b.book-two Note");
         onView(withId(R.id.fragment_query_search_view_flipper)).check(matches(isDisplayed()));
         onNotesInSearch().check(matches(recyclerViewItemCount(29)));
@@ -385,7 +384,6 @@ public class QueryFragmentTest extends OrgzlyTest {
         scenario = ActivityScenario.launch(MainActivity.class);
 
         onView(allOf(withText("notebook-1"), isDisplayed())).perform(click());
-        SystemClock.sleep(200);
         searchForTextCloseKeyboard("t.tag1 t.tag2");
         onView(withId(R.id.fragment_query_search_view_flipper)).check(matches(isDisplayed()));
         onNotesInSearch().check(matches(recyclerViewItemCount(3)));
@@ -617,7 +615,6 @@ public class QueryFragmentTest extends OrgzlyTest {
         scenario = ActivityScenario.launch(MainActivity.class);
 
         onView(allOf(withText("notebook"), isDisplayed())).perform(click());
-        SystemClock.sleep(200);
         searchForTextCloseKeyboard("tn.a or tn.b");
         onView(withId(R.id.fragment_query_search_view_flipper)).check(matches(isDisplayed()));
         onNotesInSearch().check(matches(recyclerViewItemCount(2)));
@@ -726,7 +723,6 @@ public class QueryFragmentTest extends OrgzlyTest {
         scenario = ActivityScenario.launch(MainActivity.class);
 
         onView(allOf(withText("notebook"), isDisplayed())).perform(click());
-        SystemClock.sleep(200);
         searchForTextCloseKeyboard(".it.none");
         onView(withId(R.id.fragment_query_search_view_flipper)).check(matches(isDisplayed()));
         onNotesInSearch().check(matches(recyclerViewItemCount(3)));
