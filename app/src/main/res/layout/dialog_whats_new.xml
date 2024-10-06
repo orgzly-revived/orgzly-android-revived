@@ -27,7 +27,7 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Support subfolders in all repository types" />
+            app:text="Add support for repository subfolders. (Note: The feature is disabled by default. It can be enabled under sync settings. In a future release, it will become enabled by default.)" />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
