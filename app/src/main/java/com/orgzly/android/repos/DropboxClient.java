@@ -180,7 +180,7 @@ public class DropboxClient {
                                     list.add(book);
                                 }
                             }
-                            if (metadata instanceof FolderMetadata) {
+                            if (metadata instanceof FolderMetadata && AppPreferences.subfolderSupport(mContext)) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                     if (ignores.isPathIgnored(pathRelativeToRepoRoot, true)) {
                                         continue;
@@ -385,6 +385,8 @@ public class DropboxClient {
             } else {
                 throw new IOException("Not a directory: " + path);
             }
+        } catch (GetMetadataErrorException e) {
+            // Do nothing; the folder does not exist.
         } catch (DbxException e) {
             e.printStackTrace();
             if (e.getMessage() != null) {

@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.orgzly.BuildConfig;
+import com.orgzly.R;
+import com.orgzly.android.App;
 import com.orgzly.android.BookFormat;
 import com.orgzly.android.BookName;
 import com.orgzly.android.db.entity.Repo;
@@ -14,6 +16,7 @@ import com.orgzly.android.git.GitFileSynchronizer;
 import com.orgzly.android.git.GitPreferences;
 import com.orgzly.android.git.GitPreferencesFromRepoPrefs;
 import com.orgzly.android.git.GitTransportSetter;
+import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.prefs.RepoPreferences;
 import com.orgzly.android.util.LogUtils;
 
@@ -260,6 +263,7 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
         walk.setRecursive(true);
         walk.addTree(synchronizer.currentHead().getTree());
         final RepoIgnoreNode ignores = new RepoIgnoreNode(this);
+        boolean supportsSubFolders = AppPreferences.subfolderSupport(App.getAppContext());
         walk.setFilter(new TreeFilter() {
             @Override
             public boolean include(TreeWalk walker) {
@@ -269,7 +273,7 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
                 if (ignores.isIgnored(repoRelativePath, isDirectory) == IgnoreNode.MatchResult.IGNORED)
                     return false;
                 if (isDirectory)
-                    return true;
+                    return supportsSubFolders;
                 return BookName.isSupportedFormatFileName(repoRelativePath);
             }
 
@@ -298,6 +302,10 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
     }
 
     public VersionedRook renameBook(Uri oldFullUri, String newName) throws IOException {
+        Context context = App.getAppContext();
+        if (newName.contains("/") && !AppPreferences.subfolderSupport(context)) {
+            throw new IOException(context.getString(R.string.subfolder_support_disabled));
+        }
         String oldPath = oldFullUri.toString().replaceFirst("^/", "");
         String newPath = BookName.repoRelativePath(newName, BookFormat.ORG);
         if (synchronizer.renameFileInRepo(oldPath, newPath)) {

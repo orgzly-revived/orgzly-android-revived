@@ -9,7 +9,10 @@ import com.burgstaller.okhttp.basic.BasicAuthenticator
 import com.burgstaller.okhttp.digest.CachingAuthenticator
 import com.burgstaller.okhttp.digest.Credentials
 import com.burgstaller.okhttp.digest.DigestAuthenticator
+import com.orgzly.R
+import com.orgzly.android.App
 import com.orgzly.android.BookName
+import com.orgzly.android.prefs.AppPreferences
 import com.thegrizzlylabs.sardineandroid.DavResource
 import com.thegrizzlylabs.sardineandroid.impl.OkHttpSardine
 import okhttp3.OkHttpClient
@@ -166,8 +169,14 @@ class WebdavRepo(
 
         val ignores = RepoIgnoreNode(this)
 
+        val listDepth = if (AppPreferences.subfolderSupport(App.getAppContext())) {
+            -1
+        } else {
+            1
+        }
+
         return sardine
-                .list(url, -1)
+                .list(url, listDepth)
                 .mapNotNull {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         if (!BookName.isSupportedFormatFileName(it.name) || ignores.isPathIgnored(it.getRelativePath(), it.isDirectory)) {
@@ -222,6 +231,9 @@ class WebdavRepo(
         val encodedRepoPath = Uri.encode(repoRelativePath, "/")
         if (encodedRepoPath != null) {
             if (encodedRepoPath.contains("/")) {
+                val context = App.getAppContext()
+                if (!AppPreferences.subfolderSupport(context))
+                    throw IOException(context.getString(R.string.subfolder_support_disabled))
                 ensureDirectoryHierarchy(encodedRepoPath)
             }
         }
@@ -244,6 +256,9 @@ class WebdavRepo(
         }
 
         if (newName.contains("/")) {
+            val context = App.getAppContext()
+            if (!AppPreferences.subfolderSupport(context))
+                throw IOException(context.getString(R.string.subfolder_support_disabled))
             ensureDirectoryHierarchy(newEncodedRelativePath)
         }
 
