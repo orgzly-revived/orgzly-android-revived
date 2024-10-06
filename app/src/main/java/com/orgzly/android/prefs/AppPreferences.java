@@ -1107,6 +1107,20 @@ public class AppPreferences {
     }
 
     /*
+     * Subfolder support
+     */
+    public static boolean subfolderSupport(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_enable_repo_subfolders),
+                context.getResources().getBoolean(R.bool.pref_default_enable_repo_subfolders));
+    }
+
+    public static void subfolderSupport(Context context, boolean value) {
+        String key = context.getResources().getString(R.string.pref_key_enable_repo_subfolders);
+        getDefaultSharedPreferences(context).edit().putBoolean(key, value).apply();
+    }
+
+    /*
      * Repository properties map
      */
 

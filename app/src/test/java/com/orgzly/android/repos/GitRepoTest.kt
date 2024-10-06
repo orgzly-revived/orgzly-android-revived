@@ -56,8 +56,13 @@ class GitRepoTest : SyncRepoTest {
     }
 
     @Test
-    override fun testGetBooks_singleFileInSubfolder() {
-        SyncRepoTest.testGetBooks_singleFileInSubfolder(gitWorkingTree, syncRepo)
+    override fun testGetBooks_singleFileInSubfolderWhenEnabled() {
+        SyncRepoTest.testGetBooks_singleFileInSubfolderWhenEnabled(gitWorkingTree, syncRepo)
+    }
+
+    @Test
+    override fun testGetBooks_singleFileInSubfolderWhenDisabled() {
+        SyncRepoTest.testGetBooks_singleFileInSubfolderWhenDisabled(gitWorkingTree, syncRepo)
     }
 
     @Test
@@ -86,8 +91,13 @@ class GitRepoTest : SyncRepoTest {
     }
 
     @Test
-    override fun testStoreBook_producesSameUriAsRetrieveBook() {
-        SyncRepoTest.testStoreBook_producesSameUriAsRetrieveBook(syncRepo)
+    override fun testStoreBook_producesSameUriAsRetrieveBookWithSubfolder() {
+        SyncRepoTest.testStoreBook_producesSameUriAsRetrieveBookWithSubfolder(syncRepo)
+    }
+
+    @Test
+    override fun testStoreBook_producesSameUriAsRetrieveBookWithoutSubfolder() {
+        SyncRepoTest.testStoreBook_producesSameUriAsRetrieveBookWithoutSubfolder(syncRepo)
     }
 
     @Test
@@ -101,6 +111,11 @@ class GitRepoTest : SyncRepoTest {
     }
 
     @Test
+    override fun testStoreBook_inSubfolderWhenDisabled() {
+        SyncRepoTest.testStoreBook_inSubfolderWhenDisabled(syncRepo)
+    }
+
+    @Test
     override fun testRenameBook_expectedUri() {
         SyncRepoTest.testRenameBook_expectedUri(syncRepo)
     }
@@ -111,8 +126,13 @@ class GitRepoTest : SyncRepoTest {
     }
 
     @Test
-    override fun testRenameBook_fromRootToSubfolder() {
-        SyncRepoTest.testRenameBook_fromRootToSubfolder(syncRepo)
+    override fun testRenameBook_fromRootToSubfolderWhenEnabled() {
+        SyncRepoTest.testRenameBook_fromRootToSubfolderWhenEnabled(syncRepo)
+    }
+
+    @Test(expected = IOException::class)
+    override fun testRenameBook_fromRootToSubfolderWhenDisabled() {
+        SyncRepoTest.testRenameBook_fromRootToSubfolderWhenDisabled(syncRepo)
     }
 
     @Test

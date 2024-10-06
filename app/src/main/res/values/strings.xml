@@ -87,6 +87,8 @@
     <!-- Preferences (Settings). -->
     <string name="repos_preference_title">Repositories</string>
     <string name="repos_preference_summary">Location to synchronize your notebooks with</string>
+    <string name="enable_repo_subfolders_preferences_title">Support repository subfolders</string>
+    <string name="enable_repo_subfolders_preferences_summary">Load from and write to subfolders</string>
     <string name="ssh_keygen_preference_title">SSH key generation</string>
     <string name="ssh_keygen_preference_summary">Generate key pair for Git repo sync</string>
     <string name="ssh_show_public_key_preference_title">View generated SSH public key</string>
@@ -784,4 +786,6 @@
     <string name="sync_status_saved">Saved to %s</string>
 
     <string name="moving_between_subdirectories_requires_api_24">Renaming notebook to a different subdirectory requires Android 7 or higher</string>
+
+    <string name="subfolder_support_disabled">Support for subfolders is disabled</string>
 </resources>
