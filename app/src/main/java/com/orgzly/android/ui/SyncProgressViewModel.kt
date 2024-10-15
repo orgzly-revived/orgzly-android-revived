@@ -25,7 +25,9 @@ class SyncProgressViewModel : ViewModel() {
     init {
         viewModelScope.launch {
             SyncRunner.onStateChange("sync-view-model").asFlow().collect {
-                _syncState.tryEmit(it)
+                if (it != null) {
+                    _syncState.tryEmit(it)
+                }
             }
         }
     }

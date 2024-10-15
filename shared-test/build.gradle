@@ -4,7 +4,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     namespace = "com.orgzly.shared.test"
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         minSdk 21
@@ -44,7 +44,7 @@ android {
 }
 
 dependencies {
-    implementation project(":app")
+    implementation project(path: ':app')
     implementation "junit:junit:$versions.junit"
     implementation 'androidx.documentfile:documentfile:1.0.1'
     implementation "org.eclipse.jgit:org.eclipse.jgit:$versions.jgit"
