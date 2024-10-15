@@ -22,6 +22,15 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.28"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Target Android 14 and upgrade some Android dependencies." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.27"
             tools:ignore="HardcodedText" />
 
