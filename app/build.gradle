@@ -159,7 +159,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.android_test_espresso"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$versions.android_test_espresso"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$versions.android_test_espresso"
-    androidTestImplementation "androidx.test:runner:$versions.android_test"
+    androidTestImplementation "androidx.test:runner:$versions.android_test_runner"
     androidTestImplementation "androidx.test:rules:$versions.android_test"
     androidTestImplementation "androidx.test.ext:junit:$versions.android_test_ext_junit"
     androidTestImplementation "androidx.test.uiautomator:uiautomator:$versions.android_test_uiautomator"
