@@ -31,7 +31,7 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Dropbox: Account access is now full scope, not app folder. (Unlink and re-link for it take effect.)" />
+            app:text="Dropbox: Account access is now full scope, not app folder. (Unlink and re-link for it to take effect.)" />
 
         <TextView
             style="@style/WhatsNewVersion"
