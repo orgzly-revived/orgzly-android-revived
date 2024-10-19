@@ -6,7 +6,7 @@ buildscript {
 
     versions.android_gradle_plugin = '8.7.1'
 
-    versions.kotlin = '1.9.23'
+    versions.kotlin = '1.9.25'
 
     versions.kotlin_coroutines = '1.7.3'
 
