@@ -201,14 +201,14 @@ class DocumentRepoTest : SyncRepoTest, OrgzlyTest() {
                 SystemClock.sleep(300)
                 mDevice.findObject(UiSelector().text("New folder")).click()
                 SystemClock.sleep(500)
-                mDevice.findObject(UiSelector().text("Folder name")).text = repoDirName
+                mDevice.findObject(UiSelector().text("Folder name")).setText(repoDirName)
                 mDevice.findObject(UiSelector().text("OK")).click()
                 mDevice.findObject(UiSelector().textContains("ALLOW ACCESS TO")).click()
                 mDevice.findObject(UiSelector().text("ALLOW")).click()
             } else {
                 mDevice.findObject(UiSelector().description("New folder")).click()
                 SystemClock.sleep(500)
-                mDevice.findObject(UiSelector().text("Folder name")).text = repoDirName
+                mDevice.findObject(UiSelector().text("Folder name")).setText(repoDirName)
                 mDevice.findObject(UiSelector().text("OK")).click()
                 mDevice.findObject(UiSelector().text("USE THIS FOLDER")).click()
                 mDevice.findObject(UiSelector().text("ALLOW")).click()

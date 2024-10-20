@@ -45,7 +45,7 @@ buildscript {
 
     versions.android_test_ext_junit = '1.2.1'
 
-    versions.android_test_uiautomator = '2.2.0'
+    versions.android_test_uiautomator = '2.3.0'
 
     versions.org_java = 'v1.3.2'
 
