@@ -1,6 +1,7 @@
 package com.orgzly.android.ui.repo.git
 
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.DialogInterface
@@ -19,7 +20,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -280,6 +280,7 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
         menuInflater.inflate(R.menu.repos_cab, menu)
     }
 
+    @SuppressLint("NewApi")
     private fun saveAndFinish() {
         if (validateFields()) {
             val repoId = intent.getLongExtra(ARG_REPO_ID, 0)
@@ -298,7 +299,6 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
                     return
                 }
                 val repoScheme = getRepoScheme()
-                @RequiresApi(Build.VERSION_CODES.N)
                 if (repoScheme != "https" && !SshKey.exists) {
                     SshKey.promptForKeyGeneration()
                     return
