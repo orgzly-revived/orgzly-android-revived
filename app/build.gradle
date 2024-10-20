@@ -165,7 +165,6 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$versions.android_test_ext_junit"
     androidTestImplementation "androidx.test.uiautomator:uiautomator:$versions.android_test_uiautomator"
     androidTestImplementation "de.sven-jacobs:loremipsum:$versions.loremipsum"
-    androidTestImplementation "androidx.annotation:annotation:$versions.android_annotation"
 
     /* For running tests on lower API versions (e.g. 18) to avoid:
      * Didn't find class "androidx.test.core.app.InstrumentationActivityInvoker$BootstrapActivity"
