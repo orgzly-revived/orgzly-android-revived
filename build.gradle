@@ -59,7 +59,7 @@ buildscript {
 
     versions.joda_time = '2.12.7'
 
-    versions.glide = '4.14.2'
+    versions.glide = '4.16.0'
 
     versions.sardine = '0.8'
 
