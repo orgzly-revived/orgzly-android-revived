@@ -6,11 +6,11 @@ buildscript {
 
     versions.android_gradle_plugin = '8.7.1'
 
-    versions.kotlin = '2.0.21'
+    versions.kotlin = '1.9.23'
 
     versions.kotlin_coroutines = '1.7.3'
 
-    versions.jetbrains_annotations = '26.0.1'
+    versions.jetbrains_annotations = '24.1.0'
 
     versions.android_multidex = '2.0.1'
 
@@ -29,7 +29,7 @@ buildscript {
 
     versions.android_room = '2.6.1'
 
-    versions.android_lifecycle = '2.8.6'
+    versions.android_lifecycle = '2.8.5'
 
     versions.android_workmanager = '2.9.1'
 
