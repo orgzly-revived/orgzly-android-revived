@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="sync">Sincronizar</string>
     <string name="settings">Configurações</string>
+    <string name="sortnote">Ordenar nota</string>
     <string name="ok">Ok</string>
     <string name="yes">Sim</string>
     <string name="unlink">Desvincular</string>
@@ -25,6 +26,7 @@
     <string name="edit_note">Editar nota</string>
     <string name="delete">Excluir</string>
     <string name="delete_with_quoted_argument">Excluir “%s”</string>
+    <string name="delete_amount_of_books">Remover %d cadernos</string>
     <string name="name">Nome</string>
     <string name="query">Consulta</string>
     <string name="done">Concluído</string>
@@ -80,6 +82,11 @@
     <!-- Preferences (Settings). -->
     <string name="repos_preference_title">Repositórios</string>
     <string name="repos_preference_summary">Localização para sincronizar seus cadernos</string>
+    <string name="enable_repo_subfolders_preferences_title">Suporte para subpastas do repositório</string>
+    <string name="enable_repo_subfolders_preferences_summary">Carregar e salvar em subpastas</string>
+    <string name="ssh_keygen_preference_title">Geração de chave SSH</string>
+    <string name="ssh_keygen_preference_summary">Gerar par de chaves para sincronização do repositório Git</string>
+    <string name="ssh_show_public_key_preference_title">Exibir chave pública SSH gerada</string>
     <string name="message_book_has_no_link">Nenhum link definido</string>
     <string name="message_note_created">Nota criada</string>
     <string name="message_failed_creating_note">Falha ao criar nota</string>
@@ -175,6 +182,8 @@
     <string name="git_verifying_settings">Assegurando que as configurações do repositório irão funcionar.</string>
     <string name="git_url_hint">URL remota (por exemplo git@github.com:orgzly/orgzly-android.git)</string>
     <string name="git_directory_hint">Local do diretório (por exemplo, “/sdcard/orgzly”)</string>
+    <string name="git_ssh_on_missing_key_dialog_text">Nenhum par de chaves SSH encontrado. Deseja gerar um?</string>
+    <string name="git_ssh_on_missing_key_dialog_title">Nenhuma chave SSH encontrada</string>
     <string name="git_https_username_hint">Nome do Usuário</string>
     <string name="git_https_password_hint">Senha</string>
     <string name="git_author_hint">Autor (por exemplo, John Doe)</string>
@@ -190,11 +199,14 @@
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
     <string name="git_clone_error_ssh_auth">Falha ao clonar, erro na autenticação</string>
+    <string name="git_clone_error_ssh">Falha ao clonar: %s</string>
     <string name="git_clone_error_invalid_repo">O endereço remoto não é um repositório git</string>
     <string name="git_clone_error_unknown">Erro desconhecido ao clonar</string>
     <string name="git_clone_error_invalid_target_dir">O diretório de destino não existe</string>
     <string name="git_clone_error_target_not_empty">O diretório de destino não existe</string>
     <string name="git_clone_error_uri_not_supported">O endereço remoto não é um repositório git</string>
+    <string name="git_sync_error_failed_set_marker_branch">Falha ao atualizar o marcador da branch</string>
+    
     <string name="webdav_url_hint">URL (ex. webdavs://exemplo.com/meus-arquivos-org/)</string>
     <string name="webdav_auth_username_hint">Nome do Usuário</string>
     <string name="webdav_auth_password_hint">Senha</string>
@@ -236,6 +248,8 @@
     <string name="permissions_rationale_for_book_export">A exportação do caderno requer permissão de armazenamento</string>
     <string name="permissions_rationale_for_sync_start">Sincronização com repositórios locais requer permissão de armazenamento</string>
     <string name="permissions_rationale_for_external_files_access">Acesso a arquivos externos requer permissão de armazenamento</string>
+    <string name="permissions_rationale_for_post_notifications">É necessária permissão para postar notificações</string>
+    
     <string name="cycle_visibility">Dobrar/Desdobrar Tudo</string>
     <string name="running_database_update">Atualizando banco de dados…</string>
     <string name="note_has_been_modified">Nota modificada</string>
@@ -246,6 +260,7 @@
     <string name="failed_renaming_book_with_reason">Falha ao renomear: %s</string>
     <string name="renamed_book_from">Renomeado de “%s”</string>
     <string name="also_delete_linked_book">Excluir caderno remoto vinculado</string>
+    <string name="also_delete_linked_books">Excluir qualquer caderno remoto vinculado</string>
     <string name="message_deleting_book_failed">Falha ao excluir caderno: %s</string>
     <string name="message_book_deleted">Caderno excluído</string>
     <string name="priority_with_argument">Prioridade %s</string>
@@ -387,6 +402,8 @@
     <string name="no_states_defined">Nenhum estado definido</string>
     <string name="book_name_in_search">Nome do caderno nos resultados de pesquisa</string>
     <string name="display_notebook_name">Mostrar nome do caderno</string>
+    <string name="hide_empty_days_in_agenda">Ocultar dias vazios na agenda</string>
+    
     <string name="display_inherited_tags_in_search_results">Tags herdadas nos resultados da pesquisa</string>
     <string name="display_inherited_tags_in_search_results_summary">Mostrar tags herdadas nos resultados da pesquisa</string>
     <string name="ongoing_notification">Em andamento</string>
@@ -448,6 +465,10 @@
     <string name="pref_summary_sync_after_note_update">Sincronizar após atualizar ou excluir uma nota</string>
     <string name="pref_title_on_resume_sync">Aplicativo iniciado ou retomado</string>
     <string name="pref_summary_on_resume_sync">Sincronizar sempre que o aplicativo entrar em primeiro plano</string>
+    
+    <string name="pref_title_on_suspend_sync">Aplicativo suspenso</string>
+    <string name="pref_summary_on_suspend_sync">Sincronizar sempre que o aplicativo for para o segundo plano</string>
+    
     <string name="pref_title_repo_update_sync">Repositórios modificados (não implementados ainda)</string>
     <string name="pref_summary_repo_update_sync">Sincronizar sempre que uma atualização nos repositórios for detectada</string>
     <string name="not_modified">Não modificado</string>
@@ -476,6 +497,7 @@
         <item quantity="other"><b>%d</b> pesquisas exportadas</item>
     </plurals>
     <string name="storage_permissions_missing">Sem permissão de armazenamento</string>
+    <string name="alarms_permissions_missing">Sem permissão para definir despertadores</string>
     <string name="file_does_not_exist">Arquivo não existe: %s</string>
     <string name="import_from">Importar de “%1$s”?</string>
     <string name="export_to">Exportar para “%1$s”?</string>
@@ -571,14 +593,64 @@
     <string name="prepend">Fixar ao topo</string>
     <string name="insert_new_note_at_beginning">Inserir nova nota no início</string>
     <string name="developer_options">Opções de desenvolvedor</string>
-    <string name="git_repository_type">Git repository type</string>
+    <string name="git_repository_type">Tipo de repositório Git</string>
     <string name="in_development">Em desenvolvimento</string>
-    <string name="select_notebook">Select notebook</string>
-    <string name="highlight_rich_text_being_edited">Highlight rich text being edited</string>
-    <string name="use_alarm_clock_for_tod_reminders">Use alarm clock</string>
-    <string name="use_alarm_clock_for_tod_reminders_summary">For reminders with the time of day set</string>
-    <string name="log_major_events">Log major events</string>
-    <string name="logs">Logs</string>
-    <string name="share">Share</string>
-    <string name="refresh_data">Refresh</string>
+    <string name="select_notebook">Selecionar caderno</string>
+    <string name="highlight_rich_text_being_edited">Destacar rich text que está sendo editado</string>
+    <string name="use_alarm_clock_for_tod_reminders">Usar despertador</string>
+    <string name="use_alarm_clock_for_tod_reminders_summary">Para lembretes com a hora do dia definida</string>
+    <string name="log_major_events">Registre os principais eventos</string>
+    <string name="logs">Registros</string>
+    <string name="share">Compartilhar</string>
+    <string name="refresh_data">Atualizar</string>
+
+    <string name="clock">Relógio</string>
+    <string name="clock_in">Clock in</string>
+    <string name="clock_out">Clock out</string>
+    <string name="clock_cancel">Clock cancel</string>
+    <string name="search_results">Resultado da pesquisa</string>
+    <string name="popup_menu_buttons">Botões de menu pop-up</string>
+
+    <string name="ssh_keygen_label_rsa">RSA</string>
+    <string name="ssh_keygen_label_ecdsa">ECDSA</string>
+    <string name="ssh_keygen_label_ed25519">ED25519</string>
+    <string name="ssh_keygen_require_authentication">Proteger com trava de credenciais na tela</string>
+    <string name="ssh_keygen_generate">Gerar</string>
+    <string name="ssh_keygen_existing_title">Chave SSH</string>
+    <string name="ssh_keygen_existing_message">Substituir chave SSH existente? Você pode perder o acesso ao seu servidor.</string>
+    <string name="ssh_keygen_existing_replace">Substituir</string>
+    <string name="ssh_keygen_existing_keep">Manter</string>
+    <string name="ssh_keygen_explanation_ecdsa"><b>ECDSA (NIST P-256)</b>\nAutenticação rápida e suportada pela maioria dos servidores que ainda estão recebendo atualizações.</string>
+    <string name="ssh_keygen_explanation_ed25519"><b>ED25519</b>\nAutenticação rápida, mas suportada apenas por servidores modernos.</string>
+    <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 bit)</b>\nSuportado por servidores mais antigos.</string>
+    <string name="ssh_keygen_generating_progress">Gerando chaves…</string>
+    <string name="ssh_key_failed_get_public">Falha ao resgatar chave SSH pública</string>
+    <string name="ssh_key_failed_get_private">Falha ao resgatar chave SSH privada</string>
+    <string name="ssh_key_failed_unlock_private">Falha ao desbloquear chave SSH privada</string>
+    <string name="biometric_prompt_title_ssh_keygen">Gerar chave SSH</string>
+    <string name="biometric_prompt_title_unlock_ssh_key">Desbloquear chave SSH do Orgzly</string>
+    <string name="biometric_auth_not_available">A autenticação biométrica não está disponível</string>
+    <string name="biometric_auth_on_error">Erro de autenticação: Código: %1$d (%2$s)</string>
+    <string name="ssh_keygen_message">%1$s\n\nForneça esta chave pública ao seu servidor Git.</string>
+    <string name="your_public_key">Sua chave pública</string>
+    <string name="ssh_keygen_share">Compartilhar</string>
+    <string name="error_generate_ssh_key">Erro ao tentar gerar o par de chaves SSH</string>
+    <string name="ssh_key_error_dialog_text">Mensagem: \n</string>
+    <string name="ssh_key_locked_and_no_activity">Erro: A chave SSH só pode ser desbloqueada a partir de uma atividade</string>
+    <string name="error_file_matches_repo_ignore_rule">Erro: O nome do arquivo do repositório corresponde a uma regra em %s</string>
+
+    <!-- Sync status -->
+    <string name="sync_status_no_change">Nenhuma mudança</string>
+    <string name="sync_status_no_link_and_multiple_repos">O notebook não tem link e existem vários repositórios</string>
+    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">O notebook não tem link e existe um ou mais notebooks remotos com o mesmo nome</string>
+    <string name="sync_status_dummy_without_link_and_multiple_rooks">O notebook não tem link e existem vários notebooks remotos com o mesmo nome</string>
+    <string name="sync_status_no_book_multiple_rooks">Não existe nenhum notebook e existem vários notebooks remotos com o mesmo nome</string>
+    <string name="sync_status_rook_no_longer_exists">O arquivo remoto não existe mais; link do repositório removido. Defina um link se quiser sincronizar com um repositório.</string>
+    <string name="sync_status_no_link_and_previous_error">O notebook não tem link para repositório</string>
+    <string name="sync_status_loaded">Carregado de %s</string>
+    <string name="sync_status_saved">Salvo em %s</string>
+
+    <string name="moving_between_subdirectories_requires_api_24">Renomear o caderno para um subdiretório diferente requer Android 7 ou superior</string>
+
+    <string name="subfolder_support_disabled">O suporte para subpastas está desabilitado</string>
 </resources>
