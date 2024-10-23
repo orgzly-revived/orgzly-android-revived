@@ -3,7 +3,7 @@ package com.orgzly.android.ui.main
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.Transformations
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
@@ -15,21 +15,14 @@ import com.orgzly.android.db.entity.SavedSearch
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.CommonViewModel
 import com.orgzly.android.ui.SingleLiveEvent
-import com.orgzly.android.usecase.BookScrollToNote
-import com.orgzly.android.usecase.BookSparseTreeForNote
-import com.orgzly.android.usecase.LinkFindTarget
-import com.orgzly.android.usecase.NoteFindWithProperty
-import com.orgzly.android.usecase.NoteUpdateClockingState
-import com.orgzly.android.usecase.SavedSearchExport
-import com.orgzly.android.usecase.SavedSearchImport
-import com.orgzly.android.usecase.UseCaseRunner
+import com.orgzly.android.usecase.*
 import com.orgzly.android.util.LogUtils
 import java.io.File
 
 class MainActivityViewModel(private val dataRepository: DataRepository) : CommonViewModel() {
     private val booksParams = MutableLiveData<String>()
 
-    private val booksSubject: LiveData<List<BookView>> = booksParams.switchMap {
+    private val booksSubject: LiveData<List<BookView>> = Transformations.switchMap(booksParams) {
         dataRepository.getBooksLiveData()
     }
 

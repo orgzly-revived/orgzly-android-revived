@@ -1,10 +1,11 @@
 package com.orgzly.android.ui.notes.query
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.Transformations
 import com.orgzly.BuildConfig
 import com.orgzly.android.data.DataRepository
+import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.ui.AppBar
 import com.orgzly.android.ui.CommonViewModel
 import com.orgzly.android.util.LogUtils
@@ -24,9 +25,9 @@ class QueryViewModel(private val dataRepository: DataRepository) : CommonViewMod
 
     private val notesParams = MutableLiveData<Params>()
 
-    val data = notesParams.switchMap { params ->
+    val data = Transformations.switchMap(notesParams) { params ->
         if (params.query != null) {
-            dataRepository.selectNotesFromQueryLiveData(params.query).map {
+            Transformations.map(dataRepository.selectNotesFromQueryLiveData(params.query)) {
                 viewState.value = if (it.isNotEmpty()) {
                     ViewState.LOADED
                 } else {
@@ -36,7 +37,7 @@ class QueryViewModel(private val dataRepository: DataRepository) : CommonViewMod
                 it
             }
         } else {
-            MutableLiveData()
+            MutableLiveData<List<NoteView>>()
         }
     }
 
