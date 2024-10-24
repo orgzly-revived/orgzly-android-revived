@@ -1,0 +1,91 @@
+name: Build test APKs and store artifacts
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-test-apks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Setup build tool version variable
+        shell: bash
+        run: |
+          BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
+          echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+          echo Last build tool version is: $BUILD_TOOL_VERSION
+
+      - name: Setup Git commit SHA variable
+        run: echo "COMMIT_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
+
+      # F-Droid APK
+
+      - name: Assemble F-Droid release APK
+        run: ./gradlew assembleFdroidRelease --stacktrace
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sign F-Droid APK
+        uses: r0adkll/sign-android-release@v1
+        id: sign_fdroid_apk
+        with:
+          releaseDirectory: app/build/outputs/apk/fdroid/release
+          signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
+          alias: key0
+          keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+
+      - name: Rename F-Droid APK file
+        run: mv ${{steps.sign_fdroid_apk.outputs.signedReleaseFile}} orgzly-revived-fdroid-${{ env.COMMIT_SHA }}.apk
+
+      - name: Store F-Droid release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: orgzly-revived-fdroid-${{ env.COMMIT_SHA }}.apk
+          path: orgzly-revived-fdroid-${{ env.COMMIT_SHA }}.apk
+
+      # "Premium" APK
+
+      - name: Add Dropbox app identifier
+        shell: bash
+        run: |
+          echo "dropbox.app_key = \"${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
+          echo "dropbox.app_key_schema = \"db-${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
+
+      - name: Assemble "premium" APK
+        run: ./gradlew assemblePremiumRelease --stacktrace
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sign "premium" APK
+        uses: r0adkll/sign-android-release@v1
+        id: sign_premium_apk
+        with:
+          releaseDirectory: app/build/outputs/apk/premium/release
+          signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
+          alias: key0
+          keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+
+      - name: Rename "premium" APK file
+        run: mv ${{steps.sign_premium_apk.outputs.signedReleaseFile}} orgzly-revived-premium-${{ env.COMMIT_SHA }}.apk
+
+      - name: Store "premium" release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: orgzly-revived-premium-${{ env.COMMIT_SHA }}.apk
+          path: orgzly-revived-premium-${{ env.COMMIT_SHA }}.apk
