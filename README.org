@@ -3,6 +3,25 @@
 <a title="Tests" target="_blank" href="https://github.com/orgzly-revived/orgzly-android-revived/actions/workflows/test.yaml"><img src="https://github.com/orgzly-revived/orgzly-android-revived/actions/workflows/test.yaml/badge.svg"></a>
 <a title="Crowdin" target="_blank" href="https://crowdin.com/project/orgzly"><img src="https://d322cqt584bo4o.cloudfront.net/orgzly/localized.svg"></a>
 </div>
+#+END_HTML
+
+* Orgzly Revived
+
+Orgzly is an outliner for taking notes and managing to-do lists. The source code
+[[https://github.com/orgzly/orgzly-android][repository]] is available on GitHub, but is no longer actively 
+maintained. We have used this code as the base for Orgzly Revived.
+
+With Orgzly, you can keep notebooks stored in plain-text and have them synchronized
+with a directory on your mobile device or an SD card, WebDAV server, or Dropbox.
+
+Notebooks are saved in /Org mode/'s file format. “Org mode is for
+keeping notes, maintaining TODO lists, planning projects, and
+authoring documents with a fast and effective plain-text system.” See
+http://orgmode.org for more information.
+
+Orgzly Revived is a community-maintained version of Orgzly, as the development of the original app is no longer active.
+
+#+BEGIN_HTML
 <a href="https://f-droid.org/packages/com.orgzlyrevived">
     <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
     alt="Get it on F-Droid"
@@ -13,26 +32,10 @@
 </a>
 #+END_HTML
 
-* Orgzly Revived
-
-Orgzly Revived is a community-maintained version of Orgzly, as the development of the original app is no longer active.
-
 The Orgzly Revived project aims to continue development of the Orgzly application. The rebranding is due 
 to the disappearance of the Orgzly author so we, as the community, had to come up with a new solution.
 We plan to continue adding useful features, fixing bugs, keeping up-to-date with technological evolution, 
-and generally maintaining the [[https://orgmode.org/][Org Mode]] outreach and its support on Android.
-
-[[https://orgzly.com/][Orgzly]] is an outliner for taking notes and managing to-do lists. The source code
-[[https://github.com/orgzly/orgzly-android][repository]] is available on GitHub but is no longer actively 
-maintained. We have used this code as the base for Orgzly Revived.
-
-With Orgzly, you can keep notebooks stored in plain-text and have them synchronized
-with a directory on your mobile device or an SD card, WebDAV server, or Dropbox.
-
-Notebooks are saved in /Org mode/'s file format. “Org mode is for
-keeping notes, maintaining TODO lists, planning projects, and
-authoring documents with a fast and effective plain-text system.” See
-http://orgmode.org for more information.
+and generally maintaining the [[https://orgmode.org/][Org Mode]] outreach and its support on Android .Orgzly Revived is a community-maintained version of Orgzly, as the development of the original app is no longer active.
 
 * End-user documentation
 
