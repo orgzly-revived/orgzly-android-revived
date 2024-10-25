@@ -1,6 +1,7 @@
 package com.orgzly.android.db
 
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import com.orgzly.android.App
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.db.entity.Note
@@ -13,8 +14,8 @@ import java.io.StringWriter
 data class NotesClipboard(val entries: List<Entry> = emptyList()) {
 
     data class Entry(
-            val note: Note,
-            val properties: List<NoteProperty>
+            @SerializedName("note") val note: Note,
+            @SerializedName("properties") val properties: List<NoteProperty>
     )
 
     val count: Int
