@@ -7,7 +7,7 @@
 
 * Orgzly Revived
 
-Orgzly is an outliner for taking notes and managing to-do lists. The source code
+Orgzly is an outliner for taking notes and managing to-do lists. The original source code
 [[https://github.com/orgzly/orgzly-android][repository]] is available on GitHub, but is no longer actively 
 maintained. We have used this code as the base for Orgzly Revived.
 
