@@ -7,9 +7,8 @@
 
 * Orgzly Revived
 
-Orgzly is an outliner for taking notes and managing to-do lists. The original source code
-[[https://github.com/orgzly/orgzly-android][repository]] is available on GitHub, but is no longer actively 
-maintained. We have used this code as the base for Orgzly Revived.
+Orgzly is an outliner for taking notes and managing to-do lists. Orgzly Revived is a community-maintained version of Orgzly, as the development of the original app has been halted. The original Orgzly source code can be found
+[[https://github.com/orgzly/orgzly-android][here]].
 
 With Orgzly, you can keep notebooks stored in plain-text and have them synchronized
 with a directory on your mobile device or an SD card, WebDAV server, or Dropbox.
@@ -18,8 +17,6 @@ Notebooks are saved in /Org mode/'s file format. “Org mode is for
 keeping notes, maintaining TODO lists, planning projects, and
 authoring documents with a fast and effective plain-text system.” See
 http://orgmode.org for more information.
-
-Orgzly Revived is a community-maintained version of Orgzly, as the development of the original app is no longer active.
 
 #+BEGIN_HTML
 <a href="https://f-droid.org/packages/com.orgzlyrevived">
