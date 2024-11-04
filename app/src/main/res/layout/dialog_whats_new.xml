@@ -31,7 +31,7 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Update translations for Brazilian Portuguese." />
+            app:text="Update translations for Brazilian Portuguese and Turkish." />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
