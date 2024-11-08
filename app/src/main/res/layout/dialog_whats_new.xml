@@ -22,6 +22,15 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.30"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix file corruption bug when saving to directory repos." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.29"
             tools:ignore="HardcodedText" />
 
