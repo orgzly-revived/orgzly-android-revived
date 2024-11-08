@@ -194,7 +194,7 @@ public class DocumentRepo implements SyncRepo {
             }
         }
 
-        try (OutputStream out = context.getContentResolver().openOutputStream(destinationFile.getUri())) {
+        try (OutputStream out = context.getContentResolver().openOutputStream(destinationFile.getUri(), "wt")) {
             MiscUtils.writeFileToStream(file, out);
         }
 
