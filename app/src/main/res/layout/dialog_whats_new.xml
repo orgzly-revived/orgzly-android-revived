@@ -22,12 +22,22 @@
 
         <TextView
             style="@style/WhatsNewVersion"
-            android:text="v1.8.30"
+            android:text="v1.8.31"
             tools:ignore="HardcodedText" />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Fix file corruption bug when saving to directory repos." />
+            app:text="Downgrade a WebDAV dependency." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
+            android:text="v1.8.30"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix &lt;a href=&quot;https://github.com/orgzly-revived/orgzly-android-revived/issues/395&quot;&gt;file corruption bug&lt;/a&gt; when saving to directory repos." />
 
         <TextView
             style="@style/WhatsNewVersion"
