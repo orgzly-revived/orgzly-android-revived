@@ -21,6 +21,11 @@ class AutoSync @Inject constructor(val context: Application, val dataRepository:
                         startSync()
                     }
 
+                Type.QUICK_NOTE_PRE_CREATE ->
+                    if (AppPreferences.syncOnQuickNotePreCreate(context)) {
+                        startSync()
+                    }
+
                 Type.DATA_MODIFIED ->
                     if (AppPreferences.syncOnNoteUpdate(context)) {
                         startSync()
@@ -50,6 +55,7 @@ class AutoSync @Inject constructor(val context: Application, val dataRepository:
         DATA_MODIFIED,
         APP_RESUMED,
         APP_SUSPENDED,
+        QUICK_NOTE_PRE_CREATE,
     }
 
     companion object {
