@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="sync">Synchronizuj</string>
     <string name="settings">Ustawienia</string>
+    <string name="sortnote">Sort note</string>
     <string name="ok">OK</string>
     <string name="yes">Tak</string>
     <string name="unlink">Odłącz</string>
@@ -25,6 +26,7 @@
     <string name="edit_note">Edytuj notatkę</string>
     <string name="delete">Usuń</string>
     <string name="delete_with_quoted_argument">Usuń „%s”</string>
+    <string name="delete_amount_of_books">Delete %d notebooks</string>
     <string name="name">Nazwa</string>
     <string name="query">Zapytanie</string>
     <string name="done">Gotowe</string>
@@ -86,6 +88,11 @@
     <!-- Preferences (Settings). -->
     <string name="repos_preference_title">Repozytoria</string>
     <string name="repos_preference_summary">Położenie, z którym można synchronizować notatniki</string>
+    <string name="enable_repo_subfolders_preferences_title">Support repository subfolders</string>
+    <string name="enable_repo_subfolders_preferences_summary">Load from and write to subfolders</string>
+    <string name="ssh_keygen_preference_title">SSH key generation</string>
+    <string name="ssh_keygen_preference_summary">Generate key pair for Git repo sync</string>
+    <string name="ssh_show_public_key_preference_title">View generated SSH public key</string>
     <string name="message_book_has_no_link">Nie ustawiono łącza</string>
     <string name="message_note_created">Notatka utworzona</string>
     <string name="message_failed_creating_note">Nie udało się utworzyć notatki</string>
@@ -181,6 +188,8 @@
     <string name="git_verifying_settings">Gwarantowanie, że ustawienia repozytorium będą działać.</string>
     <string name="git_url_hint">Adres zdalny (np. git@github.com:orgzly / orgzly-android.git)</string>
     <string name="git_directory_hint">Lokalizacja katalogu (np. “file:/sdcard/orgzly”)</string>
+    <string name="git_ssh_on_missing_key_dialog_text">No SSH key pair found. Do you wish to generate one?</string>
+    <string name="git_ssh_on_missing_key_dialog_title">No SSH key found</string>
     <string name="git_https_username_hint">Nazwa użytkownika</string>
     <string name="git_https_password_hint">Hasło</string>
     <string name="git_author_hint">Autor (np. John Doe)</string>
@@ -196,11 +205,13 @@
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
     <string name="git_clone_error_ssh_auth">Klonowanie nieudane, błąd uwierzytelniania</string>
+    <string name="git_clone_error_ssh">Failure while cloning: %s</string>
     <string name="git_clone_error_invalid_repo">Adres zdalny nie jest repozytorium Git</string>
     <string name="git_clone_error_unknown">Nieznany błąd podczas klonowania</string>
     <string name="git_clone_error_invalid_target_dir">Katalog docelowy nie istnieje</string>
     <string name="git_clone_error_target_not_empty">Katalog docelowy nie jest pusty</string>
     <string name="git_clone_error_uri_not_supported">Adres zdalny nie jest obsługiwany</string>
+    <string name="git_sync_error_failed_set_marker_branch">Failed to update marker branch</string>
     <string name="webdav_url_hint">Adres URL (np. webdavs://example.com/moje-pliki-org/)</string>
     <string name="webdav_auth_username_hint">Nazwa użytkownika</string>
     <string name="webdav_auth_password_hint">Hasło</string>
@@ -242,6 +253,7 @@
     <string name="permissions_rationale_for_book_export">Eksport notatnika wymaga uprawnienia do zapisu</string>
     <string name="permissions_rationale_for_sync_start">Synchronizacja z lokalnym repozytorium wymaga uprawnienia do zapisu</string>
     <string name="permissions_rationale_for_external_files_access">Dostęp do plików w pamięci zewnętrznej wymaga zezwolenia</string>
+    <string name="permissions_rationale_for_post_notifications">Permission is required to post notifications</string>
     <string name="cycle_visibility">Zwiń/Rozwiń</string>
     <string name="running_database_update">Aktualizacja bazy…</string>
     <string name="note_has_been_modified">Zmodyfikowano notatkę</string>
@@ -252,6 +264,7 @@
     <string name="failed_renaming_book_with_reason">Zmiana nazwy nie powiodła się: %s</string>
     <string name="renamed_book_from">Zmiana nazwy z “%s”</string>
     <string name="also_delete_linked_book">Usuń powiązany zdalny notatnik</string>
+    <string name="also_delete_linked_books">Delete any linked remote notebooks</string>
     <string name="message_deleting_book_failed">Usunięcie notatnika nie powiodło się: %s</string>
     <string name="message_book_deleted">Notatnik usunięty</string>
     <string name="priority_with_argument">Priorytet %s</string>
@@ -397,6 +410,7 @@
     <string name="no_states_defined">Nie zdefiniowano stanów</string>
     <string name="book_name_in_search">Nazwa notatnika w wynikach wyszukiwania</string>
     <string name="display_notebook_name">Wyświetl nazwę notatnika</string>
+    <string name="hide_empty_days_in_agenda">Hide empty days in agenda</string>
     <string name="display_inherited_tags_in_search_results">Dziedziczone tagi w wynikach wyszukiwania</string>
     <string name="display_inherited_tags_in_search_results_summary">Wyświetl dziedziczone tagi w wynikach wyszukiwania</string>
     <string name="ongoing_notification">W toku</string>
@@ -458,6 +472,8 @@
     <string name="pref_summary_sync_after_note_update">Synchronizacja po modyfikacji lub usunięciu notatki</string>
     <string name="pref_title_on_resume_sync">App started or resumed</string>
     <string name="pref_summary_on_resume_sync">Synchronizuj przy minimalizowaniu aplikacji</string>
+    <string name="pref_title_on_suspend_sync">App suspended</string>
+    <string name="pref_summary_on_suspend_sync">Sync whenever app goes to the background</string>
     <string name="pref_title_repo_update_sync">Repositories modified (not implemented yet)</string>
     <string name="pref_summary_repo_update_sync">Synchronizuj po wykryciu aktualizacji repozytoriów</string>
     <string name="not_modified">Nie zmodyfikowano</string>
@@ -494,6 +510,7 @@
         <item quantity="other">Wyeksportowano <b>%d</b> wyszukiwań</item>
     </plurals>
     <string name="storage_permissions_missing">Brak uprawnień dostępu do pamięci</string>
+    <string name="alarms_permissions_missing">No permission to set reminders</string>
     <string name="file_does_not_exist">File does not exist: %s</string>
     <string name="import_from">Import from “%1$s”?</string>
     <string name="export_to">Export to “%1$s”?</string>
@@ -603,4 +620,49 @@
     <string name="logs">Dzienniki</string>
     <string name="share">Udostępnij</string>
     <string name="refresh_data">Odśwież</string>
+    <string name="clock">Clock</string>
+    <string name="clock_in">Clock in</string>
+    <string name="clock_out">Clock out</string>
+    <string name="clock_cancel">Clock cancel</string>
+    <string name="search_results">Search results</string>
+    <string name="popup_menu_buttons">Popup menu buttons</string>
+    <string name="ssh_keygen_label_rsa">RSA</string>
+    <string name="ssh_keygen_label_ecdsa">ECDSA</string>
+    <string name="ssh_keygen_label_ed25519">ED25519</string>
+    <string name="ssh_keygen_require_authentication">Protect with screen lock credential</string>
+    <string name="ssh_keygen_generate">Generate</string>
+    <string name="ssh_keygen_existing_title">SSH key</string>
+    <string name="ssh_keygen_existing_message">Replace existing SSH key? You might lose access to your server.</string>
+    <string name="ssh_keygen_existing_replace">Replace</string>
+    <string name="ssh_keygen_existing_keep">Keep</string>
+    <string name="ssh_keygen_explanation_ecdsa"><b>ECDSA (NIST P-256)</b>\nFast authentication and supported by most servers that are still receiving updates.</string>
+    <string name="ssh_keygen_explanation_ed25519"><b>ED25519</b>\nFast authentication, but only supported by rather modern servers.</string>
+    <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 bit)</b>\nSupported by older servers.</string>
+    <string name="ssh_keygen_generating_progress">Generating keys…</string>
+    <string name="ssh_key_failed_get_public">Failed to get SSH public key</string>
+    <string name="ssh_key_failed_get_private">Failed to get SSH private key</string>
+    <string name="ssh_key_failed_unlock_private">Failed to unlock SSH private key</string>
+    <string name="biometric_prompt_title_ssh_keygen">Generate SSH key</string>
+    <string name="biometric_prompt_title_unlock_ssh_key">Unlock Orgzly\'s SSH key</string>
+    <string name="biometric_auth_not_available">Biometric authentication is not available</string>
+    <string name="biometric_auth_on_error">Authentication error: Code: %1$d (%2$s)</string>
+    <string name="ssh_keygen_message">%1$s\n\nProvide this public key to your Git server.</string>
+    <string name="your_public_key">Your public key</string>
+    <string name="ssh_keygen_share">Share</string>
+    <string name="error_generate_ssh_key">Error while trying to generate the SSH key pair</string>
+    <string name="ssh_key_error_dialog_text">Message: \n</string>
+    <string name="ssh_key_locked_and_no_activity">Error: SSH key can only be unlocked from an activity</string>
+    <string name="error_file_matches_repo_ignore_rule">Error: Repository file name matches a rule in %s</string>
+    <!-- Sync status -->
+    <string name="sync_status_no_change">No change</string>
+    <string name="sync_status_no_link_and_multiple_repos">Notebook has no link and multiple repositories exist</string>
+    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">Notebook has no link and one or more remote notebooks with the same name exist</string>
+    <string name="sync_status_dummy_without_link_and_multiple_rooks">Notebook has no link and multiple remote notebooks with the same name exist</string>
+    <string name="sync_status_no_book_multiple_rooks">No notebook and multiple remote notebooks with the same name exist</string>
+    <string name="sync_status_rook_no_longer_exists">Remote file no longer exists; repository link removed. Set a link if you want to sync to a repository.</string>
+    <string name="sync_status_no_link_and_previous_error">Notebook has no repository link</string>
+    <string name="sync_status_loaded">Loaded from %s</string>
+    <string name="sync_status_saved">Saved to %s</string>
+    <string name="moving_between_subdirectories_requires_api_24">Renaming notebook to a different subdirectory requires Android 7 or higher</string>
+    <string name="subfolder_support_disabled">Support for subfolders is disabled</string>
 </resources>
