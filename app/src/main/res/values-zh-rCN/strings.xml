@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="sync">同步</string>
     <string name="settings">设置</string>
+    <string name="sortnote">Sort note</string>
     <string name="ok">确定</string>
     <string name="yes">是</string>
     <string name="unlink">断开连接</string>
@@ -25,6 +26,7 @@
     <string name="edit_note">编辑笔记</string>
     <string name="delete">删除</string>
     <string name="delete_with_quoted_argument">删除 “%s”</string>
+    <string name="delete_amount_of_books">Delete %d notebooks</string>
     <string name="name">名称</string>
     <string name="query">查询</string>
     <string name="done">完成</string>
@@ -77,6 +79,11 @@
     <!-- Preferences (Settings). -->
     <string name="repos_preference_title">存储库</string>
     <string name="repos_preference_summary">用于同步笔记本的位置</string>
+    <string name="enable_repo_subfolders_preferences_title">Support repository subfolders</string>
+    <string name="enable_repo_subfolders_preferences_summary">Load from and write to subfolders</string>
+    <string name="ssh_keygen_preference_title">SSH key generation</string>
+    <string name="ssh_keygen_preference_summary">Generate key pair for Git repo sync</string>
+    <string name="ssh_show_public_key_preference_title">View generated SSH public key</string>
     <string name="message_book_has_no_link">无设定的连接</string>
     <string name="message_note_created">笔记已创建</string>
     <string name="message_failed_creating_note">创建笔记失败</string>
@@ -172,6 +179,8 @@
     <string name="git_verifying_settings">确保存储库设置工作。</string>
     <string name="git_url_hint">远程地址（例如 git@github.com:orgzly/orgzly-android.git）</string>
     <string name="git_directory_hint">目录位置（例如 “file:/sdcard/orgzly”）</string>
+    <string name="git_ssh_on_missing_key_dialog_text">No SSH key pair found. Do you wish to generate one?</string>
+    <string name="git_ssh_on_missing_key_dialog_title">No SSH key found</string>
     <string name="git_https_username_hint">用户名</string>
     <string name="git_https_password_hint">密码</string>
     <string name="git_author_hint">作者（例如 John Doe）</string>
@@ -187,11 +196,13 @@
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
     <string name="git_clone_error_ssh_auth">克隆失败，验证错误</string>
+    <string name="git_clone_error_ssh">Failure while cloning: %s</string>
     <string name="git_clone_error_invalid_repo">远程地址不是一个git repo</string>
     <string name="git_clone_error_unknown">克隆时发生未知错误</string>
     <string name="git_clone_error_invalid_target_dir">目标目录不存在</string>
     <string name="git_clone_error_target_not_empty">目标目录不是空的</string>
     <string name="git_clone_error_uri_not_supported">远程地址不受支持</string>
+    <string name="git_sync_error_failed_set_marker_branch">Failed to update marker branch</string>
     <string name="webdav_url_hint">URL (例如 webdavs://example.com/my-org-files/)</string>
     <string name="webdav_auth_username_hint">用户名</string>
     <string name="webdav_auth_password_hint">密码</string>
@@ -233,6 +244,7 @@
     <string name="permissions_rationale_for_book_export">导出笔记本需要存储权限</string>
     <string name="permissions_rationale_for_sync_start">与本地存储库同步需要存储权限</string>
     <string name="permissions_rationale_for_external_files_access">访问外部文件需要存储权限</string>
+    <string name="permissions_rationale_for_post_notifications">Permission is required to post notifications</string>
     <string name="cycle_visibility">收起/展开全部</string>
     <string name="running_database_update">正在升级数据库…</string>
     <string name="note_has_been_modified">笔记已修改</string>
@@ -243,6 +255,7 @@
     <string name="failed_renaming_book_with_reason">重命名失败：%s</string>
     <string name="renamed_book_from">已重命名从 “%s”</string>
     <string name="also_delete_linked_book">删除已连接的远程笔记本</string>
+    <string name="also_delete_linked_books">Delete any linked remote notebooks</string>
     <string name="message_deleting_book_failed">删除笔记本失败：%s</string>
     <string name="message_book_deleted">笔记本已删除</string>
     <string name="priority_with_argument">优先级 %s</string>
@@ -382,6 +395,7 @@
     <string name="no_states_defined">无已定义状态</string>
     <string name="book_name_in_search">搜索结果中的笔记本名称</string>
     <string name="display_notebook_name">显示笔记本名称</string>
+    <string name="hide_empty_days_in_agenda">Hide empty days in agenda</string>
     <string name="display_inherited_tags_in_search_results">搜索结果中的被继承标签</string>
     <string name="display_inherited_tags_in_search_results_summary">在搜索结果中显示被继承标签</string>
     <string name="ongoing_notification">持续</string>
@@ -443,6 +457,8 @@
     <string name="pref_summary_sync_after_note_update">更新或删除笔记后同步</string>
     <string name="pref_title_on_resume_sync">启动或返回应用程序</string>
     <string name="pref_summary_on_resume_sync">当应用程序进入前台时同步</string>
+    <string name="pref_title_on_suspend_sync">App suspended</string>
+    <string name="pref_summary_on_suspend_sync">Sync whenever app goes to the background</string>
     <string name="pref_title_repo_update_sync">存储库已修改（尚未实现）</string>
     <string name="pref_summary_repo_update_sync">当检测到存储库内有更新时同步</string>
     <string name="not_modified">未修改</string>
@@ -467,6 +483,7 @@
         <item quantity="other">已导出 <b>%d</b> 搜索</item>
     </plurals>
     <string name="storage_permissions_missing">无存储权限</string>
+    <string name="alarms_permissions_missing">No permission to set reminders</string>
     <string name="file_does_not_exist">文件不存在: %s</string>
     <string name="import_from">从“%1$s“导入？</string>
     <string name="export_to">导出到 \"%1$s\"？</string>
@@ -570,4 +587,49 @@
     <string name="logs">日志</string>
     <string name="share">分享</string>
     <string name="refresh_data">刷新</string>
+    <string name="clock">Clock</string>
+    <string name="clock_in">Clock in</string>
+    <string name="clock_out">Clock out</string>
+    <string name="clock_cancel">Clock cancel</string>
+    <string name="search_results">Search results</string>
+    <string name="popup_menu_buttons">Popup menu buttons</string>
+    <string name="ssh_keygen_label_rsa">RSA</string>
+    <string name="ssh_keygen_label_ecdsa">ECDSA</string>
+    <string name="ssh_keygen_label_ed25519">ED25519</string>
+    <string name="ssh_keygen_require_authentication">Protect with screen lock credential</string>
+    <string name="ssh_keygen_generate">Generate</string>
+    <string name="ssh_keygen_existing_title">SSH key</string>
+    <string name="ssh_keygen_existing_message">Replace existing SSH key? You might lose access to your server.</string>
+    <string name="ssh_keygen_existing_replace">Replace</string>
+    <string name="ssh_keygen_existing_keep">Keep</string>
+    <string name="ssh_keygen_explanation_ecdsa"><b>ECDSA (NIST P-256)</b>\nFast authentication and supported by most servers that are still receiving updates.</string>
+    <string name="ssh_keygen_explanation_ed25519"><b>ED25519</b>\nFast authentication, but only supported by rather modern servers.</string>
+    <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 bit)</b>\nSupported by older servers.</string>
+    <string name="ssh_keygen_generating_progress">Generating keys…</string>
+    <string name="ssh_key_failed_get_public">Failed to get SSH public key</string>
+    <string name="ssh_key_failed_get_private">Failed to get SSH private key</string>
+    <string name="ssh_key_failed_unlock_private">Failed to unlock SSH private key</string>
+    <string name="biometric_prompt_title_ssh_keygen">Generate SSH key</string>
+    <string name="biometric_prompt_title_unlock_ssh_key">Unlock Orgzly\'s SSH key</string>
+    <string name="biometric_auth_not_available">Biometric authentication is not available</string>
+    <string name="biometric_auth_on_error">Authentication error: Code: %1$d (%2$s)</string>
+    <string name="ssh_keygen_message">%1$s\n\nProvide this public key to your Git server.</string>
+    <string name="your_public_key">Your public key</string>
+    <string name="ssh_keygen_share">Share</string>
+    <string name="error_generate_ssh_key">Error while trying to generate the SSH key pair</string>
+    <string name="ssh_key_error_dialog_text">Message: \n</string>
+    <string name="ssh_key_locked_and_no_activity">Error: SSH key can only be unlocked from an activity</string>
+    <string name="error_file_matches_repo_ignore_rule">Error: Repository file name matches a rule in %s</string>
+    <!-- Sync status -->
+    <string name="sync_status_no_change">No change</string>
+    <string name="sync_status_no_link_and_multiple_repos">Notebook has no link and multiple repositories exist</string>
+    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">Notebook has no link and one or more remote notebooks with the same name exist</string>
+    <string name="sync_status_dummy_without_link_and_multiple_rooks">Notebook has no link and multiple remote notebooks with the same name exist</string>
+    <string name="sync_status_no_book_multiple_rooks">No notebook and multiple remote notebooks with the same name exist</string>
+    <string name="sync_status_rook_no_longer_exists">Remote file no longer exists; repository link removed. Set a link if you want to sync to a repository.</string>
+    <string name="sync_status_no_link_and_previous_error">Notebook has no repository link</string>
+    <string name="sync_status_loaded">Loaded from %s</string>
+    <string name="sync_status_saved">Saved to %s</string>
+    <string name="moving_between_subdirectories_requires_api_24">Renaming notebook to a different subdirectory requires Android 7 or higher</string>
+    <string name="subfolder_support_disabled">Support for subfolders is disabled</string>
 </resources>
