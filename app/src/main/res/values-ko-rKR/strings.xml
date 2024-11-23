@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="sync">동기화</string>
     <string name="settings">설정</string>
+    <string name="sortnote">Sort note</string>
     <string name="ok">확인</string>
     <string name="yes">예</string>
     <string name="unlink">연결 해제</string>
@@ -25,6 +26,7 @@
     <string name="edit_note">노트 편집</string>
     <string name="delete">삭제</string>
     <string name="delete_with_quoted_argument">\"%s\" 삭제</string>
+    <string name="delete_amount_of_books">Delete %d notebooks</string>
     <string name="name">이름</string>
     <string name="query">질의</string>
     <string name="done">완료</string>
@@ -77,6 +79,11 @@
     <!-- Preferences (Settings). -->
     <string name="repos_preference_title">저장소</string>
     <string name="repos_preference_summary">메모장 동기화 위치</string>
+    <string name="enable_repo_subfolders_preferences_title">Support repository subfolders</string>
+    <string name="enable_repo_subfolders_preferences_summary">Load from and write to subfolders</string>
+    <string name="ssh_keygen_preference_title">SSH key generation</string>
+    <string name="ssh_keygen_preference_summary">Generate key pair for Git repo sync</string>
+    <string name="ssh_show_public_key_preference_title">View generated SSH public key</string>
     <string name="message_book_has_no_link">설정된 링크가 없습니다.</string>
     <string name="message_note_created">메모 작성</string>
     <string name="message_failed_creating_note">메모를 작성하는데 실패하였습니다.</string>
@@ -172,6 +179,8 @@
     <string name="git_verifying_settings">Ensuring repository settings will work.</string>
     <string name="git_url_hint">외부 주소 (예. git@github.com:orgzly/orgzly-android.git)</string>
     <string name="git_directory_hint">디렉터리 위치 (예: \"file:/sdcard/orgzly\")</string>
+    <string name="git_ssh_on_missing_key_dialog_text">No SSH key pair found. Do you wish to generate one?</string>
+    <string name="git_ssh_on_missing_key_dialog_title">No SSH key found</string>
     <string name="git_https_username_hint">Username</string>
     <string name="git_https_password_hint">Password</string>
     <string name="git_author_hint">저자 (예. 홍길동)</string>
@@ -187,11 +196,13 @@
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
     <string name="git_clone_error_ssh_auth">Failure while cloning, authentication error</string>
+    <string name="git_clone_error_ssh">Failure while cloning: %s</string>
     <string name="git_clone_error_invalid_repo">The remote address is not a git repo</string>
     <string name="git_clone_error_unknown">Unknown error while cloning</string>
     <string name="git_clone_error_invalid_target_dir">The target directory does not exist</string>
     <string name="git_clone_error_target_not_empty">The target directory is not empty</string>
     <string name="git_clone_error_uri_not_supported">The remote address is not supported</string>
+    <string name="git_sync_error_failed_set_marker_branch">Failed to update marker branch</string>
     <string name="webdav_url_hint">URL (e.g. webdavs://example.com/my-org-files/)</string>
     <string name="webdav_auth_username_hint">Username</string>
     <string name="webdav_auth_password_hint">Password</string>
@@ -233,6 +244,7 @@
     <string name="permissions_rationale_for_book_export">메모장을 내보내기 위해서는 저장소 권한이 필요합니다.</string>
     <string name="permissions_rationale_for_sync_start">로컬 저장소에 동기화하기 위해서는 저장소 권한이 필요합니다.</string>
     <string name="permissions_rationale_for_external_files_access">외부 파일에 접근하려면 저장소 권한이 필요 합니다.</string>
+    <string name="permissions_rationale_for_post_notifications">Permission is required to post notifications</string>
     <string name="cycle_visibility">모두 접기/펼치기</string>
     <string name="running_database_update">저장 정보 업그레이드 중...</string>
     <string name="note_has_been_modified">메모 수정</string>
@@ -243,6 +255,7 @@
     <string name="failed_renaming_book_with_reason">이름 바꾸기 실패: %s</string>
     <string name="renamed_book_from">“%s”에서 이름 바꿈</string>
     <string name="also_delete_linked_book">연결된 메모장 삭제</string>
+    <string name="also_delete_linked_books">Delete any linked remote notebooks</string>
     <string name="message_deleting_book_failed">연결된 메모장 삭제 실패: %s</string>
     <string name="message_book_deleted">메모장 삭제</string>
     <string name="priority_with_argument">우선 순위 %s</string>
@@ -382,6 +395,7 @@
     <string name="no_states_defined">정의된 상태가 없습니다.</string>
     <string name="book_name_in_search">검색 결과에 메모장 이름 표시</string>
     <string name="display_notebook_name">메모장 이름 보여주기</string>
+    <string name="hide_empty_days_in_agenda">Hide empty days in agenda</string>
     <string name="display_inherited_tags_in_search_results">검색된 결과에 상속된 태그 포함</string>
     <string name="display_inherited_tags_in_search_results_summary">검색된 결과에 상속된 태그 보여주기</string>
     <string name="ongoing_notification">Ongoing</string>
@@ -444,6 +458,8 @@
     <string name="pref_summary_sync_after_note_update">메모 변경 또는 삭제 후 동기화</string>
     <string name="pref_title_on_resume_sync">앱 시작 또는 재시작</string>
     <string name="pref_summary_on_resume_sync">앱 실행시마다 동기화</string>
+    <string name="pref_title_on_suspend_sync">App suspended</string>
+    <string name="pref_summary_on_suspend_sync">Sync whenever app goes to the background</string>
     <string name="pref_title_repo_update_sync">저장소 수정 (개발 중)</string>
     <string name="pref_summary_repo_update_sync">저장소에서 변경이 될 때에도 동기화합니다.</string>
     <string name="not_modified">수정 않음</string>
@@ -468,6 +484,7 @@
         <item quantity="other">내보낸 <b>%d</b> 검색</item>
     </plurals>
     <string name="storage_permissions_missing">저장소 권한 없음</string>
+    <string name="alarms_permissions_missing">No permission to set reminders</string>
     <string name="file_does_not_exist">File does not exist: %s</string>
     <string name="import_from">\"%1$s\"에서 가져오기?</string>
     <string name="export_to">\"%1$s\"으로 내보내기?</string>
@@ -571,4 +588,49 @@
     <string name="logs">Logs</string>
     <string name="share">Share</string>
     <string name="refresh_data">Refresh</string>
+    <string name="clock">Clock</string>
+    <string name="clock_in">Clock in</string>
+    <string name="clock_out">Clock out</string>
+    <string name="clock_cancel">Clock cancel</string>
+    <string name="search_results">Search results</string>
+    <string name="popup_menu_buttons">Popup menu buttons</string>
+    <string name="ssh_keygen_label_rsa">RSA</string>
+    <string name="ssh_keygen_label_ecdsa">ECDSA</string>
+    <string name="ssh_keygen_label_ed25519">ED25519</string>
+    <string name="ssh_keygen_require_authentication">Protect with screen lock credential</string>
+    <string name="ssh_keygen_generate">Generate</string>
+    <string name="ssh_keygen_existing_title">SSH key</string>
+    <string name="ssh_keygen_existing_message">Replace existing SSH key? You might lose access to your server.</string>
+    <string name="ssh_keygen_existing_replace">Replace</string>
+    <string name="ssh_keygen_existing_keep">Keep</string>
+    <string name="ssh_keygen_explanation_ecdsa"><b>ECDSA (NIST P-256)</b>\nFast authentication and supported by most servers that are still receiving updates.</string>
+    <string name="ssh_keygen_explanation_ed25519"><b>ED25519</b>\nFast authentication, but only supported by rather modern servers.</string>
+    <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 bit)</b>\nSupported by older servers.</string>
+    <string name="ssh_keygen_generating_progress">Generating keys…</string>
+    <string name="ssh_key_failed_get_public">Failed to get SSH public key</string>
+    <string name="ssh_key_failed_get_private">Failed to get SSH private key</string>
+    <string name="ssh_key_failed_unlock_private">Failed to unlock SSH private key</string>
+    <string name="biometric_prompt_title_ssh_keygen">Generate SSH key</string>
+    <string name="biometric_prompt_title_unlock_ssh_key">Unlock Orgzly\'s SSH key</string>
+    <string name="biometric_auth_not_available">Biometric authentication is not available</string>
+    <string name="biometric_auth_on_error">Authentication error: Code: %1$d (%2$s)</string>
+    <string name="ssh_keygen_message">%1$s\n\nProvide this public key to your Git server.</string>
+    <string name="your_public_key">Your public key</string>
+    <string name="ssh_keygen_share">Share</string>
+    <string name="error_generate_ssh_key">Error while trying to generate the SSH key pair</string>
+    <string name="ssh_key_error_dialog_text">Message: \n</string>
+    <string name="ssh_key_locked_and_no_activity">Error: SSH key can only be unlocked from an activity</string>
+    <string name="error_file_matches_repo_ignore_rule">Error: Repository file name matches a rule in %s</string>
+    <!-- Sync status -->
+    <string name="sync_status_no_change">No change</string>
+    <string name="sync_status_no_link_and_multiple_repos">Notebook has no link and multiple repositories exist</string>
+    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">Notebook has no link and one or more remote notebooks with the same name exist</string>
+    <string name="sync_status_dummy_without_link_and_multiple_rooks">Notebook has no link and multiple remote notebooks with the same name exist</string>
+    <string name="sync_status_no_book_multiple_rooks">No notebook and multiple remote notebooks with the same name exist</string>
+    <string name="sync_status_rook_no_longer_exists">Remote file no longer exists; repository link removed. Set a link if you want to sync to a repository.</string>
+    <string name="sync_status_no_link_and_previous_error">Notebook has no repository link</string>
+    <string name="sync_status_loaded">Loaded from %s</string>
+    <string name="sync_status_saved">Saved to %s</string>
+    <string name="moving_between_subdirectories_requires_api_24">Renaming notebook to a different subdirectory requires Android 7 or higher</string>
+    <string name="subfolder_support_disabled">Support for subfolders is disabled</string>
 </resources>
