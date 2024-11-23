@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="sync">Synkronisera</string>
     <string name="settings">Inställningar</string>
+    <string name="sortnote">Sortera anteckningens innehåll</string>
     <string name="ok">OK</string>
     <string name="yes">Ja</string>
     <string name="unlink">Ta bort länk</string>
@@ -25,6 +26,7 @@
     <string name="edit_note">Redigera anteckning</string>
     <string name="delete">Ta bort</string>
     <string name="delete_with_quoted_argument">Ta bort “%s”</string>
+    <string name="delete_amount_of_books">Radera %d anteckningsböcker</string>
     <string name="name">Namn</string>
     <string name="query">Sökning</string>
     <string name="done">Klarmarkera</string>
@@ -68,10 +70,10 @@
         <item quantity="other">Kopierade <b>%d</b> anteckningar</item>
     </plurals>
     <plurals name="notes_pasted">
-        <item quantity="one">Anteckning klistades in</item>
+        <item quantity="one">Anteckning klistrades in</item>
         <item quantity="other">Klistrade in <b>%d</b> anteckningar</item>
     </plurals>
-    <string name="no_notes_pasted">Inget att klista in</string>
+    <string name="no_notes_pasted">Inget att klistra in</string>
     <string name="fragment_note_title_hint">Rubrik</string>
     <string name="fragment_note_tags_hint" tools:ignore="typos">tagg tagg</string>
     <string name="import_org_file">Importera Org-fil</string>
@@ -80,6 +82,8 @@
     <!-- Preferences (Settings). -->
     <string name="repos_preference_title">Lagringsplatser</string>
     <string name="repos_preference_summary">Plats som dina anteckningsböcker synkas till</string>
+    <string name="enable_repo_subfolders_preferences_title">Stöd underkataloger i lagringsplatser</string>
+    <string name="enable_repo_subfolders_preferences_summary">Läs från och skriv till underkataloger</string>
     <string name="ssh_keygen_preference_title">Generera SSH-nyckel</string>
     <string name="ssh_keygen_preference_summary">Generera ett nyckelpar för synkning med Git</string>
     <string name="ssh_show_public_key_preference_title">Visa publik SSH-nyckel</string>
@@ -178,6 +182,8 @@
     <string name="git_verifying_settings">Kontrollerar att lagringsplatsens inställningar fungerar.</string>
     <string name="git_url_hint">Fjärradress (t.ex. git@github.com:orgzly/orgzly-android.git)</string>
     <string name="git_directory_hint">Mappens plats (t.ex. ”file:/sdcard/orgzly”)</string>
+    <string name="git_ssh_on_missing_key_dialog_text">SSH-nyckelpar saknas. Vill du generera ett?</string>
+    <string name="git_ssh_on_missing_key_dialog_title">Ingen SSH-nyckel hittades</string>
     <string name="git_https_username_hint">Användarnamn</string>
     <string name="git_https_password_hint">Lösenord</string>
     <string name="git_author_hint">Författare (t.ex. John Doe)</string>
@@ -193,11 +199,13 @@
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
     <string name="git_clone_error_ssh_auth">Fel vid kloning, autentiseringsfel</string>
+    <string name="git_clone_error_ssh">Fel under kloning: %s</string>
     <string name="git_clone_error_invalid_repo">Fjärradressen är inte en Git-lagringsplats</string>
     <string name="git_clone_error_unknown">Okänt fel vid kloning</string>
     <string name="git_clone_error_invalid_target_dir">Målmappen finns inte</string>
     <string name="git_clone_error_target_not_empty">Målmappen är inte tom</string>
     <string name="git_clone_error_uri_not_supported">Fjärradressen stöds inte</string>
+    <string name="git_sync_error_failed_set_marker_branch">Det gick inte att uppdatera markör-branchen</string>
     <string name="webdav_url_hint">URL (t.ex. webdavs://example.com/my-org-files/)</string>
     <string name="webdav_auth_username_hint">Användarnamn</string>
     <string name="webdav_auth_password_hint">Lösenord</string>
@@ -239,6 +247,7 @@
     <string name="permissions_rationale_for_book_export">Exportering av anteckningsbok kräver lagringsbehörighet</string>
     <string name="permissions_rationale_for_sync_start">Synkronisering med lokala lagringsplatser kräver lagringsbehörighet</string>
     <string name="permissions_rationale_for_external_files_access">För att komma åt externa filer krävs lagringsbehörighet</string>
+    <string name="permissions_rationale_for_post_notifications">Behörighet krävs för att kunna skicka notiser</string>
     <string name="cycle_visibility">Dölj/visa alla</string>
     <string name="running_database_update">Uppgraderar databas…</string>
     <string name="note_has_been_modified">Anteckningen ändrad</string>
@@ -249,6 +258,7 @@
     <string name="failed_renaming_book_with_reason">Namnbyte misslyckades: %s</string>
     <string name="renamed_book_from">Döptes om från ”%s”</string>
     <string name="also_delete_linked_book">Ta bort länkad fjärranteckningsbok</string>
+    <string name="also_delete_linked_books">Radera eventuella associerade anteckningsböcker i fjärrlagringsplatser</string>
     <string name="message_deleting_book_failed">Borttagning av anteckningsbok misslyckades: %s</string>
     <string name="message_book_deleted">Anteckningsbok borttagen</string>
     <string name="priority_with_argument">Prioritet %s</string>
@@ -258,8 +268,8 @@
     <string name="done_states">Nyckelord för slutförda (done) uppgifter</string>
     <string name="created_at">Skapad den</string>
     <string name="insert_note_creation_time">Infoga anteckningens skapandetid</string>
-    <string name="use_created_at_property">Använd egenskap för skapandetid</string>
-    <string name="use_created_at_property_summary">Synkronisera tidpunkt för skapande med hjälp av en egenskap</string>
+    <string name="use_created_at_property">Lagra skapandetid i en egenskap</string>
+    <string name="use_created_at_property_summary">Registrera tidpunkten för skapande som en egenskap</string>
     <string name="created_at_property">Egenskap för tidpunkt för skapande</string>
     <string name="properties">Egenskaper</string>
     <string name="property_name">Egenskapens namn</string>
@@ -389,10 +399,8 @@
     <string name="duplicate_keywords_not_allowed">Nyckelordet %s används redan</string>
     <string name="no_states_defined">Inga tillstånd har definierats</string>
     <string name="book_name_in_search">Anteckningsbokens namn i sökresultat</string>
-
     <string name="display_notebook_name">Visa anteckningsbokens namn</string>
     <string name="hide_empty_days_in_agenda">Visa tomma dagar i agendan</string>
-
     <string name="display_inherited_tags_in_search_results">Ärvda taggar i sökresultat</string>
     <string name="display_inherited_tags_in_search_results_summary">Visa ärvda taggar i sökresultat</string>
     <string name="ongoing_notification">Ständig</string>
@@ -454,6 +462,8 @@
     <string name="pref_summary_sync_after_note_update">Synkronisera efter att anteckning redigerats eller raderats</string>
     <string name="pref_title_on_resume_sync">Appen startades eller återupptogs</string>
     <string name="pref_summary_on_resume_sync">Synkronisera när appen kommer till förgrunden</string>
+    <string name="pref_title_on_suspend_sync">Appen pausas</string>
+    <string name="pref_summary_on_suspend_sync">Synkronisera när appen hamnar i bakgrunden</string>
     <string name="pref_title_repo_update_sync">När en lagringsplats ändras (inte implementerat ännu)</string>
     <string name="pref_summary_repo_update_sync">Synkronisera så snart en uppdatering av en lagringsplats upptäcks</string>
     <string name="not_modified">Inte ändrad</string>
@@ -482,6 +492,7 @@
         <item quantity="other">Exporterade <b>%d</b> sökningar</item>
     </plurals>
     <string name="storage_permissions_missing">Ingen behörighet för lagring</string>
+    <string name="alarms_permissions_missing">Appen saknar behörighet att schemalägga påminnelser</string>
     <string name="file_does_not_exist">Filen finns inte: %s</string>
     <string name="import_from">Importera från ”%1$s”?</string>
     <string name="export_to">Exportera till ”%1$s”?</string>
@@ -522,8 +533,8 @@
     <string name="display_inline_images_summary">Visa bilder i anteckningar</string>
     <string name="scale_down_to_width">Anpassa till fullbredd</string>
     <string name="scale_down_to_width_summary">Anpassa bilden till angiven bredd</string>
-    <string name="file_absolute_root">Root for absolute links (e.g. file:/readme.txt)</string>
-    <string name="file_relative_root">Root for relative links (e.g. file:readme.txt)</string>
+    <string name="file_absolute_root">Rot-katalog för absoluta länkar (t.ex. file:/readme.txt)</string>
+    <string name="file_relative_root">Rot-katalog för relativa länkar (t.ex. file:readme.txt)</string>
     <string name="argument_used">%s används</string>
     <string name="argument_detected">%s upptäckt</string>
     <string name="argument_selected">%s vald</string>
@@ -587,14 +598,12 @@
     <string name="logs">Loggar</string>
     <string name="share">Dela</string>
     <string name="refresh_data">Uppdatera</string>
-
     <string name="clock">Logga tid</string>
     <string name="clock_in">Starta klocka</string>
     <string name="clock_out">Stoppa klocka</string>
     <string name="clock_cancel">Avbryt klocka</string>
     <string name="search_results">Sökresultat</string>
     <string name="popup_menu_buttons">Anpassa popup-menyernas knappar</string>
-
     <string name="ssh_keygen_label_rsa">RSA</string>
     <string name="ssh_keygen_label_ecdsa">ECDSA</string>
     <string name="ssh_keygen_label_ed25519">ED25519</string>
@@ -621,9 +630,17 @@
     <string name="error_generate_ssh_key">Fel vid generering av SSH-nyckelpar</string>
     <string name="ssh_key_error_dialog_text">Meddelande: \n</string>
     <string name="ssh_key_locked_and_no_activity">Fel: SSH-nyckeln kan bara låsas upp från appen</string>
-
+    <string name="error_file_matches_repo_ignore_rule">Fel: Filnamnet i lagringsplatsen matchar en regel i %s</string>
     <!-- Sync status -->
     <string name="sync_status_no_change">Oförändrad</string>
+    <string name="sync_status_no_link_and_multiple_repos">Anteckningsboken saknar länk och det finns flera lagringsplatser</string>
+    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">Anteckningsboken saknar länk och det finns en eller flera fjärranteckningsböcker med samma namn</string>
+    <string name="sync_status_dummy_without_link_and_multiple_rooks">Anteckningsboken saknar länk och det finns flera fjärranteckningsböcker med samma namn</string>
+    <string name="sync_status_no_book_multiple_rooks">Ingen lokal anteckningsbok och det finns flera fjärranteckningsböcker med samma namn</string>
+    <string name="sync_status_rook_no_longer_exists">Fjärrfilen finns inte längre; länken till lagringsplatsen har tagits bort. Länka anteckningsboken om du vill synka den till en lagringsplats.</string>
+    <string name="sync_status_no_link_and_previous_error">Anteckningsboken är inte länkad till en lagringsplats</string>
     <string name="sync_status_loaded">Lästes in från %s</string>
     <string name="sync_status_saved">Sparades till %s</string>
+    <string name="moving_between_subdirectories_requires_api_24">Android 7 eller nyare krävs för att flytta en anteckningsbok till en annan underkatalog</string>
+    <string name="subfolder_support_disabled">Stöd för underkataloger är avstängt</string>
 </resources>
