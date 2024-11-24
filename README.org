@@ -1,7 +1,7 @@
 #+BEGIN_HTML
 <div>
 <a title="Tests" target="_blank" href="https://github.com/orgzly-revived/orgzly-android-revived/actions/workflows/test.yaml"><img src="https://github.com/orgzly-revived/orgzly-android-revived/actions/workflows/test.yaml/badge.svg"></a>
-<a title="Crowdin" target="_blank" href="https://crowdin.com/project/orgzly"><img src="https://d322cqt584bo4o.cloudfront.net/orgzly/localized.svg"></a>
+<a title="Localized" target="_blank" href="https://crowdin.com/project/orgzly-revived"><img src="https://badges.crowdin.net/orgzly-revived/localized.svg"></a>
 </div>
 #+END_HTML
 
