@@ -206,7 +206,6 @@
     <string name="git_clone_error_target_not_empty">O diretório de destino não existe</string>
     <string name="git_clone_error_uri_not_supported">O endereço remoto não é um repositório git</string>
     <string name="git_sync_error_failed_set_marker_branch">Falha ao atualizar o marcador da branch</string>
-    
     <string name="webdav_url_hint">URL (ex. webdavs://exemplo.com/meus-arquivos-org/)</string>
     <string name="webdav_auth_username_hint">Nome do Usuário</string>
     <string name="webdav_auth_password_hint">Senha</string>
@@ -249,7 +248,6 @@
     <string name="permissions_rationale_for_sync_start">Sincronização com repositórios locais requer permissão de armazenamento</string>
     <string name="permissions_rationale_for_external_files_access">Acesso a arquivos externos requer permissão de armazenamento</string>
     <string name="permissions_rationale_for_post_notifications">É necessária permissão para postar notificações</string>
-    
     <string name="cycle_visibility">Dobrar/Desdobrar Tudo</string>
     <string name="running_database_update">Atualizando banco de dados…</string>
     <string name="note_has_been_modified">Nota modificada</string>
@@ -403,7 +401,6 @@
     <string name="book_name_in_search">Nome do caderno nos resultados de pesquisa</string>
     <string name="display_notebook_name">Mostrar nome do caderno</string>
     <string name="hide_empty_days_in_agenda">Ocultar dias vazios na agenda</string>
-    
     <string name="display_inherited_tags_in_search_results">Tags herdadas nos resultados da pesquisa</string>
     <string name="display_inherited_tags_in_search_results_summary">Mostrar tags herdadas nos resultados da pesquisa</string>
     <string name="ongoing_notification">Em andamento</string>
@@ -465,10 +462,8 @@
     <string name="pref_summary_sync_after_note_update">Sincronizar após atualizar ou excluir uma nota</string>
     <string name="pref_title_on_resume_sync">Aplicativo iniciado ou retomado</string>
     <string name="pref_summary_on_resume_sync">Sincronizar sempre que o aplicativo entrar em primeiro plano</string>
-    
     <string name="pref_title_on_suspend_sync">Aplicativo suspenso</string>
     <string name="pref_summary_on_suspend_sync">Sincronizar sempre que o aplicativo for para o segundo plano</string>
-    
     <string name="pref_title_repo_update_sync">Repositórios modificados (não implementados ainda)</string>
     <string name="pref_summary_repo_update_sync">Sincronizar sempre que uma atualização nos repositórios for detectada</string>
     <string name="not_modified">Não modificado</string>
@@ -603,14 +598,12 @@
     <string name="logs">Registros</string>
     <string name="share">Compartilhar</string>
     <string name="refresh_data">Atualizar</string>
-
     <string name="clock">Relógio</string>
     <string name="clock_in">Clock in</string>
     <string name="clock_out">Clock out</string>
     <string name="clock_cancel">Clock cancel</string>
     <string name="search_results">Resultado da pesquisa</string>
     <string name="popup_menu_buttons">Botões de menu pop-up</string>
-
     <string name="ssh_keygen_label_rsa">RSA</string>
     <string name="ssh_keygen_label_ecdsa">ECDSA</string>
     <string name="ssh_keygen_label_ed25519">ED25519</string>
@@ -638,7 +631,6 @@
     <string name="ssh_key_error_dialog_text">Mensagem: \n</string>
     <string name="ssh_key_locked_and_no_activity">Erro: A chave SSH só pode ser desbloqueada a partir de uma atividade</string>
     <string name="error_file_matches_repo_ignore_rule">Erro: O nome do arquivo do repositório corresponde a uma regra em %s</string>
-
     <!-- Sync status -->
     <string name="sync_status_no_change">Nenhuma mudança</string>
     <string name="sync_status_no_link_and_multiple_repos">O notebook não tem link e existem vários repositórios</string>
@@ -649,8 +641,6 @@
     <string name="sync_status_no_link_and_previous_error">O notebook não tem link para repositório</string>
     <string name="sync_status_loaded">Carregado de %s</string>
     <string name="sync_status_saved">Salvo em %s</string>
-
     <string name="moving_between_subdirectories_requires_api_24">Renomear o caderno para um subdiretório diferente requer Android 7 ou superior</string>
-
     <string name="subfolder_support_disabled">O suporte para subpastas está desabilitado</string>
 </resources>
