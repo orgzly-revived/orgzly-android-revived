@@ -57,7 +57,7 @@ public class Notifications {
         PendingIntent newNotePendingIntent =
                 ShareActivity.createNewNotePendingIntent(context, "ongoing notification", null);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationChannels.ONGOING)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationChannels.channelIdForOngoing())
                 .setOngoing(true)
                 .setSmallIcon(R.drawable.cic_logo_for_notification)
                 .setContentTitle(context.getString(R.string.new_note))
