@@ -20,6 +20,14 @@ object SyncNotifications {
             createSyncInProgressNotification(context))
     }
 
+    fun showSyncInProgressNotification(context: Context) {
+        context.getNotificationManager().notify(Notifications.SYNC_IN_PROGRESS_ID, createSyncInProgressNotification(context))
+    }
+
+    fun cancelSyncInProgressNotification(context: Context) {
+        context.getNotificationManager().cancel(Notifications.SYNC_IN_PROGRESS_ID)
+    }
+
     private fun createSyncInProgressNotification(context: Context): Notification {
         val openAppPendingIntent = PendingIntent.getActivity(
             context,
