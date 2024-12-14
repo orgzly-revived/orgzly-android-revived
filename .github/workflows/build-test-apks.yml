@@ -1,18 +1,8 @@
 name: Build test APKs and store artifacts
 
 on:
-  # Allows you to run this workflow manually from the Actions tab
+  # Allows to run this workflow manually from the Actions tab
   workflow_dispatch:
-  # Also trigger when a PR is created, to facilitate manual testing.
-  pull_request:
-    branches:
-      - 'master'
-    paths-ignore:
-      - 'README.org'
-      - '.github/**'
-      - 'app/build.gradle'
-      - 'metadata/**'
-      - 'app/src/main/res/layout/dialog_whats_new.xml'
 
 jobs:
   build-test-apks:
