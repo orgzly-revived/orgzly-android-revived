@@ -59,6 +59,7 @@ class SyncWorker(val context: Context, val params: WorkerParameters) :
             Result.success(state.toData())
         }
 
+        SyncNotifications.cancelSyncInProgressNotification(context)
         showNotificationOnFailures(state)
 
         if (BuildConfig.LOG_DEBUG)
@@ -89,6 +90,7 @@ class SyncWorker(val context: Context, val params: WorkerParameters) :
 
     private suspend fun tryDoWork(): SyncState {
         SyncNotifications.cancelSyncFailedNotification(context)
+        SyncNotifications.showSyncInProgressNotification(context)
 
         sendProgress(SyncState.getInstance(SyncState.Type.STARTING))
 
