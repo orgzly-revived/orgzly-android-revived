@@ -22,6 +22,19 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.32"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Add Belarusian, Lithuanian translations and update multiple languages." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix &quot;sync in progress&quot; status icon not showing." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.31"
             tools:ignore="HardcodedText" />
 
