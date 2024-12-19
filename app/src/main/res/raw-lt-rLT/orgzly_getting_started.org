@@ -1,0 +1,101 @@
+Sveiki atvykę į Orgzly!
+
+* Įrašai
+** Spustelėkite ant įrašo, kad atidarytumėte
+** Spustelėkite ir laikykite, kad įrašą pasirinktumėte
+
+Galite pasirinkti kelis įrašus.
+
+Braukite įrašą dešinėn, kad atidarytumėte jo iškylantį meniu
+
+Braukite įrašą kairėn, kad atidarytumėte kitą meniu.
+
+** Suskleiskite įrašą su poįrašiais spustelėdami šalia esančią ikoną
+
+Ilgai spustelėkite ikoną, kad išskleistumėte visą pomedį.
+
+*** Nėra ribos lygių kiekiui
+**** Naudokite tai įrašų organizavimui
+
+** Įrašas gali turėti žymes :tag1:tag2:
+*** Poįrašis paveldi žymes :tag3:
+
+Jei ieškote įrašų pažymėtų „tag1“ naudodami „t.tag1“ užklausa, šis įrašas bus įtrauktas paieškos rezultatuose.
+
+*** Įrašas, kuris turi =ARCHIVE= žymę, yra papilkintas :ARCHIVE:
+
+** TODO Įrašas gali turėti būseną
+
+Galite sukonfiguruoti įvairias būsenas: TODO, NEXT, DONE ir t. t.
+
+*** Yra du būsenų /tipai/: to-do (atlikti) ir done (atlikta)
+
+*** DONE Čia yra įrašas su /done/ būsenos tipu
+CLOSED: [2018-01-24 Wed 17:00]
+
+** Įrašas gali turėti suplanuotą laiką
+SCHEDULED: <2015-02-20 Fri 15:15>
+
+*** Laikai gali būti kartojami
+SCHEDULED: <2015-02-16 Mon .+2d>
+
+** Taip pat galite nustatyti terminą
+DEADLINE: <2015-02-20 Fri>
+
+** Įvykių laikai gali būti naudojami bet kur įrašo turinyje
+
+Galite turėti ne vieną įvykio laiką:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
+
+** Priminimai gali būti naudojami planavimui, terminams ar įvykiams
+
+Pažymėkite įrašą kaip atliktą, kad pasislinktų kartojimas.
+
+** [#A] Įrašas gali turėti svarbą
+
+Galite pakeisti svarbos pasirinkimų kiekį nustatymuose. Taip pat galite pakeisti numatytąją svarbą – įgaunama svarba nenustačius.
+
+** Įrašai gali turėti nuorodas
+
+Skambinkite tel. numeriu (tel:370-000), siųsti SMS (sms:370-000), rašyti el. laišką (mailto:support@orgzlyrevived.com) ar apsilankyti svetainėje ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+
+Taip pat galite nurodyti į kitą įrašą ar užrašinę programėlėje.
+
+Žiūrėkite https://www.orgzlyrevived.com/docs#links išsamesnei informacijai.
+
+** Palaikomas paprastas apipavidalinimas pabrėžimui
+
+Galite žodžius rašyti *pusjuodžiu*, /kursyvu/, _pabrauktai_, =neformatuotai=, ~kodu~ ir +perbraukimu+.
+
+** Galimas sąrašas su varnelėmis
+
+- [X] Užduotis 1
+- [ ] Užduotis 2
+- [ ] Užduotis 3
+
+Spustelėkite langelį, kad pažymėtumėte. Spustelėkite naujos eilutės mygtuką eilutės gale, kad sukurtumėte naują elementą.
+
+* Paieška
+** Yra daug palaikomų paieškos operatorių
+
+Galite ieškoti įrašų pagal būseną, žymę, suplanavimą, terminą, įvykio laiką ir t. t.
+
+Žiūrėkite https://www.orgzlyrevived.com/docs#search išsamesnei informacijai.
+
+** Paieškos užklausos gali būti išsaugotos greitai prieigai
+
+Pabandykite pavyzdines paieškas iš navigacijos skyriaus ir atsižvelkite į naudojamas užklausas.
+
+Galite sukurti savo išsaugotas paieškas spustelėdami „Paieškos“ navigacijos skyriuje.
+
+* Sinchronizavimas
+
+** Užrašinės gali būti išsaugotos kaip grynojo teksto failai
+
+Failai yra [[https://orgmode.org/][Org mode]] formato.
+
+** Vietos (saugyklos) tipas
+
+Saugykla yra vieta, su kuria galite sinchronizuoti savo užrašines. Saugykla gali būti katalogas jūsų mobiliajame įrenginyje, SD kortelėje ar Dropbox.
