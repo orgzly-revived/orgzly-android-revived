@@ -31,7 +31,7 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Fix &quot;sync in progress&quot; status icon not showing." />
+            app:text="Fix &quot;sync in progress&quot; notification not showing." />
 
         <TextView
             style="@style/WhatsNewVersion"
