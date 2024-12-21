@@ -53,7 +53,14 @@ abstract class BookDao : BaseDao<Book> {
     @Query("UPDATE books SET is_modified = 0 WHERE id IN (:ids)")
     abstract fun setIsNotModified(ids: Set<Long>): Int
 
-
+    @Query("""
+        SELECT books.*
+        FROM book_properties
+        LEFT JOIN books ON (books.id = book_properties.book_id)
+        WHERE LOWER(book_properties.name) = :name AND LOWER(book_properties.value) = :value AND books.id IS NOT NULL
+        LIMIT 1
+    """)
+    abstract fun firstBookHavingPropertyLowerCase(name: String, value: String): Book?
 
     fun getOrInsert(name: String): Long =
             get(name).let {

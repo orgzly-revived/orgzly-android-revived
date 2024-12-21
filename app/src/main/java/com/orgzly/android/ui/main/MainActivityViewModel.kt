@@ -18,7 +18,7 @@ import com.orgzly.android.ui.SingleLiveEvent
 import com.orgzly.android.usecase.BookScrollToNote
 import com.orgzly.android.usecase.BookSparseTreeForNote
 import com.orgzly.android.usecase.LinkFindTarget
-import com.orgzly.android.usecase.NoteFindWithProperty
+import com.orgzly.android.usecase.NoteOrBookFindWithProperty
 import com.orgzly.android.usecase.NoteUpdateClockingState
 import com.orgzly.android.usecase.SavedSearchExport
 import com.orgzly.android.usecase.SavedSearchImport
@@ -75,9 +75,9 @@ class MainActivityViewModel(private val dataRepository: DataRepository) : Common
         navigationActions.postValue(MainNavigationAction.DisplayQuery(query))
     }
 
-    fun followLinkToNoteWithProperty(name: String, value: String) {
+    fun followLinkToNoteOrBookWithProperty(name: String, value: String) {
         App.EXECUTORS.diskIO().execute {
-            val useCase = NoteFindWithProperty(name, value)
+            val useCase = NoteOrBookFindWithProperty(name, value)
 
             catchAndPostError {
                 val result = UseCaseRunner.run(useCase)
@@ -87,18 +87,25 @@ class MainActivityViewModel(private val dataRepository: DataRepository) : Common
                     errorEvent.postValue(Throwable(msg))
 
                 } else {
-                    val noteIdBookId = result.userData as NoteDao.NoteIdBookId
+                    when (result.userData) {
+                        is NoteDao.NoteIdBookId -> {
+                            val noteIdBookId = result.userData
 
-                    when (AppPreferences.linkTarget(App.getAppContext())) {
-                        "note_details" ->
-                            navigationActions.postValue(
-                                MainNavigationAction.OpenNote(noteIdBookId.bookId, noteIdBookId.noteId))
+                            when (AppPreferences.linkTarget(App.getAppContext())) {
+                                "note_details" ->
+                                    navigationActions.postValue(
+                                        MainNavigationAction.OpenNote(noteIdBookId.bookId, noteIdBookId.noteId))
 
-                        "book_and_sparse_tree" ->
-                            UseCaseRunner.run(BookSparseTreeForNote(noteIdBookId.noteId))
+                                "book_and_sparse_tree" ->
+                                    UseCaseRunner.run(BookSparseTreeForNote(noteIdBookId.noteId))
 
-                        "book_and_scroll" ->
-                            UseCaseRunner.run(BookScrollToNote(noteIdBookId.noteId))
+                                "book_and_scroll" ->
+                                    UseCaseRunner.run(BookScrollToNote(noteIdBookId.noteId))
+                            }
+                        }
+                        is Book -> {
+                            navigationActions.postValue(MainNavigationAction.OpenBook(result.userData.id))
+                        }
                     }
                 }
             }

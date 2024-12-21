@@ -45,7 +45,7 @@ buildscript {
 
     versions.android_test_uiautomator = '2.3.0'
 
-    versions.org_java = 'v1.3.2'
+    versions.org_java = 'v1.3.3'
 
     versions.loremipsum = '1.0'
 
