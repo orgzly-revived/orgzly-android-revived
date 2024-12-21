@@ -22,6 +22,19 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.33"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Make notification LED color configurable." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Upgrade some dependencies." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.32"
             tools:ignore="HardcodedText" />
 
