@@ -227,7 +227,34 @@ public class BookParsingTest extends OrgzlyTest {
         assertNull(dataRepository.findNoteOrBookHavingProperty("foo", "firstvalue"));
         assertNull(dataRepository.findNoteOrBookHavingProperty("bar", "firstvalue"));
     }
-    
+
+    @Test
+    public void testBookDuplicatePropertiesDifferentCase() {
+        String content = """
+            :PROPERTIES:
+            :foo: firstvalue
+            :bar: firstvalue
+            :FOO: secondvalue
+            :BAR: secondvalue
+            :END:
+            
+            content
+            
+        """;
+        TestedBook testedBook = onBook(content);
+        testedBook.onLoad().isWhenSaved(content);
+        assertEquals(testedBook.book, dataRepository.findNoteOrBookHavingProperty("foo",
+                "secondvalue"));
+        assertEquals(testedBook.book, dataRepository.findNoteOrBookHavingProperty("bar",
+                "secondvalue"));
+        assertEquals(testedBook.book, dataRepository.findNoteOrBookHavingProperty("FOO",
+                "secondvalue"));
+        assertEquals(testedBook.book, dataRepository.findNoteOrBookHavingProperty("BAR",
+                "secondvalue"));
+        assertNull(dataRepository.findNoteOrBookHavingProperty("foo", "firstvalue"));
+        assertNull(dataRepository.findNoteOrBookHavingProperty("bar", "firstvalue"));
+    }
+
     /*
      * Books in different languages, different sizes and formats ...
      */

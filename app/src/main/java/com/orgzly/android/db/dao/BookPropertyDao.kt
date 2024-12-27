@@ -11,7 +11,7 @@ abstract class BookPropertyDao : BaseDao<BookProperty> {
     @Query("SELECT * FROM book_properties WHERE book_id = :bookId")
     abstract fun get(bookId: Long): List<BookProperty>
 
-    @Query("SELECT * FROM book_properties WHERE book_id = :bookId AND name = :name")
+    @Query("SELECT * FROM book_properties WHERE book_id = :bookId AND LOWER(name) = LOWER(:name)")
     abstract fun get(bookId: Long, name: String): List<BookProperty>
 
     @Query("SELECT * FROM book_properties")
