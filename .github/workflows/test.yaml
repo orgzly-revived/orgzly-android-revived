@@ -73,15 +73,14 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: AVD cache
-        uses: actions/cache@v4
+      - name: Restore AVD cache if present
+        uses: actions/cache/restore@v4
         id: avd-cache
         with:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
           key: avd-${{ matrix.api-level }}
-          save-always: true
 
       - name: create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -97,7 +96,7 @@ jobs:
           script: echo "Generated AVD snapshot for caching."
 
       - name: Save AVD to cache
-        if: steps.avd-cache.outputs.cache-hit != 'true'
+        if: always() && steps.avd-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
           path: |
