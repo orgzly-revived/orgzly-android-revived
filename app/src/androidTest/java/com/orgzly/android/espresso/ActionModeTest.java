@@ -1,6 +1,7 @@
 package com.orgzly.android.espresso;
 
 import android.content.pm.ActivityInfo;
+import android.os.SystemClock;
 
 import androidx.test.core.app.ActivityScenario;
 
@@ -111,6 +112,7 @@ public class ActionModeTest extends OrgzlyTest {
 
         // TODO: Check *the same* note is selected.
 
+        SystemClock.sleep(500);
         scenario.onActivity(activity ->
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT));
 

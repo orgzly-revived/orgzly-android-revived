@@ -189,6 +189,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
         searchForTextCloseKeyboard(".it.done ad.7");
         onNotesInAgenda().check(matches(recyclerViewItemCount(25)));
 
+        SystemClock.sleep(500);
         scenario.onActivity(activity ->
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE));
 

@@ -284,6 +284,7 @@ public class BookTest extends OrgzlyTest {
         onActionItemClick(R.id.move, R.string.move);
         onView(withId(R.id.notes_action_move_down)).check(matches(isDisplayed()));
 
+        SystemClock.sleep(500);
         scenario.onActivity(activity ->
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE));
 
@@ -431,6 +432,7 @@ public class BookTest extends OrgzlyTest {
         // Rotate
         scenario.onActivity(activity -> {
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            SystemClock.sleep(500);
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         });
 
