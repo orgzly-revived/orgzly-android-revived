@@ -1,0 +1,3 @@
+• Make notification LED color configurable.
+• Upgrade some dependencies.
+
