@@ -29,7 +29,7 @@ buildscript {
 
     versions.android_room = '2.6.1'
 
-    versions.android_lifecycle = '2.8.5'
+    versions.android_lifecycle = '2.8.7'
 
     versions.android_workmanager = '2.9.1'
 
