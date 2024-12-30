@@ -2,6 +2,7 @@
 
 <androidx.preference.PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/developer_options">
 
     <SwitchPreference
@@ -24,5 +25,10 @@
             android:targetPackage="@string/application_id"
             android:targetClass="com.orgzly.android.ui.logs.AppLogsActivity"/>
     </Preference>
+
+    <Preference
+        android:key="pref_key_git_commit"
+        android:title="Git commit of app build"
+        app:enableCopying="true" />
 
 </androidx.preference.PreferenceScreen>
