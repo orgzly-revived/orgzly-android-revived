@@ -63,7 +63,7 @@ buildscript {
 
     versions.sardine = '0.8'
 
-    versions.okhttp_digest = '2.7'
+    versions.okhttp_digest = '3.1.1'
 
     versions.jgit = '5.13.3.202401111512-r'
 
