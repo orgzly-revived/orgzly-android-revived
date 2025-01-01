@@ -109,7 +109,7 @@ jobs:
         run: mv ${{steps.sign_premium_aab.outputs.signedReleaseFile}} orgzly-revived-${{ env.VERSION }}.aab
 
       - name: Upload artifacts and create Github release draft
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             *.apk
