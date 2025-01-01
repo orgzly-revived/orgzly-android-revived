@@ -407,6 +407,7 @@ class DataRepository @Inject constructor(
         val settings = OrgFileSettings.fromPreface(preface)
 
         db.book().updatePreface(bookId, preface, settings.title)
+        setBookPropertiesFromPreface(bookId, preface)
 
         updateBookIsModified(bookId, true)
     }
@@ -1859,6 +1860,10 @@ class DataRepository @Inject constructor(
                             )
 
                             db.book().update(book)
+
+                            // Parse and store any properties in the book's preface
+                            if (file.preface.isNotEmpty())
+                                setBookPropertiesFromPreface(bookId, file.preface)
                         }
 
                     })
@@ -1877,6 +1882,12 @@ class DataRepository @Inject constructor(
         updateBookIsModified(bookId, false)
 
         return bookId
+    }
+
+    private fun setBookPropertiesFromPreface(bookId: Long, preface: String) {
+        for (property: OrgProperty in OrgProperties.fromString(preface).all) {
+            db.bookProperty().upsert(bookId, property.name, property.value)
+        }
     }
 
     private fun getOrgRangeId(range: String?): Long? {
@@ -1978,6 +1989,13 @@ class DataRepository @Inject constructor(
 
     fun findNoteHavingProperty(name: String, value: String): NoteDao.NoteIdBookId? {
         return db.note().firstNoteHavingPropertyLowerCase(name.lowercase(), value.lowercase())
+    }
+
+    fun findNoteOrBookHavingProperty(name: String, value: String): Any? {
+        val foundNote = findNoteHavingProperty(name, value)
+        if (foundNote != null)
+            return foundNote
+        return db.book().firstBookHavingPropertyLowerCase(name.lowercase(), value.lowercase())
     }
 
     /*

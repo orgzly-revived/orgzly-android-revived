@@ -28,7 +28,7 @@ public class AppIntent {
     public static final String ACTION_UPDATE_TIMESTAMPS = "com.orgzly.intent.action.UPDATE_TIMESTAMPS";
 
     public static final String ACTION_OPEN_NOTE = "com.orgzly.intent.action.OPEN_NOTE";
-    public static final String ACTION_FOLLOW_LINK_TO_NOTE_WITH_PROPERTY = "com.orgzly.intent.action.FOLLOW_LINK_TO_NOTE_WITH_PROPERTY";
+    public static final String ACTION_FOLLOW_LINK_TO_NOTE_OR_BOOK_WITH_PROPERTY = "com.orgzly.intent.action.FOLLOW_LINK_TO_NOTE_OR_BOOK_WITH_PROPERTY";
     public static final String ACTION_FOLLOW_LINK_TO_FILE = "com.orgzly.intent.action.FOLLOW_LINK_TO_FILE";
     public static final String ACTION_OPEN_SAVED_SEARCHES = "com.orgzly.intent.action.OPEN_SAVED_SEARCHES";
     public static final String ACTION_OPEN_QUERY = "com.orgzly.intent.action.OPEN_QUERY";

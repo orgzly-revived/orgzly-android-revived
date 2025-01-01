@@ -11,18 +11,54 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import com.orgzly.BuildConfig
-import com.orgzly.android.db.dao.*
-import com.orgzly.android.db.entity.*
+import com.orgzly.android.db.dao.AppLogDao
+import com.orgzly.android.db.dao.BookDao
+import com.orgzly.android.db.dao.BookLinkDao
+import com.orgzly.android.db.dao.BookPropertyDao
+import com.orgzly.android.db.dao.BookSyncDao
+import com.orgzly.android.db.dao.BookViewDao
+import com.orgzly.android.db.dao.DbRepoBookDao
+import com.orgzly.android.db.dao.NoteAncestorDao
+import com.orgzly.android.db.dao.NoteDao
+import com.orgzly.android.db.dao.NoteEventDao
+import com.orgzly.android.db.dao.NotePropertyDao
+import com.orgzly.android.db.dao.NoteViewDao
+import com.orgzly.android.db.dao.OrgRangeDao
+import com.orgzly.android.db.dao.OrgTimestampDao
+import com.orgzly.android.db.dao.ReminderTimeDao
+import com.orgzly.android.db.dao.RepoDao
+import com.orgzly.android.db.dao.RookDao
+import com.orgzly.android.db.dao.RookUrlDao
+import com.orgzly.android.db.dao.SavedSearchDao
+import com.orgzly.android.db.dao.VersionedRookDao
+import com.orgzly.android.db.entity.AppLog
+import com.orgzly.android.db.entity.Book
+import com.orgzly.android.db.entity.BookLink
+import com.orgzly.android.db.entity.BookProperty
+import com.orgzly.android.db.entity.BookSync
+import com.orgzly.android.db.entity.DbRepoBook
+import com.orgzly.android.db.entity.Note
+import com.orgzly.android.db.entity.NoteAncestor
+import com.orgzly.android.db.entity.NoteEvent
+import com.orgzly.android.db.entity.NoteProperty
+import com.orgzly.android.db.entity.OrgRange
+import com.orgzly.android.db.entity.OrgTimestamp
+import com.orgzly.android.db.entity.Repo
+import com.orgzly.android.db.entity.Rook
+import com.orgzly.android.db.entity.RookUrl
+import com.orgzly.android.db.entity.SavedSearch
+import com.orgzly.android.db.entity.VersionedRook
 import com.orgzly.android.db.mappers.OrgTimestampMapper
 import com.orgzly.android.util.LogUtils
 import com.orgzly.org.OrgActiveTimestamps
 import com.orgzly.org.datetime.OrgDateTime
-import java.util.*
+import java.util.Calendar
 
 @Database(
         entities = [
             Book::class,
             BookLink::class,
+            BookProperty::class,
             BookSync::class,
             DbRepoBook::class,
             Note::class,
@@ -39,13 +75,14 @@ import java.util.*
             AppLog::class
         ],
 
-        version = 156
+        version = 157
 )
 @TypeConverters(com.orgzly.android.db.TypeConverters::class)
 abstract class OrgzlyDatabase : RoomDatabase() {
 
     abstract fun book(): BookDao
     abstract fun bookLink(): BookLinkDao
+    abstract fun bookProperty(): BookPropertyDao
     abstract fun bookView(): BookViewDao
     abstract fun bookSync(): BookSyncDao
     abstract fun noteAncestor(): NoteAncestorDao
@@ -113,7 +150,8 @@ abstract class OrgzlyDatabase : RoomDatabase() {
                             MIGRATION_152_153,
                             MIGRATION_153_154,
                             MIGRATION_154_155,
-                            MIGRATION_155_156
+                            MIGRATION_155_156,
+                            MIGRATION_156_157
                     )
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
@@ -562,6 +600,15 @@ abstract class OrgzlyDatabase : RoomDatabase() {
                 db.execSQL("CREATE TABLE IF NOT EXISTS `app_logs` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `name` TEXT NOT NULL, `message` TEXT NOT NULL)")
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_app_logs_timestamp` ON `app_logs` (`timestamp`)")
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_app_logs_name` ON `app_logs` (`name`)")
+            }
+        }
+
+        private val MIGRATION_156_157 = object : Migration(156, 157) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE TABLE IF NOT EXISTS `book_properties` (`book_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `value` TEXT NOT NULL, PRIMARY KEY(`book_id`, `name`), FOREIGN KEY(`book_id`) REFERENCES `books`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_book_properties_book_id` ON `book_properties` (`book_id`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_book_properties_name` ON `book_properties` (`name`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_book_properties_value` ON `book_properties` (`value`)")
             }
         }
     }

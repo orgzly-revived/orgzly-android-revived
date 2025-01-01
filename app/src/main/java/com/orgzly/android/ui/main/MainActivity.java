@@ -213,8 +213,8 @@ public class MainActivity extends CommonActivity
     private void handleOrgProtocolIntent(Intent intent) {
         OrgProtocol.handleOrgProtocol(intent, new OrgProtocol.Listener() {
             @Override
-            public void onNoteWithId(@NonNull String id) {
-                viewModel.followLinkToNoteWithProperty("ID", id);
+            public void onNoteOrBookWithId(@NonNull String id) {
+                viewModel.followLinkToNoteOrBookWithProperty("ID", id);
             }
 
             @Override
@@ -575,7 +575,7 @@ public class MainActivity extends CommonActivity
 
         LocalBroadcastManager bm = LocalBroadcastManager.getInstance(this);
         bm.registerReceiver(receiver, new IntentFilter(AppIntent.ACTION_OPEN_NOTE));
-        bm.registerReceiver(receiver, new IntentFilter(AppIntent.ACTION_FOLLOW_LINK_TO_NOTE_WITH_PROPERTY));
+        bm.registerReceiver(receiver, new IntentFilter(AppIntent.ACTION_FOLLOW_LINK_TO_NOTE_OR_BOOK_WITH_PROPERTY));
         bm.registerReceiver(receiver, new IntentFilter(AppIntent.ACTION_FOLLOW_LINK_TO_FILE));
         bm.registerReceiver(receiver, new IntentFilter(AppIntent.ACTION_OPEN_SAVED_SEARCHES));
         bm.registerReceiver(receiver, new IntentFilter(AppIntent.ACTION_OPEN_QUERY));
@@ -896,8 +896,8 @@ public class MainActivity extends CommonActivity
         LocalBroadcastManager.getInstance(App.getAppContext()).sendBroadcast(intent);
     }
 
-    public static void followLinkToNoteWithProperty(String name, String value) {
-        Intent intent = new Intent(AppIntent.ACTION_FOLLOW_LINK_TO_NOTE_WITH_PROPERTY);
+    public static void followLinkToNoteOrBookWithProperty(String name, String value) {
+        Intent intent = new Intent(AppIntent.ACTION_FOLLOW_LINK_TO_NOTE_OR_BOOK_WITH_PROPERTY);
         intent.putExtra(AppIntent.EXTRA_PROPERTY_NAME, name);
         intent.putExtra(AppIntent.EXTRA_PROPERTY_VALUE, value);
         LocalBroadcastManager.getInstance(App.getAppContext()).sendBroadcast(intent);
@@ -971,10 +971,10 @@ public class MainActivity extends CommonActivity
                     break;
                 }
 
-                case AppIntent.ACTION_FOLLOW_LINK_TO_NOTE_WITH_PROPERTY: {
+                case AppIntent.ACTION_FOLLOW_LINK_TO_NOTE_OR_BOOK_WITH_PROPERTY: {
                     String name = intent.getStringExtra(AppIntent.EXTRA_PROPERTY_NAME);
                     String value = intent.getStringExtra(AppIntent.EXTRA_PROPERTY_VALUE);
-                    viewModel.followLinkToNoteWithProperty(name, value);
+                    viewModel.followLinkToNoteOrBookWithProperty(name, value);
                     break;
                 }
 

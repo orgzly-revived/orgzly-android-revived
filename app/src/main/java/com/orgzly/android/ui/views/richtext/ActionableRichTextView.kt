@@ -9,6 +9,6 @@ import com.orgzly.android.ui.views.style.DrawerMarkerSpan
 interface ActionableRichTextView {
     fun toggleDrawer(markerSpan: DrawerMarkerSpan)
     fun toggleCheckbox(checkboxSpan: CheckboxSpan)
-    fun followLinkToNoteWithProperty(name: String, value: String)
+    fun followLinkToNoteOrBookWithProperty(name: String, value: String)
     fun followLinkToFile(path: String)
 }
