@@ -19,6 +19,11 @@ class AlarmSoundService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
+        // ensure no other active alarm
+        if (player != null) {
+            return START_REDELIVER_INTENT
+        }
+        
         // ensure no silent/vibration mode
         var audioManager = applicationContext.getAudioManager()
         if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
