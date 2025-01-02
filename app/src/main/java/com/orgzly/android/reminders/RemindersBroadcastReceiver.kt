@@ -203,6 +203,7 @@ class RemindersBroadcastReceiver : BroadcastReceiver() {
                     noteTime.bookId,
                     noteTime.bookName,
                     noteTime.title,
+                    noteTime.tags,
                     noteTime.timeType,
                     orgDateTime)
 

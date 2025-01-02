@@ -7,6 +7,7 @@ data class NoteReminderPayload(
     var bookId: Long,
     var bookName: String,
     var title: String,
+    var tags: String?,
     var timeType: Int,
     var orgDateTime: OrgDateTime
 )

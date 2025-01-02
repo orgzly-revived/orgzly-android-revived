@@ -61,6 +61,32 @@ object RemindersNotifications {
                 builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             }
 
+            // Start alarm sound
+            if (AppPreferences.remindersAlarm(context)) {
+
+                // check tags
+                var noteTags = noteReminder.payload.tags.orEmpty().split(' ')
+                var alarmTags = AppPreferences.remindersAlarmTags(context).split(' ')
+                if (alarmTags.isEmpty() || noteTags.any { tag -> alarmTags.contains(tag) }) {
+
+                    // ignore daily reminder time
+                    // TODO this results in the notification not playing an alarm when the user
+                    // schedules it on the exact time as the daily reminder. to still play the alarm in this case,
+                    // we can check if the date of the note matches the daily reminder time
+                    var dailyTime = AppPreferences.reminderDailyTimeAsDateTime(context)
+                    if (!noteReminder.runTime.equals(dailyTime)) {
+
+                        // start alarm sound
+                        context.startService(Intent(context, AlarmSoundService::class.java))
+
+                        // prevent accidental notification swipe
+                        // the alarm can still be turned off without mark as done or snooze by tapping the title
+                        // in the case the notification gets lost, opening the app turns off the alarm as well
+                        builder.setOngoing(true)
+                    }
+                }
+            }
+
             // Set LED
             if (AppPreferences.remindersLed(context)) {
                 val colorString = AppPreferences.remindersLedColor(context);

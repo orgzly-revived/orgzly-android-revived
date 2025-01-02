@@ -13,10 +13,12 @@ import com.orgzly.R;
 import com.orgzly.android.App;
 import com.orgzly.android.LocalStorage;
 import com.orgzly.org.OrgStatesWorkflow;
+import com.orgzly.org.datetime.OrgDateTime;
 
 import org.eclipse.jgit.transport.URIish;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joda.time.DateTime;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -323,6 +325,18 @@ public class AppPreferences {
                 context.getResources().getBoolean(R.bool.pref_default_reminders_sound));
     }
 
+    public static boolean remindersAlarm(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_reminders_alarm),
+                context.getResources().getBoolean(R.bool.pref_default_reminders_alarm));
+    }
+
+    public static String remindersAlarmTags(Context context) {
+        return getDefaultSharedPreferences(context).getString(
+                context.getResources().getString(R.string.pref_key_reminders_alarm_tags),
+                context.getResources().getString(R.string.pref_default_reminders_alarm_tags));
+    }
+
     public static boolean remindersLed(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(
                 context.getResources().getString(R.string.pref_key_reminders_led),
@@ -357,6 +371,14 @@ public class AppPreferences {
         String key = context.getResources().getString(R.string.pref_key_daily_reminder_time);
         return getDefaultSharedPreferences(context).getInt(key,
                 context.getResources().getInteger(R.integer.pref_default_daily_reminder_time));
+    }
+
+    public static DateTime reminderDailyTimeAsDateTime(Context context) {
+        int reminderTime = reminderDailyTime(context);
+        int hours = reminderTime / 60;
+        int minutes = reminderTime % 60;
+        OrgDateTime dt = new OrgDateTime.Builder(new OrgDateTime(false)).setHour(hours).setMinute(minutes).setHasTime(true).build();
+        return new DateTime(dt.getCalendar());
     }
 
     public static void reminderDailyTime(Context context, int value) {
