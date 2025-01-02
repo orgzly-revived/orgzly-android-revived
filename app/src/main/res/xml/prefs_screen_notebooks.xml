@@ -236,6 +236,12 @@
             android:title="@string/prepend"
             android:summary="@string/insert_new_note_at_beginning"
             android:defaultValue="@bool/pref_default_is_new_note_prepend"/>
+
+        <SwitchPreference
+            android:key="@string/pref_key_new_note_add_id"
+            android:title="@string/add_id_property"
+            android:summary="@string/populate_the_id_property"
+            android:defaultValue="@bool/pref_default_is_new_note_prepend"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/images">

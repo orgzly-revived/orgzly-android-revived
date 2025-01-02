@@ -726,6 +726,9 @@
     <string name="prepend">Prepend</string>
     <string name="insert_new_note_at_beginning">Insert new note at beginning</string>
 
+    <string name="add_id_property">Add ID property</string>
+    <string name="populate_the_id_property">Populate the \"ID\" property in all new notes</string>
+
     <string name="developer_options">Developer options</string>
     <string name="git_repository_type">Git repository type</string>
     <string name="in_development">In development</string>

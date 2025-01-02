@@ -233,6 +233,17 @@ public class AppPreferences {
         getDefaultSharedPreferences(context).edit().putBoolean(key, value).apply();
     }
 
+    public static boolean addIdToNewNotes(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_new_note_add_id),
+                context.getResources().getBoolean(R.bool.pref_default_new_note_add_id));
+    }
+
+    public static void addIdToNewNotes(Context context, boolean value) {
+        String key = context.getResources().getString(R.string.pref_key_new_note_add_id);
+        getDefaultSharedPreferences(context).edit().putBoolean(key, value).apply();
+    }
+
     public static String createdAtProperty(Context context) {
         return getDefaultSharedPreferences(context).getString(
                 context.getResources().getString(R.string.pref_key_created_at_property),

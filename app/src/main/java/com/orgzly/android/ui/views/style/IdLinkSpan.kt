@@ -20,7 +20,7 @@ class IdLinkSpan(val type: Int, val link: String, val name: String?) : LinkSpan(
     }
 
     companion object {
-        private const val PROPERTY = "ID"
+        const val PROPERTY = "ID"
 
         const val PREFIX = "id:"
     }
