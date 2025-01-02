@@ -11,6 +11,7 @@ interface ReminderTimeDao {
             var bookName: String,
             var state: String?,
             var title: String,
+            var tags: String?,
             var timeType: Int,
             var orgTimestampString: String)
 
@@ -21,6 +22,7 @@ interface ReminderTimeDao {
         coalesce(b.title, b.name) as bookName,
         n.state as state,
         n.title as title,
+        n.tags as tags,
         $SCHEDULED_TIME as timeType,
         t.string as orgTimestampString
         FROM org_ranges r
@@ -37,6 +39,7 @@ interface ReminderTimeDao {
         coalesce(b.title, b.name) as bookName,
         n.state as state,
         n.title as title,
+        n.tags as tags,
         $DEADLINE_TIME as timeType,
         t.string as orgTimestampString
         FROM org_ranges r
@@ -53,6 +56,7 @@ interface ReminderTimeDao {
         coalesce(b.title, b.name) as bookName,
         n.state as state,
         n.title as title,
+        n.tags as tags,
         $EVENT_TIME as timeType,
         t.string as orgTimestampString
         FROM note_events e

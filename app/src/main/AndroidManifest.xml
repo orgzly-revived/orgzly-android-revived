@@ -22,9 +22,9 @@
 
     <!-- For reminders -->
     <uses-permission android:name="android.permission.VIBRATE"/>
-
-    <!-- For reminders -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".android.App"
@@ -170,6 +170,9 @@
             android:name=".android.widgets.ListWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
             android:exported="false" />
+
+        <service
+            android:name=".android.reminders.AlarmSoundService" />
 
         <activity
             android:name=".android.widgets.ListWidgetSelectionActivity"

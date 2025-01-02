@@ -254,6 +254,12 @@
     <string name="pref_key_reminders_sound" translatable="false">pref_key_reminders_sound</string>
     <bool name="pref_default_reminders_sound" translatable="false">true</bool>
 
+    <string name="pref_key_reminders_alarm" translatable="false">pref_key_reminders_alarm</string>
+    <bool name="pref_default_reminders_alarm" translatable="false">false</bool>
+
+    <string name="pref_key_reminders_alarm_tags" translatable="false">pref_key_reminders_alarm_tags</string>
+    <string name="pref_default_reminders_alarm_tags" translatable="false">alarm</string>
+
     <string name="pref_key_reminders_vibrate" translatable="false">pref_key_reminders_vibrate</string>
     <bool name="pref_default_reminders_vibrate" translatable="false">false</bool>
 
