@@ -11,7 +11,8 @@ import com.orgzly.org.OrgProperties
 import com.orgzly.org.datetime.OrgDateTime
 import com.orgzly.org.datetime.OrgRange
 import com.orgzly.org.utils.StateChangeLogic
-import java.util.*
+import java.util.Calendar
+import java.util.UUID
 
 
 class NoteBuilder {
@@ -105,12 +106,25 @@ class NoteBuilder {
 
             val state = initialState(context)
 
+            val properties = initialProperties(context)
+
             return NotePayload(
                     title = title,
                     content = content,
                     state = state,
-                    scheduled = scheduled
+                    scheduled = scheduled,
+                    properties = properties
             )
+        }
+
+        private fun initialProperties(context: Context): OrgProperties {
+            val properties = OrgProperties()
+            if (AppPreferences.addIdToNewNotes(context)) {
+                val propName = com.orgzly.android.ui.views.style.IdLinkSpan.PROPERTY
+                val propValue = UUID.randomUUID().toString()
+                properties.put(propName, propValue)
+            }
+            return properties
         }
 
         private fun initialScheduledTime(context: Context): String? {
