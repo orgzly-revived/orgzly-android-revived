@@ -32,6 +32,7 @@ import com.orgzly.android.db.entity.Book;
 import com.orgzly.android.db.entity.Note;
 import com.orgzly.android.db.entity.SavedSearch;
 import com.orgzly.android.prefs.AppPreferences;
+import com.orgzly.android.reminders.AlarmSoundService;
 import com.orgzly.android.sync.AutoSync;
 import com.orgzly.android.ui.AppSnackbarUtils;
 import com.orgzly.android.ui.CommonActivity;
@@ -461,6 +462,8 @@ public class MainActivity extends CommonActivity
         viewModel.refresh(AppPreferences.notebooksSortOrder(this));
 
         autoSync.trigger(AutoSync.Type.APP_RESUMED);
+
+        stopService(new Intent(this, AlarmSoundService.class));
     }
 
     private void performIntros() {

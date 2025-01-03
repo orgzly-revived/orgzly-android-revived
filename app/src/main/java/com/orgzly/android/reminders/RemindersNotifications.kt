@@ -61,6 +61,29 @@ object RemindersNotifications {
                 builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             }
 
+            // Start alarm sound
+            if (AppPreferences.remindersAlarm(context)) {
+
+                // check tags
+                val noteTags = noteReminder.payload.tags.orEmpty().split(' ')
+                val alarmTags = AppPreferences.remindersAlarmTags(context).split(' ')
+                if (alarmTags.isEmpty() || noteTags.any { tag -> alarmTags.contains(tag) }) {
+
+                    // ring alarm for all notifications with a time attached
+                    // this does not include daily reminders as they do not trigger for notes with a time set
+                    if (noteReminder.payload.orgDateTime.hasTime()) {
+
+                        // start alarm sound
+                        context.startService(Intent(context, AlarmSoundService::class.java))
+
+                        // prevent accidental notification swipe
+                        // the alarm can still be turned off without mark as done or snooze by tapping the title
+                        // in the case the notification gets lost, opening the app turns off the alarm as well
+                        builder.setOngoing(true)
+                    }
+                }
+            }
+
             // Set LED
             if (AppPreferences.remindersLed(context)) {
                 val colorString = AppPreferences.remindersLedColor(context);

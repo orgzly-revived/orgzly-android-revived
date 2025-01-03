@@ -487,6 +487,11 @@
     <string name="pref_title_reminders_for_event_times">Events</string>
     <string name="pref_title_summary_reminders_for_event_times">Display notification for notes with event time</string>
 
+    <string name="pref_title_reminders_alarm">Play alarm sound</string>
+    <string name="pref_summary_reminders_alarm">For notes which have an "alarm tag" (see below)</string>
+    <string name="pref_title_reminders_alarm_tags">Alarm tags</string>
+    <string name="pref_summary_reminders_alarm_tags">Space separated list of tags that should trigger the alarm sound. Empty to trigger alarm on every reminder.</string>
+
     <string name="pref_title_reminders_sound">Sound</string>
     <string name="pref_title_reminders_vibrate">Vibration</string>
     <string name="pref_title_reminders_led">Light</string>

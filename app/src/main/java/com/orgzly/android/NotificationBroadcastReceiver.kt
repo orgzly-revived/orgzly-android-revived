@@ -8,6 +8,7 @@ import android.os.Build
 import com.orgzly.BuildConfig
 import com.orgzly.android.data.logs.AppLogsRepository
 import com.orgzly.android.reminders.RemindersScheduler
+import com.orgzly.android.reminders.AlarmSoundService
 import com.orgzly.android.ui.notifications.Notifications
 import com.orgzly.android.ui.util.getNotificationManager
 import com.orgzly.android.usecase.NoteUpdateStateDone
@@ -57,6 +58,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         val id = intent.getIntExtra(AppIntent.EXTRA_NOTIFICATION_ID, 0)
 
         if (id > 0) {
+            context.stopService(Intent(context, AlarmSoundService::class.java))
             context.getNotificationManager().let {
                 it.cancel(tag, id)
                 cancelRemindersSummary(it)
