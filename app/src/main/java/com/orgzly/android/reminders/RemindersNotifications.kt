@@ -65,15 +65,15 @@ object RemindersNotifications {
             if (AppPreferences.remindersAlarm(context)) {
 
                 // check tags
-                var noteTags = noteReminder.payload.tags.orEmpty().split(' ')
-                var alarmTags = AppPreferences.remindersAlarmTags(context).split(' ')
+                val noteTags = noteReminder.payload.tags.orEmpty().split(' ')
+                val alarmTags = AppPreferences.remindersAlarmTags(context).split(' ')
                 if (alarmTags.isEmpty() || noteTags.any { tag -> alarmTags.contains(tag) }) {
 
                     // ignore daily reminder time
                     // TODO this results in the notification not playing an alarm when the user
                     // schedules it on the exact time as the daily reminder. to still play the alarm in this case,
                     // we can check if the date of the note matches the daily reminder time
-                    var dailyTime = AppPreferences.reminderDailyTimeAsDateTime(context)
+                    val dailyTime = AppPreferences.reminderDailyTimeAsDateTime(context)
                     if (!noteReminder.runTime.equals(dailyTime)) {
 
                         // start alarm sound
