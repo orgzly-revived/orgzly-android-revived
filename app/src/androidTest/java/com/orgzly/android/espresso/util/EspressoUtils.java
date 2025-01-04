@@ -518,6 +518,13 @@ public class EspressoUtils {
         }
     }
 
+    public static void denyAlarmsAndRemindersSpecialPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            String shellCmd = "appops set --uid com.orgzlyrevived SCHEDULE_EXACT_ALARM deny";
+            getInstrumentation().getUiAutomation().executeShellCommand(shellCmd);
+        }
+    }
+
     /**
      * Utility method for starting sync using drawer button.
      */

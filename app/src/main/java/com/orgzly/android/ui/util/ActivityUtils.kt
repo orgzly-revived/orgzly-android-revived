@@ -9,7 +9,12 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.util.DisplayMetrics
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.appcompat.widget.Toolbar
@@ -33,6 +38,13 @@ object ActivityUtils {
 
         intent.data = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
 
+        activity.startActivity(intent)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun openAppScheduleExactAlarmsPermissionSetting(activity: Activity) {
+        val intent = Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+        intent.data = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
         activity.startActivity(intent)
     }
 

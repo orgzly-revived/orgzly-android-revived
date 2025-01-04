@@ -87,14 +87,13 @@ class RemindersScheduler @Inject constructor(val context: Application, val logs:
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (!alarmManager.canScheduleExactAlarms()) {
-                throw SecurityException("Missing permission to schedule alarm")
-            }
-        }
-
         // TODO: Add preferences to control *how* to schedule the alarms
         if (hasTime) {
+            if (!AppPermissions.canScheduleExactAlarms(context)) {
+                // We will not be allowed to schedule this reminder, but the user will
+                // hopefully grant the permission before our next scheduling attempt.
+                return
+            }
             if (AppPreferences.remindersUseAlarmClockForTodReminders(context)) {
                 scheduleAlarmClock(alarmManager, intent, inMs, origin)
             } else {
@@ -104,10 +103,10 @@ class RemindersScheduler @Inject constructor(val context: Application, val logs:
                     scheduleExact(alarmManager, intent, inMs, origin)
                 }
             }
-
         } else {
-            // Does not trigger while dozing
-            scheduleExact(alarmManager, intent, inMs, origin)
+            // This reminder does not contain clock time information; it's
+            // probably a daily reminder. Schedule an inexact alarm.
+            scheduleInExact(alarmManager, intent, inMs, origin)
         }
 
         // Intent received, notifications not displayed by default
@@ -128,6 +127,14 @@ class RemindersScheduler @Inject constructor(val context: Application, val logs:
             SystemClock.elapsedRealtime() + inMs,
             intent)
         logScheduled("setExact", origin, inMs)
+    }
+
+    private fun scheduleInExact(alarmManager: AlarmManager, intent: PendingIntent, inMs: Long, origin: String) {
+        alarmManager.set(
+            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            SystemClock.elapsedRealtime() + inMs,
+            intent)
+        logScheduled("set", origin, inMs)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
