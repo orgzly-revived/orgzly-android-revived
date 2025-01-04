@@ -73,4 +73,37 @@
         android:id="@+id/fab"
         style="@style/Fab.Add" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@id/fab"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_close" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@id/fab"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_add" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_with_template"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@id/fab"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_storage" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.BookUtils
@@ -65,6 +66,8 @@ class BookFragment :
     private lateinit var sharedMainActivityViewModel: SharedMainActivityViewModel
 
     private lateinit var viewModel: BookViewModel
+
+    private var isFabExpanded = false
 
     override fun getAdapter(): BookAdapter? {
         return if (::viewAdapter.isInitialized) viewAdapter else null
@@ -238,16 +241,7 @@ class BookFragment :
                     topToolbarToDefault()
                     bottomToolbarToDefault()
 
-                    binding.fab.run {
-                        if (currentBook != null) {
-                            setOnClickListener {
-                                listener?.onNoteNewRequest(NotePlace(mBookId))
-                            }
-                            show()
-                        } else {
-                            hide()
-                        }
-                    }
+                    setupFabs()
 
                     sharedMainActivityViewModel.unlockDrawer()
 
@@ -276,6 +270,74 @@ class BookFragment :
                     appBarBackPressHandler.isEnabled = true
                 }
             }
+        }
+    }
+
+    private fun setupFabs() {
+        val fabs = arrayOf(binding.fabCancel, binding.fabAdd, binding.fabAddWithTemplate)
+
+        binding.fabCancel.run {
+            setOnClickListener {
+                // Note: keep order of toggling fabs and isFabExpanded
+                toggleFabOptions(binding.fab)
+                isFabExpanded = !isFabExpanded
+                toggleFabOptions(*fabs)
+            }
+        }
+
+        binding.fabAdd.run {
+            setOnClickListener {
+                isFabExpanded = false
+                listener?.onNoteNewRequest(NotePlace(mBookId))
+            }
+        }
+
+        binding.fabAddWithTemplate.run {
+            setOnClickListener{
+                isFabExpanded = false
+                // new behaviour:
+                //                listener?.onNoteNewFromTemplateRequest(NotePlace(mBookId))
+                // until new behaviour is implemented:
+                listener?.onNoteNewRequest(NotePlace(mBookId))
+            }
+        }
+
+        binding.fab.run {
+            if (currentBook != null) {
+                setOnClickListener {
+                    // Note: keep order of toggling fabs and isFabExpanded
+                    toggleFabOptions(binding.fab)
+                    isFabExpanded = !isFabExpanded
+                    toggleFabOptions(*fabs)
+
+                    show()
+                }
+            } else {
+                hide()
+            }
+        }
+
+    }
+
+    private fun toggleFabOptions(vararg fabs: FloatingActionButton) {
+        var count : Int = 0;
+        for (fab in fabs) {
+            if (isFabExpanded) {
+                fab.visibility = View.VISIBLE
+                fab.animate()
+                    .translationY(-(resources.getDimension(R.dimen.fab_margin) * count))
+                    .setDuration(200)
+                    .start()
+            } else {
+                fab.animate()
+                    .translationY(-1f)
+                    .setDuration(200)
+                    .withEndAction {
+                        fab.visibility = View.GONE
+                    }
+                    .start()
+            }
+            count++;
         }
     }
 
