@@ -154,18 +154,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".android.ui.TemplateChooserActivity"
-            android:label="@string/new_note_shortcut_label"
-            android:icon="@mipmap/cic_shortcut_new_note"
-            android:exported="true">
-
-            <intent-filter>
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
         <service
             android:name=".android.widgets.ListWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
