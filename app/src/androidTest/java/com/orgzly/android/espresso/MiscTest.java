@@ -189,7 +189,7 @@ public class MiscTest extends OrgzlyTest {
                         "*** DONE Note #5.\n" +
                         "CLOSED: [2014-06-03 Tue 13:34]\n" +
                         "");
-        EspressoUtils.grantAlarmsAndRemindersPermission();
+        EspressoUtils.grantAlarmsAndRemindersSpecialPermission();
         try (ActivityScenario<MainActivity> ignored = ActivityScenario.launch(MainActivity.class)) {
             onView(allOf(withText("book-name"), isDisplayed())).perform(click());
 
@@ -272,7 +272,7 @@ public class MiscTest extends OrgzlyTest {
 
     @Test
     public void testTimestampDialogTimeButtonValueWhenToggling() {
-        EspressoUtils.grantAlarmsAndRemindersPermission();
+        EspressoUtils.grantAlarmsAndRemindersSpecialPermission();
         testUtils.setupBook("book-name", "Sample book used for tests\n" +
                 "* TODO Note #1.\n" +
                 "SCHEDULED: <2015-01-18 04:05 +6d>\n" +
