@@ -28,6 +28,7 @@ import com.orgzly.android.ui.dialogs.TimestampDialogFragment
 import com.orgzly.android.ui.drawer.DrawerItem
 import com.orgzly.android.ui.main.SharedMainActivityViewModel
 import com.orgzly.android.ui.main.setupSearchView
+import com.orgzly.android.ui.note.NotePayload
 import com.orgzly.android.ui.notes.ItemGestureDetector
 import com.orgzly.android.ui.notes.NoteItemViewHolder
 import com.orgzly.android.ui.notes.NotePopup
@@ -53,7 +54,8 @@ class BookFragment :
         NotesFragment(),
         TimestampDialogFragment.OnDateTimeSetListener,
         DrawerItem,
-        BookAdapter.OnClickListener {
+        BookAdapter.OnClickListener,
+        TemplateSelectionFragment.OnTemplateSelectedListener {
 
     private lateinit var binding: FragmentBookBinding
 
@@ -66,8 +68,6 @@ class BookFragment :
     private lateinit var sharedMainActivityViewModel: SharedMainActivityViewModel
 
     private lateinit var viewModel: BookViewModel
-
-    private var isFabExpanded = false
 
     override fun getAdapter(): BookAdapter? {
         return if (::viewAdapter.isInitialized) viewAdapter else null
@@ -274,42 +274,37 @@ class BookFragment :
     }
 
     private fun setupFabs() {
-        val fabs = arrayOf(binding.fabCancel, binding.fabAdd, binding.fabAddWithTemplate)
-
         binding.fabCancel.run {
             setOnClickListener {
-                // Note: keep order of toggling fabs and isFabExpanded
-                toggleFabOptions(binding.fab)
-                isFabExpanded = !isFabExpanded
-                toggleFabOptions(*fabs)
+                collapseFabs(true)
             }
         }
 
         binding.fabAdd.run {
             setOnClickListener {
-                isFabExpanded = false
+                collapseFabs(true)
+
                 listener?.onNoteNewRequest(NotePlace(mBookId))
             }
         }
 
-        binding.fabAddWithTemplate.run {
-            setOnClickListener{
-                isFabExpanded = false
-                // new behaviour:
-                //                listener?.onNoteNewFromTemplateRequest(NotePlace(mBookId))
-                // until new behaviour is implemented:
-                listener?.onNoteNewRequest(NotePlace(mBookId))
+        binding.fabAddWithTemplate.let{
+           val templates = dataRepository.getNoteTemplates(mBookId)
+           // val templates : List<NotePayload> = listOf(NotePayload(title = "p1", tags = listOf("abb", "baa")), NotePayload(title = "p2"))
+
+            it.setOnClickListener {
+                collapseFabs(true)
+
+                val dialog = TemplateSelectionFragment(listener = this, templates = templates)
+                dialog.show(childFragmentManager, "TemplateSelectionFragment")
+
             }
         }
 
         binding.fab.run {
             if (currentBook != null) {
                 setOnClickListener {
-                    // Note: keep order of toggling fabs and isFabExpanded
-                    toggleFabOptions(binding.fab)
-                    isFabExpanded = !isFabExpanded
-                    toggleFabOptions(*fabs)
-
+                    collapseFabs(false)
                     show()
                 }
             } else {
@@ -319,26 +314,44 @@ class BookFragment :
 
     }
 
-    private fun toggleFabOptions(vararg fabs: FloatingActionButton) {
-        var count : Int = 0;
-        for (fab in fabs) {
-            if (isFabExpanded) {
-                fab.visibility = View.VISIBLE
-                fab.animate()
-                    .translationY(-(resources.getDimension(R.dimen.fab_margin) * count))
-                    .setDuration(200)
-                    .start()
-            } else {
-                fab.animate()
-                    .translationY(-1f)
-                    .setDuration(200)
-                    .withEndAction {
-                        fab.visibility = View.GONE
-                    }
-                    .start()
-            }
-            count++;
+    override fun onTemplateSelected(notePayload: NotePayload) {
+        // drop the property that marks templates
+        notePayload.properties.remove("orgzly_template")
+
+        // forward for editing
+        listener?.onNoteNewFromTemplateRequest(NotePlace(mBookId), notePayload)
+    }
+
+
+    private fun collapseFabs(toCollapse: Boolean){
+        val expandableFabs = arrayOf(binding.fabCancel, binding.fabAdd, binding.fabAddWithTemplate)
+        val initialFab = binding.fab
+
+        if (toCollapse) {
+            expandableFabs.forEach { fab -> hideFab(fab) }
+            showFab(initialFab, 0)
+        } else {
+            expandableFabs.forEachIndexed { index, fab -> showFab(fab, index) }
+            hideFab(initialFab)
         }
+    }
+
+    private fun showFab(fab: FloatingActionButton, count: Int) {
+        fab.visibility = View.VISIBLE
+        fab.animate()
+            .translationY(-(resources.getDimension(R.dimen.fab_margin) * count))
+            .setDuration(200)
+            .start()
+    }
+
+    private fun hideFab(fab: FloatingActionButton) {
+        fab.animate()
+            .translationY(-1f)
+            .setDuration(200)
+            .withEndAction {
+                fab.visibility = View.GONE
+            }
+            .start()
     }
 
     private fun setFlipperDisplayedChild(notes: List<NoteView>?) {

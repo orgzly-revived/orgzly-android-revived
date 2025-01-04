@@ -70,11 +70,12 @@ import java.util.TreeSet
 import javax.inject.Inject
 
 /**
- * Note editor.
+ * Note template selector.
  */
-class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFragment.OnDateTimeSetListener, DrawerItem {
+/*
+class NoteTemplateSelectionFragment : CommonFragment(), View.OnClickListener, TimestampDialogFragment.OnDateTimeSetListener, DrawerItem {
 
-    private lateinit var binding: FragmentNoteBinding
+    private lateinit var binding: FragmentNoteTemplateSelectionBinding
 
     @Inject
     internal lateinit var dataRepository: DataRepository
@@ -109,8 +110,8 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
     private fun noteInitialDataFromArguments(): NoteInitialData {
         requireNotNull(arguments).let { args ->
-            // Book ID must be passed
-            val bookId = args.getLong(ARG_BOOK_ID)
+                // Book ID must be passed
+                val bookId = args.getLong(ARG_BOOK_ID)
             require(bookId > 0) {
                 "${NoteFragment::class.java.simpleName} requires $ARG_BOOK_ID argument passed"
             }
@@ -143,7 +144,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         val noteInitialData = noteInitialDataFromArguments()
 
         sharedMainActivityViewModel = ViewModelProvider(requireActivity())
-            .get(SharedMainActivityViewModel::class.java)
+                .get(SharedMainActivityViewModel::class.java)
 
         val factory = NoteViewModelFactory.getInstance(dataRepository, noteInitialData)
 
@@ -170,7 +171,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         binding.title.apply {
             // Keyboard's action button pressed
             setOnEditorActionListener { _, _, _ ->
-                userSave()
+                    userSave()
                 true
             }
         }
@@ -226,7 +227,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         }
 
         binding.content.setOnUserTextChangeListener { str ->
-            binding.content.setSourceText(str)
+                binding.content.setSourceText(str)
 
         }
 
@@ -286,7 +287,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             }
 
             setOnMenuItemClickListener { menuItem ->
-                handleActionItemClick(menuItem)
+                    handleActionItemClick(menuItem)
             }
 
             setOnClickListener {
@@ -302,7 +303,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         }
 
         menu.findItem(R.id.metadata_always_show_set).isChecked =
-            AppPreferences.alwaysShowSetNoteMetadata(context)
+                AppPreferences.alwaysShowSetNoteMetadata(context)
     }
 
     // Displaying a non-existent note, remove some menu items
@@ -402,15 +403,15 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
     private fun setupObservers() {
         viewModel.noteCreatedEvent.observe(viewLifecycleOwner, Observer { note ->
-            listener?.onNoteCreated(note)
+                listener?.onNoteCreated(note)
         })
 
         viewModel.noteUpdatedEvent.observe(viewLifecycleOwner, Observer { note ->
-            listener?.onNoteUpdated(note)
+                listener?.onNoteUpdated(note)
         })
 
         viewModel.noteDeletedEvent.observeSingle(viewLifecycleOwner, Observer { count ->
-            (activity as? MainActivity)?.popBackStackAndCloseKeyboard()
+                (activity as? MainActivity)?.popBackStackAndCloseKeyboard()
 
             val message = if (count == 0) {
                 resources.getString(R.string.no_notes_deleted)
@@ -422,14 +423,14 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         })
 
         viewModel.noteDeleteRequest.observeSingle(viewLifecycleOwner, Observer { count ->
-            val question = resources.getQuantityString(
+                val question = resources.getQuantityString(
                 R.plurals.delete_note_or_notes_with_count_question, count, count)
 
             dialog = MaterialAlertDialogBuilder(requireContext())
-                .setTitle(question)
-                .setPositiveButton(R.string.delete) { _, _ ->
+                    .setTitle(question)
+                    .setPositiveButton(R.string.delete) { _, _ ->
                     viewModel.deleteNote()
-                }
+            }
                 .setNegativeButton(R.string.cancel) { _, _ -> }
                 .show()
 
@@ -442,19 +443,19 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         })
 
         viewModel.errorEvent.observeSingle(viewLifecycleOwner, Observer { error ->
-            activity?.showSnackbar((error.cause ?: error).localizedMessage)
+                activity?.showSnackbar((error.cause ?: error).localizedMessage)
         })
 
         viewModel.snackBarMessage.observeSingle(viewLifecycleOwner, Observer { resId ->
-            activity?.showSnackbar(resId)
+                activity?.showSnackbar(resId)
         })
     }
 
     private fun updateViewsFromPayload() {
         val payload = viewModel.notePayload ?: return
 
-        // State
-        setStateView(payload.state)
+                // State
+                setStateView(payload.state)
 
         // Priority
         setPriorityView(payload.priority)
@@ -491,17 +492,17 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         val propView = lastProperty()
 
         val name = propView.findViewById<EditText>(R.id.name)
-        val value = propView.findViewById<EditText>(R.id.value)
-        val remove = propView.findViewById<View>(R.id.remove)
+                val value = propView.findViewById<EditText>(R.id.value)
+                val remove = propView.findViewById<View>(R.id.remove)
 
-        // Last property (this one) needs no remove button
-        remove.visibility = View.INVISIBLE
+                // Last property (this one) needs no remove button
+                remove.visibility = View.INVISIBLE
 
         // Second to last property can now have its remove button
         if (binding.propertiesContainer.childCount > 1) {
             binding.propertiesContainer
-                .getChildAt(binding.propertiesContainer.childCount - 2)
-                .findViewById<View>(R.id.remove).visibility = View.VISIBLE
+                    .getChildAt(binding.propertiesContainer.childCount - 2)
+                    .findViewById<View>(R.id.remove).visibility = View.VISIBLE
         }
 
         if (propName != null && propValue != null) { // Existing property
@@ -548,7 +549,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
     private fun lastProperty(): ViewGroup {
         return binding.propertiesContainer
-            .getChildAt(binding.propertiesContainer.childCount - 1) as ViewGroup
+                .getChildAt(binding.propertiesContainer.childCount - 1) as ViewGroup
     }
 
     private fun updatePayloadFromViews() {
@@ -582,7 +583,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             binding.priorityButton.text.toString()
 
         val tags = binding.tagsButton.text.toString()
-            .split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+                .split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
 
         viewModel.updatePayload(title, content, state, priority, tags, properties)
 
@@ -595,36 +596,36 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, savedInstanceState)
 
         viewModel.noteDetailsDataEvent.observeSingle(viewLifecycleOwner, Observer { data ->
-            data.book?.let {
-                val bookTitle = BookUtils.getFragmentTitleForBook(it.book)
+                data.book?.let {
+            val bookTitle = BookUtils.getFragmentTitleForBook(it.book)
 
-                val breadcrumbs = Breadcrumbs().apply {
-                    // Notebook
-                    add(bookTitle, 0, if (viewModel.noteId == 0L) null else fun() {
-                        userFollowBookBreadcrumb()
-                    })
+            val breadcrumbs = Breadcrumbs().apply {
+                // Notebook
+                add(bookTitle, 0, if (viewModel.noteId == 0L) null else fun() {
+                    userFollowBookBreadcrumb()
+                })
 
-                    // Ancestors
-                    data.ancestors.forEach { ancestor ->
+                // Ancestors
+                data.ancestors.forEach { ancestor ->
                         add(ancestor.title, 0) {
-                            userFollowNoteBreadcrumb(ancestor)
-                        }
-                    }
+                    userFollowNoteBreadcrumb(ancestor)
                 }
-
-                binding.breadcrumbsText.text = breadcrumbs.toCharSequence()
-
-                binding.locationButton.text = bookTitle
+                }
             }
 
+            binding.breadcrumbsText.text = breadcrumbs.toCharSequence()
+
+            binding.locationButton.text = bookTitle
+        }
+
             binding.viewFlipper.displayedChild =
-                if (viewModel.isNew()) {
-                    0
-                } else if (viewModel.notePayload != null) {
-                    0
-                } else {
-                    1
-                }
+            if (viewModel.isNew()) {
+                0
+            } else if (viewModel.notePayload != null) {
+                0
+            } else {
+                1
+            }
 
             // Load payload from saved Bundle if available
             if (savedInstanceState != null) {
@@ -653,11 +654,11 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
      */
     private fun setupTagsViewAdapter() {
         viewModel.tags.observe(viewLifecycleOwner, Observer { tags ->
-            context?.let {
-                val adapter = ArrayAdapter(it, R.layout.dropdown_item, tags)
-                binding.tagsButton.setAdapter(adapter)
-                binding.tagsButton.setTokenizer(SpaceTokenizer())
-            }
+                context?.let {
+            val adapter = ArrayAdapter(it, R.layout.dropdown_item, tags)
+            binding.tagsButton.setAdapter(adapter)
+            binding.tagsButton.setTokenizer(SpaceTokenizer())
+        }
         })
     }
 
@@ -736,16 +737,16 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         val selected = getSelectedBook(books, viewModel.bookId)
 
         dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.notebook)
-            .setSingleChoiceItems(bookNames, selected) { dialog, which ->
+                .setTitle(R.string.notebook)
+                .setSingleChoiceItems(bookNames, selected) { dialog, which ->
                 val book = books[which]
 
-                setBook(book)
+            setBook(book)
 
-                dialog.dismiss()
-            }
+            dialog.dismiss()
+        }
             .setNegativeButton(R.string.cancel, null)
-            .show()
+                .show()
     }
 
     override fun onClick(view: View) {
@@ -772,18 +773,18 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
                 }
 
                 dialog = MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.state)
-                    .setSingleChoiceItems(keywords, currentState) { dialog, which ->
+                        .setTitle(R.string.state)
+                        .setSingleChoiceItems(keywords, currentState) { dialog, which ->
                         // On state change - update state and timestamps
                         setState(states[which])
-                        dialog.dismiss()
-                    }
+                    dialog.dismiss()
+                }
                     .setNeutralButton(R.string.clear) { _, _ ->
                         // On state change - update state and timestamps
                         setState(null)
-                    }
+                }
                     .setNegativeButton(R.string.cancel, null)
-                    .show()
+                        .show()
             }
 
             R.id.state_remove -> {
@@ -801,14 +802,14 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
                 }
 
                 dialog = MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.priority)
-                    .setSingleChoiceItems(keywords, currentPriority) { dialog, which ->
+                        .setTitle(R.string.priority)
+                        .setSingleChoiceItems(keywords, currentPriority) { dialog, which ->
                         setPriorityView(priorities[which])
-                        dialog.dismiss()
-                    }
+                    dialog.dismiss()
+                }
                     .setNeutralButton(R.string.clear) { _, _ -> setPriorityView(null) }
                     .setNegativeButton(R.string.cancel, null)
-                    .show()
+                        .show()
             }
 
             R.id.priority_remove -> {
@@ -817,7 +818,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
             /* Setting scheduled time. */
             R.id.scheduled_button ->
-                f = TimestampDialogFragment.getInstance(
+            f = TimestampDialogFragment.getInstance(
                     R.id.scheduled_button,
                     TimeType.SCHEDULED,
                     emptySet(), // Unused
@@ -830,7 +831,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
             /* Setting deadline time. */
             R.id.deadline_button ->
-                f = TimestampDialogFragment.getInstance(
+            f = TimestampDialogFragment.getInstance(
                     R.id.deadline_button,
                     TimeType.DEADLINE,
                     emptySet(), // Unused
@@ -843,7 +844,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
             /* Setting closed time. */
             R.id.closed_button ->
-                f = TimestampDialogFragment.getInstance(
+            f = TimestampDialogFragment.getInstance(
                     R.id.closed_button,
                     TimeType.CLOSED,
                     emptySet(), // Unused
@@ -922,34 +923,34 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
     private fun setMetadataViewsVisibility() {
         setMetadataViewsVisibility(
-            "tags",
-            binding.tagsContainer,
-            !TextUtils.isEmpty(binding.tagsButton.text))
+                "tags",
+                binding.tagsContainer,
+                !TextUtils.isEmpty(binding.tagsButton.text))
 
         setMetadataViewsVisibility(
-            "state",
-            binding.stateContainer,
-            !TextUtils.isEmpty(binding.stateButton.text))
+                "state",
+                binding.stateContainer,
+                !TextUtils.isEmpty(binding.stateButton.text))
 
         setMetadataViewsVisibility(
-            "priority",
-            binding.priorityContainer,
-            !TextUtils.isEmpty(binding.priorityButton.text))
+                "priority",
+                binding.priorityContainer,
+                !TextUtils.isEmpty(binding.priorityButton.text))
 
         setMetadataViewsVisibility(
-            "scheduled_time",
-            binding.scheduledTimeContainer,
-            !TextUtils.isEmpty(binding.scheduledButton.text))
+                "scheduled_time",
+                binding.scheduledTimeContainer,
+                !TextUtils.isEmpty(binding.scheduledButton.text))
 
         setMetadataViewsVisibility(
-            "deadline_time",
-            binding.deadlineTimeContainer,
-            !TextUtils.isEmpty(binding.deadlineButton.text))
+                "deadline_time",
+                binding.deadlineTimeContainer,
+                !TextUtils.isEmpty(binding.deadlineButton.text))
 
         setMetadataViewsVisibility(
-            "properties",
-            binding.propertiesContainer,
-            binding.propertiesContainer.childCount > 1)
+                "properties",
+                binding.propertiesContainer,
+                binding.propertiesContainer.childCount > 1)
     }
 
     private fun setMetadataViewsVisibility(name: String?, container: View, isSet: Boolean) {
@@ -984,18 +985,18 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
         if (viewModel.isNoteModified()) {
             dialog = MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.note_has_been_modified)
-                .setMessage(R.string.discard_or_save_changes)
-                .setPositiveButton(R.string.save) { _, _ ->
+                    .setTitle(R.string.note_has_been_modified)
+                    .setMessage(R.string.discard_or_save_changes)
+                    .setPositiveButton(R.string.save) { _, _ ->
                     viewModel.saveNote {
-                        listener?.onNoteCanceled()
-                    }
-                }
+                listener?.onNoteCanceled()
+            }
+            }
                 .setNegativeButton(R.string.discard) { _, _ ->
                     listener?.onNoteCanceled()
-                }
+            }
                 .setNeutralButton(R.string.cancel, null)
-                .show()
+                    .show()
 
             return true
 
@@ -1017,18 +1018,18 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
         if (viewModel.isNoteModified()) {
             dialog = MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.note_has_been_modified)
-                .setMessage(R.string.discard_or_save_changes)
-                .setPositiveButton(R.string.save) { _, _ ->
+                    .setTitle(R.string.note_has_been_modified)
+                    .setMessage(R.string.discard_or_save_changes)
+                    .setPositiveButton(R.string.save) { _, _ ->
                     viewModel.saveNote {
-                        viewModel.followBookBreadcrumb()
-                    }
-                }
+                viewModel.followBookBreadcrumb()
+            }
+            }
                 .setNegativeButton(R.string.discard) { _, _ ->
                     viewModel.followBookBreadcrumb()
-                }
+            }
                 .setNeutralButton(R.string.cancel, null)
-                .show()
+                    .show()
         } else {
             viewModel.followBookBreadcrumb()
         }
@@ -1041,18 +1042,18 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
         if (viewModel.isNoteModified()) {
             dialog = MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.note_has_been_modified)
-                .setMessage(R.string.discard_or_save_changes)
-                .setPositiveButton(R.string.save) { _, _ ->
+                    .setTitle(R.string.note_has_been_modified)
+                    .setMessage(R.string.discard_or_save_changes)
+                    .setPositiveButton(R.string.save) { _, _ ->
                     viewModel.saveNote {
-                        viewModel.followNoteBreadcrumb(ancestor)
-                    }
-                }
+                viewModel.followNoteBreadcrumb(ancestor)
+            }
+            }
                 .setNegativeButton(R.string.discard) { _, _ ->
                     viewModel.followNoteBreadcrumb(ancestor)
-                }
+            }
                 .setNeutralButton(R.string.cancel, null)
-                .show()
+                    .show()
         } else {
             viewModel.followNoteBreadcrumb(ancestor)
         }
@@ -1085,11 +1086,11 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
     private fun setStateView(state: String?) {
         binding.stateButton.text =
-            if (state == null || NoteStates.NO_STATE_KEYWORD == state) {
-                null
-            } else {
-                state
-            }
+        if (state == null || NoteStates.NO_STATE_KEYWORD == state) {
+            null
+        } else {
+            state
+        }
         binding.stateRemove.invisibleUnless(!binding.stateButton.text.isNullOrEmpty())
     }
 
@@ -1132,49 +1133,37 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         @JvmStatic
         @JvmOverloads
         fun forNewNote(
-            notePlace: NotePlace,
-            initialPayload: NotePayload? = null): NoteFragment? {
+                notePlace: NotePlace,
+                initialPayload: NotePayload? = null): NoteFragment? {
 
-            return if (notePlace.bookId > 0) {
-                getInstance(
+        return if (notePlace.bookId > 0) {
+            getInstance(
                     notePlace.bookId,
                     notePlace.noteId,
                     notePlace.place,
                     initialPayload)
-            } else {
-                Log.e(TAG, "Invalid book id ${notePlace.bookId}")
-                null
-            }
+        } else {
+            Log.e(TAG, "Invalid book id ${notePlace.bookId}")
+            null
+        }
         }
 
         @JvmStatic
         fun forExistingNote(bookId: Long, noteId: Long): NoteFragment? {
-            return if (bookId > 0 && noteId > 0) {
-                getInstance(bookId, noteId)
-            } else {
-                Log.e(TAG, "Invalid book id $bookId or note id $noteId")
-                null
-            }
+        return if (bookId > 0 && noteId > 0) {
+            getInstance(bookId, noteId)
+        } else {
+            Log.e(TAG, "Invalid book id $bookId or note id $noteId")
+            null
         }
-
-        @JvmStatic
-        fun forNewNoteFromTemplate(bookId: Long, noteId: Long,  place: Place? = null,
-                                   initialPayload: NotePayload? = null): NoteFragment? {
-            return if (bookId > 0) {
-                getInstance(bookId, noteId, place, initialPayload)
-            } else {
-                Log.e(TAG, "Invalid book id $bookId")
-                null
-            }
         }
-
 
         @JvmStatic
         private fun getInstance(
-            bookId: Long,
-            noteId: Long,
-            place: Place? = null,
-            initialPayload: NotePayload? = null): NoteFragment {
+                bookId: Long,
+                noteId: Long,
+                place: Place? = null,
+                initialPayload: NotePayload? = null): NoteFragment {
 
             val fragment = NoteFragment()
 
@@ -1200,3 +1189,5 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         }
     }
 }
+
+ */

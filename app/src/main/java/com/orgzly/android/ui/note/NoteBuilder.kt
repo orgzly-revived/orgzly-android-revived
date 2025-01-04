@@ -1,6 +1,7 @@
 package com.orgzly.android.ui.note
 
 import android.content.Context
+import com.orgzly.android.db.entity.Note
 import com.orgzly.android.db.entity.NoteProperty
 import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.prefs.AppPreferences
@@ -99,18 +100,26 @@ class NoteBuilder {
         }
 
         @JvmStatic
-        fun newPayload(context: Context, title: String, content: String?): NotePayload {
+        fun newPayload(context: Context, initialPayload : NotePayload? = null): NotePayload {
+            // no initial data available, go with the defaults
+            if (initialPayload == null){
+                val scheduled = initialScheduledTime(context)
+                val state = initialState(context)
 
-            val scheduled = initialScheduledTime(context)
+                return NotePayload(
+                        title = "",
+                        content = null,
+                        state = state,
+                        scheduled = scheduled
+                )
+            }
 
-            val state = initialState(context)
+            // initial data available, copy as much as possible. Rest fill with sane defaults
+            assert(initialPayload != null);
+            val scheduled = initialPayload.scheduled?: initialScheduledTime(context)
+            val state = initialPayload.state?: initialState(context)
 
-            return NotePayload(
-                    title = title,
-                    content = content,
-                    state = state,
-                    scheduled = scheduled
-            )
+            return initialPayload.copy(scheduled=scheduled, state=state)
         }
 
         private fun initialScheduledTime(context: Context): String? {
