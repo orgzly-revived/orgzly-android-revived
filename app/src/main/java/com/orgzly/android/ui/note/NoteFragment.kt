@@ -30,6 +30,7 @@ import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.BookUtils
+import com.orgzly.android.Constants
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.db.entity.BookView
 import com.orgzly.android.db.entity.Note
@@ -125,8 +126,10 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
             // Initial values when sharing
             // -- From Tsunami on:
-            // -- val initialPayload: NotePayload? = args.getParcelable("initialPayload", NotePayload::class.java)
-            val initialPayload: NotePayload? = args.getParcelable("initialPayload")
+            // val initialPayload: NotePayload? = args.getParcelable(
+            //    Constants.ID_BUNDLE_PARAM_NOTEPAYLOAD,
+            //    NotePayload::class.java)
+            val initialPayload: NotePayload? = args.getParcelable(Constants.ID_BUNDLE_PARAM_NOTEPAYLOAD)
             val title = args.getString(ARG_TITLE)
             val content = args.getString(ARG_CONTENT)
             val tags = args.getString(ARG_TAGS)
@@ -1191,7 +1194,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             }
 
             if (initialPayload != null) {
-                args.putParcelable("initialPayload", initialPayload)
+                args.putParcelable(Constants.ID_BUNDLE_PARAM_NOTEPAYLOAD, initialPayload)
             }
 
             fragment.arguments = args

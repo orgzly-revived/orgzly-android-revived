@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.fragment.app.DialogFragment
+import com.orgzly.R
+import com.orgzly.android.Constants
 import com.orgzly.android.ui.NotePlace
 import com.orgzly.android.ui.note.NotePayload
 
@@ -26,7 +28,13 @@ class TemplateSelectionFragment (
 
         // Create an adapter for the ListView
         val adapter = ArrayAdapter(
-            requireContext(), android.R.layout.simple_list_item_1, templates.map { it.properties.get("orgzly_template")})
+            requireContext(),
+            android.R.layout.simple_list_item_1,
+            templates.map {
+                it.properties.get(
+                Constants.KEY_PROPERTY_TEMPLATE)
+            }
+        )
         listView.adapter = adapter
 
         listView.setOnItemClickListener { _, _, position, _ ->

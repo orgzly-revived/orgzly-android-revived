@@ -16,6 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.BookUtils
+import com.orgzly.android.Constants
 import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.NoteView
@@ -316,7 +317,7 @@ class BookFragment :
 
     override fun onTemplateSelected(notePayload: NotePayload) {
         // drop the property that marks templates
-        notePayload.properties.remove("orgzly_template")
+        notePayload.properties.remove(Constants.KEY_PROPERTY_TEMPLATE)
 
         // forward for editing
         listener?.onNoteNewFromTemplateRequest(NotePlace(mBookId), notePayload)

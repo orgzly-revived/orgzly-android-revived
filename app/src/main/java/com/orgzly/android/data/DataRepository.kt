@@ -1238,7 +1238,7 @@ class DataRepository @Inject constructor(
         val noteViews = db.noteView().getBookNotes(book?.name.toString()).filter { noteEntry ->
             val properties = getNoteProperties(noteEntry.note.id)
             properties.any { property ->
-                property.name.lowercase() == "orgzly_template"
+                property.name.lowercase() == Constants.KEY_PROPERTY_TEMPLATE
             }
         }
 
