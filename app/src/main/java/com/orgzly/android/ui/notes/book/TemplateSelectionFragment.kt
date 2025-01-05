@@ -3,12 +3,16 @@ package com.orgzly.android.ui.notes.book
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.view.Gravity
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textview.MaterialTextView
 import com.orgzly.R
 import com.orgzly.android.Constants
 import com.orgzly.android.ui.note.NotePayload
+import com.orgzly.android.ui.util.KeyboardUtils
 
 class TemplateSelectionFragment (
     private val listener: OnTemplateSelectedListener,
@@ -20,7 +24,24 @@ class TemplateSelectionFragment (
         fun onTemplateSelected(notePayload: NotePayload)
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    private fun noTemplatesAvailableDialog(): Dialog {
+        var textView = MaterialTextView(requireContext())
+        textView.setText(getString(R.string.no_template_error_msg, Constants.KEY_PROPERTY_TEMPLATE))
+        textView.gravity = Gravity.CENTER
+        textView.top.plus(20)
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.no_templates_available))
+            .setView(textView)
+            .setNegativeButton(getString(R.string.acknowledge_no_templates_available)) { _, _ ->
+                // Closing due to used android:windowSoftInputMode="stateUnchanged"
+                KeyboardUtils.closeSoftKeyboard(activity)
+            }
+            .create()
+        return dialog
+    }
+
+    private fun templatesAvailableDialog(): Dialog {
         val builder = AlertDialog.Builder(requireContext())
         val listView = ListView(requireContext())
 
@@ -30,7 +51,8 @@ class TemplateSelectionFragment (
             android.R.layout.simple_list_item_1,
             templates.map {
                 it.properties.get(
-                Constants.KEY_PROPERTY_TEMPLATE)
+                    Constants.KEY_PROPERTY_TEMPLATE
+                )
             }
         )
         listView.adapter = adapter
@@ -48,5 +70,11 @@ class TemplateSelectionFragment (
             }
 
         return builder.create()
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return if (templates.isEmpty())
+            noTemplatesAvailableDialog()
+        else templatesAvailableDialog()
     }
 }

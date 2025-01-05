@@ -794,4 +794,7 @@
     <string name="cancel_template_selection">cancel</string>
     <string name="enable_notetemplates">Enable note templates</string>
     <string name="enable_notetemplates_summary">Notes with property \"orgzly_template\" will be available as template</string>
+    <string name="no_templates_available">No templates available</string>
+    <string name="no_template_error_msg">No templates available in this book. Add property \"%1$s\" to a note to make it available as template.</string>
+    <string name="acknowledge_no_templates_available">Ok</string>
 </resources>
