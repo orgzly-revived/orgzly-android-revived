@@ -44,8 +44,8 @@ class TemplateSelectionFragment (
         }
 
         builder.setView(listView)
-            .setTitle("Select a template")
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setTitle(getString(R.string.choose_template))
+            .setNegativeButton(getString(R.string.cancel_template_selection)) { dialog, _ ->
                 dialog.dismiss()
             }
 
