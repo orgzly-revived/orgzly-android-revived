@@ -2,14 +2,12 @@ package com.orgzly.android.ui.notes.book
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.fragment.app.DialogFragment
 import com.orgzly.R
 import com.orgzly.android.Constants
-import com.orgzly.android.ui.NotePlace
 import com.orgzly.android.ui.note.NotePayload
 
 class TemplateSelectionFragment (
