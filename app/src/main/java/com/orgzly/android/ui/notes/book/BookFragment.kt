@@ -291,7 +291,6 @@ class BookFragment :
 
         binding.fabAddWithTemplate.let{
            val templates = dataRepository.getNoteTemplates(mBookId)
-           // val templates : List<NotePayload> = listOf(NotePayload(title = "p1", tags = listOf("abb", "baa")), NotePayload(title = "p2"))
 
             it.setOnClickListener {
                 collapseFabs(true)
