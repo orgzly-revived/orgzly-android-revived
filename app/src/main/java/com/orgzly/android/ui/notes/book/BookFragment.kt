@@ -281,13 +281,22 @@ class BookFragment :
 
     private fun setupSimpleFab() {
         binding.fab.run {
-            setOnClickListener {
-                listener?.onNoteNewRequest(NotePlace(mBookId))
+            if (currentBook != null) {
+                setOnClickListener {
+                    listener?.onNoteNewRequest(NotePlace(mBookId))
+                }
+                show()
+            } else {
+                hide()
             }
         }
     }
 
     private fun setupMultiFabs() {
+        if (currentBook == null) {
+            collapseFabs(true)
+        }
+
         binding.fabCancel.run {
             setOnClickListener {
                 collapseFabs(true)
@@ -310,21 +319,19 @@ class BookFragment :
 
                 val dialog = TemplateSelectionFragment(listener = this, templates = templates)
                 dialog.show(childFragmentManager, "TemplateSelectionFragment")
-
             }
         }
 
         binding.fab.run {
-            if (currentBook != null) {
+             if (currentBook != null) {
                 setOnClickListener {
                     collapseFabs(false)
-                    show()
                 }
-            } else {
+                show()
+             } else {
                 hide()
-            }
+             }
         }
-
     }
 
     override fun onTemplateSelected(notePayload: NotePayload) {

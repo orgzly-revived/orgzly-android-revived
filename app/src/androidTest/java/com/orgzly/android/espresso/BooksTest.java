@@ -115,6 +115,7 @@ public class BooksTest extends OrgzlyTest {
         pressBack();
 
         onView(withId(R.id.fragment_book_view_flipper)).check(matches(isDisplayed()));
+        SystemClock.sleep(500); // TODO: sleepers in test setups are prone to fail...
         onView(withText(R.string.book_does_not_exist_anymore)).check(matches(isDisplayed()));
         onView(withId(R.id.fab)).check(matches(not(isDisplayed())));
         pressBack();
