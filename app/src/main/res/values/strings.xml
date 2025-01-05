@@ -792,4 +792,6 @@
     <string name="subfolder_support_disabled">Support for subfolders is disabled</string>
     <string name="choose_template">Choose a template</string>
     <string name="cancel_template_selection">cancel</string>
+    <string name="enable_notetemplates">Enable note templates</string>
+    <string name="enable_notetemplates_summary">Notes with property \"orgzly_template\" will be available as template</string>
 </resources>

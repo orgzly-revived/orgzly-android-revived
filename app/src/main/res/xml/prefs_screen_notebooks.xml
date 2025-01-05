@@ -39,6 +39,12 @@
             android:title="@string/force_utf8"
             android:summary="@string/force_utf8_summary"
             android:defaultValue="@bool/pref_default_force_utf8"/>
+
+        <SwitchPreference
+            android:key="@string/pref_key_enable_notetemplates"
+            android:title="@string/enable_notetemplates"
+            android:summary="@string/enable_notetemplates_summary"
+            android:defaultValue="@bool/pref_default_enable_notetemplates"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/notes_list">

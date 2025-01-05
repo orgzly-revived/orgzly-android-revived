@@ -256,6 +256,12 @@ public class AppPreferences {
                 context.getResources().getBoolean(R.bool.pref_default_force_utf8));
     }
 
+    public static boolean noteTemplatesEnabled(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_enable_notetemplates),
+                context.getResources().getBoolean(R.bool.pref_default_enable_notetemplates));
+    }
+
     public static boolean notebooksStartFolded(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(
                 context.getResources().getString(R.string.pref_key_notebooks_start_folded),

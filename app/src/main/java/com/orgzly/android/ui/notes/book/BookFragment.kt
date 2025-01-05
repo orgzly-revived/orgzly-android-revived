@@ -242,7 +242,12 @@ class BookFragment :
                     topToolbarToDefault()
                     bottomToolbarToDefault()
 
-                    setupFabs()
+                    if (AppPreferences.noteTemplatesEnabled(context)){
+                        setupMultiFabs()
+                    } else {
+                        setupSimpleFab()
+                    }
+
 
                     sharedMainActivityViewModel.unlockDrawer()
 
@@ -274,7 +279,15 @@ class BookFragment :
         }
     }
 
-    private fun setupFabs() {
+    private fun setupSimpleFab() {
+        binding.fab.run {
+            setOnClickListener {
+                listener?.onNoteNewRequest(NotePlace(mBookId))
+            }
+        }
+    }
+
+    private fun setupMultiFabs() {
         binding.fabCancel.run {
             setOnClickListener {
                 collapseFabs(true)
