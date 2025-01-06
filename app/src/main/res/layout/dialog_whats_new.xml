@@ -22,6 +22,19 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.35"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Improve handling of the &quot;alarms &amp; reminders&quot; special permission." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Add option to let reminders play alarm sound." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.34"
             tools:ignore="HardcodedText" />
 
