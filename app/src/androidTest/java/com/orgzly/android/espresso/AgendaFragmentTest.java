@@ -164,7 +164,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
 
     @Test
     public void testMoveTaskWithRepeaterToTomorrow() {
-        EspressoUtils.grantAlarmsAndRemindersPermission();
+        EspressoUtils.grantAlarmsAndRemindersSpecialPermission();
         DateTime tomorrow = DateTime.now().withTimeAtStartOfDay().plusDays(1);
         scenario = defaultSetUp();
         searchForTextCloseKeyboard(".it.done ad.7");

@@ -280,7 +280,8 @@
     <string name="permissions_rationale_for_book_export">Exporting notebook requires storage permission</string>
     <string name="permissions_rationale_for_sync_start">Syncing with local repositories requires storage permission</string>
     <string name="permissions_rationale_for_external_files_access">Accessing external files requires storage permission</string>
-    <string name="permissions_rationale_for_post_notifications">Permission is required to post notifications</string>
+    <string name="permissions_rationale_for_post_notifications">Permission needed to post notifications</string>
+    <string name="permissions_rationale_for_schedule_exact_alarms">Permission needed to schedule reminders at exact times</string>
 
     <string name="cycle_visibility">Fold/Unfold All</string>
     <string name="running_database_update">Upgrading database…</string>

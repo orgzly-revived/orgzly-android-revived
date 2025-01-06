@@ -511,9 +511,16 @@ public class EspressoUtils {
         };
     }
 
-    public static void grantAlarmsAndRemindersPermission() {
+    public static void grantAlarmsAndRemindersSpecialPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             String shellCmd = "appops set --uid com.orgzlyrevived SCHEDULE_EXACT_ALARM allow";
+            getInstrumentation().getUiAutomation().executeShellCommand(shellCmd);
+        }
+    }
+
+    public static void denyAlarmsAndRemindersSpecialPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            String shellCmd = "appops set --uid com.orgzlyrevived SCHEDULE_EXACT_ALARM deny";
             getInstrumentation().getUiAutomation().executeShellCommand(shellCmd);
         }
     }
@@ -522,7 +529,7 @@ public class EspressoUtils {
      * Utility method for starting sync using drawer button.
      */
     public static void sync() {
-        grantAlarmsAndRemindersPermission();
+        grantAlarmsAndRemindersSpecialPermission();
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.sync_button_container)).perform(click());
         onView(withId(R.id.drawer_layout)).perform(close());
