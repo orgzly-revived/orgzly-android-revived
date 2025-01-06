@@ -10,6 +10,7 @@ import android.net.ConnectivityManager
 import android.os.storage.StorageManager
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
+import android.media.AudioManager
 
 fun Context.getNotificationManager(): NotificationManager {
     return getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -21,6 +22,10 @@ fun Context.getClipboardManager(): ClipboardManager {
 
 fun Context.getAlarmManager(): AlarmManager {
     return getSystemService(Context.ALARM_SERVICE) as AlarmManager
+}
+
+fun Context.getAudioManager(): AudioManager {
+    return getSystemService(Context.AUDIO_SERVICE) as AudioManager
 }
 
 fun Context.getConnectivityManager(): ConnectivityManager {

@@ -323,6 +323,18 @@ public class AppPreferences {
                 context.getResources().getBoolean(R.bool.pref_default_reminders_sound));
     }
 
+    public static boolean remindersAlarm(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_reminders_alarm),
+                context.getResources().getBoolean(R.bool.pref_default_reminders_alarm));
+    }
+
+    public static String remindersAlarmTags(Context context) {
+        return getDefaultSharedPreferences(context).getString(
+                context.getResources().getString(R.string.pref_key_reminders_alarm_tags),
+                context.getResources().getString(R.string.pref_default_reminders_alarm_tags));
+    }
+
     public static boolean remindersLed(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(
                 context.getResources().getString(R.string.pref_key_reminders_led),
