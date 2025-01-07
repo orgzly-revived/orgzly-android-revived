@@ -78,6 +78,9 @@ captures/
 # Keystore files
 *.jks
 
+# Generated Kotlin files
+.kotlin
+
 ### Android Patch ###
 gen-external-apklibs
 
