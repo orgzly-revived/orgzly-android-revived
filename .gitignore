@@ -126,6 +126,9 @@ flycheck_*.el
 # projectiles files
 .projectile
 
+# direnv
+.direnv
+
 ### Gradle ###
 .gradle
 .project
