@@ -40,8 +40,8 @@ import com.orgzly.android.util.MiscUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.inject.Inject;
 
@@ -152,11 +152,10 @@ public class ShareActivity extends CommonActivity
 
                 // if it's a url with title, let's turn it into org url
                 if (data.content != null && data.title != null) {
-                    Pattern pattern = Pattern.compile("^[a-z]+:[^ ]+");
-                    Matcher matcher = pattern.matcher(data.content);
-                    if (matcher.matches()) {
+                    try {
+                        new URL(data.content);
                         data.content = "[[" + data.content + "][" + data.title + "]]";
-                    }
+                    } catch (MalformedURLException ignored) {}
                 }
 
                 // TODO: Was used for direct share shortcuts to pass the book name. Used someplace else?
