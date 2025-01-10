@@ -17,6 +17,7 @@ import com.orgzly.android.ui.SelectableItemAdapter
 import com.orgzly.android.ui.TimeType
 import com.orgzly.android.ui.dialogs.NoteStateDialog
 import com.orgzly.android.ui.dialogs.TimestampDialogFragment
+import com.orgzly.android.ui.note.NotePayload
 import com.orgzly.android.ui.util.ActivityUtils
 import com.orgzly.android.util.LogUtils
 import com.orgzly.org.datetime.OrgDateTime
@@ -203,6 +204,7 @@ abstract class NotesFragment : CommonFragment(), TimestampDialogFragment.OnDateT
         fun onNoteFocusInBookRequest(noteId: Long)
 
         fun onNoteNewRequest(target: NotePlace)
+        fun onNoteNewFromTemplateRequest(target: NotePlace, notePayload : NotePayload)
 
         fun onStateChangeRequest(noteIds: Set<Long>, state: String?)
 

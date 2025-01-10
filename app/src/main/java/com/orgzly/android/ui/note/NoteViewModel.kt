@@ -27,8 +27,7 @@ data class NoteInitialData(
     val bookId: Long,
     val noteId: Long, // Could be 0 if new note is being created
     val place: Place? = null, // Relative location, used for new notes
-    val title: String? = null, // Initial title, used for when sharing
-    val content: String? = null // Initial content, used for when sharing
+    val payload: NotePayload? = null // Initial note payload
 )
 
 class NoteViewModel(
@@ -38,8 +37,9 @@ class NoteViewModel(
     var bookId = initialData.bookId
     var noteId = initialData.noteId
     private val place = initialData.place
-    private val title = initialData.title
-    private val content = initialData.content
+    private val title = initialData.payload?.title.orEmpty()
+    private val content = initialData.payload?.content.orEmpty()
+    var notePayload: NotePayload? = initialData.payload
 
     val bookView: MutableLiveData<BookView?> = MutableLiveData()
 
@@ -58,7 +58,6 @@ class NoteViewModel(
     val noteDeleteRequest: SingleLiveEvent<Int> = SingleLiveEvent()
     val bookChangeRequestEvent: SingleLiveEvent<List<BookView>> = SingleLiveEvent()
 
-    var notePayload: NotePayload? = null
 
     private var originalHash: Long = 0L
 
@@ -76,7 +75,7 @@ class NoteViewModel(
             }
 
             notePayload = if (isNew()) {
-                NoteBuilder.newPayload(App.getAppContext(), title.orEmpty(), content)
+                NoteBuilder.newPayload(App.getAppContext(), initialData.payload)
             } else {
                 dataRepository.getNotePayload(noteId)
             }
@@ -234,7 +233,7 @@ class NoteViewModel(
     }
 
     fun hasInitialData(): Boolean {
-        return !TextUtils.isEmpty(initialData.title) || !TextUtils.isEmpty(initialData.content)
+        return initialData.payload != null
     }
 
     fun setBook(b: BookView) {

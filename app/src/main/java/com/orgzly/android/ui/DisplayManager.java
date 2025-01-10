@@ -18,6 +18,7 @@ import com.orgzly.android.query.user.InternalQueryParser;
 import com.orgzly.android.ui.books.BooksFragment;
 import com.orgzly.android.ui.main.MainActivity;
 import com.orgzly.android.ui.note.NoteFragment;
+import com.orgzly.android.ui.note.NotePayload;
 import com.orgzly.android.ui.notes.book.BookFragment;
 import com.orgzly.android.ui.notes.book.BookPrefaceFragment;
 import com.orgzly.android.ui.notes.query.agenda.AgendaFragment;
@@ -158,6 +159,16 @@ public class DisplayManager {
 
     public static void displayNewNote(FragmentManager fragmentManager, NotePlace target) {
         Fragment fragment = NoteFragment.forNewNote(target);
+
+        if (fragment != null) {
+            displayNoteFragment(fragmentManager, fragment);
+        }
+    }
+
+    public static void displayNewNoteFromTemplate(
+            FragmentManager fragmentManager, NotePlace target, NotePayload notePayload) {
+        Fragment fragment = NoteFragment.forNewNoteFromTemplate(
+                target.getBookId(), target.getNoteId(), target.getPlace(), notePayload);
 
         if (fragment != null) {
             displayNoteFragment(fragmentManager, fragment);

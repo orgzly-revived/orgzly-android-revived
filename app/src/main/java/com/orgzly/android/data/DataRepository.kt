@@ -1233,6 +1233,20 @@ class DataRepository @Inject constructor(
         return db.noteView().getBookNotes(bookName)
     }
 
+    fun getNoteTemplates(bookId: Long): List<NotePayload> {
+        val book = getBook(bookId);
+
+        val noteViews = db.noteView().getBookNotes(book?.name.toString()).filter { noteEntry ->
+            val properties = getNoteProperties(noteEntry.note.id)
+            properties.any { property ->
+                property.name.lowercase() == Constants.KEY_PROPERTY_TEMPLATE
+            }
+        }
+
+        val notePayloads : List<NotePayload> = noteViews.mapNotNull { getNotePayload(it.note.id) }
+        return notePayloads
+    }
+
     fun getVisibleNotesLiveData(bookId: Long, noteId: Long? = null): LiveData<List<NoteView>> {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, bookId)
 
@@ -1357,7 +1371,7 @@ class DataRepository @Inject constructor(
     fun createNoteFromNotification(title: String) {
         val book = getTargetBook(context)
 
-        val notePayload = NoteBuilder.newPayload(context, title, "")
+        val notePayload = NoteBuilder.newPayload(context, NotePayload(title = title))
 
         createNote(notePayload, NotePlace(book.book.id))
     }

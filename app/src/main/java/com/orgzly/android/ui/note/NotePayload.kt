@@ -5,15 +5,15 @@ import android.os.Parcelable
 import com.orgzly.org.OrgProperties
 
 data class NotePayload @JvmOverloads constructor(
-        val title: String = "",
-        val content: String? = null,
-        val state: String? = null,
-        val priority: String? = null,
-        val scheduled: String? = null,
-        val deadline: String? = null,
-        val closed: String? = null,
-        val tags: List<String> = emptyList(),
-        val properties: OrgProperties = OrgProperties()
+    val title: String = "",
+    val content: String? = null,
+    val state: String? = null,
+    val priority: String? = null,
+    val scheduled: String? = null,
+    val deadline: String? = null,
+    val closed: String? = null,
+    val tags: List<String> = emptyList(),
+    val properties: OrgProperties = OrgProperties()
 ) : Parcelable {
 
     override fun describeContents(): Int {

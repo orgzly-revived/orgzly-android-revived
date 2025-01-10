@@ -30,6 +30,7 @@ import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.BookUtils
+import com.orgzly.android.Constants
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.db.entity.BookView
 import com.orgzly.android.db.entity.Note
@@ -124,10 +125,16 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             }
 
             // Initial values when sharing
+            // -- From Tsunami on:
+            // val initialPayload: NotePayload? = args.getParcelable(
+            //    Constants.ID_BUNDLE_PARAM_NOTEPAYLOAD,
+            //    NotePayload::class.java)
+            val initialPayload: NotePayload? = args.getParcelable(Constants.ID_BUNDLE_PARAM_NOTEPAYLOAD)
             val title = args.getString(ARG_TITLE)
             val content = args.getString(ARG_CONTENT)
+            val tags = args.getString(ARG_TAGS)
 
-            return NoteInitialData(bookId, noteId, place, title, content)
+            return NoteInitialData(bookId, noteId, place, initialPayload)
         }
     }
 
@@ -1123,21 +1130,20 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         private const val ARG_PLACE = "place"
         private const val ARG_TITLE = "title"
         private const val ARG_CONTENT = "content"
+        private const val ARG_TAGS = "tags"
 
         @JvmStatic
         @JvmOverloads
         fun forNewNote(
             notePlace: NotePlace,
-            initialTitle: String? = null,
-            initialContent: String? = null): NoteFragment? {
+            initialPayload: NotePayload? = null): NoteFragment? {
 
             return if (notePlace.bookId > 0) {
                 getInstance(
                     notePlace.bookId,
                     notePlace.noteId,
                     notePlace.place,
-                    initialTitle,
-                    initialContent)
+                    initialPayload)
             } else {
                 Log.e(TAG, "Invalid book id ${notePlace.bookId}")
                 null
@@ -1155,12 +1161,23 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         }
 
         @JvmStatic
+        fun forNewNoteFromTemplate(bookId: Long, noteId: Long,  place: Place? = null,
+                                   initialPayload: NotePayload? = null): NoteFragment? {
+            return if (bookId > 0) {
+                getInstance(bookId, noteId, place, initialPayload)
+            } else {
+                Log.e(TAG, "Invalid book id $bookId")
+                null
+            }
+        }
+
+
+        @JvmStatic
         private fun getInstance(
             bookId: Long,
             noteId: Long,
             place: Place? = null,
-            initialTitle: String? = null,
-            initialContent: String? = null): NoteFragment {
+            initialPayload: NotePayload? = null): NoteFragment {
 
             val fragment = NoteFragment()
 
@@ -1176,12 +1193,8 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
                 args.putString(ARG_PLACE, place.toString())
             }
 
-            if (initialTitle != null) {
-                args.putString(ARG_TITLE, initialTitle)
-            }
-
-            if (initialContent != null) {
-                args.putString(ARG_CONTENT, initialContent)
+            if (initialPayload != null) {
+                args.putParcelable(Constants.ID_BUNDLE_PARAM_NOTEPAYLOAD, initialPayload)
             }
 
             fragment.arguments = args

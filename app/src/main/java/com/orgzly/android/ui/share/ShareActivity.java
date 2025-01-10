@@ -30,6 +30,7 @@ import com.orgzly.android.ui.AppSnackbarUtils;
 import com.orgzly.android.ui.CommonActivity;
 import com.orgzly.android.ui.NotePlace;
 import com.orgzly.android.SharingShortcutsManager;
+import com.orgzly.android.ui.note.NotePayload;
 import com.orgzly.android.ui.sync.SyncFragment;
 import com.orgzly.android.ui.note.NoteFragment;
 import com.orgzly.android.ui.util.ActivityUtils;
@@ -225,7 +226,7 @@ public class ShareActivity extends CommonActivity
                 }
 
                 noteFragment = NoteFragment.forNewNote(
-                        new NotePlace(bookId), data.title, data.content);
+                        new NotePlace(bookId), new NotePayload(data.title, data.content));
 
                 getSupportFragmentManager()
                         .beginTransaction()
