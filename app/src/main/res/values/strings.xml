@@ -592,7 +592,7 @@
     <string name="styled_text_with_marks_title">Styled text with marks</string>
     <string name="styled_text_with_marks_summary">Keep marks displayed (e.g. *bold*)</string>
 
-    <string name="no_such_link_target">Note with “%1$s” property set to “%2$s” not found</string>
+    <string name="no_such_link_target">No note or book found with the “%1$s” property set to “%2$s”</string>
 
     <plurals name="imported_searches">
         <item quantity="one">Imported one search</item>

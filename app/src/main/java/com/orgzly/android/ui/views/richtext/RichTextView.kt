@@ -190,8 +190,8 @@ class RichTextView : AppCompatTextView, ActionableRichTextView {
     }
 
     // Just pass to RichView
-    override fun followLinkToNoteWithProperty(name: String, value: String) {
-        listeners.onActionListener?.followLinkToNoteWithProperty(name, value)
+    override fun followLinkToNoteOrBookWithProperty(name: String, value: String) {
+        listeners.onActionListener?.followLinkToNoteOrBookWithProperty(name, value)
     }
 
     // Just pass to RichView

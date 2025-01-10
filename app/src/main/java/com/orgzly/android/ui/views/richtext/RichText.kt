@@ -279,8 +279,8 @@ class RichText(context: Context, attrs: AttributeSet?) :
     }
 
     // TODO: Consider getting MainActivity's *ViewModel* here instead
-    override fun followLinkToNoteWithProperty(name: String, value: String) {
-        MainActivity.followLinkToNoteWithProperty(name, value)
+    override fun followLinkToNoteOrBookWithProperty(name: String, value: String) {
+        MainActivity.followLinkToNoteOrBookWithProperty(name, value)
     }
 
     override fun followLinkToFile(path: String) {
