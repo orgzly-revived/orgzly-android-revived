@@ -40,6 +40,8 @@ import com.orgzly.android.util.MiscUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.inject.Inject;
 
@@ -146,6 +148,14 @@ public class ShareActivity extends CommonActivity
                 if (data.title != null && data.content == null && intent.hasExtra(Intent.EXTRA_SUBJECT)) {
                     data.content = data.title;
                     data.title = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+                }
+
+                // if it's a url with title, let's turn it into org url
+                if (data.content != null && data.title != null) {
+                    try {
+                        new URI(data.content);
+                        data.content = "[[" + data.content + "][" + data.title + "]]";
+                    } catch (URISyntaxException ignored) {}
                 }
 
                 // TODO: Was used for direct share shortcuts to pass the book name. Used someplace else?
