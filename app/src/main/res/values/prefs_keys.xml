@@ -205,6 +205,9 @@
     <string name="pref_key_new_note_state" translatable="false">pref_key_new_note_state</string>
     <string name="pref_default_new_note_state" translatable="false">NOTE</string>
 
+    <string name="pref_key_new_note_add_id" translatable="false">pref_key_new_note_add_id</string>
+    <bool name="pref_default_new_note_add_id" translatable="false">false</bool>
+
     <string name="pref_key_is_new_note_scheduled" translatable="false">pref_key_is_new_note_scheduled</string>
     <bool name="pref_default_is_new_note_scheduled" translatable="false">false</bool>
 
