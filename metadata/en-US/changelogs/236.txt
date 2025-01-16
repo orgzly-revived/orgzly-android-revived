@@ -1,0 +1,2 @@
+• Improve handling of the "alarms & reminders" special permission.
+• Add option to let reminders play alarm sound.
