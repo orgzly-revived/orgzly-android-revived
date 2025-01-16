@@ -22,6 +22,27 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.36"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Parse properties in notebook &quot;preface&quot;." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Allow linking to notebooks by the ID property." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="New option to add a &quot;ID&quot; property to all new notes." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Automatically create org links when sharing URIs to Orgzly." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.35"
             tools:ignore="HardcodedText" />
 
