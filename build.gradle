@@ -10,7 +10,7 @@ buildscript {
 
     versions.kotlin_coroutines = '1.7.3'
 
-    versions.jetbrains_annotations = '26.0.1'
+    versions.jetbrains_annotations = '26.0.2'
 
     versions.android_multidex = '2.0.1'
 
