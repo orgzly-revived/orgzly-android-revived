@@ -58,7 +58,7 @@
             android:key="@string/pref_key_reminders_sound"
             android:title="@string/pref_title_reminders_sound"
             android:defaultValue="@bool/pref_default_reminders_sound" />
-    
+
         <SwitchPreference
             android:key="@string/pref_key_reminders_led"
             android:title="@string/pref_title_reminders_led"
@@ -71,12 +71,6 @@
     </PreferenceCategory>
 
     <!-- v26 and after -->
-    <EditTextPreference
-            android:defaultValue="@string/pref_default_reminders_led_color"
-            android:key="pref_key_reminders_led_color"
-            android:title="@string/pref_title_reminders_led_color"
-            android:summary="@string/pref_summary_reminders_led_color"/>
-
     <!-- Open system settings to configure reminders' notification channel -->
     <androidx.preference.PreferenceScreen
         android:key="@string/pref_key_reminders_notification_settings_V26"
