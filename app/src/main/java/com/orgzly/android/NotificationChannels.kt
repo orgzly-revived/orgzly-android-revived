@@ -9,8 +9,6 @@ import androidx.annotation.RequiresApi
 import com.orgzly.R
 import com.orgzly.android.reminders.RemindersNotifications
 import com.orgzly.android.ui.util.getNotificationManager
-import com.orgzly.android.prefs.AppPreferences
-import java.util.UUID
 
 
 /**
@@ -18,34 +16,15 @@ import java.util.UUID
  */
 object NotificationChannels {
 
-    private const val _ONGOING = "ongoing"
-    private var ongoingId = ""
-    private var prevOngoingId = _ONGOING
- 
-    private const val _REMINDERS = "reminders"
-    private var remindersId = ""
-    private var prevRemindersId = _REMINDERS
-
+    const val ONGOING = "ongoing"
+    const val REMINDERS = "reminders"
     const val SYNC_PROGRESS = "sync-progress"
     const val SYNC_FAILED = "sync-failed"
     const val SYNC_PROMPT = "sync-prompt"
 
     @JvmStatic
-    fun channelIdForOngoing() : String {
-        return ongoingId;
-    }
-
-    @JvmStatic
-    fun channelIdForReminders() : String {
-        return remindersId;
-    }
-
-
-    @JvmStatic
     fun createAll(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            updateChannelIds();
-
             createForOngoing(context)
             createForReminders(context)
             createForSyncProgress(context)
@@ -54,46 +33,9 @@ object NotificationChannels {
         }
     }
 
-    @JvmStatic
-    fun updateAll(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          updateChannelIds();
-
-          updateForReminders(context)
-          updateForOngoing(context)
-        }
-    }
-
-    private fun updateChannelIds() {
-        prevRemindersId = remindersId; 
-        remindersId = _REMINDERS + "_" + UUID.randomUUID()
-        
-        prevOngoingId = ongoingId; 
-        ongoingId = _ONGOING + "_" + UUID.randomUUID()
-    }
-
-
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun updateForReminders(context: Context) {
-        val channel = createChannelForReminders(context);
-        context.getNotificationManager().createNotificationChannel(channel)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun updateForOngoing(context: Context) {
-        // Note: Effect on Notifications: Deleting a notification channel will remove all
-        // notifications associated with that channel. If you recreate the channel later, it will be
-        // treated as a new channel, and any previous notifications will not be restored. Using the
-        // same ID will restore the previous channel including the LED color.
-        
-        val channel = createChannelForOngoing(context);
-        context.getNotificationManager().createNotificationChannel(channel)
-    }
-
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createChannelForReminders(context: Context) : NotificationChannel {
-        val id = remindersId;
+    private fun createForReminders(context: Context) {
+        val id = REMINDERS
         val name = context.getString(R.string.reminders_channel_name)
         val description = context.getString(R.string.reminders_channel_description)
         val importance = NotificationManager.IMPORTANCE_HIGH
@@ -103,32 +45,22 @@ object NotificationChannels {
         channel.description = description
 
         channel.enableLights(true)
-
-        val colorString = AppPreferences.remindersLedColor(context);
-        channel.lightColor = Color.parseColor(colorString);
+        channel.lightColor = Color.BLUE
 
         channel.vibrationPattern = RemindersNotifications.VIBRATION_PATTERN
 
         channel.setShowBadge(false)
 
-        return channel;
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createForReminders(context: Context) {
-        val channel = createChannelForReminders(context)
         context.getNotificationManager().createNotificationChannel(channel)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun createForOngoing(context: Context)  {
-        val channel = createChannelForOngoing(context)
-        context.getNotificationManager().createNotificationChannel(channel)
-    }
+    private fun createForOngoing(context: Context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return
+        }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createChannelForOngoing(context: Context) : NotificationChannel {
-        val id = ongoingId
+        val id = ONGOING
         val name = context.getString(R.string.ongoing_channel_name)
         val description = context.getString(R.string.ongoing_channel_description)
         val importance = NotificationManager.IMPORTANCE_MIN
@@ -139,10 +71,7 @@ object NotificationChannels {
 
         channel.setShowBadge(false)
 
-        val colorString = AppPreferences.remindersLedColor(context);
-        channel.lightColor = Color.parseColor(colorString);
-
-        return channel;
+        context.getNotificationManager().createNotificationChannel(channel)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

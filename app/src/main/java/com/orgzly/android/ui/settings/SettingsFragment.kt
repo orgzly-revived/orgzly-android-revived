@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.preference.*
 import com.orgzly.BuildConfig
@@ -27,7 +26,6 @@ import com.orgzly.android.usecase.UseCase
 import com.orgzly.android.util.AppPermissions
 import com.orgzly.android.util.LogUtils
 import com.orgzly.android.widgets.ListWidgetProvider
-import com.orgzly.android.NotificationChannels
 
 /**
  * Displays settings.
@@ -125,18 +123,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 }
             } else {
                 preferenceScreen.removePreference(it)
-            }
-        }
-
-        preference(R.string.pref_key_reminders_led_color)?.let {
-            it.setOnPreferenceChangeListener {
-              _, newValue ->
-                val pattern = Regex("^#[0-9A-Fa-f]{6}$")
-                val stringCorrect = pattern.matches(newValue.toString())
-                if (!stringCorrect) {
-                    Toast.makeText(activity, "Please enter a hexadecimal value for color.", Toast.LENGTH_SHORT).show()
-                } 
-                stringCorrect
             }
         }
 
@@ -391,7 +377,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
 
         updateRemindersScreen()
         updateWidgetScreen()
-        updateNotificationChannels()
 
         /* Always notify about possibly changed data, if settings are modified.
          *
@@ -402,11 +387,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         RemindersScheduler.notifyDataSetChanged(requireContext())
         ListWidgetProvider.notifyDataSetChanged(requireContext())
         SharingShortcutsManager().replaceDynamicShortcuts(requireContext())
-    }
-
-    private fun updateNotificationChannels() {
-        var context = requireContext();
-        NotificationChannels.updateAll(context);
     }
 
     private fun updateRemindersScreen() {
@@ -431,7 +411,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             preference(R.string.pref_key_snooze_time)?.isEnabled = remindersEnabled
             preference(R.string.pref_key_snooze_type)?.isEnabled = remindersEnabled
             preference(R.string.pref_key_daily_reminder_time)?.isEnabled = remindersEnabled
-            preference(R.string.pref_key_reminders_led_color)?.isEnabled = remindersEnabled
         }
     }
 

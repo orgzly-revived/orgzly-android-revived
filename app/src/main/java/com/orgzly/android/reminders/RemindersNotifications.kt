@@ -26,8 +26,7 @@ import com.orgzly.android.util.UserTimeFormatter
 object RemindersNotifications {
     val VIBRATION_PATTERN = longArrayOf(500, 50, 50, 300)
 
-    private val LIGHTS_ON_MS = 1000
-    private val LIGHTS_OFF_MS = 5000
+    private val LIGHTS = Triple(Color.BLUE, 1000, 5000)
 
     fun showNotifications(context: Context, notes: List<NoteReminder>, logs: AppLogsRepository) {
         val notificationManager = context.getNotificationManager()
@@ -39,8 +38,7 @@ object RemindersNotifications {
 
             val content = getContent(context, noteReminder)
 
-            val builder = NotificationCompat.Builder(context,
-                NotificationChannels.channelIdForReminders())
+            val builder = NotificationCompat.Builder(context, NotificationChannels.REMINDERS)
                     .setAutoCancel(true)
                     .setCategory(NotificationCompat.CATEGORY_REMINDER)
                     .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -86,9 +84,7 @@ object RemindersNotifications {
 
             // Set LED
             if (AppPreferences.remindersLed(context)) {
-                val colorString = AppPreferences.remindersLedColor(context);
-                val color = Color.parseColor(colorString);
-                builder.setLights(color, LIGHTS_ON_MS, LIGHTS_OFF_MS)
+                builder.setLights(LIGHTS.first, LIGHTS.second, LIGHTS.third)
             }
 
             builder.setContentTitle(OrgFormatter.parse(
@@ -154,8 +150,7 @@ object RemindersNotifications {
         // Create a group summary notification, but only if notifications can be grouped
         if (canGroupReminders()) {
             if (notes.isNotEmpty()) {
-                val builder = NotificationCompat.Builder(context,
-                    NotificationChannels.channelIdForReminders())
+                val builder = NotificationCompat.Builder(context, NotificationChannels.REMINDERS)
                         .setAutoCancel(true)
                         .setSmallIcon(R.drawable.cic_logo_for_notification)
                         .setGroup(Notifications.REMINDERS_GROUP)
