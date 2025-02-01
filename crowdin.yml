@@ -1,5 +1,8 @@
 files:
   - source: /app/src/main/res/values/strings.xml
-    translation: /app/src/main/res/values-%android_code%/strings.xml
+    translation: /app/src/main/res/values-%android_code%/%original_file_name%
   - source: /app/src/main/res/raw/orgzly_getting_started.org
-    translation: /app/src/main/res/raw-%android_code%/orgzly_getting_started.org
+    translation: /app/src/main/res/raw-%android_code%/%original_file_name%
+  - source: /metadata/en-US/*.txt
+    translation: /metadata/%two_letters_code%/%original_file_name%
+  
