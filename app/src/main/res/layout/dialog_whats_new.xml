@@ -31,7 +31,7 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Allow linking to notebooks by the ID property." />
+            app:text="Allow linking to notebooks by the &quot;ID&quot; property." />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
