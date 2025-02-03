@@ -61,7 +61,7 @@ buildscript {
 
     versions.glide = '4.16.0'
 
-    versions.sardine = '0.8'
+    versions.sardine = '0.9'
 
     versions.okhttp_digest = '3.1.1'
 
