@@ -2,6 +2,8 @@ name: Sync translations with Crowdin
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "04 04 * * *"
 
 jobs:
   sync-translations-with-crowdin:
