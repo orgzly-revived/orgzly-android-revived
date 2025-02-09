@@ -8,6 +8,8 @@ on:
       - 'README.org'
       - 'metadata/**'
   workflow_dispatch:
+  schedule:
+    - cron: "03 03 * * sun"
 
 jobs:
 
