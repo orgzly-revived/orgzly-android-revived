@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="sync">Синхронизация</string>
     <string name="settings">Настройки</string>
+    <string name="sortnote">Сортировка заметок</string>
     <string name="ok">ОК</string>
     <string name="yes">Да</string>
     <string name="unlink">Отвязать</string>
@@ -25,6 +26,7 @@
     <string name="edit_note">Редактировать заметку</string>
     <string name="delete">Удалить</string>
     <string name="delete_with_quoted_argument">Удалить «%s»</string>
+    <string name="delete_amount_of_books">Удалить %d блокнотов</string>
     <string name="name">Название</string>
     <string name="query">Запрос</string>
     <string name="done">Выполнено</string>
@@ -86,6 +88,11 @@
     <!-- Preferences (Settings). -->
     <string name="repos_preference_title">Хранилища</string>
     <string name="repos_preference_summary">Расположение для синхронизации ваших блокнотов с</string>
+    <string name="enable_repo_subfolders_preferences_title">Поддержка подпапок репозитория</string>
+    <string name="enable_repo_subfolders_preferences_summary">Загрузка из и запись в подпапки</string>
+    <string name="ssh_keygen_preference_title">Создание SSH ключа</string>
+    <string name="ssh_keygen_preference_summary">Генерировать пару ключей для синхронизации через Git</string>
+    <string name="ssh_show_public_key_preference_title">Просмотр сгенерированного публичного ключа SSH</string>
     <string name="message_book_has_no_link">Нет ссылки</string>
     <string name="message_note_created">Заметка создана</string>
     <string name="message_failed_creating_note">Невозможно создать заметку</string>
@@ -181,6 +188,8 @@
     <string name="git_verifying_settings">Обеспечение работоспособных настроек репозитория.</string>
     <string name="git_url_hint">Удалённый адрес (например, git@github.com:orgzly/orgzly-android.git)</string>
     <string name="git_directory_hint">Путь к каталогу (например, «file:/sdcard/orgzly»)</string>
+    <string name="git_ssh_on_missing_key_dialog_text">Не найдено пары ключей SSH. Вы хотите сгенерировать её?</string>
+    <string name="git_ssh_on_missing_key_dialog_title">SSH ключ не найден</string>
     <string name="git_https_username_hint">Имя</string>
     <string name="git_https_password_hint">Пароль</string>
     <string name="git_author_hint">Автор (например, John Doe)</string>
@@ -196,11 +205,13 @@
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
     <string name="git_clone_error_ssh_auth">Сбой при клонировании, ошибка аутентификации</string>
+    <string name="git_clone_error_ssh">Сбой при клонировании: %s</string>
     <string name="git_clone_error_invalid_repo">Удалённый адрес не является git-репозиторием</string>
     <string name="git_clone_error_unknown">Неизвестная ошибка при клонировании</string>
     <string name="git_clone_error_invalid_target_dir">Целевой каталог не существует</string>
     <string name="git_clone_error_target_not_empty">Целевой каталог не пустой</string>
     <string name="git_clone_error_uri_not_supported">Удалённый адрес не поддерживается</string>
+    <string name="git_sync_error_failed_set_marker_branch">Не удалось обновить ветку маркера</string>
     <string name="webdav_url_hint">URL (например, webdavs://example.com/my-org-files/)</string>
     <string name="webdav_auth_username_hint">Имя пользователя</string>
     <string name="webdav_auth_password_hint">Пароль</string>
@@ -242,6 +253,8 @@
     <string name="permissions_rationale_for_book_export">Для экспорта блокнота требуется разрешение на хранение</string>
     <string name="permissions_rationale_for_sync_start">Для синхронизации с локальными хранилищами требуется разрешение на хранение</string>
     <string name="permissions_rationale_for_external_files_access">Для доступа к внешним файлам требуется разрешение «Память»</string>
+    <string name="permissions_rationale_for_post_notifications">Требуется разрешение для отправки уведомлений</string>
+    <string name="permissions_rationale_for_schedule_exact_alarms">Необходимо разрешение для того чтобы запланировать напоминания в нужное время</string>
     <string name="cycle_visibility">Сложить/Развернуть все</string>
     <string name="running_database_update">Обновление базы данных…</string>
     <string name="note_has_been_modified">Заметка изменена</string>
@@ -252,6 +265,7 @@
     <string name="failed_renaming_book_with_reason">Невозможно переименовать: %s</string>
     <string name="renamed_book_from">Переименовано из «%s»</string>
     <string name="also_delete_linked_book">Удалить привязанный удалённый блокнот</string>
+    <string name="also_delete_linked_books">Удалить привязанный удалённый блокнот</string>
     <string name="message_deleting_book_failed">Удаление блокнота не выполнено: %s</string>
     <string name="message_book_deleted">Блокнот удалён</string>
     <string name="priority_with_argument">Приоритет %s</string>
@@ -397,6 +411,7 @@
     <string name="no_states_defined">Состояния не определены</string>
     <string name="book_name_in_search">Название блокнота в результатах поиска</string>
     <string name="display_notebook_name">Показывать имя блокнота</string>
+    <string name="hide_empty_days_in_agenda">Скрыть свободные дни в повестке дня</string>
     <string name="display_inherited_tags_in_search_results">Унаследованные теги в поиске</string>
     <string name="display_inherited_tags_in_search_results_summary">Отображать теги в результатах поиска</string>
     <string name="ongoing_notification">Текущее</string>
@@ -411,6 +426,10 @@
     <string name="pref_title_summary_reminders_for_deadline_times">Отображать уведомление для заметок со временем окончания</string>
     <string name="pref_title_reminders_for_event_times">События</string>
     <string name="pref_title_summary_reminders_for_event_times">Отображать уведомление для заметок со временем</string>
+    <string name="pref_title_reminders_alarm">Проигрывать звуковое оповещение</string>
+    <string name="pref_summary_reminders_alarm">Для заметок имеющих \"метку напоминания\" (см. ниже)</string>
+    <string name="pref_title_reminders_alarm_tags">Метки напоминания</string>
+    <string name="pref_summary_reminders_alarm_tags">Список меток, разделённых пробелами, которые должны вызвать сигнал напоминания. Оставьте пустым чтобы сигналить при каждом напоминании.</string>
     <string name="pref_title_reminders_sound">Звук</string>
     <string name="pref_title_reminders_vibrate">Вибрация</string>
     <string name="pref_title_reminders_led">Светлый</string>
@@ -458,6 +477,8 @@
     <string name="pref_summary_sync_after_note_update">Синхронизировать после изменения или удаления заметки</string>
     <string name="pref_title_on_resume_sync">Приложение запущено или возобновлено</string>
     <string name="pref_summary_on_resume_sync">Синхронизация после запуска или возобновления приложения</string>
+    <string name="pref_title_on_suspend_sync">Приложение приостановлено</string>
+    <string name="pref_summary_on_suspend_sync">Синхронизация всякий раз, когда приложение переходит в фон</string>
     <string name="pref_title_repo_update_sync">Хранилища изменены (ещё не реализовано)</string>
     <string name="pref_summary_repo_update_sync">Синхронизация при обнаружении обновления в хранилищах</string>
     <string name="not_modified">Без изменений</string>
@@ -494,6 +515,7 @@
         <item quantity="other">Экспортировано <b>%d</b> запросов</item>
     </plurals>
     <string name="storage_permissions_missing">Нет разрешения на хранение</string>
+    <string name="alarms_permissions_missing">Нет разрешения на установку напоминаний</string>
     <string name="file_does_not_exist">Файл не существует: %s</string>
     <string name="import_from">Импортировать из «%1$s»?</string>
     <string name="export_to">Экспортировать в «%1$s»?</string>
@@ -592,6 +614,8 @@
     <string name="content">Описание</string>
     <string name="prepend">Добавить</string>
     <string name="insert_new_note_at_beginning">Вставить новую заметку в начало</string>
+    <string name="add_id_property">Добавить свойство ID</string>
+    <string name="populate_the_id_property">Заполнить свойство \"ID\" во всех новых заметках</string>
     <string name="developer_options">Для разработчиков</string>
     <string name="git_repository_type">Тип git-репозитория</string>
     <string name="in_development">В разработке</string>
@@ -603,4 +627,49 @@
     <string name="logs">Журналы</string>
     <string name="share">Поделиться</string>
     <string name="refresh_data">Обновить</string>
+    <string name="clock">Часы</string>
+    <string name="clock_in">Начать замер времени</string>
+    <string name="clock_out">Закончить замер</string>
+    <string name="clock_cancel">Отмена замера времени</string>
+    <string name="search_results">Результаты поиска</string>
+    <string name="popup_menu_buttons">Кнопки всплывающего меню</string>
+    <string name="ssh_keygen_label_rsa">RSA</string>
+    <string name="ssh_keygen_label_ecdsa">ECDSA</string>
+    <string name="ssh_keygen_label_ed25519">ED25519</string>
+    <string name="ssh_keygen_require_authentication">Использовать пароль блокировки экрана устройства</string>
+    <string name="ssh_keygen_generate">Сгенерировать</string>
+    <string name="ssh_keygen_existing_title">SSH ключ</string>
+    <string name="ssh_keygen_existing_message">Заменить существующий SSH ключ? Вы можете потерять доступ к вашему серверу.</string>
+    <string name="ssh_keygen_existing_replace">Замена</string>
+    <string name="ssh_keygen_existing_keep">Оставить</string>
+    <string name="ssh_keygen_explanation_ecdsa"><b>ECDSA (NIST P-256)</b>\nБыстрая аутентификация, поддерживается большинством современных серверов.</string>
+    <string name="ssh_keygen_explanation_ed25519"><b>Ed25519</b>\nБыстрая аутентификация, но поддерживается только современными серверами.</string>
+    <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 бит)</b>\nподдерживается и старыми серверами тоже.</string>
+    <string name="ssh_keygen_generating_progress">Генерация ключей…</string>
+    <string name="ssh_key_failed_get_public">Не удалось получить публичный SSH ключ</string>
+    <string name="ssh_key_failed_get_private">Не удалось получить приватный ключ SSH</string>
+    <string name="ssh_key_failed_unlock_private">Не удалось разблокировать приватный ключ SSH</string>
+    <string name="biometric_prompt_title_ssh_keygen">Сгенерировать SSH ключ</string>
+    <string name="biometric_prompt_title_unlock_ssh_key">Разблокировать SSH ключ Orgzli</string>
+    <string name="biometric_auth_not_available">Биометрическая аутентификация недоступна</string>
+    <string name="biometric_auth_on_error">Ошибка аутентификации: Код: %1$d (%2$s)</string>
+    <string name="ssh_keygen_message">%1$s\n\nДобавьте этот публичный ключ на сервер Git сервер.</string>
+    <string name="your_public_key">Ваш публичный ключ</string>
+    <string name="ssh_keygen_share">Поделиться</string>
+    <string name="error_generate_ssh_key">Ошибка при попытке сгенерировать пару ключей SSH</string>
+    <string name="ssh_key_error_dialog_text">Сообщение: \n</string>
+    <string name="ssh_key_locked_and_no_activity">Ошибка: SSH ключ может быть разблокирован только из activity</string>
+    <string name="error_file_matches_repo_ignore_rule">Ошибка: Файл репозитория совпадает с правилом в %s</string>
+    <!-- Sync status -->
+    <string name="sync_status_no_change">Без изменений</string>
+    <string name="sync_status_no_link_and_multiple_repos">Блокнот не имеет ссылки и несколько репозиториев существуют</string>
+    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">Блокнот не имеет ссылки и существует один или несколько удаленных блокнотов с таким же именем</string>
+    <string name="sync_status_dummy_without_link_and_multiple_rooks">Блокнот не имеет ссылки и существует несколько удаленных блокнотов с одинаковым именем</string>
+    <string name="sync_status_no_book_multiple_rooks">Нет блокнотов и нескольких удаленных блокнотов с одинаковым именем</string>
+    <string name="sync_status_rook_no_longer_exists">Удаленный файл больше не существует; ссылка на репозиторий удалена. Установите ссылку, если хотите синхронизировать с репозиторием.</string>
+    <string name="sync_status_no_link_and_previous_error">Блокнот не имеет ссылки на репозиторий</string>
+    <string name="sync_status_loaded">Загружено из %s</string>
+    <string name="sync_status_saved">Сохранено в %s</string>
+    <string name="moving_between_subdirectories_requires_api_24">Переименование блокнота в другую подпапку требует Android 7 или выше</string>
+    <string name="subfolder_support_disabled">Поддержка подпапок отключена</string>
 </resources>
