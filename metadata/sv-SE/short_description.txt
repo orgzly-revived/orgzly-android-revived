@@ -1,0 +1,1 @@
+Outliner-program för att hantera anteckningar och att-göra-listor i Org-mode-format
