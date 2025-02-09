@@ -7,6 +7,8 @@ on:
     paths-ignore:
       - 'README.org'
       - 'metadata/**'
+      - 'app/src/main/res/raw-*/*'
+      - 'app/src/main/res/values-*/*'
   workflow_dispatch:
   schedule:
     - cron: "03 03 * * sun"
