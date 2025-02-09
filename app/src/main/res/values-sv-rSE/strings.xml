@@ -31,7 +31,7 @@
     <string name="query">Sökning</string>
     <string name="done">Klarmarkera</string>
     <string name="mark_as_done">Klarmarkera</string>
-    <string name="mark_as_done_with_repeater">Omplanera %s</string>
+    <string name="mark_as_done_with_repeater">Klarmarkera och upprepa om %s</string>
     <string name="reminder_snooze">Skjut upp</string>
     <string name="close">Stäng</string>
     <string name="import_">Importera</string>
@@ -47,7 +47,7 @@
     <string name="import_as">Importera som…</string>
     <string name="new_notebook">Ny anteckningsbok</string>
     <string name="new_folder">Ny mapp</string>
-    <string name="scheduled">Schemalägga</string>
+    <string name="scheduled">Schemalagd</string>
     <string name="agenda">Agenda</string>
     <string name="agenda_period">Agenda dagar</string>
     <string name="time">Tid</string>
@@ -248,6 +248,7 @@
     <string name="permissions_rationale_for_sync_start">Synkronisering med lokala lagringsplatser kräver åtkomst till lagring</string>
     <string name="permissions_rationale_for_external_files_access">För att komma åt externa filer krävs åtkomst till lagring</string>
     <string name="permissions_rationale_for_post_notifications">Behörighet krävs för att kunna skicka notiser</string>
+    <string name="permissions_rationale_for_schedule_exact_alarms">Appen behöver behörighet att schemalägga påminnelser vid exakta tider</string>
     <string name="cycle_visibility">Fäll ihop/ut alla</string>
     <string name="running_database_update">Uppgraderar databas…</string>
     <string name="note_has_been_modified">Anteckningen ändrad</string>
@@ -415,6 +416,10 @@
     <string name="pref_title_summary_reminders_for_deadline_times">Visa avisering för anteckningar med en deadline</string>
     <string name="pref_title_reminders_for_event_times">Händelser</string>
     <string name="pref_title_summary_reminders_for_event_times">Visa avisering för anteckningar med händelsetid</string>
+    <string name="pref_title_reminders_alarm">Spela alarmljud</string>
+    <string name="pref_summary_reminders_alarm">För anteckningar som har en \"alarm-tagg\" (se nedan)</string>
+    <string name="pref_title_reminders_alarm_tags">Alarm-taggar</string>
+    <string name="pref_summary_reminders_alarm_tags">Taggar, separerade med blanksteg, som ska utlösa alarmljudet. Töm fältet för att spela alarmljudet vid varje påminnelse.</string>
     <string name="pref_title_reminders_sound">Ljud</string>
     <string name="pref_title_reminders_vibrate">Vibration</string>
     <string name="pref_title_reminders_led">Ljus</string>
@@ -545,7 +550,7 @@
     <string name="below">Nedanför</string>
     <string name="loading">Laddar…</string>
     <string name="go_to">Gå till</string>
-    <string name="cannot_refile_to_the_same_subtree">Cannot refile to the same subtree</string>
+    <string name="cannot_refile_to_the_same_subtree">Kan inte flytta till samma underträd</string>
     <string name="notification_maximum_priority">Högsta</string>
     <string name="notification_high_priority">Hög</string>
     <string name="notification_default_priority">Standard</string>
@@ -587,6 +592,8 @@
     <string name="content">Innehåll</string>
     <string name="prepend">Infoga i början</string>
     <string name="insert_new_note_at_beginning">Lägg till nya anteckningar överst</string>
+    <string name="add_id_property">Lägg till ID-egenskap</string>
+    <string name="populate_the_id_property">Sätt ett värde på egenskapen \"ID\" när en ny anteckning skapas</string>
     <string name="developer_options">Alternativ för utvecklare</string>
     <string name="git_repository_type">Git-lagringsplatser</string>
     <string name="in_development">Under utveckling</string>
