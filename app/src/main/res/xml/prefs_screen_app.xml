@@ -11,6 +11,16 @@
         android:summary="@string/reload_getting_started_summary" />
 
     <Preference
+        android:key="@string/pref_key_export_settings"
+        android:title="@string/export_settings"
+        android:summary="@string/export_settings_summary" />
+
+    <Preference
+        android:key="@string/pref_key_import_settings"
+        android:title="@string/import_settings"
+        android:summary="@string/import_settings_summary" />
+
+    <Preference
         android:key="@string/pref_key_clear_database"
         android:title="@string/clear_database"
         android:summary="@string/clear_database_summary" />

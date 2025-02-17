@@ -15,6 +15,9 @@ import androidx.lifecycle.map
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.sqlite.db.SupportSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.JsonSyntaxException
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.*
@@ -22,6 +25,7 @@ import com.orgzly.android.data.mappers.OrgMapper
 import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.OrgzlyDatabase
 import com.orgzly.android.db.dao.NoteDao
+import com.orgzly.android.db.dao.NoteDao.NoteIdBookId
 import com.orgzly.android.db.dao.NoteViewDao
 import com.orgzly.android.db.dao.ReminderTimeDao
 import com.orgzly.android.db.entity.*
@@ -2066,6 +2070,73 @@ class DataRepository @Inject constructor(
         if (foundNote.isNotEmpty())
             return foundNote
         return db.book().allBooksHavingPropertyLowerCase(name.lowercase(), value.lowercase())
+    }
+
+    fun findUniqueNoteHavingProperty(name: String, value: String): NoteIdBookId? {
+        val foundNotes = db.note().allNotesHavingPropertyLowerCase(name.lowercase(), value.lowercase())
+        return if (foundNotes.isEmpty()) null
+        else if (foundNotes.size == 1) foundNotes[0]
+        else {
+            val msg = App.getAppContext().getString(R.string.error_multiple_notes_with_matching_property_value, name, value)
+            throw RuntimeException(msg)
+        }
+    }
+
+    fun exportSettingsAndSearchesToNote(note: Note) {
+        val notePayload = getNotePayload(note.id) ?: throw RuntimeException(context.getString(R.string.failed_to_get_note_payload))
+        var noteIdPropertyValue = notePayload.properties.get("ID")
+        if (noteIdPropertyValue == null) {
+            // Note has no "ID" property - let's add one
+            noteIdPropertyValue = UUID.randomUUID().toString()
+            notePayload.properties.put("ID", noteIdPropertyValue)
+            updateNote(note.id, notePayload)
+        }
+        // Ensure that the note's "ID" property value is unique
+        val targetNote = findUniqueNoteHavingProperty("ID", noteIdPropertyValue)
+        // Get settings as JSON
+        val settingsJsonObject = AppPreferences.getDefaultPrefsAsJsonObject(context)
+        // Get saved searches as JSON
+        val savedSearchesJsonObject = Gson().fromJson("{}", JsonObject::class.java)
+        getSavedSearches().forEach {
+            savedSearchesJsonObject.addProperty(it.name, it.query)
+        }
+        // Put them together
+        val finalMap = mapOf("settings" to settingsJsonObject, "saved_searches" to savedSearchesJsonObject)
+        val finalJsonString = Gson().toJson(finalMap)
+        updateNoteContent(targetNote!!.noteId, finalJsonString)
+        AppPreferences.settingsExportAndImportNoteId(context, noteIdPropertyValue)
+    }
+
+    fun importSettingsAndSearchesFromNote(note: Note) {
+        var importedSomething = false
+        val notePayload = getNotePayload(note.id) ?: throw RuntimeException(
+            context.getString(R.string.failed_to_get_note_payload))
+        if (notePayload.content.isNullOrEmpty())
+            throw RuntimeException(context.getString(R.string.note_has_no_content))
+        val gson: Map<*, *>
+        try {
+            gson = Gson().fromJson(notePayload.content, Map::class.java)
+        } catch (e: JsonSyntaxException) {
+            throw RuntimeException(context.getString(R.string.note_does_not_contain_valid_json))
+        }
+        if (!("settings" in gson.keys && "saved_searches" in gson.keys)) // Both keys must be present
+            throw RuntimeException(context.getString(R.string.imported_json_is_missing_mandatory_fields))
+        val settings = gson["settings"] as Map<String, *>
+        if (settings.isNotEmpty()) {
+            AppPreferences.setDefaultPrefsFromJsonMap(context, settings)
+            importedSomething = true
+        }
+        val savedSearches: List<SavedSearch> = (gson["saved_searches"] as Map<String, String>)
+            .entries
+            .mapIndexed { index, entry ->
+                SavedSearch(0, entry.key, entry.value, index + 1)
+            }
+        if (savedSearches.isNotEmpty()) {
+            replaceSavedSearches(savedSearches)
+            importedSomething = true
+        }
+        if (!importedSomething)
+            throw RuntimeException("Found no settings or saved searches to import.")
     }
 
     /*
