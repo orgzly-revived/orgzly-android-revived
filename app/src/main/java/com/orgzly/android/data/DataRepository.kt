@@ -13,8 +13,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.preference.PreferenceManager
 import androidx.sqlite.db.SupportSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.*
@@ -22,6 +25,7 @@ import com.orgzly.android.data.mappers.OrgMapper
 import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.OrgzlyDatabase
 import com.orgzly.android.db.dao.NoteDao
+import com.orgzly.android.db.dao.NoteDao.NoteIdBookId
 import com.orgzly.android.db.dao.NoteViewDao
 import com.orgzly.android.db.dao.ReminderTimeDao
 import com.orgzly.android.db.entity.*
@@ -1987,15 +1991,63 @@ class DataRepository @Inject constructor(
         NotesOrgExporter(this).exportBook(book, writer)
     }
 
-    fun findNoteHavingProperty(name: String, value: String): NoteDao.NoteIdBookId? {
-        return db.note().firstNoteHavingPropertyLowerCase(name.lowercase(), value.lowercase())
+    fun findNotesHavingProperty(name: String, value: String): List<NoteIdBookId> {
+        return db.note().allNotesHavingPropertyLowerCase(name.lowercase(), value.lowercase())
     }
 
-    fun findNoteOrBookHavingProperty(name: String, value: String): Any? {
-        val foundNote = findNoteHavingProperty(name, value)
-        if (foundNote != null)
+    fun findNotesOrBooksHavingProperty(name: String, value: String): List<Any?> {
+        val foundNote = findNotesHavingProperty(name, value)
+        if (foundNote.isNotEmpty())
             return foundNote
-        return db.book().firstBookHavingPropertyLowerCase(name.lowercase(), value.lowercase())
+        return db.book().allBooksHavingPropertyLowerCase(name.lowercase(), value.lowercase())
+    }
+
+    fun findUniqueNoteHavingProperty(name: String, value: String): NoteIdBookId? {
+        val foundNotes = db.note().allNotesHavingPropertyLowerCase(name.lowercase(), value.lowercase())
+        return if (foundNotes.isEmpty()) null
+        else if (foundNotes.size == 1) foundNotes[0]
+        else {
+            val msg = App.getAppContext().getString(R.string.error_multiple_notes_with_matching_property_value, name, value)
+            throw RuntimeException(msg)
+        }
+    }
+
+    fun exportSettingsAndSearchesToSelectedNote() {
+        val targetNote = findUniqueNoteHavingProperty("ID", AppPreferences.settingsExportAndImportNoteId(context))
+        if (targetNote != null) {
+            val gson = Gson()
+            // Get settings as JSON
+            val settingsJsonObject = gson.toJsonTree(PreferenceManager.getDefaultSharedPreferences(context).all)
+            // Get saved searches as JSON
+            val savedSearchesJsonObject = gson.fromJson("{}", JsonObject::class.java)
+            getSavedSearches().forEach {
+                savedSearchesJsonObject.addProperty(it.name, it.query)
+            }
+            // Put them together
+            val finalMap = mapOf("settings" to settingsJsonObject, "saved_searches" to savedSearchesJsonObject)
+            val finalJsonString = gson.toJson(finalMap)
+            updateNoteContent(targetNote.bookId, targetNote.noteId, finalJsonString)
+        }
+    }
+
+    fun importSettingsAndSearchesFromSelectedNote() {
+        val sourceNote = findUniqueNoteHavingProperty("ID", AppPreferences.settingsExportAndImportNoteId(context))
+        if (sourceNote != null) {
+            val notePayload = getNotePayload(sourceNote.noteId)
+            if (notePayload != null) {
+                val gson = Gson().fromJson(notePayload.content, Map::class.java)
+                val settings = gson["settings"] as Map<String, *>
+                if (settings.isNotEmpty())
+                    AppPreferences.setDefaultPrefsFromJsonMap(context, settings)
+                val savedSearches: List<SavedSearch> = (gson["saved_searches"] as Map<String, String>)
+                    .entries
+                    .mapIndexed { index, entry ->
+                        SavedSearch(0, entry.key, entry.value, index + 1)
+                    }
+                if (savedSearches.isNotEmpty())
+                    replaceSavedSearches(savedSearches)
+            }
+        }
     }
 
     /*

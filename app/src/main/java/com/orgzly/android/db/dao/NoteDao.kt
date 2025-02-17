@@ -306,9 +306,8 @@ abstract class NoteDao : BaseDao<Note> {
         LEFT JOIN notes ON (notes.id = note_properties.note_id)
         WHERE LOWER(note_properties.name) = :name AND LOWER(note_properties.value) = :value AND notes.id IS NOT NULL
         ORDER BY notes.lft
-        LIMIT 1
     """)
-    abstract fun firstNoteHavingPropertyLowerCase(name: String, value: String): NoteIdBookId?
+    abstract fun allNotesHavingPropertyLowerCase(name: String, value: String): List<NoteIdBookId>
 
     @Query("""
         UPDATE notes

@@ -591,6 +591,7 @@
     <string name="styled_text_with_marks_summary">Keep marks displayed (e.g. *bold*)</string>
 
     <string name="no_such_link_target">No note or book found with the “%1$s” property set to “%2$s”</string>
+    <string name="error_multiple_notes_with_matching_property_value">Found multiple notes with the “%1$s” property set to “%2$s”</string>
 
     <plurals name="imported_searches">
         <item quantity="one">Imported one search</item>
@@ -797,4 +798,15 @@
     <string name="moving_between_subdirectories_requires_api_24">Renaming notebook to a different subdirectory requires Android 7 or higher</string>
 
     <string name="subfolder_support_disabled">Support for subfolders is disabled</string>
+    <string name="export_settings_to_note">Export settings to note</string>
+    <string name="import_settings_from_note">Import settings from note</string>
+    <string name="settings_exported_to">Exported settings to note “%1$s”</string>
+    <string name="settings_imported_from">Imported settings from note “%1$s”</string>
+    <string name="failed_to_get_note_payload">Failed to get note payload</string>
+    <string name="export_settings">Export app settings</string>
+    <string name="export_settings_summary">Write a JSON representation of all settings to a note of your choice</string>
+    <string name="import_settings">Import app settings</string>
+    <string name="import_settings_summary">Import settings as JSON from a note of your choice</string>
+    <string name="export_settings_warning_text">WARNING! The selected note will be completely overwritten!</string>
+    <string name="selected_notes_id_property_value_is_not_unique">The selected note\'s “ID” property value is not unique (consider changing it)</string>
 </resources>
