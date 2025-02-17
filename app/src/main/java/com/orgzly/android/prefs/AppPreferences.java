@@ -20,7 +20,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -92,6 +94,10 @@ public class AppPreferences {
 
             } else if (value instanceof Set) {
                 edit.putStringSet(key, (Set) value);
+
+            } else if (value instanceof ArrayList) {
+                HashSet<String> set = new HashSet<>((Collection<? extends String>) value);
+                edit.putStringSet(key, set);
             }
         }
 
