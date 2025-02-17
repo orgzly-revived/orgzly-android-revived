@@ -2057,15 +2057,15 @@ class DataRepository @Inject constructor(
         NotesOrgExporter(this).exportBook(book, writer)
     }
 
-    fun findNoteHavingProperty(name: String, value: String): NoteDao.NoteIdBookId? {
-        return db.note().firstNoteHavingPropertyLowerCase(name.lowercase(), value.lowercase())
+    fun findNotesHavingProperty(name: String, value: String): List<NoteIdBookId> {
+        return db.note().allNotesHavingPropertyLowerCase(name.lowercase(), value.lowercase())
     }
 
-    fun findNoteOrBookHavingProperty(name: String, value: String): Any? {
-        val foundNote = findNoteHavingProperty(name, value)
-        if (foundNote != null)
+    fun findNotesOrBooksHavingProperty(name: String, value: String): List<Any?> {
+        val foundNote = findNotesHavingProperty(name, value)
+        if (foundNote.isNotEmpty())
             return foundNote
-        return db.book().firstBookHavingPropertyLowerCase(name.lowercase(), value.lowercase())
+        return db.book().allBooksHavingPropertyLowerCase(name.lowercase(), value.lowercase())
     }
 
     /*
