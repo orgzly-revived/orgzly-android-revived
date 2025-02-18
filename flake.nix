@@ -3,12 +3,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    nixgl.url = "github:nix-community/nixGL";
   };
   outputs = {
     nixpkgs,
     flake-utils,
-    nixgl,
     ...
   }:
   flake-utils.lib.eachDefaultSystem (system: let
@@ -16,8 +14,8 @@
       inherit system;
       config = {
         android_sdk.accept_license = true;
+        allowUnfree = true;
       };
-      overlays = [nixgl.overlay];
     };
     cmakeVersion = "3.22.1";
     buildToolsVersion = "34.0.0";
@@ -56,28 +54,21 @@
   in {
     devShells = with pkgs; {
       default = mkShell {
-        buildInputs =
-          sharedDeps
-          ++ [gradle_8 watchman]
-          ++ (
-            if system == "x86_64-linux"
-            then [pkgs.nixgl.auto.nixGLDefault pkgs.nixgl.nixGLIntel]
-            else []
-          );
-          LC_ALL = "en_US.UTF-8";
-          LANG = "en_US.UTF-8";
-          CMAKE_DIR = cmakeDir;
-          ANDROID_HOME = android-home;
-          ANDROID_NDK_ROOT = "${android-home}/ndk-bundle";
-          ANDROID_SDK_BIN = android-home;
-          GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${aapt2Binary}";
-          shellHook =
-            ''
-              export JAVA_HOME=${pkgs.jdk17.home};
-              source ${android-sdk.out}/nix-support/setup-hook
-              export ORG_GRADLE_PROJECT_ANDROID_HOME="$ANDROID_HOME"
-              export PATH=${additionalPath}:$PATH
-            '';
+        buildInputs = sharedDeps ++ [gradle_8 watchman];
+        LC_ALL = "en_US.UTF-8";
+        LANG = "en_US.UTF-8";
+        CMAKE_DIR = cmakeDir;
+        ANDROID_HOME = android-home;
+        ANDROID_NDK_ROOT = "${android-home}/ndk-bundle";
+        ANDROID_SDK_BIN = android-home;
+        GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${aapt2Binary}";
+        shellHook =
+          ''
+            export JAVA_HOME=${pkgs.jdk17.home};
+            source ${android-sdk.out}/nix-support/setup-hook
+            export ORG_GRADLE_PROJECT_ANDROID_HOME="$ANDROID_HOME"
+            export PATH=${additionalPath}:$PATH
+          '';
       };
     };
   });
