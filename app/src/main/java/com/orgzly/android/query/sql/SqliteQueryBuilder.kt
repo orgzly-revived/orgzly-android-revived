@@ -311,6 +311,7 @@ class SqliteQueryBuilder(val context: Context) {
 
         } else {
             val unit = when (interval.unit) {
+                OrgInterval.Unit.MINUTE -> Calendar.MINUTE
                 OrgInterval.Unit.HOUR -> Calendar.HOUR_OF_DAY
                 OrgInterval.Unit.DAY -> Calendar.DAY_OF_MONTH
                 OrgInterval.Unit.WEEK -> Calendar.WEEK_OF_YEAR
