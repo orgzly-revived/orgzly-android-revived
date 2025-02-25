@@ -1,19 +1,46 @@
 package com.orgzly.android.query
 
-import com.orgzly.org.datetime.OrgInterval
-
 /**
- * [OrgInterval] with support for "none", "today" (0d), "tomorrow" (1d), "yesterday" (-1d).
+ * Similar to [OrgInterval] with support for "none", "M" (minute),
+ * "today" (0d), "tomorrow" (1d) and "yesterday" (-1d).
  **/
-class QueryInterval(val none: Boolean = false, val now: Boolean = false) : OrgInterval() {
-    override fun toString(): String {
+class QueryInterval(val u: QueryInterval.Unit, val v: Int = 0) {
+    enum class Unit(val text: String) {
+        NONE("none"),
+        NOW("now"),
+        HOUR("h"),
+        DAY("d"),
+        WEEK("w"),
+        MONTH("m"),
+        YEAR("y");
+
+        override fun toString(): String {
+            return text
+        }
+
+        companion object {
+            fun from(text: String): Unit = Unit.values().first { it.text == text }
+        }
+    }
+
+    public var value: Int = v
+    public var unit: QueryInterval.Unit = u
+
+    private fun setValue(str: String) {
+        try {
+            value = str.toInt()
+        } catch (e: NumberFormatException) {
+            throw IllegalArgumentException("Interval value '$str' couldn't be parsed as integer", e);
+        }
+    }
+
+    override public fun toString(): String {
         return when {
-            none -> "none"
-            now -> "now"
             unit == Unit.DAY && value ==  0 -> "today"
             unit == Unit.DAY && value ==  1 -> "tomorrow"
             unit == Unit.DAY && value == -1 -> "yesterday"
-            else -> super.toString()
+            unit == Unit.NONE || unit == Unit.NOW -> unit.toString()
+            else -> "$value${unit.toString()}"
         }
     }
 
@@ -22,41 +49,32 @@ class QueryInterval(val none: Boolean = false, val now: Boolean = false) : OrgIn
 
         fun parse(str: String): QueryInterval? = when (str.lowercase()) {
             "none", "no" -> {
-                QueryInterval(none = true)
+                QueryInterval(Unit.NONE)
             }
 
             "now" -> {
-                QueryInterval(now = true)
+                QueryInterval(Unit.NOW)
             }
 
             "today", "tod" -> {
-                val interval = QueryInterval()
-                interval.setValue(0)
-                interval.setUnit(Unit.DAY)
-                interval
+                QueryInterval(Unit.DAY, 0)
             }
 
             "tomorrow", "tmrw", "tom" -> {
-                val interval = QueryInterval()
-                interval.setValue(1)
-                interval.setUnit(Unit.DAY)
-                interval
+                QueryInterval(Unit.DAY, 1)
             }
 
             "yesterday" -> {
-                val interval = QueryInterval()
-                interval.setValue(-1)
-                interval.setUnit(Unit.DAY)
-                interval
+                QueryInterval(Unit.DAY, -1)
             }
 
             else -> {
                 val m = REGEX.find(str)
 
                 if (m != null) {
-                    val interval = QueryInterval()
+                    var unit = Unit.from(m.groupValues[2])
+                    var interval = QueryInterval(unit)
                     interval.setValue(m.groupValues[1])
-                    interval.setUnit(m.groupValues[2])
                     interval
 
                 } else {

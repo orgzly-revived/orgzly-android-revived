@@ -4,7 +4,6 @@ import android.content.Context
 import android.database.DatabaseUtils
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.query.*
-import com.orgzly.org.datetime.OrgInterval
 import java.util.*
 
 
@@ -272,7 +271,8 @@ class SqliteQueryBuilder(val context: Context) {
     }
 
     private fun toInterval(column: String, isActiveColumn: String?, interval: QueryInterval, relation: Relation): String {
-        if (interval.none) {
+        if (interval.unit == QueryInterval.Unit.NONE) {
+
             return "$column IS NULL"
         }
 
@@ -300,29 +300,18 @@ class SqliteQueryBuilder(val context: Context) {
         return "($activeOnly$column != 0 AND $cond)"
     }
 
-    /*
-     * TODO: Clean this up.
-     * There's no need to depend on Org-supported units.
-     * Remove OrgInterval dependency from QueryInterval.
-     */
     private fun getFieldAndValueFromInterval(interval: QueryInterval): Pair<Int, Int> {
-        return if (interval.now) {
-            Pair(Calendar.MILLISECOND, 0)
-
-        } else {
-            val unit = when (interval.unit) {
-                OrgInterval.Unit.HOUR -> Calendar.HOUR_OF_DAY
-                OrgInterval.Unit.DAY -> Calendar.DAY_OF_MONTH
-                OrgInterval.Unit.WEEK -> Calendar.WEEK_OF_YEAR
-                OrgInterval.Unit.MONTH -> Calendar.MONTH
-                OrgInterval.Unit.YEAR -> Calendar.YEAR
-
-                null -> throw IllegalArgumentException("Interval unit not set")
-            }
-
-            val value = interval.value
-
-            Pair(unit, value)
+        val unit = when (interval.unit) {
+            // NONE should have handled early
+            QueryInterval.Unit.NONE -> throw IllegalArgumentException("Invalid unit")
+            QueryInterval.Unit.NOW -> Calendar.MILLISECOND
+            QueryInterval.Unit.HOUR -> Calendar.HOUR_OF_DAY
+            QueryInterval.Unit.DAY -> Calendar.DAY_OF_MONTH
+            QueryInterval.Unit.WEEK -> Calendar.WEEK_OF_YEAR
+            QueryInterval.Unit.MONTH -> Calendar.MONTH
+            QueryInterval.Unit.YEAR -> Calendar.YEAR
         }
+
+        return Pair(unit, interval.value)
     }
 }
