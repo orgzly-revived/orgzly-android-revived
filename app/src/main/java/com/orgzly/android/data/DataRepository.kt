@@ -58,6 +58,7 @@ import java.util.*
 import java.util.concurrent.Callable
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.roundToInt
 
 // TODO: Split
 @Singleton
@@ -1505,6 +1506,17 @@ class DataRepository @Inject constructor(
 
         db.noteAncestor().insertAncestorsForNote(noteId)
 
+        val doneKeywords = AppPreferences.doneKeywordsSet(context)
+        val todoKeywords = AppPreferences.todoKeywordsSet(context)
+
+        if (doneKeywords.contains(notePayload.state) || todoKeywords.contains(notePayload.state)) {
+            val ancestors = getNoteAncestors(noteId)
+
+            if (ancestors.isNotEmpty()) {
+                tryUpdateTitleCookies(ancestors.last())
+            }
+        }
+
         updateBookIsModified(target.bookId, true, time)
 
         return noteEntity.copy(id = noteId)
@@ -1545,7 +1557,14 @@ class DataRepository @Inject constructor(
 
 
     fun updateNote(noteId: Long, notePayload: NotePayload): Note? {
-        val note = db.note().get(noteId) ?: return null
+        val noteAndAncestors = db.note().getNoteAndAncestors(noteId)
+
+        if (noteAndAncestors.isEmpty()) return null
+
+        val ancestors = noteAndAncestors.dropLast(1)
+
+        val note = noteAndAncestors.last()
+        val noteParent = if (ancestors.isEmpty()) null else ancestors.last()
 
         return db.runInTransaction(Callable {
             updateBookIsModified(note.position.bookId, true)
@@ -1569,8 +1588,32 @@ class DataRepository @Inject constructor(
 
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Updated $count note: $newNote")
 
+            if (newNote.state != note.state && noteParent != null) {
+                tryUpdateTitleCookies(noteParent)
+            }
+
             newNote
         })
+    }
+
+    private fun tryUpdateTitleCookies(note: Note) {
+        val doneKeywords = AppPreferences.doneKeywordsSet(context)
+        val todoKeywords = AppPreferences.todoKeywordsSet(context)
+
+        val titleUpdater = StateChangeParentTitleUpdater(todoKeywords, doneKeywords)
+        val children = getNoteChildren(note.id)
+
+        val newTitle = titleUpdater.updateTitleForStates(note.title, children.map { it.state })
+
+        if (newTitle == note.title) {
+            return
+        }
+
+        val newNote = note.copy(title = newTitle)
+
+        val count = db.note().update(newNote)
+
+        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Updated $count note: $newNote")
     }
 
     fun deleteNotes(bookId: Long, ids: Set<Long>): Int {
