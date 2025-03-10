@@ -14,10 +14,10 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeTrue;
 
@@ -176,7 +176,8 @@ public class BookParsingTest extends OrgzlyTest {
         """;
         TestedBook testedBook = onBook(content);
         testedBook.onLoad().isWhenSaved(content);
-        assertEquals(testedBook.book, dataRepository.findNoteOrBookHavingProperty("foo", "bar"));
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)),
+                dataRepository.findNotesOrBooksHavingProperty("foo", "bar"));
     }
 
     /**
@@ -197,8 +198,8 @@ public class BookParsingTest extends OrgzlyTest {
         """;
         TestedBook testedBook = onBook(content);
         testedBook.onLoad().isWhenSaved(content);
-        assertEquals(testedBook.book, dataRepository.findNoteOrBookHavingProperty("foo", "bar"));
-        assertEquals(testedBook.book, dataRepository.findNoteOrBookHavingProperty("bar", "foo"));
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)), dataRepository.findNotesOrBooksHavingProperty("foo", "bar"));
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)), dataRepository.findNotesOrBooksHavingProperty("bar", "foo"));
     }
 
     /**
@@ -220,12 +221,12 @@ public class BookParsingTest extends OrgzlyTest {
         """;
         TestedBook testedBook = onBook(content);
         testedBook.onLoad().isWhenSaved(content);
-        assertEquals(testedBook.book, dataRepository.findNoteOrBookHavingProperty("foo",
-                "secondvalue"));
-        assertEquals(testedBook.book, dataRepository.findNoteOrBookHavingProperty("bar",
-                "secondvalue"));
-        assertNull(dataRepository.findNoteOrBookHavingProperty("foo", "firstvalue"));
-        assertNull(dataRepository.findNoteOrBookHavingProperty("bar", "firstvalue"));
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)),
+                dataRepository.findNotesOrBooksHavingProperty("foo", "secondvalue"));
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)),
+                dataRepository.findNotesOrBooksHavingProperty("bar", "secondvalue"));
+        assertEquals(0, dataRepository.findNotesOrBooksHavingProperty("foo", "firstvalue").size());
+        assertEquals(0, dataRepository.findNotesOrBooksHavingProperty("bar", "firstvalue").size());
     }
 
     @Test
@@ -243,16 +244,16 @@ public class BookParsingTest extends OrgzlyTest {
         """;
         TestedBook testedBook = onBook(content);
         testedBook.onLoad().isWhenSaved(content);
-        assertEquals(testedBook.book, dataRepository.findNoteOrBookHavingProperty("foo",
-                "secondvalue"));
-        assertEquals(testedBook.book, dataRepository.findNoteOrBookHavingProperty("bar",
-                "secondvalue"));
-        assertEquals(testedBook.book, dataRepository.findNoteOrBookHavingProperty("FOO",
-                "secondvalue"));
-        assertEquals(testedBook.book, dataRepository.findNoteOrBookHavingProperty("BAR",
-                "secondvalue"));
-        assertNull(dataRepository.findNoteOrBookHavingProperty("foo", "firstvalue"));
-        assertNull(dataRepository.findNoteOrBookHavingProperty("bar", "firstvalue"));
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)),
+                dataRepository.findNotesOrBooksHavingProperty("foo", "secondvalue"));
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)),
+                dataRepository.findNotesOrBooksHavingProperty("bar", "secondvalue"));
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)),
+                dataRepository.findNotesOrBooksHavingProperty("FOO", "secondvalue"));
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)),
+                dataRepository.findNotesOrBooksHavingProperty("BAR", "secondvalue"));
+        assertEquals(0, dataRepository.findNotesOrBooksHavingProperty("foo", "firstvalue").size());
+        assertEquals(0, dataRepository.findNotesOrBooksHavingProperty("bar", "firstvalue").size());
     }
 
     /*

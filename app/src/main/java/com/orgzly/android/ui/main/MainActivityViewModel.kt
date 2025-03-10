@@ -81,15 +81,19 @@ class MainActivityViewModel(private val dataRepository: DataRepository) : Common
 
             catchAndPostError {
                 val result = UseCaseRunner.run(useCase)
+                val data = result.userData as List<*>
 
-                if (result.userData == null) {
+                if (data.isEmpty()) {
                     val msg = App.getAppContext().getString(R.string.no_such_link_target, name, value)
                     errorEvent.postValue(Throwable(msg))
-
                 } else {
-                    when (result.userData) {
+                    if (data.size > 1) {
+                        val msg = App.getAppContext().getString(R.string.error_multiple_notes_with_matching_property_value, name, value)
+                        errorEvent.postValue(Throwable(msg))
+                    }
+                    when (data[0]) {
                         is NoteDao.NoteIdBookId -> {
-                            val noteIdBookId = result.userData
+                            val noteIdBookId = data[0] as NoteDao.NoteIdBookId
 
                             when (AppPreferences.linkTarget(App.getAppContext())) {
                                 "note_details" ->
@@ -104,7 +108,8 @@ class MainActivityViewModel(private val dataRepository: DataRepository) : Common
                             }
                         }
                         is Book -> {
-                            navigationActions.postValue(MainNavigationAction.OpenBook(result.userData.id))
+                            val book = data[0] as Book
+                            navigationActions.postValue(MainNavigationAction.OpenBook(book.id))
                         }
                     }
                 }

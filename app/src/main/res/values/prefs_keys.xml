@@ -595,6 +595,8 @@
 
     <string name="pref_key_major_events_logs" translatable="false">pref_key_major_events_logs</string>
 
+    <string name="pref_key_note_id_for_settings_export_and_import" translatable="false">pref_key_settings_export_note_id</string>
+
     <!-- These do not store any data. -->
     <string name="pref_key_repos" translatable="false">pref_key_repos</string>
     <string name="pref_key_ssh_keygen" translatable="false">pref_key_ssh_keygen</string>
@@ -603,6 +605,8 @@
     <string name="pref_key_git_commit" translatable="false">pref_key_git_commit</string>
     <string name="pref_key_reload_getting_started" translatable="false">pref_key_reload_getting_started</string>
     <string name="pref_key_clear_database" translatable="false">pref_key_clear_database</string>
+    <string name="pref_key_export_settings" translatable="false">pref_key_export_settings</string>
+    <string name="pref_key_import_settings" translatable="false">pref_key_import_settings</string>
 
     <!-- State-type preferences, not changeable by user. They have no defaults. -->
     <string name="pref_key_dropbox_credential" translatable="false">pref_key_dropbox_token</string>

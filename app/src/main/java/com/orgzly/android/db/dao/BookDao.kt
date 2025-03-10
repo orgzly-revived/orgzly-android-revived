@@ -58,9 +58,8 @@ abstract class BookDao : BaseDao<Book> {
         FROM book_properties
         LEFT JOIN books ON (books.id = book_properties.book_id)
         WHERE LOWER(book_properties.name) = :name AND LOWER(book_properties.value) = :value AND books.id IS NOT NULL
-        LIMIT 1
     """)
-    abstract fun firstBookHavingPropertyLowerCase(name: String, value: String): Book?
+    abstract fun allBooksHavingPropertyLowerCase(name: String, value: String): List<Book>
 
     fun getOrInsert(name: String): Long =
             get(name).let {
