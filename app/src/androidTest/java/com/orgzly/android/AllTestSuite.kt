@@ -74,7 +74,7 @@ import org.junit.runners.Suite
         OrgFormatterMiscTest::class,
         OrgFormatterSpeedTest::class,
         OrgFormatterStyleTextTest::class,
-        StateChangeParentTitleUpdaterTest::class,
+        StateChangeParentTitleUpdateTest::class,
         UriUtilsTest::class
 )
 class AllTestSuite
