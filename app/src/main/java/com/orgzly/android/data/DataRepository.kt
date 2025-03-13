@@ -1560,13 +1560,13 @@ class DataRepository @Inject constructor(
 
 
     fun updateNote(noteId: Long, notePayload: NotePayload): Note? {
-        val noteAndAncestors = db.note().getNoteAndParent(noteId)
+        val noteAndParent = db.note().getNoteAndParent(noteId)
 
-        if (noteAndAncestors.isEmpty()) return null
+        if (noteAndParent.isEmpty()) return null
 
-        val ancestors = noteAndAncestors.dropLast(1)
+        val ancestors = noteAndParent.dropLast(1)
 
-        val note = noteAndAncestors.last()
+        val note = noteAndParent.last()
         val noteParent = if (ancestors.isEmpty()) null else ancestors.last()
 
         return db.runInTransaction(Callable {
