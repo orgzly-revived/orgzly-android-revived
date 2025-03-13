@@ -1,27 +1,31 @@
 package com.orgzly.android.util
 
 import com.orgzly.android.OrgzlyTest
+import com.orgzly.android.db.entity.Note
 import com.orgzly.android.ui.note.NotePayload
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class ContentChangeTitleUpdateTest : OrgzlyTest() {
+/**
+ * There are multiple ways of changing the content of a note via the DataRepository, so this abstract base
+ * class allows inheritors to test the same functionality calling the different methods to persist the
+ * content changes.
+ */
+abstract class ContentChangeTitleUpdateTestBase : OrgzlyTest() {
+    abstract fun persistContentChange(note: Note, content: String)
+
     @Test
-    fun testTitleDoesNotChangeWhenContentHasNoCheckboxes() {
+    fun testExistingTitleDoesNotChangeWhenContentHasNoCheckboxes() {
         val book = testUtils.setupBook(
             "book-a",
             "* Things to do [%] [/]")
 
         val onlyNote = dataRepository.getLastNote("Things to do [%] [/]")!!
 
-        dataRepository.updateNote(
-            noteId = onlyNote.id,
-            NotePayload(
-                title = onlyNote.title,
-                content =
-                    "there are no checkboxes in here\n" +
-                    "no siree Bob"
-            )
+        persistContentChange(
+            onlyNote,
+            "there are no checkboxes in here\n" +
+                    "none at all"
         )
 
         val exportedBook = exportBook(book)
@@ -29,13 +33,13 @@ class ContentChangeTitleUpdateTest : OrgzlyTest() {
         val expectedBook =
             "* Things to do [%] [/]\n\n" +
             "there are no checkboxes in here\n" +
-            "no siree Bob"
+            "none at all"
 
         assertEquals(expectedBook, exportedBook.trim())
     }
 
     @Test
-    fun testTitleDoesNotChangeWhenContentHasInvalidCheckboxes() {
+    fun testExistingTitleDoesNotChangeWhenContentHasInvalidCheckboxes() {
         val notCheckboxes = listOf(
             "[ ] no bullet or number",
             "! - [ ] bullet or number should be first",
@@ -53,13 +57,7 @@ class ContentChangeTitleUpdateTest : OrgzlyTest() {
         val onlyNote = dataRepository.getLastNote("Things to do [%] [/]")!!
 
         for (notCheckbox in notCheckboxes) {
-            dataRepository.updateNote(
-                noteId = onlyNote.id,
-                NotePayload(
-                    title = onlyNote.title,
-                    content = notCheckbox
-                )
-            )
+            persistContentChange(onlyNote, notCheckbox)
 
             val exportedBook = exportBook(book)
 
@@ -82,13 +80,7 @@ class ContentChangeTitleUpdateTest : OrgzlyTest() {
         val onlyNote = dataRepository.getLastNote("Things to do [%] [/]")!!
 
         for (checkbox in checkboxes) {
-            dataRepository.updateNote(
-                noteId = onlyNote.id,
-                NotePayload(
-                    title = onlyNote.title,
-                    content = checkbox
-                )
-            )
+            persistContentChange(onlyNote, checkbox)
 
             val exportedBook = exportBook(book)
 
@@ -111,13 +103,7 @@ class ContentChangeTitleUpdateTest : OrgzlyTest() {
         val onlyNote = dataRepository.getLastNote("Things to do [%] [/]")!!
 
         for (checkbox in checkboxes) {
-            dataRepository.updateNote(
-                noteId = onlyNote.id,
-                NotePayload(
-                    title = onlyNote.title,
-                    content = checkbox
-                )
-            )
+            persistContentChange(onlyNote, checkbox)
 
             val exportedBook = exportBook(book)
 
@@ -140,13 +126,7 @@ class ContentChangeTitleUpdateTest : OrgzlyTest() {
         val onlyNote = dataRepository.getLastNote("Things to do [%] [/]")!!
 
         for (checkbox in checkboxes) {
-            dataRepository.updateNote(
-                noteId = onlyNote.id,
-                NotePayload(
-                    title = onlyNote.title,
-                    content = checkbox
-                )
-            )
+            persistContentChange(onlyNote, checkbox)
 
             val exportedBook = exportBook(book)
 
@@ -154,5 +134,26 @@ class ContentChangeTitleUpdateTest : OrgzlyTest() {
 
             assertEquals(expectedBook, exportedBook.trim())
         }
+    }
+}
+
+class ContentChangeTitleUpdateViaUpdateNoteTest : ContentChangeTitleUpdateTestBase() {
+    override fun persistContentChange(note: Note, content: String) {
+        dataRepository.updateNote(
+            noteId = note.id,
+            NotePayload(
+                title = note.title,
+                content = content
+            )
+        )
+    }
+}
+
+class ContentChangeTitleUpdateViaUpdateNoteContentTest : ContentChangeTitleUpdateTestBase() {
+    override fun persistContentChange(note: Note, content: String) {
+        dataRepository.updateNoteContent(
+            noteId = note.id,
+            content = content
+        )
     }
 }

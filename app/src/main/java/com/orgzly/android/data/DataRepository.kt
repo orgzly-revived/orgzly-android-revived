@@ -1162,11 +1162,15 @@ class DataRepository @Inject constructor(
         })
     }
 
-    fun updateNoteContent(bookId: Long, noteId: Long, content: String?) {
+    fun updateNoteContent(noteId: Long, content: String?) {
         db.runInTransaction {
             db.note().updateContent(noteId, content, MiscUtils.lineCount(content))
 
-            updateBookIsModified(bookId, true)
+            val note = db.note().get(noteId)!!
+
+            tryUpdateTitleCookies(note)
+
+            updateBookIsModified(note.position.bookId, true)
         }
     }
 
@@ -1556,7 +1560,7 @@ class DataRepository @Inject constructor(
 
 
     fun updateNote(noteId: Long, notePayload: NotePayload): Note? {
-        val noteAndAncestors = db.note().getNoteAndAncestors(noteId)
+        val noteAndAncestors = db.note().getNoteAndParent(noteId)
 
         if (noteAndAncestors.isEmpty()) return null
 
