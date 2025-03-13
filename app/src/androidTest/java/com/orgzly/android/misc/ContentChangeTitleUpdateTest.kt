@@ -1,4 +1,4 @@
-package com.orgzly.android.util
+package com.orgzly.android.misc
 
 import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.db.entity.Note
