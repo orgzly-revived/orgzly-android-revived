@@ -74,8 +74,9 @@ import org.junit.runners.Suite
         OrgFormatterMiscTest::class,
         OrgFormatterSpeedTest::class,
         OrgFormatterStyleTextTest::class,
-        ContentChangeTitleUpdateViaUpdateNoteTest::class,
-        ContentChangeTitleUpdateViaUpdateNoteContentTest::class,
+        ContentCheckboxesTitleUpdateViaUpdateNoteTest::class,
+        ContentCheckboxesTitleUpdateViaUpdateNoteContentTest::class,
+        NewNoteContentCheckboxesTitleUpdateTest::class,
         StateChangeParentTitleUpdateTest::class,
         UriUtilsTest::class
 )

@@ -1520,6 +1520,8 @@ class DataRepository @Inject constructor(
             }
         }
 
+        tryUpdateTitleCookies(noteEntity.copy(id = noteId))
+
         updateBookIsModified(target.bookId, true, time)
 
         return noteEntity.copy(id = noteId)

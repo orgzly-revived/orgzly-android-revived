@@ -11,8 +11,35 @@ import org.junit.Test
  * class allows inheritors to test the same functionality calling the different methods to persist the
  * content changes.
  */
-abstract class ContentChangeTitleUpdateTestBase : OrgzlyTest() {
+abstract class ContentCheckboxesTitleUpdateTestBase : OrgzlyTest() {
     abstract fun persistContentChange(note: Note, content: String)
+
+    companion object {
+        val notCheckboxes = listOf(
+                "[ ] no bullet or number",
+                "! - [ ] bullet or number should be first",
+                "! 1. [ ] bullet or number should be first",
+                "- ! [ ] checkbox should immediately follow bullet or number",
+                "1. ! [ ] checkbox should immediately follow bullet or number",
+                "- [f] checkbox should only contain space, hyphen or X",
+                "1. [f] checkbox should only contain space, hyphen or X",
+            )
+
+        val uncheckedCheckboxes = listOf(
+            "- [ ] First thing",
+            "1. [ ] first thing"
+        )
+
+        val hyphenatedCheckboxes = listOf(
+            "- [-] First thing",
+            "1. [-] first thing"
+        )
+
+        val checkedCheckboxes = listOf(
+            "- [X] First thing",
+            "1. [X] first thing"
+        )
+    }
 
     @Test
     fun testExistingTitleDoesNotChangeWhenContentHasNoCheckboxes() {
@@ -40,16 +67,6 @@ abstract class ContentChangeTitleUpdateTestBase : OrgzlyTest() {
 
     @Test
     fun testExistingTitleDoesNotChangeWhenContentHasInvalidCheckboxes() {
-        val notCheckboxes = listOf(
-            "[ ] no bullet or number",
-            "! - [ ] bullet or number should be first",
-            "! 1. [ ] bullet or number should be first",
-            "- ! [ ] checkbox should immediately follow bullet or number",
-            "1. ! [ ] checkbox should immediately follow bullet or number",
-            "- [f] checkbox should only contain space, hyphen or X",
-            "1. [f] checkbox should only contain space, hyphen or X",
-        )
-
         val book = testUtils.setupBook(
             "book-a",
             "* Things to do [%] [/]")
@@ -69,17 +86,13 @@ abstract class ContentChangeTitleUpdateTestBase : OrgzlyTest() {
 
     @Test
     fun testAddingNewEmptyCheckboxUpdatesTitleCookies() {
-        val checkboxes = listOf(
-            "- [ ] First thing",
-            "1. [ ] first thing"
-        )
         val book = testUtils.setupBook(
             "book-a",
             "* Things to do [%] [/]")
 
         val onlyNote = dataRepository.getLastNote("Things to do [%] [/]")!!
 
-        for (checkbox in checkboxes) {
+        for (checkbox in uncheckedCheckboxes) {
             persistContentChange(onlyNote, checkbox)
 
             val exportedBook = exportBook(book)
@@ -92,17 +105,13 @@ abstract class ContentChangeTitleUpdateTestBase : OrgzlyTest() {
 
     @Test
     fun testAddingNewHyphenatedCheckboxUpdatesTitleCookies() {
-        val checkboxes = listOf(
-            "- [-] First thing",
-            "1. [-] first thing"
-        )
         val book = testUtils.setupBook(
             "book-a",
             "* Things to do [%] [/]")
 
         val onlyNote = dataRepository.getLastNote("Things to do [%] [/]")!!
 
-        for (checkbox in checkboxes) {
+        for (checkbox in hyphenatedCheckboxes) {
             persistContentChange(onlyNote, checkbox)
 
             val exportedBook = exportBook(book)
@@ -115,17 +124,13 @@ abstract class ContentChangeTitleUpdateTestBase : OrgzlyTest() {
 
     @Test
     fun testAddingNewCheckedCheckboxUpdatesTitleCookies() {
-        val checkboxes = listOf(
-            "- [X] First thing",
-            "1. [X] first thing"
-        )
         val book = testUtils.setupBook(
             "book-a",
             "* Things to do [%] [/]")
 
         val onlyNote = dataRepository.getLastNote("Things to do [%] [/]")!!
 
-        for (checkbox in checkboxes) {
+        for (checkbox in checkedCheckboxes) {
             persistContentChange(onlyNote, checkbox)
 
             val exportedBook = exportBook(book)
@@ -137,7 +142,7 @@ abstract class ContentChangeTitleUpdateTestBase : OrgzlyTest() {
     }
 }
 
-class ContentChangeTitleUpdateViaUpdateNoteTest : ContentChangeTitleUpdateTestBase() {
+class ContentCheckboxesTitleUpdateViaUpdateNoteTest : ContentCheckboxesTitleUpdateTestBase() {
     override fun persistContentChange(note: Note, content: String) {
         dataRepository.updateNote(
             noteId = note.id,
@@ -149,7 +154,7 @@ class ContentChangeTitleUpdateViaUpdateNoteTest : ContentChangeTitleUpdateTestBa
     }
 }
 
-class ContentChangeTitleUpdateViaUpdateNoteContentTest : ContentChangeTitleUpdateTestBase() {
+class ContentCheckboxesTitleUpdateViaUpdateNoteContentTest : ContentCheckboxesTitleUpdateTestBase() {
     override fun persistContentChange(note: Note, content: String) {
         dataRepository.updateNoteContent(
             noteId = note.id,
