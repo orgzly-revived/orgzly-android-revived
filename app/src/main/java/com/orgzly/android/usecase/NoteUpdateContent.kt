@@ -5,9 +5,9 @@ import com.orgzly.android.data.DataRepository
 /**
  * From toggling checkboxes, folding drawers, etc.
  */
-class NoteUpdateContent(val bookId: Long, val noteId: Long, val content: String?) : UseCase() {
+class NoteUpdateContent(val noteId: Long, val content: String?) : UseCase() {
     override fun run(dataRepository: DataRepository): UseCaseResult {
-        dataRepository.updateNoteContent(bookId, noteId, content)
+        dataRepository.updateNoteContent(noteId, content)
 
         return UseCaseResult(
                 modifiesLocalData = true,

@@ -58,7 +58,6 @@ import java.util.*
 import java.util.concurrent.Callable
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.math.roundToInt
 
 // TODO: Split
 @Singleton
@@ -1163,11 +1162,15 @@ class DataRepository @Inject constructor(
         })
     }
 
-    fun updateNoteContent(bookId: Long, noteId: Long, content: String?) {
+    fun updateNoteContent(noteId: Long, content: String?) {
         db.runInTransaction {
             db.note().updateContent(noteId, content, MiscUtils.lineCount(content))
 
-            updateBookIsModified(bookId, true)
+            val note = db.note().get(noteId)!!
+
+            tryUpdateTitleCookies(note)
+
+            updateBookIsModified(note.position.bookId, true)
         }
     }
 
@@ -1517,6 +1520,8 @@ class DataRepository @Inject constructor(
             }
         }
 
+        tryUpdateTitleCookies(noteEntity.copy(id = noteId))
+
         updateBookIsModified(target.bookId, true, time)
 
         return noteEntity.copy(id = noteId)
@@ -1557,13 +1562,13 @@ class DataRepository @Inject constructor(
 
 
     fun updateNote(noteId: Long, notePayload: NotePayload): Note? {
-        val noteAndAncestors = db.note().getNoteAndAncestors(noteId)
+        val noteAndParent = db.note().getNoteAndParent(noteId)
 
-        if (noteAndAncestors.isEmpty()) return null
+        if (noteAndParent.isEmpty()) return null
 
-        val ancestors = noteAndAncestors.dropLast(1)
+        val ancestors = noteAndParent.dropLast(1)
 
-        val note = noteAndAncestors.last()
+        val note = noteAndParent.last()
         val noteParent = if (ancestors.isEmpty()) null else ancestors.last()
 
         return db.runInTransaction(Callable {
@@ -1586,8 +1591,13 @@ class DataRepository @Inject constructor(
 
             val count = db.note().update(newNote)
 
+            // first we try to update our title in case we have child tasks or checkboxes
+            tryUpdateTitleCookies(newNote)
+
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Updated $count note: $newNote")
 
+            // then we try to update our parent's title in case we're a child task with a
+            // todo/done state
             if (newNote.state != note.state && noteParent != null) {
                 tryUpdateTitleCookies(noteParent)
             }
@@ -1597,13 +1607,30 @@ class DataRepository @Inject constructor(
     }
 
     private fun tryUpdateTitleCookies(note: Note) {
+        // as of my testing in org 9.6.15, if a heading has child headings which are TODO items
+        // as well as content which are checkboxes, it's unpredictable how the title changes, but:
+        //
+        // 1. it does NOT count both the checkboxes and child headings together, but rather favors
+        //    one or the other
+        // 2. it seems to favor them in the order they appear (top-down), but also somehow seems to
+        //    favor child headings more
+        //
+        // for sanity's sake, we're just going to process for any checkboxes and then process for
+        // any children, in that order
+
         val doneKeywords = AppPreferences.doneKeywordsSet(context)
         val todoKeywords = AppPreferences.todoKeywordsSet(context)
 
         val titleUpdater = StateChangeParentTitleUpdater(todoKeywords, doneKeywords)
+
+        var newTitle = if (note.content.isNullOrEmpty()) note.title
+            else titleUpdater.updateTitleForPossibleCheckboxes(note.title, note.content)
+
         val children = getNoteChildren(note.id)
 
-        val newTitle = titleUpdater.updateTitleForStates(note.title, children.map { it.state })
+        if (children.any()) {
+            newTitle = titleUpdater.updateTitleForChildStates(newTitle, children.map { it.state })
+        }
 
         if (newTitle == note.title) {
             return
