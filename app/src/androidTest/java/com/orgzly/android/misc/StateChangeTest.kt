@@ -1,15 +1,12 @@
 package com.orgzly.android.misc
 
-import com.orgzly.android.NotesOrgExporter
 import com.orgzly.android.OrgzlyTest
-import com.orgzly.android.db.entity.BookView
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.org.datetime.OrgDateTime
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
-import java.io.StringWriter
 
 class StateChangeTest : OrgzlyTest() {
     @Before
@@ -118,13 +115,5 @@ class StateChangeTest : OrgzlyTest() {
                            "  DEADLINE: <2013-08-17 Sat +1w>\n\n"
 
         assertEquals(expectedBook, exportedBook)
-    }
-
-    private fun exportBook(book: BookView): String {
-        val sw = StringWriter()
-
-        NotesOrgExporter(dataRepository).exportBook(book.book, sw)
-
-        return sw.toString()
     }
 }

@@ -106,7 +106,7 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
 
             /* If content changes (for example by toggling the checkbox), update the note. */
             holder.binding.itemHeadContent.setOnUserTextChangeListener { str ->
-                val useCase = NoteUpdateContent(note.position.bookId, note.id, str)
+                val useCase = NoteUpdateContent(note.id, str)
 
                 App.EXECUTORS.diskIO().execute {
                     UseCaseRunner.run(useCase)
