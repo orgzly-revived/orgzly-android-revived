@@ -156,7 +156,7 @@ public class BookName {
                 String name = m.group(1);
                 String extension = m.group(2);
 
-                if (extension.equals("org")) {
+                if (extension != null && extension.equals("org")) {
                     return new BookName(repoRelativePath, name, BookFormat.ORG);
                 }
             }

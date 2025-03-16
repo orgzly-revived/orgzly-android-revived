@@ -2,6 +2,8 @@ package com.orgzly.android.repos;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,5 +64,6 @@ public interface SyncRepo {
 
     void delete(Uri uri) throws IOException;
 
+    @NonNull
     String toString();
 }
