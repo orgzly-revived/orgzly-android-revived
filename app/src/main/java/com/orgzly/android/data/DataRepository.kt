@@ -72,6 +72,7 @@ class DataRepository @Inject constructor(
         private val resources: Resources,
         private val localStorage: LocalStorage) {
 
+    @Throws(IOException::class)
     fun forceLoadBook(bookId: Long) {
         val book = getBookView(bookId)
                 ?: throw IOException(resources.getString(R.string.book_does_not_exist_anymore))

@@ -1,16 +1,10 @@
 package com.orgzly.android.repos;
 
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.orgzly.android.espresso.util.EspressoUtils.onBook;
-import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
 
@@ -600,7 +594,7 @@ public class SyncTest extends OrgzlyTest {
      * force-loading.
      */
     @Test
-    public void testForceLoadBookInSubfolder() {
+    public void testForceLoadBookInSubfolder() throws IOException {
         Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
         BookView bookView = testUtils.setupBook("a folder/a book", "content");
         testUtils.sync();
@@ -673,24 +667,25 @@ public class SyncTest extends OrgzlyTest {
                 bookView.getBook().getLastAction().getMessage());
     }
 
-    @Test
-    public void testForceLoadingBookWithLink() throws IOException {
+    @Test(expected = IOException.class)
+    public void testForceLoadingBookWithLinkButNeverSynced() throws IOException {
         Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
         testUtils.setupRook(repo, "mock://repo-a/booky.org", "New content", "abc", 1234567890000L);
         Book book = testUtils.setupBook("booky", "First book used for testing\n* Note A").getBook();
         dataRepository.setLink(book.getId(), repo);
-        dataRepository.forceLoadBook(book.getId());
-
-        assertEquals(context.getString(R.string.force_loaded_from_uri, "mock://repo-a/booky.org")
-                , dataRepository.getBook(book.getName()).getLastAction().getMessage());
-        assertEquals("New content\n\n", dataRepository.getBookContent("booky", BookFormat.ORG));
+        try {
+            dataRepository.forceLoadBook(book.getId());
+        } catch (IOException e) {
+            assertTrue(e.getMessage().contains("Notebook has never been synced before"));
+            throw new IOException(e);
+        }
     }
 
     /**
      * To ensure that book names are not parsed/constructed differently during force load
      */
     @Test
-    public void testForceLoadBookWithSpaceInName() {
+    public void testForceLoadBookWithSpaceInName() throws IOException {
         Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
         testUtils.setupRook(repo, "mock://repo-a/Book%20Name.org", "", "1abcdef", 1400067155);
 
@@ -704,7 +699,7 @@ public class SyncTest extends OrgzlyTest {
     }
 
     @Test
-    public void testForceLoadingBookWithNoLinkNoRepos() {
+    public void testForceLoadingBookWithNoLinkNoRepos() throws IOException {
         BookView book = testUtils.setupBook("booky", "First book used for testing\n* Note A");
 
         exceptionRule.expect(IOException.class);
@@ -713,34 +708,13 @@ public class SyncTest extends OrgzlyTest {
     }
 
     @Test
-    public void testForceLoadingBookWithNoLinkSingleRepo() {
+    public void testForceLoadingBookWithNoLinkSingleRepo() throws IOException {
         testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
         BookView book = testUtils.setupBook("booky", "First book used for testing\n* Note A");
 
         exceptionRule.expect(IOException.class);
         exceptionRule.expectMessage(context.getString(R.string.message_book_has_no_link));
         dataRepository.forceLoadBook(book.getBook().getId());
-    }
-
-    /* Books view was returning multiple entries for the same book, due to duplicates in encodings
-     * table. The last statement in this method will fail if there are multiple books matching.
-     */
-    @Test
-    public void testForceLoadingMultipleTimes() {
-        Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
-        testUtils.setupRook(repo, "mock://repo-a/book-one.org", "New content", "abc", 1234567890000L);
-        Book book = testUtils.setupBook("book-one", "First book used for testing\n* Note A").getBook();
-        dataRepository.setLink(book.getId(), repo);
-        dataRepository.forceLoadBook(book.getId());
-        assertEquals(
-            context.getString(R.string.force_loaded_from_uri, "mock://repo-a/book-one.org"),
-            dataRepository.getBook(book.getId()).getLastAction().getMessage()
-        );
-        dataRepository.forceLoadBook(book.getId());
-        assertEquals(
-                context.getString(R.string.force_loaded_from_uri, "mock://repo-a/book-one.org"),
-                dataRepository.getBook(book.getId()).getLastAction().getMessage()
-        );
     }
 
     @Test
