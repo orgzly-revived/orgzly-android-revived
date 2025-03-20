@@ -177,24 +177,27 @@ public class DocumentRepo implements SyncRepo {
         if (!file.exists()) {
             throw new FileNotFoundException("File " + file + " does not exist");
         }
-        DocumentFile destinationFile = getDocumentFileFromPath(repoRelativePath);
+        DocumentFile destinationDir = repoDocumentFile;
+        String fileName = Uri.parse(repoRelativePath).getLastPathSegment();
+        assert fileName != null;
         if (repoRelativePath.contains("/")) {
             if (AppPreferences.subfolderSupport(context)) {
-                DocumentFile destinationDir = ensureDirectoryHierarchy(repoRelativePath);
-                String fileName = Uri.parse(repoRelativePath).getLastPathSegment();
-                if (destinationDir.findFile(fileName) == null) {
-                    destinationFile = destinationDir.createFile("text/*", fileName);
-                }
+                destinationDir = ensureDirectoryHierarchy(repoRelativePath);
             } else {
                 throw new IOException(context.getString(R.string.subfolder_support_disabled));
             }
-        } else {
-            if (!destinationFile.exists()) {
-                repoDocumentFile.createFile("text/*", repoRelativePath);
-            }
         }
 
-        try (OutputStream out = context.getContentResolver().openOutputStream(destinationFile.getUri(), "wt")) {
+        DocumentFile existingFile = destinationDir.findFile(fileName);
+        if (existingFile != null) {
+            // #536: Delete existing file to ensure fresh timestamp
+            existingFile.delete();
+        }
+
+        DocumentFile destinationFile = destinationDir.createFile("text/*", fileName);
+        assert destinationFile != null;
+
+        try (OutputStream out = context.getContentResolver().openOutputStream(destinationFile.getUri(), "w")) {
             MiscUtils.writeFileToStream(file, out);
         }
 
