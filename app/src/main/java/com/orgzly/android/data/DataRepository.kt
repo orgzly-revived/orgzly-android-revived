@@ -1153,7 +1153,7 @@ class DataRepository @Inject constructor(
                         replaceNoteEvents(note.noteId, title, content, null)
                     }
 
-                    tryUpdateTitleCookiesOfParent(note.noteId, scl.state)
+                    tryUpdateTitleCookiesOfParent(note.noteId)
                 }
 
                 updated
@@ -1162,7 +1162,7 @@ class DataRepository @Inject constructor(
                 val ret = db.note().updateStateAndRemoveClosedTime(noteIds, state)
 
                 for (noteId in noteIds) {
-                    tryUpdateTitleCookiesOfParent(noteId, state)
+                    tryUpdateTitleCookiesOfParent(noteId)
                 }
 
                 ret
@@ -1517,7 +1517,7 @@ class DataRepository @Inject constructor(
 
         db.noteAncestor().insertAncestorsForNote(noteId)
 
-        tryUpdateTitleCookiesOfParent(noteId, notePayload.state)
+        tryUpdateTitleCookiesOfParent(noteId)
 
         tryUpdateTitleCookies(noteEntity.copy(id = noteId))
 
@@ -1605,16 +1605,11 @@ class DataRepository @Inject constructor(
         })
     }
 
-    private fun tryUpdateTitleCookiesOfParent(childNoteId: Long, childNoteState: String?) {
-        val doneKeywords = AppPreferences.doneKeywordsSet(context)
-        val todoKeywords = AppPreferences.todoKeywordsSet(context)
+    private fun tryUpdateTitleCookiesOfParent(childNoteId: Long) {
+        val ancestors = getNoteAncestors(childNoteId)
 
-        if (doneKeywords.contains(childNoteState) || todoKeywords.contains(childNoteState)) {
-            val ancestors = getNoteAncestors(childNoteId)
-
-            if (ancestors.isNotEmpty()) {
-                tryUpdateTitleCookies(ancestors.last())
-            }
+        if (ancestors.isNotEmpty()) {
+            tryUpdateTitleCookies(ancestors.last())
         }
     }
 
