@@ -1152,12 +1152,20 @@ class DataRepository @Inject constructor(
                     if (scl.isShifted) {
                         replaceNoteEvents(note.noteId, title, content, null)
                     }
+
+                    tryUpdateTitleCookiesOfParent(note.noteId)
                 }
 
                 updated
 
             } else { // Set to non-done state
-                db.note().updateStateAndRemoveClosedTime(noteIds, state)
+                val ret = db.note().updateStateAndRemoveClosedTime(noteIds, state)
+
+                for (noteId in noteIds) {
+                    tryUpdateTitleCookiesOfParent(noteId)
+                }
+
+                ret
             }
         })
     }
@@ -1509,16 +1517,7 @@ class DataRepository @Inject constructor(
 
         db.noteAncestor().insertAncestorsForNote(noteId)
 
-        val doneKeywords = AppPreferences.doneKeywordsSet(context)
-        val todoKeywords = AppPreferences.todoKeywordsSet(context)
-
-        if (doneKeywords.contains(notePayload.state) || todoKeywords.contains(notePayload.state)) {
-            val ancestors = getNoteAncestors(noteId)
-
-            if (ancestors.isNotEmpty()) {
-                tryUpdateTitleCookies(ancestors.last())
-            }
-        }
+        tryUpdateTitleCookiesOfParent(noteId)
 
         tryUpdateTitleCookies(noteEntity.copy(id = noteId))
 
@@ -1604,6 +1603,14 @@ class DataRepository @Inject constructor(
 
             newNote
         })
+    }
+
+    private fun tryUpdateTitleCookiesOfParent(childNoteId: Long) {
+        val ancestors = getNoteAncestors(childNoteId)
+
+        if (ancestors.isNotEmpty()) {
+            tryUpdateTitleCookies(ancestors.last())
+        }
     }
 
     private fun tryUpdateTitleCookies(note: Note) {

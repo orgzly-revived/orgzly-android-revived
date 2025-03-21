@@ -5,6 +5,7 @@ import com.orgzly.android.ui.NotePlace
 import com.orgzly.android.ui.Place
 import com.orgzly.android.ui.note.NotePayload
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 
 class StateChangeParentTitleUpdateTest : OrgzlyTest() {
@@ -228,5 +229,67 @@ class StateChangeParentTitleUpdateTest : OrgzlyTest() {
 
             assertEquals(expectedBook, exportedBook.trim())
         }
+    }
+
+    @Test
+    fun testTitleOfParentIsUpdatedWhenUsingSetNotesState() {
+         val book = testUtils.setupBook(
+            "book-a",
+            "* Things to do [%] [/]\n" +
+            "*** DONE Add percentage and fraction cookie handling for titles\n" +
+            "*** TODO Write integration tests for same")
+
+        val firstNote = dataRepository
+            .getLastNote("Add percentage and fraction cookie handling for titles")!!
+        val secondNote = dataRepository.getLastNote("Write integration tests for same")!!
+
+        dataRepository.setNotesState(
+            setOf(firstNote.id, secondNote.id),
+            "DONE"
+        )
+
+        // can't use exportBook here because there are going to be CLOSED stamps involved, and we
+        // don't know what date/time they will have.  instead we'll just look it up by the adjusted
+        // title it should have now, and if it's not null then we know it worked.
+
+        val parentNote = dataRepository.getLastNote("Things to do [100%] [2/2]")
+
+        assertNotNull(parentNote)
+    }
+
+    @Test
+    fun testTitleOfParentIsUpdatedWhenUsingSetNotesStateToDone() {
+         val book = testUtils.setupBook(
+            "book-a",
+            "* Things to do [%] [/]\n" +
+            "*** DONE Add percentage and fraction cookie handling for titles\n" +
+            "*** TODO Write integration tests for same")
+
+        val secondNote = dataRepository.getLastNote("Write integration tests for same")!!
+
+        dataRepository.setNoteStateToDone(secondNote.id)
+
+        val parentNote = dataRepository.getLastNote("Things to do [100%] [2/2]")
+
+        assertNotNull(parentNote)
+    }
+
+    @Test
+    fun testTitleOfParentIsUpdatedWhenUsingToggleNoteState() {
+         val book = testUtils.setupBook(
+            "book-a",
+            "* Things to do [%] [/]\n" +
+            "*** DONE Add percentage and fraction cookie handling for titles\n" +
+            "*** TODO Write integration tests for same")
+
+        val firstNote = dataRepository
+            .getLastNote("Add percentage and fraction cookie handling for titles")!!
+        val secondNote = dataRepository.getLastNote("Write integration tests for same")!!
+
+        dataRepository.toggleNotesState(setOf(firstNote.id, secondNote.id))
+
+        val parentNote = dataRepository.getLastNote("Things to do [100%] [2/2]")
+
+        assertNotNull(parentNote)
     }
 }
