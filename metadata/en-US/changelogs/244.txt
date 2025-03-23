@@ -1,0 +1,2 @@
+• Update title percentage/fraction cookies to reflect TODO and checkbox statistics.
+• Update translations.
