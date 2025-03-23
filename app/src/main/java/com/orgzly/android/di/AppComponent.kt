@@ -12,11 +12,10 @@ import com.orgzly.android.reminders.NoteReminders
 import com.orgzly.android.reminders.RemindersBroadcastReceiver
 import com.orgzly.android.sync.SyncWorker
 import com.orgzly.android.ui.BookChooserActivity
-import com.orgzly.android.ui.logs.AppLogsActivity
 import com.orgzly.android.ui.TemplateChooserActivity
 import com.orgzly.android.ui.books.BooksFragment
+import com.orgzly.android.ui.logs.AppLogsActivity
 import com.orgzly.android.ui.main.MainActivity
-import com.orgzly.android.ui.sync.SyncFragment
 import com.orgzly.android.ui.note.NoteFragment
 import com.orgzly.android.ui.notes.NotesFragment
 import com.orgzly.android.ui.notes.book.BookFragment
@@ -33,7 +32,10 @@ import com.orgzly.android.ui.repos.ReposActivity
 import com.orgzly.android.ui.savedsearch.SavedSearchFragment
 import com.orgzly.android.ui.savedsearches.SavedSearchesFragment
 import com.orgzly.android.ui.settings.SettingsActivity
+import com.orgzly.android.ui.settings.exporting.SettingsExportFragment
+import com.orgzly.android.ui.settings.importing.SettingsImportFragment
 import com.orgzly.android.ui.share.ShareActivity
+import com.orgzly.android.ui.sync.SyncFragment
 import com.orgzly.android.usecase.UseCaseRunner
 import com.orgzly.android.usecase.UseCaseWorker
 import com.orgzly.android.widgets.ListWidgetProvider
@@ -74,6 +76,8 @@ interface AppComponent {
     fun inject(arg: SavedSearchesFragment)
     fun inject(arg: SavedSearchFragment)
     fun inject(arg: RefileFragment)
+    fun inject(arg: SettingsExportFragment)
+    fun inject(arg: SettingsImportFragment)
     fun inject(arg: SyncFragment)
 
     fun inject(arg: SyncWorker)

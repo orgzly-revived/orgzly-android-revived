@@ -9,6 +9,8 @@ import android.os.Environment;
 
 import androidx.annotation.StringRes;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.orgzly.R;
 import com.orgzly.android.App;
 import com.orgzly.android.LocalStorage;
@@ -20,7 +22,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -60,6 +64,16 @@ public class AppPreferences {
         return values;
     }
 
+    public static void setDefaultPrefsFromJsonMap(Context context, Map<String, ?> parsedMap) {
+        SharedPreferences prefs = getDefaultSharedPreferences(context);
+        setPrefsFromValues(prefs, parsedMap);
+    }
+
+    public static JsonElement getDefaultPrefsAsJsonObject(Context context) {
+        Gson gson = new Gson();
+        return gson.toJsonTree(getDefaultSharedPreferences(context).getAll());
+    }
+
     public static void setAllFromValues(Context context, AppPreferencesValues values) {
         AppPreferences.clearAllSharedPreferences(context);
 
@@ -92,6 +106,10 @@ public class AppPreferences {
 
             } else if (value instanceof Set) {
                 edit.putStringSet(key, (Set) value);
+
+            } else if (value instanceof ArrayList) {
+                HashSet<String> set = new HashSet<>((Collection<? extends String>) value);
+                edit.putStringSet(key, set);
             }
         }
 
@@ -1141,6 +1159,20 @@ public class AppPreferences {
     public static void subfolderSupport(Context context, boolean value) {
         String key = context.getResources().getString(R.string.pref_key_enable_repo_subfolders);
         getDefaultSharedPreferences(context).edit().putBoolean(key, value).apply();
+    }
+
+    /*
+     * Export and import of user settings
+     */
+
+    public static String settingsExportAndImportNoteId(Context context) {
+        return getDefaultSharedPreferences(context).getString(
+                context.getResources().getString(R.string.pref_key_note_id_for_settings_export_and_import), "");
+    }
+
+    public static void settingsExportAndImportNoteId(Context context, String value) {
+        String key = context.getResources().getString(R.string.pref_key_note_id_for_settings_export_and_import);
+        getDefaultSharedPreferences(context).edit().putString(key, value).apply();
     }
 
     /*

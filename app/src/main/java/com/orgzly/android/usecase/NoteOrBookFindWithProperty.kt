@@ -4,10 +4,10 @@ import com.orgzly.android.data.DataRepository
 
 class NoteOrBookFindWithProperty(val name: String, val value: String) : UseCase() {
     override fun run(dataRepository: DataRepository): UseCaseResult {
-        val noteOrBook = dataRepository.findNoteOrBookHavingProperty(name, value)
+        val notesOrBooks = dataRepository.findNotesOrBooksHavingProperty(name, value)
 
         return UseCaseResult(
-                userData = noteOrBook
+                userData = notesOrBooks
         )
     }
 }

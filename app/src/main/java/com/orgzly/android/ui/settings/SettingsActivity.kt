@@ -7,7 +7,11 @@ import com.orgzly.android.App
 import com.orgzly.android.ui.CommonActivity
 import com.orgzly.android.ui.settings.SettingsFragment.Listener
 import com.orgzly.android.ui.showSnackbar
-import com.orgzly.android.usecase.*
+import com.orgzly.android.usecase.BookImportGettingStarted
+import com.orgzly.android.usecase.DatabaseClear
+import com.orgzly.android.usecase.UseCase
+import com.orgzly.android.usecase.UseCaseRunner
+import com.orgzly.android.usecase.UseCaseWorker
 import com.orgzly.databinding.ActivitySettingsBinding
 
 class SettingsActivity : CommonActivity(), Listener {

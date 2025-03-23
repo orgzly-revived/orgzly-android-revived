@@ -26,6 +26,8 @@ import com.orgzly.android.usecase.UseCase
 import com.orgzly.android.util.AppPermissions
 import com.orgzly.android.util.LogUtils
 import com.orgzly.android.widgets.ListWidgetProvider
+import com.orgzly.android.ui.settings.exporting.SettingsExportFragment
+import com.orgzly.android.ui.settings.importing.SettingsImportFragment
 
 /**
  * Displays settings.
@@ -64,6 +66,20 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         preference(R.string.pref_key_clear_database)?.let {
             it.setOnPreferenceClickListener {
                 listener?.onDatabaseClearRequest()
+                true
+            }
+        }
+
+        preference(R.string.pref_key_export_settings)?.let {
+            it.setOnPreferenceClickListener {
+                SettingsExportFragment().show(childFragmentManager, SettingsExportFragment.FRAGMENT_TAG)
+                true
+            }
+        }
+
+        preference(R.string.pref_key_import_settings)?.let {
+            it.setOnPreferenceClickListener {
+                SettingsImportFragment().show(childFragmentManager, SettingsImportFragment.FRAGMENT_TAG)
                 true
             }
         }
