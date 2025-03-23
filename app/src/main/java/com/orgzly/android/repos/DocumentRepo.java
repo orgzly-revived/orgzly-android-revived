@@ -190,8 +190,7 @@ public class DocumentRepo implements SyncRepo {
 
         DocumentFile existingFile = destinationDir.findFile(fileName);
         if (existingFile != null) {
-            // #536: Delete existing file to ensure fresh timestamp
-            existingFile.delete();
+            existingFile.delete();  // #536: Delete existing file to ensure fresh timestamp
         }
 
         DocumentFile destinationFile = destinationDir.createFile("text/*", fileName);
@@ -201,7 +200,9 @@ public class DocumentRepo implements SyncRepo {
             MiscUtils.writeFileToStream(file, out);
         }
 
-        long mtime = destinationFile.lastModified();
+        // We can't use destinationFile.lastModified() here, because some
+        // ContentProviders will not yet have set it.
+        long mtime = System.currentTimeMillis();
         String rev = String.valueOf(mtime);
 
         return new VersionedRook(repoId, RepoType.DOCUMENT, getUri(), destinationFile.getUri(), rev, mtime);
