@@ -27,7 +27,7 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Update title percentage/fraction cookies to reflect TODO and checkbox changes." />
+            app:text="Update title percentage/fraction cookies to reflect TODO and checkbox statistics." />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
