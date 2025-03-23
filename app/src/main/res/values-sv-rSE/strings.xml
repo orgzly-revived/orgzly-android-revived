@@ -357,9 +357,9 @@
     <string name="warning_period_description">Varna om att deadline närmar sig eller har passerat</string>
     <string name="displayed_book_details_local_mtime">Lokal modifieringstid</string>
     <string name="displayed_book_details_link_url">Länk-URL</string>
-    <string name="displayed_book_details_sync_url">Synkronisera URL</string>
-    <string name="displayed_book_details_sync_mtime">Synkronisera ändringstidpunkt</string>
-    <string name="displayed_book_details_sync_revision">Synkronisera version</string>
+    <string name="displayed_book_details_sync_url">URL för synkning</string>
+    <string name="displayed_book_details_sync_mtime">Synkad modifieringstid</string>
+    <string name="displayed_book_details_sync_revision">Synkad version</string>
     <string name="displayed_book_details_selected_encoding">Vald teckenkodning</string>
     <string name="displayed_book_details_detected_encoding">Igenkänd teckenkodning</string>
     <string name="displayed_book_details_used_encoding">Använd teckenkodning</string>
@@ -488,6 +488,7 @@
     <string name="styled_text_with_marks_title">Formaterad text med tecken</string>
     <string name="styled_text_with_marks_summary">Visa tecken (t.ex. *fetstil*)</string>
     <string name="no_such_link_target">Anteckning med egenskapen ”%1$s” satt till ”%2$s” hittades inte</string>
+    <string name="error_multiple_notes_with_matching_property_value">Hittade flera anteckningar med egenskapen ”%1$s” satt till ”%2$s\"</string>
     <plurals name="imported_searches">
         <item quantity="one">Importerade en sökning</item>
         <item quantity="other">Importerade <b>%d</b> sökningar</item>
@@ -650,4 +651,21 @@
     <string name="sync_status_saved">Sparades till %s</string>
     <string name="moving_between_subdirectories_requires_api_24">Android 7 eller nyare krävs för att flytta en anteckningsbok till en annan underkatalog</string>
     <string name="subfolder_support_disabled">Stöd för underkataloger är avstängt</string>
+    <string name="export_settings_to_note">Exportera inställningar till en anteckning</string>
+    <string name="import_settings_from_note">Importera inställningar från en anteckning</string>
+    <string name="settings_exported_to">Inställningarna exporterades till anteckningen ”%1$s”</string>
+    <string name="settings_imported_from">Inställningarna importerades från anteckningen ”%1$s”</string>
+    <string name="settings_imported">Importerade inställningar och sparade sökningar</string>
+    <string name="settings_could_not_be_imported">Misslyckades med att importera inställningar och sparade sökningar</string>
+    <string name="failed_to_get_note_payload">Kunde inte läsa anteckningens innehåll</string>
+    <string name="export_settings">Exportera appens inställningar</string>
+    <string name="export_settings_summary">Spara en JSON-representation av alla inställningar till en anteckning som du väljer</string>
+    <string name="import_settings">Importera appens inställningar</string>
+    <string name="import_settings_summary">Importera inställningar i JSON-form från en anteckning som du väljer</string>
+    <string name="export_settings_warning_text">VARNING! Den anteckning du väljer kommer att skrivas över helt och hållet!</string>
+    <string name="selected_notes_id_property_value_is_not_unique">Fel: Den valda anteckningens ”ID”-egenskap har ett värde som inte är unikt (överväg att ändra det)</string>
+    <string name="error">Fel</string>
+    <string name="note_does_not_contain_valid_json">Anteckningen innehåller inte giltig JSON.</string>
+    <string name="imported_json_is_missing_mandatory_fields">Den importerade JSON-strukturen saknar obligatoriska fält.</string>
+    <string name="note_has_no_content">Anteckningen har inget innehåll.</string>
 </resources>
