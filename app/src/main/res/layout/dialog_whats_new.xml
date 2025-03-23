@@ -22,6 +22,15 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.39"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Allow export/import of settings and saved searches to/from a note of choice." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.38"
             tools:ignore="HardcodedText" />
 
