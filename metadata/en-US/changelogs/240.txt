@@ -1,0 +1,3 @@
+• Remove notification LED color setting due to a bug.
+• Update translations.
+• Dependency upgrades.

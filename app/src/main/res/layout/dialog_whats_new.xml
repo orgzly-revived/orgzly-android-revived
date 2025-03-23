@@ -22,6 +22,19 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.8.38"
+            tools:ignore="HardcodedText" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Update title percentage/fraction cookies to reflect TODO and checkbox statistics." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Update translations." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.37"
             tools:ignore="HardcodedText" />
 
