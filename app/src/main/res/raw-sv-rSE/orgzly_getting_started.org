@@ -24,14 +24,25 @@ Om du söker efter anteckningar taggade med “tag1” med hjälp av sökfrågan
 
 *** En anteckning med taggen =ARCHIVE= visas som utgråad :ARCHIVE:
 
-** TODO Anteckningar kan ha en status
+** Anteckningar kan ha en status
 
 Du kan själv konfigurera valfritt antal möjliga statusar: TODO, NEXT, DONE, osv.
 
-*** Det finns två /typer/ av status: att-göra och klar
+*** TODO Det finns två /typer/ av status: ”to-do” och ”klar”
 
 *** DONE Denna antecknings status är av typen /klar/
 CLOSED: [2018-01-24 Wed 17:00]
+
+** En antecknings rubrik kan visa status hos dess underordnade anteckningar [1/3] [33%]
+
+*** TODO För att se kvoten mellan TODO- och DONE-statusar, lägg till [/] i rubriken
+
+*** TODO För att visa relationen mellan TODO- och DONE-status i procent, lägg till [%] i rubriken
+
+*** DONE Båda två kan användas samtidigt
+CLOSED: [2025-03-13 Thu 08:37]
+
+Ordningen har ingen betydelse, och siffrorna uppdateras automatiskt.
 
 ** Anteckningar kan schemaläggas till en viss tidpunkt
 SCHEDULED: <2015-02-20 Fri 15:15>
@@ -76,6 +87,12 @@ Text kan visas som *fetstilt*, /kursiv/, _understruken_, =ordagrann=, ~kod~ och 
 - [ ] Uppgift 3
 
 Klicka i rutan för att klarmarkera den. Tryck på Enter vid slutet av den sista raden för att lägga till en post i listan.
+
+** En antecknings rubrik kan också visa status hos checklistor [66%] [2/3]
+
+- [X] Uppgift 1
+- [ ] Uppgift 2
+- [X] Uppgift 3
 
 * Söka
 ** Orgzly stöder många olika sökoperatorer
