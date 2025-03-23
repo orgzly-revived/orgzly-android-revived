@@ -78,6 +78,9 @@ captures/
 # Keystore files
 *.jks
 
+# Generated Kotlin files
+.kotlin
+
 ### Android Patch ###
 gen-external-apklibs
 
@@ -126,8 +129,12 @@ flycheck_*.el
 # projectiles files
 .projectile
 
+# direnv
+.direnv
+
 ### Gradle ###
 .gradle
+.project
 build/
 
 # Ignore Gradle GUI config
