@@ -10,20 +10,14 @@
     <string name="clear">Limpar</string>
     <string name="cancel">Cancelar</string>
     <string name="create">Criar</string>
-    <string name="new_">Novo</string>
     <!-- "new" is reserved -->
-    <string name="select">Selecionar</string>
     <string name="set">Definir</string>
-    <string name="add">Adicionar</string>
     <string name="not_now">Agora não</string>
     <string name="save">Salvar</string>
     <string name="discard">Descartar</string>
     <string name="remove_notebook_link">Remover vínculo</string>
     <string name="browse">Localizar</string>
     <string name="dropbox">Dropbox</string>
-    <string name="view">Visualização</string>
-    <string name="edit">Editar</string>
-    <string name="edit_note">Editar nota</string>
     <string name="delete">Excluir</string>
     <string name="delete_with_quoted_argument">Excluir “%s”</string>
     <string name="delete_amount_of_books">Remover %d cadernos</string>
@@ -42,23 +36,16 @@
     <string name="created">Criado</string>
     <string name="states">Estados</string>
     <string name="note">Nota</string>
-    <string name="notes">Notas</string>
     <string name="property">Propriedade</string>
     <string name="import_as">Importar como…</string>
     <string name="new_notebook">Novo caderno</string>
     <string name="new_folder">Nova pasta</string>
     <string name="scheduled">Agendado</string>
     <string name="agenda">Agenda</string>
-    <string name="agenda_period">Dias da agenda</string>
-    <string name="time">Horário</string>
-    <string name="repeater">Repetir</string>
     <string name="state">Estado</string>
     <string name="priority">Prioridade</string>
-    <string name="nothing">Nada</string>
     <string name="open">Abrir</string>
-    <string name="focus">Foco</string>
     <string name="widget">Widget</string>
-    <string name="history">Histórico</string>
     <string name="event">Evento</string>
     <plurals name="notes_cut">
         <item quantity="one">Nota cortada</item>
@@ -75,7 +62,6 @@
     </plurals>
     <string name="no_notes_pasted">Nada para colar</string>
     <string name="fragment_note_title_hint">Título</string>
-    <string name="fragment_note_tags_hint" tools:ignore="typos">tag</string>
     <string name="import_org_file">Importar arquivo Org</string>
     <string name="message_dropbox_unlinked">Desvincular do Dropbox</string>
     <string name="message_dropbox_linked">Vinculado ao Dropbox com sucesso</string>
@@ -89,20 +75,16 @@
     <string name="ssh_show_public_key_preference_title">Exibir chave pública SSH gerada</string>
     <string name="message_book_has_no_link">Nenhum link definido</string>
     <string name="message_note_created">Nota criada</string>
-    <string name="message_failed_creating_note">Falha ao criar nota</string>
-    <string name="message_failed_updating_note">Falha ao atualizar nota</string>
     <string name="drawer_close">Fechar menu</string>
     <string name="drawer_open">Abrir menu</string>
     <string name="schedule">Agendamento</string>
     <string name="refile">Recarregar</string>
-    <string name="refile_to">Movido para</string>
     <string name="deadline">Prazo</string>
     <string name="closed">Fechado</string>
     <!-- TODO: Not hints, rename -->
     <string name="schedule_button_hint">Horário para agendamento</string>
     <string name="deadline_button_hint">Prazo limite</string>
     <string name="closed_button_hint">Finalizado</string>
-    <string name="fragment_note_content_hint">Conteúdo da nota</string>
     <string name="books_context_menu_item_rename">Renomear</string>
     <string name="books_context_menu_item_set_link">Definir Link</string>
     <string name="books_context_menu_item_force_save">Forçar Salvar</string>
@@ -122,7 +104,6 @@
     <string name="quick_note">Nota rápida</string>
     <string name="tap_to_create_new_note">Toque para criar uma nova nota</string>
     <string name="options_menu_item_search">Pesquisar</string>
-    <string name="no_user_repos_configured_pref_summary">Nenhum configurado ainda</string>
     <string name="repos_options_menu_new_repo">Novo repositório</string>
     <string name="book_name_already_exists">Caderno %s já existe</string>
     <string name="filter_name_already_exists">Já existe uma pesquisa com o mesmo nome</string>
@@ -140,14 +121,11 @@
     <string name="book_does_not_exist_anymore">Este caderno não existe mais.</string>
     <string name="note_does_not_exist_anymore">Esta nota não existe mais.</string>
     <string name="search_does_not_exist_anymore">Esta busca não existe mais.</string>
-    <string name="fragment_query_title">Pesquisar</string>
     <string name="repo_dropbox_button_not_linked">Vincular ao Dropbox</string>
     <string name="repo_dropbox_button_linked">Desvincular do Dropbox</string>
-    <string name="fragment_settings_title">Configurações</string>
     <string name="notes_update_needed_dialog_title">Preferência afeta notas</string>
     <string name="notes_update_needed_dialog_message">Atualizar notas para refletir as alterações?</string>
     <string name="updating_notes">Atualizando notas…</string>
-    <string name="failure">Uh oh</string>
     <string name="no_notes_found_after_search">Sua pesquisa não correspondeu a nenhuma nota</string>
     <string name="today">Hoje</string>
     <string name="tomorrow">Amanhã</string>
@@ -163,7 +141,6 @@
     <string name="notebooks">Cadernos</string>
     <string name="searches">Pesquisas</string>
     <string name="search">Pesquisa</string>
-    <string name="new_search">Nova Pesquisa</string>
     <string name="multiple_repos">Múltiplos repositórios existentes</string>
     <string name="no_repos">Nenhum repositório configurado</string>
     <string name="no_books">No notebooks found</string>
@@ -171,7 +148,6 @@
     <string name="collecting_notebooks_in_progress">Coletando cadernos…</string>
     <string name="syncing_in_progress">Sincronizando…</string>
     <string name="syncing_book">Sincronizando %s…</string>
-    <string name="sync_with_argument">Sincronizado: %s</string>
     <string name="syncing_failed_title">Falha na sincronização</string>
     <string name="canceled">Cancelado</string>
     <string name="canceling">Cancelando…</string>
@@ -185,23 +161,13 @@
     <string name="git_ssh_on_missing_key_dialog_text">Nenhum par de chaves SSH encontrado. Deseja gerar um?</string>
     <string name="git_ssh_on_missing_key_dialog_title">Nenhuma chave SSH encontrada</string>
     <string name="git_https_username_hint">Nome do Usuário</string>
-    <string name="git_https_password_hint">Senha</string>
     <string name="git_author_hint">Autor (por exemplo, John Doe)</string>
     <string name="git_email_hint">Email (por exemplo, john@email.com)</string>
     <string name="git_branch_hint">Branch (por exemplo, master)</string>
-    <string name="git_auth_https_username_hint">Nome do Usuário</string>
     <string name="git_auth_https_password_hint">Senha</string>
-    <string name="git_generate_key_pair">Gerar par de chaves</string>
-    <string name="git_copy_public_key">Copiar chave pública</string>
-    <string name="git_auth_type_text">Tipo de autenticação</string>
-    <string name="git_auth_type_ssh">SSH</string>
-    <string name="git_auth_type_https">HTTPS</string>
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
-    <string name="git_clone_error_ssh_auth">Falha ao clonar, erro na autenticação</string>
-    <string name="git_clone_error_ssh">Falha ao clonar: %s</string>
     <string name="git_clone_error_invalid_repo">O endereço remoto não é um repositório git</string>
-    <string name="git_clone_error_unknown">Erro desconhecido ao clonar</string>
     <string name="git_clone_error_invalid_target_dir">O diretório de destino não existe</string>
     <string name="git_clone_error_target_not_empty">O diretório de destino não existe</string>
     <string name="git_clone_error_uri_not_supported">O endereço remoto não é um repositório git</string>
@@ -212,18 +178,12 @@
     <string name="webdav_test_error_auth">Login ou senha inválidos</string>
     <string name="webdav_test_error_unknown">Ocorreu um erro desconhecido</string>
     <!-- Share button - error messages (set as title). -->
-    <string name="share_action_not_set">Ação de compartilhar não definida</string>
     <string name="share_action_not_supported">Ação de compartilhamento %s não é suportada</string>
-    <string name="share_type_not_set">Tipo de compartilhamento não definido</string>
     <string name="share_type_not_supported">Tipo de compartilhamento %s não é suportado</string>
     <string name="repositories">Repositórios</string>
     <string name="repository_not_valid_with_reason">Repositório inválido: %s</string>
     <string name="invalid_repo_url">URL inválida para o repositório “%s”</string>
     <string name="repository_url_already_exists">Repositório com esta URL já existe</string>
-    <string name="fragment_left_drawer_list_view_content_description">Gaveta Esquerda</string>
-    <string name="drawer_item">Item da gaveta</string>
-    <string name="prev_state">Estado anterior</string>
-    <string name="next_state">Próximo estado</string>
     <string name="new_above">Nova acima</string>
     <string name="new_under">Nova dentro</string>
     <string name="new_below">Nova abaixo</string>
@@ -239,17 +199,14 @@
     <string name="no_filters">Você não tem nenhuma pesquisa salva</string>
     <string name="book_shortcut_label">Caderno</string>
     <string name="new_note_shortcut_label">Nova nota</string>
-    <string name="pick_a_notebook">Escolha um caderno</string>
     <string name="down">Abaixo</string>
     <string name="up">Acima</string>
-    <string name="notebook_modified">Caderno modificado</string>
     <string name="permissions_rationale_for_local_repo">Sincronizar com um diretório local requer permissão de armazenamento</string>
     <string name="permissions_rationale_for_book_export">A exportação do caderno requer permissão de armazenamento</string>
     <string name="permissions_rationale_for_sync_start">Sincronização com repositórios locais requer permissão de armazenamento</string>
     <string name="permissions_rationale_for_external_files_access">Acesso a arquivos externos requer permissão de armazenamento</string>
     <string name="permissions_rationale_for_post_notifications">É necessária permissão para postar notificações</string>
     <string name="cycle_visibility">Dobrar/Desdobrar Tudo</string>
-    <string name="running_database_update">Atualizando banco de dados…</string>
     <string name="note_has_been_modified">Nota modificada</string>
     <string name="discard_or_save_changes">Salvar alterações?</string>
     <string name="rename">Renomear</string>
@@ -261,13 +218,10 @@
     <string name="also_delete_linked_books">Excluir qualquer caderno remoto vinculado</string>
     <string name="message_deleting_book_failed">Falha ao excluir caderno: %s</string>
     <string name="message_book_deleted">Caderno excluído</string>
-    <string name="priority_with_argument">Prioridade %s</string>
     <string name="default_priority">Prioridade padrão</string>
     <string name="lowest_priority">Prioridade mais baixa</string>
     <string name="todo_states">Palavras-chave para tarefas ativas (todo)</string>
     <string name="done_states">Palavras-chave para tarefas concluídas (done)</string>
-    <string name="created_at">Criado em</string>
-    <string name="insert_note_creation_time">Inserir horário de criação das notas</string>
     <string name="use_created_at_property">Usar propriedade para - criado em</string>
     <string name="use_created_at_property_summary">Sincronizar criado-em usando uma propriedade</string>
     <string name="created_at_property">Propriedade - Criado em</string>
@@ -307,7 +261,6 @@
     <string name="prefs_title_new_note">Nova nota</string>
     <string name="prefs_title_notifications">Notificações</string>
     <string name="app">Aplicativo</string>
-    <string name="no_repos_configured">Nenhum repositório configurado</string>
     <string name="test_connection">Teste de conexão</string>
     <string name="connecting">Conectando…</string>
     <string name="no_connection">Sem conexão</string>
@@ -332,7 +285,6 @@
     <string name="org_indent_mode">Ajustar baseado na indentação</string>
     <string name="org_indent_mode_summary">Enviar modo de indentação para a conta</string>
     <string name="org_indent_indentation_per_level">Indentação por nível</string>
-    <string name="add_property">Adicionar propriedade</string>
     <string name="priority_a_highest">A (maior prioridade)</string>
     <string name="priority_z_lowest">Z (prioridade mais baixa)</string>
     <string name="hour">Hora</string>
@@ -364,7 +316,6 @@
     <string name="displayed_book_details_used_encoding">Codificação utilizada</string>
     <string name="displayed_book_details_last_action">Última ação</string>
     <string name="displayed_book_details_notes_count">Contagem das notas</string>
-    <string name="color_scheme_system">System</string>
     <string name="color_scheme_dynamic">Dynamic color</string>
     <string name="color_scheme_light">Claro</string>
     <string name="color_scheme_dark">Escuro</string>
@@ -385,17 +336,11 @@
         <item quantity="other">Excluir <b>%d</b> notas?</item>
     </plurals>
     <!-- Unused -->
-    <string name="delete_note">Excluir nota</string>
-    <string name="delete_notes">Excluir notas</string>
-    <string name="delete_note_and_all_subnotes">Excluir esta nota e todas suas sub-notas?</string>
-    <string name="delete_notes_and_all_subnotes">Excluir notas e todas as suas sub notas?</string>
     <plurals name="notes_deleted">
         <item quantity="one">Nota excluída</item>
         <item quantity="other"><b>%d</b> notas excluídas</item>
     </plurals>
     <string name="no_notes_deleted">Nenhuma nota excluída</string>
-    <string name="note_content_finish_editing">Ver conteúdo</string>
-    <string name="note_content_start_editing">Editar conteúdo</string>
     <string name="duplicate_keywords_not_allowed">Palavra-chave %s já usada</string>
     <string name="no_states_defined">Nenhum estado definido</string>
     <string name="book_name_in_search">Nome do caderno nos resultados de pesquisa</string>
@@ -431,10 +376,6 @@
     <string name="keep_screen_on_summary">Exibir item do menu para alternar a opção</string>
     <string name="keep_screen_on">Manter a tela ligada</string>
     <string name="keep_screen_on_desc">Sua tela não será desligada até que você desabilite essa opção</string>
-    <string name="layout_direction">Direção do layout</string>
-    <string name="layout_direction_locale">Padrão</string>
-    <string name="layout_direction_ltr">Esquerda para direita</string>
-    <string name="layout_direction_rtl">Direita para esquerda</string>
     <string name="preface_in_book">Prefácio do caderno</string>
     <string name="preface_in_book_full">Exibir</string>
     <string name="preface_in_book_hide">Ocultar</string>
@@ -451,9 +392,7 @@
     <string name="notebooks_start_folded_summary">Recolher todas as notas quando o caderno é carregado</string>
     <string name="list_widget_name">Pesquisa salva</string>
     <string name="list_widget_select_search">Selecionar a pesquisa</string>
-    <string name="list_widget_nothing_selected">Nenhuma pesquisa selecionada</string>
     <string name="auto_sync">Auto-sincronizar</string>
-    <string name="auto_sync_experimental_summary">Usado para repositórios locais apenas</string>
     <string name="auto_sync_summary">Not supported for Dropbox</string>
     <string name="auto_sync_warning">Dependendo das opções que você escolher, a sincronização pode ser acionada com frequência. Se o caderno for modificado, todo o conteúdo será transferido para o repositório. Certas ações podem ser atrasadas enquanto a sincronização estiver em andamento.</string>
     <string name="pref_title_sync_after_note_create">Nota criada</string>
@@ -508,7 +447,6 @@
     <string name="sync_failed_channel_description">Mostrar quando a sincronização falhar</string>
     <string name="notification_channel_settings">Notificações</string>
     <string name="notification_channel_settings_summary">Som, vibração e ponto de notificação</string>
-    <string name="hide_note_metadata">Ocultar metadados</string>
     <string name="overwrite_local_notebook_question">Substituir caderno local?</string>
     <string name="overwrite_remote_notebook_question">Substituir caderno remoto?</string>
     <string name="drawers_folded_by_default">Desenhos recolhidos</string>
@@ -525,7 +463,6 @@
     <string name="show_all">Mostrar tudo</string>
     <string name="always_show_set">Exibir sempre</string>
     <string name="show_selected">Exibir selecionados</string>
-    <string name="hide_all">Ocultar tudo</string>
     <string name="external_file_no_app_found">Nenhum aplicativo encontrado para abrir este arquivo</string>
     <string name="failed_to_open_linked_file_with_reason">Falha ao abrir o arquivo: %s</string>
     <string name="images">Imagens</string>
@@ -539,11 +476,9 @@
     <string name="argument_detected">%s detectada(s)</string>
     <string name="argument_selected">%s selecionado(s)</string>
     <string name="fixed_width_value">Largura (em pixels)</string>
-    <string name="share_target_service">Compartilhar para o caderno Orgzly</string>
     <string name="under">Dentro</string>
     <string name="above">Acima</string>
     <string name="below">Abaixo</string>
-    <string name="loading">Carregando…</string>
     <string name="go_to">Ir para</string>
     <string name="cannot_refile_to_the_same_subtree">Não é possível recriar para a mesma sub-árvore</string>
     <string name="notification_maximum_priority">Máxima</string>
@@ -562,16 +497,12 @@
     </plurals>
     <string name="display_checkmarks">Exibir marcadores</string>
     <string name="display_checkmarks_summary">Permitir marcar notas como concluídas</string>
-    <string name="last_used">Usado pela última vez</string>
-    <string name="note_details_opening_mode">Modo de abertura</string>
     <string name="cleartext_traffic">Tráfego sem texto</string>
     <string name="cleartext_traffic_message">Você tem certeza que deseja usar esta URL?</string>
     <string name="credentials_in_url_not_supported">Não há suporte para inserir credenciais na URL</string>
-    <string name="access_token">Token de acesso</string>
     <string name="trusted_certificates">Certificados confiáveis</string>
     <string name="add_trusted_certificates_optional">Adicionar certificados confiáveis (opcional)</string>
     <string name="edit_trusted_certificates">Editar certificados confiáveis</string>
-    <string name="this_action_cannot_be_undone">Esta ação não pode ser desfeita.</string>
     <plurals name="paste_note_or_notes_with_count">
         <item quantity="one">Colar nota</item>
         <item quantity="other">Colar <b>%d</b> notas</item>
@@ -619,11 +550,9 @@
     <string name="ssh_keygen_generating_progress">Gerando chaves…</string>
     <string name="ssh_key_failed_get_public">Falha ao resgatar chave SSH pública</string>
     <string name="ssh_key_failed_get_private">Falha ao resgatar chave SSH privada</string>
-    <string name="ssh_key_failed_unlock_private">Falha ao desbloquear chave SSH privada</string>
     <string name="biometric_prompt_title_ssh_keygen">Gerar chave SSH</string>
     <string name="biometric_prompt_title_unlock_ssh_key">Desbloquear chave SSH do Orgzly</string>
     <string name="biometric_auth_not_available">A autenticação biométrica não está disponível</string>
-    <string name="biometric_auth_on_error">Erro de autenticação: Código: %1$d (%2$s)</string>
     <string name="ssh_keygen_message">%1$s\n\nForneça esta chave pública ao seu servidor Git.</string>
     <string name="your_public_key">Sua chave pública</string>
     <string name="ssh_keygen_share">Compartilhar</string>

@@ -10,20 +10,14 @@
     <string name="clear">Išvalyti</string>
     <string name="cancel">Atšaukti</string>
     <string name="create">Sukurti</string>
-    <string name="new_">Nauja</string>
     <!-- "new" is reserved -->
-    <string name="select">Pasirinkti</string>
     <string name="set">Nustatyti</string>
-    <string name="add">Pridėti</string>
     <string name="not_now">Ne dabar</string>
     <string name="save">Išsaugoti</string>
     <string name="discard">Atmesti</string>
     <string name="remove_notebook_link">Pašalinti siejimą</string>
     <string name="browse">Naršyti</string>
     <string name="dropbox">Dropbox</string>
-    <string name="view">Rodymas</string>
-    <string name="edit">Redaguoti</string>
-    <string name="edit_note">Redaguoti įrašą</string>
     <string name="delete">Pašalinti</string>
     <string name="delete_with_quoted_argument">Pašalinti „%s“</string>
     <string name="delete_amount_of_books">Ištrinti %d užrašines</string>
@@ -42,23 +36,16 @@
     <string name="created">Sukurta</string>
     <string name="states">Būsenos</string>
     <string name="note">Įrašas</string>
-    <string name="notes">Įrašai</string>
     <string name="property">Savybė</string>
     <string name="import_as">Importuoti kaip…</string>
     <string name="new_notebook">Nauja užrašinė</string>
     <string name="new_folder">Naujas aplankas</string>
     <string name="scheduled">Suplanuota</string>
     <string name="agenda">Dienotvarkė</string>
-    <string name="agenda_period">Dienotvarkės dienos</string>
-    <string name="time">Laikas</string>
-    <string name="repeater">Kartojimas</string>
     <string name="state">Būsena</string>
     <string name="priority">Svarba</string>
-    <string name="nothing">Nieko</string>
     <string name="open">Atidaryti</string>
-    <string name="focus">Fokusas</string>
     <string name="widget">Valdiklis</string>
-    <string name="history">Istorija</string>
     <string name="event">Įvykis</string>
     <plurals name="notes_cut">
         <item quantity="one">Įrašas iškirptas</item>
@@ -81,7 +68,6 @@
     </plurals>
     <string name="no_notes_pasted">Nėra ko klijuoti</string>
     <string name="fragment_note_title_hint">Pavadinimas</string>
-    <string name="fragment_note_tags_hint" tools:ignore="typos">žymė žymė</string>
     <string name="import_org_file">Importuoti Org failą</string>
     <string name="message_dropbox_unlinked">Atsieta nuo Dropbox</string>
     <string name="message_dropbox_linked">Sėkmingai susieta su Dropbox</string>
@@ -95,20 +81,16 @@
     <string name="ssh_show_public_key_preference_title">Rodyti sukurtą SSH viešąjį raktą</string>
     <string name="message_book_has_no_link">Nesusieta</string>
     <string name="message_note_created">Įrašas sukurtas</string>
-    <string name="message_failed_creating_note">Nepavyko sukurti įrašo</string>
-    <string name="message_failed_updating_note">Nepavyko atnaujinti įrašo</string>
     <string name="drawer_close">Uždaryti skyrių</string>
     <string name="drawer_open">Atverti skyrių</string>
     <string name="schedule">Suplanuoti</string>
     <string name="refile">Perkelti</string>
-    <string name="refile_to">Perkelti į</string>
     <string name="deadline">Terminas</string>
     <string name="closed">Uždaryta</string>
     <!-- TODO: Not hints, rename -->
     <string name="schedule_button_hint">Suplanuotas laikas</string>
     <string name="deadline_button_hint">Termino laikas</string>
     <string name="closed_button_hint">Uždarymo laikas</string>
-    <string name="fragment_note_content_hint">Įrašo turinys</string>
     <string name="books_context_menu_item_rename">Pervadinti</string>
     <string name="books_context_menu_item_set_link">Nustatyti siejimą</string>
     <string name="books_context_menu_item_force_save">Priverstinai išsaugoti</string>
@@ -128,7 +110,6 @@
     <string name="quick_note">Greitas įrašas</string>
     <string name="tap_to_create_new_note">Spustelėkite sukurti įrašą</string>
     <string name="options_menu_item_search">Paiešką</string>
-    <string name="no_user_repos_configured_pref_summary">Dar nenustatyta</string>
     <string name="repos_options_menu_new_repo">Nauja saugykla</string>
     <string name="book_name_already_exists">Užrašinė %s jau egzistuoja</string>
     <string name="filter_name_already_exists">Paieška su tokiu pavadinimu jau egzistuoja</string>
@@ -146,14 +127,11 @@
     <string name="book_does_not_exist_anymore">Ši užrašinė nebeegzistuoja.</string>
     <string name="note_does_not_exist_anymore">Šis įrašas nebeegzistuoja.</string>
     <string name="search_does_not_exist_anymore">Ši paieška nebeegzistuoja.</string>
-    <string name="fragment_query_title">Paieška</string>
     <string name="repo_dropbox_button_not_linked">Susieti su Dropbox</string>
     <string name="repo_dropbox_button_linked">Atsieti nuo Dropbox</string>
-    <string name="fragment_settings_title">Nustatymai</string>
     <string name="notes_update_needed_dialog_title">Nuostata veikia įrašus</string>
     <string name="notes_update_needed_dialog_message">Atnaujinti įrašus pagal pokyčius?</string>
     <string name="updating_notes">Įrašai atnaujinami…</string>
-    <string name="failure">Vaje</string>
     <string name="no_notes_found_after_search">Jūsų paieška neatitiko jokių įrašų</string>
     <string name="today">Šiandien</string>
     <string name="tomorrow">Rytoj</string>
@@ -169,7 +147,6 @@
     <string name="notebooks">Užrašinės</string>
     <string name="searches">Paieškos</string>
     <string name="search">Paieška</string>
-    <string name="new_search">Nauja paieška</string>
     <string name="multiple_repos">Egzistuoja kelios saugyklos</string>
     <string name="no_repos">Saugyklos nenustatyos</string>
     <string name="no_books">Nerasta užrašinių</string>
@@ -177,7 +154,6 @@
     <string name="collecting_notebooks_in_progress">Surenkamos užrašinės…</string>
     <string name="syncing_in_progress">Sinchronizuojama…</string>
     <string name="syncing_book">Sinchronizuojama %s…</string>
-    <string name="sync_with_argument">Sinchronizacija: %s</string>
     <string name="syncing_failed_title">Sinchronizacija nepavyko</string>
     <string name="canceled">Atšaukta</string>
     <string name="canceling">Atšaukiama…</string>
@@ -191,23 +167,13 @@
     <string name="git_ssh_on_missing_key_dialog_text">Nerastą SSH raktų pora. Ar norite ją sukurti?</string>
     <string name="git_ssh_on_missing_key_dialog_title">Nerasta SSH raktų pora</string>
     <string name="git_https_username_hint">Vartotojo vardas</string>
-    <string name="git_https_password_hint">Slaptažodis</string>
     <string name="git_author_hint">Autorius (pvz. Vardenis Pavardenis)</string>
     <string name="git_email_hint">El. paštas (pvz. vardenis@pastas.lt)</string>
     <string name="git_branch_hint">Šaka (pvz. master)</string>
-    <string name="git_auth_https_username_hint">Vartotojo vardas</string>
     <string name="git_auth_https_password_hint">Slaptažodis</string>
-    <string name="git_generate_key_pair">Sukurti raktų porą</string>
-    <string name="git_copy_public_key">Kopijuoti viešąjį raktą</string>
-    <string name="git_auth_type_text">Autentifikavimo rūšis</string>
-    <string name="git_auth_type_ssh">SSH</string>
-    <string name="git_auth_type_https">HTTPS</string>
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
-    <string name="git_clone_error_ssh_auth">Nepavyko klonuoti, autentifikavimo klaida</string>
-    <string name="git_clone_error_ssh">Nepavyko klonuoti: %s</string>
     <string name="git_clone_error_invalid_repo">Nuotolinis adresas nėra git saugykla</string>
-    <string name="git_clone_error_unknown">Nežinoma klaida klonuojant</string>
     <string name="git_clone_error_invalid_target_dir">Paskirties katalogas neegzituoja</string>
     <string name="git_clone_error_target_not_empty">Paskirties katalogas nėra tuščias</string>
     <string name="git_clone_error_uri_not_supported">Nuotolinis adresas nepalaikomas</string>
@@ -218,18 +184,12 @@
     <string name="webdav_test_error_auth">Prisijungimas ar slaptažodis neteisingas</string>
     <string name="webdav_test_error_unknown">Įvyko nežinoma klaida</string>
     <!-- Share button - error messages (set as title). -->
-    <string name="share_action_not_set">Dalinimosi veiksmas nenustatytas</string>
     <string name="share_action_not_supported">Dalinimosi veiksmas %s nepalaikomas</string>
-    <string name="share_type_not_set">Dalinimosi rūšis nenustatyta</string>
     <string name="share_type_not_supported">Dalinimosi rūšis %s nepalaikoma</string>
     <string name="repositories">Repozitorijos</string>
     <string name="repository_not_valid_with_reason">Saugykla netinkama: %s</string>
     <string name="invalid_repo_url">Netinkamas saugyklos URL „%s“</string>
     <string name="repository_url_already_exists">Saugykla su šiuo URL jau egzistuoja</string>
-    <string name="fragment_left_drawer_list_view_content_description">Kairys skyrius</string>
-    <string name="drawer_item">Skyriaus elementas</string>
-    <string name="prev_state">Praeita būsena</string>
-    <string name="next_state">Sekanti būsena</string>
     <string name="new_above">Naujas virš</string>
     <string name="new_under">Naujas po</string>
     <string name="new_below">Naujas žemiau</string>
@@ -245,17 +205,14 @@
     <string name="no_filters">Neturite išsaugotų paieškų</string>
     <string name="book_shortcut_label">Užrašinė</string>
     <string name="new_note_shortcut_label">Naujas įrašas</string>
-    <string name="pick_a_notebook">Pasirinkti užrašinę</string>
     <string name="down">Žemyn</string>
     <string name="up">Aukštyn</string>
-    <string name="notebook_modified">Užrašinė pakeista</string>
     <string name="permissions_rationale_for_local_repo">Sinchronizavimui su vietiniu katalogu reikia saugyklos leidimo</string>
     <string name="permissions_rationale_for_book_export">Užrašinės eksportavimui reikia saugyklos leidimo</string>
     <string name="permissions_rationale_for_sync_start">Sinchronizavimui su vietine saugkla reikia saugyklos leidimo</string>
     <string name="permissions_rationale_for_external_files_access">Pasiekti išorinius failus reikia saugyklos leidimo</string>
     <string name="permissions_rationale_for_post_notifications">Pranešimams reikalingas leidimas</string>
     <string name="cycle_visibility">Suskleisti/išskleisti viską</string>
-    <string name="running_database_update">Atnaujinama duombazė…</string>
     <string name="note_has_been_modified">Įrašas pakeistas</string>
     <string name="discard_or_save_changes">Išsaugoti pakeitimus?</string>
     <string name="rename">Pervadinti</string>
@@ -267,13 +224,10 @@
     <string name="also_delete_linked_books">Ištrinti bet kokias susietas nuotolines užrašines</string>
     <string name="message_deleting_book_failed">Nepavyko pašalinti užrašinės: %s</string>
     <string name="message_book_deleted">Užrašinė pašalinta</string>
-    <string name="priority_with_argument">Svarba %s</string>
     <string name="default_priority">Numatytoji svarba</string>
     <string name="lowest_priority">Žemiausia svarba</string>
     <string name="todo_states">Raktažodžiai aktyvioms (todo) užduotims</string>
     <string name="done_states">Raktažodžiai atliktoms (done) užduotims</string>
-    <string name="created_at">Sukurta</string>
-    <string name="insert_note_creation_time">Įterpti įrašo sukūrimo laiką</string>
     <string name="use_created_at_property">Naudoti savybę sukurta-laiku laikui</string>
     <string name="use_created_at_property_summary">Sinchronizuoti sukurta-laiku naudojant savybę</string>
     <string name="created_at_property">Sukurta-laiku savybė</string>
@@ -313,7 +267,6 @@
     <string name="prefs_title_new_note">Naujas įrašas</string>
     <string name="prefs_title_notifications">Pranešimai</string>
     <string name="app">Programėlė</string>
-    <string name="no_repos_configured">Saugyklos nenustatyos</string>
     <string name="test_connection">Tikrinti ryšį</string>
     <string name="connecting">Prisijungiama…</string>
     <string name="no_connection">Nėra ryšio</string>
@@ -338,7 +291,6 @@
     <string name="org_indent_mode">Keisti pagal įtraukos rėžimą</string>
     <string name="org_indent_mode_summary">Atsižvelgti į org-indent-mode</string>
     <string name="org_indent_indentation_per_level">Įtrauka lygiui</string>
-    <string name="add_property">Pridėti savybę</string>
     <string name="priority_a_highest">A (aukščiausia svarba)</string>
     <string name="priority_z_lowest">Z (žemiausia svarba)</string>
     <string name="hour">Valanda</string>
@@ -370,7 +322,6 @@
     <string name="displayed_book_details_used_encoding">Naudojama koduotė</string>
     <string name="displayed_book_details_last_action">Paskutinis veiksmas</string>
     <string name="displayed_book_details_notes_count">Įrašų kiekis</string>
-    <string name="color_scheme_system">Sistema</string>
     <string name="color_scheme_dynamic">Dinaminė spalva</string>
     <string name="color_scheme_light">Šviesi</string>
     <string name="color_scheme_dark">Tamsi</string>
@@ -393,10 +344,6 @@
         <item quantity="other">Pašalinti <b>%d</b> įrašus?</item>
     </plurals>
     <!-- Unused -->
-    <string name="delete_note">Pašalinti įrašą</string>
-    <string name="delete_notes">Pašalinti įrašus</string>
-    <string name="delete_note_and_all_subnotes">Pašalinti šį įrašą ir jo poįrašius?</string>
-    <string name="delete_notes_and_all_subnotes">Pašalinti įrašus ir visus jų poįrašius?</string>
     <plurals name="notes_deleted">
         <item quantity="one">Įrašas pašalintas</item>
         <item quantity="few">Pašalinti <b>%d</b> įrašai</item>
@@ -404,8 +351,6 @@
         <item quantity="other">Pašalinti <b>%d</b> įrašai</item>
     </plurals>
     <string name="no_notes_deleted">Įrašai nepašalinti</string>
-    <string name="note_content_finish_editing">Peržiūrėti turinį</string>
-    <string name="note_content_start_editing">Redaguoti turinį</string>
     <string name="duplicate_keywords_not_allowed">Raktažodis %s jau naudojamas</string>
     <string name="no_states_defined">Būsenos nenustatytos</string>
     <string name="book_name_in_search">Užrašinės pavadinimas paieškos rezultatuose</string>
@@ -441,10 +386,6 @@
     <string name="keep_screen_on_summary">Rodyti meniu elementą nustatymo įjungimui</string>
     <string name="keep_screen_on">Laikyti įjungtą ekraną</string>
     <string name="keep_screen_on_desc">Jūsų ekranas neišsijungs, kol neišeisite ar neišjungsite nustatymą</string>
-    <string name="layout_direction">Išdėstymo kryptis</string>
-    <string name="layout_direction_locale">Numatyta</string>
-    <string name="layout_direction_ltr">Iš kairės į dešinę</string>
-    <string name="layout_direction_rtl">Iš dešinės į kairę</string>
     <string name="preface_in_book">Užrašinės pratarmė</string>
     <string name="preface_in_book_full">Rodyti</string>
     <string name="preface_in_book_hide">Slėpti</string>
@@ -461,9 +402,7 @@
     <string name="notebooks_start_folded_summary">Suskleisti visus įrašus užkrovus užrašinę</string>
     <string name="list_widget_name">Išsaugota paieška</string>
     <string name="list_widget_select_search">Pasirinkti paiešką</string>
-    <string name="list_widget_nothing_selected">Paieška nepasirinkta</string>
     <string name="auto_sync">Automatinis sinchronizavimas</string>
-    <string name="auto_sync_experimental_summary">Naudojama tik vietinėms saugykloms</string>
     <string name="auto_sync_summary">Nepalaikoma Dropbox</string>
     <string name="auto_sync_warning">Priklausomai nuo pasirinkto nustatymo, sinchronizacija gali vykti dažnai. Jei užrašinė pakeičiama, visas jos turinys perkeliamas į ar iš saugyklos. Kai kurie veiksmai gali būti delsiami, kol vyksta sinchronizacija.</string>
     <string name="pref_title_sync_after_note_create">Įrašas sukurtas</string>
@@ -526,7 +465,6 @@
     <string name="sync_failed_channel_description">Rodyti, kai sinchronizacija nepavyksta</string>
     <string name="notification_channel_settings">Pranešimai</string>
     <string name="notification_channel_settings_summary">Garsas, vibracija, pranešimo šviesa</string>
-    <string name="hide_note_metadata">Slėpti metaduomenis</string>
     <string name="overwrite_local_notebook_question">Perrašyti vietinę užrašinę?</string>
     <string name="overwrite_remote_notebook_question">Perrašyti nuotolinę užrašinę?</string>
     <string name="drawers_folded_by_default">Skyriai suskleisti</string>
@@ -543,7 +481,6 @@
     <string name="show_all">Rodyti viską</string>
     <string name="always_show_set">Visada rodyti</string>
     <string name="show_selected">Rodyti pasirinktą</string>
-    <string name="hide_all">Slėpti viską</string>
     <string name="external_file_no_app_found">Nerasta aplikacija atverti failui</string>
     <string name="failed_to_open_linked_file_with_reason">Nepavyko įkelti failo: %s</string>
     <string name="images">Paveikslėliai</string>
@@ -557,11 +494,9 @@
     <string name="argument_detected">%s aptikta</string>
     <string name="argument_selected">%s pasirinkta</string>
     <string name="fixed_width_value">Plotis (pikseliais)</string>
-    <string name="share_target_service">Dalintis su Orgzly užrašine</string>
     <string name="under">Po</string>
     <string name="above">Virš</string>
     <string name="below">Žemiau</string>
-    <string name="loading">Įkeliama…</string>
     <string name="go_to">Eiti į</string>
     <string name="cannot_refile_to_the_same_subtree">Negalima perkelti į tą patį pomedį</string>
     <string name="notification_maximum_priority">Aukščiausia</string>
@@ -582,16 +517,12 @@
     </plurals>
     <string name="display_checkmarks">Rodyti varneles</string>
     <string name="display_checkmarks_summary">Leidžia pažymėti įrašus kaip atliktus</string>
-    <string name="last_used">Vėliausiai naudota</string>
-    <string name="note_details_opening_mode">Atvėrimo rėžimas</string>
     <string name="cleartext_traffic">Nešifruotas srautas</string>
     <string name="cleartext_traffic_message">Ar tikrai norite naudoti šį URL?</string>
     <string name="credentials_in_url_not_supported">Prisijungimo informacijos perdavimas URL nepalaikomas</string>
-    <string name="access_token">Prieigos raktas</string>
     <string name="trusted_certificates">Patikimi liudijimai</string>
     <string name="add_trusted_certificates_optional">Pridėti patikimus liudijimus (pasirenkama)</string>
     <string name="edit_trusted_certificates">Redaguoti patikimus liudijimus</string>
-    <string name="this_action_cannot_be_undone">Šio veiksmo negalima atšaukti.</string>
     <plurals name="paste_note_or_notes_with_count">
         <item quantity="one">Įklijuoti įrašą</item>
         <item quantity="few">Įklijuoti <b>%d</b> įrašus</item>
@@ -641,11 +572,9 @@
     <string name="ssh_keygen_generating_progress">Sukuriami raktai…</string>
     <string name="ssh_key_failed_get_public">Nepavyko gauti SSH viešojo rakto</string>
     <string name="ssh_key_failed_get_private">Nepavyko gauti SSH privataus rakto</string>
-    <string name="ssh_key_failed_unlock_private">Nepavyko atrakinti SSH privataus rakto</string>
     <string name="biometric_prompt_title_ssh_keygen">Sukurti SSH raktą</string>
     <string name="biometric_prompt_title_unlock_ssh_key">Atrakinti Orgzly SSH raktą</string>
     <string name="biometric_auth_not_available">Biometrinis atpažinimas neprieinamas</string>
-    <string name="biometric_auth_on_error">Autentifikavimo klaida: Kodas: %1$d (%2$s)</string>
     <string name="ssh_keygen_message">%1$s\n\nPateikite šį viešąjį raktą savo Git serveriui.</string>
     <string name="your_public_key">Jūsų viešasis raktas</string>
     <string name="ssh_keygen_share">Dalintis</string>

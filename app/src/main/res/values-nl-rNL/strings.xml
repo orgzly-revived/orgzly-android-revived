@@ -9,20 +9,14 @@
     <string name="clear">Wissen</string>
     <string name="cancel">Annuleren</string>
     <string name="create">Maken</string>
-    <string name="new_">Nieuwe</string>
     <!-- "new" is reserved -->
-    <string name="select">Selecteer</string>
     <string name="set">Stel in</string>
-    <string name="add">Voeg toe</string>
     <string name="not_now">Niet nu</string>
     <string name="save">Opslaan</string>
     <string name="discard">Weggooien</string>
     <string name="remove_notebook_link">Link verwijderen</string>
     <string name="browse">Bladeren</string>
     <string name="dropbox">Dropbox</string>
-    <string name="view">Weergave</string>
-    <string name="edit">Bewerk</string>
-    <string name="edit_note">Notitie bewerken</string>
     <string name="delete">Verwijder</string>
     <string name="delete_with_quoted_argument">Verwijder “%s”</string>
     <string name="name">Naam</string>
@@ -40,23 +34,16 @@
     <string name="created">Gemaakt op</string>
     <string name="states">Statussen</string>
     <string name="note">Notitie</string>
-    <string name="notes">Notities</string>
     <string name="property">Eigenschap</string>
     <string name="import_as">Importeren als…</string>
     <string name="new_notebook">Nieuw notitieboekje</string>
     <string name="new_folder">Nieuwe map</string>
     <string name="scheduled">Gepland</string>
     <string name="agenda">Agenda</string>
-    <string name="agenda_period">Agenda dagen</string>
-    <string name="time">Tijd</string>
-    <string name="repeater">Herhaler</string>
     <string name="state">Status</string>
     <string name="priority">Prioriteit</string>
-    <string name="nothing">Niets</string>
     <string name="open">Open</string>
-    <string name="focus">Focus</string>
     <string name="widget">Widget</string>
-    <string name="history">Geschiedenis</string>
     <string name="event">Gebeurtenis</string>
     <plurals name="notes_cut">
         <item quantity="one">Notitie knippen</item>
@@ -73,7 +60,6 @@
     </plurals>
     <string name="no_notes_pasted">Niets om te plakken</string>
     <string name="fragment_note_title_hint">Titel</string>
-    <string name="fragment_note_tags_hint" tools:ignore="typos">label label</string>
     <string name="import_org_file">Importeer Org bestand</string>
     <string name="message_dropbox_unlinked">Losgekoppeld van Dropbox</string>
     <string name="message_dropbox_linked">Succesvol aan Dropbox gekoppeld</string>
@@ -82,20 +68,16 @@
     <string name="repos_preference_summary">Lokatie voor het synchroniseren van uw notitieboekjes</string>
     <string name="message_book_has_no_link">Geen koppeling ingesteld</string>
     <string name="message_note_created">Notitie gemaakt</string>
-    <string name="message_failed_creating_note">Notitie maken mislukt</string>
-    <string name="message_failed_updating_note">Notitie bijwerken mislukt</string>
     <string name="drawer_close">Zijmenu sluiten</string>
     <string name="drawer_open">Zijmenu openen</string>
     <string name="schedule">Planning</string>
     <string name="refile">Opbergen</string>
-    <string name="refile_to">Opbergen naar</string>
     <string name="deadline">Deadline</string>
     <string name="closed">Gesloten</string>
     <!-- TODO: Not hints, rename -->
     <string name="schedule_button_hint">Geplande tijd</string>
     <string name="deadline_button_hint">Deadline tijd</string>
     <string name="closed_button_hint">Gesloten tijd</string>
-    <string name="fragment_note_content_hint">Inhoud van notitie</string>
     <string name="books_context_menu_item_rename">Naam Wijzigen</string>
     <string name="books_context_menu_item_set_link">Koppeling instellen</string>
     <string name="books_context_menu_item_force_save">Forceer opslaan</string>
@@ -115,7 +97,6 @@
     <string name="quick_note">Snelle notitie</string>
     <string name="tap_to_create_new_note">Tik om een nieuwe notitie te maken</string>
     <string name="options_menu_item_search">Zoeken</string>
-    <string name="no_user_repos_configured_pref_summary">Nog niets geconfigureerd</string>
     <string name="repos_options_menu_new_repo">Nieuwe Repository</string>
     <string name="book_name_already_exists">Shrift %s bestaat al.</string>
     <string name="filter_name_already_exists">Zoekopdracht met dezelfde naam bestaat al</string>
@@ -133,14 +114,11 @@
     <string name="book_does_not_exist_anymore">Dit notitieboekje bestaat niet meer.</string>
     <string name="note_does_not_exist_anymore">Deze notitie bestaat niet meer.</string>
     <string name="search_does_not_exist_anymore">Deze zoekopdracht bestaat niet meer.</string>
-    <string name="fragment_query_title">Zoeken</string>
     <string name="repo_dropbox_button_not_linked">Koppelen met Dropbox</string>
     <string name="repo_dropbox_button_linked">Ontkoppel van Dropbox</string>
-    <string name="fragment_settings_title">Instellingen</string>
     <string name="notes_update_needed_dialog_title">Voorkeur is van invloed op notities</string>
     <string name="notes_update_needed_dialog_message">Notities bijwerken om wijzingingen weer te geven?</string>
     <string name="updating_notes">Notities worden bijgewerkt…</string>
-    <string name="failure">Oh oh</string>
     <string name="no_notes_found_after_search">Je zoekopdracht matcht met geen notities</string>
     <string name="today">Vandaag</string>
     <string name="tomorrow">Morgen</string>
@@ -156,7 +134,6 @@
     <string name="notebooks">Notitieboekjes</string>
     <string name="searches">Zoekopdrachten</string>
     <string name="search">Zoeken</string>
-    <string name="new_search">Nieuwe zoekopdracht</string>
     <string name="multiple_repos">Er bestaan meerdere opslagruimtes</string>
     <string name="no_repos">Geen opslagruimtes ingesteld</string>
     <string name="no_books">Geen notitieboekjes gevonden</string>
@@ -164,7 +141,6 @@
     <string name="collecting_notebooks_in_progress">Notitieboeken verzamelen…</string>
     <string name="syncing_in_progress">Synchroniseren…</string>
     <string name="syncing_book">Synchroniseert %s…</string>
-    <string name="sync_with_argument">Synchroniseer: %s</string>
     <string name="syncing_failed_title">Synchroniseren mislukt</string>
     <string name="canceled">Geannuleerd</string>
     <string name="canceling">Wordt geannuleerd…</string>
@@ -176,22 +152,13 @@
     <string name="git_url_hint">Extern adres (bijv. git@github.com:orgzly/orgzly-android.git)</string>
     <string name="git_directory_hint">Locatie van map (bijv. \"file:/sdcard/orgzly\")</string>
     <string name="git_https_username_hint">Gebruikersnaam</string>
-    <string name="git_https_password_hint">Wachtwoord</string>
     <string name="git_author_hint">Auteur (bijv. John Doe)</string>
     <string name="git_email_hint">E-mail (bijv. john@email.com)</string>
     <string name="git_branch_hint">Branch (bijv. master)</string>
-    <string name="git_auth_https_username_hint">Gebruikersnaam</string>
     <string name="git_auth_https_password_hint">Wachtwoord</string>
-    <string name="git_generate_key_pair">Sleutelpaar genereren</string>
-    <string name="git_copy_public_key">Publieke sleutel kopiëren</string>
-    <string name="git_auth_type_text">Authenticatietype</string>
-    <string name="git_auth_type_ssh">SSH</string>
-    <string name="git_auth_type_https">HTTPS</string>
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
-    <string name="git_clone_error_ssh_auth">Fout bij het klonen, authenticatiefout</string>
     <string name="git_clone_error_invalid_repo">Het externe adres is geen git repo</string>
-    <string name="git_clone_error_unknown">Onbekende fout tijdens het klonen</string>
     <string name="git_clone_error_invalid_target_dir">De doelmap bestaat niet</string>
     <string name="git_clone_error_target_not_empty">De doelmap is niet leeg</string>
     <string name="git_clone_error_uri_not_supported">Het externe adres wordt niet ondersteund</string>
@@ -201,18 +168,12 @@
     <string name="webdav_test_error_auth">Gebruikersnaam of wachtwoord is onjuist</string>
     <string name="webdav_test_error_unknown">Onbekende fout opgetreden</string>
     <!-- Share button - error messages (set as title). -->
-    <string name="share_action_not_set">Deelactie niet ingesteld</string>
     <string name="share_action_not_supported">Deelactie %s wordt niet ondersteund</string>
-    <string name="share_type_not_set">Deeltype niet ingesteld</string>
     <string name="share_type_not_supported">Deeltype %s wordt niet ondersteund</string>
     <string name="repositories">Opslagruimtes</string>
     <string name="repository_not_valid_with_reason">Repository ongeldig: %s</string>
     <string name="invalid_repo_url">Ongeldige opslagruimte-URL \"%s\"</string>
     <string name="repository_url_already_exists">Repository met deze URL bestaat al</string>
-    <string name="fragment_left_drawer_list_view_content_description">Linker Menu</string>
-    <string name="drawer_item">Menu-item</string>
-    <string name="prev_state">Vorige toestand</string>
-    <string name="next_state">Volgende Toestand</string>
     <string name="new_above">Nieuwe erboven</string>
     <string name="new_under">Nieuwe erbij</string>
     <string name="new_below">Nieuwe eronder</string>
@@ -228,16 +189,13 @@
     <string name="no_filters">Je hebt geen opgeslagen zoekopdrachten</string>
     <string name="book_shortcut_label">Notitieboek</string>
     <string name="new_note_shortcut_label">Nieuwe notitie</string>
-    <string name="pick_a_notebook">Kies een notitieboekje</string>
     <string name="down">Omlaag</string>
     <string name="up">Omhoog</string>
-    <string name="notebook_modified">Notitieboekje gewijzigd</string>
     <string name="permissions_rationale_for_local_repo">Synchroniseren met een lokale map vereist opslagtoestemming</string>
     <string name="permissions_rationale_for_book_export">Notitieboekje exporteren vereist opslagtoestemming</string>
     <string name="permissions_rationale_for_sync_start">Synchroniseren met lokale opslagruimte vereist opslagtoestemming</string>
     <string name="permissions_rationale_for_external_files_access">Toegang tot externe bestanden vereist opslagtoestemming</string>
     <string name="cycle_visibility">Vouw/Ontvouw alles</string>
-    <string name="running_database_update">Database bijwerken…</string>
     <string name="note_has_been_modified">Notitie bewerkt</string>
     <string name="discard_or_save_changes">Wijzigingen opslaan?</string>
     <string name="rename">Naam Wijzigen</string>
@@ -248,13 +206,10 @@
     <string name="also_delete_linked_book">Verwijder gekoppelde notitieboekje op server</string>
     <string name="message_deleting_book_failed">Notitieboekje verwijderen mislukt: %s</string>
     <string name="message_book_deleted">Notitieboekje verwijderd</string>
-    <string name="priority_with_argument">Prioriteit %s</string>
     <string name="default_priority">Standaardprioriteit</string>
     <string name="lowest_priority">Laagste prioriteit</string>
     <string name="todo_states">Zoekwoord voor actieve (todo) taken</string>
     <string name="done_states">Zoekwoorden voor afgeronde (done) taken</string>
-    <string name="created_at">Gemaakt op</string>
-    <string name="insert_note_creation_time">Voeg aanmaaktijd van notitie toe</string>
     <string name="use_created_at_property">Gebruik eigenschap voor creatie-tijd</string>
     <string name="use_created_at_property_summary">Synchroniseer gemaakt-op tijd middels een eigenschap</string>
     <string name="created_at_property">Bij eigenschap gemaakt</string>
@@ -294,7 +249,6 @@
     <string name="prefs_title_new_note">Nieuwe notitie</string>
     <string name="prefs_title_notifications">Notificaties</string>
     <string name="app">App</string>
-    <string name="no_repos_configured">Geen repos geconfigureerd</string>
     <string name="test_connection">Verbinding testen</string>
     <string name="connecting">Verbinden…</string>
     <string name="no_connection">Geen verbinding</string>
@@ -319,7 +273,6 @@
     <string name="org_indent_mode">Aanpassen op basis van indentatiemodus</string>
     <string name="org_indent_mode_summary">Neem org-indent-mode in acht</string>
     <string name="org_indent_indentation_per_level">Indentering per niveau</string>
-    <string name="add_property">Eigenschap toevoegen</string>
     <string name="priority_a_highest">A (hoogste prioriteit)</string>
     <string name="priority_z_lowest">Z (laagste prioriteit)</string>
     <string name="hour">Uur</string>
@@ -351,7 +304,6 @@
     <string name="displayed_book_details_used_encoding">Gebruikt codering</string>
     <string name="displayed_book_details_last_action">Laatste actie</string>
     <string name="displayed_book_details_notes_count">Aantal notities</string>
-    <string name="color_scheme_system">Systeem</string>
     <string name="color_scheme_dynamic">Dynamische kleur</string>
     <string name="color_scheme_light">Licht</string>
     <string name="color_scheme_dark">Donker</string>
@@ -372,17 +324,11 @@
         <item quantity="other"><b>%d</b> notities verwijderen?</item>
     </plurals>
     <!-- Unused -->
-    <string name="delete_note">Notitie verwijderen</string>
-    <string name="delete_notes">Notities verwijderen</string>
-    <string name="delete_note_and_all_subnotes">Deze notitie en al haar sub-notities verwijderen?</string>
-    <string name="delete_notes_and_all_subnotes">Notities en alle sub-notities verwijderen?</string>
     <plurals name="notes_deleted">
         <item quantity="one">Notitie verwijderd</item>
         <item quantity="other">Verwijderde <b>%d</b> notities</item>
     </plurals>
     <string name="no_notes_deleted">Geen notities verwijderd</string>
-    <string name="note_content_finish_editing">Bekijk inhoud</string>
-    <string name="note_content_start_editing">Bewerk inhoud</string>
     <string name="duplicate_keywords_not_allowed">Keyword %s wordt al gebruikt</string>
     <string name="no_states_defined">Geen statussen gedefiniëerd</string>
     <string name="book_name_in_search">Naam van notitieboekje in zoekresultaten</string>
@@ -417,10 +363,6 @@
     <string name="keep_screen_on_summary">Display menu item for toggling the option</string>
     <string name="keep_screen_on">Scherm aanlaten</string>
     <string name="keep_screen_on_desc">Your screen will not turn off until you leave it or disable this option</string>
-    <string name="layout_direction">Vormgeefrichting</string>
-    <string name="layout_direction_locale">Standaard</string>
-    <string name="layout_direction_ltr">Links naar rechts</string>
-    <string name="layout_direction_rtl">Rechts naar links</string>
     <string name="preface_in_book">Notitieboekjesvoorwoord</string>
     <string name="preface_in_book_full">Weergave</string>
     <string name="preface_in_book_hide">Verbergen</string>
@@ -437,9 +379,7 @@
     <string name="notebooks_start_folded_summary">Vouw alle notities op als notitieboek geladen wordt</string>
     <string name="list_widget_name">Opgeslagen zoekopdracht</string>
     <string name="list_widget_select_search">Selecteer zoeken</string>
-    <string name="list_widget_nothing_selected">Geen zoekopdracht geselecteerd</string>
     <string name="auto_sync">Auto-synchroniseer</string>
-    <string name="auto_sync_experimental_summary">Wordt alleen voor lokale opslagruimtes gebruikt</string>
     <string name="auto_sync_summary">Niet ondersteund voor Dropbox</string>
     <string name="auto_sync_warning">Afhankelijk van welke opties je kiest, kan synchroniseren vaak getriggerd worden. Als het notitieboekje aangepast is, wordt de volledige inhoud van of naar de opslagruimte verstuurd. Bepaalde handelingen kunnen vertraagd worden terwijl het synchroniseren bezig is.</string>
     <string name="pref_title_sync_after_note_create">Notitie gemaakt</string>
@@ -491,7 +431,6 @@
     <string name="sync_failed_channel_description">Toon wanneer synchroniseren mislukt is</string>
     <string name="notification_channel_settings">Notificaties</string>
     <string name="notification_channel_settings_summary">Geluid, vibratie, notificatiestip</string>
-    <string name="hide_note_metadata">Verberg metagegevens</string>
     <string name="overwrite_local_notebook_question">Lokaal notitieboekje overschrijven?</string>
     <string name="overwrite_remote_notebook_question">Extern notitieboekje overschrijven?</string>
     <string name="drawers_folded_by_default">Laden gevouwen</string>
@@ -508,7 +447,6 @@
     <string name="show_all">Alles tonen</string>
     <string name="always_show_set">Altijd weer te geven</string>
     <string name="show_selected">Toon geselecteerde</string>
-    <string name="hide_all">Alles verbergen</string>
     <string name="external_file_no_app_found">Geen toepassing gevonden om dit bestand te openen</string>
     <string name="failed_to_open_linked_file_with_reason">Kon bestand niet openen: %s</string>
     <string name="images">Afbeeldingen</string>
@@ -522,11 +460,9 @@
     <string name="argument_detected">%s gedetecteerd</string>
     <string name="argument_selected">%s geselecteerd</string>
     <string name="fixed_width_value">Breedte (in pixels)</string>
-    <string name="share_target_service">Deel op Orgzly notebook</string>
     <string name="under">Onder</string>
     <string name="above">Boven</string>
     <string name="below">Onder</string>
-    <string name="loading">Bezig met laden…</string>
     <string name="go_to">Ga naar</string>
     <string name="cannot_refile_to_the_same_subtree">Kan niet opbergen naar dezelfde tak</string>
     <string name="notification_maximum_priority">Maximum</string>
@@ -545,16 +481,12 @@
     </plurals>
     <string name="display_checkmarks">Toon vinkjes</string>
     <string name="display_checkmarks_summary">Sta het markeren van notities als gedaan toe</string>
-    <string name="last_used">Laatst gebruikt</string>
-    <string name="note_details_opening_mode">Openingsmodus</string>
     <string name="cleartext_traffic">Onversleuteld verkeer</string>
     <string name="cleartext_traffic_message">Weet u zeker dat u deze URL wilt gebruiken?</string>
     <string name="credentials_in_url_not_supported">Inloggegevens in URL doorgeven wordt niet ondersteund</string>
-    <string name="access_token">Toegangstoken</string>
     <string name="trusted_certificates">Vertrouwde certificaten</string>
     <string name="add_trusted_certificates_optional">Vertrouwde certificaten toevoegen (optioneel)</string>
     <string name="edit_trusted_certificates">Vertrouwde certificaten bewerken</string>
-    <string name="this_action_cannot_be_undone">Deze actie kan niet ongedaan gemaakt worden.</string>
     <plurals name="paste_note_or_notes_with_count">
         <item quantity="one">Notitie plakken</item>
         <item quantity="other">Plak <b>%d</b> notities</item>

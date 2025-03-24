@@ -9,20 +9,14 @@
     <string name="clear">Wyczyść</string>
     <string name="cancel">Anuluj</string>
     <string name="create">Utwórz</string>
-    <string name="new_">Nowa</string>
     <!-- "new" is reserved -->
-    <string name="select">Wybierz</string>
     <string name="set">Ustaw</string>
-    <string name="add">Dodaj</string>
     <string name="not_now">Nie teraz</string>
     <string name="save">Zapisz</string>
     <string name="discard">Odrzuć</string>
     <string name="remove_notebook_link">Usuń łącze</string>
     <string name="browse">Przeglądaj</string>
     <string name="dropbox">Dropbox</string>
-    <string name="view">Podgląd</string>
-    <string name="edit">Edytuj</string>
-    <string name="edit_note">Edytuj notatkę</string>
     <string name="delete">Usuń</string>
     <string name="delete_with_quoted_argument">Usuń „%s”</string>
     <string name="name">Nazwa</string>
@@ -40,23 +34,16 @@
     <string name="created">Utworzone</string>
     <string name="states">Stany</string>
     <string name="note">Notatka</string>
-    <string name="notes">Notatki</string>
     <string name="property">Atrybut</string>
     <string name="import_as">Importuj jako…</string>
     <string name="new_notebook">Nowy notatnik</string>
     <string name="new_folder">Nowy folder</string>
     <string name="scheduled">Zaplanowane</string>
     <string name="agenda">Terminarz</string>
-    <string name="agenda_period">Dni terminarza</string>
-    <string name="time">Czas</string>
-    <string name="repeater">Powtórzenie</string>
     <string name="state">Stan</string>
     <string name="priority">Priorytet</string>
-    <string name="nothing">Nic</string>
     <string name="open">Otwórz</string>
-    <string name="focus">Skupienie</string>
     <string name="widget">Widżet</string>
-    <string name="history">Historia</string>
     <string name="event">Wydarzenie</string>
     <plurals name="notes_cut">
         <item quantity="one">Notatka wycięta</item>
@@ -79,7 +66,6 @@
     </plurals>
     <string name="no_notes_pasted">Nie ma nic do wklejenia</string>
     <string name="fragment_note_title_hint">Tytuł</string>
-    <string name="fragment_note_tags_hint" tools:ignore="typos">znacznik1 znacznik2</string>
     <string name="import_org_file">Importuj plik ORG</string>
     <string name="message_dropbox_unlinked">Odłączono od Dropboxa</string>
     <string name="message_dropbox_linked">Połączono z Dropboxem</string>
@@ -88,20 +74,16 @@
     <string name="repos_preference_summary">Położenie, z którym można synchronizować notatniki</string>
     <string name="message_book_has_no_link">Nie ustawiono łącza</string>
     <string name="message_note_created">Notatka utworzona</string>
-    <string name="message_failed_creating_note">Nie udało się utworzyć notatki</string>
-    <string name="message_failed_updating_note">Nie udało się zaktualizować notatki</string>
     <string name="drawer_close">Zamknij menu</string>
     <string name="drawer_open">Otwórz menu</string>
     <string name="schedule">Zaplanuj</string>
     <string name="refile">Przenieś</string>
-    <string name="refile_to">Przenieś do</string>
     <string name="deadline">Ostateczny termin</string>
     <string name="closed">Zamknięty</string>
     <!-- TODO: Not hints, rename -->
     <string name="schedule_button_hint">Zaplanowany czas</string>
     <string name="deadline_button_hint">Ostateczny termin</string>
     <string name="closed_button_hint">Czas zamknięcia</string>
-    <string name="fragment_note_content_hint">Treść notatki</string>
     <string name="books_context_menu_item_rename">Zmień nazwę</string>
     <string name="books_context_menu_item_set_link">Ustaw łącze</string>
     <string name="books_context_menu_item_force_save">Wymuś zapis</string>
@@ -121,7 +103,6 @@
     <string name="quick_note">Szybka notatka</string>
     <string name="tap_to_create_new_note">Dotknij, aby utworzyć nową notatkę</string>
     <string name="options_menu_item_search">Szukaj</string>
-    <string name="no_user_repos_configured_pref_summary">Nie skonfigurowano</string>
     <string name="repos_options_menu_new_repo">Nowe repozytorium</string>
     <string name="book_name_already_exists">Notatnik %s już istnieje</string>
     <string name="filter_name_already_exists">Wyszukiwanie o tej nazwie już istnieje</string>
@@ -139,14 +120,11 @@
     <string name="book_does_not_exist_anymore">Notatnik już nie istnieje.</string>
     <string name="note_does_not_exist_anymore">Notatka już nie istnieje.</string>
     <string name="search_does_not_exist_anymore">Nie ma już tego wyszukiwania.</string>
-    <string name="fragment_query_title">Szukaj</string>
     <string name="repo_dropbox_button_not_linked">Połącz z Dropboxem</string>
     <string name="repo_dropbox_button_linked">Odłącz od Dropboxa</string>
-    <string name="fragment_settings_title">Ustawienia</string>
     <string name="notes_update_needed_dialog_title">Preferencje wpływają na notatki</string>
     <string name="notes_update_needed_dialog_message">Uaktualnić notatki w celu odzwierciedlenia zmian?</string>
     <string name="updating_notes">Aktualizacja notatek…</string>
-    <string name="failure">O nie...</string>
     <string name="no_notes_found_after_search">Wyszukiwanie nie zwróciło żadnej notatki</string>
     <string name="today">Dziś</string>
     <string name="tomorrow">Jutro</string>
@@ -162,7 +140,6 @@
     <string name="notebooks">Notatniki</string>
     <string name="searches">Wyszukiwania</string>
     <string name="search">Szukaj</string>
-    <string name="new_search">Nowe wyszukiwanie</string>
     <string name="multiple_repos">Istnieje wiele repozytoriów</string>
     <string name="no_repos">Nie skonfigurowano żadnych repozytoriów</string>
     <string name="no_books">Nie znaleziono notatników</string>
@@ -170,7 +147,6 @@
     <string name="collecting_notebooks_in_progress">Zbieranie notatników…</string>
     <string name="syncing_in_progress">Synchronizowanie…</string>
     <string name="syncing_book">Synchronizowanie %s…</string>
-    <string name="sync_with_argument">Synchronizacja: %s</string>
     <string name="syncing_failed_title">Synchronizacja nieudana</string>
     <string name="canceled">Anulowano</string>
     <string name="canceling">Anulowanie…</string>
@@ -182,22 +158,13 @@
     <string name="git_url_hint">Adres zdalny (np. git@github.com:orgzly / orgzly-android.git)</string>
     <string name="git_directory_hint">Lokalizacja katalogu (np. “file:/sdcard/orgzly”)</string>
     <string name="git_https_username_hint">Nazwa użytkownika</string>
-    <string name="git_https_password_hint">Hasło</string>
     <string name="git_author_hint">Autor (np. John Doe)</string>
     <string name="git_email_hint">Email (np. john@email.com)</string>
     <string name="git_branch_hint">Gałąź (np. master)</string>
-    <string name="git_auth_https_username_hint">Nazwa użytkownika</string>
     <string name="git_auth_https_password_hint">Hasło</string>
-    <string name="git_generate_key_pair">Wygeneruj parę kluczy</string>
-    <string name="git_copy_public_key">Kopiuj klucz publiczny</string>
-    <string name="git_auth_type_text">Rodzaj uwierzytelniania</string>
-    <string name="git_auth_type_ssh">SSH</string>
-    <string name="git_auth_type_https">HTTPS</string>
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
-    <string name="git_clone_error_ssh_auth">Klonowanie nieudane, błąd uwierzytelniania</string>
     <string name="git_clone_error_invalid_repo">Adres zdalny nie jest repozytorium Git</string>
-    <string name="git_clone_error_unknown">Nieznany błąd podczas klonowania</string>
     <string name="git_clone_error_invalid_target_dir">Katalog docelowy nie istnieje</string>
     <string name="git_clone_error_target_not_empty">Katalog docelowy nie jest pusty</string>
     <string name="git_clone_error_uri_not_supported">Adres zdalny nie jest obsługiwany</string>
@@ -207,18 +174,12 @@
     <string name="webdav_test_error_auth">Nieprawidłowy login lub hasło</string>
     <string name="webdav_test_error_unknown">Wystąpił nieznany błąd</string>
     <!-- Share button - error messages (set as title). -->
-    <string name="share_action_not_set">Nie ustawiono akcji udostępniania</string>
     <string name="share_action_not_supported">Akcja udostępniania „%s” nie jest obsługiwana</string>
-    <string name="share_type_not_set">Typ udostępniania nie został ustawiony</string>
     <string name="share_type_not_supported">Udostępnianie typu %s nie jest obsługiwane</string>
     <string name="repositories">Repozytoria</string>
     <string name="repository_not_valid_with_reason">Nieprawidłowe repozytorium: %s</string>
     <string name="invalid_repo_url">Nieprawidłowy adres URL \"%s\"</string>
     <string name="repository_url_already_exists">Repozytorium o takim URL już istnieje</string>
-    <string name="fragment_left_drawer_list_view_content_description">Menu po lewej</string>
-    <string name="drawer_item">Element menu</string>
-    <string name="prev_state">Poprzedni status</string>
-    <string name="next_state">Następny status</string>
     <string name="new_above">Nowa powyżej</string>
     <string name="new_under">Nowa zagnieżdżona</string>
     <string name="new_below">Nowa poniżej</string>
@@ -234,16 +195,13 @@
     <string name="no_filters">Nie masz zapisanych wyszukiwań</string>
     <string name="book_shortcut_label">Notatnik</string>
     <string name="new_note_shortcut_label">Nowa notatka</string>
-    <string name="pick_a_notebook">Wybierz notatnik</string>
     <string name="down">Do dołu</string>
     <string name="up">Do góry</string>
-    <string name="notebook_modified">Zmodyfikowano notatnik</string>
     <string name="permissions_rationale_for_local_repo">Synchronizacja z katalogiem lokalnym wymaga uprawnień</string>
     <string name="permissions_rationale_for_book_export">Eksport notatnika wymaga uprawnienia do zapisu</string>
     <string name="permissions_rationale_for_sync_start">Synchronizacja z lokalnym repozytorium wymaga uprawnienia do zapisu</string>
     <string name="permissions_rationale_for_external_files_access">Dostęp do plików w pamięci zewnętrznej wymaga zezwolenia</string>
     <string name="cycle_visibility">Zwiń/Rozwiń</string>
-    <string name="running_database_update">Aktualizacja bazy…</string>
     <string name="note_has_been_modified">Zmodyfikowano notatkę</string>
     <string name="discard_or_save_changes">Zapisać zmiany?</string>
     <string name="rename">Zmień nazwę</string>
@@ -254,13 +212,10 @@
     <string name="also_delete_linked_book">Usuń powiązany zdalny notatnik</string>
     <string name="message_deleting_book_failed">Usunięcie notatnika nie powiodło się: %s</string>
     <string name="message_book_deleted">Notatnik usunięty</string>
-    <string name="priority_with_argument">Priorytet %s</string>
     <string name="default_priority">Domyślny priorytet</string>
     <string name="lowest_priority">Najniższy priorytet</string>
     <string name="todo_states">Słowa kluczowe dla aktywnych (todo) zadań</string>
     <string name="done_states">Słowa kluczowe dla zakończonych (done) zadań</string>
-    <string name="created_at">Utworzono</string>
-    <string name="insert_note_creation_time">Wstaw czas utworzenia notatki</string>
     <string name="use_created_at_property">Użyj atrybutu dla czasu utworzenia</string>
     <string name="use_created_at_property_summary">Synchronizuj czas utworzenia przy użyciu atrybutu</string>
     <string name="created_at_property">Atrybut czasu utworzenia</string>
@@ -300,7 +255,6 @@
     <string name="prefs_title_new_note">Nowa notatka</string>
     <string name="prefs_title_notifications">Powiadomienia</string>
     <string name="app">O programie</string>
-    <string name="no_repos_configured">Brak skonfigurowanych repozytoriów</string>
     <string name="test_connection">Testuj połączenie</string>
     <string name="connecting">Łączenie…</string>
     <string name="no_connection">Brak połączenia</string>
@@ -325,7 +279,6 @@
     <string name="org_indent_mode">Dostosuj na podstawie trybu wcięć</string>
     <string name="org_indent_mode_summary">Weź pod uwagę tryb org-indent-mode</string>
     <string name="org_indent_indentation_per_level">Wcięcie na poziom</string>
-    <string name="add_property">Dodaj atrybut</string>
     <string name="priority_a_highest">A (najwyższy priorytet)</string>
     <string name="priority_z_lowest">Z (najniższy priorytet)</string>
     <string name="hour">Godzina</string>
@@ -357,7 +310,6 @@
     <string name="displayed_book_details_used_encoding">Użyte kodowanie</string>
     <string name="displayed_book_details_last_action">Ostatnia akcja</string>
     <string name="displayed_book_details_notes_count">Liczba notatek</string>
-    <string name="color_scheme_system">System</string>
     <string name="color_scheme_dynamic">Kolor dynamiczny</string>
     <string name="color_scheme_light">Jasny</string>
     <string name="color_scheme_dark">Ciemny</string>
@@ -380,10 +332,6 @@
         <item quantity="other">Usunąć <b>%d</b> notatek?</item>
     </plurals>
     <!-- Unused -->
-    <string name="delete_note">Usuń notatkę</string>
-    <string name="delete_notes">Usuwanie notatek</string>
-    <string name="delete_note_and_all_subnotes">Czy usunąć notatkę i wszystkie pod-notatki?</string>
-    <string name="delete_notes_and_all_subnotes">Czy usunąć notatki i wszystkie pod-notatki?</string>
     <plurals name="notes_deleted">
         <item quantity="one">Notatka usunięta</item>
         <item quantity="few">Notatki usunięte <b>%d</b></item>
@@ -391,8 +339,6 @@
         <item quantity="other">Notatki usunięte <b>%d</b></item>
     </plurals>
     <string name="no_notes_deleted">Notatki nie zostały usunięte</string>
-    <string name="note_content_finish_editing">Pokaż zawartość</string>
-    <string name="note_content_start_editing">Edytuj treść</string>
     <string name="duplicate_keywords_not_allowed">Słowo kluczowe %s jest już używane</string>
     <string name="no_states_defined">Nie zdefiniowano stanów</string>
     <string name="book_name_in_search">Nazwa notatnika w wynikach wyszukiwania</string>
@@ -427,10 +373,6 @@
     <string name="keep_screen_on_summary">Display menu item for toggling the option</string>
     <string name="keep_screen_on">Nie wygaszaj ekranu</string>
     <string name="keep_screen_on_desc">Ekran nie wygasi się, dopóki nie wyłączysz tej opcji</string>
-    <string name="layout_direction">Kierunek układu</string>
-    <string name="layout_direction_locale">Domyślny</string>
-    <string name="layout_direction_ltr">Z lewej do prawej</string>
-    <string name="layout_direction_rtl">Z prawej do lewej</string>
     <string name="preface_in_book">Opis notatnika</string>
     <string name="preface_in_book_full">Wyświetl</string>
     <string name="preface_in_book_hide">Ukryj</string>
@@ -447,9 +389,7 @@
     <string name="notebooks_start_folded_summary">Fold all notes when notebook is loaded</string>
     <string name="list_widget_name">Zapisane wyszukiwanie</string>
     <string name="list_widget_select_search">Wybierz wyszukiwanie</string>
-    <string name="list_widget_nothing_selected">Nie zaznaczono wyszukiwania</string>
     <string name="auto_sync">Automatyczna synchronizacja</string>
-    <string name="auto_sync_experimental_summary">Used for local repositories only</string>
     <string name="auto_sync_summary">Not supported for Dropbox</string>
     <string name="auto_sync_warning">Depending on which options you choose, sync could be triggered often. If notebook is modified, its entire content is transferred to or from the repository. Certain actions might be delayed while syncing is in progress.</string>
     <string name="pref_title_sync_after_note_create">Utworzono notatkę</string>
@@ -509,7 +449,6 @@
     <string name="sync_failed_channel_description">Display when syncing fails</string>
     <string name="notification_channel_settings">Powiadomienia</string>
     <string name="notification_channel_settings_summary">Dźwięk, wibracje, dioda powiadomień</string>
-    <string name="hide_note_metadata">Ukryj metadane</string>
     <string name="overwrite_local_notebook_question">Overwrite local notebook?</string>
     <string name="overwrite_remote_notebook_question">Overwrite remote notebook?</string>
     <string name="drawers_folded_by_default">Menu zwinięte</string>
@@ -526,7 +465,6 @@
     <string name="show_all">Pokaż wszystkie</string>
     <string name="always_show_set">Zawsze pokazuj ustawione</string>
     <string name="show_selected">Pokaż wybrane</string>
-    <string name="hide_all">Ukryj wszystkie</string>
     <string name="external_file_no_app_found">Nie znaleziono aplikacji do otwarcia tego pliku</string>
     <string name="failed_to_open_linked_file_with_reason">Nie można otworzyć pliku: %s</string>
     <string name="images">Obrazy</string>
@@ -540,11 +478,9 @@
     <string name="argument_detected">Wykryto %s</string>
     <string name="argument_selected">Wybrano %s</string>
     <string name="fixed_width_value">Szerokość (w pikselach)</string>
-    <string name="share_target_service">Wyślij do notatnika Orgzly</string>
     <string name="under">Poniżej</string>
     <string name="above">Powyżej</string>
     <string name="below">Poniżej</string>
-    <string name="loading">Wczytywanie…</string>
     <string name="go_to">Przejdź do</string>
     <string name="cannot_refile_to_the_same_subtree">Cannot refile to the same subtree</string>
     <string name="notification_maximum_priority">Maximum</string>
@@ -565,16 +501,12 @@
     </plurals>
     <string name="display_checkmarks">Display checkmarks</string>
     <string name="display_checkmarks_summary">Allows marking notes as done</string>
-    <string name="last_used">Last used</string>
-    <string name="note_details_opening_mode">Opening mode</string>
     <string name="cleartext_traffic">Cleartext traffic</string>
     <string name="cleartext_traffic_message">Are you sure you want to use this URL?</string>
     <string name="credentials_in_url_not_supported">Passing credentials in URL is not supported</string>
-    <string name="access_token">Token dostępu</string>
     <string name="trusted_certificates">Zaufane certyfikaty</string>
     <string name="add_trusted_certificates_optional">Dodaj zaufane certyfikaty (opcjonalnie)</string>
     <string name="edit_trusted_certificates">Edytuj zaufane certyfikaty</string>
-    <string name="this_action_cannot_be_undone">Tej czynności nie można cofnąć.</string>
     <plurals name="paste_note_or_notes_with_count">
         <item quantity="one">Wklej <b>%d</b> notatkę</item>
         <item quantity="few">Wklej <b>%d</b> notatki</item>

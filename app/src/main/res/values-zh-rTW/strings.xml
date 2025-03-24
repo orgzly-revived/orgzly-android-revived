@@ -9,20 +9,14 @@
     <string name="clear">清除</string>
     <string name="cancel">取消</string>
     <string name="create">新增</string>
-    <string name="new_">新的</string>
     <!-- "new" is reserved -->
-    <string name="select">選擇</string>
     <string name="set">設置</string>
-    <string name="add">增加</string>
     <string name="not_now">現在不要</string>
     <string name="save">儲存</string>
     <string name="discard">放棄儲存</string>
     <string name="remove_notebook_link">移除連結</string>
     <string name="browse">瀏覽</string>
     <string name="dropbox">Dropbox</string>
-    <string name="view">檢視</string>
-    <string name="edit">編輯</string>
-    <string name="edit_note">編輯筆記</string>
     <string name="delete">刪除</string>
     <string name="delete_with_quoted_argument">刪除 \"%s\"</string>
     <string name="name">名稱</string>
@@ -40,23 +34,16 @@
     <string name="created">已建立</string>
     <string name="states">狀態</string>
     <string name="note">筆記</string>
-    <string name="notes">筆記</string>
     <string name="property">屬性</string>
     <string name="import_as">匯入為</string>
     <string name="new_notebook">新筆記</string>
     <string name="new_folder">新資料夾</string>
     <string name="scheduled">已排程</string>
     <string name="agenda">議程</string>
-    <string name="agenda_period">議程日</string>
-    <string name="time">時間</string>
-    <string name="repeater">重複</string>
     <string name="state">狀態</string>
     <string name="priority">優先順序</string>
-    <string name="nothing">沒有</string>
     <string name="open">打開</string>
-    <string name="focus">焦點</string>
     <string name="widget">桌面小工具</string>
-    <string name="history">歷史記錄</string>
     <string name="event">事件</string>
     <plurals name="notes_cut">
         <item quantity="other">剪下 <b>%d</b> 筆記</item>
@@ -70,7 +57,6 @@
     </plurals>
     <string name="no_notes_pasted">無法貼上</string>
     <string name="fragment_note_title_hint">標題</string>
-    <string name="fragment_note_tags_hint" tools:ignore="typos">標記標籤</string>
     <string name="import_org_file">匯入Org檔案</string>
     <string name="message_dropbox_unlinked">取消Dropbox連結</string>
     <string name="message_dropbox_linked">已成功連結到Dropbox</string>
@@ -79,20 +65,16 @@
     <string name="repos_preference_summary">同步筆記本的位置</string>
     <string name="message_book_has_no_link">沒有設定連結</string>
     <string name="message_note_created">已創建筆記</string>
-    <string name="message_failed_creating_note">無法建立筆記</string>
-    <string name="message_failed_updating_note">無法更新筆記</string>
     <string name="drawer_close">關閉抽屜</string>
     <string name="drawer_open">打開抽屜</string>
     <string name="schedule">日程</string>
     <string name="refile">移動筆記</string>
-    <string name="refile_to">移動筆記到</string>
     <string name="deadline">截止時間</string>
     <string name="closed">已關閉</string>
     <!-- TODO: Not hints, rename -->
     <string name="schedule_button_hint">排程時間</string>
     <string name="deadline_button_hint">截止時間</string>
     <string name="closed_button_hint">關閉時間</string>
-    <string name="fragment_note_content_hint">筆記內文</string>
     <string name="books_context_menu_item_rename">重新命名</string>
     <string name="books_context_menu_item_set_link">設定連結</string>
     <string name="books_context_menu_item_force_save">強制保存</string>
@@ -112,7 +94,6 @@
     <string name="quick_note">快速筆記</string>
     <string name="tap_to_create_new_note">點擊創建新筆記</string>
     <string name="options_menu_item_search">搜尋</string>
-    <string name="no_user_repos_configured_pref_summary">尚未配置</string>
     <string name="repos_options_menu_new_repo">新增資料庫</string>
     <string name="book_name_already_exists">筆記本%s 已存在</string>
     <string name="filter_name_already_exists">已存在相同的搜尋名稱</string>
@@ -130,14 +111,11 @@
     <string name="book_does_not_exist_anymore">這個筆記本已不存在</string>
     <string name="note_does_not_exist_anymore">這筆記已不存在</string>
     <string name="search_does_not_exist_anymore">這個搜尋已不存在</string>
-    <string name="fragment_query_title">搜尋</string>
     <string name="repo_dropbox_button_not_linked">連結到 Dropbox</string>
     <string name="repo_dropbox_button_linked">取消 Dropbox 連結</string>
-    <string name="fragment_settings_title">設置</string>
     <string name="notes_update_needed_dialog_title">筆記影響偏好設定</string>
     <string name="notes_update_needed_dialog_message">刷新筆記以顯示更改？</string>
     <string name="updating_notes">更新筆記</string>
-    <string name="failure">噢！</string>
     <string name="no_notes_found_after_search">您的搜尋沒有任何結果</string>
     <string name="today">今天</string>
     <string name="tomorrow">明天</string>
@@ -153,7 +131,6 @@
     <string name="notebooks">筆記本</string>
     <string name="searches">搜尋</string>
     <string name="search">搜尋</string>
-    <string name="new_search">新搜尋</string>
     <string name="multiple_repos">存在多個資料庫</string>
     <string name="no_repos">未配置資料庫</string>
     <string name="no_books">沒有找到筆記本</string>
@@ -161,7 +138,6 @@
     <string name="collecting_notebooks_in_progress">正在收集筆記..</string>
     <string name="syncing_in_progress">正在同步...</string>
     <string name="syncing_book">正在同步%s...</string>
-    <string name="sync_with_argument">同步: %s</string>
     <string name="syncing_failed_title">同步失敗！</string>
     <string name="canceled">已取消</string>
     <string name="canceling">正在取消...</string>
@@ -173,22 +149,13 @@
     <string name="git_url_hint">Remote 遠端位址 (如 git@github:orgzly/orgzly-android.git)</string>
     <string name="git_directory_hint">目錄位址 (如 \"file:/sdcard/orgzly\")</string>
     <string name="git_https_username_hint">使用者名稱</string>
-    <string name="git_https_password_hint">密碼</string>
     <string name="git_author_hint">作者 (如 無名氏)</string>
     <string name="git_email_hint">電子郵件 (例如 john@email.com)</string>
     <string name="git_branch_hint">Branch 分支 (如 master)</string>
-    <string name="git_auth_https_username_hint">使用者名稱</string>
     <string name="git_auth_https_password_hint">密碼</string>
-    <string name="git_generate_key_pair">產生金鑰</string>
-    <string name="git_copy_public_key">複製公鑰</string>
-    <string name="git_auth_type_text">驗證類型</string>
-    <string name="git_auth_type_ssh">SSH</string>
-    <string name="git_auth_type_https">HTTPS</string>
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
-    <string name="git_clone_error_ssh_auth">複製失敗，身份驗證錯誤</string>
     <string name="git_clone_error_invalid_repo">遠端位址不是 git repo 倉庫</string>
-    <string name="git_clone_error_unknown">複製時發生不明錯誤</string>
     <string name="git_clone_error_invalid_target_dir">目標目錄不存在</string>
     <string name="git_clone_error_target_not_empty">目標不是空目錄</string>
     <string name="git_clone_error_uri_not_supported">不支援此遠端位址</string>
@@ -198,18 +165,12 @@
     <string name="webdav_test_error_auth">帳號或密碼不正確</string>
     <string name="webdav_test_error_unknown">發生未知的錯誤</string>
     <!-- Share button - error messages (set as title). -->
-    <string name="share_action_not_set">沒有設置共用</string>
     <string name="share_action_not_supported">不支援 %s 共用操作</string>
-    <string name="share_type_not_set">沒有設置共用類型</string>
     <string name="share_type_not_supported">共用操作 %s 不支援</string>
     <string name="repositories">資料庫</string>
     <string name="repository_not_valid_with_reason">資料庫無效: %s</string>
     <string name="invalid_repo_url">無效的資料庫 URL 位址 “%s”</string>
     <string name="repository_url_already_exists">具有此 url 位址的存儲庫已存在</string>
-    <string name="fragment_left_drawer_list_view_content_description">左側抽屜</string>
-    <string name="drawer_item">抽屜項目</string>
-    <string name="prev_state">上一個狀態</string>
-    <string name="next_state">下一個狀態</string>
     <string name="new_above">在上方新增</string>
     <string name="new_under">新增子項目</string>
     <string name="new_below">在下方新增</string>
@@ -225,16 +186,13 @@
     <string name="no_filters">您沒有已保存的搜索</string>
     <string name="book_shortcut_label">筆記本</string>
     <string name="new_note_shortcut_label">新增筆記</string>
-    <string name="pick_a_notebook">選擇一個筆記本</string>
     <string name="down">下</string>
     <string name="up">上</string>
-    <string name="notebook_modified">筆記本修改</string>
     <string name="permissions_rationale_for_local_repo">與本地資料夾同步需要存儲許可權</string>
     <string name="permissions_rationale_for_book_export">匯出筆記本需要存儲許可權</string>
     <string name="permissions_rationale_for_sync_start">與本地資料庫同步需要存儲許可權</string>
     <string name="permissions_rationale_for_external_files_access">訪問外部檔案需要允許存儲授權</string>
     <string name="cycle_visibility">折疊/展開所有</string>
-    <string name="running_database_update">正在更新資料庫..</string>
     <string name="note_has_been_modified">筆記修改</string>
     <string name="discard_or_save_changes">儲存變更？</string>
     <string name="rename">重新命名</string>
@@ -245,13 +203,10 @@
     <string name="also_delete_linked_book">刪除連結的遠端筆記本</string>
     <string name="message_deleting_book_failed">刪除筆記本失敗: %s</string>
     <string name="message_book_deleted">筆記本已刪除</string>
-    <string name="priority_with_argument">優先順序 %s</string>
     <string name="default_priority">預設優先順序</string>
     <string name="lowest_priority">最低優先順序</string>
     <string name="todo_states">啟用 (todo) 任務的關鍵字</string>
     <string name="done_states">完成 (done) 任務的關鍵字</string>
-    <string name="created_at">建立於</string>
-    <string name="insert_note_creation_time">插入建立筆記的時間</string>
     <string name="use_created_at_property">在創建時使用屬性</string>
     <string name="use_created_at_property_summary">同步在創建使用屬性時</string>
     <string name="created_at_property">在屬性中創建</string>
@@ -291,7 +246,6 @@
     <string name="prefs_title_new_note">新增筆記</string>
     <string name="prefs_title_notifications">通知訊息</string>
     <string name="app">應用程式</string>
-    <string name="no_repos_configured">找不到任何資料庫</string>
     <string name="test_connection">連線測試</string>
     <string name="connecting">連線中…</string>
     <string name="no_connection">沒有連接</string>
@@ -316,7 +270,6 @@
     <string name="org_indent_mode">根據縮進模式調整</string>
     <string name="org_indent_mode_summary">把 org-indent-mode 考慮進去</string>
     <string name="org_indent_indentation_per_level">每個級別的縮進</string>
-    <string name="add_property">增加屬性</string>
     <string name="priority_a_highest">A (最高優先順序)</string>
     <string name="priority_z_lowest">Z (最低優先順序)</string>
     <string name="hour">小時</string>
@@ -348,7 +301,6 @@
     <string name="displayed_book_details_used_encoding">使用編碼</string>
     <string name="displayed_book_details_last_action">最後一次操作</string>
     <string name="displayed_book_details_notes_count">筆記數量</string>
-    <string name="color_scheme_system">系统</string>
     <string name="color_scheme_dynamic">動態取色</string>
     <string name="color_scheme_light">亮色</string>
     <string name="color_scheme_dark">暗色</string>
@@ -368,16 +320,10 @@
         <item quantity="other">刪除 <b>%d</b> 筆記？</item>
     </plurals>
     <!-- Unused -->
-    <string name="delete_note">刪除筆記</string>
-    <string name="delete_notes">刪除筆記</string>
-    <string name="delete_note_and_all_subnotes">是否刪除此筆記及所有內文？</string>
-    <string name="delete_notes_and_all_subnotes">是否刪除此筆記及所有內文？</string>
     <plurals name="notes_deleted">
         <item quantity="other">已刪除 <b>%d</b> 筆記</item>
     </plurals>
     <string name="no_notes_deleted">沒有筆記被刪除</string>
-    <string name="note_content_finish_editing">查看內容</string>
-    <string name="note_content_start_editing">編輯內容</string>
     <string name="duplicate_keywords_not_allowed">關鍵字%s 已使用</string>
     <string name="no_states_defined">未定義任何狀態</string>
     <string name="book_name_in_search">搜尋結果中的筆記本名稱</string>
@@ -412,10 +358,6 @@
     <string name="keep_screen_on_summary">顯示用於切換選項的功能表項目</string>
     <string name="keep_screen_on">保持螢幕開啟</string>
     <string name="keep_screen_on_desc">在您離開螢幕或禁用此選項之前, 螢幕不會關閉</string>
-    <string name="layout_direction">佈局方向</string>
-    <string name="layout_direction_locale">預設</string>
-    <string name="layout_direction_ltr">左至右</string>
-    <string name="layout_direction_rtl">右至左</string>
     <string name="preface_in_book">筆記的前言</string>
     <string name="preface_in_book_full">顯示</string>
     <string name="preface_in_book_hide">隱藏</string>
@@ -432,9 +374,7 @@
     <string name="notebooks_start_folded_summary">讀取筆記本時折疊所有筆記</string>
     <string name="list_widget_name">已儲存的的搜尋</string>
     <string name="list_widget_select_search">選取搜尋</string>
-    <string name="list_widget_nothing_selected">沒有選取搜尋</string>
     <string name="auto_sync">自動同步</string>
-    <string name="auto_sync_experimental_summary">只使用本地資料庫</string>
     <string name="auto_sync_summary">不支持 Dropbox</string>
     <string name="auto_sync_warning">根據您選擇的選項，同步可能會經常觸發。如果筆記本被修改，則其整個內容被傳送到存儲庫或從存儲庫傳送。正在進行同步時，某些操作可能會延遲。</string>
     <string name="pref_title_sync_after_note_create">已創建筆記</string>
@@ -482,7 +422,6 @@
     <string name="sync_failed_channel_description">同步失敗時顯示</string>
     <string name="notification_channel_settings">通知訊息</string>
     <string name="notification_channel_settings_summary">聲音, 震動, 通知</string>
-    <string name="hide_note_metadata">隱藏中繼資料</string>
     <string name="overwrite_local_notebook_question">是否覆蓋本地筆記本？</string>
     <string name="overwrite_remote_notebook_question">是否覆蓋遠端筆記本？</string>
     <string name="drawers_folded_by_default">抽屜折疊</string>
@@ -499,7 +438,6 @@
     <string name="show_all">顯示全部</string>
     <string name="always_show_set">總是顯示選單</string>
     <string name="show_selected">顯示已選取的項目</string>
-    <string name="hide_all">隱藏全部</string>
     <string name="external_file_no_app_found">沒有關聯可開啟此檔案的程式。</string>
     <string name="failed_to_open_linked_file_with_reason">開啟檔案失敗: %s</string>
     <string name="images">圖像</string>
@@ -513,11 +451,9 @@
     <string name="argument_detected">偵測到 %s</string>
     <string name="argument_selected">已選取 %s</string>
     <string name="fixed_width_value">寬度 (像素)</string>
-    <string name="share_target_service">分享到 Orgzly 筆記本</string>
     <string name="under">在下</string>
     <string name="above">以上</string>
     <string name="below">以下</string>
-    <string name="loading">載入中…</string>
     <string name="go_to">前往</string>
     <string name="cannot_refile_to_the_same_subtree">無法轉移到相同的子目錄</string>
     <string name="notification_maximum_priority">最大</string>
@@ -535,16 +471,12 @@
     </plurals>
     <string name="display_checkmarks">顯示check標誌</string>
     <string name="display_checkmarks_summary">允許將筆記標記為done完成</string>
-    <string name="last_used">最後使用的</string>
-    <string name="note_details_opening_mode">開始的模式</string>
     <string name="cleartext_traffic">明文傳輸</string>
     <string name="cleartext_traffic_message">確定要使用這個URL位址？</string>
     <string name="credentials_in_url_not_supported">不支持在URL位址中傳送認證</string>
-    <string name="access_token">存取權杖</string>
     <string name="trusted_certificates">可信任的憑證</string>
     <string name="add_trusted_certificates_optional">新增可信任的憑證(可選)</string>
     <string name="edit_trusted_certificates">編輯可信任的憑證</string>
-    <string name="this_action_cannot_be_undone">這項操作無法復原</string>
     <plurals name="paste_note_or_notes_with_count">
         <item quantity="other">貼上 <b>%d</b> 筆記</item>
     </plurals>
