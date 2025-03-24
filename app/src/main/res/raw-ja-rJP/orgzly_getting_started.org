@@ -33,8 +33,9 @@ Orgzly へようこそ!
 *** DONE これはdoneタイプの状態のメモです
 CLOSED: [2018-01-24 Wed 17:00]
 
-** メモには予定日時をつけることができます
-SCHEDULED: <2015-02-20 Fri 15:15>
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
 *** 日時には繰り返しを指定できます
 SCHEDULED: <2015-02-16 Mon .+2d>
@@ -44,19 +45,17 @@ DEADLINE: <2015-02-20 Fri>
 
 ** 予定と期限日時の通知をサポートしています
 
-初期設定では無効になっているので、必要であれば設定から有効にしてください。
-
-** [#A] メモには優先度を付けることができます
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
 
 優先度の数は、設定から変更できます。 メモに優先度を指定しなかったときに仮定される、暗黙の優先度も変更できます。
 
-** メモにはリンクを含めることができます
+** You can also set a deadline time
+DEADLINE: <2015-02-20 Fri>
 
-電話をかける (tel:555-0199), SMS送信 (sms:555-0199), メール編集 (mailto:support@orgzlyrevived.com) Webページを開く ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+** Event times can be used anywhere in the note's content
 
-アプリ内の、別のメモやメモ帳にも、リンクができます。
-
-詳しくは https://www.orgzlyrevived.com/docs#links を見てください。
+You can have multiple event times:
 
 ** 基本的なタイポグラフィをサポートします
 
@@ -64,31 +63,57 @@ DEADLINE: <2015-02-20 Fri>
 
 ** チェックボックスリストが利用できます
 
+** [#A] Note can have a priority
+
 - [X] タスク1
 - [ ] タスク2
 - [ ] タスク3
 
 チェックボックスをタップすると、トグルできます。 行末で改行すると、新しいアイテムが作れます。
 
-* 検索
-** 多くの検索演算子をサポートしています
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-状態、タグ、予定日時、期限日時などで、メモを検索できます。
+You can also link to another note or notebook within the app.
 
-詳しくは https://www.orgzlyrevived.com/docs#search を見てください。
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
 
-** 検索クエリは、クイックアクセスに保存できます
+** Basic typographical emphasis is supported
 
-ナビゲーションドロワーからサンプルの検索を試し、そのクエリに注目してください。
+You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
 
-ナビゲーションドロワーの"検索"をタップして、あなた用の検索を作ることができます。
+** Checkbox list is available
 
-* 同期
+- [X] Task 1
+- [ ] Task 2
+- [ ] Task 3
 
-** メモ帳はプレーンテキストとして保存できます
+Click the checkbox to toggle it. Press the new-line button at the end of the line to create a new item.
 
-ファイルは “Org mode” フォーマットが使われます。
+** A note's title can also track checkbox list states [66%] [2/3]
 
-** 場所 (リポジトリ) の種類
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
 
-メモ帳は、モバイル デバイス、SD カード、Dropbox 上のディレクトリと同期することができます。
+* Search
+** There are many search operators supported
+
+You can search notes by state, tag, scheduled, deadline or event times, etc.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.

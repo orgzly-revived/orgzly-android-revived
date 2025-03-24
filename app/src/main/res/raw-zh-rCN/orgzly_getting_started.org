@@ -33,8 +33,9 @@
 *** DONE 这是一条带/完成/类型状态的笔记
 CLOSED: [2018-01-24 Wed 17:00]
 
-** 可以为笔记设置一个计划时间
-SCHEDULED: <2015-02-20 Fri 15:15>
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
 *** 可以为时间设定一个重复器
 SCHEDULED: <2015-02-16 Mon .+2d>
@@ -44,19 +45,17 @@ DEADLINE: <2015-02-20 Fri>
 
 ** 支持通知提醒计划时间和截至时间
 
-此功能默认关闭，需要在设置中启用。
-
-** [#A] 笔记可以具有优先级
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
 
 可在设置中更改优先级数量。 也可以更改默认优先级 - 假如还没有为笔记设定优先级。
 
-** 笔记可以包含链接
+** You can also set a deadline time
+DEADLINE: <2015-02-20 Fri>
 
-拨打电话 (tel:555-0199)， 发送短信 (sms:555-0199)， 写邮件 (mailto:support@orgzlyrevived.com) 或访问网页 ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]])。
+** Event times can be used anywhere in the note's content
 
-也可以在应用程序内链接到其他笔记或笔记本。
-
-访问 https://www.orgzlyrevived.com/docs#links 了解更多信息。
+You can have multiple event times:
 
 ** 支持基本的排版强调
 
@@ -64,31 +63,57 @@ DEADLINE: <2015-02-20 Fri>
 
 ** 支持复选框列表
 
+** [#A] Note can have a priority
+
 - [X] 任务 1
 - [ ] 任务 2
 - [ ] 任务 3
 
 点击复选框切换状态。 点按行尾的新建行按钮以创建新条目。
 
-* 搜索
-** 支持多种搜索运算符
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-可通过状态，标签，计划时间或截止时间等搜索笔记
+You can also link to another note or notebook within the app.
 
-访问 https://www.orgzlyrevived.com/docs#search 了解更多。
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
 
-** 可保存搜索查询串以便快速访问
+** Basic typographical emphasis is supported
 
-从导航抽屉中尝试示例搜索并注意它们所使用的查询串。
+You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
 
-可通过点击导航抽屉中的“搜索”创建和保存自定义搜索。
+** Checkbox list is available
 
-* 同步
+- [X] Task 1
+- [ ] Task 2
+- [ ] Task 3
 
-** 笔记本可保存为纯文本文件
+Click the checkbox to toggle it. Press the new-line button at the end of the line to create a new item.
 
-文件使用“Org mode”的格式。
+** A note's title can also track checkbox list states [66%] [2/3]
 
-** 位置(存储库)类型
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
 
-可将笔记本与设备存储，SD 卡或 Dropbox 上的一个目录同步。
+* Search
+** There are many search operators supported
+
+You can search notes by state, tag, scheduled, deadline or event times, etc.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.

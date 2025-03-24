@@ -33,8 +33,9 @@ Existem dois /tipos/ de estados: afazeres e feito
 *** DONE isto é uma nota com o tipo de estado /feito/
 CLOSED: [2018-01-24 Wed 17:00]
 
-* * Notas podem ter um dia/horário agendado
-SCHEDULED: <2015-02-20 Fri 15:15>
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
 *** Datas podem ter um repetidor
 SCHEDULED: <2015-02-16 Mon .+2d>
@@ -44,19 +45,17 @@ DEADLINE: <2015-02-20 Fri>
 
 ** Lembretes para dias agendados e datas limite são suportados
 
-Eles ficam desativados por padrão e precisam ser ativados nas Configurações.
-
-** [#A] Notas podem ter prioridades
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
 
 Você pode alterar a quantidade de prioridades nas Configurações. Você também pode alterar a prioridade padrão - assumida por notas sem prioridades definidas explicitamente.
 
-** Notas podem conter links
+** You can also set a deadline time
+DEADLINE: <2015-02-20 Fri>
 
-Ligar para um número (tel:555-0199), enviar SMS (sms:555-0199), enviar emails (mailto:support@orgzlyrevived.com) ou acessar uma página da web ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+** Event times can be used anywhere in the note's content
 
-Você também pode criar um link para outra nota ou bloco de notas dentro do aplicativo.
-
-Acesse https://www.orgzlyrevived.com/docs#links para mais informações (conteúdo em inglês).
+You can have multiple event times:
 
 ** Ênfase tipográfica básica é suportada
 
@@ -64,31 +63,57 @@ Você pode escrever palavras em *negrito*, /itálico/, _sublinhado_, =citação=
 
 ** Caixas de seleção estão disponíveis
 
+** [#A] Note can have a priority
+
 - [X] Tarefa 1
 - [ ] Tarefa 2
 - [ ] Tarefa 3
 
 Selecione a caixa de seleção para marcá-la / desmarcá-la. Pressione o botão de nova linha no fim da linha para criar um novo item.
 
-* Busca
-** Existem diversos operadores de busca suportados
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-Você pode buscar notas por estado, etiqueta, agendas ou datas limite etc.
+You can also link to another note or notebook within the app.
 
-Acesse https://www.orgzlyrevived.com/docs#search para saber mais (em inglês).
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
 
-** Consultas de busca podem ser salvas para acesso rápido
+** Basic typographical emphasis is supported
 
-Experimente as buscas salvas no painel de navegação e observe os operadores que elas usam.
+You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
 
-Você pode criar suas próprias buscas salvas clicando em "Buscas" no painel de navegação.
+** Checkbox list is available
 
-* Sincronização
+- [X] Task 1
+- [ ] Task 2
+- [ ] Task 3
 
-** Blocos de notas podem ser salvos como arquivos de texto simples
+Click the checkbox to toggle it. Press the new-line button at the end of the line to create a new item.
 
-Arquivos estão no formato usado pelo "Org mode".
+** A note's title can also track checkbox list states [66%] [2/3]
 
-** Tipo de localização (repositório)
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
 
-Você pode manter os blocos de notas sincronizados em uma pasta em seu aparelho, no cartão SD ou no Dropbox.
+* Search
+** There are many search operators supported
+
+You can search notes by state, tag, scheduled, deadline or event times, etc.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.

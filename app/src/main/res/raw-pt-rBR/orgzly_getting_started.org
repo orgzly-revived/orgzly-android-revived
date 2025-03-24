@@ -33,8 +33,9 @@ Você pode configurar quantos estados quiser: TODO, NEXT, DONE, etc.
 *** DONE Isto é uma nota com o tipo de estado concluído (done)
 CLOSED: [2018-01-24 Wed 17:00]
 
-** Uma nota pode ter um horário agendado
-SCHEDULED: <2015-02-20 Fri 15:15>
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
 *** Horários podem ter um repetidor
 SCHEDULED: <2015-02-16 Mon .+2d>
@@ -44,19 +45,17 @@ DEADLINE: <2015-02-20 Fri>
 
 ** Lembretes para agendamento e horário do prazo limite são suportados
 
-Eles estão desativados por padrão e precisam ser ativados nas Configurações.
-
-** [#A] Notas podem ter prioridade
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
 
 Você pode alterar o número de prioridades nas Configurações. Você também pode alterar a prioridade padrão - definindo prioridade para as notas que não possuem.
 
-** Notas podem conter links
+** You can also set a deadline time
+DEADLINE: <2015-02-20 Fri>
 
-Discar um número de telefone (tel:555-0199), enviar SMS (sms:555-0199), escrever e-mail (mailto:support@orgzlyrevived.com) ou visitar uma página da web ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+** Event times can be used anywhere in the note's content
 
-Você também pode criar links para uma outra nota ou caderno dentro do app.
-
-Consulte https://www.orgzlyrevived.com/docs#links para obter mais informações.
+You can have multiple event times:
 
 ** Ênfase tipográfica básica é suportada
 
@@ -64,31 +63,57 @@ Você pode deixar as palavras *negrito*, /itálico/, _sublinhado_, =textuais=, ~
 
 ** Checklists podem ser criados
 
+** [#A] Note can have a priority
+
 - [X] Tarefa 1
 - [ ] Tarefa 2
 - [ ] Tarefa 3
 
 Clique na caixa de seleção para marcá-lo. Tecle enter no final da linha para criar um novo item.
 
-* Pesquisa
-** Existem muitos operadores de pesquisa suportados
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-Você pode buscar notas por estado, tag, horário agendado, prazo, etc.
+You can also link to another note or notebook within the app.
 
-Acesse https://www.orgzlyrevived.com/docs#search para aprender mais.
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
 
-** Pesquisas podem ser salvas para acesso rápido
+** Basic typographical emphasis is supported
 
-Teste as pesquisas de exemplo na gaveta de navegação e observe o que as pesquisas fazem.
+You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
 
-Você pode criar suas próprias pesquisas e salvá-las na gaveta de navegação em "Pesquisas".
+** Checkbox list is available
 
-* Sincronizando
+- [X] Task 1
+- [ ] Task 2
+- [ ] Task 3
 
-** Cadernos podem ser salvos como arquivos de texto simples
+Click the checkbox to toggle it. Press the new-line button at the end of the line to create a new item.
 
-Arquivos são formatados usando o "Modo Org".
+** A note's title can also track checkbox list states [66%] [2/3]
 
-** Tipo de localização (repositório)
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
 
-Você pode manter os cadernos sincronizados usando um diretório no seu dispositivo móvel, cartão SD ou Dropbox.
+* Search
+** There are many search operators supported
+
+You can search notes by state, tag, scheduled, deadline or event times, etc.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.

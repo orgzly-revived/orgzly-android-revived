@@ -33,8 +33,9 @@ Se si cerca note con tag “tag1” utilizzando la query “t.tag1”, questa no
 *** DONE Questa è una nota con il tipo di stato /Done/
 CLOSED: [2018-01-24 Mer 17:00]
 
-** La nota può avere un orario programmato
-SCHEDULED: <2015-02-20 Ven 15:15>
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
 *** Gli orari possono avere una ripetizione
 SCHEDULED: <2015-02-16 Lun .+2d>
@@ -44,19 +45,17 @@ DEADLINE: <2015-02-20 Ven>
 
 ** Sono supportati i promemoria per i task pianificati e per le scadenze
 
-Sono disabilitati di default e devono essere abilitati nelle impostazioni.
-
-** [#A] Le note possono avere una priorità
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
 
 È possibile modificare il numero di priorità nelle impostazioni. Puoi anche cambiare la priorità predefinita - la proprietà impostata per le note in cui non viene specificata.
 
-** Le note possono includere link
+** You can also set a deadline time
+DEADLINE: <2015-02-20 Fri>
 
-Digita un numero di telefono (tel:555-0199), invia SMS (sms:555-0199), componi un'email (mailto:support@orgzlyrevived.com) o visita una pagina web ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+** Event times can be used anywhere in the note's content
 
-Puoi anche collegarti a un'altra nota o a un taccuino all'interno dell'app.
-
-Vai su https://www.orgzlyrevived.com/docs#links per maggiori informazioni.
+You can have multiple event times:
 
 ** Sono supportati i livelli di formattazione base
 
@@ -64,31 +63,57 @@ Puoi usare parole in *grassetto*, /corsivo/, _sottolineato_, =scandito=, ~tipo c
 
 ** È disponibile una lista di checkbox
 
+** [#A] Note can have a priority
+
 - [X] Attività 1
 - [ ] Attività 2
 - [ ] Attività 3
 
 Fare clic sulla casella per cambiare lo stato. Premere il pulsante nuova riga alla fine della linea per creare un nuovo elemento.
 
-* Cerca
-** Sono supportati molti operatori di ricerca
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-Puoi cercare nelle note a seconda dello stato, del tag, della programmazione o della scadenza ecc.
+You can also link to another note or notebook within the app.
 
-Vai su https://www.orgzlyrevived.com/docs#search per saperne di più.
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
 
-** Le stringhe di ricerca possono essere salvate per un rapido accesso
+** Basic typographical emphasis is supported
 
-Prova a fare ricerche semplici dal cassetto di navigazione e nota quali stringhe usino.
+You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
 
-Puoi creare le proprie ricerche salvate premendo su "Ricerche" nel menu di navigazione.
+** Checkbox list is available
 
-* Sincronizzazione
+- [X] Task 1
+- [ ] Task 2
+- [ ] Task 3
 
-** I taccuini possono essere salvati come file di testo
+Click the checkbox to toggle it. Press the new-line button at the end of the line to create a new item.
 
-I file sono nel formato usato da "Org mode".
+** A note's title can also track checkbox list states [66%] [2/3]
 
-** Tipo di percorso (repository)
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
 
-Puoi tenere sincronizzati i taccuini sul tuo dispositivo mobile in una directory, su di una scheda di memoria o su Dropbox.
+* Search
+** There are many search operators supported
+
+You can search notes by state, tag, scheduled, deadline or event times, etc.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.
