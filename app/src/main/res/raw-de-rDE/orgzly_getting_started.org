@@ -33,8 +33,9 @@ Sie können eine beliebige Anzahl zu verwendender Status konfigurieren: TODO, NE
 *** DONE Dies ist eine Notiz mit dem Status /done/ (also erledigt)
 CLOSED: [2018-01-24 Wed 17:00]
 
-** Sie können einen Termin festlegen
-SCHEDULED: <2015-02-20 Fri 15:15>
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
 *** Es gibt eine Wiederholungsfunktion für Termine
 SCHEDULED: <2015-02-16 Mon .+2d>
@@ -44,19 +45,17 @@ DEADLINE: <2015-02-20 Fri>
 
 ** Erinnerungen für Termine und Fristen
 
-Erinnerungen für Termine und Fristen sind standardmäßig deaktiviert und können in den Einstellungen aktiviert werden.
-
-** [#A] Notizen können priorisiert werden
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
 
 Die verschiedenen Prioritätsstufen können in den Einstellungen verändert werden. Ebenso kann die Priorität angepasst werden, die Notizen ohne explizite Priorisierung zugeordnet wird.
 
-** Notizen können Links enthalten
+** You can also set a deadline time
+DEADLINE: <2015-02-20 Fri>
 
-Wählen Sie eine Telefonnummer (tel:555-0199), senden Sie SMS (sms:555-0199), schreiben Sie eine E-Mail (mailto:support@orgzlyrevived.com) oder besuchen Sie eine Webseite ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+** Event times can be used anywhere in the note's content
 
-Sie können auch auf eine andere Notiz oder ein anderes Notizbuch innerhalb der App verweisen.
-
-Siehe https://www.orgzlyrevived.com/docs#links für weitere Informationen.
+You can have multiple event times:
 
 ** Grundlegende typografische Hervorhebungen werden unterstützt
 
@@ -64,31 +63,57 @@ Sie können Wörter *fett*, /kursiv/, _unterstrichen_, =verbatim=, ~als Code~ un
 
 ** Verwenden von Kontrollkästchen
 
+** [#A] Note can have a priority
+
 - [X] Aufgabe 1
 - [ ] Aufgabe 2
 - [ ] Aufgabe 3
 
 Klicken Sie auf das Kontrollkästchen, um es zu wechseln. Wenn Sie aus einer Zeile mit Kontrollkästchen eine neue Zeile erstellen, wird diese Zeile ebenfalls ein Kontrollkästchen beinhalten.
 
-* Suchen
-** Es werden viele Suchoperatoren unterstützt
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-Sie können Notizen nach Status (state), Schlagwort (tag), Termin (scheduled) oder Frist (deadline) usw. durchsuchen.
+You can also link to another note or notebook within the app.
 
-Besuchen Sie https://www.orgzlyrevived.com/docs#search, um mehr zu erfahren.
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
 
-** Suchabfragen können für den Schnellzugriff gespeichert werden
+** Basic typographical emphasis is supported
 
-Probieren Sie die Beispielabfragen in der Navigationsleiste aus und schauen Sie sich an, wie diese Abfragen aufgebaut sind.
+You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
 
-Sie können Ihre eigenen gespeicherten Suchen erstellen, indem Sie in der Navigationsleiste „Suchen“ antippen.
+** Checkbox list is available
 
-* Synchronisieren
+- [X] Task 1
+- [ ] Task 2
+- [ ] Task 3
 
-** Notizbücher können als reine Textdateien gespeichert werden
+Click the checkbox to toggle it. Press the new-line button at the end of the line to create a new item.
 
-Diese Dateien haben das "Org mode"-Format.
+** A note's title can also track checkbox list states [66%] [2/3]
 
-** Speicherort (Repository)
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
 
-Notizbücher können in einem Verzeichnis auf Ihrem mobilen Gerät, der SD-Karte oder Ihrer Dropbox gespeichert und so synchronisiert werden.
+* Search
+** There are many search operators supported
+
+You can search notes by state, tag, scheduled, deadline or event times, etc.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.

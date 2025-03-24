@@ -33,8 +33,9 @@ Lze nastavit množství stavů: TODO, NEXT, DONE, atd.
 *** DONE je dokončená poznámka, se stavem /done/
 CLOSED: [2018-01-24 Wed 17:00]
 
-** Poznámka může obsahovat naplánovaný čas
-SCHEDULED: <2015-02-20 Fri 15:15>
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
 *** Časy mohou obsahovat opakovač
 SCHEDULED: <2015-02-16 Mon .+2d>
@@ -44,19 +45,17 @@ DEADLINE: <2015-02-20 Fri>
 
 ** Upozornění pro časy plánované a časy po termínu jsou podporovány
 
-Ve výchozím nastavení jsou tyto vypnuty a je nutno je povolit v nastavení.
-
-** [#A] Poznámky mohou obsahovat prioritu
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
 
 Priority můžete nastavit v Nastavení. Můžete také nastavit výchozí prioritu - předpokládanou prioritu pro poznámky bez nastavené priority.
 
-** Poznámky mohou obsahovat odkazy
+** You can also set a deadline time
+DEADLINE: <2015-02-20 Fri>
 
-Vytočení telefonního čísla (tel:555-0199), poslání textové zprávy (sms:555-0199), email (mailto:support@orgzlyrevived.com) nebo webová stránky ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+** Event times can be used anywhere in the note's content
 
-Linkovat lze i ostatní poznámky nebo sešity v rámci aplikace.
-
-Navštivte https://www.orgzlyrevived.com/docs#links pro více informací.
+You can have multiple event times:
 
 ** Základní typografická zvýraznění jsou podporována
 
@@ -64,31 +63,57 @@ Slova lze označit jako *tučná*, /kurzíva/, _podtržená_, =doslovná=, ~kód
 
 ** Zaškrtávací políčka jsou k dispozici
 
+** [#A] Note can have a priority
+
 - [X] Úkol 1
 - [ ] Úkol 2
 - [ ] Úkol 3
 
 Klikněte na zaškrtávací políčko pro odškrtnutí. Klikněte na ikonu nového-řádku na konci řádku pro vytvoření nové položky.
 
-* Hledání
-** Podporováno je mnoho vyhledávacích operátorů
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-Můžete hledat dle stavu, štítku, času plánovaného nebo termínu a podobně.
+You can also link to another note or notebook within the app.
 
-Navšivte https://www.orgzlyrevived.com/docs#search pro další podrobnosti.
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
 
-** Hledání je možno uložit pro rychlý přístup
+** Basic typographical emphasis is supported
 
-Zkuste si ukázková hledání v navigační liště a všimněte si jaké vyhledávací dotazy obsahují.
+You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
 
-Můžete vytvořit vlastní uložená hledání kliknutím na "Hledání" v navigační liště.
+** Checkbox list is available
 
-* Synchronizace
+- [X] Task 1
+- [ ] Task 2
+- [ ] Task 3
 
-** Sešity je možno uložit jako čistě textové soubory
+Click the checkbox to toggle it. Press the new-line button at the end of the line to create a new item.
 
-Soubory jsou ve formátu používaném v "Org módu".
+** A note's title can also track checkbox list states [66%] [2/3]
 
-** Typ (umístění) úložiště
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
 
-Sešity můžete synchronizovat se složkou na vašem mobilním zařízení, na SD kartě nebo na Dropboxu.
+* Search
+** There are many search operators supported
+
+You can search notes by state, tag, scheduled, deadline or event times, etc.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.

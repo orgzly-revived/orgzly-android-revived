@@ -33,8 +33,9 @@ Létre lehet hozni akárhány állapot jelzőt: TODO, NEXT, DONE, stb.
 *** DONE Ennek a bejegyzésnek az állapota /done/, vagyis /kész/
 CLOSED: [2018-01-24 Wed 17:00]
 
-** Egy bejegyzést ütemezni is lehet
-SCHEDULED: <2015-02-20 Fri 15:15>
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
 *** Ismétlődő időt is be lehet állítani
 SCHEDULED: <2015-02-16 Mon .+2d>
@@ -44,19 +45,17 @@ DEADLINE: <2015-02-20 Fri>
 
 ** Az ütemezett és a határidőkhöz emlékeztetőt is lehet beállítani
 
-Alaphelyzetben ez le van tiltva, engedélyezni kell a Beállításokban.
-
-** [#A] Egy jegyzetnek lehet prioritása
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
 
 A prioritások számát megadhatod a Beállításokban. Az alap prioritást is át lehet állítani - bármely bejegyzésnek ez lesz a prioritása ha nincs külön beállítva.
 
-** Linket is tartalmazhat egy bejegyzés
+** You can also set a deadline time
+DEADLINE: <2015-02-20 Fri>
 
-Hívj fel egy számot (tel:555-0199), küldj SMS-t (sms:555-0199), írj emailt (mailto:support@orgzlyrevived.com) vagy látogass meg egy weboldalt ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+** Event times can be used anywhere in the note's content
 
-Lehet más bejegyzéshez vagy az appon belül másik jegyzetfüzethez is linket megadni.
-
-További információ a https://www.orgzlyrevived.com/docs#links címen.
+You can have multiple event times:
 
 ** Az alapvető tipográfiai kiemeléseket támogatja a program
 
@@ -64,31 +63,57 @@ Lehet egy szó *félkövér*, /dőlt/, _aláhúzva_, =szó szerinti=, ~kód~ és
 
 ** Jelölő négyzetet is használhatunk
 
+** [#A] Note can have a priority
+
 - [X] Első feladat
 - [ ] Második feladat
 - [ ] Harmadik feladat
 
 Kattintás a jelölőnégyzetre átváltja azt. Új elem létrehozása a sor végén az új-sor gomb megnyomásával a is lehetséges.
 
-* Keresés
-** Elég sok kereső operátort támogat a program
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-Rá lehet keresni például állapotra, címkékre, ütemezésre vagy határidőre, stb.
+You can also link to another note or notebook within the app.
 
-Erről többet a https://www.orgzlyrevived.com/docs#search oldalon tanulhatsz.
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
 
-** A keresési kifejezéseket el lehet menteni, hogy gyorsan hozzáférjünk később
+** Basic typographical emphasis is supported
 
-Próbáld ki a kész kereséseket a navigációs fiókban és tekintsd meg ott a lekérdezéseket.
+You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
 
-Létrehozhatsz saját elmentett kereséseket a navigációs fiókban a "Keresés"-re koppintva.
+** Checkbox list is available
 
-* Szinkronizálás
+- [X] Task 1
+- [ ] Task 2
+- [ ] Task 3
 
-** A jegyzettömböket szövegfáljként lehet menteni
+Click the checkbox to toggle it. Press the new-line button at the end of the line to create a new item.
 
-A mentett fájlok formátuma “Org mode”.
+** A note's title can also track checkbox list states [66%] [2/3]
 
-** A tárolók típusa
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
 
-Szinkronizálni lehet a jegyzettömböket egy könyvtárral a mobil eszközön, az SD kártyán, vagy a Dropbox-ban.
+* Search
+** There are many search operators supported
+
+You can search notes by state, tag, scheduled, deadline or event times, etc.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.

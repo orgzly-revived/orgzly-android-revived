@@ -33,8 +33,9 @@ If you search for notes with tag “tag1” using “t.tag1” query, this note 
 *** DONE 메모의 처리가 /완료/되었습니다.
 CLOSED: [2018-01-24 Wed 17:00]
 
-** 예정일을 설정할 수 있습니다.
-SCHEDULED: <2015-02-20 Fri 15:15>
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
 *** 일정을 반복할 수 있습니다.
 SCHEDULED: <2015-02-16 Mon .+2d>
@@ -44,19 +45,17 @@ DEADLINE: <2015-02-20 Fri>
 
 ** 예정일과 마감일에 대해 알림 기능을 제공합니다.
 
-기본적으로 알림이 해제되어 있으므로, 설정에서 변경하시기 바랍니다.
-
-** [#A] 메모에 우선 순위를 설정할 수 있습니다.
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
 
 우선 순위를 변경할 수 있습니다. 우선 순위를 설정하지 않은 메모에 대한 기본 우선 순위를 변경할 수 있습니다.
 
-** 노트에 바로 가기를 사용할 수 있습니다.
+** You can also set a deadline time
+DEADLINE: <2015-02-20 Fri>
 
-전화 걸기 (tel:555-0199), 문자 보내기 (sms:555-0199), 이메일 발송 (mailto:support@orgzlyrevived.com), 인터넷 연결 ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+** Event times can be used anywhere in the note's content
 
-앱 내의 다른 메모나 메모장도 바로 가기를 사용할 수 있습니다.
-
-자세한 내용은 "https://www.orgzlyrevived.com/docs#links" 참고하세요.
+You can have multiple event times:
 
 ** 기본적인 글자 강조 기능을 사용할 수 있습니다.
 
@@ -64,31 +63,57 @@ DEADLINE: <2015-02-20 Fri>
 
 ** 확인란 목록을 사용할 수 있습니다.
 
+** [#A] Note can have a priority
+
 - [X] 작업 1
 - [ ] 작업 2
 - [ ] 작업 3
 
 확인 란을 클릭하면 상태가 변경됩니다. 줄 끝에 있는 새 줄 단추를 눌러 새 항목을 만드세요.
 
-* 찾기
-** 다양한 방법으로 메모를 검색할 수 있습니다.
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-메모의 상태, 예정일, 종료일 등 으로도 검색할 수 있습니다.
+You can also link to another note or notebook within the app.
 
-자세한 내용은 "https://www.orgzlyrevived.com/docs#search" 참고하세요.
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
 
-*** 자주사용하는 검색 방법을 저장할 수 있습니다.
+** Basic typographical emphasis is supported
 
-네비게이션 메뉴에서 기본 제공된 검색 방법을 이용해보시기 바랍니다.
+You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
 
-네비게이션 메뉴에서 "찾기"를 클릭하시면 기본 제공된 검색 방법을 수정할 수 있습니다.
+** Checkbox list is available
 
-* 동기화
+- [X] Task 1
+- [ ] Task 2
+- [ ] Task 3
 
-** 메모장은 텍스트 파일로 저장됩니다.
+Click the checkbox to toggle it. Press the new-line button at the end of the line to create a new item.
 
-텍스트 파일의 확장자는 org 입니다.
+** A note's title can also track checkbox list states [66%] [2/3]
 
-** 저장소 종류
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
 
-핸드폰 저장소나 드랍박스에 동기화 기능으로 메모장을 저장할 수 있습니다.
+* Search
+** There are many search operators supported
+
+You can search notes by state, tag, scheduled, deadline or event times, etc.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.
