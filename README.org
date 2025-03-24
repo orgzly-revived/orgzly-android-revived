@@ -27,6 +27,9 @@ http://orgmode.org for more information.
 <a href="https://play.google.com/store/apps/details?id=com.orgzlyrevived">
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Get it on Google Play" height="80">
 </a>
+<a href="https://apt.izzysoft.de/packages/com.orgzlyrevived">
+<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height="80">
+</a>
 #+END_HTML
 
 The Orgzly Revived project aims to continue development of the Orgzly application. The rebranding is due 
