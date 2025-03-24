@@ -672,4 +672,14 @@
     <string name="sync_status_saved">Сохранено в %s</string>
     <string name="moving_between_subdirectories_requires_api_24">Переименование блокнота в другую подпапку требует Android 7 или выше</string>
     <string name="subfolder_support_disabled">Поддержка подпапок отключена</string>
+    <string name="export_settings_to_note">Экспортировать настройки в заметку</string>
+    <string name="failed_to_get_note_payload">Не удалось извлечь приложение к заметке</string>
+    <string name="settings_exported_to">Экспортированные настройки в заметку «%1$s»</string>
+    <string name="settings_imported">Импортированные настройки и сохранённые поисковые запросы</string>
+    <string name="error_multiple_notes_with_matching_property_value">Найдено несколько заметок сосвойством \"%1$s\" в значении \"%2$s\"</string>
+    <string name="export_settings_summary">Запись всех настроек в формате JSON в заметку по вашему выбору</string>
+    <string name="import_settings_from_note">Импорт настроек из заметки</string>
+    <string name="settings_imported_from">Импортированные настройки из заметки «%1$s»</string>
+    <string name="settings_could_not_be_imported">Не удалось импортировать настройки и сохранённые поисковые запросы</string>
+    <string name="export_settings">Экспорт настроек приложения</string>
 </resources>
