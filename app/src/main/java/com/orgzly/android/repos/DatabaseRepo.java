@@ -2,6 +2,8 @@ package com.orgzly.android.repos;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
 import com.orgzly.android.data.DbRepoBookRepository;
 import com.orgzly.android.util.MiscUtils;
 import com.orgzly.android.util.UriUtils;
@@ -48,8 +50,7 @@ public class DatabaseRepo implements SyncRepo {
     }
 
     @Override
-    public VersionedRook retrieveBook(String repoRelativePath, File file) {
-        Uri uri = repoUri.buildUpon().appendPath(repoRelativePath).build();
+    public VersionedRook retrieveBook(Uri uri, File file) {
         return dbRepo.retrieveBook(repoId, repoUri, uri, file);
     }
 
@@ -83,6 +84,7 @@ public class DatabaseRepo implements SyncRepo {
         dbRepo.deleteBook(uri);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return repoUri.toString();

@@ -82,7 +82,7 @@ public class LocalDbRepoTest extends OrgzlyTest {
 
         File tmpFile = dataRepository.getTempBookFile();
         try {
-            syncRepo.retrieveBook("mock-book.org", tmpFile);
+            syncRepo.retrieveBook(vrook.uri, tmpFile);
             String content = MiscUtils.readStringFromFile(tmpFile);
             assertEquals("book content\n" + "\n" + "* First note\n" + "** Second note", content);
         } finally {

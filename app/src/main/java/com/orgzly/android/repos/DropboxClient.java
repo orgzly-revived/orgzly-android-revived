@@ -228,10 +228,8 @@ public class DropboxClient {
     /**
      * Download file from Dropbox and store it to a local file.
      */
-    public VersionedRook download(Uri repoUri, String repoRelativePath, File localFile) throws IOException {
+    public VersionedRook download(Uri repoUri, Uri uri, File localFile) throws IOException {
         linkedOrThrow();
-
-        Uri uri = getFullUriFromRelativePath(repoUri, repoRelativePath);
 
         OutputStream out = new BufferedOutputStream(new FileOutputStream(localFile));
 

@@ -53,16 +53,16 @@ interface SyncRepoTest {
             // Given
             val fileContent = "\n\n...\n\n"
             val fileName = "Book one.org"
-            val expectedRookUri = writeFileToRepo(fileContent, syncRepo, repoManipulationPoint, fileName)
+            val rookUri = writeFileToRepo(fileContent, syncRepo, repoManipulationPoint, fileName)
 
             // When
             val books = syncRepo.books
             val retrieveBookDestinationFile = kotlin.io.path.createTempFile().toFile()
-            syncRepo.retrieveBook(fileName, retrieveBookDestinationFile)
+            syncRepo.retrieveBook(rookUri, retrieveBookDestinationFile)
 
             // Then
             assertEquals(1, books.size)
-            assertEquals(expectedRookUri, books[0].uri.toString())
+            assertEquals(rookUri, books[0].uri)
             assertEquals(fileContent, retrieveBookDestinationFile.readText())
             assertEquals(fileName, BookName.getRepoRelativePath(syncRepo.uri, books[0].uri))
         }
@@ -72,16 +72,16 @@ interface SyncRepoTest {
             AppPreferences.subfolderSupport(App.getAppContext(), true)
             val repoFilePath = "Folder/Book one.org"
             val fileContent = "\n\n...\n\n"
-            val expectedRookUri = writeFileToRepo(fileContent, syncRepo, repoManipulationPoint, "Book one.org", "Folder")
+            val rookUri = writeFileToRepo(fileContent, syncRepo, repoManipulationPoint, "Book one.org", "Folder")
 
             // When
             val books = syncRepo.books
             val retrieveBookDestinationFile = kotlin.io.path.createTempFile().toFile()
-            syncRepo.retrieveBook(repoFilePath, retrieveBookDestinationFile)
+            syncRepo.retrieveBook(rookUri, retrieveBookDestinationFile)
 
             // Then
             assertEquals(1, books.size)
-            assertEquals(expectedRookUri, books[0].uri.toString())
+            assertEquals(rookUri, books[0].uri)
             assertEquals(repoFilePath, BookName.getRepoRelativePath(syncRepo.uri, books[0].uri))
             assertEquals(fileContent, retrieveBookDestinationFile.readText())
         }
@@ -173,7 +173,7 @@ interface SyncRepoTest {
             MiscUtils.writeStringToFile("...", tmpFile)
             // When
             val storedRook = syncRepo.storeBook(tmpFile, repositoryPath)
-            val retrievedBook = syncRepo.retrieveBook(repositoryPath, tmpFile)
+            val retrievedBook = syncRepo.retrieveBook(storedRook.uri, tmpFile)
             tmpFile.delete()
             // Then
             assertEquals(retrievedBook.uri, storedRook.uri)
@@ -187,7 +187,7 @@ interface SyncRepoTest {
             MiscUtils.writeStringToFile("...", tmpFile)
             // When
             val storedRook = syncRepo.storeBook(tmpFile, repositoryPath)
-            val retrievedBook = syncRepo.retrieveBook(repositoryPath, tmpFile)
+            val retrievedBook = syncRepo.retrieveBook(storedRook.uri, tmpFile)
             tmpFile.delete()
             // Then
             assertEquals(retrievedBook.uri, storedRook.uri)
@@ -258,7 +258,7 @@ interface SyncRepoTest {
                     // as long as URLs work as expected.
                     repoManipulationPoint as DropboxClient
                     val retrievedFile = kotlin.io.path.createTempFile().toFile()
-                    repoManipulationPoint.download(syncRepo.uri, repositoryPath, retrievedFile)
+                    repoManipulationPoint.download(syncRepo.uri, syncRepo.uri.buildUpon().appendPath(repositoryPath).build(), retrievedFile)
                     assertEquals(testBookContent, retrievedFile.readText())
                 }
             }
@@ -303,12 +303,11 @@ interface SyncRepoTest {
 
         fun testRenameBook_repoFileAlreadyExists(repoManipulationPoint: Any, syncRepo: SyncRepo) {
             // Given
-            for (fileName in arrayOf("Original.org", "Renamed.org")) {
-                writeFileToRepo("...", syncRepo, repoManipulationPoint, fileName)
-            }
+            val firstExistingRookUri = writeFileToRepo("...", syncRepo, repoManipulationPoint, "Original.org")
+            val secondExistingRookUri = writeFileToRepo("...", syncRepo, repoManipulationPoint, "Renamed.org")
             val retrievedBookFile = kotlin.io.path.createTempFile().toFile()
             // When
-            val originalRook = syncRepo.retrieveBook("Original.org", retrievedBookFile)
+            val originalRook = syncRepo.retrieveBook(firstExistingRookUri, retrievedBookFile)
             try {
                 syncRepo.renameBook(originalRook.uri, "Renamed")
             } catch (e: IOException) {
@@ -433,7 +432,7 @@ interface SyncRepoTest {
             repoManipulationPoint: Any,
             fileName: String,
             folderName: String? = null
-        ): String {
+        ): Uri {
             var expectedRookUri = repo.uri.toString() + "/" + Uri.encode(fileName)
             when (repo) {
                 is WebdavRepo -> {
@@ -482,7 +481,7 @@ interface SyncRepoTest {
                     tmpFile.delete()
                 }
             }
-            return expectedRookUri
+            return Uri.parse(expectedRookUri)
         }
 
         private fun updateGitRepo(workdir: File) {

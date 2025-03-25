@@ -93,6 +93,7 @@
     <string name="ssh_keygen_preference_summary">Generate key pair for Git repo sync</string>
     <string name="ssh_show_public_key_preference_title">View generated SSH public key</string>
     <string name="message_book_has_no_link">Notebook has no repository link</string>
+    <string name="message_book_has_no_rook">Notebook has never been synced before</string>
     <string name="message_note_created">Note created</string>
     <string name="message_failed_creating_note">Failed to create note</string>
     <string name="message_failed_updating_note">Failed to update note</string>

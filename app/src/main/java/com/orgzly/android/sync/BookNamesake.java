@@ -6,6 +6,7 @@ import com.orgzly.android.db.entity.BookView;
 import com.orgzly.android.db.entity.Repo;
 import com.orgzly.android.repos.VersionedRook;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +36,7 @@ public class BookNamesake {
     /**
      * Create links between each local book and each remote book with the same name.
      */
-    public static Map<String, BookNamesake> getAll(List<BookView> books, List<VersionedRook> versionedRooks) {
+    public static Map<String, BookNamesake> getAll(List<BookView> books, List<VersionedRook> versionedRooks) throws IOException {
         Map<String, BookNamesake> namesakes = new HashMap<>();
 
         /* Create links from all local books first. */
