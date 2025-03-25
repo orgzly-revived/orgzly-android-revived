@@ -55,7 +55,7 @@ public class OrgzlyTest {
 
     protected DataRepository dataRepository;
 
-    private OrgzlyDatabase database;
+    protected OrgzlyDatabase database;
 
     @Rule
     public GrantPermissionRule grantPermissionRule;

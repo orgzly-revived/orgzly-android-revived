@@ -53,6 +53,7 @@ import com.orgzly.android.util.LogUtils
 import com.orgzly.org.OrgActiveTimestamps
 import com.orgzly.org.datetime.OrgDateTime
 import java.util.Calendar
+import androidx.annotation.VisibleForTesting
 
 @Database(
         entities = [
@@ -75,7 +76,7 @@ import java.util.Calendar
             AppLog::class
         ],
 
-        version = 157
+        version = 158
 )
 @TypeConverters(com.orgzly.android.db.TypeConverters::class)
 abstract class OrgzlyDatabase : RoomDatabase() {
@@ -151,7 +152,8 @@ abstract class OrgzlyDatabase : RoomDatabase() {
                             MIGRATION_153_154,
                             MIGRATION_154_155,
                             MIGRATION_155_156,
-                            MIGRATION_156_157
+                            MIGRATION_156_157,
+                            MIGRATION_157_158
                     )
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
@@ -168,10 +170,10 @@ abstract class OrgzlyDatabase : RoomDatabase() {
         }
 
         fun insertDefaultSearches(db: SupportSQLiteDatabase) {
-            db.execSQL("INSERT INTO searches (`name`, `query`, `position`) VALUES (\"Agenda\", \".it.done ad.7\", 1)")
-            db.execSQL("INSERT INTO searches (`name`, `query`, `position`) VALUES (\"Next 3 days\", \".it.done s.ge.today ad.3\", 2)")
-            db.execSQL("INSERT INTO searches (`name`, `query`, `position`) VALUES (\"Scheduled\", \"s.today .it.done\", 3)")
-            db.execSQL("INSERT INTO searches (`name`, `query`, `position`) VALUES (\"To Do\", \"i.todo\", 4)")
+            db.execSQL("INSERT INTO searches (`name`, `query`, `position`) VALUES (\"Agenda\", \".it.done ad.7 o.s\", 1)")
+            db.execSQL("INSERT INTO searches (`name`, `query`, `position`) VALUES (\"Next 3 days\", \".it.done s.ge.today ad.3 o.s\", 2)")
+            db.execSQL("INSERT INTO searches (`name`, `query`, `position`) VALUES (\"Scheduled\", \"s.today .it.done o.s\", 3)")
+            db.execSQL("INSERT INTO searches (`name`, `query`, `position`) VALUES (\"To Do\", \"i.todo o.s\", 4)")
         }
 
         private val MIGRATION_149_150 = object : Migration(149, 150) {
@@ -610,6 +612,21 @@ abstract class OrgzlyDatabase : RoomDatabase() {
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_book_properties_name` ON `book_properties` (`name`)")
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_book_properties_value` ON `book_properties` (`value`)")
             }
+        }
+
+        private val MIGRATION_157_158 = object : Migration(157, 158) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                // Update the search queries to add the sort clause
+                db.execSQL("UPDATE searches SET query = query || ' o.s' WHERE name IN ('Agenda', 'Next 3 days', 'Scheduled', 'To Do')")
+            }
+        }
+
+        /**
+         * Expose migration from 157 to 158 for testing
+         */
+        @VisibleForTesting
+        fun runMigration157To158(db: SupportSQLiteDatabase) {
+            MIGRATION_157_158.migrate(db)
         }
     }
 }
