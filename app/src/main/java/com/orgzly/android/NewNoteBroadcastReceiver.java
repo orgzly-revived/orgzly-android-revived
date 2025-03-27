@@ -10,6 +10,7 @@ import com.orgzly.android.ui.notifications.Notifications;
 import com.orgzly.android.usecase.NoteCreateFromNotification;
 import com.orgzly.android.usecase.UseCaseRunner;
 import com.orgzly.android.util.LogUtils;
+import com.orgzly.android.sync.AutoSync;
 
 import androidx.core.app.RemoteInput;
 
@@ -25,6 +26,8 @@ public class NewNoteBroadcastReceiver extends BroadcastReceiver {
         String title = getNoteTitle(intent);
 
         if (title != null) {
+            autoSync.trigger(AutoSync.Type.QUICK_NOTE_PRE_CREATE);
+
             App.EXECUTORS.diskIO().execute(() ->
                     UseCaseRunner.run(new NoteCreateFromNotification(title)));
 
