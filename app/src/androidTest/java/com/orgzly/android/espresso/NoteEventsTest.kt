@@ -152,7 +152,7 @@ class NoteEventsTest : OrgzlyTest() {
         testUtils.setupBook("book-a", """
             * Note
             SCHEDULED: ${time(1000 * 60 * 60 * 24 * 2)}
-            DEADLINE: ${time()}
+            DEADLINE: ${time(hasTime=true)}
 
             Now: ${time(hasTime = true)}
             In one hour: ${time(1000 * 60 * 60, hasTime = true)}
