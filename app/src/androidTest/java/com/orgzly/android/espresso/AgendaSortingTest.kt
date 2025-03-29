@@ -267,11 +267,42 @@ class AgendaSortingTest : OrgzlyTest() {
         onNotesInAgenda().check(matches(recyclerViewItemCount(6)))
 
         onItemInAgenda(1, R.id.item_head_title_view).check(matches(withText(containsString("Note C"))))
-
         onItemInAgenda(2, R.id.item_head_title_view).check(matches(withText(containsString("Note A"))))
-
         onItemInAgenda(3, R.id.item_head_title_view).check(matches(withText(containsString("Note B"))))
-
         onItemInAgenda(4, R.id.item_head_title_view).check(matches(withText(containsString("Note D"))))
+    }
+
+    @Test
+    fun testAgendaSortingByDefaultOrderWhenTimeIsMissing() {
+        // Setup test data
+        testUtils.setupBook(
+            "book-a",
+            """
+           * [#C] Note A
+           SCHEDULED: <${getToday()}>
+           
+           * [#B] Note B
+           SCHEDULED: <${getToday()}>
+           
+           * [#A] Note C
+           SCHEDULED: <${getToday()}>
+           
+           * [#C] Note D
+           SCHEDULED: <${getToday()} 16:00> 
+           """.trimIndent()
+        )
+
+        scenario = ActivityScenario.launch(MainActivity::class.java)
+
+        // Search for agenda items for that specific day
+        searchForTextCloseKeyboard("ad.1")
+
+        // Verify total number of items (3 notes + today's header)
+        onNotesInAgenda().check(matches(recyclerViewItemCount(5)))
+
+        onItemInAgenda(1, R.id.item_head_title_view).check(matches(withText(containsString("Note D"))))
+        onItemInAgenda(2, R.id.item_head_title_view).check(matches(withText(containsString("Note C"))))
+        onItemInAgenda(3, R.id.item_head_title_view).check(matches(withText(containsString("Note B"))))
+        onItemInAgenda(4, R.id.item_head_title_view).check(matches(withText(containsString("Note A"))))
     }
 }

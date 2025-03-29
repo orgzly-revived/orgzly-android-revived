@@ -20,7 +20,7 @@ sealed class AgendaItem(open val id: Long) {
 
         companion object {
             fun compareByTimeInDay(a: Note, b: Note): Int {
-                // First compare timestamps
+                // If both notes are missing the time, then it will keep the original order
                 if (a.hour == null && b.hour == null) return 0
                 if (a.hour == null) return 1  // Null hour go last
                 if (b.hour == null) return -1 // Null timestamps go last
