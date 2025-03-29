@@ -35,7 +35,7 @@ public class SettingsChangeTest extends OrgzlyTest {
         testUtils.setupBook(
                 "book-a",
                 "* [#B] Note [a-1]\n" +
-                "SCHEDULED: <2018-01-01>\n" +
+                "SCHEDULED: <2014-01-01>\n" +
                 "Content for [a-1]\n" +
                 "* Note [a-2]\n" +
                 "SCHEDULED: <2014-01-01>\n"
