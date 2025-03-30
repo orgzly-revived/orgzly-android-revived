@@ -33,8 +33,9 @@ Galite sukonfiguruoti įvairias būsenas: TODO, NEXT, DONE ir t. t.
 *** DONE Čia yra įrašas su /done/ būsenos tipu
 CLOSED: [2018-01-24 Wed 17:00]
 
-** Įrašas gali turėti suplanuotą laiką
-SCHEDULED: <2015-02-20 Fri 15:15>
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
 *** Laikai gali būti kartojami
 SCHEDULED: <2015-02-16 Mon .+2d>
@@ -44,12 +45,11 @@ DEADLINE: <2015-02-20 Fri>
 
 ** Įvykių laikai gali būti naudojami bet kur įrašo turinyje
 
-Galite turėti ne vieną įvykio laiką:
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
 
-- <2015-02-20 Fri>
-- <2015-02-21 Sat>
-
-** Priminimai gali būti naudojami planavimui, terminams ar įvykiams
+*** Times can have a repeater
+SCHEDULED: <2015-02-16 Mon .+2d>
 
 Pažymėkite įrašą kaip atliktą, kad pasislinktų kartojimas.
 
@@ -57,32 +57,31 @@ Pažymėkite įrašą kaip atliktą, kad pasislinktų kartojimas.
 
 Galite pakeisti svarbos pasirinkimų kiekį nustatymuose. Taip pat galite pakeisti numatytąją svarbą – įgaunama svarba nenustačius.
 
-** Įrašai gali turėti nuorodas
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
-Skambinkite tel. numeriu (tel:370-000), siųsti SMS (sms:370-000), rašyti el. laišką (mailto:support@orgzlyrevived.com) ar apsilankyti svetainėje ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+** Reminders for notes with scheduled, deadline, or event times are supported
 
-Taip pat galite nurodyti į kitą įrašą ar užrašinę programėlėje.
+Mark the note as done to shift the repeater.
 
-Žiūrėkite https://www.orgzlyrevived.com/docs#links išsamesnei informacijai.
+** [#A] Note can have a priority
 
-** Palaikomas paprastas apipavidalinimas pabrėžimui
+You can change the number of priorities in Settings. You can also change default priority - assumed priority for notes without one set.
 
-Galite žodžius rašyti *pusjuodžiu*, /kursyvu/, _pabrauktai_, =neformatuotai=, ~kodu~ ir +perbraukimu+.
+** Note can include links
 
-** Galimas sąrašas su varnelėmis
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-- [X] Užduotis 1
-- [ ] Užduotis 2
-- [ ] Užduotis 3
+You can also link to another note or notebook within the app.
 
-Spustelėkite langelį, kad pažymėtumėte. Spustelėkite naujos eilutės mygtuką eilutės gale, kad sukurtumėte naują elementą.
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
+
+** Basic typographical emphasis is supported
 
 * Paieška
 ** Yra daug palaikomų paieškos operatorių
 
 Galite ieškoti įrašų pagal būseną, žymę, suplanavimą, terminą, įvykio laiką ir t. t.
-
-Žiūrėkite https://www.orgzlyrevived.com/docs#search išsamesnei informacijai.
 
 ** Paieškos užklausos gali būti išsaugotos greitai prieigai
 
@@ -90,12 +89,27 @@ Pabandykite pavyzdines paieškas iš navigacijos skyriaus ir atsižvelkite į na
 
 Galite sukurti savo išsaugotas paieškas spustelėdami „Paieškos“ navigacijos skyriuje.
 
-* Sinchronizavimas
-
 ** Užrašinės gali būti išsaugotos kaip grynojo teksto failai
 
-Failai yra [[https://orgmode.org/][Org mode]] formato.
-
-** Vietos (saugyklos) tipas
+* Search
+** There are many search operators supported
 
 Saugykla yra vieta, su kuria galite sinchronizuoti savo užrašines. Saugykla gali būti katalogas jūsų mobiliajame įrenginyje, SD kortelėje ar Dropbox.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.

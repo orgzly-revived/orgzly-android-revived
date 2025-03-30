@@ -33,8 +33,9 @@
 *** DONE Такая нататка з /выкананым/ тыпам стану
 CLOSED: [2018-01-24 Срд 17:00]
 
-** Нататкі могуць мець заплянаваны час
-SCHEDULED: <2015-02-20 Пят 15:15>
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
 *** Час можа мець паўтаральнік
 SCHEDULED: <2015-02-16 Пан .+2д>
@@ -44,12 +45,11 @@ DEADLINE: <2015-02-20 Пят>
 
 ** Часы падзеі ільга адзначаць дзе заўгодна ў зьмесьце нататкі
 
-Ільга мець некалькі часоў падзеі:
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
 
-- <2015-02-20 Пят>
-- <2015-02-21 Суб>
-
-** Падтрымліваюцца нагадваньні ў нататак з заплянаваным часам ды тэрмінам
+*** Times can have a repeater
+SCHEDULED: <2015-02-16 Mon .+2d>
 
 Пазначце нататку як выкананую, каб зрушыць паўтаральнік.
 
@@ -57,32 +57,31 @@ DEADLINE: <2015-02-20 Пят>
 
 Ільга зьмяніць колькасьць прыярытэтаў у наладах. Вы таксама можаце зьмяніць прадвызначаны прыярытэт - разьлічаны на нататкі, дзе ён ня вызначаны.
 
-** Нататка можа зьмяшчаць спасылкі
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
-Патэлефанаваць на нумар (tel:555-0199), надаслаць SMS (sms:555-0199), напісаць электронны ліст (mailto:support@orgzlyrevived.com), або наведаць вэб-старонку ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+** Reminders for notes with scheduled, deadline, or event times are supported
 
-Таксама ільга спасылацца на іншую нататку ці нататнік у праграме.
+Mark the note as done to shift the repeater.
 
-Глядзіце дадатковыя зьвесткі на [[https://www.orgzlyrevived.com/docs#links]].
+** [#A] Note can have a priority
 
-** Падтрымліваюцца асноўныя друкарскія выдзяленьні
+You can change the number of priorities in Settings. You can also change default priority - assumed priority for notes without one set.
 
-Ільга рабіць тэкст *тлустым*, /курсіўным/, _падкрэсьленым_, =вылучаным=, ~кодам~ ды +закрэсьленым+.
+** Note can include links
 
-** Даступны сьпіс з птушкамі
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-- [X] Заданьне 1
-- [ ] Заданьне 2
-- [ ] Заданьне 3
+You can also link to another note or notebook within the app.
 
-Націсьніце на поле, каб зьмяніць стан. Націсьніце кнопку новага радка ў канцы радка, каб стварыць новы элемэнт.
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
+
+** Basic typographical emphasis is supported
 
 * Пошук
 ** Падтрымліваюцца разнастайныя апэратары пошуку
 
 Ільга шукаць нататкі па стану, метках, заплянаванаму часу ці тэрміну й г.д.
-
-Глядзіце [[https://www.orgzlyrevived.com/docs#search]], каб даведацца больш.
 
 ** Пошукавыя запыты можна захоўваць дзеля хуткага доступу
 
@@ -90,12 +89,27 @@ DEADLINE: <2015-02-20 Пят>
 
 Ільга стварыць свае ўласныя пошукавыя запыты націсканьнем на «Пошукавыя запыты» ў панэлі навігацыі.
 
-* Сынхранізацыя
-
 ** Нататнікі могуць захоўвацца як простыя тэкставыя файлы
 
-Файлы захоўваюцца ў фармаце паводле [[https://orgmode.org/][Org mode]].
-
-** Тып разьмяшчэньня (рэпазітара)
+* Search
+** There are many search operators supported
 
 Рэпазітар - гэта месца, зь якім вы можаце сынхранізаваць свае нататнікі. Вы можаце трымаць нататнікі ў каталозе на сваёй мабільнай прыладзе, SD-картцы ці ў Dropbox.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.

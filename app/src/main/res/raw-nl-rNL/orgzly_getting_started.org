@@ -33,8 +33,9 @@ Je kunt zo veel statussen configureren als je wilt: TODO, NEXT, DONE, etc.
 *** DONE Dit is een notitie met een /done/ type status
 CLOSED: [2018-01-24 Wed 17:00]
 
-** Notitie kan een geplande tijd hebben
-SCHEDULED: <2015-02-20 Fri 15:15>
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
 *** Tijden kunnen een herhaler hebben
 SCHEDULED: <2015-02-16 Mon .+2d>
@@ -44,19 +45,17 @@ DEADLINE: <2015-02-20 Fri>
 
 ** Herinneringen aan geplande en deadline tijdstippen zijn ondersteund
 
-Ze zijn standaard uitgeschakeld en moeten in Instellingen worden ingeschakeld.
-
-** [#A] Een notitie kan een prioriteit hebben
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
 
 U kunt het aantal prioriteiten in Instellingen wijzigen. U kunt ook de standaard prioriteit - aangenomen prioriteit wijzigen voor notities zonder één set.
 
-** Een notitie kan links gebruiken
+** You can also set a deadline time
+DEADLINE: <2015-02-20 Fri>
 
-Bel een telefoonnummer (tel:555-0199), stuur een SMS (sms:555-0199), stel een e-mail op (mailto:support@orgzlyrevived.com) of bezoek een webpagina ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+** Event times can be used anywhere in the note's content
 
-U kunt ook naar een andere notitie of notebook binnen de app linken.
-
-Zie https://www.orgzlyrevived.com/docs#links voor meer informatie.
+You can have multiple event times:
 
 ** Typografische basisaccentuering wordt ondersteund
 
@@ -64,31 +63,57 @@ Je kunt worden *dikgedrukt*, /schuin/, _onderstreept_, =verbato=, ~code~ en +doo
 
 ** Checkbox lijst is beschikbaar
 
+** [#A] Note can have a priority
+
 - [X] Taak 1
 - [ ] Taak 2
 - [ ] Taak 3
 
 Klik op de checkbox om het aan te vinken. Druk op de nieuwe-lijnknop aan het einde van de regel om een nieuw item aan te maken.
 
-* Zoeken
-** Er worden veel zoekoperatoren ondersteund
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-Je kunt notities doorzoeken op status, label, geplande- of deadlinetijd etc.
+You can also link to another note or notebook within the app.
 
-Zie https://www.orgzlyrevived.com/docs#search voor meer informatie.
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
 
-** Zoekopdrachten kunnen worden opgeslagen voor snelle toegang
+** Basic typographical emphasis is supported
 
-Probeer voorbeeldzoekopdrachten vanuit de navigatie lade en let op de zoekopdrachten die ze gebruiken.
+You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
 
-Je kunt je eigen opgeslagen zoekopdrachten maken door te klikken op "Zoeken" in de navigatie-lade.
+** Checkbox list is available
 
-* Synchroniseren
+- [X] Task 1
+- [ ] Task 2
+- [ ] Task 3
 
-** Notebooks kunnen worden opgeslagen als platte-tekst bestanden
+Click the checkbox to toggle it. Press the new-line button at the end of the line to create a new item.
 
-Bestanden zijn in de indeling die wordt gebruikt door "Org-mode".
+** A note's title can also track checkbox list states [66%] [2/3]
 
-** Soort locatie (archief)
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
 
-Je kunt je notitieboeken synchroniseren met een map op uw mobiele apparaat, SD-kaart of Dropbox.
+* Search
+** There are many search operators supported
+
+You can search notes by state, tag, scheduled, deadline or event times, etc.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.

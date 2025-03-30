@@ -33,8 +33,9 @@ Anda dapat mengkonfigurasi sejumlah bagian negara untuk menggunakan: TODO, NEXT,
 *** DONE Ini adalah catatan dengan tipe status /selesai/
 CLOSED: [2018-01-24 Wed 17:00]
 
-** Catatan harus memiliki jadwal waktu
-SCHEDULED: <2015-02-20 Fri 15:15>
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
 *** Waktu bisa memiliki pengulang
 SCHEDULED: <2015-02-16 Mon .+2d>
@@ -44,19 +45,19 @@ DEADLINE: <2015-02-20 Fri>
 
 ** Pengingat jadwal dan deadline juga didukung
 
-They are disabled by default and need to be enabled in Settings.
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
 
-** [#A] Note can have a priority
+- [X] Task 1
+- [ ] Task 2
+- [ ] Task 3
 
-You can change the number of priorities in Settings. You can also change default priority - assumed priority for notes without one set.
+** You can also set a deadline time
+DEADLINE: <2015-02-20 Fri>
 
-** Note can include links
+** Event times can be used anywhere in the note's content
 
-Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
-
-You can also link to another note or notebook within the app.
-
-See https://www.orgzlyrevived.com/docs#links for more information.
+You can have multiple event times:
 
 ** Dasar tekanan typografi di dukung
 
@@ -64,31 +65,57 @@ Kamu bisa membuat kata *tebal*, /miring/, _bergaris bawah_, =verbatim=, ~kode~ d
 
 ** Checkbox list is available
 
+** [#A] Note can have a priority
+
 - [X] Task 1
 - [ ] Task 2
 - [ ] Task 3
 
 Click the checkbox to toggle it. Press new-line button at the end of the line to create a new item.
 
-* Pencarian
-Ada banyak operator pencarian yang didukung
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-Anda dapat mencari catatan menurut negara, tag, jadal atau tanggal waktu dll.
+You can also link to another note or notebook within the app.
 
-See https://www.orgzlyrevived.com/docs#search to learn more.
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
 
-pertanyaan penelusuran dapat disimpan untuk akses cepat
+** Basic typographical emphasis is supported
 
-Cobalah contoh penelusuran dari laci navigasi dan catat pertanyaan yang mereka gunakan.
+You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
 
-Anda dapat membuat pencarian tersimpan Anda sendiri dengan menekan "Searches" di laci navigasi.
+** Checkbox list is available
 
-* Sinkronisasi
+- [X] Task 1
+- [ ] Task 2
+- [ ] Task 3
 
-** Notebook dapat disimpan sebagai file teks biasa
+Click the checkbox to toggle it. Press the new-line button at the end of the line to create a new item.
 
-File dalam format yang digunakan oleh"Org mode".
+** A note's title can also track checkbox list states [66%] [2/3]
 
-** Jenis lokasi (repositori)
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
 
-Anda dapat menyimpan buku catatan dengan disinkronkan dengan sebuah direktori pada perangkat mobile Anda, kartu SD atau Dropbox.
+* Search
+** There are many search operators supported
+
+You can search notes by state, tag, scheduled, deadline or event times, etc.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.

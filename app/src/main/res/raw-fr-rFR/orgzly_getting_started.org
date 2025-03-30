@@ -33,8 +33,9 @@ Vous pouvez configurer tous les états que vous souhaitez : TODO, NEXT, DONE, e
 *** DONE C'est une note avec un type d'état /fait/
 CLOSED: [2018-01-24 Mer 17:00]
 
-** Une note peut avoir une date de début programmée
-SCHEDULED: <2015-02-20 Ven 15:15>
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
 *** L'horaire peut avoir un répetiteur
 SCHEDULED: <2015-02-16 Mon .+2d>
@@ -44,19 +45,17 @@ DEADLINE: <2015-02-20 Fri>
 
 ** Les rappels pour les dates planifiées ou d'échéances sont supportés
 
-Ils sont désactivés par défaut et doivent être activés dans les paramètres.
-
-** [#A] Les notes peuvent avoir une priorité
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
 
 Vous pouvez modifier le nombre de priorités dans les paramètres. Vous pouvez également changer la priorité par défaut - la priorité assumée lorsqu'elle n'est pas définie.
 
-** Les notes peuvent inclure des liens
+** You can also set a deadline time
+DEADLINE: <2015-02-20 Fri>
 
-Composer un numéro de téléphone (tel:555-0199), envoyer un SMS (sms:555-0199), écrire un courriel (mailto:support@orgzlyrevived.com) ou aller à une page web ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+** Event times can be used anywhere in the note's content
 
-Vous pouvez également lier une autre note ou un autre bloc-note de l'application.
-
-Voir https://www.orgzlyrevived.com/docs#links pour de plus amples informations (en anglais).
+You can have multiple event times:
 
 ** Les formatages de base sont supportés
 
@@ -64,31 +63,57 @@ Vous pouvez mettre les mots en *gras*, /italique/, _souligné_, =verbatim=, ~en 
 
 ** Les liste de cases à cocher sont utilsables
 
+** [#A] Note can have a priority
+
 - [X] Tâche 1
 - [X] Tâche 2
 - [X] Tâche 3
 
 Un appui sur la case à cocher change son état. Un retour à la ligne crée une nouvelle case à cocher.
 
-* Recherche
-** Il y a beaucoup d’opérateurs de recherche
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-Vous pouvez rechercher des notes par état, étiquette, planification, échéance, etc.
+You can also link to another note or notebook within the app.
 
-Voir https://www.orgzlyrevived.com/docs#search pour en savoir plus.
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
 
-** Les recherches peuvent être enregistrées pour un accès rapide
+** Basic typographical emphasis is supported
 
-Essayez les exemples de recherche du menu et notez les requêtes qu’elles utilisent.
+You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
 
-Vous pouvez créer vos propres recherches enregistrées en cliquant sur « Recherche » dans le menu de navigation.
+** Checkbox list is available
 
-* Synchronisation
+- [X] Task 1
+- [ ] Task 2
+- [ ] Task 3
 
-** Les bloc-notes peuvent être enregistrés comme de simples fichiers de texte
+Click the checkbox to toggle it. Press the new-line button at the end of the line to create a new item.
 
-Les fichiers suivent les règles de formatage « Org mode ».
+** A note's title can also track checkbox list states [66%] [2/3]
 
-** Emplacements des dépôts
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
 
-Vous pouvez garder les bloc-notes synchronisés avec un dossier de votre appareil, sur une carte mémoire SD ou avec Dropbox.
+* Search
+** There are many search operators supported
+
+You can search notes by state, tag, scheduled, deadline or event times, etc.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.

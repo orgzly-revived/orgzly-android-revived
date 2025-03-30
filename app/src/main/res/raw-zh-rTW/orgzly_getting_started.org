@@ -33,8 +33,9 @@
 *** DONE 是筆記“完成”類型的狀態
 CLOSED: [2018-01-24 Wed 17:00]
 
-** 筆記可以有預定日程"scheduled"的時間
-SCHEDULED: <2015-02-20 Fri 15:15>
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
 *** 時間可以重複
 SCHEDULED: <2015-02-16 Mon .+2d>
@@ -44,19 +45,17 @@ DEADLINE: <2018-02-20 Sat>
 
 ** 支援行事曆和截止時間的提醒
 
-預設情況下, 它們處於禁用狀態, 需要在設置中啟用。
-
-** [#A] 注釋可以具有優先順序
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
 
 您可以在 "設置" 中更改優先順序的數量。 您還可以更改預設優先順序，假使沒有筆記的優先順序。
 
-** 筆記可以包含連結
+** You can also set a deadline time
+DEADLINE: <2015-02-20 Fri>
 
-撥打電話號碼 (tel:555-0199), 傳送簡訊 (sms:555-0199), 撰寫電子郵件 (mailto:support@orgzlyrevived.com) 或訪問網頁 ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]])。
+** Event times can be used anywhere in the note's content
 
-你還可以連結到其他筆記或筆記本。
-
-有關詳細資訊, 請參閱 https://www.orgzlyrevived.com/docs#links。
+You can have multiple event times:
 
 ** 筆記支持基本的標記重點
 
@@ -64,31 +63,57 @@ DEADLINE: <2018-02-20 Sat>
 
 ** 核取方塊清單可用
 
+** [#A] Note can have a priority
+
 - [X] 任務1
 -[ ] 任務2
 -[ ] 任務3
 
 按一下核取方塊以切換它。 按下行末的new-line新建行，創建新項目
 
-* 搜尋
-** 有許多支援的搜索操作符
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-您可以按狀態、標籤、日程“schedule"或截止時間"deadline"等來搜索筆記。
+You can also link to another note or notebook within the app.
 
-請參閱 https://www.orgzlyrevived.com/docs#search 瞭解更多。
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
 
-** 可以將搜尋保存以便快速訪問
+** Basic typographical emphasis is supported
 
-嘗試使用導航抽屜中的搜尋範本, 並記下他們使用的查詢語法。
+You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
 
-您可以通過按一下導航抽屜中的 "搜尋" 來創建自己保存的搜尋。
+** Checkbox list is available
 
-* 同步
+- [X] Task 1
+- [ ] Task 2
+- [ ] Task 3
 
-** 筆記本可保存為純文字檔
+Click the checkbox to toggle it. Press the new-line button at the end of the line to create a new item.
 
-檔案採用 "org-mode" 所使用的格式。
+** A note's title can also track checkbox list states [66%] [2/3]
 
-** 位置 (存儲庫) 類型
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
 
-您可以將筆記本與行動裝置上的目錄、SD 卡或Dropbox保持同步。
+* Search
+** There are many search operators supported
+
+You can search notes by state, tag, scheduled, deadline or event times, etc.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.
