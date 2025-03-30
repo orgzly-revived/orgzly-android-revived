@@ -33,6 +33,17 @@
 *** DONE 这是一条带/完成/类型状态的笔记
 CLOSED: [2018-01-24 Wed 17:00]
 
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
 ** 可以为笔记设置一个计划时间
 SCHEDULED: <2015-02-20 Fri 15:15>
 
@@ -41,6 +52,13 @@ SCHEDULED: <2015-02-16 Mon .+2d>
 
 ** 还可以设定一个截止时间
 DEADLINE: <2015-02-20 Fri>
+
+** Event times can be used anywhere in the note's content
+
+You can have multiple event times:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
 ** 支持通知提醒计划时间和截至时间
 
@@ -56,7 +74,7 @@ DEADLINE: <2015-02-20 Fri>
 
 也可以在应用程序内链接到其他笔记或笔记本。
 
-访问 https://www.orgzlyrevived.com/docs#links 了解更多信息。
+访问 [[https://www.orgzlyrevived.com/docs#links]] 了解更多信息。
 
 ** 支持基本的排版强调
 
@@ -70,12 +88,18 @@ DEADLINE: <2015-02-20 Fri>
 
 点击复选框切换状态。 点按行尾的新建行按钮以创建新条目。
 
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] 任务 1
+- [ ] 任务 2
+- [X] 任务 3
+
 * 搜索
 ** 支持多种搜索运算符
 
 可通过状态，标签，计划时间或截止时间等搜索笔记
 
-访问 https://www.orgzlyrevived.com/docs#search 了解更多。
+访问 [[https://www.orgzlyrevived.com/docs#search]] 了解更多。
 
 ** 可保存搜索查询串以便快速访问
 
@@ -87,7 +111,7 @@ DEADLINE: <2015-02-20 Fri>
 
 ** 笔记本可保存为纯文本文件
 
-文件使用“Org mode”的格式。
+文件使用 [[https://orgmode.org/][Org mode]] 的格式。
 
 ** 位置(存储库)类型
 

@@ -33,6 +33,17 @@ If you search for notes with tag “tag1” using “t.tag1” query, this note 
 *** DONE 메모의 처리가 /완료/되었습니다.
 CLOSED: [2018-01-24 Wed 17:00]
 
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
 ** 예정일을 설정할 수 있습니다.
 SCHEDULED: <2015-02-20 Fri 15:15>
 
@@ -41,6 +52,13 @@ SCHEDULED: <2015-02-16 Mon .+2d>
 
 ** 마감일을 설정할 수 있습니다.
 DEADLINE: <2015-02-20 Fri>
+
+** Event times can be used anywhere in the note's content
+
+You can have multiple event times:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
 ** 예정일과 마감일에 대해 알림 기능을 제공합니다.
 
@@ -56,7 +74,7 @@ DEADLINE: <2015-02-20 Fri>
 
 앱 내의 다른 메모나 메모장도 바로 가기를 사용할 수 있습니다.
 
-자세한 내용은 "https://www.orgzlyrevived.com/docs#links" 참고하세요.
+자세한 내용은 [[https://www.orgzlyrevived.com/docs#links]] 참고하세요.
 
 ** 기본적인 글자 강조 기능을 사용할 수 있습니다.
 
@@ -69,6 +87,12 @@ DEADLINE: <2015-02-20 Fri>
 - [ ] 작업 3
 
 확인 란을 클릭하면 상태가 변경됩니다. 줄 끝에 있는 새 줄 단추를 눌러 새 항목을 만드세요.
+
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] 작업 1
+- [ ] 작업 2
+- [X] 작업 3
 
 * 찾기
 ** 다양한 방법으로 메모를 검색할 수 있습니다.
@@ -87,7 +111,7 @@ DEADLINE: <2015-02-20 Fri>
 
 ** 메모장은 텍스트 파일로 저장됩니다.
 
-텍스트 파일의 확장자는 org 입니다.
+텍스트 파일의 확장자는 [[https://orgmode.org/][Org mode]] 입니다.
 
 ** 저장소 종류
 

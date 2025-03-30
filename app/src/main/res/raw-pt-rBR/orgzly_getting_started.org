@@ -33,6 +33,17 @@ Você pode configurar quantos estados quiser: TODO, NEXT, DONE, etc.
 *** DONE Isto é uma nota com o tipo de estado concluído (done)
 CLOSED: [2018-01-24 Wed 17:00]
 
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
 ** Uma nota pode ter um horário agendado
 SCHEDULED: <2015-02-20 Fri 15:15>
 
@@ -41,6 +52,13 @@ SCHEDULED: <2015-02-16 Mon .+2d>
 
 ** Você também pode definir um prazo limite
 DEADLINE: <2015-02-20 Fri>
+
+** Event times can be used anywhere in the note's content
+
+You can have multiple event times:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
 ** Lembretes para agendamento e horário do prazo limite são suportados
 
@@ -56,7 +74,7 @@ Discar um número de telefone (tel:555-0199), enviar SMS (sms:555-0199), escreve
 
 Você também pode criar links para uma outra nota ou caderno dentro do app.
 
-Consulte https://www.orgzlyrevived.com/docs#links para obter mais informações.
+Consulte [[https://www.orgzlyrevived.com/docs#links]] para obter mais informações.
 
 ** Ênfase tipográfica básica é suportada
 
@@ -70,12 +88,18 @@ Você pode deixar as palavras *negrito*, /itálico/, _sublinhado_, =textuais=, ~
 
 Clique na caixa de seleção para marcá-lo. Tecle enter no final da linha para criar um novo item.
 
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] Tarefa 1
+- [ ] Tarefa 2
+- [X] Tarefa 3
+
 * Pesquisa
 ** Existem muitos operadores de pesquisa suportados
 
 Você pode buscar notas por estado, tag, horário agendado, prazo, etc.
 
-Acesse https://www.orgzlyrevived.com/docs#search para aprender mais.
+Acesse [[https://www.orgzlyrevived.com/docs#search]] para aprender mais.
 
 ** Pesquisas podem ser salvas para acesso rápido
 
@@ -87,7 +111,7 @@ Você pode criar suas próprias pesquisas e salvá-las na gaveta de navegação 
 
 ** Cadernos podem ser salvos como arquivos de texto simples
 
-Arquivos são formatados usando o "Modo Org".
+Arquivos são formatados usando o [[https://orgmode.org/][Modo Org]].
 
 ** Tipo de localização (repositório)
 
