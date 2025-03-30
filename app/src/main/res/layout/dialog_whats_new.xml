@@ -22,12 +22,17 @@
 
         <TextView
             style="@style/WhatsNewVersion"
-            android:text="v1.8.39"
-            tools:ignore="HardcodedText" />
+            android:text="v1.9.0"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Allow export/import of settings and saved searches to/from a note of choice." />
+            app:text="Allow export/import of settings and saved searches to/from a chosen note. (See app settings.)" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Start applying &lt;a href=&quot;https://semver.org/&quot;&gt;semantic versioning&lt;/a&gt; when naming app releases." />
 
         <TextView
             style="@style/WhatsNewVersion"
