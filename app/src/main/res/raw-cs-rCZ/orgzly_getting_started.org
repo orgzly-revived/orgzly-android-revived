@@ -33,6 +33,17 @@ Lze nastavit množství stavů: TODO, NEXT, DONE, atd.
 *** DONE je dokončená poznámka, se stavem /done/
 CLOSED: [2018-01-24 Wed 17:00]
 
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
 ** Poznámka může obsahovat naplánovaný čas
 SCHEDULED: <2015-02-20 Fri 15:15>
 
@@ -44,7 +55,14 @@ DEADLINE: <2015-02-20 Fri>
 
 ** Upozornění pro časy plánované a časy po termínu jsou podporovány
 
-Ve výchozím nastavení jsou tyto vypnuty a je nutno je povolit v nastavení.
+You can have multiple event times:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
+
+** Reminders for notes with scheduled, deadline, or event times are supported
+
+Mark the note as done to shift the repeater.
 
 ** [#A] Poznámky mohou obsahovat prioritu
 
@@ -56,7 +74,7 @@ Vytočení telefonního čísla (tel:555-0199), poslání textové zprávy (sms:
 
 Linkovat lze i ostatní poznámky nebo sešity v rámci aplikace.
 
-Navštivte https://www.orgzlyrevived.com/docs#links pro více informací.
+Navštivte [[https://www.orgzlyrevived.com/docs#links]] pro více informací.
 
 ** Základní typografická zvýraznění jsou podporována
 
@@ -70,12 +88,18 @@ Slova lze označit jako *tučná*, /kurzíva/, _podtržená_, =doslovná=, ~kód
 
 Klikněte na zaškrtávací políčko pro odškrtnutí. Klikněte na ikonu nového-řádku na konci řádku pro vytvoření nové položky.
 
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] Úkol 1
+- [ ] Úkol 2
+- [X] Úkol 3
+
 * Hledání
 ** Podporováno je mnoho vyhledávacích operátorů
 
 Můžete hledat dle stavu, štítku, času plánovaného nebo termínu a podobně.
 
-Navšivte https://www.orgzlyrevived.com/docs#search pro další podrobnosti.
+Navšivte [[https://www.orgzlyrevived.com/docs#search]] pro další podrobnosti.
 
 ** Hledání je možno uložit pro rychlý přístup
 
@@ -87,7 +111,7 @@ Můžete vytvořit vlastní uložená hledání kliknutím na "Hledání" v navi
 
 ** Sešity je možno uložit jako čistě textové soubory
 
-Soubory jsou ve formátu používaném v "Org módu".
+Soubory jsou ve formátu používaném v [[https://orgmode.org/][Org módu]].
 
 ** Typ (umístění) úložiště
 

@@ -33,6 +33,17 @@ Létre lehet hozni akárhány állapot jelzőt: TODO, NEXT, DONE, stb.
 *** DONE Ennek a bejegyzésnek az állapota /done/, vagyis /kész/
 CLOSED: [2018-01-24 Wed 17:00]
 
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
 ** Egy bejegyzést ütemezni is lehet
 SCHEDULED: <2015-02-20 Fri 15:15>
 
@@ -41,6 +52,13 @@ SCHEDULED: <2015-02-16 Mon .+2d>
 
 ** Határidőt is be lehet állítani
 DEADLINE: <2015-02-20 Fri>
+
+** Event times can be used anywhere in the note's content
+
+You can have multiple event times:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
 ** Az ütemezett és a határidőkhöz emlékeztetőt is lehet beállítani
 
@@ -56,7 +74,7 @@ Hívj fel egy számot (tel:555-0199), küldj SMS-t (sms:555-0199), írj emailt (
 
 Lehet más bejegyzéshez vagy az appon belül másik jegyzetfüzethez is linket megadni.
 
-További információ a https://www.orgzlyrevived.com/docs#links címen.
+További információ a [[https://www.orgzlyrevived.com/docs#links]] címen.
 
 ** Az alapvető tipográfiai kiemeléseket támogatja a program
 
@@ -64,18 +82,24 @@ Lehet egy szó *félkövér*, /dőlt/, _aláhúzva_, =szó szerinti=, ~kód~ és
 
 ** Jelölő négyzetet is használhatunk
 
-- [X] Első feladat
-- [ ] Második feladat
-- [ ] Harmadik feladat
+- [X] Feladat 1
+- [ ] Feladat 2
+- [ ] Feladat 3
 
 Kattintás a jelölőnégyzetre átváltja azt. Új elem létrehozása a sor végén az új-sor gomb megnyomásával a is lehetséges.
+
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
 
 * Keresés
 ** Elég sok kereső operátort támogat a program
 
 Rá lehet keresni például állapotra, címkékre, ütemezésre vagy határidőre, stb.
 
-Erről többet a https://www.orgzlyrevived.com/docs#search oldalon tanulhatsz.
+Erről többet a [[https://www.orgzlyrevived.com/docs#search]] oldalon tanulhatsz.
 
 ** A keresési kifejezéseket el lehet menteni, hogy gyorsan hozzáférjünk később
 
@@ -87,7 +111,7 @@ Létrehozhatsz saját elmentett kereséseket a navigációs fiókban a "Keresés
 
 ** A jegyzettömböket szövegfáljként lehet menteni
 
-A mentett fájlok formátuma “Org mode”.
+A mentett fájlok formátuma [[https://orgmode.org/][Org mode]].
 
 ** A tárolók típusa
 

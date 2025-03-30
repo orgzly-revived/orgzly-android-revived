@@ -33,6 +33,17 @@ Je kunt zo veel statussen configureren als je wilt: TODO, NEXT, DONE, etc.
 *** DONE Dit is een notitie met een /done/ type status
 CLOSED: [2018-01-24 Wed 17:00]
 
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
 ** Notitie kan een geplande tijd hebben
 SCHEDULED: <2015-02-20 Fri 15:15>
 
@@ -41,6 +52,13 @@ SCHEDULED: <2015-02-16 Mon .+2d>
 
 ** Je kunt ook een deadlinetijd instellen
 DEADLINE: <2015-02-20 Fri>
+
+** Event times can be used anywhere in the note's content
+
+You can have multiple event times:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
 ** Herinneringen aan geplande en deadline tijdstippen zijn ondersteund
 
@@ -56,7 +74,7 @@ Bel een telefoonnummer (tel:555-0199), stuur een SMS (sms:555-0199), stel een e-
 
 U kunt ook naar een andere notitie of notebook binnen de app linken.
 
-Zie https://www.orgzlyrevived.com/docs#links voor meer informatie.
+Zie [[https://www.orgzlyrevived.com/docs#links]] voor meer informatie.
 
 ** Typografische basisaccentuering wordt ondersteund
 
@@ -70,12 +88,18 @@ Je kunt worden *dikgedrukt*, /schuin/, _onderstreept_, =verbato=, ~code~ en +doo
 
 Klik op de checkbox om het aan te vinken. Druk op de nieuwe-lijnknop aan het einde van de regel om een nieuw item aan te maken.
 
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] Taak 1
+- [ ] Taak 2
+- [X] Taak 3
+
 * Zoeken
 ** Er worden veel zoekoperatoren ondersteund
 
 Je kunt notities doorzoeken op status, label, geplande- of deadlinetijd etc.
 
-Zie https://www.orgzlyrevived.com/docs#search voor meer informatie.
+Zie [[https://www.orgzlyrevived.com/docs#search]] voor meer informatie.
 
 ** Zoekopdrachten kunnen worden opgeslagen voor snelle toegang
 
@@ -87,7 +111,7 @@ Je kunt je eigen opgeslagen zoekopdrachten maken door te klikken op "Zoeken" in 
 
 ** Notebooks kunnen worden opgeslagen als platte-tekst bestanden
 
-Bestanden zijn in de indeling die wordt gebruikt door "Org-mode".
+Bestanden zijn in de indeling die wordt gebruikt door [[https://orgmode.org/]Org-mode]].
 
 ** Soort locatie (archief)
 
