@@ -73,4 +73,10 @@
         android:id="@+id/fab"
         style="@style/Fab.Add" />
 
+    <!-- Jump to End FAB -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/jump_to_end_fab"
+        style="@style/Fab.JumpToEnd"
+        />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
