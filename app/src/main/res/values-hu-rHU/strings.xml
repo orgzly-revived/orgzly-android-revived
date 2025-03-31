@@ -9,20 +9,14 @@
     <string name="clear">Törlés</string>
     <string name="cancel">Mégse</string>
     <string name="create">Létrehoz</string>
-    <string name="new_">Új</string>
     <!-- "new" is reserved -->
-    <string name="select">Kiválasztás</string>
     <string name="set">Választás</string>
-    <string name="add">Hozzáadás</string>
     <string name="not_now">Ne most</string>
     <string name="save">Mentés</string>
     <string name="discard">Elvetés</string>
     <string name="remove_notebook_link">Hivatkozás eltávolítása</string>
     <string name="browse">Tallózás</string>
     <string name="dropbox">Dropbox</string>
-    <string name="view">Nézet</string>
-    <string name="edit">Szerkesztés</string>
-    <string name="edit_note">Bejegyzés szerkesztése</string>
     <string name="delete">Törlés</string>
     <string name="delete_with_quoted_argument">\"%s\" törlése</string>
     <string name="name">Név</string>
@@ -40,23 +34,16 @@
     <string name="created">Létrehozva</string>
     <string name="states">Állapotok</string>
     <string name="note">Bejegyzés</string>
-    <string name="notes">Bejegyzések</string>
     <string name="property">Tulajdonság</string>
     <string name="import_as">Betöltés mint…</string>
     <string name="new_notebook">Új jegyzetfüzet</string>
     <string name="new_folder">Új mappa</string>
     <string name="scheduled">Ütemezett</string>
     <string name="agenda">Napirend</string>
-    <string name="agenda_period">Napirendi napok</string>
-    <string name="time">Idő</string>
-    <string name="repeater">Ismétlő</string>
     <string name="state">Állapot</string>
     <string name="priority">Fontosság</string>
-    <string name="nothing">Semmi</string>
     <string name="open">Megnyit</string>
-    <string name="focus">Fókusz</string>
     <string name="widget">Kisalkalmazás</string>
-    <string name="history">Előzmények</string>
     <string name="event">Esemény</string>
     <plurals name="notes_cut">
         <item quantity="one">Jegyzet kivágva</item>
@@ -73,7 +60,6 @@
     </plurals>
     <string name="no_notes_pasted">Nincs mit beilleszteni</string>
     <string name="fragment_note_title_hint">Cím</string>
-    <string name="fragment_note_tags_hint" tools:ignore="typos">címke címke</string>
     <string name="import_org_file">Org-fájl betöltése</string>
     <string name="message_dropbox_unlinked">Leválasztva a Dropbox-ról</string>
     <string name="message_dropbox_linked">Sikeresen kapcsolódott a Dropbox-hoz</string>
@@ -82,20 +68,16 @@
     <string name="repos_preference_summary">Hova szinkronizálja a jegyzetfüzeteket</string>
     <string name="message_book_has_no_link">Nincs beállítva kapcsolat</string>
     <string name="message_note_created">Bejegyzés létrehozva</string>
-    <string name="message_failed_creating_note">Nem sikerült létrehozni a bejegyzést</string>
-    <string name="message_failed_updating_note">Nem sikerült módosítani a bejegyzést</string>
     <string name="drawer_close">Fiók bezárása</string>
     <string name="drawer_open">Fiók megnyitása</string>
     <string name="schedule">Ütemezés</string>
     <string name="refile">Újraír</string>
-    <string name="refile_to">Újraírás máshova</string>
     <string name="deadline">Határidő</string>
     <string name="closed">Zárva</string>
     <!-- TODO: Not hints, rename -->
     <string name="schedule_button_hint">Ütemezés időpontja</string>
     <string name="deadline_button_hint">Határidő időpontja</string>
     <string name="closed_button_hint">Lezárás időpontja</string>
-    <string name="fragment_note_content_hint">Bejegyzés tartalma</string>
     <string name="books_context_menu_item_rename">Átnevezés</string>
     <string name="books_context_menu_item_set_link">Kapcsolat beállítása</string>
     <string name="books_context_menu_item_force_save">Mentés kényszerítése</string>
@@ -115,7 +97,6 @@
     <string name="quick_note">Gyorsjegyzet</string>
     <string name="tap_to_create_new_note">Koppints egy új bejegyzés létrehozásához</string>
     <string name="options_menu_item_search">Keresés</string>
-    <string name="no_user_repos_configured_pref_summary">Egy sincs még beállítva</string>
     <string name="repos_options_menu_new_repo">Új tároló</string>
     <string name="book_name_already_exists">%s jegyzetfüzet már létezik.</string>
     <string name="filter_name_already_exists">Ugyenezzel a névvel már van keresés</string>
@@ -133,14 +114,11 @@
     <string name="book_does_not_exist_anymore">Ez a jegyzetfüzet már nem létezik.</string>
     <string name="note_does_not_exist_anymore">Ez a bejegyzés már nem létezik.</string>
     <string name="search_does_not_exist_anymore">Ilyen keresés már nem létezik.</string>
-    <string name="fragment_query_title">Keresés</string>
     <string name="repo_dropbox_button_not_linked">Kapcsolódás a Dropbox-hoz</string>
     <string name="repo_dropbox_button_linked">Leválasztás a Dropbox-ról</string>
-    <string name="fragment_settings_title">Beállítások</string>
     <string name="notes_update_needed_dialog_title">A beállítás hatással van bejegyzésekre</string>
     <string name="notes_update_needed_dialog_message">Frissítsem a bejegyzéseket, hogy látszódjanak a változások?</string>
     <string name="updating_notes">Bejegyzések frissítése…</string>
-    <string name="failure">Ajjaj</string>
     <string name="no_notes_found_after_search">Nem találtam bejegyzést a keresés alapján</string>
     <string name="today">Ma</string>
     <string name="tomorrow">Holnap</string>
@@ -156,7 +134,6 @@
     <string name="notebooks">Jegyzetfüzetek</string>
     <string name="searches">Keresések</string>
     <string name="search">Keresés</string>
-    <string name="new_search">Új keresés</string>
     <string name="multiple_repos">Több tárolóhely is létezik</string>
     <string name="no_repos">Nincs beállítva tárolóhely</string>
     <string name="no_books">Nem található jegyzetfüzet</string>
@@ -164,7 +141,6 @@
     <string name="collecting_notebooks_in_progress">Jegyzetfüzetek összegyűjtése…</string>
     <string name="syncing_in_progress">Szinkronizálás…</string>
     <string name="syncing_book">%s szinkronizálása…</string>
-    <string name="sync_with_argument">%s szinkronizálása</string>
     <string name="syncing_failed_title">Sikertelen szinkronizálás</string>
     <string name="canceled">Megszakítva</string>
     <string name="canceling">Érvénytelenítés…</string>
@@ -176,22 +152,13 @@
     <string name="git_url_hint">Távoli cím (pl. git@github.com:orgzly/orgzly-android.git)</string>
     <string name="git_directory_hint">Könyvtár helye (pl. “file:/sdcard/orgzly”)</string>
     <string name="git_https_username_hint">Felhasználónév</string>
-    <string name="git_https_password_hint">Jelszó</string>
     <string name="git_author_hint">Szerző (pl. Kovács Jenő)</string>
     <string name="git_email_hint">Email (pl. john@email.com)</string>
     <string name="git_branch_hint">Ág (pl. master)</string>
-    <string name="git_auth_https_username_hint">Felhasználónév</string>
     <string name="git_auth_https_password_hint">Jelszó</string>
-    <string name="git_generate_key_pair">Kulcspár generálása</string>
-    <string name="git_copy_public_key">Nyilvános kulcs másolása</string>
-    <string name="git_auth_type_text">Hitelesítés típusa</string>
-    <string name="git_auth_type_ssh">SSH</string>
-    <string name="git_auth_type_https">HTTPS</string>
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
-    <string name="git_clone_error_ssh_auth">Nem sikerült klónozni, hitelesítési hiba</string>
     <string name="git_clone_error_invalid_repo">A távoli cím nem git adattár</string>
-    <string name="git_clone_error_unknown">Ismeretlen hiba klónozás közben</string>
     <string name="git_clone_error_invalid_target_dir">A cél mappa nem létezik</string>
     <string name="git_clone_error_target_not_empty">A cél mappa nem üres</string>
     <string name="git_clone_error_uri_not_supported">Nem támogatott távoli cím</string>
@@ -201,18 +168,12 @@
     <string name="webdav_test_error_auth">Felhasználónév vagy a jelszó hibás</string>
     <string name="webdav_test_error_unknown">Ismeretlen hiba történt</string>
     <!-- Share button - error messages (set as title). -->
-    <string name="share_action_not_set">Megosztási művelet nincs beállítva</string>
     <string name="share_action_not_supported">%s megosztási művelet nem támogatott</string>
-    <string name="share_type_not_set">Megosztástípus nincs beállítva</string>
     <string name="share_type_not_supported">%s megosztás típus nem támogatott</string>
     <string name="repositories">Tárolók</string>
     <string name="repository_not_valid_with_reason">Érvénytelen tároló: %s</string>
     <string name="invalid_repo_url">Érvénytelen tároló URL \"%s\"</string>
     <string name="repository_url_already_exists">Ilyen tároló URL más létezik</string>
-    <string name="fragment_left_drawer_list_view_content_description">Bal fiók</string>
-    <string name="drawer_item">Fiók elem</string>
-    <string name="prev_state">Előző állapot</string>
-    <string name="next_state">Következő állapot</string>
     <string name="new_above">Újat fölé</string>
     <string name="new_under">Újat alá</string>
     <string name="new_below">Újat alá</string>
@@ -228,16 +189,13 @@
     <string name="no_filters">Nincs elmentett keresés</string>
     <string name="book_shortcut_label">Jegyzetfüzet</string>
     <string name="new_note_shortcut_label">Új bejegyzés</string>
-    <string name="pick_a_notebook">Válassz jegyzetfüzetet</string>
     <string name="down">Le</string>
     <string name="up">Fel</string>
-    <string name="notebook_modified">Jegyzetfüzet módosítva</string>
     <string name="permissions_rationale_for_local_repo">Helyi tárolóval csak memóriához kapott engedéllyel lehet szinkronizálni</string>
     <string name="permissions_rationale_for_book_export">Jegyzetfüzet mentéséhez memória engedély kell</string>
     <string name="permissions_rationale_for_sync_start">Helyi tárolóval csak memóriához kapott engedéllyel lehet szinkronizálni</string>
     <string name="permissions_rationale_for_external_files_access">A külső fájlok eléréséhez tárhely engedély szükséges</string>
     <string name="cycle_visibility">Mind behajtása/kibontása</string>
-    <string name="running_database_update">Adatbázis frissítése…</string>
     <string name="note_has_been_modified">Bejegyzés módosítva</string>
     <string name="discard_or_save_changes">Menti a módosításokat?</string>
     <string name="rename">Átnevezés</string>
@@ -248,13 +206,10 @@
     <string name="also_delete_linked_book">Kapcsolt távoli jegyzetfüzet törlése</string>
     <string name="message_deleting_book_failed">%s jegyzetfüzet törlése meghiúsult</string>
     <string name="message_book_deleted">Jegyzetfüzet törölve</string>
-    <string name="priority_with_argument">%s fontosság</string>
     <string name="default_priority">Alapértelmezett fontosság</string>
     <string name="lowest_priority">Legalacsonyabb fontosság</string>
     <string name="todo_states">Aktív (teendő) feladatok kulcsszavai</string>
     <string name="done_states">Kész (elvégzett) feladatok kulcsszavai</string>
-    <string name="created_at">Létrehozva</string>
-    <string name="insert_note_creation_time">Létrehozás időpontját illessze be</string>
     <string name="use_created_at_property">\"Létrehozás időpontja\" tulajdonság neve</string>
     <string name="use_created_at_property_summary">Tulajdonság felhasználása a létrehozás időpontjának szinkronizálásához</string>
     <string name="created_at_property">Létrehozás időpontja tulajdonság</string>
@@ -294,7 +249,6 @@
     <string name="prefs_title_new_note">Új bejegyzés</string>
     <string name="prefs_title_notifications">Értesítések</string>
     <string name="app">App</string>
-    <string name="no_repos_configured">Nincs beállítva tárolóhely</string>
     <string name="test_connection">Kapcsolat tesztelése</string>
     <string name="connecting">Kapcsolódás…</string>
     <string name="no_connection">Nincs kapcsolat</string>
@@ -319,7 +273,6 @@
     <string name="org_indent_mode">Behúzás beállításai alapján igazítsa</string>
     <string name="org_indent_mode_summary">Figyelembe veszi az org-indent-mode üzemmódot</string>
     <string name="org_indent_indentation_per_level">Szintenkénti behúzás</string>
-    <string name="add_property">Tulajdonság hozzádása</string>
     <string name="priority_a_highest">A (legfontosabb)</string>
     <string name="priority_z_lowest">Z (legkevésbé fontos)</string>
     <string name="hour">Óra</string>
@@ -351,7 +304,6 @@
     <string name="displayed_book_details_used_encoding">Használt kódolás</string>
     <string name="displayed_book_details_last_action">Utolsó művelet</string>
     <string name="displayed_book_details_notes_count">Bejegyzések száma</string>
-    <string name="color_scheme_system">Rendszer</string>
     <string name="color_scheme_dynamic">A rendszer szerinti színtéma</string>
     <string name="color_scheme_light">Világos</string>
     <string name="color_scheme_dark">Sötét</string>
@@ -372,17 +324,11 @@
         <item quantity="other"><b>%d</b> bejegyzés törlése?</item>
     </plurals>
     <!-- Unused -->
-    <string name="delete_note">Bejegyzés törlése</string>
-    <string name="delete_notes">Bejegyzések törlése</string>
-    <string name="delete_note_and_all_subnotes">Törli a bejegyzést és minden aljegyzetet?</string>
-    <string name="delete_notes_and_all_subnotes">Törli a bejegyzéseket és minden aljegyzetet?</string>
     <plurals name="notes_deleted">
         <item quantity="one">Bejegyzés törölve</item>
         <item quantity="other"><b>%d</b> bejegyzés törölve</item>
     </plurals>
     <string name="no_notes_deleted">Nem töröltem bejegyzést</string>
-    <string name="note_content_finish_editing">Szövegkörnyezet mutatása</string>
-    <string name="note_content_start_editing">Tartalom szerkesztése</string>
     <string name="duplicate_keywords_not_allowed">%s kulcsszó már használt</string>
     <string name="no_states_defined">Nincs állapot definiálva</string>
     <string name="book_name_in_search">Jegyzetfüzet neve a keresés eredményében</string>
@@ -417,10 +363,6 @@
     <string name="keep_screen_on_summary">Menüelem megjelenítése a lehetőség ki-bekapcsolásához</string>
     <string name="keep_screen_on">Tartsa bekapcsolva a képernyőt</string>
     <string name="keep_screen_on_desc">A képernyő bekapcsolva marad amíg nincs letiltva ez a lehetőség</string>
-    <string name="layout_direction">Szöveg iránya</string>
-    <string name="layout_direction_locale">Alapértelmezett</string>
-    <string name="layout_direction_ltr">Balról jobbra</string>
-    <string name="layout_direction_rtl">Jobbról balra</string>
     <string name="preface_in_book">Jegyzetfüzet előszó</string>
     <string name="preface_in_book_full">Kijelző</string>
     <string name="preface_in_book_hide">Elrejtés</string>
@@ -437,9 +379,7 @@
     <string name="notebooks_start_folded_summary">Betöltéskor minden bejegyzést behajt</string>
     <string name="list_widget_name">Mentett keresés</string>
     <string name="list_widget_select_search">Keresés választása</string>
-    <string name="list_widget_nothing_selected">Nincs kiválasztott keresés</string>
     <string name="auto_sync">Automatikus szinkronizálás</string>
-    <string name="auto_sync_experimental_summary">Csak helyi tárolók esetén</string>
     <string name="auto_sync_summary">Dropbox esetében nem támogatott</string>
     <string name="auto_sync_warning">Attól függően, hogy melyik lehetőséget választja, szinkronizálás gyakran indulhat. Ha a jegyzetfüzet módosul, annak teljes tartalmát menti vagy betölti. Bizonyos műveletek késhetnek, amíg szinkronizálás van folyamatban.</string>
     <string name="pref_title_sync_after_note_create">Bejegyzés létrehozva</string>
@@ -491,7 +431,6 @@
     <string name="sync_failed_channel_description">Szinkronizálás hiba megjelenítése</string>
     <string name="notification_channel_settings">Értesítések</string>
     <string name="notification_channel_settings_summary">Hang, rezgés, értesítés pont</string>
-    <string name="hide_note_metadata">Metaadatok elrejtése</string>
     <string name="overwrite_local_notebook_question">Felülírja a helyi jegyzetfüzetet?</string>
     <string name="overwrite_remote_notebook_question">Felülírja a távoli jegyzetfüzetet?</string>
     <string name="drawers_folded_by_default">Bejegyzések behajtva</string>
@@ -508,7 +447,6 @@
     <string name="show_all">Összes megjelenítése</string>
     <string name="always_show_set">Mindig mutassa a készletet</string>
     <string name="show_selected">Kiválasztottak megjelenítése</string>
-    <string name="hide_all">Összes elrejtése</string>
     <string name="external_file_no_app_found">A fájl megnyitásához nem találtam alkalmazást</string>
     <string name="failed_to_open_linked_file_with_reason">Nem sikerült megnyitni a fájlt: %s</string>
     <string name="images">Képek</string>
@@ -522,11 +460,9 @@
     <string name="argument_detected">%s észlelve</string>
     <string name="argument_selected">%s kiválasztva</string>
     <string name="fixed_width_value">Szélesség (képpontokban)</string>
-    <string name="share_target_service">Orgzly jegyzetfüzet megosztása</string>
     <string name="under">Alatt</string>
     <string name="above">Felett</string>
     <string name="below">Alatta</string>
-    <string name="loading">Betöltés…</string>
     <string name="go_to">Ugrás</string>
     <string name="cannot_refile_to_the_same_subtree">Nem lehet ugyabba a részfába újraírni</string>
     <string name="notification_maximum_priority">Maximális</string>
@@ -545,16 +481,12 @@
     </plurals>
     <string name="display_checkmarks">Pipák megjelenítése</string>
     <string name="display_checkmarks_summary">Készre lehet jelölni egy bejegyzést</string>
-    <string name="last_used">Utoljára használt</string>
-    <string name="note_details_opening_mode">Nyitás módja</string>
     <string name="cleartext_traffic">Kódolatlan adatforgalom</string>
     <string name="cleartext_traffic_message">Biztosan ezt az URL-t akarod használni?</string>
     <string name="credentials_in_url_not_supported">Hitelesítő adatok továbbítása URL-ben nem támogatott</string>
-    <string name="access_token">Hozzáférési token</string>
     <string name="trusted_certificates">Megbízható tanúsítványok</string>
     <string name="add_trusted_certificates_optional">Megbízható tanúsítványok hozzáadása (választható)</string>
     <string name="edit_trusted_certificates">Megbízható tanúsítványok szerkesztése</string>
-    <string name="this_action_cannot_be_undone">Ez a művelet nem vonható vissza.</string>
     <plurals name="paste_note_or_notes_with_count">
         <item quantity="one"><b>%d</b> bejegyzés beillesztése</item>
         <item quantity="other"><b>%d</b> bejegyzés beillesztése</item>

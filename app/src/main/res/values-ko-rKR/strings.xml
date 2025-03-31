@@ -9,20 +9,14 @@
     <string name="clear">제거</string>
     <string name="cancel">취소</string>
     <string name="create">생성하기</string>
-    <string name="new_">새 파일</string>
     <!-- "new" is reserved -->
-    <string name="select">선택하기</string>
     <string name="set">설정</string>
-    <string name="add">추가하기</string>
     <string name="not_now">지금 안 함</string>
     <string name="save">저장</string>
     <string name="discard">취소</string>
     <string name="remove_notebook_link">링크 제거</string>
     <string name="browse">탐색</string>
     <string name="dropbox">드롭박스</string>
-    <string name="view">View</string>
-    <string name="edit">편집</string>
-    <string name="edit_note">노트 편집</string>
     <string name="delete">삭제</string>
     <string name="delete_with_quoted_argument">\"%s\" 삭제</string>
     <string name="name">이름</string>
@@ -40,23 +34,16 @@
     <string name="created">생성됨</string>
     <string name="states">상태</string>
     <string name="note">노트</string>
-    <string name="notes">노트목록</string>
     <string name="property">속성</string>
     <string name="import_as">... 로 가져오기</string>
     <string name="new_notebook">새 노트북</string>
     <string name="new_folder">새 폴더</string>
     <string name="scheduled">예정일</string>
     <string name="agenda">일정</string>
-    <string name="agenda_period">일정 일</string>
-    <string name="time">시간</string>
-    <string name="repeater">반복</string>
     <string name="state">상태</string>
     <string name="priority">우선 순위</string>
-    <string name="nothing">없음</string>
     <string name="open">열기</string>
-    <string name="focus">포커스</string>
     <string name="widget">위젯</string>
-    <string name="history">History</string>
     <string name="event">Event</string>
     <plurals name="notes_cut">
         <item quantity="other">메모 <b>%d</b> 잘라내기</item>
@@ -70,7 +57,6 @@
     </plurals>
     <string name="no_notes_pasted">붙여넣기 할 매모가 없습니다.</string>
     <string name="fragment_note_title_hint">제목</string>
-    <string name="fragment_note_tags_hint" tools:ignore="typos">태그 tag</string>
     <string name="import_org_file">Org 파일 가져오기</string>
     <string name="message_dropbox_unlinked">Dropbox에서 연결 끊기</string>
     <string name="message_dropbox_linked">Dropbox에 성공적으로 연결</string>
@@ -79,20 +65,16 @@
     <string name="repos_preference_summary">메모장 동기화 위치</string>
     <string name="message_book_has_no_link">설정된 링크가 없습니다.</string>
     <string name="message_note_created">메모 작성</string>
-    <string name="message_failed_creating_note">메모를 작성하는데 실패하였습니다.</string>
-    <string name="message_failed_updating_note">메모를 변경하는데 실패하였습니다.</string>
     <string name="drawer_close">메뉴 닫기</string>
     <string name="drawer_open">메뉴 열기</string>
     <string name="schedule">일정</string>
     <string name="refile">옮기기</string>
-    <string name="refile_to">메모로 옮기기</string>
     <string name="deadline">마감일</string>
     <string name="closed">종료</string>
     <!-- TODO: Not hints, rename -->
     <string name="schedule_button_hint">예정일</string>
     <string name="deadline_button_hint">마감일시</string>
     <string name="closed_button_hint">종료일</string>
-    <string name="fragment_note_content_hint">메모 내용</string>
     <string name="books_context_menu_item_rename">이름 바꾸기</string>
     <string name="books_context_menu_item_set_link">바로가기 설정</string>
     <string name="books_context_menu_item_force_save">강제 저장하기</string>
@@ -112,7 +94,6 @@
     <string name="quick_note">빠른 메모</string>
     <string name="tap_to_create_new_note">탭해서 새 메모 만들기</string>
     <string name="options_menu_item_search">찾기</string>
-    <string name="no_user_repos_configured_pref_summary">아직 구성 없음</string>
     <string name="repos_options_menu_new_repo">새 저장소</string>
     <string name="book_name_already_exists">노트북 %s 이미 존재합니다.</string>
     <string name="filter_name_already_exists">이미 존재 하는 같은 이름으로 검색</string>
@@ -130,14 +111,11 @@
     <string name="book_does_not_exist_anymore">이 메모장은 더 이상 사용할 수 없습니다.</string>
     <string name="note_does_not_exist_anymore">이 메모는 더 이상 사용할 수 없습니다.</string>
     <string name="search_does_not_exist_anymore">이 검색 조건은 더 이상 사용할 수 없습니다.</string>
-    <string name="fragment_query_title">찾기</string>
     <string name="repo_dropbox_button_not_linked">Dropbox로 연결하기</string>
     <string name="repo_dropbox_button_linked">Dropbox에서 연결 끊기</string>
-    <string name="fragment_settings_title">설정</string>
     <string name="notes_update_needed_dialog_title">메모에 영향을 미치는 설정</string>
     <string name="notes_update_needed_dialog_message">변경 내용을 반영하겠습니까?</string>
     <string name="updating_notes">메모 변경 중 …</string>
-    <string name="failure">이...이런</string>
     <string name="no_notes_found_after_search">검색 결과가 없습니다</string>
     <string name="today">오늘</string>
     <string name="tomorrow">내일</string>
@@ -153,7 +131,6 @@
     <string name="notebooks">메모장</string>
     <string name="searches">찾기</string>
     <string name="search">찾기</string>
-    <string name="new_search">새로 검색</string>
     <string name="multiple_repos">여러 개의 저장소가 존재합니다.</string>
     <string name="no_repos">구성된 저장소가 없습니다.</string>
     <string name="no_books">No notebooks found</string>
@@ -161,7 +138,6 @@
     <string name="collecting_notebooks_in_progress">메모장 수집 중 …</string>
     <string name="syncing_in_progress">동기화 중...</string>
     <string name="syncing_book">동기화 중 %s…</string>
-    <string name="sync_with_argument">동기화: %s</string>
     <string name="syncing_failed_title">동기화에 실패했습니다.</string>
     <string name="canceled">취소됨</string>
     <string name="canceling">취소 중...</string>
@@ -173,22 +149,13 @@
     <string name="git_url_hint">외부 주소 (예. git@github.com:orgzly/orgzly-android.git)</string>
     <string name="git_directory_hint">디렉터리 위치 (예: \"file:/sdcard/orgzly\")</string>
     <string name="git_https_username_hint">Username</string>
-    <string name="git_https_password_hint">Password</string>
     <string name="git_author_hint">저자 (예. 홍길동)</string>
     <string name="git_email_hint">이메일 (예: john@email.com)</string>
     <string name="git_branch_hint">지점 (예: 본점)</string>
-    <string name="git_auth_https_username_hint">Username</string>
     <string name="git_auth_https_password_hint">Password</string>
-    <string name="git_generate_key_pair">Generate keypair</string>
-    <string name="git_copy_public_key">Copy public key</string>
-    <string name="git_auth_type_text">Authentication type</string>
-    <string name="git_auth_type_ssh">SSH</string>
-    <string name="git_auth_type_https">HTTPS</string>
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
-    <string name="git_clone_error_ssh_auth">Failure while cloning, authentication error</string>
     <string name="git_clone_error_invalid_repo">The remote address is not a git repo</string>
-    <string name="git_clone_error_unknown">Unknown error while cloning</string>
     <string name="git_clone_error_invalid_target_dir">The target directory does not exist</string>
     <string name="git_clone_error_target_not_empty">The target directory is not empty</string>
     <string name="git_clone_error_uri_not_supported">The remote address is not supported</string>
@@ -198,18 +165,12 @@
     <string name="webdav_test_error_auth">Login or password is invalid</string>
     <string name="webdav_test_error_unknown">Unknown error occurred</string>
     <!-- Share button - error messages (set as title). -->
-    <string name="share_action_not_set">공유 작업이 설정되지 않았습니다.</string>
     <string name="share_action_not_supported">%s는 지원되지 않는 공유 작업 입니다.</string>
-    <string name="share_type_not_set">공유 형식이 설정되지 않았습니다.</string>
     <string name="share_type_not_supported">%s는 지원되지 않는 공유 형식 입니다.</string>
     <string name="repositories">저장소</string>
     <string name="repository_not_valid_with_reason">Repository invalid: %s</string>
     <string name="invalid_repo_url">“%s”는 잘못된 저장소 URL 입니다.</string>
     <string name="repository_url_already_exists">URL이 이미 존재합니다.</string>
-    <string name="fragment_left_drawer_list_view_content_description">왼쪽 메뉴</string>
-    <string name="drawer_item">메뉴 항목</string>
-    <string name="prev_state">이전 상태</string>
-    <string name="next_state">다음 상태</string>
     <string name="new_above">위로</string>
     <string name="new_under">하위로</string>
     <string name="new_below">아래로</string>
@@ -225,16 +186,13 @@
     <string name="no_filters">저장된 검색 조건이 없습니다.</string>
     <string name="book_shortcut_label">Notebook</string>
     <string name="new_note_shortcut_label">New note</string>
-    <string name="pick_a_notebook">메모장 선택</string>
     <string name="down">아래로</string>
     <string name="up">위로</string>
-    <string name="notebook_modified">메모장 수정</string>
     <string name="permissions_rationale_for_local_repo">로컬 디렉토리에 동기화하기 위해서는 저장소 권한이 필요합니다.</string>
     <string name="permissions_rationale_for_book_export">메모장을 내보내기 위해서는 저장소 권한이 필요합니다.</string>
     <string name="permissions_rationale_for_sync_start">로컬 저장소에 동기화하기 위해서는 저장소 권한이 필요합니다.</string>
     <string name="permissions_rationale_for_external_files_access">외부 파일에 접근하려면 저장소 권한이 필요 합니다.</string>
     <string name="cycle_visibility">모두 접기/펼치기</string>
-    <string name="running_database_update">저장 정보 업그레이드 중...</string>
     <string name="note_has_been_modified">메모 수정</string>
     <string name="discard_or_save_changes">변경 내용을 저장 하시겠습니까?</string>
     <string name="rename">이름 바꾸기</string>
@@ -245,13 +203,10 @@
     <string name="also_delete_linked_book">연결된 메모장 삭제</string>
     <string name="message_deleting_book_failed">연결된 메모장 삭제 실패: %s</string>
     <string name="message_book_deleted">메모장 삭제</string>
-    <string name="priority_with_argument">우선 순위 %s</string>
     <string name="default_priority">기본 우선 순위</string>
     <string name="lowest_priority">낮은 우선 순위</string>
     <string name="todo_states">진행 중 업무(todo)에 대한키워드</string>
     <string name="done_states">완료된 업무(done)에 대한 키워드</string>
-    <string name="created_at">생성 위치</string>
-    <string name="insert_note_creation_time">메모에 생성 시간 삽입</string>
     <string name="use_created_at_property">생성 시 속성 사용</string>
     <string name="use_created_at_property_summary">속성의 생성 시간 동기화</string>
     <string name="created_at_property">생성 속성</string>
@@ -291,7 +246,6 @@
     <string name="prefs_title_new_note">새 메모</string>
     <string name="prefs_title_notifications">알림</string>
     <string name="app">앱</string>
-    <string name="no_repos_configured">구성된 저장소가 없습니다.</string>
     <string name="test_connection">Test connection</string>
     <string name="connecting">Connecting…</string>
     <string name="no_connection">연결 없음</string>
@@ -316,7 +270,6 @@
     <string name="org_indent_mode">들여쓰기 모드에 따라 변경됨</string>
     <string name="org_indent_mode_summary">계정에서 org-indent-mode 가져오기</string>
     <string name="org_indent_indentation_per_level">들여쓰기 수준</string>
-    <string name="add_property">속성 추가</string>
     <string name="priority_a_highest">A (최우선 순위)</string>
     <string name="priority_z_lowest">Z (최차선 순위)</string>
     <string name="hour">시</string>
@@ -348,7 +301,6 @@
     <string name="displayed_book_details_used_encoding">인코딩 사용</string>
     <string name="displayed_book_details_last_action">최근 작업</string>
     <string name="displayed_book_details_notes_count">메모 개수</string>
-    <string name="color_scheme_system">System</string>
     <string name="color_scheme_dynamic">Dynamic color</string>
     <string name="color_scheme_light">밝은</string>
     <string name="color_scheme_dark">어두운</string>
@@ -368,16 +320,10 @@
         <item quantity="other">Delete <b>%d</b> notes?</item>
     </plurals>
     <!-- Unused -->
-    <string name="delete_note">메모 삭제</string>
-    <string name="delete_notes">메모 삭제</string>
-    <string name="delete_note_and_all_subnotes">하위 메모까지 삭제하겠습니까?</string>
-    <string name="delete_notes_and_all_subnotes">하위 메모까지 삭제하겠습니까?</string>
     <plurals name="notes_deleted">
         <item quantity="other"><b>%d</b> 노트 삭제됨</item>
     </plurals>
     <string name="no_notes_deleted">노트가 삭제되었습니다.</string>
-    <string name="note_content_finish_editing">내용 보기</string>
-    <string name="note_content_start_editing">내용을 편집하세요.</string>
     <string name="duplicate_keywords_not_allowed">키워드 %s 는 이미 사용 중 입니다.</string>
     <string name="no_states_defined">정의된 상태가 없습니다.</string>
     <string name="book_name_in_search">검색 결과에 메모장 이름 표시</string>
@@ -412,10 +358,6 @@
     <string name="keep_screen_on_summary">전환 옵션에 대한 메뉴 항목을 보여주기</string>
     <string name="keep_screen_on">화면을 켜진 상태로 유지</string>
     <string name="keep_screen_on_desc">앱을 종료하거나 옵션을 끄기 전까지는 화면이 꺼지지 않습니다.</string>
-    <string name="layout_direction">레이아웃 방향</string>
-    <string name="layout_direction_locale">기본설정</string>
-    <string name="layout_direction_ltr">왼쪽에서 오른쪽으로</string>
-    <string name="layout_direction_rtl">오른쪽에서 왼쪽으로</string>
     <string name="preface_in_book">머리말</string>
     <string name="preface_in_book_full">표시</string>
     <string name="preface_in_book_hide">숨기기</string>
@@ -432,9 +374,7 @@
     <string name="notebooks_start_folded_summary">Fold all notes when notebook is loaded</string>
     <string name="list_widget_name">Saved search</string>
     <string name="list_widget_select_search">검색 조건 선택</string>
-    <string name="list_widget_nothing_selected">선택된 검색 없음</string>
     <string name="auto_sync">자동 동기화</string>
-    <string name="auto_sync_experimental_summary">핸드폰 저장소만 사용</string>
     <string name="auto_sync_summary">Not supported for Dropbox</string>
     <string name="auto_sync_warning">선택한 옵션에 따라 자주 동기화가 될 수 있습니다. 메모장을 수정하면 관련 메모 전체가 저장소로 또는 저장소에서 전송됩니다.
 동기화 중에는 일부 작업이 지연될 수 있습니다.</string>
@@ -483,7 +423,6 @@
     <string name="sync_failed_channel_description">동기화 실패시 보여주기</string>
     <string name="notification_channel_settings">알림</string>
     <string name="notification_channel_settings_summary">소리, 진동, 알림표시</string>
-    <string name="hide_note_metadata">메타데이터 숨기기</string>
     <string name="overwrite_local_notebook_question">로컬 메모장을 덮어쓰시겠습니까?</string>
     <string name="overwrite_remote_notebook_question">원격 메모장을 덮어쓰시겠습니까?</string>
     <string name="drawers_folded_by_default">메뉴 접기</string>
@@ -500,7 +439,6 @@
     <string name="show_all">모두 보기</string>
     <string name="always_show_set">항상 보여주기</string>
     <string name="show_selected">선택한 항목 표시</string>
-    <string name="hide_all">모두 숨기기</string>
     <string name="external_file_no_app_found">이 파일을 열 수 있는 앱이 없습니다.</string>
     <string name="failed_to_open_linked_file_with_reason">파일을 열지 못했습니다: %s</string>
     <string name="images">이미지</string>
@@ -514,11 +452,9 @@
     <string name="argument_detected">%s 감지됨</string>
     <string name="argument_selected">%s 선택됨</string>
     <string name="fixed_width_value">너비 (픽셀단위)</string>
-    <string name="share_target_service">Orgzly 메모장 공유하기</string>
     <string name="under">Under</string>
     <string name="above">Above</string>
     <string name="below">Below</string>
-    <string name="loading">Loading…</string>
     <string name="go_to">Go to</string>
     <string name="cannot_refile_to_the_same_subtree">Cannot refile to the same subtree</string>
     <string name="notification_maximum_priority">Maximum</string>
@@ -536,16 +472,12 @@
     </plurals>
     <string name="display_checkmarks">Display checkmarks</string>
     <string name="display_checkmarks_summary">Allows marking notes as done</string>
-    <string name="last_used">Last used</string>
-    <string name="note_details_opening_mode">Opening mode</string>
     <string name="cleartext_traffic">Cleartext traffic</string>
     <string name="cleartext_traffic_message">Are you sure you want to use this URL?</string>
     <string name="credentials_in_url_not_supported">Passing credentials in URL is not supported</string>
-    <string name="access_token">Access token</string>
     <string name="trusted_certificates">Trusted certificates</string>
     <string name="add_trusted_certificates_optional">Add trusted certificates (optional)</string>
     <string name="edit_trusted_certificates">Edit trusted certificates</string>
-    <string name="this_action_cannot_be_undone">This action cannot be undone.</string>
     <plurals name="paste_note_or_notes_with_count">
         <item quantity="other">Paste <b>%d</b> notes</item>
     </plurals>

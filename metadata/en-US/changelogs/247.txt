@@ -1,0 +1,2 @@
+• Allow export/import of settings and saved searches to/from a chosen note.
+• Start applying semantic versioning when naming app releases.
