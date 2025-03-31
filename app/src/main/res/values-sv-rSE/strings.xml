@@ -134,7 +134,7 @@
     <string name="clear_database_summary">Rensa appens databas</string>
     <string name="clear_database_performed">Datbasen tömdes</string>
     <string name="getting_started_notebook_name">Kom igång med Orgzly</string>
-    <string name="reload_getting_started">Importera \"Kom igång med Orgzly”</string>
+    <string name="reload_getting_started">Importera ”Kom igång med Orgzly”</string>
     <string name="reload_getting_started_summary">Importera senaste versionen av anteckningsboken</string>
     <string name="notebook_imported">Anteckningsboken har importerats</string>
     <string name="book_does_not_exist_anymore">Denna anteckningsbok finns inte längre.</string>
@@ -389,7 +389,7 @@
     <string name="delete_note">Radera anteckning</string>
     <string name="delete_notes">Radera anteckningar</string>
     <string name="delete_note_and_all_subnotes">Ta bort denna anteckning och alla dess underanteckningar?</string>
-    <string name="delete_notes_and_all_subnotes">Ta bort denna anteckning och alla dess underanteckningar?</string>
+    <string name="delete_notes_and_all_subnotes">Ta bort dessa anteckningar och alla deras underanteckningar?</string>
     <plurals name="notes_deleted">
         <item quantity="one">Anteckning raderad</item>
         <item quantity="other">Raderade <b>%d</b> anteckningar</item>
