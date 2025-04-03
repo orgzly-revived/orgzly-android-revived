@@ -1,118 +1,118 @@
-Welcome to Orgzly!
+Dobrodošli v Orgzly!
 
-* Notes
-** Click on the note to open it
-** Click and hold the note to select it
+* Opombe
+** Kliknite na opombo, da jo odprete
+** Kliknite in držite opombo, da jo izberete
 
-You can select multiple notes.
+Izberete lahko več opomb.
 
-** Fling the note right to open its popup menu
+** Vstavite opombo v desno, da odprete pojavni meni
 
-Fling the note left to open a different menu.
+Vstavite opombo levo, da odprete drug meni.
 
-** Fold a note which contains sub-notes by clicking the icon next to it
+** Zložite opombo, ki vsebuje podopombe, tako da kliknete ikono poleg nje
 
-Long-click the icon to unfold the entire subtree.
+Dolgo kliknite ikono, da odprete celotno poddrevo.
 
-*** There is no limit to the number of levels you can have
-**** Use this to better organize your notes
+*** Število stopenj, ki jih lahko imate, ni omejeno
+**** Uporabite to za boljšo organizacijo zapiskov
 
-** Note can have tags :tag1:tag2:
-*** Sub-note inherits the tags :tag3:
+** Opomba ima lahko oznake :tag1:tag2:
+*** Podopomba podeduje oznake :tag3:
 
-If you search for notes tagged with “tag1” using “t.tag1” query, this note will be included in the search results.
+Če iščete opombe z oznako »tag1« s poizvedbo »t.tag1«, bo ta opomba vključena v rezultate iskanja.
 
-*** A note that has the =ARCHIVE= tag set is grayed out :ARCHIVE:
+*** Opomba ki ima =ARCHIVE= oznaku je obarvana sivo :ARCHIVE:
 
-** Note can have a state
+** Opomba ima lahko stanje
 
-You can configure any number of states to use: TODO, NEXT, DONE, etc.
+Nastavite lahko poljubno število stanj za uporabo: TODO, NEXT, DONE itd.
 
-*** TODO There are two /types/ of states: to-do and done
+** TODO Obstajata dve /vrsti/ stanja: To-do in Done
 
-*** DONE This is a note with /done/ type of state
+*** DONE To je opomba z /opravljeno/ vrsto stanja
 CLOSED: [2018-01-24 Wed 17:00]
 
-** Parent notes can track state of child notes [1/3] [33%]
+** Starševski opombe lahko sledijo stanju otroških opombev [1/3] [33%]
 
-*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+** TODO Če želite spremljati razmerje med elementi TODO in DONE, dodajte [/] v naslov opombe
 
-*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+*** TODO Če želite spremljati odstotek DONE v primerjavi z TODO artiklov, dodajte [%] v naslov opombe
 
-*** DONE Both can be used in tandem
+*** DONE Oboje se lahko uporablja v tandemu
 CLOSED: [2025-03-13 Thu 08:37]
 
-The order doesn't matter, and the counts will be updated automatically.
+Naročilo ni pomembno, številke pa bodo samodejno posodobljene.
 
-** Note can have a scheduled time
+** Opomba ima lahko načrtovan čas
 SCHEDULED: <2015-02-20 Fri 15:15>
 
-*** Times can have a repeater
-SCHEDULED: <2015-02-16 Mon .+2d>
+*** Časi imajo lahko repetitor
+SCHEDULED: <16.02.2015 Mon .+2d>
 
-** You can also set a deadline time
+** Nastavite lahko tudi rok
 DEADLINE: <2015-02-20 Fri>
 
-** Event times can be used anywhere in the note's content
+** Čas dogodka lahko uporabite kjer koli v vsebini opombe
 
-You can have multiple event times:
+Imate lahko več časov dogodkov:
 
 - <2015-02-20 Fri>
 - <2015-02-21 Sat>
 
-** Reminders for notes with scheduled, deadline, or event times are supported
+** Podprti so opomniki za opombe z načrtovanimi časi, roki ali dogodki
 
-Mark the note as done to shift the repeater.
+Označite opombo kot končano, da premaknete repetitor.
 
-** [#A] Note can have a priority
+** [#A] Opomba ima lahko prednost
 
-You can change the number of priorities in Settings. You can also change default priority - assumed priority for notes without one set.
+Število prednostnih nalog lahko spremenite v nastavitvah. Spremenite lahko tudi privzeto prednost - predvideno prednost za opombe brez enega nabora.
 
-** Note can include links
+** Opomba lahko vključuje povezave
 
-Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+Pokličite telefonsko številko (tel:555-0199), pošljite SMS (sms:555-0199), sestavite e-pošto (mailto:support@orgzlyrevived.com) ali obiščite spletno stran ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-You can also link to another note or notebook within the app.
+V aplikaciji se lahko povežete tudi z drugim opombo ali zvezkom.
 
-See [[https://www.orgzlyrevived.com/docs#links]] for more information.
+Za več informacij glejte [[https://www.orgzlyrevived.com/docs#links]].
 
-** Basic typographical emphasis is supported
+** Podprt je osnovni tipografski poudarek
 
-You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
+Izberete lahko besede *krepko*, /ležeče/, _podčrtano_, =dobesedno=, ~koda~ in +prečrtano+.
 
-** Checkbox list is available
+** Seznam potrditvenih polj je na voljo
 
-- [X] Task 1
-- [ ] Task 2
-- [ ] Task 3
+- [X] Opravilo 1
+- [ ] Opravilo 2
+- [ ] Opravilo 3
 
-Click the checkbox to toggle it. Press the new-line button at the end of the line to create a new item.
+Kliknite potrditveno polje, da ga preklopite. Na koncu vrstice pritisnite gumb nove vrstice da ustvarite nov element.
 
-** A note's title can also track checkbox list states [66%] [2/3]
+** Naslov opombe lahko spremlja tudi navedena seznama potrditvenih polj [66%] [2/3]
 
-- [X] Task 1
-- [ ] Task 2
-- [X] Task 3
+- [X] Opravilo 1
+- [ ] Opravilo 2
+- [X] Opravilo 3
 
-* Search
-** There are many search operators supported
+* Iskanje
+** Podprtih je veliko iskalnih operaterjev
 
-You can search notes by state, tag, scheduled, deadline or event times, etc.
+Opombe lahko iščete po stanju, oznaki, načrtovanju, roku ali časih dogodkov itd.
 
-See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+Za več informacij glejte [[https://www.orgzlyrevived.com/docs#search]].
 
-** Search queries can be saved for quick access
+** Iskalne poizvedbe lahko shranite za hiter dostop
 
-Try sample searches from the navigation drawer and note the queries they use.
+Preizkusite vzorčna iskanja iz navigacijskega predala in upoštevajte poizvedbe, ki jih uporabljajo.
 
-You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+Svoja shranjena iskanja lahko ustvarite s klikom na »Iskanja« v navigacijskem predalu.
 
-* Syncing
+* Sinhronizacija
 
-** Notebooks can be saved as plain-text files
+Prenosne knjige lahko shranite kot datoteke navadnega besedila
 
-Files are in the format used by [[https://orgmode.org/][Org mode]].
+Datoteke so v formatu ki ga uporablja [[https://orgmode.org/][Org mode]].
 
-** Location (repository) type
+** Tip lokacije (skladišča)
 
-A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.
+Skladišče (repozitorij) je mesto, s katerim lahko sinhronizirate zvezke. Skladišče je lahko imenik na vaši mobilni napravi, kartici SD ali Dropbox.
