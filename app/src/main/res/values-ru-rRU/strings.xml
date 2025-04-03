@@ -603,20 +603,17 @@
     <string name="subfolder_support_disabled">Поддержка подпапок отключена</string>
     <string name="export_settings_to_note">Экспортировать настройки в заметку</string>
     <string name="failed_to_get_note_payload">Не удалось извлечь приложение к заметке</string>
-    <string name="settings_exported_to">Экспортированные настройки в заметку «%1$s»</string>
-    <string name="settings_imported">Импортированные настройки и сохранённые поисковые запросы</string>
+    <string name="settings_exported_to">Экспортированные настройки и сохранённые поисик в заметку «%1$s»</string>
     <string name="error_multiple_notes_with_matching_property_value">Найдено несколько заметок сосвойством \"%1$s\" в значении \"%2$s\"</string>
-    <string name="export_settings_summary">Запись всех настроек в формате JSON в заметку по вашему выбору</string>
+    <string name="export_settings_summary">Запись всех настроек и сохранённых поисков в формате JSON в заметку по вашему выбору</string>
     <string name="import_settings_from_note">Импорт настроек из заметки</string>
-    <string name="settings_imported_from">Импортированные настройки из заметки «%1$s»</string>
-    <string name="settings_could_not_be_imported">Не удалось импортировать настройки и сохранённые поисковые запросы</string>
+    <string name="settings_imported_from">Импортировано настройки и сохранёные поиски из заметки «%1$s»</string>
     <string name="export_settings">Экспорт настроек приложения</string>
     <string name="export_settings_warning_text">Внимание! Выбранная заметка будет полностью перезаписана!</string>
     <string name="error">Ошибка</string>
     <string name="note_does_not_contain_valid_json">Заметка не содержит допустимый JSON.</string>
     <string name="imported_json_is_missing_mandatory_fields">В импортированном JSON отсутствуют обязательные поля.</string>
     <string name="note_has_no_content">Заметка не имеет содержания.</string>
-    <string name="import_settings_summary">Импортировать настройки как JSON из выбранной вами заметки</string>
+    <string name="import_settings_summary">Импортировать настройки и схоранённые поиски как JSON из выбранной вами заметки</string>
     <string name="import_settings">Импорт настроек приложения</string>
-    <string name="selected_notes_id_property_value_is_not_unique">Ошибка: Значение свойства «ID» выбранной заметки не уникально (попробуйте его изменить)</string>
 </resources>
