@@ -10,7 +10,9 @@ import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orgzly.BuildConfig
 import com.orgzly.R
@@ -42,6 +44,10 @@ import com.orgzly.android.ui.util.setup
 import com.orgzly.android.ui.util.styledAttributes
 import com.orgzly.android.util.LogUtils
 import com.orgzly.databinding.FragmentBookBinding
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 
 /**
@@ -65,6 +71,8 @@ class BookFragment :
     private lateinit var sharedMainActivityViewModel: SharedMainActivityViewModel
 
     private lateinit var viewModel: BookViewModel
+
+    private var hideButtonJob: Job? = null
 
     override fun getAdapter(): BookAdapter? {
         return if (::viewAdapter.isInitialized) viewAdapter else null
@@ -164,6 +172,9 @@ class BookFragment :
                     }
                 }
             }))
+
+            // Add scroll listener for jump-to-end button
+            setupJumpToEndButton(rv)
         }
 
         binding.swipeContainer.setup()
@@ -306,6 +317,10 @@ class BookFragment :
         super.onDestroyView()
 
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG)
+
+        // Clean up coroutine job
+        hideButtonJob?.cancel()
+        hideButtonJob = null
     }
 
     override fun onDetach() {
@@ -775,6 +790,61 @@ class BookFragment :
         }
     }
 
+    private fun setupJumpToEndButton(recyclerView: RecyclerView) {
+        // Initially hide the button
+        binding.jumpToEndFab.hide()
+
+        // Set up the click listener
+        binding.jumpToEndFab.run {
+            setOnClickListener {
+                binding.fragmentBookRecyclerView.smoothScrollToPosition(viewAdapter.itemCount - 1)
+            }
+        }
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
+                val totalItemCount = layoutManager.itemCount
+
+                when {
+                    // At bottom - hide button
+                    lastVisibleItem >= totalItemCount - 1 -> {
+                        binding.jumpToEndFab.hide()
+                    }
+                    // Scrolling fast - show button
+                    abs(dy) > SCROLL_SPEED_THRESHOLD -> {
+                        binding.jumpToEndFab.show()
+                        scheduleButtonHide()
+                    }
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                when (newState) {
+                    RecyclerView.SCROLL_STATE_IDLE -> {
+                        // Schedule hide when scrolling stops
+                        scheduleButtonHide()
+                    }
+                    RecyclerView.SCROLL_STATE_DRAGGING -> {
+                        // Cancel scheduled hide when user starts dragging
+                        hideButtonJob?.cancel()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun scheduleButtonHide() {
+        hideButtonJob?.cancel()
+        hideButtonJob = lifecycleScope.launch {
+            delay(FADE_DELAY)
+            binding.jumpToEndFab.hide()
+        }
+    }
+
     interface Listener : NotesFragment.Listener {
         fun onBookPrefaceEditRequest(book: Book)
 
@@ -798,6 +868,10 @@ class BookFragment :
         /** Name used for [android.app.FragmentManager].  */
         @JvmField
         val FRAGMENT_TAG: String = BookFragment::class.java.name
+
+        /* Jump to Bottom Consts */
+        private const val FADE_DELAY = 2000L
+        private const val SCROLL_SPEED_THRESHOLD = 50
 
         /* Arguments. */
         private const val ARG_BOOK_ID = "bookId"
