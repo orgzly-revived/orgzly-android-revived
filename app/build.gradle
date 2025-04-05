@@ -182,6 +182,7 @@ dependencies {
     implementation "com.google.code.gson:gson:$versions.gson"
 
     implementation "com.dropbox.core:dropbox-core-sdk:$versions.dropbox_core_sdk"
+    implementation "com.dropbox.core:dropbox-android-sdk:$versions.dropbox_core_sdk"
 
     implementation "com.googlecode.juniversalchardet:juniversalchardet:$versions.juniversalchardet"
 
