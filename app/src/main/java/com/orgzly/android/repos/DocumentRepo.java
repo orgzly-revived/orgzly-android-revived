@@ -200,10 +200,8 @@ public class DocumentRepo implements SyncRepo {
             MiscUtils.writeFileToStream(file, out);
         }
 
-        // We can't use destinationFile.lastModified() here, because some
-        // ContentProviders will not yet have set it.
+        String rev = String.valueOf(destinationFile.lastModified());
         long mtime = System.currentTimeMillis();
-        String rev = String.valueOf(mtime);
 
         return new VersionedRook(repoId, RepoType.DOCUMENT, getUri(), destinationFile.getUri(), rev, mtime);
     }
