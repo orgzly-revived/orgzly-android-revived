@@ -6,6 +6,7 @@ import android.os.Build;
 import android.provider.DocumentsContract;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
 
 import com.orgzly.BuildConfig;
@@ -70,38 +71,30 @@ public class DocumentRepo implements SyncRepo {
     @Override
     public List<VersionedRook> getBooks() throws IOException {
         List<VersionedRook> result = new ArrayList<>();
-
         List<DocumentFile> files = walkFileTree();
-
-        if (files.size() > 0) {
+        if (!files.isEmpty()) {
             for (DocumentFile file : files) {
-                if (BookName.isSupportedFormatFileName(file.getName())) {
-
-                    if (BuildConfig.LOG_DEBUG) {
-                        LogUtils.d(TAG,
-                                "file.getName()", file.getName(),
-                                "getUri()", getUri(),
-                                "repoDocumentFile.getUri()", repoDocumentFile.getUri(),
-                                "file", file,
-                                "file.getUri()", file.getUri(),
-                                "file.getParentFile()", file.getParentFile().getUri());
-                    }
-
-                    result.add(new VersionedRook(
-                            repoId,
-                            RepoType.DOCUMENT,
-                            getUri(),
-                            file.getUri(),
-                            String.valueOf(file.lastModified()),
-                            file.lastModified()
-                    ));
+                if (BuildConfig.LOG_DEBUG) {
+                    LogUtils.d(TAG,
+                            "file.getName()", file.getName(),
+                            "getUri()", getUri(),
+                            "repoDocumentFile.getUri()", repoDocumentFile.getUri(),
+                            "file", file,
+                            "file.getUri()", file.getUri(),
+                            "file.getParentFile()", Objects.requireNonNull(file.getParentFile()).getUri());
                 }
+                result.add(new VersionedRook(
+                        repoId,
+                        RepoType.DOCUMENT,
+                        getUri(),
+                        file.getUri(),
+                        String.valueOf(file.lastModified()),
+                        file.lastModified()
+                ));
             }
-
         } else {
             Log.e(TAG, "Listing files in " + getUri() + " returned null.");
         }
-
         return result;
     }
 
@@ -111,27 +104,39 @@ public class DocumentRepo implements SyncRepo {
     private List<DocumentFile> walkFileTree() {
         List<DocumentFile> result = new ArrayList<>();
         List<DocumentFile> directoryNodes = new ArrayList<>();
-        RepoIgnoreNode ignores = new RepoIgnoreNode(this);
         directoryNodes.add(repoDocumentFile);
+        RepoIgnoreNode ignoreNode = new RepoIgnoreNode(this);
+        StringBuilder repoRelativePath = new StringBuilder();
         while (!directoryNodes.isEmpty()) {
             DocumentFile currentDir = directoryNodes.remove(0);
-            for (DocumentFile node : currentDir.listFiles()) {
-                String repoRelativePath = BookName.getRepoRelativePath(repoUri, node.getUri());
-                if (node.isDirectory()) {
-                    if (!AppPreferences.subfolderSupport(context))
-                        continue;
-                    if (Build.VERSION.SDK_INT >= 26) {
-                        if (ignores.isPathIgnored(repoRelativePath, true)) {
-                            continue;
-                        }
-                    }
-                    directoryNodes.add(node);
+            DocumentFile parentDir = currentDir.getParentFile();
+            if (parentDir != null) {
+                if (parentDir == repoDocumentFile) {
+                    repoRelativePath = new StringBuilder(Objects.requireNonNull(currentDir.getName()));
                 } else {
+                    repoRelativePath.append("/").append(currentDir.getName());
+                }
+            }
+            for (DocumentFile node : currentDir.listFiles()) {
+                if (node.isDirectory() && AppPreferences.subfolderSupport(context)) {
+                    // Avoid descending into completely ignored directories
                     if (Build.VERSION.SDK_INT >= 26) {
-                        if (ignores.isPathIgnored(repoRelativePath, false)) {
-                            continue;
+                        if (!ignoreNode.isPathIgnored(repoRelativePath.toString(), true)) {
+                            directoryNodes.add(node);
                         }
-                    } result.add(node);
+                    } else {
+                        directoryNodes.add(node);
+                    }
+                } else {
+                    if (BookName.isSupportedFormatFileName(node.getName())) {
+                        // Check for matching ignore rules
+                        if (Build.VERSION.SDK_INT >= 26) {
+                            repoRelativePath.append("/").append(node.getName());
+                            if (ignoreNode.isPathIgnored(repoRelativePath.toString(), false))
+                                continue;
+                        }
+                        result.add(node);
+                    }
                 }
             }
         }
@@ -144,18 +149,20 @@ public class DocumentRepo implements SyncRepo {
     }
 
     @Override
-    public VersionedRook retrieveBook(String repoRelativePath, File destinationFile) throws IOException {
-        DocumentFile sourceFile = getDocumentFileFromPath(repoRelativePath);
-        if (sourceFile == null) {
-            throw new FileNotFoundException("Book " + repoRelativePath + " not found in " + repoUri);
+    public VersionedRook retrieveBook(Uri uri, File destinationFile) throws IOException {
+        DocumentFile sourceFile = DocumentFile.fromSingleUri(context, uri);
+        assert sourceFile != null;
+        if (!sourceFile.exists()) {
+            throw new FileNotFoundException("File " + sourceFile.getUri() + " not found in " + repoUri);
         } else {
             if (BuildConfig.LOG_DEBUG) {
-                LogUtils.d(TAG, "Found DocumentFile for " + repoRelativePath + ": " + sourceFile.getUri());
+                LogUtils.d(TAG, "Found DocumentFile for " + sourceFile.getUri());
             }
         }
 
         /* "Download" the file. */
         try (InputStream is = context.getContentResolver().openInputStream(sourceFile.getUri())) {
+            assert is != null;
             MiscUtils.writeStreamToFile(is, destinationFile);
         }
 
@@ -217,7 +224,7 @@ public class DocumentRepo implements SyncRepo {
         DocumentFile currentDir = repoDocumentFile;
         while (levels.size() > 1) {
             String nextDirName = levels.remove(0);
-            DocumentFile nextDir = currentDir.findFile(nextDirName);
+            DocumentFile nextDir = Objects.requireNonNull(currentDir).findFile(nextDirName);
             if (nextDir == null) {
                 currentDir = currentDir.createDirectory(nextDirName);
             } else {
@@ -230,15 +237,15 @@ public class DocumentRepo implements SyncRepo {
     /**
      * Allows renaming a notebook to any subdirectory (indicated with a "/"), ensuring that all
      * required subdirectories are created, if they do not already exist. Note that the file is
-     * moved, but no "abandoned" directories are deleted.
-     * @param oldFullUri
-     * @param newName
-     * @return
+     * moved, but any emptied directories are not deleted.
+     * @param oldFullUri Original URI
+     * @param newName The user's chosen display name
+     * @return a VersionedRook representation of the new file
      * @throws IOException
      */
     @Override
     public VersionedRook renameBook(Uri oldFullUri, String newName) throws IOException {
-        DocumentFile oldDocFile = DocumentFile.fromSingleUri(context, oldFullUri);
+        DocumentFile oldDocFile = Objects.requireNonNull(DocumentFile.fromSingleUri(context, oldFullUri));
         long mtime = oldDocFile.lastModified();
         String rev = String.valueOf(mtime);
         String oldDocFileName = oldDocFile.getName();
@@ -250,7 +257,7 @@ public class DocumentRepo implements SyncRepo {
         );
         BookName oldBookName = BookName.fromRepoRelativePath(BookName.getRepoRelativePath(repoUri, oldFullUri));
         String newRelativePath = BookName.repoRelativePath(newName, oldBookName.getFormat());
-        String newDocFileName = Uri.parse(newRelativePath).getLastPathSegment();
+        String newDocFileName = Objects.requireNonNull(Uri.parse(newRelativePath).getLastPathSegment());
         DocumentFile newDir;
         Uri newUri = oldFullUri;
 
@@ -278,6 +285,7 @@ public class DocumentRepo implements SyncRepo {
                         oldDirUri,
                         newDir.getUri()
                 );
+                assert newUri != null;
             } else {
                 throw new IllegalArgumentException(
                         context.getString(R.string.moving_between_subdirectories_requires_api_24));
@@ -291,6 +299,7 @@ public class DocumentRepo implements SyncRepo {
                     newUri,
                     newDocFileName
             );
+            assert newUri != null;
         }
 
         return new VersionedRook(repoId, RepoType.DOCUMENT, repoUri, newUri, rev, mtime);
@@ -307,6 +316,7 @@ public class DocumentRepo implements SyncRepo {
         }
     }
 
+    @NonNull
     @Override
     public String toString() {
         return getUri().toString();
