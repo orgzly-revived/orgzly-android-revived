@@ -22,7 +22,7 @@
 
         <TextView
             style="@style/WhatsNewVersion"
-            android:text="v1.9.1"
+            android:text="v1.10.0"
             tools:ignore="HardcodedText"
             android:autoLink="web" />
 
@@ -32,11 +32,11 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Reduce modification time issues in directory repo type." />
+            app:text="Fix a modification time bug in the directory repository type." />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Translation updates." />
+            app:text="Update translations." />
 
         <TextView
             style="@style/WhatsNewVersion"
