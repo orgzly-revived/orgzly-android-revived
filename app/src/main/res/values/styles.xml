@@ -405,7 +405,12 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">bottom|end</item>
-        <item name="android:layout_margin">@dimen/screen_edge</item>
+        <!--  Have four margin values so that they can be overridden separately.
+        "The layout_margin value will take precedence over the edge-specific values"-->
+        <item name="android:layout_marginLeft">@dimen/screen_edge</item>
+        <item name="android:layout_marginRight">@dimen/screen_edge</item>
+        <item name="android:layout_marginTop">@dimen/screen_edge</item>
+        <item name="android:layout_marginBottom">@dimen/screen_edge</item>
         <item name="fabCradleRoundedCornerRadius">0dp</item>
         <item name="fabCradleVerticalOffset">0dp</item>
     </style>
@@ -417,6 +422,14 @@
     <style name="Fab.Add">
         <item name="android:src">@drawable/ic_add</item>
     </style>
+
+    <style name="Fab.JumpToEnd">
+        <item name="android:layout_marginBottom">@dimen/fab_stack_spacing</item>
+        <item name="android:src">@drawable/ic_arrow_downward_to_bottom</item>
+    </style>
+    <style name="JumpToEnd">
+    </style>
+
 
     <style name="HorizontalDivider">
         <item name="android:layout_width">match_parent</item>

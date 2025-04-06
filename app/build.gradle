@@ -10,8 +10,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 34
-        versionCode 247
-        versionName "1.9.0"
+        versionCode 251
+        versionName "1.10.0"
         applicationId = "com.orgzlyrevived"
         resValue "string", "application_id", "com.orgzlyrevived"
 
@@ -182,6 +182,7 @@ dependencies {
     implementation "com.google.code.gson:gson:$versions.gson"
 
     implementation "com.dropbox.core:dropbox-core-sdk:$versions.dropbox_core_sdk"
+    implementation "com.dropbox.core:dropbox-android-sdk:$versions.dropbox_core_sdk"
 
     implementation "com.googlecode.juniversalchardet:juniversalchardet:$versions.juniversalchardet"
 

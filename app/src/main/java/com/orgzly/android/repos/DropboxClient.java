@@ -12,7 +12,6 @@ import com.dropbox.core.android.Auth;
 import com.dropbox.core.json.JsonReadException;
 import com.dropbox.core.oauth.DbxCredential;
 import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.DeleteResult;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.FolderMetadata;
 import com.dropbox.core.v2.files.GetMetadataErrorException;
@@ -228,10 +227,8 @@ public class DropboxClient {
     /**
      * Download file from Dropbox and store it to a local file.
      */
-    public VersionedRook download(Uri repoUri, String repoRelativePath, File localFile) throws IOException {
+    public VersionedRook download(Uri repoUri, Uri uri, File localFile) throws IOException {
         linkedOrThrow();
-
-        Uri uri = getFullUriFromRelativePath(repoUri, repoRelativePath);
 
         OutputStream out = new BufferedOutputStream(new FileOutputStream(localFile));
 

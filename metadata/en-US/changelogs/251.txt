@@ -1,0 +1,3 @@
+• Always sort agenda items chronologically.
+• Fix a modification time bug in the directory repository type.
+• Update translations.
