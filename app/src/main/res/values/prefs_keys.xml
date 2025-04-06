@@ -101,9 +101,9 @@
     </string-array>
 
     <!-- Theme -->
-    <string name="color_theme_system_default">System default</string>
-    <string name="color_theme_light">Light</string>
-    <string name="color_theme_dark">Dark</string>
+    <string name="color_theme_system_default" translatable="true">System default</string>
+    <string name="color_theme_light" translatable="true">Light</string>
+    <string name="color_theme_dark" translatable="true">Dark</string>
     <string name="pref_key_color_theme" translatable="false">pref_key_color_theme</string>
     <string name="pref_default_color_theme" translatable="false">system</string>
     <string-array name="color_theme">
