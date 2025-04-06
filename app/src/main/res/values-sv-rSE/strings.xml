@@ -581,13 +581,13 @@
     <string name="subfolder_support_disabled">Stöd för underkataloger är avstängt</string>
     <string name="export_settings_to_note">Exportera inställningar till en anteckning</string>
     <string name="import_settings_from_note">Importera inställningar från en anteckning</string>
-    <string name="settings_exported_to">Inställningarna exporterades till anteckningen ”%1$s”</string>
-    <string name="settings_imported_from">Inställningarna importerades från anteckningen ”%1$s”</string>
+    <string name="settings_exported_to">Inställningar och sparade sökningar exporterades till anteckningen ”%1$s”</string>
+    <string name="settings_imported_from">Inställningar och sparade sökningar importerades från anteckningen ”%1$s”</string>
     <string name="failed_to_get_note_payload">Kunde inte läsa anteckningens innehåll</string>
     <string name="export_settings">Exportera appens inställningar</string>
-    <string name="export_settings_summary">Spara en JSON-representation av alla inställningar till en anteckning som du väljer</string>
+    <string name="export_settings_summary">Spara en JSON-representation av alla inställningar och sparade sökningar till en anteckning som du väljer</string>
     <string name="import_settings">Importera appens inställningar</string>
-    <string name="import_settings_summary">Importera inställningar i JSON-form från en anteckning som du väljer</string>
+    <string name="import_settings_summary">Importera inställningar och sparade sökningar i JSON-form från en anteckning som du väljer</string>
     <string name="export_settings_warning_text">VARNING! Den anteckning du väljer kommer att skrivas över helt och hållet!</string>
     <string name="error">Fel</string>
     <string name="note_does_not_contain_valid_json">Anteckningen innehåller inte giltig JSON.</string>
