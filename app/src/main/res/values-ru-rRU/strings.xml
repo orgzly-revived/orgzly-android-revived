@@ -616,4 +616,5 @@
     <string name="note_has_no_content">Заметка не имеет содержания.</string>
     <string name="import_settings_summary">Импортировать настройки и схоранённые поиски как JSON из выбранной вами заметки</string>
     <string name="import_settings">Импорт настроек приложения</string>
+    <string name="message_book_has_no_rook">Блокнот ранее не синхронизировался ещё</string>
 </resources>
