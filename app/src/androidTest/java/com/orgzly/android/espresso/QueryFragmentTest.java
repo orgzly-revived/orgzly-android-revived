@@ -5,6 +5,7 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.contrib.DrawerActions.open;
 import static androidx.test.espresso.contrib.PickerActions.setDate;
 import static androidx.test.espresso.contrib.PickerActions.setTime;
@@ -41,6 +42,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.os.SystemClock;
+import android.widget.Toolbar;
 
 import androidx.test.core.app.ActivityScenario;
 
@@ -49,6 +51,8 @@ import com.orgzly.android.OrgzlyTest;
 import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.ui.main.MainActivity;
 import com.orgzly.org.datetime.OrgDateTime;
+import com.orgzly.android.ui.notes.query.agenda.AgendaFragment;
+import com.orgzly.android.ui.notes.query.search.SearchFragment;
 
 import org.junit.After;
 import org.junit.Ignore;
@@ -860,5 +864,62 @@ public class QueryFragmentTest extends OrgzlyTest {
         scenario = ActivityScenario.launch(MainActivity.class);
         searchForTextCloseKeyboard("s.no");
         onNotesInSearch().check(matches(recyclerViewItemCount(1)));
+    }
+
+    @Test
+    public void testSavedSearchAgendaFragmentDisplaysCorrectTitle() {
+        defaultSetUp();
+
+        // Create a saved search with Agenda View
+        testUtils.createSavedSearch("My Agenda", ".it.done ad.7");
+        scenario = ActivityScenario.launch(MainActivity.class);
+
+        // Open drawer
+        onView(withId(R.id.drawer_layout)).perform(open());
+
+        // Click on the saved search
+        onView(withText("My Agenda")).perform(click());
+
+        // Verify AgendaFragment is displayed
+        onView(withId(R.id.fragment_query_agenda_recycler_view)).check(matches(isDisplayed()));
+
+        // Verify SearchFragment is NOT displayed
+        onView(withId(R.id.fragment_query_search_recycler_view)).check(doesNotExist());
+
+        // Verify the title in the toolbar
+        onView(allOf(
+            instanceOf(TextView.class),
+            withParent(withId(R.id.top_toolbar)),
+            withText("My Agenda")
+        )).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testSavedSearchSearchFragmentDisplaysCorrectTitle() {
+        defaultSetUp();
+
+        // Create a saved search
+        testUtils.createSavedSearch("My Search", "i.todo");
+        scenario = ActivityScenario.launch(MainActivity.class);
+
+        // Open drawer
+        onView(withId(R.id.drawer_layout)).perform(open());
+
+        // Click on the saved search
+        onView(withText("My Search")).perform(click());
+
+        SystemClock.sleep(200);
+
+        // Verify SearchFragment is displayed
+        onView(withId(R.id.fragment_query_search_recycler_view)).check(matches(isDisplayed()));
+
+        // Verify AgendaFragment is NOT displayed
+        onView(withId(R.id.fragment_query_agenda_recycler_view)).check(doesNotExist());
+
+        onView(allOf(
+                instanceOf(TextView.class),
+                withParent(withId(R.id.top_toolbar)),
+                withText("My Search")
+        )).check(matches(isDisplayed()));
     }
 }
