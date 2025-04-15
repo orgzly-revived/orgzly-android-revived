@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.data.DataRepository
@@ -11,6 +12,7 @@ import com.orgzly.android.data.mappers.OrgMapper
 import com.orgzly.android.db.entity.BookView
 import com.orgzly.android.db.entity.Note
 import com.orgzly.android.db.entity.NoteView
+import com.orgzly.android.db.entity.Book
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.CommonViewModel
 import com.orgzly.android.ui.NotePlace
@@ -22,6 +24,7 @@ import com.orgzly.android.util.MiscUtils
 import com.orgzly.org.OrgProperties
 import com.orgzly.org.datetime.OrgRange
 import com.orgzly.org.parser.OrgParserWriter
+import com.orgzly.android.db.entity.BookAction
 
 data class NoteInitialData(
     val bookId: Long,
@@ -61,6 +64,18 @@ class NoteViewModel(
     var notePayload: NotePayload? = null
 
     private var originalHash: Long = 0L
+
+    private val reactiveBook: LiveData<Book?> = dataRepository.getBookLiveData(bookId)
+
+    val lastSyncStatusText: LiveData<String?> = reactiveBook.map { currentBook ->
+        val lastAction = currentBook?.lastAction
+        val syncTimestamp = if (isSuccessfulSyncAction(lastAction)) {
+            lastAction?.timestamp
+        } else {
+            null
+        }
+        formatSyncTimestamp(syncTimestamp)
+    }
 
     fun loadData() {
         App.EXECUTORS.diskIO().execute {
@@ -295,6 +310,25 @@ class NoteViewModel(
         } else {
             true
         }
+    }
+
+    private fun isSuccessfulSyncAction(action: BookAction?): Boolean {
+        if (action == null || action.type != BookAction.Type.INFO) {
+            return false
+        }
+        // TODO: Verify exact success messages from BookSyncStatus
+        // Using placeholder checks for now
+        return action.message.contains("Loaded from") ||
+               action.message.contains("Saved to") ||
+               action.message == "No change" // Placeholder, confirm this message if used for success
+    }
+
+    private fun formatSyncTimestamp(timestamp: Long?): String? {
+         if (timestamp == null) return null // Or return "Never synced"
+
+         // TODO: Replace with proper relative formatting using Context and DateUtils
+         // Simple format for now:
+          return "Synced: ${java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault()).format(java.util.Date(timestamp))}"
     }
 
     companion object {
