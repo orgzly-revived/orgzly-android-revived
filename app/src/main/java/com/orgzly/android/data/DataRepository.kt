@@ -257,7 +257,7 @@ class DataRepository @Inject constructor(
         return db.book().get(id) ?: throw IllegalStateException("Book with ID $id not found")
     }
 
-    fun getBookLiveData(id: Long): LiveData<Book> {
+    fun getBookLiveData(id: Long): LiveData<Book?> {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, id)
         return db.book().getLiveData(id)
     }

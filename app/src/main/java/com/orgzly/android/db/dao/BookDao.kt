@@ -18,7 +18,7 @@ abstract class BookDao : BaseDao<Book> {
     abstract fun get(name: String): Book?
 
     @Query("SELECT * FROM books WHERE id = :id")
-    abstract fun getLiveData(id: Long): LiveData<Book> // null not allowed, use List
+    abstract fun getLiveData(id: Long): LiveData<Book?>
 
     @Query("SELECT * FROM books WHERE last_action_type = :type")
     abstract fun getWithActionType(type: BookAction.Type): List<Book>

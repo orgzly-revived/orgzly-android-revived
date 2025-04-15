@@ -428,7 +428,6 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
                 }
                 .setNegativeButton(R.string.cancel) { _, _ -> }
                 .show()
-
         })
 
         viewModel.bookChangeRequestEvent.observeSingle(viewLifecycleOwner, Observer { books ->
@@ -443,6 +442,12 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
         viewModel.snackBarMessage.observeSingle(viewLifecycleOwner, Observer { resId ->
             activity?.showSnackbar(resId)
+        })
+
+        // Observe the last sync status text and update the toolbar subtitle
+        viewModel.lastSyncStatusText.observe(viewLifecycleOwner, Observer { syncStatus ->
+            // Set the subtitle of the Toolbar. If syncStatus is null or empty, the subtitle will be cleared.
+            binding.topToolbar.subtitle = syncStatus
         })
     }
 
