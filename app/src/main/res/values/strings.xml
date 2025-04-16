@@ -734,4 +734,8 @@
     <string name="note_does_not_contain_valid_json">Note does not contain valid JSON.</string>
     <string name="imported_json_is_missing_mandatory_fields">Imported JSON is missing mandatory fields.</string>
     <string name="note_has_no_content">Note has no content.</string>
+
+    <string name="copied_link">Copied link</string>
+    <string name="synced_prefix">Synced: %s</string>
+    <string name="never_synced">Never synced</string>
 </resources>

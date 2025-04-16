@@ -25,6 +25,13 @@ import com.orgzly.org.OrgProperties
 import com.orgzly.org.datetime.OrgRange
 import com.orgzly.org.parser.OrgParserWriter
 import com.orgzly.android.db.entity.BookAction
+import android.text.format.DateUtils
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.delay
+import androidx.lifecycle.asFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 
 data class NoteInitialData(
     val bookId: Long,
@@ -65,17 +72,26 @@ class NoteViewModel(
 
     private var originalHash: Long = 0L
 
+    private val tickerFlow: Flow<Unit> = flow {
+        while (true) {
+            emit(Unit)
+            delay(60_000) // Emit every 60 seconds (1 minute)
+        }
+    }
+
     private val reactiveBook: LiveData<Book?> = dataRepository.getBookLiveData(bookId)
 
-    val lastSyncStatusText: LiveData<String?> = reactiveBook.map { currentBook ->
-        val lastAction = currentBook?.lastAction
-        val syncTimestamp = if (isSuccessfulSyncAction(lastAction)) {
-            lastAction?.timestamp
-        } else {
-            null
+    // Add the new Flow definition:
+    val relativeSyncStatusText: Flow<String?> = reactiveBook.asFlow()
+        .combine(tickerFlow) { book, _ -> // Combine book Flow with ticker
+            val lastAction = book?.lastAction
+            val syncTimestamp = if (isSuccessfulSyncAction(lastAction)) {
+                lastAction?.timestamp
+            } else {
+                null
+            }
+            formatRelativeSyncTimestamp(syncTimestamp)
         }
-        formatSyncTimestamp(syncTimestamp)
-    }
 
     fun loadData() {
         App.EXECUTORS.diskIO().execute {
@@ -329,6 +345,23 @@ class NoteViewModel(
          // TODO: Replace with proper relative formatting using Context and DateUtils
          // Simple format for now:
           return "Synced: ${java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault()).format(java.util.Date(timestamp))}"
+    }
+
+    private fun formatRelativeSyncTimestamp(timestamp: Long?): String? {
+        if (timestamp == null) {
+            // Return specific string (needs string resource)
+             return App.getAppContext().getString(R.string.never_synced)
+        }
+        val now = System.currentTimeMillis()
+        // MIN_RESOLUTION_MINUTE ensures it updates at least every minute
+        val relativeTime = DateUtils.getRelativeTimeSpanString(
+            timestamp,
+            now,
+            DateUtils.MINUTE_IN_MILLIS
+        )
+        // Optional: Prepend "Synced: " or similar (consider i18n)
+        return App.getAppContext().getString(R.string.synced_prefix, relativeTime)
+        // If no prefix needed: return relativeTime.toString()
     }
 
     companion object {
