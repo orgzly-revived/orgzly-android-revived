@@ -25,6 +25,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.Lifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orgzly.BuildConfig
 import com.orgzly.R
@@ -444,11 +448,15 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             activity?.showSnackbar(resId)
         })
 
-        // Observe the last sync status text and update the toolbar subtitle
-        viewModel.lastSyncStatusText.observe(viewLifecycleOwner, Observer { syncStatus ->
-            // Set the subtitle of the Toolbar. If syncStatus is null or empty, the subtitle will be cleared.
-            binding.topToolbar.subtitle = syncStatus
-        })
+        // Add the new Flow collector:
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.relativeSyncStatusText.collect { syncStatus ->
+                    // Update UI on the main thread (safe here)
+                    binding.topToolbar.subtitle = syncStatus
+                }
+            }
+        }
     }
 
     private fun updateViewsFromPayload() {
