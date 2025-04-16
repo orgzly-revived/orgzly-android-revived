@@ -1348,6 +1348,10 @@ class DataRepository @Inject constructor(
         return db.noteProperty().get(noteId)
     }
 
+    fun getNoteProperties(noteId: Long, name: String): List<NoteProperty> {
+        return db.noteProperty().get(noteId, name)
+    }
+
     private fun setNoteProperty(noteId: Long, name: String, value: String) {
         db.noteProperty().upsert(noteId, name, value)
     }
