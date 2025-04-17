@@ -32,6 +32,7 @@ import kotlinx.coroutines.delay
 import androidx.lifecycle.asFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import com.orgzly.android.db.entity.SyncResult
 
 data class NoteInitialData(
     val bookId: Long,
@@ -84,14 +85,36 @@ class NoteViewModel(
     // Add the new Flow definition:
     val relativeSyncStatusText: Flow<String?> = reactiveBook.asFlow()
         .combine(tickerFlow) { book, _ -> // Combine book Flow with ticker
-            val lastAction = book?.lastAction
-            val syncTimestamp = if (isSuccessfulSyncAction(lastAction)) {
-                lastAction?.timestamp
-            } else {
-                null
-            }
-            formatRelativeSyncTimestamp(syncTimestamp)
-        }
+             // Read the new sync result fields
+             val lastResult = book?.lastSyncActionResult
+             val lastTimestamp = book?.lastSyncActionTimestamp
+             val context = App.getAppContext() // Get context for strings
+
+             // Construct the status text based on the result
+             when (lastResult) {
+                 SyncResult.SUCCESS -> {
+                     val relativeTime = formatRelativeTimeSpan(lastTimestamp)
+                     context.getString(R.string.sync_status_synced, relativeTime)
+                 }
+                 SyncResult.ERROR -> {
+                     val relativeTime = formatRelativeTimeSpan(lastTimestamp)
+                     context.getString(R.string.sync_status_error, relativeTime)
+                 }
+                 SyncResult.CONFLICT -> {
+                     context.getString(R.string.sync_status_conflict)
+                 }
+                 null -> {
+                     // When there's no data, the status is ambiguous, it could be:
+                     // 1. the book is just created, and it should display "never-synced", or
+                     // 2. the app has been just updated and the db doesn't have the data,
+                     // and it should display nothing, or
+                     // 3. the user doesn't have a sync repo configured, and it should display nothing
+                     ""
+                     // TODO implement a mechanism to determine if the book was newly created
+                     // and should display context.getString(R.string.sync_status_never)
+                 }
+             }
+         }
 
     fun loadData() {
         App.EXECUTORS.diskIO().execute {
@@ -328,40 +351,20 @@ class NoteViewModel(
         }
     }
 
-    private fun isSuccessfulSyncAction(action: BookAction?): Boolean {
-        if (action == null || action.type != BookAction.Type.INFO) {
-            return false
-        }
-        // TODO: Verify exact success messages from BookSyncStatus
-        // Using placeholder checks for now
-        return action.message.contains("Loaded from") ||
-               action.message.contains("Saved to") ||
-               action.message == "No change" // Placeholder, confirm this message if used for success
-    }
-
-    private fun formatSyncTimestamp(timestamp: Long?): String? {
-         if (timestamp == null) return null // Or return "Never synced"
-
-         // TODO: Replace with proper relative formatting using Context and DateUtils
-         // Simple format for now:
-          return "Synced: ${java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault()).format(java.util.Date(timestamp))}"
-    }
-
-    private fun formatRelativeSyncTimestamp(timestamp: Long?): String? {
+    // Refactored function to just get the relative time span
+    private fun formatRelativeTimeSpan(timestamp: Long?): String {
         if (timestamp == null) {
-            // Return specific string (needs string resource)
-             return App.getAppContext().getString(R.string.never_synced)
+             // Should ideally not be reached if called correctly from combine block,
+             // but return empty or a default value just in case.
+             return App.getAppContext().getString(R.string.unknown_time) // Need R.string.unknown_time
         }
         val now = System.currentTimeMillis()
-        // MIN_RESOLUTION_MINUTE ensures it updates at least every minute
-        val relativeTime = DateUtils.getRelativeTimeSpanString(
+        // Get relative time span
+        return DateUtils.getRelativeTimeSpanString(
             timestamp,
             now,
             DateUtils.MINUTE_IN_MILLIS
-        )
-        // Optional: Prepend "Synced: " or similar (consider i18n)
-        return App.getAppContext().getString(R.string.synced_prefix, relativeTime)
-        // If no prefix needed: return relativeTime.toString()
+        ).toString()
     }
 
     companion object {

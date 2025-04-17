@@ -53,6 +53,7 @@ import com.orgzly.android.util.LogUtils
 import com.orgzly.org.OrgActiveTimestamps
 import com.orgzly.org.datetime.OrgDateTime
 import java.util.Calendar
+import androidx.annotation.VisibleForTesting
 
 @Database(
         entities = [
@@ -75,7 +76,7 @@ import java.util.Calendar
             AppLog::class
         ],
 
-        version = 157
+        version = 158
 )
 @TypeConverters(com.orgzly.android.db.TypeConverters::class)
 abstract class OrgzlyDatabase : RoomDatabase() {
@@ -151,7 +152,8 @@ abstract class OrgzlyDatabase : RoomDatabase() {
                             MIGRATION_153_154,
                             MIGRATION_154_155,
                             MIGRATION_155_156,
-                            MIGRATION_156_157
+                            MIGRATION_156_157,
+                            MIGRATION_157_158
                     )
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
@@ -609,6 +611,14 @@ abstract class OrgzlyDatabase : RoomDatabase() {
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_book_properties_book_id` ON `book_properties` (`book_id`)")
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_book_properties_name` ON `book_properties` (`name`)")
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_book_properties_value` ON `book_properties` (`value`)")
+            }
+        }
+
+        // Make migration internal to be accessible by tests
+        internal val MIGRATION_157_158 = object : Migration(157, 158) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE books ADD COLUMN last_sync_action_result TEXT")
+                db.execSQL("ALTER TABLE books ADD COLUMN last_sync_action_timestamp INTEGER DEFAULT NULL")
             }
         }
     }

@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.BookAction
+import com.orgzly.android.db.entity.SyncResult
 
 
 @Dao
@@ -37,6 +38,9 @@ abstract class BookDao : BaseDao<Book> {
 
     @Query("UPDATE books SET last_action_type = :type, last_action_message = :message, last_action_timestamp = :timestamp, sync_status = :status WHERE id = :id")
     abstract fun updateLastActionAndSyncStatus(id: Long, type: BookAction.Type, message: String, timestamp: Long, status: String?): Int
+
+    @Query("UPDATE books SET last_sync_action_result = :syncResult, last_sync_action_timestamp = :timestamp WHERE id = :id")
+    abstract fun updateLastSyncActionResult(id: Long, syncResult: SyncResult, timestamp: Long): Int
 
     @Query("UPDATE books SET last_action_type = :type, last_action_message = :message, last_action_timestamp = :timestamp, sync_status = :status WHERE last_action_type = :whereType")
     abstract fun updateStatusToCanceled(whereType: BookAction.Type, type: BookAction.Type, message: String, timestamp: Long, status: String?): Int
