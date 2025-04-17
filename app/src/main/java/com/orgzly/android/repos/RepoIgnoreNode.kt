@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.orgzly.R
 import com.orgzly.android.App
+import com.orgzly.android.prefs.AppPreferences
 import org.eclipse.jgit.ignore.IgnoreNode
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -13,7 +14,7 @@ class RepoIgnoreNode(repo: SyncRepo) : IgnoreNode() {
 
     init {
         try {
-            val inputStream = repo.openRepoFileInputStream(IGNORE_FILE)
+            val inputStream = repo.openRepoFileInputStream(ignore_file())
             inputStream.use {
                 parse(it)
             }
@@ -49,13 +50,14 @@ class RepoIgnoreNode(repo: SyncRepo) : IgnoreNode() {
             throw IOException(
                 App.getAppContext().getString(
                     R.string.error_file_matches_repo_ignore_rule,
-                    IGNORE_FILE,
+                    ignore_file(),
                 )
             )
         }
     }
 
     companion object {
-        const val IGNORE_FILE = ".orgzlyignore"
+        @JvmStatic
+        fun ignore_file(): String = AppPreferences.orgzlyignoreFile(App.getAppContext())
     }
 }

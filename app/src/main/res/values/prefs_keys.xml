@@ -619,4 +619,7 @@
     <string name="pref_key_notes_clipboard" translatable="false">pref_key_notes_clipboard</string>
     <string name="pref_key_refile_last_location" translatable="false">pref_key_refile_last_location</string>
 
+    <!-- Repository ignore file. -->
+    <string name="pref_key_orgzlyignore_file" translatable="false">pref_key_orgzlyignore_file</string>
+    <string name="pref_default_orgzlyignore_file" translatable="false">.orgzlyignore</string>
 </resources>
