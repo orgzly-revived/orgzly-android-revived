@@ -11,6 +11,7 @@ import com.orgzly.android.SharingShortcutsManager
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.data.logs.AppLogsRepository
 import com.orgzly.android.db.entity.BookAction
+import com.orgzly.android.db.entity.SyncResult
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.reminders.RemindersScheduler
 import com.orgzly.android.repos.DirectoryRepo
@@ -244,17 +245,42 @@ class SyncWorker(val context: Context, val params: WorkerParameters) :
                 sendProgress(SyncState.getInstance(
                     SyncState.Type.BOOK_STARTED, namesake.name, curr, namesakes.size))
 
+                val originalStatus = namesake.status
                 try {
-                    val action = SyncUtils.syncNamesake(dataRepository, namesake)
+                    val resultingAction = SyncUtils.syncNamesake(dataRepository, namesake)
+
                     dataRepository.setBookLastActionAndSyncStatus(
                         namesake.book.book.id,
-                        action,
+                        resultingAction,
                         namesake.status.toString())
+
+                    // Determine and update specific SyncResult
+                    val syncResult = when (resultingAction.type) {
+                        BookAction.Type.INFO -> SyncResult.SUCCESS // Includes NO_CHANGE implicitly
+                        BookAction.Type.ERROR -> {
+                            // Check original status to differentiate CONFLICT from other ERRORs
+                            when (originalStatus) {
+                                BookSyncStatus.CONFLICT_BOTH_BOOK_AND_ROOK_MODIFIED,
+                                BookSyncStatus.CONFLICT_BOOK_WITH_LINK_AND_ROOK_BUT_NEVER_SYNCED_BEFORE,
+                                BookSyncStatus.CONFLICT_LAST_SYNCED_ROOK_AND_LATEST_ROOK_ARE_DIFFERENT -> SyncResult.CONFLICT
+                                else -> SyncResult.ERROR
+                            }
+                        }
+                        else -> null // Ignore PROGRESS type for final result
+                    }
+                    if (syncResult != null) {
+                        dataRepository.updateLastSyncActionResult(namesake.book.book.id, syncResult, resultingAction.timestamp)
+                    }
+
                 } catch (e: Exception) {
                     e.printStackTrace()
                     dataRepository.setBookLastActionAndSyncStatus(
                         namesake.book.book.id,
                         BookAction.forNow(BookAction.Type.ERROR, e.message.orEmpty()))
+                    // Also record the specific sync error result.
+                    // OK using "Merge conflict" is a little hacky, but this might just be a small edge case from github merge
+                    val syncResult = if (e.message?.contains("Merge conflict") == true) SyncResult.CONFLICT else SyncResult.ERROR
+                    dataRepository.updateLastSyncActionResult(namesake.book.book.id, syncResult, System.currentTimeMillis())
                 }
 
                 sendProgress(SyncState.getInstance(
