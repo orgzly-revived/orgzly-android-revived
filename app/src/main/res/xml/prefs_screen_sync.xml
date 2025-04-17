@@ -15,6 +15,16 @@
             android:targetClass="com.orgzly.android.ui.repos.ReposActivity"/>
     </Preference>
 
+    <EditTextPreference
+        android:key="@string/pref_key_orgzlyignore_file"
+        android:title="@string/orgzlyignore_file"
+        android:selectAllOnFocus="true"
+        android:inputType="text"
+        android:singleLine="true"
+        android:dialogMessage="@string/orgzlyignore_file_desc"
+        android:defaultValue="@string/pref_default_orgzlyignore_file"
+        app:useSimpleSummaryProvider="true"/>
+
     <SwitchPreference
         android:key="@string/pref_key_enable_repo_subfolders"
         android:title="@string/enable_repo_subfolders_preferences_title"
