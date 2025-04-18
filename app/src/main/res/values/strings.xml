@@ -583,6 +583,8 @@
     <string name="log_on_time_shift_summary">Log time when note with repeater is marked as done</string>
     <string name="set_last_repeat_on_time_shift">Set property on time shift</string>
     <string name="set_last_repeat_on_time_shift_summary">Set time when note with repeater is marked as done</string>
+    <string name="pre_notify_property">Pre-notification Property</string>
+    <string name="pre_notify_property_summary">The property that contains a comma-separated list of pre-notification intervals of a given node.</string>
     <string name="background_opacity">Background opacity</string>
     <string name="update_frequency">Update frequency</string>
     <string name="git">Git</string>

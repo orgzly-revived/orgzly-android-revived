@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/prefs_title_reminders">
 
-    <SwitchPreference
+   <SwitchPreference
         android:key="@string/pref_key_use_reminders_for_scheduled_times"
         android:title="@string/pref_title_reminders_for_scheduled_times"
         android:summary="@string/pref_title_summary_reminders_for_scheduled_times"
