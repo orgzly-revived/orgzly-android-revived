@@ -63,6 +63,9 @@ class AgendaSortingTest : OrgzlyTest() {
             
             * Note C
             SCHEDULED: <${getToday()} 11:15>
+            
+            * Note D
+            SCHEDULED: <${getToday()} 14:15>
             """.trimIndent()
         )
 
@@ -79,8 +82,39 @@ class AgendaSortingTest : OrgzlyTest() {
         // Note C (11:15) should be second
         onItemInAgenda(2, R.id.item_head_title_view).check(matches(withText(containsString("Note C"))))
         
+        // Note D (14:15) should be third
+        onItemInAgenda(3, R.id.item_head_title_view).check(matches(withText(containsString("Note D"))))
+
         // Note B (14:30) should be third
-        onItemInAgenda(3, R.id.item_head_title_view).check(matches(withText(containsString("Note B"))))
+        onItemInAgenda(4, R.id.item_head_title_view).check(matches(withText(containsString("Note B"))))
+    }
+
+    @Test
+    fun testMidnightTaskSorting() {
+        // Set up test data with different scheduled times on the same day
+        testUtils.setupBook(
+            "book-one",
+            """
+            * Note A
+            SCHEDULED: <${getToday()}>
+            
+            * Note B
+            SCHEDULED: <${getToday()} 00:00>
+            """.trimIndent()
+        )
+
+        scenario = ActivityScenario.launch(MainActivity::class.java)
+
+        // Search for agenda items for that specific day
+        searchForTextCloseKeyboard("ad.1")
+
+        // First item (position 0) is the Date Header
+
+        // Note B (00:00) should be first
+        onItemInAgenda(1, R.id.item_head_title_view).check(matches(withText(containsString("Note B"))))
+
+        // Note A (no time in day) should be second
+        onItemInAgenda(2, R.id.item_head_title_view).check(matches(withText(containsString("Note A"))))
     }
 
     @Test
