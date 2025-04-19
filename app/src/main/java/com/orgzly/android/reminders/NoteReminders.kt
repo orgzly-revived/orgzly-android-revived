@@ -1,6 +1,7 @@
 package com.orgzly.android.reminders
 
 import android.content.Context
+import com.orgzly.R
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.db.dao.ReminderTimeDao
 import com.orgzly.android.db.dao.ReminderTimeDao.NoteTime
@@ -29,13 +30,20 @@ object NoteReminders {
         intervalType: Int): List<NoteReminder> {
 
         val result: MutableList<NoteReminder> = ArrayList()
+        val format = AppPreferences.preNotifyFormat(context)
+        val isMinuteFormat = context.getResources().getString(R.string.pref_value_pre_notify_format_minutes) == format;
+
+        val deliminiter = if (isMinuteFormat) {
+            " "
+        } else {
+            ";"
+        }
 
         for (noteTime in dataRepository.times()) {
             if (isRelevantNoteTime(context, noteTime)) {
                 val orgDateTime = OrgDateTime.parse(noteTime.orgTimestampString)
 
                 val interval = intervalToConsider(intervalType, now, lastRun, noteTime.timeType)
-
                 // Deadline warning period
 
                 val warningPeriod = if (isWarningPeriodSupported(noteTime)) {
@@ -54,10 +62,14 @@ object NoteReminders {
 
                 var periods = mutableSetOf(0)
                 if (preNotification.length > 0) {
-                    periods = (preNotification.split(",")
+                    periods = (preNotification.split(deliminiter)
                         .map {
                             try {
-                                Duration.parse(it.trim()).inWholeMilliseconds.toInt()
+                                if (isMinuteFormat) {
+                                    it.toInt() * 1000 * 60
+                                } else {
+                                    Duration.parse(it.trim()).inWholeMilliseconds.toInt()
+                                }
                             } catch (_: Exception) {
                                 0 // safely default to 0
                             }
