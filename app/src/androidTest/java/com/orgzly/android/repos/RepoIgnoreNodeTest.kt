@@ -13,7 +13,7 @@ class RepoIgnoreNodeTest : OrgzlyTest() {
 
     class MockRepoWithMockIgnoreFile : MockRepo(repoWithProps, null) {
         override fun openRepoFileInputStream(repoRelativePath: String): InputStream {
-            if (repoRelativePath == RepoIgnoreNode.IGNORE_FILE) {
+            if (repoRelativePath == RepoIgnoreNode.ignore_file()) {
                 val ignoreFileContents = """
                     IgnoredAnywhere.org
                     /OnlyIgnoredInRoot.org
