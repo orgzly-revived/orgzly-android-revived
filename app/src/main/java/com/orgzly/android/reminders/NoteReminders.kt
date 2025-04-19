@@ -1,6 +1,7 @@
 package com.orgzly.android.reminders
 
 import android.content.Context
+import com.orgzly.R
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.db.dao.ReminderTimeDao
 import com.orgzly.android.db.dao.ReminderTimeDao.NoteTime
@@ -11,6 +12,7 @@ import com.orgzly.org.datetime.OrgInterval
 import org.joda.time.DateTime
 import org.joda.time.ReadableInstant
 import java.util.*
+import kotlin.time.Duration
 
 
 object NoteReminders {
@@ -28,13 +30,20 @@ object NoteReminders {
         intervalType: Int): List<NoteReminder> {
 
         val result: MutableList<NoteReminder> = ArrayList()
+        val format = AppPreferences.preNotifyFormat(context)
+        val isMinuteFormat = context.getResources().getString(R.string.pref_value_pre_notify_format_minutes) == format;
+
+        val deliminiter = if (isMinuteFormat) {
+            " "
+        } else {
+            ";"
+        }
 
         for (noteTime in dataRepository.times()) {
             if (isRelevantNoteTime(context, noteTime)) {
                 val orgDateTime = OrgDateTime.parse(noteTime.orgTimestampString)
 
                 val interval = intervalToConsider(intervalType, now, lastRun, noteTime.timeType)
-
                 // Deadline warning period
 
                 val warningPeriod = if (isWarningPeriodSupported(noteTime)) {
@@ -49,31 +58,49 @@ object NoteReminders {
                     null
                 }
 
-                val time = getFirstTime(
-                    orgDateTime,
-                    interval,
-                    AppPreferences.reminderDailyTime(context),
-                    warningPeriod
-                )
+                val preNotification = noteTime.orgPreAlerts
 
-//                    if (BuildConfig.LOG_DEBUG) {
-//                        LogUtils.d(TAG,
-//                                "Note's time", noteTime,
-//                                "Interval", interval,
-//                                "Found first time", time)
-//                    }
+                var periods = mutableSetOf(0)
+                if (preNotification.length > 0) {
+                    periods = (preNotification.split(deliminiter)
+                        .map {
+                            try {
+                                if (isMinuteFormat) {
+                                    it.toInt() * 1000 * 60
+                                } else {
+                                    Duration.parse(it.trim()).inWholeMilliseconds.toInt()
+                                }
+                            } catch (_: Exception) {
+                                0 // safely default to 0
+                            }
+                        }).toMutableSet()
+                }
 
-                if (time != null) {
-                    val payload = NoteReminderPayload(
-                        noteTime.noteId,
-                        noteTime.bookId,
-                        noteTime.bookName,
-                        noteTime.title,
-                        noteTime.tags,
-                        noteTime.timeType,
-                        orgDateTime)
+                // always notify at the actual reminder time
+                periods.add(0)
 
-                    result.add(NoteReminder(time, payload))
+                for (period in periods.sortedDescending()) {
+                    var time = getFirstTime(
+                        orgDateTime,
+                        interval,
+                        AppPreferences.reminderDailyTime(context),
+                        warningPeriod,
+                        period
+                    )
+
+                    if (time != null) {
+                        val payload = NoteReminderPayload(
+                            noteTime.noteId,
+                            noteTime.bookId,
+                            noteTime.bookName,
+                            noteTime.title,
+                            noteTime.tags,
+                            noteTime.timeType,
+                            orgDateTime
+                        )
+
+                        result.add(NoteReminder(time, payload))
+                    }
                 }
             }
         }
@@ -136,7 +163,8 @@ object NoteReminders {
         orgDateTime: OrgDateTime,
         interval: Pair<ReadableInstant, ReadableInstant?>,
         defaultTimeOfDay: Int,
-        warningPeriod: OrgInterval?): DateTime? {
+        warningPeriod: OrgInterval?,
+        preNotificationPeriod: Int): DateTime? {
 
         val times = OrgDateTimeUtils.getTimesInInterval(
             orgDateTime,
@@ -145,7 +173,8 @@ object NoteReminders {
             defaultTimeOfDay,
             false, // Do not use repeater for reminders
             warningPeriod,
-            1)
+            1,
+            preNotificationPeriod)
 
         return times.firstOrNull()
     }
