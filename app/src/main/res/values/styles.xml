@@ -302,6 +302,7 @@
         <item name="fastScrollHorizontalTrackDrawable">@drawable/fast_scroll_line_drawable</item>
         <item name="fastScrollVerticalThumbDrawable">@drawable/fast_scroll_thumb_drawable</item>
         <item name="fastScrollVerticalTrackDrawable">@drawable/fast_scroll_line_drawable</item>
+        <item name="android:scrollbarSize">@dimen/scrollbar_width</item>
     </style>
 
     <style name="ListViewItem">
