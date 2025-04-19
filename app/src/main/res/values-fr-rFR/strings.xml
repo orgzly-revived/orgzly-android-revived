@@ -513,4 +513,6 @@
     <string name="logs">Journaux</string>
     <string name="share">Partager</string>
     <string name="refresh_data">Rafraîchir</string>
+    <string name="ssh_show_public_key_preference_title">Afficher la clé publique SSH générée</string>
+    <string name="permissions_rationale_for_post_notifications">Autorisation nécessaire pour envoyer des notifications</string>
 </resources>
