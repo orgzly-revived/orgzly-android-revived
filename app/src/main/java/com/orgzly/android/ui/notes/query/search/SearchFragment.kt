@@ -151,7 +151,7 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
                 binding.topToolbar.menu.findItem(R.id.search_view)?.expandActionView()
             }
 
-            title = getString(R.string.search)
+            title = currentQueryName ?: getString(R.string.search)
             subtitle = currentQuery
         }
     }
@@ -302,12 +302,19 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
         val FRAGMENT_TAG: String = SearchFragment::class.java.name
 
         @JvmStatic
-        fun getInstance(query: String): QueryFragment {
+        fun getInstance(query: String): SearchFragment {
+            return getInstance(query, null)
+        }
+
+        @JvmStatic
+        fun getInstance(query: String, queryName: String? = null): SearchFragment {
             val fragment = SearchFragment()
 
             val args = Bundle()
             args.putString(ARG_QUERY, query)
-
+            if (queryName != null) {
+                args.putString(ARG_QUERY_NAME, queryName)
+            }
             fragment.arguments = args
 
             return fragment
