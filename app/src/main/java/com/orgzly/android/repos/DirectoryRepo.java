@@ -4,13 +4,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.orgzly.android.BookName;
 import com.orgzly.android.LocalStorage;
 import com.orgzly.android.db.entity.Repo;
 import com.orgzly.android.util.MiscUtils;
 import com.orgzly.android.util.UriUtils;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,7 +26,7 @@ public class DirectoryRepo implements SyncRepo {
 
     public static final String SCHEME = "file";
 
-    private File mDirectory;
+    private final File mDirectory;
 
     private final long repoId;
     private final Uri repoUri;
@@ -124,9 +124,7 @@ public class DirectoryRepo implements SyncRepo {
     }
 
     @Override
-    public VersionedRook retrieveBook(String repoRelativePath, File destinationFile) throws IOException {
-        Uri uri = repoUri.buildUpon().appendPath(repoRelativePath).build();
-
+    public VersionedRook retrieveBook(Uri uri, File destinationFile) throws IOException {
         String path = uri.getPath();
 
         if (path == null) {
@@ -229,7 +227,7 @@ public class DirectoryRepo implements SyncRepo {
         return mDirectory;
     }
 
-    @NotNull
+    @NonNull
     @Override
     public String toString() {
         return repoUri.toString();

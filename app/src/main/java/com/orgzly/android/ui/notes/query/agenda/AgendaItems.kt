@@ -131,7 +131,16 @@ class AgendaItems(private val hideEmptyDaysInAgenda : Boolean) {
         // Add overdue heading and notes
         if (overdueNotes.isNotEmpty()) {
             result.add(AgendaItem.Overdue(agendaItemId++))
-            result.addAll(overdueNotes)
+
+            val sortedItems = overdueNotes.sortedWith { a, b ->
+                when {
+                    a !is AgendaItem.Note -> -1  // Non-notes go first
+                    b !is AgendaItem.Note -> 1   // Non-notes go first
+                    else -> AgendaItem.Note.compareByTime(a, b)
+                }
+            }
+
+            result.addAll(sortedItems)
         }
 
         // Add daily
@@ -141,7 +150,15 @@ class AgendaItems(private val hideEmptyDaysInAgenda : Boolean) {
             }
 
             if (d.value.isNotEmpty()) {
-                result.addAll(d.value)
+                // Sort agenda items by their time before adding to result
+                val sortedItems = d.value.sortedWith { a, b ->
+                    when {
+                        a !is AgendaItem.Note -> -1  // Non-notes go first
+                        b !is AgendaItem.Note -> 1   // Non-notes go first
+                        else -> AgendaItem.Note.compareByTimeInDay(a, b)
+                    }
+                }
+                result.addAll(sortedItems)
             }
         }
 

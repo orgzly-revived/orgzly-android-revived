@@ -2,6 +2,8 @@ package com.orgzly.android.repos;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +33,7 @@ public interface SyncRepo {
     /**
      * Download the latest available revision of the book and store its content to {@code File}.
      */
-    VersionedRook retrieveBook(String repoRelativePath, File destination) throws IOException;
+    VersionedRook retrieveBook(Uri uri, File destination) throws IOException;
 
     /**
      * Open a file in the repository for reading. Originally added for parsing the .orgzlyignore
@@ -62,5 +64,6 @@ public interface SyncRepo {
 
     void delete(Uri uri) throws IOException;
 
+    @NonNull
     String toString();
 }

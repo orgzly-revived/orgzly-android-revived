@@ -33,6 +33,17 @@ Puede configurar cualquier número de estados a utilizar: TODO, NEXT, DONE, etc.
 *** DONE Esta es una nota con el tipo de estado /done/
 CLOSED: [2018-01-24 Wed 17:00]
 
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
 ** Una nota puede tener un momento de inicio programado
 SCHEDULED: <2015-02-20 Fri 15:15>
 
@@ -41,6 +52,13 @@ SCHEDULED: <2015-02-16 Mon .+2d>
 
 ** También se puede establecer un tiempo límite
 DEADLINE: <2015-02-20 Fri>
+
+** Event times can be used anywhere in the note's content
+
+You can have multiple event times:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
 ** Se soportan los recordatorios para horas programadas y de tiempo límite
 
@@ -56,7 +74,7 @@ Marcar un número de teléfono (tel:555-0199), enviar SMS (sms:555-0199), compon
 
 También puede enlazar a otra nota o bloc de notas dentro de la aplicación.
 
-Consulte https://www.orgzlyrevived.com/docs#links para obtener más información.
+Consulte [[https://www.orgzlyrevived.com/docs#links]] para obtener más información.
 
 ** Están soportados formatos tipográficos básicos
 
@@ -70,12 +88,18 @@ Puede escribir palabras en *negrita*, /itálica/, _subrayadas_, =cita literal=, 
 
 Pulsa la caja de verificación para alternar su estado. Pulsa el botón de nueva línea al final de la línea para crear un nuevo elemento.
 
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] Tarea 1
+- [ ] Tarea 2
+- [X] Tarea 3
+
 * Buscar
 ** Existen muchos operadores de búsqueda soportados
 
 Puede buscar notas por estado, etiqueta, fecha de inicio, fecha límite, etc.
 
-Visite https://www.orgzlyrevived.com/docs#search para aprender más.
+Visite [[https://www.orgzlyrevived.com/docs#search]] para aprender más.
 
 ** Las consultas se pueden guardar como accesos rápidos
 
@@ -87,7 +111,7 @@ Puede crear sus propias búsquedas y guardarlas haciendo clic en "Búsquedas" en
 
 ** Los cuadernos pueden guardarse como archivos de texto plano
 
-Los archivos se guardan en el formato de "Org mode".
+Los archivos se guardan en el formato de [[https://orgmode.org/][Org mode]].
 
 ** Tipo de ubicación (repositorio)
 

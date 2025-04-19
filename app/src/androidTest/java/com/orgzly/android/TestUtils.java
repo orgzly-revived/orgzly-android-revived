@@ -189,4 +189,13 @@ public class TestUtils {
         mockSerializedDbxCredential.put("app_key", BuildConfig.DROPBOX_APP_KEY);
         AppPreferences.dropboxSerializedCredential(App.getAppContext(), mockSerializedDbxCredential.toString());
     }
+
+    /**
+     * Creates a saved search with the given name and query.
+     * @param name Name of the saved search
+     * @param query Search query
+     */
+    public void createSavedSearch(String name, String query) {
+        dataRepository.createSavedSearch(new com.orgzly.android.db.entity.SavedSearch(0, name, query, 0));
+    }
 }

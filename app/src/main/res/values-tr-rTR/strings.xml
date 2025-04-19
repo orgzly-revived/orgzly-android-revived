@@ -10,20 +10,14 @@
     <string name="clear">Temizle</string>
     <string name="cancel">İptal</string>
     <string name="create">Oluştur</string>
-    <string name="new_">Yeni</string>
     <!-- "new" is reserved -->
-    <string name="select">Seç</string>
     <string name="set">Ayarla</string>
-    <string name="add">Ekle</string>
     <string name="not_now">Şimdi değil</string>
     <string name="save">Kaydet</string>
     <string name="discard">Vazgeç</string>
     <string name="remove_notebook_link">Bağlantıyı kaldır</string>
     <string name="browse">Gözat</string>
     <string name="dropbox">Dropbox</string>
-    <string name="view">Görüntüle</string>
-    <string name="edit">Düzenle</string>
-    <string name="edit_note">Notu düzenle</string>
     <string name="delete">Sil</string>
     <string name="delete_with_quoted_argument">Sil \"%s\"</string>
     <string name="delete_amount_of_books">%d not defterini sil</string>
@@ -42,23 +36,16 @@
     <string name="created">Oluşturuldu</string>
     <string name="states">Durumlar</string>
     <string name="note">Not</string>
-    <string name="notes">Notlar</string>
     <string name="property">Özellik</string>
     <string name="import_as">Olarak içe aktar…</string>
     <string name="new_notebook">Yeni defter</string>
     <string name="new_folder">Yeni dosya</string>
     <string name="scheduled">Zamanlandı</string>
     <string name="agenda">Gündem</string>
-    <string name="agenda_period">Sabah gündemi</string>
-    <string name="time">Zaman</string>
-    <string name="repeater">Tekrarlayıcı</string>
     <string name="state">Durum</string>
     <string name="priority">Öncelik</string>
-    <string name="nothing">Hiçbir şey</string>
     <string name="open">Aç</string>
-    <string name="focus">Odak</string>
     <string name="widget">Widget</string>
-    <string name="history">Geçmiş</string>
     <string name="event">Etkinlik</string>
     <plurals name="notes_cut">
         <item quantity="one">Notu kes</item>
@@ -75,7 +62,6 @@
     </plurals>
     <string name="no_notes_pasted">Yapıştırılacak birşey yok</string>
     <string name="fragment_note_title_hint">Başlık</string>
-    <string name="fragment_note_tags_hint" tools:ignore="typos">etiket etiket</string>
     <string name="import_org_file">Org dosyasını içeri aktar</string>
     <string name="message_dropbox_unlinked">Dropbox bağlantısı kaldırıldı</string>
     <string name="message_dropbox_linked">Dropbox\'a başarıyla bağlandı</string>
@@ -89,20 +75,16 @@
     <string name="ssh_show_public_key_preference_title">Oluşturulan SSH ortak anahtarını görüntüle</string>
     <string name="message_book_has_no_link">Bağlantı yok</string>
     <string name="message_note_created">Not oluşturuldu</string>
-    <string name="message_failed_creating_note">Not oluşturulamadı</string>
-    <string name="message_failed_updating_note">Not güncellenemedi</string>
     <string name="drawer_close">Çekmeceyi kapat</string>
     <string name="drawer_open">Çekmeyi aç</string>
     <string name="schedule">Zamanla</string>
     <string name="refile">Yerleştir</string>
-    <string name="refile_to">Yeniden dosyala</string>
     <string name="deadline">Bitiş tarihi</string>
     <string name="closed">Kapalı</string>
     <!-- TODO: Not hints, rename -->
     <string name="schedule_button_hint">Planlanan zaman</string>
     <string name="deadline_button_hint">Bitiş tarihi</string>
     <string name="closed_button_hint">Kapanış saati</string>
-    <string name="fragment_note_content_hint">Not içeriği</string>
     <string name="books_context_menu_item_rename">Yeniden adlandır</string>
     <string name="books_context_menu_item_set_link">Bağlantı kur</string>
     <string name="books_context_menu_item_force_save">Kaydetmeye Zorla</string>
@@ -122,7 +104,6 @@
     <string name="quick_note">Hızlı not</string>
     <string name="tap_to_create_new_note">Yeni bir not oluşturmak için dokun</string>
     <string name="options_menu_item_search">Arama</string>
-    <string name="no_user_repos_configured_pref_summary">Henüz yapılandırılmadı</string>
     <string name="repos_options_menu_new_repo">Yeni Depo</string>
     <string name="book_name_already_exists">%s defteri zaten mevcut</string>
     <string name="filter_name_already_exists">Aynı isim ile arama zaten var</string>
@@ -140,14 +121,11 @@
     <string name="book_does_not_exist_anymore">Bu defter artık mevcut değil.</string>
     <string name="note_does_not_exist_anymore">Bu not artık mevcut değil.</string>
     <string name="search_does_not_exist_anymore">Bu arama artık mevcut değil.</string>
-    <string name="fragment_query_title">Ara</string>
     <string name="repo_dropbox_button_not_linked">Dropbox bağlantısı</string>
     <string name="repo_dropbox_button_linked">Dropbox bağlantısını kaldır</string>
-    <string name="fragment_settings_title">Ayarlar</string>
     <string name="notes_update_needed_dialog_title">Tercih notları etkiler</string>
     <string name="notes_update_needed_dialog_message">Değişiklikleri yansıtacak şekilde notlar güncellensin mi?</string>
     <string name="updating_notes">Notlar güncelleniyor…</string>
-    <string name="failure">Tüh</string>
     <string name="no_notes_found_after_search">Sorgu hiçbir bir notla eşleşmedi</string>
     <string name="today">Bugün</string>
     <string name="tomorrow">Yarın</string>
@@ -163,7 +141,6 @@
     <string name="notebooks">Defterler</string>
     <string name="searches">Aramalar</string>
     <string name="search">Arama</string>
-    <string name="new_search">Yeni Arama</string>
     <string name="multiple_repos">Birden fazla depo mevcut</string>
     <string name="no_repos">Depolar yapılandırılmadı</string>
     <string name="no_books">Defter bulunamadı</string>
@@ -171,7 +148,6 @@
     <string name="collecting_notebooks_in_progress">Defterler getiriliyor…</string>
     <string name="syncing_in_progress">Senkronize ediliyor…</string>
     <string name="syncing_book">%s senkronize ediliyor…</string>
-    <string name="sync_with_argument">Senkronize: %s</string>
     <string name="syncing_failed_title">Senkronizasyon başarısız</string>
     <string name="canceled">İptal edildi</string>
     <string name="canceling">İptal ediliyor…</string>
@@ -185,23 +161,13 @@
     <string name="git_ssh_on_missing_key_dialog_text">SSH anahtar çifti bulunamadı. Bir tane oluşturmak ister misin?</string>
     <string name="git_ssh_on_missing_key_dialog_title">SSH anahtarı bulunamadı</string>
     <string name="git_https_username_hint">Kullanıcı adı</string>
-    <string name="git_https_password_hint">Parola</string>
     <string name="git_author_hint">Yazar (örn. Sarı Çizmeli Mehmet)</string>
     <string name="git_email_hint">E-posta (örn. saricizmelimehmet@email.com)</string>
     <string name="git_branch_hint">Dal (örn. master)</string>
-    <string name="git_auth_https_username_hint">Kullanıcı adı</string>
     <string name="git_auth_https_password_hint">Parola</string>
-    <string name="git_generate_key_pair">Anahtar çifti oluştur</string>
-    <string name="git_copy_public_key">Genel anahtarı kopyala</string>
-    <string name="git_auth_type_text">Kimlik doğrulama türü</string>
-    <string name="git_auth_type_ssh">SSH</string>
-    <string name="git_auth_type_https">HTTPS</string>
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
-    <string name="git_clone_error_ssh_auth">Klonlama sırasında hata, kimlik doğrulama hatası</string>
-    <string name="git_clone_error_ssh">Klonlama sırasında hata: %s</string>
     <string name="git_clone_error_invalid_repo">Uzak bağlantı adresi bir git deposu olmalı</string>
-    <string name="git_clone_error_unknown">Klonlama sırasında bilinmeyen hata</string>
     <string name="git_clone_error_invalid_target_dir">Hedef dizin mevcut değil</string>
     <string name="git_clone_error_target_not_empty">Hedef dizin boş değil</string>
     <string name="git_clone_error_uri_not_supported">Uzak bağlantı adresi desteklenmiyor</string>
@@ -212,18 +178,12 @@
     <string name="webdav_test_error_auth">Kullanıcı adı veya parola hatalı</string>
     <string name="webdav_test_error_unknown">Bilinmeyen bir hata oluştu</string>
     <!-- Share button - error messages (set as title). -->
-    <string name="share_action_not_set">Paylaşma işlemi ayarlanmadı</string>
     <string name="share_action_not_supported">%s paylaşım eylemi desteklenmiyor</string>
-    <string name="share_type_not_set">Paylaşım türü ayarlanmadı</string>
     <string name="share_type_not_supported">%s paylaşım türü desteklenmiyor</string>
     <string name="repositories">Depolar</string>
     <string name="repository_not_valid_with_reason">Depo geçersiz: %s</string>
     <string name="invalid_repo_url">Geçersiz depo bağlantısı “%s”</string>
     <string name="repository_url_already_exists">Bu bağlantıya sahip bir depo zaten var</string>
-    <string name="fragment_left_drawer_list_view_content_description">Sol çekmece</string>
-    <string name="drawer_item">Çekmece öğesi</string>
-    <string name="prev_state">Önceki Durum</string>
-    <string name="next_state">Sonraki Durum</string>
     <string name="new_above">Üstüne yeni</string>
     <string name="new_under">Altına yeni</string>
     <string name="new_below">Aşağı yeni</string>
@@ -239,17 +199,14 @@
     <string name="no_filters">Kayıtlı arama yok</string>
     <string name="book_shortcut_label">Defter</string>
     <string name="new_note_shortcut_label">Yeni not</string>
-    <string name="pick_a_notebook">Bir defter seç</string>
     <string name="down">Aşağı</string>
     <string name="up">Yukarı</string>
-    <string name="notebook_modified">Defter değiştirildi</string>
     <string name="permissions_rationale_for_local_repo">Yerel bir dizinle senkronizasyon, depolama izni gerektirir</string>
     <string name="permissions_rationale_for_book_export">Defteri dışa aktarmak için depolama izni gerekiyor</string>
     <string name="permissions_rationale_for_sync_start">Yerel depolarla senkronize etmek depolama iznini gerektirir</string>
     <string name="permissions_rationale_for_external_files_access">Harici dosyalara erişim, depolama izni gerektirir</string>
     <string name="permissions_rationale_for_post_notifications">Bildirim yayınlamak için izin gerekiyor</string>
     <string name="cycle_visibility">Tümünü Katla/Aç</string>
-    <string name="running_database_update">Veritabanı yükseltiliyor…</string>
     <string name="note_has_been_modified">Not değiştirildi</string>
     <string name="discard_or_save_changes">Değişiklikler kaydedilsin mi?</string>
     <string name="rename">Yeniden adlandır</string>
@@ -261,13 +218,10 @@
     <string name="also_delete_linked_books">Bağlantılı tüm uzak not defterlerini sil</string>
     <string name="message_deleting_book_failed">Defter silinemedi: %s</string>
     <string name="message_book_deleted">Defter silindi</string>
-    <string name="priority_with_argument">Öncelik %s</string>
     <string name="default_priority">Varsayılan öncelik</string>
     <string name="lowest_priority">Düşük öncelik</string>
     <string name="todo_states">Aktif (yapılacak) görevler için anahtar kelimeler</string>
     <string name="done_states">Tamamlanan (biten) görevler için anahtar kelimeler</string>
-    <string name="created_at">Oluşturuldu</string>
-    <string name="insert_note_creation_time">Not oluşturulma zamanını ekle</string>
     <string name="use_created_at_property">Zamanında oluşturulanlar için özelliği kullan</string>
     <string name="use_created_at_property_summary">Bir özellik kullanılarak aynı anda oluşturulan senkronizasyon</string>
     <string name="created_at_property">Özellik Oluşturuldu</string>
@@ -307,7 +261,6 @@
     <string name="prefs_title_new_note">Yeni not</string>
     <string name="prefs_title_notifications">Bildirimler</string>
     <string name="app">Uygulama</string>
-    <string name="no_repos_configured">Yapılandırılmış depo yok</string>
     <string name="test_connection">Test bağlantısı</string>
     <string name="connecting">Bağlanıyor…</string>
     <string name="no_connection">Bağlantı yok</string>
@@ -332,7 +285,6 @@
     <string name="org_indent_mode">Girdi moduna göre ayarla</string>
     <string name="org_indent_mode_summary">org-indent-mode\'u dikkate al</string>
     <string name="org_indent_indentation_per_level">Düzey başına girinti</string>
-    <string name="add_property">Özellik ekle</string>
     <string name="priority_a_highest">A (yüksek öncelik)</string>
     <string name="priority_z_lowest">Z (düşük öncelik)</string>
     <string name="hour">Saat</string>
@@ -364,7 +316,6 @@
     <string name="displayed_book_details_used_encoding">Kullanılanan kodlama</string>
     <string name="displayed_book_details_last_action">Son eylem</string>
     <string name="displayed_book_details_notes_count">Not sayısı</string>
-    <string name="color_scheme_system">Sistem</string>
     <string name="color_scheme_dynamic">Dinamik renk</string>
     <string name="color_scheme_light">Açık</string>
     <string name="color_scheme_dark">Koyu</string>
@@ -385,17 +336,11 @@
         <item quantity="other"><b>%d</b> not silinsin mi?</item>
     </plurals>
     <!-- Unused -->
-    <string name="delete_note">Notu sil</string>
-    <string name="delete_notes">Notları sil</string>
-    <string name="delete_note_and_all_subnotes">Bu not ve tüm alt notları silinsin mi?</string>
-    <string name="delete_notes_and_all_subnotes">Notlar ve alt notlar silinsin mi?</string>
     <plurals name="notes_deleted">
         <item quantity="one">Not silindi</item>
         <item quantity="other"><b>%d</b> not silindi</item>
     </plurals>
     <string name="no_notes_deleted">Silinen not yok</string>
-    <string name="note_content_finish_editing">Içeriği göster</string>
-    <string name="note_content_start_editing">Içeriği düzenle</string>
     <string name="duplicate_keywords_not_allowed">%s anahtar kelimesi zaten kullanılıyor</string>
     <string name="no_states_defined">Tanımlanmış durum yok</string>
     <string name="book_name_in_search">Arama sonuçlarında defter adı</string>
@@ -431,10 +376,6 @@
     <string name="keep_screen_on_summary">Seçeneği değiştirmek için menü öğesini görüntüle</string>
     <string name="keep_screen_on">Ekranı açık tut</string>
     <string name="keep_screen_on_desc">Ayrılana veya bu seçeneği devre dışı bırakana kadar ekran kapanmayacak</string>
-    <string name="layout_direction">Yerleşim yönü</string>
-    <string name="layout_direction_locale">Varsayılan</string>
-    <string name="layout_direction_ltr">Soldan sağa</string>
-    <string name="layout_direction_rtl">Sağdan sola</string>
     <string name="preface_in_book">Defter ön sözü</string>
     <string name="preface_in_book_full">Göster</string>
     <string name="preface_in_book_hide">Gizle</string>
@@ -451,9 +392,7 @@
     <string name="notebooks_start_folded_summary">Defter yüklendiğinde tüm notlar katlansın</string>
     <string name="list_widget_name">Kaydedilmiş arama</string>
     <string name="list_widget_select_search">Arama seç</string>
-    <string name="list_widget_nothing_selected">Arama seçilmedi</string>
     <string name="auto_sync">Otomatik senkronizasyon</string>
-    <string name="auto_sync_experimental_summary">Yalnızca yerel depolar için kullanılır</string>
     <string name="auto_sync_summary">Dropbox desteklenmiyor</string>
     <string name="auto_sync_warning">Hangi seçeneklerin seçildiğine bağlı olarak senkronizasyon sıklıkla tetiklenebilir. Eğer defter değiştirilirse içeriğin tamamı depoya veya depodan buraya aktarılır. Senkronizasyon devam ederken bazı işlemler gecikebilir.</string>
     <string name="pref_title_sync_after_note_create">Not oluşturuldu</string>
@@ -508,7 +447,6 @@
     <string name="sync_failed_channel_description">Senkronizasyon başarısız olduğunda görüntüleme</string>
     <string name="notification_channel_settings">Bildirimler</string>
     <string name="notification_channel_settings_summary">Ses, titreşim, bildirim noktası</string>
-    <string name="hide_note_metadata">Meta verileri gizle</string>
     <string name="overwrite_local_notebook_question">Yerel defterin üzerine yazılsın mı?</string>
     <string name="overwrite_remote_notebook_question">Uzak defterin üzerine yazılsın mı?</string>
     <string name="drawers_folded_by_default">Katla</string>
@@ -525,7 +463,6 @@
     <string name="show_all">Hepsini göster</string>
     <string name="always_show_set">Her zaman seti göster</string>
     <string name="show_selected">Seçileni göster</string>
-    <string name="hide_all">Tümünü gizle</string>
     <string name="external_file_no_app_found">Dosyayı açmak için uygun uygulama bulunamadı</string>
     <string name="failed_to_open_linked_file_with_reason">Dosya açılamadı: %s</string>
     <string name="images">Görseller</string>
@@ -539,11 +476,9 @@
     <string name="argument_detected">%s algılandı</string>
     <string name="argument_selected">%s seçildi</string>
     <string name="fixed_width_value">Genişlik (piksel cinsinden)</string>
-    <string name="share_target_service">Orgzly defterine paylaş</string>
     <string name="under">Altında</string>
     <string name="above">Üzerinde</string>
     <string name="below">Altında</string>
-    <string name="loading">Yükleniyor…</string>
     <string name="go_to">Git</string>
     <string name="cannot_refile_to_the_same_subtree">Aynı alt ağaca yeniden dosyalanamıyor</string>
     <string name="notification_maximum_priority">Maksimum</string>
@@ -562,16 +497,12 @@
     </plurals>
     <string name="display_checkmarks">Onay işaretlerini görüntüle</string>
     <string name="display_checkmarks_summary">Notları tamamlandı olarak işaretlemeye izin verir</string>
-    <string name="last_used">Son kullanım</string>
-    <string name="note_details_opening_mode">Açılış modu</string>
     <string name="cleartext_traffic">Cleartext traffic</string>
     <string name="cleartext_traffic_message">Bu bağlantıyı kullanmak istediğinden emin misin?</string>
     <string name="credentials_in_url_not_supported">Kimlik bilgilerinin bağlantıda iletilmesi desteklenmiyor</string>
-    <string name="access_token">Erişim anahtarı</string>
     <string name="trusted_certificates">Güvenilen sertifikalar</string>
     <string name="add_trusted_certificates_optional">Güvenilir sertifika ekle (isteğe bağlı)</string>
     <string name="edit_trusted_certificates">Güvenilen sertifikaları düzenle</string>
-    <string name="this_action_cannot_be_undone">Bu işlem geri alınamaz.</string>
     <plurals name="paste_note_or_notes_with_count">
         <item quantity="one">Not yapıştır</item>
         <item quantity="other"><b>%d</b> notu yapıştır</item>
@@ -619,11 +550,9 @@
     <string name="ssh_keygen_generating_progress">Anahtarlar oluşturuluyor…</string>
     <string name="ssh_key_failed_get_public">SSH ortak anahtarı alınamadı</string>
     <string name="ssh_key_failed_get_private">SSH özel anahtarı alınamadı</string>
-    <string name="ssh_key_failed_unlock_private">SSH özel anahtarının kilidi açılamadı</string>
     <string name="biometric_prompt_title_ssh_keygen">SSH anahtarı oluştur</string>
     <string name="biometric_prompt_title_unlock_ssh_key">Orgzly\'in SSH anahtarının kilidini aç</string>
     <string name="biometric_auth_not_available">Biyometrik kimlik doğrulama kullanılamıyor</string>
-    <string name="biometric_auth_on_error">Kimlik doğrulama hatası: Kod: %1$d (%2$s)</string>
     <string name="ssh_keygen_message">%1$s\n\nBu ortak anahtarı Git sunucuna sağla.</string>
     <string name="your_public_key">Genel anahtar</string>
     <string name="ssh_keygen_share">Paylaş</string>

@@ -33,6 +33,17 @@ Możesz skonfigurować dowolną liczbę stanów do użycia: TODO, NEXT, DONE, it
 *** DONE To jest notatka ze /zrobionym/ typem stanu
 CLOSED: [2018-01-24 Wed 17:00]
 
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
 ** Notatka może mieć zaplanowany termin
 SCHEDULED: <2015-02-20 Fri 15:15>
 
@@ -41,6 +52,13 @@ SCHEDULED: <2015-02-16 Mon .+2d>
 
 ** Możesz również ustawić termin ostateczny
 DEADLINE: <2015-02-20 Fri>
+
+** Event times can be used anywhere in the note's content
+
+You can have multiple event times:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
 ** Obsługiwane są przypomnienia o zaplanowanych i ostatecznych terminach
 
@@ -56,7 +74,7 @@ Wybierz numer telefonu (tel:123-456-789), wyślij wiadomość SMS (sms:123-456-7
 
 Możesz również zamieszczać łącza do innych notatek lub notatników w aplikacji.
 
-Zobacz https://www.orgzlyrevived.com/docs#links, aby uzyskać więcej informacji.
+Zobacz [[https://www.orgzlyrevived.com/docs#links]] aby uzyskać więcej informacji.
 
 ** Orgzly wspiera podstawowe formatowanie tekstu
 
@@ -70,12 +88,18 @@ Możesz stosować *pogrubienie*, /kursywę/, _podkreślenie_, =dosłowny tekst=,
 
 Kliknij pole wyboru, aby je przełączyć. Naciśnij klawisz ENTER na końcu linii, aby utworzyć nowy element listy.
 
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] Zadanie 1
+- [ ] Zadanie 2
+- [X] Zadanie 3
+
 * Wyszukiwanie
 ** Istnieje wiele obsługiwanych operatorów wyszukiwania
 
 Możesz wyszukiwać notatki według stanu, znaczników, zaplanowanego lub ostatecznego terminu itp.
 
-Zobacz https://www.orgzlyrevived.com/docs#search, aby dowiedzieć się więcej.
+Zobacz [[https://www.orgzlyrevived.com/docs#search]] aby dowiedzieć się więcej.
 
 ** Aby uzyskać szybki dostęp do wyszukań, można je zapisać
 
@@ -87,7 +111,7 @@ Możesz utworzyć własne wyszukiwania, klikając na „Wyszukiwania” w szufla
 
 ** Notatniki mogą być zapisywane jako zwykłe pliki tekstowe
 
-Pliki zapisywane są w formacie używanym przez „Org-mode”.
+Pliki zapisywane są w formacie używanym przez [[https://orgmode.org/][Org-mode]].
 
 ** Typ lokalizacji (repozytorium)
 

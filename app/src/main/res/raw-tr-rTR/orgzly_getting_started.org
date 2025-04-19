@@ -33,6 +33,17 @@ Kullanılacak istediğiniz sayıda durumu yapılandırabilirsiniz: YAPILACAKLAR,
 *** TAMAMLANDI Bu, /done/ türünde bir durum içeren bir nottur
 CLOSED: [2024-01-10 Çrş 22:09]
 
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
 ** Notların yapılması için bir zaman belirlenebilir
 SCHEDULED: <2024-01-10 Çrş 22:09>
 
@@ -41,6 +52,13 @@ SCHEDULED: <2024-01-10 Çrş .+3d>
 
 ** Notlara bitiş tarihi de eklenebilir
 DEADLINE: <2024-01-10 Çrş>
+
+** Event times can be used anywhere in the note's content
+
+You can have multiple event times:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
 ** Planlamalar ve bitiş tarihleri için hatırlatma desteği
 
@@ -56,7 +74,7 @@ Bir telefon numarası çevirin (tel:555-0199), SMS gönderin (sms:555-0199), e-p
 
 Ayrıca uygulama içindeki başka bir nota veya deftere bağlantı verilebilir.
 
-Daha fazla bilgi için http://www.orgzlyrevived.com/docs#links adresine bakın.
+Daha fazla bilgi için [[http://www.orgzlyrevived.com/docs#links]] adresine bakın.
 
 ** Temel tipografik vurgu desteklenmekte
 
@@ -70,12 +88,18 @@ Kelimeler *kalın*, /italik/, _altı çizili_, =verbatim=, ~kod~ ve +üstü çiz
 
 Değiştirmek için onay kutusunu tıklayın. Yeni bir öğe oluşturmak için satırın sonundaki yeni satır düğmesine tıklayın.
 
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] Görev 1
+- [ ] Görev 2
+- [X] Görev 3
+
 * Arama
 ** Birçok arama operatörü desteklenmektedir
 
 Notlar durumlara, etiketlere, planlanma durumuna veya bitiş tarihlerine vb. göre aranabilir.
 
-Daha fazla bilgi edinmek için http://www.orgzlyrevived.com/docs#search adresine göz at.
+Daha fazla bilgi edinmek için [[http://www.orgzlyrevived.com/docs#search]] adresine göz at.
 
 ** Hızlı erişim için arama sorguları kaydedilebilir
 
@@ -87,7 +111,7 @@ Gezinme çekmecesindeki "Aramalar"ı tıklayarak kendi kayıtlı aramalarını o
 
 ** Defterler düz metin dosyaları olarak kaydedilebilir
 
-Dosyalar “Org mod” tarafından kullanılan formattadır.
+Dosyalar [[https://orgmode.org/][Org mod]] tarafından kullanılan formattadır.
 
 ** Konum (depo) türü
 

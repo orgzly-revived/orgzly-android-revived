@@ -10,20 +10,13 @@
     <string name="clear">Ачысьціць</string>
     <string name="cancel">Скасаваць</string>
     <string name="create">Стварыць</string>
-    <string name="new_">Новая</string>
-    <!-- "new" is reserved -->
-    <string name="select">Выбраць</string>
     <string name="set">Задаць</string>
-    <string name="add">Дадаць</string>
     <string name="not_now">Не цяпер</string>
     <string name="save">Захаваць</string>
     <string name="discard">Адкінуць</string>
     <string name="remove_notebook_link">Прыбраць спасылку</string>
     <string name="browse">Агляд</string>
     <string name="dropbox">Dropbox</string>
-    <string name="view">Выгляд</string>
-    <string name="edit">Зьмяніць</string>
-    <string name="edit_note">Зьмяніць нататку</string>
     <string name="delete">Выдаліць</string>
     <string name="delete_with_quoted_argument">Выдаліць «%s»</string>
     <string name="delete_amount_of_books">Выдаліць %d нататнікаў</string>
@@ -42,23 +35,16 @@
     <string name="created">Створана</string>
     <string name="states">Станы</string>
     <string name="note">Нататка</string>
-    <string name="notes">Нататкі</string>
     <string name="property">Атрыбут</string>
     <string name="import_as">Імпартаваць як…</string>
     <string name="new_notebook">Новы нататнік</string>
     <string name="new_folder">Новая тэчка</string>
     <string name="scheduled">Заплянавана</string>
     <string name="agenda">Распарадак</string>
-    <string name="agenda_period">Распарадак дзён</string>
-    <string name="time">Час</string>
-    <string name="repeater">Паўтаральнік</string>
     <string name="state">Стан</string>
     <string name="priority">Прыярытэт</string>
-    <string name="nothing">Пуста</string>
     <string name="open">Адкрыць</string>
-    <string name="focus">Фокус</string>
     <string name="widget">Віджэт</string>
-    <string name="history">Гісторыя</string>
     <string name="event">Падзея</string>
     <plurals name="notes_cut">
         <item quantity="one">Нататка выразаная</item>
@@ -81,7 +67,6 @@
     </plurals>
     <string name="no_notes_pasted">Няма чаго ўстаўляць</string>
     <string name="fragment_note_title_hint">Назва</string>
-    <string name="fragment_note_tags_hint" tools:ignore="typos">метка метка</string>
     <string name="import_org_file">Імпартаваць файл Org</string>
     <string name="message_dropbox_unlinked">Адлучана ад Dropbox</string>
     <string name="message_dropbox_linked">Пасьпяхова прылучана да Dropbox</string>
@@ -95,20 +80,16 @@
     <string name="ssh_show_public_key_preference_title">Прагляд створанага адкрытага ключа SSH</string>
     <string name="message_book_has_no_link">Спасылка адсутнічае</string>
     <string name="message_note_created">Нататка створаная</string>
-    <string name="message_failed_creating_note">Не ўдалося стварыць нататку</string>
-    <string name="message_failed_updating_note">Не ўдалося абнавіць нататку</string>
     <string name="drawer_close">Закрыць мэню</string>
     <string name="drawer_open">Адкрыць мэню</string>
     <string name="schedule">Расклад</string>
     <string name="refile">Перамясьціць</string>
-    <string name="refile_to">Перамясьціць у</string>
     <string name="deadline">Тэрмін</string>
     <string name="closed">Закрытае</string>
     <!-- TODO: Not hints, rename -->
     <string name="schedule_button_hint">Заплянаваны час</string>
     <string name="deadline_button_hint">Канчатковы час</string>
     <string name="closed_button_hint">Час закрыцьця</string>
-    <string name="fragment_note_content_hint">Зьмест нататкі</string>
     <string name="books_context_menu_item_rename">Перайменаваць</string>
     <string name="books_context_menu_item_set_link">Дадаць спасылку</string>
     <string name="books_context_menu_item_force_save">Прымусова захаваць</string>
@@ -128,7 +109,6 @@
     <string name="quick_note">Шпаркая нататка</string>
     <string name="tap_to_create_new_note">Дакраніцеся, каб стварыць новую нататку</string>
     <string name="options_menu_item_search">Пошук</string>
-    <string name="no_user_repos_configured_pref_summary">Пакуль яшчэ не наладжана</string>
     <string name="repos_options_menu_new_repo">Новы рэпазітар</string>
     <string name="book_name_already_exists">Нататнік %s ужо існуе</string>
     <string name="filter_name_already_exists">Пошук з такою назваю ўжо існуе</string>
@@ -146,14 +126,11 @@
     <string name="book_does_not_exist_anymore">Такі нататнік ужо не існуе.</string>
     <string name="note_does_not_exist_anymore">Такая нататка ўжо не існуе.</string>
     <string name="search_does_not_exist_anymore">Такі пошукавы запыт ужо не існуе.</string>
-    <string name="fragment_query_title">Пошук</string>
     <string name="repo_dropbox_button_not_linked">Прылучыць да Dropbox</string>
     <string name="repo_dropbox_button_linked">Адлучыць ад Dropbox</string>
-    <string name="fragment_settings_title">Налады</string>
     <string name="notes_update_needed_dialog_title">Налада ўплывае на нататкі</string>
     <string name="notes_update_needed_dialog_message">Абнавіць нататкі, каб адлюстраваць зьмены?</string>
     <string name="updating_notes">Абнаўленьне нататак…</string>
-    <string name="failure">Вой-вой-вой</string>
     <string name="no_notes_found_after_search">Па вашаму запыту ня знойдзена аніводнай нататкі</string>
     <string name="today">Сёньня</string>
     <string name="tomorrow">Заўтра</string>
@@ -169,7 +146,6 @@
     <string name="notebooks">Нататнікі</string>
     <string name="searches">Пошукавыя запыты</string>
     <string name="search">Пошук</string>
-    <string name="new_search">Новы пошук</string>
     <string name="multiple_repos">Існуе некалькі рэпазітараў</string>
     <string name="no_repos">Няма наладжаных рэпазітараў</string>
     <string name="no_books">Нататнікі ня знойдзены</string>
@@ -177,7 +153,6 @@
     <string name="collecting_notebooks_in_progress">Зьбіраньне нататнікаў…</string>
     <string name="syncing_in_progress">Сынхранізацыя…</string>
     <string name="syncing_book">Сынхранізацыя %s…</string>
-    <string name="sync_with_argument">Сынхранізацыя: %s</string>
     <string name="syncing_failed_title">Збой сынхранізацыі</string>
     <string name="canceled">Скасавана</string>
     <string name="canceling">Скасаваньне…</string>
@@ -191,23 +166,13 @@
     <string name="git_ssh_on_missing_key_dialog_text">Пара ключоў SSH ня знойдзеная. Хочаце стварыць?</string>
     <string name="git_ssh_on_missing_key_dialog_title">Ключ SSH ня знойдзены</string>
     <string name="git_https_username_hint">Імя карыстальніка</string>
-    <string name="git_https_password_hint">Пароль</string>
     <string name="git_author_hint">Аўтар (напрыклад, John Doe)</string>
     <string name="git_email_hint">Электронная пошта (напрыклад, john@email.com)</string>
     <string name="git_branch_hint">Галіна (напрыклад, master)</string>
-    <string name="git_auth_https_username_hint">Імя карыстальніка</string>
     <string name="git_auth_https_password_hint">Пароль</string>
-    <string name="git_generate_key_pair">Стварыць пару ключоў</string>
-    <string name="git_copy_public_key">Скапіяваць адкрыты ключ</string>
-    <string name="git_auth_type_text">Тып аўтэнтыфікацыі</string>
-    <string name="git_auth_type_ssh">SSH</string>
-    <string name="git_auth_type_https">HTTPS</string>
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
-    <string name="git_clone_error_ssh_auth">Збой клянаваньня, памылка аўтэнтыфікацыі</string>
-    <string name="git_clone_error_ssh">Памылка пры клянаваньні: %s</string>
     <string name="git_clone_error_invalid_repo">Аддалены адрас не з\'яўляецца рэпазітарам git</string>
-    <string name="git_clone_error_unknown">Невядомая памылка пры клянаваньні</string>
     <string name="git_clone_error_invalid_target_dir">Мэтавы каталёг не існуе</string>
     <string name="git_clone_error_target_not_empty">Мэтавы каталёг не пусты</string>
     <string name="git_clone_error_uri_not_supported">Аддалены адрас не падтрымліваецца</string>
@@ -218,18 +183,12 @@
     <string name="webdav_test_error_auth">Несапраўднае імя карыстальніка або пароль</string>
     <string name="webdav_test_error_unknown">Адбылася невядомая памылка</string>
     <!-- Share button - error messages (set as title). -->
-    <string name="share_action_not_set">Дзеяньне абагульненьня ня вызначанае</string>
     <string name="share_action_not_supported">Дзеяньне абагульненьня %s не падтрымліваецца</string>
-    <string name="share_type_not_set">Тып абагульненьня ня вызначаны</string>
     <string name="share_type_not_supported">Тып абагульненьня %s не падтрымліваецца</string>
     <string name="repositories">Рэпазітары</string>
     <string name="repository_not_valid_with_reason">Хібны рэпазітар: %s</string>
     <string name="invalid_repo_url">Хібны URL рэпазітара «%s»</string>
     <string name="repository_url_already_exists">Рэпазітар з такім URL ужо існуе</string>
-    <string name="fragment_left_drawer_list_view_content_description">Левае мэню</string>
-    <string name="drawer_item">Элемэнт мэню</string>
-    <string name="prev_state">Папярэдні стан</string>
-    <string name="next_state">Наступны стан</string>
     <string name="new_above">Новая вышэй</string>
     <string name="new_under">Новая пад</string>
     <string name="new_below">Новая ніжэй</string>
@@ -245,17 +204,14 @@
     <string name="no_filters">Няма захаваных пошукавых запытаў</string>
     <string name="book_shortcut_label">Нататнік</string>
     <string name="new_note_shortcut_label">Новая нататка</string>
-    <string name="pick_a_notebook">Выбраць нататнік</string>
     <string name="down">Уніз</string>
     <string name="up">Уверх</string>
-    <string name="notebook_modified">Нататнік зьменены</string>
     <string name="permissions_rationale_for_local_repo">Сінхранізацыя зь лякальным каталёгам патрабуе дазволу на захоўваньне</string>
     <string name="permissions_rationale_for_book_export">Экспартаваньне нататніка патрабуе дазволу на захоўваньне</string>
     <string name="permissions_rationale_for_sync_start">Сінхранізацыя зь лякальнымі рэпазітарамі патрабуе дазволу на захоўваньне</string>
     <string name="permissions_rationale_for_external_files_access">Доступ да вонкавых файлаў патрабуе дазволу на захоўваньне</string>
     <string name="permissions_rationale_for_post_notifications">Патрабуецца дазвол на адпраўку апавяшчэньняў</string>
     <string name="cycle_visibility">Згарнуць/Разгарнуць усе</string>
-    <string name="running_database_update">Абнаўленьне базы даных…</string>
     <string name="note_has_been_modified">Нататка зьмененая</string>
     <string name="discard_or_save_changes">Захаваць зьмены?</string>
     <string name="rename">Перайменаваць</string>
@@ -267,13 +223,10 @@
     <string name="also_delete_linked_books">Выдаліць усе прылучаныя аддаленыя нататнікі</string>
     <string name="message_deleting_book_failed">Не атрымалася выдаліць нататнік(і): %s</string>
     <string name="message_book_deleted">Нататнік(і) выдалены(я)</string>
-    <string name="priority_with_argument">Прыярытэт %s</string>
     <string name="default_priority">Прадвызначаны прыярытэт</string>
     <string name="lowest_priority">Найніжэйшы прыярытэт</string>
     <string name="todo_states">Ключавыя словы на актыўныя (todo) заданні</string>
     <string name="done_states">Ключавыя словы на выкананыя (done) заданні</string>
-    <string name="created_at">Створана а</string>
-    <string name="insert_note_creation_time">Устаўляць час стварэньня нататкі</string>
     <string name="use_created_at_property">Выкарыстоўваць атрыбут часу стварэньня</string>
     <string name="use_created_at_property_summary">Сынхранізаваць час стварэньня з дапамогай атрыбуту</string>
     <string name="created_at_property">Атрыбут часу стварэньня</string>
@@ -313,7 +266,6 @@
     <string name="prefs_title_new_note">Новая нататка</string>
     <string name="prefs_title_notifications">Апавяшчэньні</string>
     <string name="app">Пра праграму</string>
-    <string name="no_repos_configured">Няма наладжаных рэпазітараў</string>
     <string name="test_connection">Тэст злучэньня</string>
     <string name="connecting">Злучэньне…</string>
     <string name="no_connection">Няма злучэньня</string>
@@ -338,7 +290,6 @@
     <string name="org_indent_mode">Наладзіць на аснове рэжыму водступу</string>
     <string name="org_indent_mode_summary">Ажыцьцяўляць org-indent-mode ва ўліковым запісе</string>
     <string name="org_indent_indentation_per_level">Водступы на ўзровень</string>
-    <string name="add_property">Дадаць атрыбут</string>
     <string name="priority_a_highest">A (найвышэйшы прыярытэт)</string>
     <string name="priority_z_lowest">Z (найніжэйшы прыярытэт)</string>
     <string name="hour">Гадзіна</string>
@@ -370,7 +321,6 @@
     <string name="displayed_book_details_used_encoding">Ужытае кадаваньне</string>
     <string name="displayed_book_details_last_action">Апошняе дзеяньне</string>
     <string name="displayed_book_details_notes_count">Колькасьць нататак</string>
-    <string name="color_scheme_system">Сыстэмная</string>
     <string name="color_scheme_dynamic">Дынамічны колер</string>
     <string name="color_scheme_light">Сьветлая</string>
     <string name="color_scheme_dark">Цёмная</string>
@@ -393,10 +343,6 @@
         <item quantity="other">Выдаліць <b>%d</b> нататак?</item>
     </plurals>
     <!-- Unused -->
-    <string name="delete_note">Выдаліць нататку</string>
-    <string name="delete_notes">Выдаліць нататкі</string>
-    <string name="delete_note_and_all_subnotes">Выдаліць гэтую нататку з усімі даччынымі?</string>
-    <string name="delete_notes_and_all_subnotes">Выдаліць нататкі з усімі даччынымі?</string>
     <plurals name="notes_deleted">
         <item quantity="one">Нататка выдаленая</item>
         <item quantity="few"><b>%d</b> нататкі выдаленыя</item>
@@ -404,8 +350,6 @@
         <item quantity="other"><b>%d</b> нататак выдаленыя</item>
     </plurals>
     <string name="no_notes_deleted">Няма выдаленых нататак</string>
-    <string name="note_content_finish_editing">Праглядзець зьмест</string>
-    <string name="note_content_start_editing">Зьмяніць зьмест</string>
     <string name="duplicate_keywords_not_allowed">Ключавое слова %s ужо ўжываецца</string>
     <string name="no_states_defined">Станы ня вызначаныя</string>
     <string name="book_name_in_search">Назва нататніка ў выніках пошуку</string>
@@ -441,10 +385,6 @@
     <string name="keep_screen_on_summary">Адлюстроўваць пераключальнік у мэню</string>
     <string name="keep_screen_on">Не выключаць экран</string>
     <string name="keep_screen_on_desc">Экран ня згасьне датуль, пакуль уключаны гэты пераключальнік</string>
-    <string name="layout_direction">Напрамак макета</string>
-    <string name="layout_direction_locale">Прадвызначаны</string>
-    <string name="layout_direction_ltr">Зьлева направа</string>
-    <string name="layout_direction_rtl">Справа налева</string>
     <string name="preface_in_book">Прадмова нататніка</string>
     <string name="preface_in_book_full">Адлюстроўваць</string>
     <string name="preface_in_book_hide">Схаваць</string>
@@ -461,9 +401,7 @@
     <string name="notebooks_start_folded_summary">Згарнуць усе нататкі, калі нататнік загружаны</string>
     <string name="list_widget_name">Захаваны пошук</string>
     <string name="list_widget_select_search">Выбраны пошук</string>
-    <string name="list_widget_nothing_selected">Пошук ня выбраны</string>
     <string name="auto_sync">Аўтаматычная сынхранізацыя</string>
-    <string name="auto_sync_experimental_summary">Выкарыстоўваецца толькі на лякальных рэпазітарох</string>
     <string name="auto_sync_summary">Не падтрымліваецца на Dropbox</string>
     <string name="auto_sync_warning">У залежнасьці ад выбраных парамэтраў сынхранізацыя можа адбывацца часта. Калі нататнік мадыфікуецца, увесь яго зьмест перамяшчаецца ў сховішча або зь яго. Некаторыя дзеяньні могуць запавольвацца падчас сынхранізацыі.</string>
     <string name="pref_title_sync_after_note_create">Нататка створаная</string>
@@ -526,7 +464,6 @@
     <string name="sync_failed_channel_description">Адлюстроўваць пры збоі сынхранізацыі</string>
     <string name="notification_channel_settings">Апавяшчэньні</string>
     <string name="notification_channel_settings_summary">Гук, вібрацыя, пункт апавяшчэньня</string>
-    <string name="hide_note_metadata">Схаваць метаданыя</string>
     <string name="overwrite_local_notebook_question">Перазапісаць лякальны нататнік?</string>
     <string name="overwrite_remote_notebook_question">Перазапісаць аддалены нататнік?</string>
     <string name="drawers_folded_by_default">Меню згорнутыя</string>
@@ -543,7 +480,6 @@
     <string name="show_all">Паказаць усе</string>
     <string name="always_show_set">Заўжды паказваць набор</string>
     <string name="show_selected">Паказаць выбранае</string>
-    <string name="hide_all">Схаваць усе</string>
     <string name="external_file_no_app_found">Ня знойдзена праграмы на адкрыцьцё гэтага файла</string>
     <string name="failed_to_open_linked_file_with_reason">Не атрымалася адкрыць файл: %s</string>
     <string name="images">Відарысы</string>
@@ -557,11 +493,9 @@
     <string name="argument_detected">Выяўлена %s</string>
     <string name="argument_selected">Выбрана %s</string>
     <string name="fixed_width_value">Шырыня (у пікселях)</string>
-    <string name="share_target_service">Адправіць у нататнік Orgzly</string>
     <string name="under">Пад</string>
     <string name="above">Вышэй</string>
     <string name="below">Ніжэй</string>
-    <string name="loading">Загрузка…</string>
     <string name="go_to">Перайсьці да</string>
     <string name="cannot_refile_to_the_same_subtree">Немагчыма перамясьціць у тое самае паддрэва</string>
     <string name="notification_maximum_priority">Максымальны</string>
@@ -582,16 +516,12 @@
     </plurals>
     <string name="display_checkmarks">Адлюстроўваць птушкі</string>
     <string name="display_checkmarks_summary">Дазваляць пазначаць нататкі як выкананыя</string>
-    <string name="last_used">Апошняе выкарыстаньне</string>
-    <string name="note_details_opening_mode">Рэжым адкрыцьця</string>
     <string name="cleartext_traffic">Незашыфраваны трафік</string>
     <string name="cleartext_traffic_message">Вы ўпэўнены, што хочаце выкарыстоўваць гэты URL?</string>
     <string name="credentials_in_url_not_supported">Перадача ўліковых даных у URL не падтрымліваецца</string>
-    <string name="access_token">Токен доступу</string>
     <string name="trusted_certificates">Давераныя сэртыфікаты</string>
     <string name="add_trusted_certificates_optional">Дадаць давераныя сэртыфікаты (неабавязкова)</string>
     <string name="edit_trusted_certificates">Рэдагаваць давераныя сэртыфікаты</string>
-    <string name="this_action_cannot_be_undone">Немагчыма скасаваць гэта дзеяньне.</string>
     <plurals name="paste_note_or_notes_with_count">
         <item quantity="one">Уставіць нататку</item>
         <item quantity="few">Уставіць <b>%d</b> нататкі</item>
@@ -641,11 +571,9 @@
     <string name="ssh_keygen_generating_progress">Генэрацыя ключоў…</string>
     <string name="ssh_key_failed_get_public">Не ўдалося атрымаць адкрыты ключ SSH</string>
     <string name="ssh_key_failed_get_private">Не ўдалося атрымаць закрыты ключ SSH</string>
-    <string name="ssh_key_failed_unlock_private">Не ўдалося адамкнуць закрыты ключ SSH</string>
     <string name="biometric_prompt_title_ssh_keygen">Стварыць ключ SSH</string>
     <string name="biometric_prompt_title_unlock_ssh_key">Адамкнуць Orgzly ключ SSH</string>
     <string name="biometric_auth_not_available">Біямэтрычнае распазнаваньне недаступнае</string>
-    <string name="biometric_auth_on_error">Памылка аўтэнтыфікацыі: код: %1$d (%2$s)</string>
     <string name="ssh_keygen_message">%1$s\n\nПерадаць гэты адкрыты ключ на ўласны сэрвэр Git.</string>
     <string name="your_public_key">Ваш адкрыты ключ</string>
     <string name="ssh_keygen_share">Абагуліць</string>

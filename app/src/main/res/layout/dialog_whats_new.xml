@@ -22,6 +22,38 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.10.0"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Always sort agenda items chronologically (&lt;a href=&quot;https://orgzlyrevived.com/docs#search-agenda&quot;&gt;documentation&lt;/a&gt;)." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix a modification time bug in the directory repository type." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Update translations." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
+            android:text="v1.9.0"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Allow export/import of settings and saved searches to/from a chosen note. (See app settings.)" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Start applying &lt;a href=&quot;https://semver.org/&quot;&gt;semantic versioning&lt;/a&gt; when naming app releases." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.8.38"
             tools:ignore="HardcodedText" />
 

@@ -33,6 +33,17 @@
 *** DONE Такая нататка з /выкананым/ тыпам стану
 CLOSED: [2018-01-24 Срд 17:00]
 
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
 ** Нататкі могуць мець заплянаваны час
 SCHEDULED: <2015-02-20 Пят 15:15>
 
@@ -76,6 +87,12 @@ DEADLINE: <2015-02-20 Пят>
 - [ ] Заданьне 3
 
 Націсьніце на поле, каб зьмяніць стан. Націсьніце кнопку новага радка ў канцы радка, каб стварыць новы элемэнт.
+
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] Заданьне 1
+- [ ] Заданьне 2
+- [X] Заданьне 3
 
 * Пошук
 ** Падтрымліваюцца разнастайныя апэратары пошуку

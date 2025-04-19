@@ -33,6 +33,17 @@ Galite sukonfiguruoti įvairias būsenas: TODO, NEXT, DONE ir t. t.
 *** DONE Čia yra įrašas su /done/ būsenos tipu
 CLOSED: [2018-01-24 Wed 17:00]
 
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
 ** Įrašas gali turėti suplanuotą laiką
 SCHEDULED: <2015-02-20 Fri 15:15>
 
@@ -63,7 +74,7 @@ Skambinkite tel. numeriu (tel:370-000), siųsti SMS (sms:370-000), rašyti el. l
 
 Taip pat galite nurodyti į kitą įrašą ar užrašinę programėlėje.
 
-Žiūrėkite https://www.orgzlyrevived.com/docs#links išsamesnei informacijai.
+Žiūrėkite [[https://www.orgzlyrevived.com/docs#links]] išsamesnei informacijai.
 
 ** Palaikomas paprastas apipavidalinimas pabrėžimui
 
@@ -77,12 +88,18 @@ Galite žodžius rašyti *pusjuodžiu*, /kursyvu/, _pabrauktai_, =neformatuotai=
 
 Spustelėkite langelį, kad pažymėtumėte. Spustelėkite naujos eilutės mygtuką eilutės gale, kad sukurtumėte naują elementą.
 
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] Užduotis 1
+- [ ] Užduotis 2
+- [X] Užduotis 3
+
 * Paieška
 ** Yra daug palaikomų paieškos operatorių
 
 Galite ieškoti įrašų pagal būseną, žymę, suplanavimą, terminą, įvykio laiką ir t. t.
 
-Žiūrėkite https://www.orgzlyrevived.com/docs#search išsamesnei informacijai.
+Žiūrėkite [[https://www.orgzlyrevived.com/docs#search]] išsamesnei informacijai.
 
 ** Paieškos užklausos gali būti išsaugotos greitai prieigai
 

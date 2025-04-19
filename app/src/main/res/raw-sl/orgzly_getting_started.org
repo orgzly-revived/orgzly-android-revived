@@ -1,0 +1,118 @@
+Dobrodošli v Orgzly!
+
+* Opombe
+** Kliknite na opombo, da jo odprete
+** Kliknite in držite opombo, da jo izberete
+
+Izberete lahko več opomb.
+
+** Vstavite opombo v desno, da odprete pojavni meni
+
+Vstavite opombo levo, da odprete drug meni.
+
+** Zložite opombo, ki vsebuje podopombe, tako da kliknete ikono poleg nje
+
+Dolgo kliknite ikono, da odprete celotno poddrevo.
+
+*** Število stopenj, ki jih lahko imate, ni omejeno
+**** Uporabite to za boljšo organizacijo zapiskov
+
+** Opomba ima lahko oznake :tag1:tag2:
+*** Podopomba podeduje oznake :tag3:
+
+Če iščete opombe z oznako »tag1« s poizvedbo »t.tag1«, bo ta opomba vključena v rezultate iskanja.
+
+*** Opomba ki ima =ARCHIVE= oznaku je obarvana sivo :ARCHIVE:
+
+** Opomba ima lahko stanje
+
+Nastavite lahko poljubno število stanj za uporabo: TODO, NEXT, DONE itd.
+
+** TODO Obstajata dve /vrsti/ stanja: To-do in Done
+
+*** DONE To je opomba z /opravljeno/ vrsto stanja
+CLOSED: [2018-01-24 Wed 17:00]
+
+** Starševski opombe lahko sledijo stanju otroških opombev [1/3] [33%]
+
+** TODO Če želite spremljati razmerje med elementi TODO in DONE, dodajte [/] v naslov opombe
+
+*** TODO Če želite spremljati odstotek DONE v primerjavi z TODO artiklov, dodajte [%] v naslov opombe
+
+*** DONE Oboje se lahko uporablja v tandemu
+CLOSED: [2025-03-13 Thu 08:37]
+
+Naročilo ni pomembno, številke pa bodo samodejno posodobljene.
+
+** Opomba ima lahko načrtovan čas
+SCHEDULED: <2015-02-20 Fri 15:15>
+
+*** Časi imajo lahko repetitor
+SCHEDULED: <16.02.2015 Mon .+2d>
+
+** Nastavite lahko tudi rok
+DEADLINE: <2015-02-20 Fri>
+
+** Čas dogodka lahko uporabite kjer koli v vsebini opombe
+
+Imate lahko več časov dogodkov:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
+
+** Podprti so opomniki za opombe z načrtovanimi časi, roki ali dogodki
+
+Označite opombo kot končano, da premaknete repetitor.
+
+** [#A] Opomba ima lahko prednost
+
+Število prednostnih nalog lahko spremenite v nastavitvah. Spremenite lahko tudi privzeto prednost - predvideno prednost za opombe brez enega nabora.
+
+** Opomba lahko vključuje povezave
+
+Pokličite telefonsko številko (tel:555-0199), pošljite SMS (sms:555-0199), sestavite e-pošto (mailto:support@orgzlyrevived.com) ali obiščite spletno stran ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+
+V aplikaciji se lahko povežete tudi z drugim opombo ali zvezkom.
+
+Za več informacij glejte [[https://www.orgzlyrevived.com/docs#links]].
+
+** Podprt je osnovni tipografski poudarek
+
+Izberete lahko besede *krepko*, /ležeče/, _podčrtano_, =dobesedno=, ~koda~ in +prečrtano+.
+
+** Seznam potrditvenih polj je na voljo
+
+- [X] Opravilo 1
+- [ ] Opravilo 2
+- [ ] Opravilo 3
+
+Kliknite potrditveno polje, da ga preklopite. Na koncu vrstice pritisnite gumb nove vrstice da ustvarite nov element.
+
+** Naslov opombe lahko spremlja tudi navedena seznama potrditvenih polj [66%] [2/3]
+
+- [X] Opravilo 1
+- [ ] Opravilo 2
+- [X] Opravilo 3
+
+* Iskanje
+** Podprtih je veliko iskalnih operaterjev
+
+Opombe lahko iščete po stanju, oznaki, načrtovanju, roku ali časih dogodkov itd.
+
+Za več informacij glejte [[https://www.orgzlyrevived.com/docs#search]].
+
+** Iskalne poizvedbe lahko shranite za hiter dostop
+
+Preizkusite vzorčna iskanja iz navigacijskega predala in upoštevajte poizvedbe, ki jih uporabljajo.
+
+Svoja shranjena iskanja lahko ustvarite s klikom na »Iskanja« v navigacijskem predalu.
+
+* Sinhronizacija
+
+Prenosne knjige lahko shranite kot datoteke navadnega besedila
+
+Datoteke so v formatu ki ga uporablja [[https://orgmode.org/][Org mode]].
+
+** Tip lokacije (skladišča)
+
+Skladišče (repozitorij) je mesto, s katerim lahko sinhronizirate zvezke. Skladišče je lahko imenik na vaši mobilni napravi, kartici SD ali Dropbox.

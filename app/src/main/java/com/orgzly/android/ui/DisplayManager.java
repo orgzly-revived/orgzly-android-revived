@@ -174,6 +174,10 @@ public class DisplayManager {
     }
 
     public static void displayQuery(FragmentManager fragmentManager, @NonNull String queryString) {
+        displayQuery(fragmentManager, queryString, null);
+    }
+
+    public static void displayQuery(FragmentManager fragmentManager, @NonNull String queryString, @Nullable String searchName) {
         // If the same query is already displayed, don't do anything.
         String displayedQuery = getDisplayedQuery(fragmentManager);
         if (displayedQuery != null && displayedQuery.equals(queryString)) {
@@ -189,11 +193,11 @@ public class DisplayManager {
 
         // Display agenda or query fragment
         if (query.getOptions().getAgendaDays() > 0) {
-            fragment = AgendaFragment.getInstance(queryString);
+            fragment = AgendaFragment.getInstance(queryString, searchName);
             tag = AgendaFragment.FRAGMENT_TAG;
 
         } else {
-            fragment = SearchFragment.getInstance(queryString);
+            fragment = SearchFragment.getInstance(queryString, searchName);
             tag = SearchFragment.FRAGMENT_TAG;
         }
 
