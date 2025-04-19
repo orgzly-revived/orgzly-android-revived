@@ -4,16 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
-import android.widget.PopupWindow
 import androidx.lifecycle.ViewModelProvider
 import com.orgzly.R
 import com.orgzly.android.sync.SyncRunner
 import com.orgzly.android.ui.dialogs.TimestampDialogFragment
 import com.orgzly.android.ui.drawer.DrawerItem
 import com.orgzly.android.ui.main.SharedMainActivityViewModel
-import com.orgzly.android.ui.notes.NotePopup
 import com.orgzly.android.ui.notes.NotesFragment
 import com.orgzly.android.ui.settings.SettingsActivity
 
@@ -28,12 +24,14 @@ abstract class QueryFragment :
     /** Currently active query.  */
     var currentQuery: String? = null
 
+    /** Currently active query name. */
+    var currentQueryName: String? = null
+
     protected var listener: Listener? = null
 
     protected lateinit var sharedMainActivityViewModel: SharedMainActivityViewModel
 
     protected lateinit var viewModel: QueryViewModel
-
 
     override fun getCurrentListener(): Listener? {
         return listener
@@ -49,6 +47,7 @@ abstract class QueryFragment :
         listener = activity as Listener
 
         currentQuery = requireArguments().getString(ARG_QUERY)
+        currentQueryName = requireArguments().getString(ARG_QUERY_NAME)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,6 +119,7 @@ abstract class QueryFragment :
         private val TAG = QueryFragment::class.java.name
 
         const val ARG_QUERY = "query"
+        const val ARG_QUERY_NAME = "query_name"
 
         fun getDrawerItemId(query: String?): String {
             return "$TAG $query"

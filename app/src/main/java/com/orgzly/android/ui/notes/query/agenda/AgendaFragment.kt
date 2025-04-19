@@ -153,7 +153,7 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
                 binding.topToolbar.menu.findItem(R.id.search_view)?.expandActionView()
             }
 
-            title = getString(R.string.agenda)
+            title = currentQueryName ?: getString(R.string.agenda)
             subtitle = currentQuery
         }
     }
@@ -315,14 +315,20 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
         @JvmField
         val FRAGMENT_TAG: String = AgendaFragment::class.java.name
 
+        @JvmStatic
+        fun getInstance(query: String): AgendaFragment {
+            return getInstance(query, null)
+        }
 
         @JvmStatic
-        fun getInstance(query: String): QueryFragment {
+        fun getInstance(query: String, queryName: String? = null): AgendaFragment {
             val fragment = AgendaFragment()
 
             val args = Bundle()
             args.putString(ARG_QUERY, query)
-
+            if (queryName != null) {
+                args.putString(ARG_QUERY_NAME, queryName)
+            }
             fragment.arguments = args
 
             return fragment

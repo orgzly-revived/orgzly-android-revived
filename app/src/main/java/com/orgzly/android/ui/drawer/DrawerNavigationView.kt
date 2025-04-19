@@ -88,6 +88,7 @@ internal class DrawerNavigationView(
         savedSearches.forEach { savedSearch ->
             val intent = Intent(AppIntent.ACTION_OPEN_QUERY)
             intent.putExtra(AppIntent.EXTRA_QUERY_STRING, savedSearch.query)
+            intent.putExtra(AppIntent.EXTRA_SEARCH_NAME, savedSearch.name)
 
             val id = generateRandomUniqueId()
             val item = menu.add(R.id.drawer_group, id, 1, savedSearch.name)
