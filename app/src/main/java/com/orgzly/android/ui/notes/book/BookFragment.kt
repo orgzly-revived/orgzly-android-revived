@@ -797,7 +797,40 @@ class BookFragment :
         // Set up the click listener
         binding.jumpToEndFab.run {
             setOnClickListener {
-                binding.fragmentBookRecyclerView.smoothScrollToPosition(viewAdapter.itemCount - 1)
+                val adapter = binding.fragmentBookRecyclerView.adapter
+                val targetPosition = adapter?.itemCount?.minus(1) ?: 0
+                if (targetPosition <= 0) return@setOnClickListener // Nothing to scroll to
+
+                val layoutManager = binding.fragmentBookRecyclerView.layoutManager as? LinearLayoutManager
+                if (layoutManager == null) {
+                    // Fallback or log error if layout manager is not LinearLayoutManager
+                    binding.fragmentBookRecyclerView.smoothScrollToPosition(targetPosition)
+                    return@setOnClickListener
+                }
+
+                val currentPosition = layoutManager.findFirstVisibleItemPosition()
+                if (currentPosition == RecyclerView.NO_POSITION) {
+                    // If current position is unknown, maybe just smooth scroll
+                    binding.fragmentBookRecyclerView.smoothScrollToPosition(targetPosition)
+                    return@setOnClickListener
+                }
+
+
+                // --- Conditional Logic ---
+                val totalItemCount = adapter?.itemCount ?: 0
+                val scrollDistance = abs(targetPosition - currentPosition)
+
+                // Define thresholds (adjust as needed)
+                val sizeThreshold = 500 // Jump instantly if total items > threshold
+                val distanceThreshold = 50 // Jump instantly if distance to scroll > threshold
+
+                if (totalItemCount > sizeThreshold || scrollDistance > distanceThreshold) {
+                    // Jump instantly for large lists or long distances
+                    layoutManager.scrollToPositionWithOffset(targetPosition, 0) // Or just scrollToPosition(targetPosition)
+                } else {
+                    // Smooth scroll for smaller lists/distances
+                    binding.fragmentBookRecyclerView.smoothScrollToPosition(targetPosition)
+                }
             }
         }
 
