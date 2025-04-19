@@ -788,6 +788,14 @@ public class AppPreferences {
                 context.getResources().getString(R.string.pref_default_pre_notify_property));
     }
 
+    public static String preNotifyFormat(Context context) {
+        return getDefaultSharedPreferences(context).getString(
+                context.getResources().getString(R.string.pref_key_pre_notify_format),
+                context.getResources().getString(R.string.pref_default_pre_notify_format));
+    }
+
+
+
     /*
      * Open note or book on link/breadcrumbs follow.
      */

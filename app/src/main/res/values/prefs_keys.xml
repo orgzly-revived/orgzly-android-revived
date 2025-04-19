@@ -467,6 +467,19 @@
     <string name="pref_key_pre_notify_property" translatable="false">pref_key_pre_notify_property</string>
     <string name="pref_default_pre_notify_property" translatable="false">notify</string>
 
+    <string name="pref_key_pre_notify_format" translatable="false">name</string>
+    <string name="pref_default_pre_notify_format" translatable="false">@string/pref_value_pre_notify_format_minutes</string>
+    <string name="pref_value_pre_notify_format_minutes" translatable="false">minutes</string>
+    <string name="pref_value_pre_notify_format_parse" translatable="false">parse</string>
+    <string-array name="pre_notify_format">
+        <item>@string/pre_notfiy_format_minutes</item>
+        <item>@string/pre_notfiy_format_parse</item>
+    </string-array>
+    <string-array name="pre_notify_format_values">
+        <item>@string/pref_value_pre_notify_format_minutes</item>
+        <item>@string/pref_value_pre_notify_format_parse</item>
+    </string-array>
+
     <string name="pref_key_breadcrumbs_target" translatable="false">pref_key_breadcrumbs_target</string>
     <string name="pref_default_breadcrumbs_target" translatable="false">note_details</string>
 

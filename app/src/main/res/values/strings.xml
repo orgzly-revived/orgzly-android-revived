@@ -585,6 +585,11 @@
     <string name="set_last_repeat_on_time_shift_summary">Set time when note with repeater is marked as done</string>
     <string name="pre_notify_property">Pre-notification Property</string>
     <string name="pre_notify_property_summary">The property that contains a comma-separated list of pre-notification intervals of a given node.</string>
+    <string name="pre_notify_format">Pre-notfication format</string>
+    <string name="pre_notify_format_desc">The format of the pre-notification property syntax.</string>
+    <string name="pre_notfiy_format_minutes">Space separated minute values</string>
+    <string name="pre_notfiy_format_parse">Comma separated time intervals with advanced syntax</string>
+
     <string name="background_opacity">Background opacity</string>
     <string name="update_frequency">Update frequency</string>
     <string name="git">Git</string>
