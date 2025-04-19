@@ -734,4 +734,13 @@
     <string name="note_does_not_contain_valid_json">Note does not contain valid JSON.</string>
     <string name="imported_json_is_missing_mandatory_fields">Imported JSON is missing mandatory fields.</string>
     <string name="note_has_no_content">Note has no content.</string>
+
+    <string name="copied_link">Copied link</string>
+    
+    <!-- Sync status for NoteViewModel -->
+    <string name="sync_status_synced">Synced: %1$s</string>
+    <string name="sync_status_error">Sync error: %1$s</string>
+    <string name="sync_status_conflict">Sync conflict</string>
+    <string name="sync_status_never">Never synced</string>
+    <string name="unknown_time">unknown time</string>
 </resources>
