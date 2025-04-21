@@ -62,6 +62,6 @@
 
     <dimen name="horizontal_divider_height">1dp</dimen>
 
+    <dimen name="scrollbar_width">16dp</dimen>
     <dimen name="fab_stack_spacing">80dp</dimen>
-
 </resources>
