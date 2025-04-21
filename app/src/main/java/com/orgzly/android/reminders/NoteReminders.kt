@@ -30,14 +30,7 @@ object NoteReminders {
         intervalType: Int): List<NoteReminder> {
 
         val result: MutableList<NoteReminder> = ArrayList()
-        val format = AppPreferences.preNotifyFormat(context)
-        val isMinuteFormat = context.getResources().getString(R.string.pref_value_pre_notify_format_minutes) == format;
-
-        val deliminiter = if (isMinuteFormat) {
-            " "
-        } else {
-            ";"
-        }
+        val preNotifyParser = PreNotificationParser(context)
 
         for (noteTime in dataRepository.times()) {
             if (isRelevantNoteTime(context, noteTime)) {
@@ -58,28 +51,7 @@ object NoteReminders {
                     null
                 }
 
-                val preNotification = noteTime.orgPreAlerts
-
-                var periods = mutableSetOf(0)
-                if (preNotification.length > 0) {
-                    periods = (preNotification.split(deliminiter)
-                        .map {
-                            try {
-                                if (isMinuteFormat) {
-                                    it.toInt() * 1000 * 60
-                                } else {
-                                    Duration.parse(it.trim()).inWholeMilliseconds.toInt()
-                                }
-                            } catch (_: Exception) {
-                                0 // safely default to 0
-                            }
-                        }).toMutableSet()
-                }
-
-                // always notify at the actual reminder time
-                periods.add(0)
-
-                for (period in periods.sortedDescending()) {
+                for (period in preNotifyParser.parse(noteTime.orgPreAlerts)) {
                     var time = getFirstTime(
                         orgDateTime,
                         interval,
