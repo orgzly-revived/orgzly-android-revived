@@ -195,14 +195,16 @@ class WebdavRepo(
                 .toMutableList()
     }
 
-    override fun retrieveBook(uri: Uri, destination: File): VersionedRook {
-        sardine.get(uri.toUrl()).use { inputStream ->
+    override fun retrieveBook(repoRelativePath: String?, destination: File?): VersionedRook {
+        val fileUrl = Uri.withAppendedPath(uri, repoRelativePath).toUrl()
+
+        sardine.get(fileUrl).use { inputStream ->
             FileOutputStream(destination).use { outputStream ->
                 inputStream.copyTo(outputStream)
             }
         }
 
-        return sardine.list(uri.toUrl()).first().toVersionedRook()
+        return sardine.list(fileUrl).first().toVersionedRook()
     }
 
     override fun openRepoFileInputStream(repoRelativePath: String): InputStream {

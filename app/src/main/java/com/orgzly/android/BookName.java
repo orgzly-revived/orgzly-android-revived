@@ -2,8 +2,6 @@ package com.orgzly.android;
 
 import android.content.Context;
 import android.net.Uri;
-
-import androidx.annotation.Nullable;
 import androidx.documentfile.provider.DocumentFile;
 
 import com.orgzly.BuildConfig;
@@ -12,7 +10,6 @@ import com.orgzly.android.repos.Rook;
 import com.orgzly.android.repos.VersionedRook;
 import com.orgzly.android.util.LogUtils;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,7 +33,7 @@ public class BookName {
         mFormat = format;
     }
 
-    public static String getRepoRelativePath(BookView bookView) throws IOException {
+    public static String getRepoRelativePath(BookView bookView) {
         if (bookView.getSyncedTo() != null) {
             VersionedRook vrook = bookView.getSyncedTo();
             return getRepoRelativePath(vrook.getRepoUri(), vrook.getUri());
@@ -72,49 +69,12 @@ public class BookName {
         return fileName;
     }
 
-    /**
-     * Look through as many directory levels as needed until we've found the file with the right URI
-     * @param folder folder to go through
-     * @param targetFile the file that we know we are looking for
-     * @return A TreeDocumentFile object representation of our target file, which contains
-     * information about its parent directories, or null if the file was not found
-     */
-    @Nullable
-    private static DocumentFile getFileWithParentInfo(DocumentFile folder, DocumentFile targetFile) {
-        String targetFileName = targetFile.getName();
-        assert(targetFileName != null);
-        DocumentFile foundFile = folder.findFile(targetFileName);
-        if (foundFile != null && foundFile.getUri().toString().equals(targetFile.getUri().toString()))
-            return foundFile;
-        for (DocumentFile item : folder.listFiles()) {
-            if (item.isDirectory()) {
-                foundFile = getFileWithParentInfo(item, targetFile);
-                if (foundFile != null) return foundFile;
-            }
-        }
-        return null;
-    }
-
-    public static String getRepoRelativePath(Uri repoUri, Uri fileUri) throws IOException {
+    public static String getRepoRelativePath(Uri repoUri, Uri fileUri) {
         /* The content:// repository type requires special handling */
         if ("content".equals(repoUri.getScheme())) {
-            Context context = App.getAppContext();
-            DocumentFile repoRootDir = DocumentFile.fromTreeUri(context, repoUri);
-            assert(repoRootDir != null);
-            DocumentFile targetFile = DocumentFile.fromSingleUri(context, fileUri);
-            assert(targetFile != null);
-            DocumentFile foundFile = getFileWithParentInfo(repoRootDir, targetFile);
-            if (foundFile == null || foundFile.getName() == null)
-                throw new IOException("Failed to find " + fileUri + " in " + repoUri);
-            StringBuilder repoRelativePath = new StringBuilder(foundFile.getName());
-            DocumentFile parentDir = foundFile.getParentFile();
-            assert parentDir != null;
-            while (parentDir != repoRootDir) {
-                repoRelativePath.insert(0, parentDir.getName() + "/");
-                parentDir = parentDir.getParentFile();
-                assert parentDir != null;
-            }
-            return repoRelativePath.toString();
+            String repoUriLastSegment = repoUri.toString().replaceAll("^.*/", "");
+            String repoRootUriSegment = repoUri + "/document/" + repoUriLastSegment + "%2F";
+            return Uri.decode(fileUri.toString().replace(repoRootUriSegment, ""));
         } else {
             // Just return the decoded fileUri stripped of the repoUri (if present), and stripped
             // of any leading / (if present).
@@ -124,7 +84,7 @@ public class BookName {
         }
     }
 
-    public static BookName fromRook(Rook rook) throws IOException {
+    public static BookName fromRook(Rook rook) {
         return fromRepoRelativePath(getRepoRelativePath(rook.getRepoUri(), rook.getUri()));
     }
 
