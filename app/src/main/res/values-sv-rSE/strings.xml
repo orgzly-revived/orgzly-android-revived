@@ -593,5 +593,4 @@
     <string name="note_does_not_contain_valid_json">Anteckningen innehåller inte giltig JSON.</string>
     <string name="imported_json_is_missing_mandatory_fields">Den importerade JSON-strukturen saknar obligatoriska fält.</string>
     <string name="note_has_no_content">Anteckningen har inget innehåll.</string>
-    <string name="message_book_has_no_rook">Anteckningsboken har aldrig tidigare synkats</string>
 </resources>
