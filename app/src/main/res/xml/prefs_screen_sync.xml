@@ -73,5 +73,11 @@
             android:title="@string/org_file_format"
             android:summary="@string/org_file_format_summary">
         </androidx.preference.PreferenceScreen>
+
+        <SwitchPreference
+            android:key="@string/pref_key_display_sync_status"
+            android:title="@string/pref_display_sync_status_title"
+            android:summary="@string/pref_display_sync_status_summary"
+            android:defaultValue="false"/>
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

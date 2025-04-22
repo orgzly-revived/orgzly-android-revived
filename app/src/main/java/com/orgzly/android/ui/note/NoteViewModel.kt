@@ -85,36 +85,44 @@ class NoteViewModel(
     // Add the new Flow definition:
     val relativeSyncStatusText: Flow<String?> = reactiveBook.asFlow()
         .combine(tickerFlow) { book, _ -> // Combine book Flow with ticker
-             // Read the new sync result fields
-             val lastResult = book?.lastSyncActionResult
-             val lastTimestamp = book?.lastSyncActionTimestamp
-             val context = App.getAppContext() // Get context for strings
+            val context = App.getAppContext()
 
-             // Construct the status text based on the result
-             when (lastResult) {
-                 SyncResult.SUCCESS -> {
-                     val relativeTime = formatRelativeTimeSpan(lastTimestamp)
-                     context.getString(R.string.sync_status_synced, relativeTime)
-                 }
-                 SyncResult.ERROR -> {
-                     val relativeTime = formatRelativeTimeSpan(lastTimestamp)
-                     context.getString(R.string.sync_status_error, relativeTime)
-                 }
-                 SyncResult.CONFLICT -> {
-                     context.getString(R.string.sync_status_conflict)
-                 }
-                 null -> {
-                     // When there's no data, the status is ambiguous, it could be:
-                     // 1. the book is just created, and it should display "never-synced", or
-                     // 2. the app has been just updated and the db doesn't have the data,
-                     // and it should display nothing, or
-                     // 3. the user doesn't have a sync repo configured, and it should display nothing
-                     ""
-                     // TODO implement a mechanism to determine if the book was newly created
-                     // and should display context.getString(R.string.sync_status_never)
-                 }
-             }
-         }
+            // Check the preference flag first
+            val shouldDisplaySyncStatus = AppPreferences.displaySyncStatusOnNote(context);
+
+            if (!shouldDisplaySyncStatus) {
+                null // Return null if the preference is false
+            } else {
+                // Preference is true, proceed with existing logic
+                val lastResult = book?.lastSyncActionResult
+                val lastTimestamp = book?.lastSyncActionTimestamp
+
+                // Construct the status text based on the result
+                when (lastResult) {
+                    SyncResult.SUCCESS -> {
+                        val relativeTime = formatRelativeTimeSpan(lastTimestamp)
+                        context.getString(R.string.sync_status_synced, relativeTime)
+                    }
+                    SyncResult.ERROR -> {
+                        val relativeTime = formatRelativeTimeSpan(lastTimestamp)
+                        context.getString(R.string.sync_status_error, relativeTime)
+                    }
+                    SyncResult.CONFLICT -> {
+                        context.getString(R.string.sync_status_conflict)
+                    }
+                    null -> {
+                        // When there's no data, the status is ambiguous, it could be:
+                        // 1. the book is just created, and it should display "never-synced", or
+                        // 2. the app has been just updated and the db doesn't have the data,
+                        // and it should display nothing, or
+                        // 3. the user doesn't have a sync repo configured, and it should display nothing
+                        "" // Keep the original behavior for now when preference is true but data is null
+                        // TODO implement a mechanism to determine if the book was newly created
+                        // and should display context.getString(R.string.sync_status_never)
+                    }
+                }
+            }
+        }
 
     fun loadData() {
         App.EXECUTORS.diskIO().execute {
@@ -353,18 +361,18 @@ class NoteViewModel(
 
     // Refactored function to just get the relative time span
     private fun formatRelativeTimeSpan(timestamp: Long?): String {
-        if (timestamp == null) {
-             // Should ideally not be reached if called correctly from combine block,
-             // but return empty or a default value just in case.
-             return App.getAppContext().getString(R.string.unknown_time) // Need R.string.unknown_time
-        }
-        val now = System.currentTimeMillis()
-        // Get relative time span
-        return DateUtils.getRelativeTimeSpanString(
-            timestamp,
-            now,
-            DateUtils.MINUTE_IN_MILLIS
-        ).toString()
+         if (timestamp == null) {
+              // Should ideally not be reached if called correctly from combine block,
+              // but return empty or a default value just in case.
+              return App.getAppContext().getString(R.string.unknown_time) // Need R.string.unknown_time
+         }
+         val now = System.currentTimeMillis()
+         // Get relative time span
+         return DateUtils.getRelativeTimeSpanString(
+             timestamp,
+             now,
+             DateUtils.MINUTE_IN_MILLIS
+         ).toString()
     }
 
     companion object {
