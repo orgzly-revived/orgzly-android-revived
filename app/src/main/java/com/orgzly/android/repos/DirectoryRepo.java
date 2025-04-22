@@ -26,7 +26,7 @@ public class DirectoryRepo implements SyncRepo {
 
     public static final String SCHEME = "file";
 
-    private final File mDirectory;
+    private File mDirectory;
 
     private final long repoId;
     private final Uri repoUri;
@@ -124,7 +124,9 @@ public class DirectoryRepo implements SyncRepo {
     }
 
     @Override
-    public VersionedRook retrieveBook(Uri uri, File destinationFile) throws IOException {
+    public VersionedRook retrieveBook(String repoRelativePath, File destinationFile) throws IOException {
+        Uri uri = repoUri.buildUpon().appendPath(repoRelativePath).build();
+
         String path = uri.getPath();
 
         if (path == null) {

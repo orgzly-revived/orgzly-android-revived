@@ -72,7 +72,6 @@ class DataRepository @Inject constructor(
         private val resources: Resources,
         private val localStorage: LocalStorage) {
 
-    @Throws(IOException::class)
     fun forceLoadBook(bookId: Long) {
         val book = getBookView(bookId)
                 ?: throw IOException(resources.getString(R.string.book_does_not_exist_anymore))
@@ -81,15 +80,14 @@ class DataRepository @Inject constructor(
             if (book.linkRepo == null) {
                 throw IOException(resources.getString(R.string.message_book_has_no_link))
             }
-            if (book.syncedTo == null) {
-                throw IOException(resources.getString(R.string.message_book_has_no_rook))
-            }
 
             setBookLastActionAndSyncStatus(bookId, BookAction.forNow(
                     BookAction.Type.PROGRESS,
                     resources.getString(R.string.force_loading_from_uri, book.linkRepo.url)))
 
-            val loadedBook = loadBookFromRepo(book.linkRepo.id, book.linkRepo.type, book.linkRepo.url, book.syncedTo.uri)
+            val repoRelativePath = BookName.getRepoRelativePath(book)
+
+            val loadedBook = loadBookFromRepo(book.linkRepo.id, book.linkRepo.type, book.linkRepo.url, repoRelativePath)
 
             setBookLastActionAndSyncStatus(loadedBook!!.book.id, BookAction.forNow(
                     BookAction.Type.INFO,
@@ -1719,11 +1717,13 @@ class DataRepository @Inject constructor(
 
     @Throws(IOException::class)
     fun loadBookFromRepo(rook: Rook): BookView? {
-        return loadBookFromRepo(rook.repoId, rook.repoType, rook.repoUri.toString(), rook.uri)
+        val repoRelativePath = BookName.getRepoRelativePath(rook.repoUri, rook.uri)
+
+        return loadBookFromRepo(rook.repoId, rook.repoType, rook.repoUri.toString(), repoRelativePath)
     }
 
     @Throws(IOException::class)
-    fun loadBookFromRepo(repoId: Long, repoType: RepoType, repoUrl: String, uri: Uri): BookView? {
+    fun loadBookFromRepo(repoId: Long, repoType: RepoType, repoUrl: String, repoRelativePath: String): BookView? {
         val book: BookView?
 
         val repo = getRepoInstance(repoId, repoType, repoUrl)
@@ -1731,9 +1731,9 @@ class DataRepository @Inject constructor(
         val tmpFile = getTempBookFile()
         try {
             /* Download from repo. */
-            val vrook = repo.retrieveBook(uri, tmpFile)
+            val vrook = repo.retrieveBook(repoRelativePath, tmpFile)
 
-            val bookName = BookName.fromRook(vrook)
+            val bookName = BookName.fromRepoRelativePath(repoRelativePath)
 
             /* Store from file to Shelf. */
             book = loadBookFromFile(bookName.name, bookName.format, tmpFile, vrook)
