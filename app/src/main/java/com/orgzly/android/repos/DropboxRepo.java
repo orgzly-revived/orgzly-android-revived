@@ -48,8 +48,8 @@ public class DropboxRepo implements SyncRepo {
     }
 
     @Override
-    public VersionedRook retrieveBook(Uri uri, File file) throws IOException {
-        return client.download(repoUri, uri, file);
+    public VersionedRook retrieveBook(String repoRelativePath, File file) throws IOException {
+        return client.download(repoUri, repoRelativePath, file);
     }
 
     @Override
