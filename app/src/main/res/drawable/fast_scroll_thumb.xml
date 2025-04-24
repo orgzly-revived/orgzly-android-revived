@@ -6,8 +6,4 @@
 
     <solid android:color="?colorPrimary" />
 
-    <size android:width="@dimen/scrollbar_width" />
-
-    <corners android:radius="4dp" />
-
 </shape>
