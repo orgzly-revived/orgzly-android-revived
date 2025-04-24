@@ -32,7 +32,7 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Make scrollbar more useful in large notes" />
+            app:text="Fix bug preventing grabbing the scrollbar" />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
