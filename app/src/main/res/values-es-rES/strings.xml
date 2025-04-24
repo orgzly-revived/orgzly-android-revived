@@ -513,4 +513,7 @@
     <string name="logs">Registros</string>
     <string name="share">Compartir</string>
     <string name="refresh_data">Actualizar</string>
+    <string name="enable_repo_subfolders_preferences_title">Soporte para subdirectorios del repositorio</string>
+    <string name="sortnote">Ordenar nota</string>
+    <string name="delete_amount_of_books">Borrar %d libretas</string>
 </resources>
