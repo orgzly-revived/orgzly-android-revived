@@ -45,6 +45,26 @@ import org.junit.Test;
 public class BookTest extends OrgzlyTest {
     private ActivityScenario<MainActivity> scenario;
 
+    private static final String LONG_CONTENT_NOTE_TITLE = "Note with very long content";
+    private static final String LONG_CONTENT_START = "START OF LONG CONTENT...";
+    private static final String LONG_CONTENT_END = "...END OF LONG CONTENT";
+    // 5000 is the default size limit for a single-line Text View.
+    // a single-line TextView. See the source code for Android API 34
+    // https://github.com/AndroidSDKSources/android-sdk-sources-for-api-level-34/blob/master/android/widget/TextView.java#L11941-L11942
+    // In this test, we want to make sure that a longer string are not capped.
+    private static final int LONG_CONTENT_LENGTH = 6000;
+
+    private String buildLongString() {
+        StringBuilder longContentBuilder = new StringBuilder(LONG_CONTENT_LENGTH);
+        longContentBuilder.append(LONG_CONTENT_START);
+        int repeatLength = LONG_CONTENT_LENGTH - LONG_CONTENT_START.length() - LONG_CONTENT_END.length();
+        for (int i = 0; i < repeatLength; i++) {
+            longContentBuilder.append('x'); // Fill with repeating characters
+        }
+        longContentBuilder.append(LONG_CONTENT_END);
+        return longContentBuilder.toString();
+    }
+
     @Before
     public void setUp() throws Exception {
         super.setUp();
@@ -72,7 +92,7 @@ public class BookTest extends OrgzlyTest {
                 ":PROPERTIES:\n" +
                 ":CREATED: [2017-01-01]\n" +
                 ":END:\n" +
-                "** Note #15.\n" +
+                "** Note #15.\n" + buildLongString() + "\n" +
                 "** Note #16.\n" +
                 "** Note #17.\n" +
                 "** Note #18.\n" +
@@ -499,5 +519,11 @@ public class BookTest extends OrgzlyTest {
         onView(withId(R.id.state)).perform(click());
 
         onView(withText("TODO")).check(matches(isChecked()));
+    }
+
+    @Test
+    public void testLongContentDisplayedInNote() {
+        onNoteInBook(15, R.id.item_head_content_view).check(matches(withText(
+                allOf(startsWith(LONG_CONTENT_START), endsWith(LONG_CONTENT_END)))));
     }
 }
