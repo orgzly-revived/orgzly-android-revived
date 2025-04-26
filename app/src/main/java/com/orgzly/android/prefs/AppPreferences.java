@@ -855,6 +855,16 @@ public class AppPreferences {
     }
 
     /*
+     * Folding in search
+     */
+
+    public static boolean isSearchFoldable(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_is_search_foldable),
+                context.getResources().getBoolean(R.bool.pref_default_is_search_foldable));
+    }
+
+    /*
      * Keep screen on menu item
      */
 
