@@ -54,6 +54,17 @@ example:
 
 Make sure you [[https://developer.android.com/training/testing/espresso/setup][turn off animations]] for the device you're testing on.
 
+** Nix
+
+If you are using Nix/NixOS, a flake with a =devShell= exists and can be used via [[https://direnv.net/][direnv]].
+
+# TODO remove this when the issue is fixed and flake is bumped past the fix
+Due to [[https://github.com/NixOS/nixpkgs/issues/402297][this nixpkgs issue]], you must run gradle like this:
+
+#+begin_src shell
+  gradle $GRADLE_OPTS app:assembleDebug
+#+end_src
+
 * Contributing
 
 Please feel free to get involved in the project on GitHub by contributing issues, ideas, or features! 
