@@ -18,7 +18,7 @@
       };
     };
     cmakeVersion = "3.22.1";
-    buildToolsVersion = "34.0.0";
+    buildToolsVersion = "35.0.0";
     cmdLineToolsVersion = "8.0";
     androidComposition = pkgs.androidenv.composeAndroidPackages {
         cmdLineToolsVersion = cmdLineToolsVersion;
