@@ -83,6 +83,13 @@
             android:defaultValue="@bool/pref_default_is_notes_content_displayed_in_list"/>
 
         <SwitchPreference
+            android:key="@string/pref_key_is_notes_content_foldable"
+            android:dependency="@string/pref_key_is_notes_content_displayed_in_list"
+            android:title="@string/fold_content"
+            android:summary="@string/allow_folding_of_content"
+            android:defaultValue="@bool/pref_default_is_notes_content_foldable"/>
+
+        <SwitchPreference
             android:key="@string/pref_key_is_notes_content_displayed_in_search"
             android:dependency="@string/pref_key_is_notes_content_displayed_in_list"
             android:title="@string/display_content_in_search"
@@ -90,11 +97,11 @@
             android:defaultValue="@bool/pref_default_is_notes_content_displayed_in_search"/>
 
         <SwitchPreference
-            android:key="@string/pref_key_is_notes_content_foldable"
-            android:dependency="@string/pref_key_is_notes_content_displayed_in_list"
-            android:title="@string/fold_content"
-            android:summary="@string/allow_folding_of_content"
-            android:defaultValue="@bool/pref_default_is_notes_content_foldable"/>
+            android:key="@string/pref_key_is_search_foldable"
+            android:dependency="@string/pref_key_is_notes_content_displayed_in_search"
+            android:title="@string/fold_search"
+            android:summary="@string/allow_folding_in_search"
+            android:defaultValue="@bool/pref_default_is_search_foldable"/>
 
         <SwitchPreference
             android:key="@string/pref_key_content_line_count_displayed"
