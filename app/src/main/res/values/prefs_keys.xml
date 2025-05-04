@@ -122,8 +122,8 @@
     </string-array>
 
     <!-- Light theme scheme -->
-    <string name="pref_key_light_color_scheme">pref_key_light_color_scheme</string>
-    <string name="pref_default_light_color_scheme">dynamic</string>
+    <string name="pref_key_light_color_scheme" translatable="false">pref_key_light_color_scheme</string>
+    <string name="pref_default_light_color_scheme" translatable="false">dynamic</string>
     <string-array name="light_color_scheme_list">
         <item>@string/color_scheme_dynamic</item>
         <item>@string/color_scheme_light</item>
@@ -134,8 +134,8 @@
     </string-array>
     
     <!-- Dark theme scheme -->
-    <string name="pref_key_dark_color_scheme">pref_key_dark_color_scheme</string>
-    <string name="pref_default_dark_color_scheme">dynamic</string>
+    <string name="pref_key_dark_color_scheme" translatable="false">pref_key_dark_color_scheme</string>
+    <string name="pref_default_dark_color_scheme" translatable="false">dynamic</string>
     <string-array name="dark_color_scheme_list">
         <item>@string/color_scheme_dynamic</item>
         <item>@string/color_scheme_dark</item>
@@ -239,7 +239,7 @@
     <string name="pref_key_ongoing_notification_priority" translatable="false">pref_key_ongoing_notification_priority</string>
 
     <!-- Try to display notification expanded to see the actions -->
-    <string name="pref_default_ongoing_notification_priority">max</string>
+    <string name="pref_default_ongoing_notification_priority" translatable="false">max</string>
 
     <string-array name="notification_priorities">
         <item>@string/notification_maximum_priority</item>
@@ -305,7 +305,7 @@
     <string name="pref_default_snooze_time" translatable="false">5</string>
 
     <string name="pref_key_snooze_type" translatable="false">pref_key_snooze_type</string>
-    <string name="pref_default_snooze_type">button</string>
+    <string name="pref_default_snooze_type" translatable="false">button</string>
     <string-array name="snooze_types">
         <item>Relative to when you tap the snooze button</item>
         <item>Relative to reminder time</item>
@@ -485,10 +485,10 @@
     <string name="pref_key_images_scale_down_to_width_value" translatable="false">pref_key_set_images_fixed_width_value</string>
     <string name="pref_default_images_scale_down_to_width_value" translatable="false">256</string>
 
-    <string name="pref_key_file_absolute_root">pref_key_file_absolute_root</string>
+    <string name="pref_key_file_absolute_root" translatable="false">pref_key_file_absolute_root</string>
     <string name="pref_default_file_absolute_root" translatable="false">/</string>
 
-    <string name="pref_key_file_relative_root">pref_key_file_relative_root</string>
+    <string name="pref_key_file_relative_root" translatable="false">pref_key_file_relative_root</string>
 
     <!-- Separate notes with an empty line -->
     <string name="pref_key_separate_notes_with_new_line" translatable="false">pref_key_separate_notes_with_new_line</string>
@@ -580,14 +580,14 @@
 
     <!-- Git preferences -->
     <string name="pref_key_git_ssh_key_type" translatable="false">pref_key_git_ssh_key_type</string>
-    <string name="pref_key_git_author" traslatable="false">pref_key_git_author</string>
-    <string name="pref_key_git_email" traslatable="false">pref_key_git_email</string>
+    <string name="pref_key_git_author" translatable="false">pref_key_git_author</string>
+    <string name="pref_key_git_email" translatable="false">pref_key_git_email</string>
     <string name="pref_key_git_https_username" translatable="false">pref_key_git_https_username</string>
     <string name="pref_key_git_https_password" translatable="false">pref_key_git_https_password</string>
-    <string name="pref_key_git_repository_filepath" traslatable="false">pref_key_git_repository_filepath</string>
-    <string name="pref_key_git_remote_name" traslatable="false">pref_key_git_remote_name</string>
-    <string name="pref_key_git_branch_name" traslatable="false">pref_key_git_branch_name</string>
-    <string name="pref_key_git_default_repository_directory">pref_key_git_default_repository_directory</string>
+    <string name="pref_key_git_repository_filepath" translatable="false">pref_key_git_repository_filepath</string>
+    <string name="pref_key_git_remote_name" translatable="false">pref_key_git_remote_name</string>
+    <string name="pref_key_git_branch_name" translatable="false">pref_key_git_branch_name</string>
+    <string name="pref_key_git_default_repository_directory" translatable="false">pref_key_git_default_repository_directory</string>
 
     <!-- Developer options -->
 
