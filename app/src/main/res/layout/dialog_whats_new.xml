@@ -44,10 +44,6 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Ignore hidden files in Git repos" />
-
-        <com.orgzly.android.ui.views.WhatsNewChange
-            style="@style/WhatsNewChange"
             app:text="Update dependencies" />
 
         <com.orgzly.android.ui.views.WhatsNewChange
