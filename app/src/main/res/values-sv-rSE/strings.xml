@@ -392,7 +392,7 @@
     <string name="default_notebook_desc">Anteckningsbok som används när du delar till Orgzly eller skapar en ny anteckning från den pågående aviseringen</string>
     <string name="force_utf8">Tvinga UTF-8-kodning</string>
     <string name="force_utf8_summary">Försök inte att upptäcka kodning, använd alltid UTF-8</string>
-    <string name="notebooks_start_folded">Öppna anteckningsböcker ihopvikta</string>
+    <string name="notebooks_start_folded">Öppna anteckningsböcker ihopfällda</string>
     <string name="notebooks_start_folded_summary">Fäll ihop alla anteckningar när anteckningsboken öppnas</string>
     <string name="list_widget_name">Sparad sökning</string>
     <string name="list_widget_select_search">Välj sökning</string>
@@ -454,8 +454,8 @@
     <string name="notification_channel_settings_summary">Ljud, vibration, aviseringsprick</string>
     <string name="overwrite_local_notebook_question">Vill du skriva över den lokala anteckningsboken?</string>
     <string name="overwrite_remote_notebook_question">Vill du skriva över fjärranteckningsboken?</string>
-    <string name="drawers_folded_by_default">Lådor ihopvikta</string>
-    <string name="drawers_folded_by_default_summary">Fäll ihop lådor som standard</string>
+    <string name="drawers_folded_by_default">Fäll ihop lådor</string>
+    <string name="drawers_folded_by_default_summary">Visa lådor ihopfällda som standard</string>
     <string name="log_on_time_shift">Logga till en låda vid tidsförskjutning</string>
     <string name="log_on_time_shift_summary">Logga tid när upprepad anteckning markeras som slutförd</string>
     <string name="set_last_repeat_on_time_shift">Sätt egenskap vid tidsförskjutning</string>
@@ -593,4 +593,6 @@
     <string name="note_does_not_contain_valid_json">Anteckningen innehåller inte giltig JSON.</string>
     <string name="imported_json_is_missing_mandatory_fields">Den importerade JSON-strukturen saknar obligatoriska fält.</string>
     <string name="note_has_no_content">Anteckningen har inget innehåll.</string>
+    <string name="fold_search">Utfällbart innehåll i sökningar</string>
+    <string name="allow_folding_in_search">Tillåt utfällning av innehåll i sökvyer</string>
 </resources>
