@@ -103,7 +103,7 @@ interface SyncRepoTest {
             // Given
             val ignoreFileContent = "*\n"
             writeFileToRepo("...", syncRepo, repoManipulationPoint, "book one.org", "folder")
-            writeFileToRepo(ignoreFileContent, syncRepo, repoManipulationPoint, RepoIgnoreNode.IGNORE_FILE)
+            writeFileToRepo(ignoreFileContent, syncRepo, repoManipulationPoint, RepoIgnoreNode.ignore_file())
             // When
             val books = syncRepo.books
             // Then
@@ -115,7 +115,7 @@ interface SyncRepoTest {
             AppPreferences.subfolderSupport(App.getAppContext(), true)
             val ignoreFileContent = "folder/book one.org\n"
             writeFileToRepo("...", syncRepo, repoManipulationPoint, "book one.org", "folder")
-            writeFileToRepo(ignoreFileContent, syncRepo, repoManipulationPoint, RepoIgnoreNode.IGNORE_FILE)
+            writeFileToRepo(ignoreFileContent, syncRepo, repoManipulationPoint, RepoIgnoreNode.ignore_file())
             // When
             val books = syncRepo.books
             // Then
@@ -129,7 +129,7 @@ interface SyncRepoTest {
             val fileName = "My file.org"
             val ignoreFileContent = "$folderName/**\n!$folderName/$fileName\n"
             writeFileToRepo("...", syncRepo, repoManipulationPoint, fileName, folderName)
-            writeFileToRepo(ignoreFileContent, syncRepo, repoManipulationPoint, RepoIgnoreNode.IGNORE_FILE)
+            writeFileToRepo(ignoreFileContent, syncRepo, repoManipulationPoint, RepoIgnoreNode.ignore_file())
             // When
             val books = syncRepo.books
             // Then

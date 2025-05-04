@@ -526,6 +526,16 @@ public class AppPreferences {
     }
 
     /*
+     * Orgzlyignore file
+     */
+
+    public static String orgzlyignoreFile(Context context) {
+        return getDefaultSharedPreferences(context).getString(
+                context.getResources().getString(R.string.pref_key_orgzlyignore_file),
+                context.getResources().getString(R.string.pref_default_orgzlyignore_file));
+    }
+
+    /*
      * Click action.
      */
 
