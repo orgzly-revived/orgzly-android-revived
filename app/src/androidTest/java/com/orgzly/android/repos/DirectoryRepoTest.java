@@ -98,7 +98,7 @@ public class DirectoryRepoTest extends OrgzlyTest {
         MiscUtils.writeStringToFile("content", new File(dirFile, "file3.org"));
 
         // Add .orgzlyignore file
-        MiscUtils.writeStringToFile("*1.org\nfile3*", new File(dirFile, RepoIgnoreNode.IGNORE_FILE));
+        MiscUtils.writeStringToFile("*1.org\nfile3*", new File(dirFile, RepoIgnoreNode.ignore_file()));
 
         List<VersionedRook> books = repo.getBooks();
 
