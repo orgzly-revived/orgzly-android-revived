@@ -506,7 +506,7 @@
     <string name="pref_summary_repo_update_sync">Sync whenever an update in repositories is detected</string>
 
     <string name="pref_key_display_sync_status" translatable="false">pref_display_sync_status</string>
-    <string name="pref_display_sync_status_title">Display sync status on a note</string>
+    <string name="pref_display_sync_status_title">Display sync status when editing</string>
     <string name="pref_display_sync_status_summary">Status and timestamp of the last sync action of the notebook.</string>
     
     <string name="not_modified">Not modified</string>
