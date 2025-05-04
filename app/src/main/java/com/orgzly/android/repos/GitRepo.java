@@ -269,10 +269,7 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
             public boolean include(TreeWalk walker) {
                 final FileMode mode = walk.getFileMode();
                 final boolean isDirectory = mode == FileMode.TREE;
-                final String name = walk.getNameString();
                 final String repoRelativePath = walk.getPathString();
-                if (name.startsWith("."))
-                    return false;
                 if (ignores.isIgnored(repoRelativePath, isDirectory) == IgnoreNode.MatchResult.IGNORED)
                     return false;
                 if (isDirectory)
