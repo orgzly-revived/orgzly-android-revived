@@ -537,7 +537,7 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
         }
         
         override fun showDuration(choice: Boolean) {
-            pass
+
         }
     }
 
