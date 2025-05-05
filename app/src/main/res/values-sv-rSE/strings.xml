@@ -595,4 +595,6 @@
     <string name="note_has_no_content">Anteckningen har inget innehåll.</string>
     <string name="fold_search">Utfällbart innehåll i sökningar</string>
     <string name="allow_folding_in_search">Tillåt utfällning av innehåll i sökvyer</string>
+    <string name="orgzlyignore_file">Fil med ignoreringsregler</string>
+    <string name="orgzlyignore_file_desc">Sökväg till fil (relativt till lagringsplatsens rot-katalog) med ignoreringsregler för filnamn</string>
 </resources>
