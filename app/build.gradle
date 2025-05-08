@@ -116,6 +116,12 @@ android {
         checkDependencies true
         disable 'MissingTranslation', 'MissingQuantity', 'ImpliedQuantity', 'InvalidPackage'
     }
+
+    sourceSets {
+        androidTest {
+            assets.srcDirs += files("$projectDir/schemas")
+        }
+    }
 }
 
 dependencies {
@@ -160,6 +166,7 @@ dependencies {
     testImplementation "io.github.atetzner:webdav-embedded-server:$versions.webdav_embedded_server"
 
     // Android instrumented tests
+    androidTestImplementation "androidx.room:room-testing:$versions.android_room"
     androidTestImplementation(project(":shared-test"))
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.android_test_espresso"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$versions.android_test_espresso"
