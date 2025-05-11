@@ -28,15 +28,27 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Bug fix: Long notes (>5000 characters) are no longer cut off" />
+            app:text="Bug fix: Long notes (>5000 characters) are no longer cut off." />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Note contents can now be expanded in search views (disabled by default)" />
+            app:text="Note contents can now be expanded in search views (disabled by default)." />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Add FAB for jumping to top of note, shown when scrolling" />
+            app:text="Add FAB for jumping to top of note, shown when scrolling." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Allow changing the .orgzlyignore file name." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Translation updates." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Dependency upgrades." />
 
         <TextView
             style="@style/WhatsNewVersion"
@@ -46,27 +58,27 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Add FAB for jumping to bottom of note, shown when scrolling" />
+            app:text="Add FAB for jumping to bottom of note, shown when scrolling." />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Fix bug preventing grabbing the scrollbar" />
+            app:text="Fix bug preventing grabbing the scrollbar." />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Ensure agenda items are sorted by minute" />
+            app:text="Ensure agenda items are sorted by minute." />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Show meaningful heading when viewing a saved search" />
+            app:text="Show meaningful heading when viewing a saved search." />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Update dependencies" />
+            app:text="Update dependencies." />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Update translations" />
+            app:text="Update translations." />
 
         <TextView
             style="@style/WhatsNewVersion"
