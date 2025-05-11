@@ -1,0 +1,6 @@
+• Add FAB for jumping to bottom of note, shown when scrolling.
+• Fix bug preventing grabbing the scrollbar.
+• Ensure agenda items are sorted by minute.
+• Show meaningful heading when viewing a saved search.
+• Update dependencies.
+• Update translations.

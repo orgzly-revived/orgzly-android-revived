@@ -22,6 +22,36 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.11.0"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Add FAB for jumping to bottom of note, shown when scrolling" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix bug preventing grabbing the scrollbar" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Ensure agenda items are sorted by minute" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Show meaningful heading when viewing a saved search" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Update dependencies" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Update translations" />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.10.0"
             tools:ignore="HardcodedText"
             android:autoLink="web" />
