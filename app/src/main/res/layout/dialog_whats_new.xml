@@ -22,6 +22,24 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.12.0"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Bug fix: Long notes (>5000 characters) are no longer cut off" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Note contents can now be expanded in search views (disabled by default)" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Add FAB for jumping to top of note, shown when scrolling" />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.11.0"
             tools:ignore="HardcodedText"
             android:autoLink="web" />
