@@ -505,6 +505,10 @@
     <string name="pref_title_repo_update_sync">Repositories modified (not implemented yet)</string>
     <string name="pref_summary_repo_update_sync">Sync whenever an update in repositories is detected</string>
 
+    <string name="pref_key_display_sync_status" translatable="false">pref_display_sync_status</string>
+    <string name="pref_display_sync_status_title">Display sync status when editing</string>
+    <string name="pref_display_sync_status_summary">Status and timestamp of the last sync action of the notebook.</string>
+    
     <string name="not_modified">Not modified</string>
 
     <string name="notes_count_zero">Contains no notes</string>
@@ -738,4 +742,12 @@
 
     <string name="orgzlyignore_file">Ignore pattern filename</string>
     <string name="orgzlyignore_file_desc">The path of the file containing the ignore patterns relative to the repository root.</string>
+    <string name="copied_link">Copied link</string>
+    
+    <!-- Sync status for NoteViewModel -->
+    <string name="sync_status_synced">Synced: %1$s</string>
+    <string name="sync_status_error">Sync error: %1$s</string>
+    <string name="sync_status_conflict">Sync conflict</string>
+    <string name="sync_status_never">Never synced</string>
+    <string name="unknown_time">unknown time</string>
 </resources>
