@@ -240,7 +240,7 @@
     <string name="display_both_title_and_content">Hem başlık hem de içeriği görüntüle</string>
     <string name="display_planning_times">Planlama sürelerini görüntüle</string>
     <string name="display_planning_times_summary">Planlamaları, sona erenleri ve zamanı dolanları görüntüle</string>
-    <string name="density">Sıkışık</string>
+    <string name="density">Yoğunluk</string>
     <string name="details">Ayrıntılar</string>
     <string name="notebook_details">Defter ayrıntıları</string>
     <string name="displayed_details_about_notebook">Defterle alakalı ayrıntıları görüntüle</string>
@@ -308,9 +308,9 @@
     <string name="warning_period_description">Zamanı yaklaşan yada geçen olayları uyar</string>
     <string name="displayed_book_details_local_mtime">Yerel değişiklik zamanı</string>
     <string name="displayed_book_details_link_url">Bağlantı adresi</string>
-    <string name="displayed_book_details_sync_url">URL Senkronizasyonu</string>
-    <string name="displayed_book_details_sync_mtime">Değiştirilme zamanını senkronize et</string>
-    <string name="displayed_book_details_sync_revision">Revizyonu senkronize et</string>
+    <string name="displayed_book_details_sync_url">Senkronizasyon URL\'si</string>
+    <string name="displayed_book_details_sync_mtime">Senkronizasyon değişiklik zamanı</string>
+    <string name="displayed_book_details_sync_revision">Senkronizasyon revizesi</string>
     <string name="displayed_book_details_selected_encoding">Seçilen kodlama</string>
     <string name="displayed_book_details_detected_encoding">Algılanan kodlama</string>
     <string name="displayed_book_details_used_encoding">Kullanılanan kodlama</string>
@@ -328,7 +328,7 @@
     <string name="book_name_in_search_under_note">Not altına</string>
     <string name="list_density_comfortable">Konforlu</string>
     <string name="list_density_cozy">Rahat</string>
-    <string name="list_density_compact">Kompakt</string>
+    <string name="list_density_compact">Sıkı</string>
     <string name="notebooks_sort_order_name">İsim</string>
     <string name="notebooks_sort_order_modification_time">Değiştirilme zamanı</string>
     <plurals name="delete_note_or_notes_with_count_question">
@@ -389,7 +389,7 @@
     <string name="force_utf8">UTF-8 kodlamasına zorla</string>
     <string name="force_utf8_summary">Kodlamayı tespit etmeye çalışma, her zaman UTF-8 kullan</string>
     <string name="notebooks_start_folded">Katlı olarak başla</string>
-    <string name="notebooks_start_folded_summary">Defter yüklendiğinde tüm notlar katlansın</string>
+    <string name="notebooks_start_folded_summary">Defter yüklendiğinde tüm notlar katlaı olsun</string>
     <string name="list_widget_name">Kaydedilmiş arama</string>
     <string name="list_widget_select_search">Arama seç</string>
     <string name="auto_sync">Otomatik senkronizasyon</string>
@@ -459,7 +459,7 @@
     <string name="update_frequency">Güncelleme sıklığı</string>
     <string name="git">Git</string>
     <string name="metadata">Meta veri</string>
-    <string name="selected_metadata_summary">Notta her zaman görüntülenebilir meta veriler</string>
+    <string name="selected_metadata_summary">Notta her zaman görüntülenmesini seçebileceğin meta veriler</string>
     <string name="show_all">Hepsini göster</string>
     <string name="always_show_set">Her zaman seti göster</string>
     <string name="show_selected">Seçileni göster</string>
@@ -572,4 +572,7 @@
     <string name="sync_status_saved">%s kaydedildi</string>
     <string name="moving_between_subdirectories_requires_api_24">Not defterini farklı bir alt dizinde yeniden adlandırmak için Android 7 veya üzeri gerekir</string>
     <string name="subfolder_support_disabled">Alt klasör desteği devre dışı</string>
+    <string name="pref_title_reminders_alarm">Alarm sesi çal</string>
+    <string name="pref_summary_reminders_alarm">Alarm etiketi bulunan notlar için (aşağıya bak)</string>
+    <string name="pref_title_reminders_alarm_tags">Alarm etiketleri</string>
 </resources>
