@@ -1,7 +1,6 @@
 package com.orgzly.android.reminders
 
 import android.content.Context
-import com.orgzly.R
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.db.dao.ReminderTimeDao
 import com.orgzly.android.db.dao.ReminderTimeDao.NoteTime
@@ -12,8 +11,6 @@ import com.orgzly.org.datetime.OrgInterval
 import org.joda.time.DateTime
 import org.joda.time.ReadableInstant
 import java.util.*
-import kotlin.time.Duration
-
 
 object NoteReminders {
     // private val TAG: String = NoteReminders::class.java.name
@@ -30,7 +27,7 @@ object NoteReminders {
         intervalType: Int): List<NoteReminder> {
 
         val result: MutableList<NoteReminder> = ArrayList()
-        val preNotifyParser = PreNotificationParser(context)
+        val preNotifyParser = PreNotificationParser()
 
         for (noteTime in dataRepository.times()) {
             if (isRelevantNoteTime(context, noteTime)) {

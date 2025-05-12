@@ -35,13 +35,4 @@
         android:defaultValue="@string/pref_default_pre_notify_property"
         app:useSimpleSummaryProvider="true"/>
 
-    <ListPreference
-        android:key="@string/pref_key_pre_notify_format"
-        android:title="@string/pre_notify_format"
-        android:dialogTitle="@string/pre_notify_format_desc"
-        android:entries="@array/pre_notify_format"
-        android:entryValues="@array/pre_notify_format_values"
-        android:defaultValue="@string/pref_default_pre_notify_format"
-        app:useSimpleSummaryProvider="true"/>
-
 </androidx.preference.PreferenceScreen>
