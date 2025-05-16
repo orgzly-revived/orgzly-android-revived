@@ -39,11 +39,11 @@ jobs:
       - name: Gradle test Fdroid
         run: ./gradlew testFdroidDebugUnitTest
 
-      - name: Add Dropbox API credentials (for DropboxRepo tests)
+      - name: Add TEST Dropbox API credentials (for DropboxRepo tests)
         shell: bash
         run: |
-          echo "dropbox.refresh_token = \"${{ secrets.DROPBOX_REFRESH_TOKEN }}\"" >> app.properties
-          echo "dropbox.app_key = \"${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
+          echo "dropbox.refresh_token = \"${{ secrets.DROPBOX_TEST_REFRESH_TOKEN }}\"" >> app.properties
+          echo "dropbox.app_key = \"${{ secrets.DROPBOX_TEST_APP_KEY }}\"" >> app.properties
 
       - name: Gradle test Premium
         run: ./gradlew testPremiumDebugUnitTest
