@@ -36,7 +36,7 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Note contents can now be expanded in search views (disabled by default)." />
+            app:text="Allow folding note contents in search view." />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
