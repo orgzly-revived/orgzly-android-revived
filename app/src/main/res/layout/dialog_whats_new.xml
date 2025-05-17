@@ -32,6 +32,10 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
+            app:text="Bug fix: Fix broken pull-down-to-sync gesture in the notes view." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
             app:text="Note contents can now be expanded in search views (disabled by default)." />
 
         <com.orgzly.android.ui.views.WhatsNewChange
