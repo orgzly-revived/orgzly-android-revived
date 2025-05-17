@@ -182,15 +182,28 @@ object PreRoomMigration {
     private fun noteFromCursor(cursor: Cursor): NotePosition {
         val position = NotePosition()
 
-        position.id = cursor.getLong(cursor.getColumnIndex("_id"))
-        position.bookId = cursor.getLong(cursor.getColumnIndex("book_id"))
-        position.level = cursor.getInt(cursor.getColumnIndex("level"))
-        position.lft = cursor.getLong(cursor.getColumnIndex("is_visible"))
-        position.rgt = cursor.getLong(cursor.getColumnIndex("parent_position"))
-        position.descendantsCount = cursor.getInt(cursor.getColumnIndex("has_children"))
-        position.foldedUnderId = cursor.getLong(cursor.getColumnIndex("is_under_collapsed"))
-        position.parentId = cursor.getLong(cursor.getColumnIndex("parent_id"))
-        position.isFolded = cursor.getInt(cursor.getColumnIndex("is_collapsed")) != 0
+        // Get column indices safely
+        val idColumnIndex = cursor.getColumnIndex("_id")
+        val bookIdColumnIndex = cursor.getColumnIndex("book_id")
+        val levelColumnIndex = cursor.getColumnIndex("level")
+        val lftColumnIndex = cursor.getColumnIndex("is_visible")
+        val rgtColumnIndex = cursor.getColumnIndex("parent_position")
+        val descendantsColumnIndex = cursor.getColumnIndex("has_children")
+        val foldedUnderIdColumnIndex = cursor.getColumnIndex("is_under_collapsed")
+        val parentIdColumnIndex = cursor.getColumnIndex("parent_id")
+        val isFoldedColumnIndex = cursor.getColumnIndex("is_collapsed")
+
+        // Only access columns that exist
+        if (idColumnIndex >= 0) position.id = cursor.getLong(idColumnIndex)
+        if (bookIdColumnIndex >= 0) position.bookId = cursor.getLong(bookIdColumnIndex)
+        if (levelColumnIndex >= 0) position.level = cursor.getInt(levelColumnIndex)
+        if (lftColumnIndex >= 0) position.lft = cursor.getLong(lftColumnIndex)
+        if (rgtColumnIndex >= 0) position.rgt = cursor.getLong(rgtColumnIndex)
+        if (descendantsColumnIndex >= 0) position.descendantsCount = cursor.getInt(descendantsColumnIndex)
+        if (foldedUnderIdColumnIndex >= 0) position.foldedUnderId = cursor.getLong(foldedUnderIdColumnIndex)
+        if (parentIdColumnIndex >= 0) position.parentId = cursor.getLong(parentIdColumnIndex)
+        if (isFoldedColumnIndex >= 0) position.isFolded = cursor.getInt(isFoldedColumnIndex) != 0
+
 
         return position
     }
