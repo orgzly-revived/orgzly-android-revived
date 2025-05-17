@@ -184,14 +184,6 @@ class BookFragment :
         }
 
         binding.swipeContainer.setup()
-    
-        // Fix the conflict between scroll and pull-to-refresh
-        // The problem is that RecylerView is not a direct child of SwipeRefreshLayout. 
-        // See https://stackoverflow.com/questions/55616525/i-cant-scroll-up-because-of-swipe-refresh-layout
-        binding.swipeContainer.setOnChildScrollUpCallback { parent, child ->
-            // Only allow pull-to-refresh if the recyclerView can't no longer scroll. 
-            binding.fragmentBookRecyclerView.canScrollVertically(-1)
-        }
 
         viewModel.flipperDisplayedChild.observe(viewLifecycleOwner, Observer { child ->
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Observed flipper displayed child: $child")
