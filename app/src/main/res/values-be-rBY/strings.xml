@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="sync">Сынхранізаваць</string>
+    <string name="sync">Сынхранізацыя</string>
     <string name="settings">Налады</string>
     <string name="sortnote">Сартаваць нататку</string>
     <string name="ok">Згода</string>
@@ -237,7 +237,7 @@
     <string name="reminder_for_deadline">Тэрмін: %s</string>
     <string name="reminder_for_event">Падзея: %s</string>
     <string name="scheduled_new_notes_for_today">Расклад новых заметак на сёньня</string>
-    <string name="fold_content">Згарнуць змест</string>
+    <string name="fold_content">Згарнуць зьмест</string>
     <string name="allow_folding_of_content">Дазволіць згортваньне зьместу</string>
     <string name="display_content_in_search">Адлюстроўваць зьмест у пошуку</string>
     <string name="display_content_in_search_results">Адлюстроўваць зьмест у рэзультатах пошуку</string>
@@ -258,7 +258,7 @@
     <string name="light_scheme">Сьветлая тэма</string>
     <string name="dark_scheme">Цёмная тэма</string>
     <string name="monospaced_font">Монашырынны шрыфт</string>
-    <string name="monospaced_font_summary">Выкарыстоўваць монашырынны шрыфт у зместу нататкі ды ў прадмове да нататніка</string>
+    <string name="monospaced_font_summary">Выкарыстоўваць монашырынны шрыфт у зьместу нататкі ды ў прадмове да нататніка</string>
     <string name="reversed_note_click_action">Замена дзеяньняў кароткага ды працяглага націсканьня на нататку</string>
     <string name="reversed_note_click_action_summary">Кароткае націсканьне на выбар нататкі, працяглае -- на адкрыцьцё</string>
     <string name="look_and_feel">Выгляд</string>
@@ -282,8 +282,8 @@
     <string name="org_file_format">Фармат файла Org</string>
     <string name="org_file_format_summary">Фармат экспартаваных нататнікаў</string>
     <string name="separate_notes_with_new_line">Аддзяляць нататкі пустым радком</string>
-    <string name="separate_header_and_content_with_new_line">Аддзяляць загаловак і змест</string>
-    <string name="separate_header_and_content_with_new_line_summary">Аддзяляць загаловак ад зместу пустым радком</string>
+    <string name="separate_header_and_content_with_new_line">Аддзяляць загаловак і зьмест</string>
+    <string name="separate_header_and_content_with_new_line_summary">Аддзяляць загаловак ад зьместу пустым радком</string>
     <string name="tags_indent">Водступы метак</string>
     <string name="tags_indent_summary">Парамэтры кіраваньня водступам метак</string>
     <string name="tags_column">Слупок метак (org-tags-column)</string>
