@@ -8,6 +8,7 @@ class QueryInterval(val u: QueryInterval.Unit, val v: Int = 0) {
     enum class Unit(val text: String) {
         NONE("none"),
         NOW("now"),
+        MINUTE("M"),
         HOUR("h"),
         DAY("d"),
         WEEK("w"),
@@ -45,7 +46,7 @@ class QueryInterval(val u: QueryInterval.Unit, val v: Int = 0) {
     }
 
     companion object {
-        private val REGEX = Regex("^([-+]?\\d+)([hdwmy])$")
+        private val REGEX = Regex("^([-+]?\\d+)([Mhdwmy])$")
 
         fun parse(str: String): QueryInterval? = when (str.lowercase()) {
             "none", "no" -> {
