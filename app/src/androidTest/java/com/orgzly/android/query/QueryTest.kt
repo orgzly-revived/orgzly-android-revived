@@ -176,6 +176,21 @@ class QueryTest(private val param: Parameter) : OrgzlyTest() {
                             expectedSelectionArgs = listOf("TODO", "book(1) name", "book2")
                     ),
                     Parameter(
+                            queryString = "s.le.20M",
+                            expectedQueryString = "s.20M",
+                            expectedSqlSelection = "((scheduled_is_active = 1 AND scheduled_time_timestamp != 0 AND scheduled_time_timestamp < " + TimeUtils.timeFromNow(Calendar.MINUTE, 20+1) + "))"
+                    ),
+                    Parameter(
+                            queryString = "s.le.-20M",
+                            expectedQueryString = "s.-20M",
+                            expectedSqlSelection = "((scheduled_is_active = 1 AND scheduled_time_timestamp != 0 AND scheduled_time_timestamp < " + TimeUtils.timeFromNow(Calendar.MINUTE, -20+1) + "))"
+                    ),
+                    Parameter(
+                            queryString = "s.ge.-20M",
+                            expectedQueryString = "s.ge.-20M",
+                            expectedSqlSelection = "((scheduled_is_active = 1 AND scheduled_time_timestamp != 0 AND " + TimeUtils.timeFromNow(Calendar.MINUTE, -20) + " <= scheduled_time_timestamp))"
+                    ),
+                    Parameter(
                             queryString = "s.le.2w",
                             expectedQueryString = "s.2w",
                             expectedSqlSelection = "((scheduled_is_active = 1 AND scheduled_time_timestamp != 0 AND scheduled_time_timestamp < " + TimeUtils.timeFromNow(Calendar.DAY_OF_MONTH, 14+1) + "))"
