@@ -561,6 +561,15 @@ public class AppPreferences {
     }
 
     /*
+     * Schedule time for new note.
+     */
+    public static boolean isNewNoteTimeScheduled(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_is_new_note_time_scheduled),
+                context.getResources().getBoolean(R.bool.pref_default_is_new_note_time_scheduled));
+    }
+
+    /*
      * Prepend new note.
      */
 

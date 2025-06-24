@@ -239,6 +239,13 @@
             android:defaultValue="@bool/pref_default_is_new_note_scheduled"/>
 
         <SwitchPreference
+            android:key="@string/pref_key_is_new_note_time_scheduled"
+            android:title="@string/schedule_with_time"
+            android:summary="@string/schedule_with_current_time"
+            android:defaultValue="@bool/pref_default_is_new_note_time_scheduled"
+            android:dependency="@string/pref_key_is_new_note_scheduled"/>
+
+        <SwitchPreference
             android:key="@string/pref_key_is_new_note_prepend"
             android:title="@string/prepend"
             android:summary="@string/insert_new_note_at_beginning"
