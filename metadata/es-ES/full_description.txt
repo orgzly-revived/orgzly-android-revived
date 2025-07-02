@@ -1,0 +1,19 @@
+Aplicación para tomar y organizar notas y tareas en formato Org-mode
+
+Mantén tus libretas de notas en texto plano y sincronízalas con un directorio en tu celular, tarjeta SD o a través de WebDAV.
+
+Las libretas son guardadas en el formato de Org mode.
+"Org mode is para tomar notas, manejar listas de tareas, planear proyectos y crear documentos con un sistema efectivo y rápido de texto plano."
+Visita http://orgmode.org para más información.
+
+<b>Características:</b>
+* Crea, edita y elimina notas y tareas
+* Colapsa y expande subnotas
+* Planea tareas y ponles fechas límite
+* Organiza tus notas con diferentes prioridades y etiquetas
+* Desliza sobre las notas para abrir menús rápidamente
+* Busca y filtra notas por diferentes propiedades
+* Crea y guarda búsquedas para acceso rápdio
+* Sincroniza libretas con uno o más directorios
+
+Orgzly Revived es un fork de la comunidad de la aplicación original de Orgzly.
