@@ -33,7 +33,7 @@ Vous pouvez configurer tous les états que vous souhaitez: TODO, NEXT, DONE, etc
 *** DONE C'est une note avec un type d'état /fait/
 CLOSED: [2018-01-24 Mer 17:00]
 
-** Parent notes can track state of child notes [1/3] [33%]
+** Les notes parents peuvent suivre l'état des notes enfants [1/3] [33%]
 
 *** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
