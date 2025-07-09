@@ -65,7 +65,6 @@
             android:name=".android.ui.share.ShareActivity"
             android:exported="true"
             android:windowSoftInputMode="stateUnchanged"
-            android:excludeFromRecents="true"
             android:taskAffinity="">
 
             <intent-filter>
