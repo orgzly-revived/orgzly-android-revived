@@ -147,6 +147,13 @@ class SyncWorker(val context: Context, val params: WorkerParameters) :
             if (repos.isEmpty() || !RepoUtils.isAutoSyncSupported(repos)) {
                 return SyncState.getInstance(SyncState.Type.AUTO_SYNC_NOT_STARTED)
             }
+        } else {
+            // This sync was manually triggered. If scheduled auto-sync is enabled,
+            // cancel and re-schedule the next occasion.
+            if (AppPreferences.scheduledSyncEnabled(context)) {
+                AutoSyncScheduler.cancelAll(context)
+                AutoSyncScheduler.schedule(context)
+            }
         }
 
         /* There are no repositories configured. */

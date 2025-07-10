@@ -224,6 +224,8 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".android.sync.ScheduledAutoSyncBroadcastReceiver"/>
+
         <receiver android:name=".android.NotificationBroadcastReceiver"/>
 
         <receiver android:name=".android.NewNoteBroadcastReceiver"/>
