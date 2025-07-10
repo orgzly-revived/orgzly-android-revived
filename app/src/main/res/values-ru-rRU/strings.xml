@@ -299,7 +299,7 @@
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
     <string name="year">Год</string>
-    <string name="repeater_dialog_title">Повтор</string>
+    <string name="repeater_dialog_title">Повторение</string>
     <string name="repeater_description">После того, как задача будет помечена как выполненная, повторитель будет сдвигать время</string>
     <string name="repeater_description_cumulate">Добавить период для времени</string>
     <!-- + -->
@@ -420,7 +420,7 @@
     <string name="pref_summary_on_suspend_sync">Синхронизация всякий раз, когда приложение переходит в фон</string>
     <string name="pref_title_repo_update_sync">Хранилища изменены (ещё не реализовано)</string>
     <string name="pref_summary_repo_update_sync">Синхронизация при обнаружении обновления в хранилищах</string>
-    <string name="not_modified">Без изменений</string>
+    <string name="not_modified">Не изменено</string>
     <string name="notes_count_zero">Не содержит заметок</string>
     <plurals name="notes_count_nonzero">
         <item quantity="one">Содержит <b>%d</b> заметку</item>
@@ -537,7 +537,7 @@
     <string name="timestamp_dialog_day">День</string>
     <string name="timestamp_dialog_time">Время</string>
     <string name="timestamp_dialog_end_time">Время окончания</string>
-    <string name="timestamp_dialog_repeater">Повтор</string>
+    <string name="timestamp_dialog_repeater">Повторение</string>
     <string name="timestamp_dialog_delay">Задержка</string>
     <string name="timestamp_dialog_warning_period">Период предупреждения</string>
     <string name="overdue">Просрочено</string>
@@ -616,4 +616,8 @@
     <string name="note_has_no_content">Заметка не имеет содержания.</string>
     <string name="import_settings_summary">Импортировать настройки и схоранённые поиски как JSON из выбранной вами заметки</string>
     <string name="import_settings">Импорт настроек приложения</string>
+    <string name="fold_search">Сворачивать в поиске</string>
+    <string name="allow_folding_in_search">Разрешить сворачивание при поиске</string>
+    <string name="orgzlyignore_file_desc">Путь к файлу, содержащему шаблоны игнорирования относительно корня репозитория.</string>
+    <string name="orgzlyignore_file">Файл шаблонов игнорирования</string>
 </resources>
