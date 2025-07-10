@@ -15,6 +15,7 @@ import com.orgzly.android.SharingShortcutsManager
 import com.orgzly.android.git.SshKey
 import com.orgzly.android.prefs.*
 import com.orgzly.android.reminders.RemindersScheduler
+import com.orgzly.android.sync.AutoSyncScheduler
 import com.orgzly.android.ui.CommonActivity
 import com.orgzly.android.ui.NoteStates
 import com.orgzly.android.ui.dialogs.ShowSshKeyDialogFragment
@@ -367,6 +368,17 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                         AppPermissions.isGrantedOrRequest(
                             activity, AppPermissions.Usage.POST_NOTIFICATIONS)
                     }
+                }
+            }
+
+            // Scheduled sync
+            getString(R.string.pref_key_auto_sync_at_interval_enabled),
+            getString(R.string.pref_key_auto_sync_interval_in_mins) -> {
+                if (AppPreferences.scheduledSyncEnabled(context)) {
+                    AutoSyncScheduler.cancelAll(requireContext())
+                    AutoSyncScheduler.schedule(requireContext())
+                } else {
+                    AutoSyncScheduler.cancelAll(requireContext())
                 }
             }
 

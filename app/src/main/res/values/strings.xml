@@ -743,4 +743,8 @@
     <string name="in_note_heading">In note heading</string>
     <string name="in_note_content">In note content</string>
     <string name="book_names_cannot_contain">Book names cannot contain \'../\'</string>
+
+    <string name="pref_key_auto_sync_interval_title">Auto-sync interval in minutes</string>
+    <string name="pref_key_auto_sync_at_interval_title">At (approximate) fixed interval</string>
+    <string name="pref_key_auto_sync_at_interval_summary">Note: Manual syncs and other auto-syncs will reset the counter</string>
 </resources>

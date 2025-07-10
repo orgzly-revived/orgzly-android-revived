@@ -297,6 +297,18 @@ public class AppPreferences {
                 context.getResources().getBoolean(R.bool.pref_default_ongoing_notification));
     }
 
+    public static boolean scheduledSyncEnabled(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_auto_sync_at_interval_enabled),
+                context.getResources().getBoolean(R.bool.pref_default_auto_sync_at_interval_enabled));
+    }
+
+    public static String scheduledSyncIntervalInMins(Context context) {
+        return getDefaultSharedPreferences(context).getString(
+                context.getResources().getString(R.string.pref_key_auto_sync_interval_in_mins),
+                context.getResources().getString(R.string.pref_default_auto_sync_interval_in_mins));
+    }
+
     public static String ongoingNotificationPriority(Context context) {
         return getDefaultSharedPreferences(context).getString(
                 context.getResources().getString(R.string.pref_key_ongoing_notification_priority),
