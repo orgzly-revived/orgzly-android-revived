@@ -53,7 +53,7 @@ jobs:
     strategy:
       matrix:
         # TODO: Run on lowest and highest supported API
-        api-level: [29, 34]
+        api-level: [29, 35]
         flavor: [Fdroid, Premium]
     steps:
       - name: checkout
