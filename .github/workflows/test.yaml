@@ -108,7 +108,7 @@ jobs:
       - name: Add Dropbox API TEST credentials
         shell: bash
         run: |
-          echo "dropbox.refresh_token = \"${{ DROPBOX_TEST_REFRESH_TOKEN }}\"" >> app.properties
+          echo "dropbox.refresh_token = \"${{ secrets.DROPBOX_TEST_REFRESH_TOKEN }}\"" >> app.properties
           echo "dropbox.app_key = \"${{ secrets.DROPBOX_TEST_APP_KEY }}\"" >> app.properties
 
       - name: Run instrumented tests
