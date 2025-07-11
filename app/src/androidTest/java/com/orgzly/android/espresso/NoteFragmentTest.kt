@@ -498,7 +498,7 @@ class NoteFragmentTest : OrgzlyTest() {
         onView(withId(R.id.content)).perform(click())
         onView(withId(R.id.content_edit)).perform(typeTextIntoFocusedView("a\nb\nc"))
         onView(withId(R.id.done)).perform(click()) // Note done
-        SystemClock.sleep(500)
+        SystemClock.sleep(1000)
         onNoteInBook(1, R.id.item_head_fold_button).perform(click())
         onNoteInBook(1, R.id.item_head_title_view).check(matches(withText(endsWith("3"))))
     }
