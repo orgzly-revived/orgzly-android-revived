@@ -50,6 +50,6 @@ android {
 dependencies {
     implementation project(path: ':app')
     implementation "junit:junit:$versions.junit"
-    implementation 'androidx.documentfile:documentfile:1.0.1'
+    implementation 'androidx.documentfile:documentfile:1.1.0'
     implementation "org.eclipse.jgit:org.eclipse.jgit:$versions.jgit"
 }
