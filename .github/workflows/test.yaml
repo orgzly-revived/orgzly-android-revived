@@ -39,7 +39,7 @@ jobs:
       - name: Gradle test Fdroid
         run: ./gradlew testFdroidDebugUnitTest
 
-      - name: Add TEST Dropbox API credentials (for DropboxRepo tests)
+      - name: Add Dropbox API TEST credentials
         shell: bash
         run: |
           echo "dropbox.refresh_token = \"${{ secrets.DROPBOX_TEST_REFRESH_TOKEN }}\"" >> app.properties
@@ -105,11 +105,11 @@ jobs:
             ~/.android/adb*
           key: avd-${{ matrix.api-level }}
 
-      - name: Add Dropbox API credentials
+      - name: Add Dropbox API TEST credentials
         shell: bash
         run: |
-          echo "dropbox.refresh_token = \"${{ secrets.DROPBOX_REFRESH_TOKEN }}\"" >> app.properties
-          echo "dropbox.app_key = \"${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
+          echo "dropbox.refresh_token = \"${{ DROPBOX_TEST_REFRESH_TOKEN }}\"" >> app.properties
+          echo "dropbox.app_key = \"${{ secrets.DROPBOX_TEST_APP_KEY }}\"" >> app.properties
 
       - name: Run instrumented tests
         uses: reactivecircus/android-emulator-runner@v2
