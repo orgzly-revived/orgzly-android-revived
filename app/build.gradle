@@ -194,7 +194,7 @@ dependencies {
         exclude group: 'xpp3', module: 'xpp3'
     }
 
-    implementation('com.squareup.okhttp3:okhttp:4.12.0') {
+    implementation('com.squareup.okhttp3:okhttp:5.1.0') {
         because 'https://github.com/orgzly/orgzly-android/issues/880'
     }
 
