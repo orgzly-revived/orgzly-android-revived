@@ -47,6 +47,12 @@ data class Book constructor(
         @Embedded(prefix = "last_action_")
         val lastAction: BookAction? = null,
 
+        @ColumnInfo(name = "last_sync_action_result")
+        var lastSyncActionResult: SyncResult? = null,
+
+        @ColumnInfo(name = "last_sync_action_timestamp")
+        var lastSyncActionTimestamp: Long? = null,
+
         @ColumnInfo(name = "is_modified")
         val isModified: Boolean = false
 ) {

@@ -25,6 +25,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.Lifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orgzly.BuildConfig
 import com.orgzly.R
@@ -428,7 +432,6 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
                 }
                 .setNegativeButton(R.string.cancel) { _, _ -> }
                 .show()
-
         })
 
         viewModel.bookChangeRequestEvent.observeSingle(viewLifecycleOwner, Observer { books ->
@@ -444,6 +447,16 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         viewModel.snackBarMessage.observeSingle(viewLifecycleOwner, Observer { resId ->
             activity?.showSnackbar(resId)
         })
+
+        // Add the new Flow collector:
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.relativeSyncStatusText.collect { syncStatus ->
+                    // Update UI on the main thread (safe here)
+                    binding.topToolbar.subtitle = syncStatus
+                }
+            }
+        }
     }
 
     private fun updateViewsFromPayload() {

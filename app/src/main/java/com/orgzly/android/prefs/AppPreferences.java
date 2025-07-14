@@ -1069,6 +1069,14 @@ public class AppPreferences {
         return getStateSharedPreferences(context).getLong(key, 0L);
     }
 
+    public static boolean displaySyncStatusOnNote(Context context) {
+        String key = context.getResources().getString(R.string.pref_key_display_sync_status);
+        return getDefaultSharedPreferences(context).getBoolean(
+                key,
+                false
+        );
+    }
+
     /*
      * ReminderWorker
      */

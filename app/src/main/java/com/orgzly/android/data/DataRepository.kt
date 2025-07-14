@@ -90,8 +90,10 @@ class DataRepository @Inject constructor(
             val loadedBook = loadBookFromRepo(book.linkRepo.id, book.linkRepo.type, book.linkRepo.url, repoRelativePath)
 
             setBookLastActionAndSyncStatus(loadedBook!!.book.id, BookAction.forNow(
-                    BookAction.Type.INFO,
-                    resources.getString(R.string.force_loaded_from_uri, loadedBook.syncedTo?.uri)))
+                BookAction.Type.INFO,
+                resources.getString(R.string.force_loaded_from_uri, loadedBook.syncedTo?.uri)))
+            // Update sync action result on success
+            updateLastSyncActionResult(loadedBook.book.id, SyncResult.SUCCESS, System.currentTimeMillis())
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -99,6 +101,8 @@ class DataRepository @Inject constructor(
             val msg = resources.getString(R.string.force_loading_failed, e.localizedMessage)
 
             setBookLastActionAndSyncStatus(bookId, BookAction.forNow(BookAction.Type.ERROR, msg))
+            // Update sync action result on error
+            updateLastSyncActionResult(bookId, SyncResult.ERROR, System.currentTimeMillis())
 
             throw IOException(msg)
         }
@@ -123,8 +127,10 @@ class DataRepository @Inject constructor(
             val savedBook = getBookView(bookId)
 
             setBookLastActionAndSyncStatus(bookId, BookAction.forNow(
-                    BookAction.Type.INFO,
-                    resources.getString(R.string.force_saved_to_uri, savedBook?.syncedTo?.uri)))
+                BookAction.Type.INFO,
+                resources.getString(R.string.force_saved_to_uri, savedBook?.syncedTo?.uri)))
+            // Update sync action result on success
+            updateLastSyncActionResult(bookId, SyncResult.SUCCESS, System.currentTimeMillis())
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -134,6 +140,8 @@ class DataRepository @Inject constructor(
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Updating status for $bookId")
 
             setBookLastActionAndSyncStatus(bookId, BookAction.forNow(BookAction.Type.ERROR, msg))
+            // Update sync action result on error
+            updateLastSyncActionResult(bookId, SyncResult.ERROR, System.currentTimeMillis())
 
             throw IOException(msg)
         }
@@ -257,7 +265,7 @@ class DataRepository @Inject constructor(
         return db.book().get(id) ?: throw IllegalStateException("Book with ID $id not found")
     }
 
-    fun getBookLiveData(id: Long): LiveData<Book> {
+    fun getBookLiveData(id: Long): LiveData<Book?> {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, id)
         return db.book().getLiveData(id)
     }
@@ -2552,5 +2560,16 @@ class DataRepository @Inject constructor(
         private val TAG = DataRepository::class.java.name
 
         const val GETTING_STARTED_NOTEBOOK_RESOURCE_ID = R.raw.orgzly_getting_started
+    }
+
+    /**
+     * Updates the last sync action result and timestamp for a book.
+     *
+     * @param bookId The ID of the book to update.
+     * @param result The result of the sync operation (SUCCESS or ERROR).
+     * @param timestamp The timestamp of the sync operation.
+     */
+    fun updateLastSyncActionResult(bookId: Long, result: SyncResult, timestamp: Long) {
+        db.book().updateLastSyncActionResult(bookId, result, timestamp)
     }
 }
