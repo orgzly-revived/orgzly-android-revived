@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/count_widget_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp" >
+
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:scaleType="fitCenter"
+          android:src="@mipmap/cic_shortcut_notebook" />
+
+      <TextView
+          android:id="@+id/note_count"
+          android:text="0"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="end|bottom"
+          android:layout_margin="5dp"
+          android:background="@drawable/count_widget_background"
+          android:paddingLeft="5dp"
+          android:paddingTop="0.5dp"
+          android:paddingRight="5dp"
+          android:paddingBottom="0.5dp"
+          android:textColor="#ffffff"
+          android:textSize="11sp" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/count_widget_book_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:padding="1dp"
+        android:text="@string/count_widget_label"
+        android:textColor="#ffffff"
+        android:textSize="12sp" />
+
+</LinearLayout>

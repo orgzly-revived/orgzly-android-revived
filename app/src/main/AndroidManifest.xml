@@ -165,6 +165,15 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".android.widgets.CountWidgetConfigurationActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
         <service
             android:name=".android.widgets.ListWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
@@ -210,6 +219,20 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/list_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".android.widgets.CountWidgetProvider"
+            android:label="@string/count_widget_label"
+            android:exported="false">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/count_widget_info" />
         </receiver>
 
         <receiver android:name=".android.BootCompletedReceiver" android:exported="false">
