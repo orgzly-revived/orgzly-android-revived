@@ -4,7 +4,7 @@ buildscript {
 
     def versions = [:]
 
-    versions.android_gradle_plugin = '8.11.1'
+    versions.android_gradle_plugin = '8.10.1'
 
     versions.kotlin = '2.2.0'
 
