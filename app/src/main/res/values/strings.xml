@@ -738,4 +738,7 @@
 
     <string name="orgzlyignore_file">Ignore pattern filename</string>
     <string name="orgzlyignore_file_desc">The path of the file containing the ignore patterns relative to the repository root.</string>
+    <string name="pref_key_auto_sync_interval_title">Auto-sync interval in minutes</string>
+    <string name="pref_key_auto_sync_at_interval_title">At (approximate) fixed interval</string>
+    <string name="pref_key_auto_sync_at_interval_summary">Note: Manual syncs and other auto-syncs will reset the counter</string>
 </resources>
