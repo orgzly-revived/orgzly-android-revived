@@ -38,6 +38,8 @@ import com.orgzly.android.ui.share.ShareActivity
 import com.orgzly.android.ui.sync.SyncFragment
 import com.orgzly.android.usecase.UseCaseRunner
 import com.orgzly.android.usecase.UseCaseWorker
+import com.orgzly.android.widgets.CountWidgetConfigurationActivity
+import com.orgzly.android.widgets.CountWidgetProvider
 import com.orgzly.android.widgets.ListWidgetProvider
 import com.orgzly.android.widgets.ListWidgetSelectionActivity
 import com.orgzly.android.widgets.ListWidgetService
@@ -65,6 +67,7 @@ interface AppComponent {
     fun inject(arg: TemplateChooserActivity)
     fun inject(arg: ListWidgetSelectionActivity)
     fun inject(arg: AppLogsActivity)
+    fun inject(arg: CountWidgetConfigurationActivity)
 
     fun inject(arg: BooksFragment)
     fun inject(arg: NotesFragment)
@@ -86,6 +89,7 @@ interface AppComponent {
     fun inject(arg: UseCaseWorker)
     fun inject(arg: ListWidgetService)
     fun inject(arg: ListWidgetProvider)
+    fun inject(arg: CountWidgetProvider)
     fun inject(arg: NewNoteBroadcastReceiver)
     fun inject(arg: TimeChangeBroadcastReceiver)
     fun inject(arg: RemindersBroadcastReceiver)

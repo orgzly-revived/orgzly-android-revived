@@ -45,6 +45,7 @@ import com.orgzly.android.ui.note.NoteBuilder
 import com.orgzly.android.ui.note.NotePayload
 import com.orgzly.android.usecase.RepoCreate
 import com.orgzly.android.util.*
+import com.orgzly.android.widgets.CountWidgetProvider
 import com.orgzly.org.OrgActiveTimestamps
 import com.orgzly.org.OrgFile
 import com.orgzly.org.OrgFileSettings
@@ -462,6 +463,9 @@ class DataRepository @Inject constructor(
         if (bookIds.isNotEmpty()) {
             if (isModified) {
                 db.book().setIsModified(bookIds, time)
+
+                // FIXME: Is there a better place to do this?
+                CountWidgetProvider.updateCounts(context);
             } else {
                 db.book().setIsNotModified(bookIds)
             }

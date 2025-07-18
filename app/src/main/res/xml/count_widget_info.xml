@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="40dp"
+    android:minHeight="40dp"
+    android:targetCellWidth="1"
+    android:targetCellHeight="1"
+    android:resizeMode="none"
+    android:description="@string/count_widget_desc"
+    android:updatePeriodMillis="0"
+    android:initialLayout="@layout/count_widget"
+    android:previewLayout="@layout/count_widget"
+    android:previewImage="@drawable/count_widget_preview"
+    android:widgetCategory="home_screen"
+    android:widgetFeatures="reconfigurable"
+    android:configure="com.orgzly.android.widgets.CountWidgetConfigurationActivity">
+</appwidget-provider>
