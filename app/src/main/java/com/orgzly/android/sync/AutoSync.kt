@@ -11,6 +11,9 @@ import javax.inject.Singleton
 @Singleton
 class AutoSync @Inject constructor(val context: Application, val dataRepository: DataRepository) {
 
+    @Inject
+    lateinit var autoSyncScheduler: AutoSyncScheduler
+
     fun trigger(type: Type) {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, type)
 
@@ -35,6 +38,11 @@ class AutoSync @Inject constructor(val context: Application, val dataRepository:
                     if (AppPreferences.syncOnSuspend(context)) {
                         startSync()
                     }
+
+                Type.SCHEDULED ->
+                    if (AppPreferences.scheduledSyncEnabled(context)) {
+                        startSync()
+                    }
             }
         }
     }
@@ -42,7 +50,13 @@ class AutoSync @Inject constructor(val context: Application, val dataRepository:
     private fun startSync() {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG)
 
+        // Cancel any scheduled auto-sync - no matter what triggered this one.
+        autoSyncScheduler.cancelAll()
+
         SyncRunner.startAuto()
+
+        if (AppPreferences.scheduledSyncEnabled(context))
+            autoSyncScheduler.schedule()
     }
 
     enum class Type {
@@ -50,6 +64,7 @@ class AutoSync @Inject constructor(val context: Application, val dataRepository:
         DATA_MODIFIED,
         APP_RESUMED,
         APP_SUSPENDED,
+        SCHEDULED,
     }
 
     companion object {

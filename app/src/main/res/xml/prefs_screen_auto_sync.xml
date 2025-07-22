@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.preference.PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/auto_sync">
 
     <Preference
@@ -41,6 +41,22 @@
         android:title="@string/pref_title_on_suspend_sync"
         android:summary="@string/pref_summary_on_suspend_sync"
         android:defaultValue="@bool/pref_default_auto_sync_on_suspend"/>
+
+    <SwitchPreference
+        android:key="@string/pref_key_auto_sync_at_interval_enabled"
+        android:dependency="@string/pref_key_auto_sync"
+        android:title="@string/pref_key_auto_sync_at_interval_title"
+        android:summary="@string/pref_key_auto_sync_at_interval_summary"
+        android:defaultValue="@bool/pref_default_auto_sync_at_interval_enabled"/>
+
+    <com.orgzly.android.prefs.IntegerPreference
+        android:key="@string/pref_key_auto_sync_interval_in_mins"
+        android:dependency="@string/pref_key_auto_sync_at_interval_enabled"
+        android:title="@string/pref_key_auto_sync_interval_title"
+        android:selectAllOnFocus="true"
+        android:inputType="numberSigned"
+        android:defaultValue="@string/pref_default_auto_sync_interval_in_mins"
+        app:min="@integer/pref_key_auto_sync_interval_minimum_value" />
 
     <SwitchPreference
         android:key="@string/pref_key_auto_sync_on_repo_change"
