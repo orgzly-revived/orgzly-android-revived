@@ -4,9 +4,10 @@ You can keep notebooks stored in plain-text and have them synchronized with a di
 
 Notebooks are saved in Org mode's file format.
 “Org mode is for keeping notes, maintaining TODO lists, planning projects, and authoring documents with a fast and effective plain-text system.”
-See http://orgmode.org for more information.
+See <a href='https://orgmode.org/'>https://orgmode.org/</a> for more information.
 
 <b>Features:</b>
+
 * Create, edit and delete notes and tasks
 * Collapse and expand sub-notes
 * Schedule tasks and set their deadlines
