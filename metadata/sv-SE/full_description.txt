@@ -4,9 +4,10 @@ Du kan lagra dina anteckningar i vanliga textfiler och synkronisera dem med en m
 
 Anteckningsböckerna lagras i Org-mode-filformatet.
 ”Org-mode är gjort för att hantera anteckningar och att-göra-listor, planera projekt och skriva dokument med en snabbt och effektivt system som utgår från vanliga textfiler.”
-Besök https://orgmode.org för mer information.
+Besök <a href='https://orgmode.org/'>orgmode.org</a> för mer information.
 
-<b>Funktioner:</b>
+<b>Funktioner</b>
+
 * Skapa, redigera och radera anteckningar och uppgifter
 * Fäll ihop och veckla ut underordnade anteckningar
 * Schemalägg uppgifter och ge dem deadlines
