@@ -45,6 +45,7 @@ import com.orgzly.android.ui.note.NoteBuilder
 import com.orgzly.android.ui.note.NotePayload
 import com.orgzly.android.usecase.RepoCreate
 import com.orgzly.android.util.*
+import com.orgzly.android.widgets.CountWidgetProvider
 import com.orgzly.org.OrgActiveTimestamps
 import com.orgzly.org.OrgFile
 import com.orgzly.org.OrgFileSettings
@@ -466,6 +467,8 @@ class DataRepository @Inject constructor(
                 db.book().setIsNotModified(bookIds)
             }
         }
+        // FIXME: Is there a better place to do this?
+        CountWidgetProvider.updateCounts(context);
     }
 
     /**
