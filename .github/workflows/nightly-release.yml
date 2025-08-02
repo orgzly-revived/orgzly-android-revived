@@ -128,7 +128,7 @@ jobs:
           files: |
             *.apk
             *.aab
-          make_latest: 'false'
+          prerelease: true
           tag_name: ${{ needs.AddTag.outputs.version }}
           body: Install at your own risk! These "unstable" builds are generated once a day from the current main branch (if it has changed).
           generate_release_notes: true
