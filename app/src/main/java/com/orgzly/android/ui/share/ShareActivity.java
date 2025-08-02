@@ -146,8 +146,11 @@ public class ShareActivity extends CommonActivity
                 }
 
                 if (data.title != null && data.content == null && intent.hasExtra(Intent.EXTRA_SUBJECT)) {
-                    data.content = data.title;
-                    data.title = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+                    String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+                    if (subject != null && !subject.isEmpty()) {
+                        data.content = data.title;
+                        data.title = subject;
+                    }
                 }
 
                 // if it's a url with title, let's turn it into org url
