@@ -116,7 +116,7 @@ public class ShareActivity extends CommonActivity
             if (type.startsWith("text/")) {
 
                 if (intent.hasExtra(Intent.EXTRA_TEXT)) {
-                    data.title = intent.getStringExtra(Intent.EXTRA_TEXT);
+                    data.content = intent.getStringExtra(Intent.EXTRA_TEXT);
 
                 } else if (intent.hasExtra(Intent.EXTRA_STREAM)) {
                     Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
@@ -145,10 +145,9 @@ public class ShareActivity extends CommonActivity
                     }
                 }
 
-                if (data.title != null && data.content == null && intent.hasExtra(Intent.EXTRA_SUBJECT)) {
+                if (data.content != null && data.title == null && intent.hasExtra(Intent.EXTRA_SUBJECT)) {
                     String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
                     if (subject != null && !subject.isEmpty()) {
-                        data.content = data.title;
                         data.title = subject;
                     }
                 }

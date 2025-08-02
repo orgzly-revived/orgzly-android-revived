@@ -17,7 +17,12 @@ import com.orgzly.android.ui.NotePlace
 import com.orgzly.android.ui.Place
 import com.orgzly.android.ui.SingleLiveEvent
 import com.orgzly.android.ui.main.MainActivity
-import com.orgzly.android.usecase.*
+import com.orgzly.android.usecase.BookScrollToNote
+import com.orgzly.android.usecase.BookSparseTreeForNote
+import com.orgzly.android.usecase.NoteCreate
+import com.orgzly.android.usecase.NoteDelete
+import com.orgzly.android.usecase.NoteUpdate
+import com.orgzly.android.usecase.UseCaseRunner
 import com.orgzly.android.util.MiscUtils
 import com.orgzly.org.OrgProperties
 import com.orgzly.org.datetime.OrgRange
@@ -233,8 +238,8 @@ class NoteViewModel(
         return place != null
     }
 
-    fun hasInitialData(): Boolean {
-        return !TextUtils.isEmpty(initialData.title) || !TextUtils.isEmpty(initialData.content)
+    fun hasInitialTitleData(): Boolean {
+        return !TextUtils.isEmpty(initialData.title)
     }
 
     fun setBook(b: BookView) {
