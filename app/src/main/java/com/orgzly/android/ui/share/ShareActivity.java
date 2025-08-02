@@ -155,10 +155,13 @@ public class ShareActivity extends CommonActivity
 
                 // if it's a url with title, let's turn it into org url
                 if (data.content != null && data.title != null) {
-                    try {
-                        new URI(data.content);
-                        data.content = "[[" + data.content + "][" + data.title + "]]";
-                    } catch (URISyntaxException ignored) {}
+                    // A multi-line "subject" will not make a good link
+                    if (!data.title.contains("\n")) {
+                        try {
+                            new URI(data.content);
+                            data.content = "[[" + data.content + "][" + data.title + "]]";
+                        } catch (URISyntaxException ignored) {}
+                    }
                 }
 
                 // TODO: Was used for direct share shortcuts to pass the book name. Used someplace else?
