@@ -159,7 +159,8 @@ public class ShareActivity extends CommonActivity
                     if (!data.title.contains("\n")) {
                         try {
                             new URI(data.content);
-                            data.content = "[[" + data.content + "][" + data.title + "]]";
+                            data.title = "[[" + data.content + "][" + data.title + "]]";
+                            data.content = null;
                         } catch (URISyntaxException ignored) {}
                     }
                 }
