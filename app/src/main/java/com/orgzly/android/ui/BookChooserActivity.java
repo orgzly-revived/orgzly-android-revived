@@ -32,7 +32,7 @@ public class BookChooserActivity extends CommonActivity
     protected String action;
 
     @Inject
-    DataRepository dataRepository;
+    protected DataRepository dataRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

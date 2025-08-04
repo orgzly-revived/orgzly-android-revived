@@ -738,4 +738,7 @@
 
     <string name="orgzlyignore_file">Ignore pattern filename</string>
     <string name="orgzlyignore_file_desc">The path of the file containing the ignore patterns relative to the repository root.</string>
+
+    <string name="count_widget_label">Note count</string>
+    <string name="count_widget_desc">Display the number of notes in a book.</string>
 </resources>
