@@ -7,15 +7,22 @@ import android.os.SystemClock
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.orgzly.R
 import com.orgzly.android.AppIntent
 import com.orgzly.android.OrgzlyTest
-import com.orgzly.android.espresso.util.EspressoUtils.*
+import com.orgzly.android.espresso.util.EspressoUtils.closeSoftKeyboardWithDelay
+import com.orgzly.android.espresso.util.EspressoUtils.onSnackbar
+import com.orgzly.android.espresso.util.EspressoUtils.scroll
+import com.orgzly.android.espresso.util.EspressoUtils.waitId
 import com.orgzly.android.ui.share.ShareActivity
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.startsWith
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -27,7 +34,8 @@ class ShareActivityTest : OrgzlyTest() {
             type: String? = null,
             extraText: String? = null,
             extraStreamUri: String? = null,
-            queryString: String? = null): ActivityScenario<ShareActivity> {
+            queryString: String? = null,
+            extraSubjectText: String? = null): ActivityScenario<ShareActivity> {
 
         val intent = Intent(context, ShareActivity::class.java)
 
@@ -51,7 +59,16 @@ class ShareActivityTest : OrgzlyTest() {
             intent.putExtra(AppIntent.EXTRA_QUERY_STRING, queryString)
         }
 
+        if (extraSubjectText != null) {
+            intent.putExtra(Intent.EXTRA_SUBJECT, extraSubjectText)
+        }
+
         return ActivityScenario.launch(intent)
+    }
+
+    private fun setNoteTitle(title: String = "Dummy title") {
+        onView(withId(R.id.title_edit)).perform(replaceText(title))
+        closeSoftKeyboardWithDelay()
     }
 
     @Test
@@ -117,12 +134,85 @@ class ShareActivityTest : OrgzlyTest() {
 
     @Test
     fun testTextSimple() {
+        val sharedText = "This is some shared text"
         startActivityWithIntent(
                 action = Intent.ACTION_SEND,
                 type = "text/plain",
-                extraText = "This is some shared text")
+                extraText = sharedText)
 
-        onView(withId(R.id.done)).perform(click()); // Note done
+        onView(withId(R.id.content_view)).check(matches(withText(sharedText)))
+        onView(withId(R.id.title_edit)).check(matches(withText("")))
+    }
+
+    @Test
+    fun testTextWithSubjectExtra() {
+        val sharedText = "Shared text"
+        val sharedSubject = "Shared subject/title"
+        startActivityWithIntent(
+            action = Intent.ACTION_SEND,
+            type = "text/plain",
+            extraText = sharedText,
+            extraSubjectText = sharedSubject)
+
+        onView(withId(R.id.content_view)).check(matches(withText(sharedText)))
+        onView(withId(R.id.title_view)).check(matches(withText(sharedSubject)))
+    }
+
+    @Test
+    fun testUrlishTextWithSubjectExtra() {
+        val sharedText = "https://website.com/"
+        val sharedSubject = "Website Title"
+        startActivityWithIntent(
+            action = Intent.ACTION_SEND,
+            type = "text/plain",
+            extraText = sharedText,
+            extraSubjectText = sharedSubject)
+
+        // Content should be empty
+        onView(withId(R.id.content_view)).check(matches(withText("")))
+        // Title should be a link with the shared subject as title
+        onView(withId(R.id.title_view)).check(matches(withText(sharedSubject)))
+        // Title should not be in "edit mode"
+        onView(withId(R.id.title_edit)).check(matches(not(isDisplayed())))
+
+        // Verify the link content
+        onView(withId(R.id.title_view)).perform(click())
+        onView(withId(R.id.title_edit)).check(matches(withText("[[" + sharedText + "][" + sharedSubject + "]]")))
+    }
+
+    @Test
+    fun testUrlishAndOtherTextWithSubjectExtra() {
+        val sharedText = "https://website.com/ is really cool"
+        val sharedSubject = "Website Title"
+        startActivityWithIntent(
+            action = Intent.ACTION_SEND,
+            type = "text/plain",
+            extraText = sharedText,
+            extraSubjectText = sharedSubject)
+
+        // Content should contain the shared text verbatim
+        onView(withId(R.id.content_view)).check(matches(withText(sharedText)))
+        // Title should match the subject extra
+        onView(withId(R.id.title_view)).check(matches(withText(sharedSubject)))
+        // Title should not be in "edit mode"
+        onView(withId(R.id.title_edit)).check(matches(not(isDisplayed())))
+
+    }
+
+    @Test
+    fun testUrlishTextWithNoSubjectExtra() {
+        val sharedText = "https://website.com/"
+        startActivityWithIntent(
+            action = Intent.ACTION_SEND,
+            type = "text/plain",
+            extraText = sharedText)
+
+        // Content should contain the shared text verbatim
+        onView(withId(R.id.content_view)).check(matches(withText(sharedText)))
+        // Title should be empty
+        onView(withId(R.id.title_edit)).check(matches(allOf(withText(""), isDisplayed())))
+        // Title should be in "edit mode"
+        onView(withId(R.id.title_view)).check(matches(not(isDisplayed())))
     }
 
     @Test
@@ -138,19 +228,22 @@ class ShareActivityTest : OrgzlyTest() {
         }
 
         SystemClock.sleep(1000)
-        onView(withId(R.id.done)).perform(click()); // Note done
+        setNoteTitle()
+        onView(withId(R.id.done)).perform(click()) // Note done
     }
 
     @Test
     fun testTextEmpty() {
         startActivityWithIntent(action = Intent.ACTION_SEND, type = "text/plain", extraText = "")
-        onView(withId(R.id.done)).perform(click()); // Note done
+        setNoteTitle()
+        onView(withId(R.id.done)).perform(click()) // Note done
     }
 
     @Test
     fun testTextNull() {
         startActivityWithIntent(action = Intent.ACTION_SEND, type = "text/plain")
-        onView(withId(R.id.done)).perform(click()); // Note done
+        setNoteTitle()
+        onView(withId(R.id.done)).perform(click()) // Note done
     }
 
     @Test
@@ -163,14 +256,14 @@ class ShareActivityTest : OrgzlyTest() {
         onView(withId(R.id.title_view)).check(matches(withText("content://uri")))
         onView(withId(R.id.content_view)).check(matches(withText("Cannot find image using this URI.")))
 
-        onView(withId(R.id.done)).perform(click()); // Note done
+        onView(withId(R.id.done)).perform(click()) // Note done
     }
 
     @Test
     fun testNoMatchingType() {
         startActivityWithIntent(action = Intent.ACTION_SEND, type = "application/octet-stream")
 
-        onView(withId(R.id.title_view)).check(matches(withText("")))
+        onView(withId(R.id.content_view)).check(matches(withText("")))
         onSnackbar().check(matches(withText(context.getString(R.string.share_type_not_supported, "application/octet-stream"))))
     }
 
@@ -178,7 +271,7 @@ class ShareActivityTest : OrgzlyTest() {
     fun testNoActionSend() {
         startActivityWithIntent()
 
-        onView(withId(R.id.title_view)).check(matches(withText("")))
+        onView(withId(R.id.content_view)).check(matches(withText("")))
     }
 
     @Test
@@ -211,9 +304,10 @@ class ShareActivityTest : OrgzlyTest() {
         startActivityWithIntent(
                 action = Intent.ACTION_SEND,
                 type = "text/plain",
-                extraText = "Note 3")
+                extraText = "This is some shared text")
 
-        onView(withId(R.id.done)).perform(click()); // Note done
+        setNoteTitle("Note 3")
+        onView(withId(R.id.done)).perform(click()) // Note done
 
         val (_, lft, rgt) = dataRepository.getLastNote("Note 1")!!.position
         val (_, lft1, rgt1) = dataRepository.getLastNote("Note 2")!!.position

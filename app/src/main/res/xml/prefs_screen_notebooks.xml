@@ -249,6 +249,14 @@
             android:title="@string/add_id_property"
             android:summary="@string/populate_the_id_property"
             android:defaultValue="@bool/pref_default_is_new_note_prepend"/>
+
+        <ListPreference
+            android:key="@string/pref_key_shared_text_placement"
+            android:title="@string/placement_of_shared_text"
+            android:entries="@array/shared_text_placement_options"
+            android:entryValues="@array/shared_text_placement_option_values"
+            android:defaultValue="@string/pref_default_shared_text_placement"
+            app:useSimpleSummaryProvider="true"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/images">

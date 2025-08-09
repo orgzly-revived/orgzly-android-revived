@@ -22,6 +22,7 @@ import com.orgzly.android.data.DataRepository;
 import com.orgzly.android.db.entity.Book;
 import com.orgzly.android.db.entity.Note;
 import com.orgzly.android.db.entity.SavedSearch;
+import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.query.Query;
 import com.orgzly.android.query.QueryUtils;
 import com.orgzly.android.query.user.DottedQueryParser;
@@ -116,8 +117,11 @@ public class ShareActivity extends CommonActivity
             if (type.startsWith("text/")) {
 
                 if (intent.hasExtra(Intent.EXTRA_TEXT)) {
-                    data.title = intent.getStringExtra(Intent.EXTRA_TEXT);
-
+                    if (AppPreferences.sharedTextPlacement(App.getAppContext()).equals("in_note_heading")) {
+                        data.title = intent.getStringExtra(Intent.EXTRA_TEXT);
+                    } else {
+                        data.content = intent.getStringExtra(Intent.EXTRA_TEXT);
+                    }
                 } else if (intent.hasExtra(Intent.EXTRA_STREAM)) {
                     Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
 
@@ -145,17 +149,23 @@ public class ShareActivity extends CommonActivity
                     }
                 }
 
-                if (data.title != null && data.content == null && intent.hasExtra(Intent.EXTRA_SUBJECT)) {
-                    data.content = data.title;
-                    data.title = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+                if (data.content != null && data.title == null && intent.hasExtra(Intent.EXTRA_SUBJECT)) {
+                    String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+                    if (subject != null && !subject.isEmpty()) {
+                        data.title = subject;
+                    }
                 }
 
                 // if it's a url with title, let's turn it into org url
                 if (data.content != null && data.title != null) {
-                    try {
-                        new URI(data.content);
-                        data.content = "[[" + data.content + "][" + data.title + "]]";
-                    } catch (URISyntaxException ignored) {}
+                    // A multi-line "subject" will not make a good link
+                    if (!data.title.contains("\n")) {
+                        try {
+                            new URI(data.content);
+                            data.title = "[[" + data.content + "][" + data.title + "]]";
+                            data.content = null;
+                        } catch (URISyntaxException ignored) {}
+                    }
                 }
 
                 // TODO: Was used for direct share shortcuts to pass the book name. Used someplace else?

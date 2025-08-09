@@ -636,7 +636,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             /* Open the keyboard for new notes, unless fragment was given
              * some initial values (for example from ShareActivity).
              */
-            if (viewModel.isNew() && !viewModel.hasInitialData()) {
+            if (viewModel.isNew() && !viewModel.hasInitialTitleData()) {
                 binding.title.toEditMode(0)
             }
         })

@@ -738,4 +738,8 @@
 
     <string name="orgzlyignore_file">Ignore pattern filename</string>
     <string name="orgzlyignore_file_desc">The path of the file containing the ignore patterns relative to the repository root.</string>
+
+    <string name="placement_of_shared_text">Placement of shared plain text</string>
+    <string name="in_note_heading">In note heading</string>
+    <string name="in_note_content">In note content</string>
 </resources>
