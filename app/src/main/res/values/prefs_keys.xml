@@ -626,4 +626,18 @@
     <!-- Repository ignore file. -->
     <string name="pref_key_orgzlyignore_file" translatable="false">pref_key_orgzlyignore_file</string>
     <string name="pref_default_orgzlyignore_file" translatable="false">.orgzlyignore</string>
+
+    <!-- Share-to-new-note receiver behavior -->
+    <string name="pref_key_shared_text_placement" translatable="false">pref_key_shared_text_placement</string>
+    <string name="pref_default_shared_text_placement" translatable="false">in_note_content</string>
+
+    <string-array name="shared_text_placement_options">
+        <item>@string/in_note_heading</item>
+        <item>@string/in_note_content</item>
+    </string-array>
+
+    <string-array name="shared_text_placement_option_values">
+        <item>in_note_heading</item>
+        <item>in_note_content</item>
+    </string-array>
 </resources>

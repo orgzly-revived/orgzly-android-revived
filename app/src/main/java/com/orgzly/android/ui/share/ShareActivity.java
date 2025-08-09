@@ -22,6 +22,7 @@ import com.orgzly.android.data.DataRepository;
 import com.orgzly.android.db.entity.Book;
 import com.orgzly.android.db.entity.Note;
 import com.orgzly.android.db.entity.SavedSearch;
+import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.query.Query;
 import com.orgzly.android.query.QueryUtils;
 import com.orgzly.android.query.user.DottedQueryParser;
@@ -116,8 +117,11 @@ public class ShareActivity extends CommonActivity
             if (type.startsWith("text/")) {
 
                 if (intent.hasExtra(Intent.EXTRA_TEXT)) {
-                    data.content = intent.getStringExtra(Intent.EXTRA_TEXT);
-
+                    if (AppPreferences.sharedTextPlacement(App.getAppContext()).equals("in_note_heading")) {
+                        data.title = intent.getStringExtra(Intent.EXTRA_TEXT);
+                    } else {
+                        data.content = intent.getStringExtra(Intent.EXTRA_TEXT);
+                    }
                 } else if (intent.hasExtra(Intent.EXTRA_STREAM)) {
                     Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
 

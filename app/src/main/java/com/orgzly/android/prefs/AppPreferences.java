@@ -1196,6 +1196,16 @@ public class AppPreferences {
     }
 
     /*
+     * Where to put incoming shared text in new note
+     */
+
+    public static String sharedTextPlacement(Context context) {
+        return getDefaultSharedPreferences(context).getString(
+                context.getResources().getString(R.string.pref_key_shared_text_placement),
+                context.getResources().getString(R.string.pref_default_shared_text_placement));
+    }
+
+    /*
      * Repository properties map
      */
 
