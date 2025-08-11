@@ -5,11 +5,11 @@ apply plugin: 'kotlin-kapt'
 android {
     namespace 'com.orgzly'
 
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 262
         versionName "1.12.1-beta.1"
         applicationId = "com.orgzlyrevived"

@@ -149,13 +149,13 @@ class ShareActivityTest : OrgzlyTest() {
         val sharedText = "Shared text"
         val sharedSubject = "Shared subject/title"
         startActivityWithIntent(
-            action = Intent.ACTION_SEND,
-            type = "text/plain",
-            extraText = sharedText,
-            extraSubjectText = sharedSubject)
-
-        onView(withId(R.id.content_view)).check(matches(withText(sharedText)))
-        onView(withId(R.id.title_view)).check(matches(withText(sharedSubject)))
+                action = Intent.ACTION_SEND,
+                type = "text/plain",
+                extraText = sharedText,
+                extraSubjectText = sharedSubject).use {
+            onView(withId(R.id.content_view)).check(matches(withText(sharedText)))
+            onView(withId(R.id.title_view)).check(matches(withText(sharedSubject)))
+        }
     }
 
     @Test
