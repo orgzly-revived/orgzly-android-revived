@@ -28,7 +28,7 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Include share/new note screen in “recent activities” stack." />
+            app:text="Include new note screen in “recent activities” stack." />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"

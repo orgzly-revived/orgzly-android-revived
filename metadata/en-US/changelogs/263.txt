@@ -1,0 +1,3 @@
+• Include new note screen in “recent activities” stack.
+• Update translations.
+• Upgrade dependencies.
