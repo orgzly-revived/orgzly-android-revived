@@ -305,6 +305,7 @@ class SqliteQueryBuilder(val context: Context) {
             // NONE should have handled early
             QueryInterval.Unit.NONE -> throw IllegalArgumentException("Invalid unit")
             QueryInterval.Unit.NOW -> Calendar.MILLISECOND
+            QueryInterval.Unit.MINUTE -> Calendar.MINUTE
             QueryInterval.Unit.HOUR -> Calendar.HOUR_OF_DAY
             QueryInterval.Unit.DAY -> Calendar.DAY_OF_MONTH
             QueryInterval.Unit.WEEK -> Calendar.WEEK_OF_YEAR
