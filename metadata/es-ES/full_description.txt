@@ -7,6 +7,7 @@ Las libretas son guardadas en el formato de Org mode.
 Visita http://orgmode.org para más información.
 
 <b>Características:</b>
+
 * Crea, edita y elimina notas y tareas
 * Colapsa y expande subnotas
 * Planea tareas y ponles fechas límite

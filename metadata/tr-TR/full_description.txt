@@ -7,6 +7,7 @@ Not defterleri Org mod dosya biçiminde kaydedilir.
 Daha fazla bilgi için http://orgmode.org adresine bak.
 
 <b>Özellikler:</b>
+
 * Notlar ve görevler oluşturma, düzenleme ve silme
 * Alt notları daraltma ve genişletme
 * Görevleri planlama ve son tarihlerini belirleme
