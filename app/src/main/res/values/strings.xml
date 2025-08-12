@@ -502,6 +502,9 @@
     <string name="pref_title_on_suspend_sync">App suspended</string>
     <string name="pref_summary_on_suspend_sync">Sync whenever app goes to the background</string>
 
+    <string name="pref_title_repo_quick_note">Quick Note</string>
+    <string name="pref_summary_repo_quick_note">Sync whenever quick note dialogue is opened</string>
+
     <string name="pref_title_repo_update_sync">Repositories modified (not implemented yet)</string>
     <string name="pref_summary_repo_update_sync">Sync whenever an update in repositories is detected</string>
 
