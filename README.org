@@ -2,6 +2,7 @@
 <div>
 <a title="Tests" target="_blank" href="https://github.com/orgzly-revived/orgzly-android-revived/actions/workflows/test.yaml"><img src="https://github.com/orgzly-revived/orgzly-android-revived/actions/workflows/test.yaml/badge.svg"></a>
 <a href="https://toolate.othing.xyz/engage/orgzly-revived/"><img src="https://toolate.othing.xyz/widget/orgzly-revived/svg-badge.svg" alt="Translation status" /></a>
+<a href="https://shields.rbtlog.dev/com.orgzlyrevived"><img src="https://shields.rbtlog.dev/simple/com.orgzlyrevived" alt="RB Status"></a>
 </div>
 #+END_HTML
 
