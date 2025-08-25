@@ -620,4 +620,7 @@
     <string name="allow_folding_in_search">Разрешить сворачивание при поиске</string>
     <string name="orgzlyignore_file_desc">Путь к файлу, содержащему шаблоны игнорирования относительно корня репозитория.</string>
     <string name="orgzlyignore_file">Файл шаблонов игнорирования</string>
+    <string name="in_note_heading">В заголовке заметки</string>
+    <string name="in_note_content">В содержании заметки</string>
+    <string name="placement_of_shared_text">Размещение общего простого текста</string>
 </resources>
