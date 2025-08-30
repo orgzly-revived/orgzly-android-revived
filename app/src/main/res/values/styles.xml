@@ -365,6 +365,8 @@
         <item name="android:background">?android:colorBackground</item>
 
         <!-- For FAB not to overlap with navigation bar -->
+        <!-- TODO: Replace with more elegant edge-to-edge solution
+        (making the books list visible beneath the bottom navigation bar) -->
         <item name="android:fitsSystemWindows">true</item>
     </style>
 
