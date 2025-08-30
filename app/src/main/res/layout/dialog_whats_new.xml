@@ -22,6 +22,20 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.13.0"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Improve the “share to Orgzly” experience (setting added under “New note”)." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Target Android 15 (API 35)." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.12.1"
             tools:ignore="HardcodedText"
             android:autoLink="web" />
