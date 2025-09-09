@@ -1,0 +1,20 @@
+Orgzly yra rengyklė skirta kurti užrašus ir užduočių sąrašus
+
+Galima laikyti užrašines grynuoju tekstu ir jas sinchronizuoti su katalogu mobiliajame įrenginyje, SD kortelėje ar naudojant WebDAV
+
+Užrašinės išsaugomos Org mode formatu
+„Org mode yra skirta kaupti užrašus, prižiūrėti užduočių sąrašus, planuoti projektus, rašyti dokumentus greita ir efektyvia grynojo teksto sistema.“
+Žiūrėti <a href='https://orgmode.org/'>https://orgmode.org/</a> dėl daugiau informacijos.
+
+<b>Funkcijos:</b>
+
+* Kurti, redaguoti ir trinti įrašus ir užduotis
+* Suskleisti ir išskleisti poįrašius.
+* Planuoti užduotis ir nustatyti terminus
+* Nustatyti svarbą ir žymes įrašams
+* Braukti įrašus į kairę ar dešinę, kad atsidarytų greitieji meniu
+* Ieškoti įrašų įvairiomis savybėmis
+* Kurti ir išsaugoti paieškas greitai prieigai
+* Sinchronizuoti užrašines su vienu ar daugiau katalogų
+
+Orgzly Revived yra bendruomenės atšaka originalios Orgzly programėlės.
