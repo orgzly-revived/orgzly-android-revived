@@ -297,6 +297,9 @@
     <string name="pref_key_auto_sync_on_suspend" translatable="false">pref_key_auto_sync_on_suspend</string>
     <bool name="pref_default_auto_sync_on_suspend" translatable="false">false</bool>
 
+    <string name="pref_key_auto_sync_on_quick_note" translatable="false">pref_key_auto_sync_on_quick_note</string>
+    <bool name="pref_default_auto_sync_on_quick_note" translatable="false">false</bool>
+
     <string name="pref_key_auto_sync_on_repo_change" translatable="false">pref_key_auto_sync_on_repo_change</string>
     <bool name="pref_default_auto_sync_on_repo_change" translatable="false">false</bool>
 
