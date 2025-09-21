@@ -33,16 +33,16 @@
 *** DONE 这是一条带/完成/类型状态的笔记
 CLOSED: [2018-01-24 Wed 17:00]
 
-** Parent notes can track state of child notes [1/3] [33%]
+** 父笔记可以跟踪子笔记的状态 [1/3] [33%]
 
-*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+*** TODO 若要跟踪 TODO 事项与 DONE 事项的比例，请在笔记标题中添加 [/]
 
-*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+*** TODO 若要跟踪 DONE 事项与 TODO 事项的百分比，请在笔记标题中添加 [%]
 
-*** DONE Both can be used in tandem
+*** DONE 两者可以同时使用
 CLOSED: [2025-03-13 Thu 08:37]
 
-The order doesn't matter, and the counts will be updated automatically.
+顺序无关紧要，数量会自动更新。
 
 ** 可以为笔记设置一个计划时间
 SCHEDULED: <2015-02-20 Fri 15:15>
@@ -88,7 +88,7 @@ You can have multiple event times:
 
 点击复选框切换状态。 点按行尾的新建行按钮以创建新条目。
 
-** A note's title can also track checkbox list states [66%] [2/3]
+** 笔记的标题也可以跟踪复选框列表的状态 [66%] [2/3]
 
 - [X] 任务 1
 - [ ] 任务 2
