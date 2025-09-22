@@ -24,7 +24,7 @@
     <string name="done">Completato</string>
     <string name="mark_as_done">Contrassegna come completato</string>
     <string name="mark_as_done_with_repeater">Ripianifica %s</string>
-    <string name="reminder_snooze">Sveglia</string>
+    <string name="reminder_snooze">Rinvia</string>
     <string name="close">Chiudi</string>
     <string name="import_">Importa</string>
     <!-- Reserved keyword -->
@@ -350,8 +350,8 @@
     <string name="pref_title_reminders_sound">Suono</string>
     <string name="pref_title_reminders_vibrate">Vibrazione</string>
     <string name="pref_title_reminders_led">Illuminazione</string>
-    <string name="pref_title_snooze_time">Durata sveglia (minuti)</string>
-    <string name="pref_title_snooze_type">Tipo di allarme</string>
+    <string name="pref_title_snooze_time">Durata rinvio (minuti)</string>
+    <string name="pref_title_snooze_type">Tipo di rinvio</string>
     <string name="pref_title_daily_reminder_time">Ora promemoria giornaliero</string>
     <string name="primary_storage">Memoria principale</string>
     <string name="book_exported">Taccuino esportato su %s</string>
