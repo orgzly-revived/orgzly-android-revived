@@ -1,0 +1,1 @@
+Teksto rengyklė skirta kurti užrašus ir užduočių sąrašus Org-mode formatu

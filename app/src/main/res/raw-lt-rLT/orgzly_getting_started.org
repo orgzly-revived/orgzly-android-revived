@@ -6,7 +6,7 @@ Sveiki atvykę į Orgzly!
 
 Galite pasirinkti kelis įrašus.
 
-Braukite įrašą dešinėn, kad atidarytumėte jo iškylantį meniu
+** Braukite įrašą dešinėn, kad atidarytumėte jo iškylantį meniu
 
 Braukite įrašą kairėn, kad atidarytumėte kitą meniu.
 
@@ -20,7 +20,7 @@ Ilgai spustelėkite ikoną, kad išskleistumėte visą pomedį.
 ** Įrašas gali turėti žymes :tag1:tag2:
 *** Poįrašis paveldi žymes :tag3:
 
-Jei ieškote įrašų pažymėtų „tag1“ naudodami „t.tag1“ užklausa, šis įrašas bus įtrauktas paieškos rezultatuose.
+Jei ieškote įrašų pažymėtų „tag1“ naudodami „t.tag1“ užklausą, šis įrašas bus įtrauktas į paieškos rezultatus.
 
 *** Įrašas, kuris turi =ARCHIVE= žymę, yra papilkintas :ARCHIVE:
 
@@ -33,16 +33,16 @@ Galite sukonfiguruoti įvairias būsenas: TODO, NEXT, DONE ir t. t.
 *** DONE Čia yra įrašas su /done/ būsenos tipu
 CLOSED: [2018-01-24 Wed 17:00]
 
-** Parent notes can track state of child notes [1/3] [33%]
+** Viršįrašiai taip pat gali sekti poįrašių būseną [1/3] [33%]
 
-*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+*** TODO Sekti santykį TODO su DONE elementais, pridėkite [/] į įrašo pavadinimą
 
-*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+*** TODO Sekti procentą TODO su DONE elementais, pridėkite [/] į įrašo pavadinimą
 
-*** DONE Both can be used in tandem
+*** DONE Abu gali būti naudojami vienu metu
 CLOSED: [2025-03-13 Thu 08:37]
 
-The order doesn't matter, and the counts will be updated automatically.
+Tvarka nesvarbi, skaitiklis bus atnaujintas automatiškai.
 
 ** Įrašas gali turėti suplanuotą laiką
 SCHEDULED: <2015-02-20 Fri 15:15>
@@ -88,7 +88,7 @@ Galite žodžius rašyti *pusjuodžiu*, /kursyvu/, _pabrauktai_, =neformatuotai=
 
 Spustelėkite langelį, kad pažymėtumėte. Spustelėkite naujos eilutės mygtuką eilutės gale, kad sukurtumėte naują elementą.
 
-** A note's title can also track checkbox list states [66%] [2/3]
+** Įrašo pavadinimas taip pat gali sekti langelių būsenas [66%] [2/3]
 
 - [X] Užduotis 1
 - [ ] Užduotis 2

@@ -26,7 +26,7 @@
         platformToolsVersion = "34.0.5";
         buildToolsVersions = ["30.0.3" "33.0.1" buildToolsVersion];
         includeEmulator = true;
-        platformVersions = ["30" "33" "34"];
+        platformVersions = ["30" "33" "35"];
         includeSources = false;
         includeSystemImages = true;
         systemImageTypes = ["google_apis_playstore"];
