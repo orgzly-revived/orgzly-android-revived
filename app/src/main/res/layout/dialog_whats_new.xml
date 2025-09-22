@@ -22,6 +22,20 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.13.1"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Handle “edge-to-edge” graphics on Android 15 and above." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Dependency upgrades." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.13.0"
             tools:ignore="HardcodedText"
             android:autoLink="web" />
