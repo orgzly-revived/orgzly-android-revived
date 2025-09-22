@@ -86,6 +86,7 @@ jobs:
       run: |
         ./gradlew :app:compileFdroidDebugKotlin
         ./gradlew :app:compilePremiumDebugKotlin
+        find . -name "*.java" -print | xargs javac
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
