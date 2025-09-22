@@ -7,11 +7,13 @@ on:
     - cron: '41 19 * * 2'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
 
   AddTag:
+    permissions:
+      contents: write
     outputs:
       created: ${{ steps.daily-version.outputs.created }}
       version: ${{ steps.daily-version.outputs.version }}
@@ -25,6 +27,8 @@ jobs:
           prefix: 'weekly-unstable-'
 
   BuildAndRelease:
+    permissions:
+      contents: write
     needs: AddTag
     if: github.event_name == 'workflow_dispatch' || needs.AddTag.outputs.created
     runs-on: ubuntu-latest
