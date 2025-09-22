@@ -1,6 +1,9 @@
 package com.orgzly.android.ui.settings
 
 import android.os.Bundle
+import android.widget.FrameLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orgzly.R
 import com.orgzly.android.App
@@ -79,6 +82,18 @@ class SettingsActivity : CommonActivity(), Listener {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
+
+        val container = findViewById<FrameLayout>(R.id.activity_settings_container)
+        ViewCompat.setOnApplyWindowInsetsListener(container, { view, insets ->
+                val innerPadding = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                container.setPadding( // We only need to add padding for the bottom navigation buttons
+                    0,
+                    0,
+                    0,
+                    innerPadding.bottom
+                )
+                insets
+            })
 
         if (savedInstanceState == null) {
             val fragment = SettingsFragment.getInstance()
