@@ -17,6 +17,14 @@ permissions:
 on:
   schedule:
     - cron: '24 21 * * 0'
+  pull_request:
+    branches:
+      - 'master'
+    paths-ignore:
+      - 'README.org'
+      - 'metadata/**'
+      - 'app/src/main/res/raw-*/*'
+      - 'app/src/main/res/values-*/*'
   workflow_dispatch:
 
 jobs:
