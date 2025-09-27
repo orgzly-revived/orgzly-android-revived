@@ -31,7 +31,7 @@ buildscript {
 
     versions.android_lifecycle = '2.9.2'
 
-    versions.android_workmanager = '2.10.4'
+    versions.android_workmanager = '2.10.5'
 
     versions.junit = '4.13.2'
 
