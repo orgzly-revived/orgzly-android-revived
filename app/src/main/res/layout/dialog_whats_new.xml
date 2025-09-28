@@ -32,7 +32,7 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Dependency upgrades." />
+            app:text="Upgrade dependencies." />
 
         <TextView
             style="@style/WhatsNewVersion"
