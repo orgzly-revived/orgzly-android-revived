@@ -454,7 +454,7 @@ public class BookTest extends OrgzlyTest {
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             SystemClock.sleep(500);
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            SystemClock.sleep(500);
+            SystemClock.sleep(1000);
         });
 
         pressBack(); // Leave note
