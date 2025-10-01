@@ -12,6 +12,7 @@ on:
       - 'metadata/**'
       - 'app/src/main/res/raw-*/*'
       - 'app/src/main/res/values-*/*'
+      - '.github/**'
   workflow_dispatch:
   schedule:
     - cron: "03 03 * * sun"
