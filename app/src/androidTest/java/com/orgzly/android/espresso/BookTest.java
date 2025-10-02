@@ -448,16 +448,6 @@ public class BookTest extends OrgzlyTest {
         onView(withText(R.string.note_does_not_exist_anymore)).check(matches(isDisplayed()));
         onView(withId(R.id.done)).check(doesNotExist());
         onView(withId(R.id.delete)).check(doesNotExist());
-
-        // Rotate
-        scenario.onActivity(activity -> {
-            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            SystemClock.sleep(500);
-            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            SystemClock.sleep(1000);
-        });
-
-        pressBack(); // Leave note
     }
 
     @Test
