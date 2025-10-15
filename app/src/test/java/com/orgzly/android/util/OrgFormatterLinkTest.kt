@@ -5,16 +5,19 @@ import com.orgzly.android.ui.views.style.FileOrNotLinkSpan
 import com.orgzly.android.ui.views.style.IdLinkSpan
 import com.orgzly.android.ui.views.style.UrlLinkSpan
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
-import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
+import org.robolectric.ParameterizedRobolectricTestRunner
+import org.robolectric.ParameterizedRobolectricTestRunner.Parameters
+import org.robolectric.annotation.Config
 import java.io.File
 import java.io.IOException
 
-@RunWith(value = Parameterized::class)
+@RunWith(ParameterizedRobolectricTestRunner::class)
+@Config(sdk = [35])
 class OrgFormatterLinkTest(private val param: Parameter) : OrgFormatterTest() {
 
     data class Span(val start: Int, val end: Int, val klass: Class<*>)
@@ -25,7 +28,6 @@ class OrgFormatterLinkTest(private val param: Parameter) : OrgFormatterTest() {
         val expectedSpans: List<Span>)
 
     @Before
-    @Throws(Exception::class)
     override fun setUp() {
         super.setUp()
 
@@ -46,16 +48,13 @@ class OrgFormatterLinkTest(private val param: Parameter) : OrgFormatterTest() {
     }
 
     @After
-    override fun tearDown() {
-        super.tearDown()
-
-        File(context.cacheDir, "orgzly-tests").let { dir ->
-            dir.deleteRecursively()
-        }
+    fun tearDown() {
+        File(context.cacheDir, "orgzly-tests").deleteRecursively()
     }
 
     companion object {
-        @JvmStatic @Parameterized.Parameters(name = "{index}: {0}")
+        @JvmStatic
+        @Parameters(name = "{index}: {0}")
         fun data(): Collection<Parameter> {
             return listOf(
                 Parameter("[[orgzly-tests/document.txt]]", "orgzly-tests/document.txt", listOf(Span(0, 25, FileOrNotLinkSpan::class.java))),
@@ -110,7 +109,7 @@ class OrgFormatterLinkTest(private val param: Parameter) : OrgFormatterTest() {
 
             assertThat(
                 "Found span class is different then expected: $msg",
-                parseResult.foundSpans[i].span.javaClass.simpleName,
+                parseResult.foundSpans[i].span?.javaClass?.simpleName,
                 equalTo(param.expectedSpans[i].klass.simpleName))
         }
     }

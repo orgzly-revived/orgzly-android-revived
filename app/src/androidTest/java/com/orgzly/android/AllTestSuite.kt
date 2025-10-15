@@ -48,8 +48,6 @@ import com.orgzly.android.usecase.NoteUpdateScheduledTimeTest
 import com.orgzly.android.util.AgendaUtilsTest
 import com.orgzly.android.util.EncodingDetectTest
 import com.orgzly.android.util.MiscUtilsTest
-import com.orgzly.android.util.OrgFormatterLinkTest
-import com.orgzly.android.util.OrgFormatterMiscTest
 import com.orgzly.android.util.OrgFormatterSpeedTest
 import com.orgzly.android.util.OrgFormatterStyleTextTest
 import com.orgzly.android.util.UriUtilsTest
@@ -113,8 +111,6 @@ import org.junit.runners.Suite
         AgendaUtilsTest::class,
         EncodingDetectTest::class,
         MiscUtilsTest::class,
-        OrgFormatterLinkTest::class,
-        OrgFormatterMiscTest::class,
         OrgFormatterSpeedTest::class,
         OrgFormatterStyleTextTest::class,
         ContentCheckboxesTitleUpdateViaUpdateNoteTest::class,
