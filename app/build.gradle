@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    namespace 'com.orgzly'
+    namespace = 'com.orgzly'
 
     compileSdk 35
 
@@ -18,7 +18,7 @@ android {
         testInstrumentationRunner "com.orgzly.android.OrgzlyTestRunner"
         // testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        multiDexEnabled true
+        multiDexEnabled = true
 
         buildConfigField "String", "DROPBOX_APP_KEY", gradle.ext.appProperties.getProperty("dropbox.app_key", '""')
 
@@ -35,8 +35,8 @@ android {
     }
 
     buildFeatures {
-        viewBinding true
-        buildConfig true
+        viewBinding = true
+        buildConfig = true
     }
 
     testOptions {
@@ -47,7 +47,7 @@ android {
 
     buildTypes {
         release {
-            shrinkResources true
+            shrinkResources = true
             minifyEnabled true
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -113,7 +113,7 @@ android {
     }
 
     lint {
-        checkDependencies true
+        checkDependencies = true
         disable 'MissingTranslation', 'MissingQuantity', 'ImpliedQuantity', 'InvalidPackage'
     }
 }
