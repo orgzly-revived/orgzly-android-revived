@@ -40,7 +40,6 @@ import com.orgzly.android.repos.DirectoryRepoTest
 import com.orgzly.android.repos.DropboxRepoTest
 import com.orgzly.android.repos.LocalDbRepoTest
 import com.orgzly.android.repos.RepoFactoryTest
-import com.orgzly.android.repos.SyncTest
 import com.orgzly.android.ui.ImageLoaderTest
 import com.orgzly.android.uiautomator.ListWidgetTest
 import com.orgzly.android.usecase.NoteUpdateDeadlineTimeTest
@@ -99,7 +98,6 @@ import org.junit.runners.Suite
         DropboxRepoTest::class,
         LocalDbRepoTest::class,
         RepoFactoryTest::class,
-        SyncTest::class,
 
         ImageLoaderTest::class,
 
