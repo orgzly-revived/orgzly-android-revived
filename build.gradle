@@ -108,3 +108,8 @@ allprojects {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
 }
+
+tasks.register('pullScreenshot', Exec) {
+    final def command = ['adb', 'pull', '/sdcard/Pictures/.', buildDir]
+    commandLine command
+}
