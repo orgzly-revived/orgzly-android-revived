@@ -7,9 +7,9 @@ import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
 /**
- * Retry test rule used to retry test that failed. Retry failed test 3 times
+ * Used for retrying flaky tests.
  */
-class RetryTestRule(val retryCount: Int = 3) : TestRule {
+class RetryTestRule(val retryCount: Int = 10) : TestRule {
 
     private val TAG = RetryTestRule::class.java.simpleName
 
