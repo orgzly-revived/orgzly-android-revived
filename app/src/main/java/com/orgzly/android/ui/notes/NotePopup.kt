@@ -137,7 +137,7 @@ object NotePopup {
         }
     }
 
-    data class Action(@IdRes val id : Int, @DrawableRes val icon: Int, @StringRes val tooltip: Int, val name: String)
+    data class Action(@param:IdRes val id : Int, @param:DrawableRes val icon: Int, @param:StringRes val tooltip: Int, val name: String)
 
     val allActions = listOf(
         Action(R.id.note_popup_set_schedule, R.drawable.ic_today, R.string.schedule, "set-schedule"),

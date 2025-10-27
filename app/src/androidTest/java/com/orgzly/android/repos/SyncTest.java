@@ -1,10 +1,5 @@
 package com.orgzly.android.repos;
 
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.orgzly.android.espresso.util.EspressoUtils.onBook;
-import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -32,9 +27,7 @@ import com.orgzly.android.util.EncodingDetect;
 import com.orgzly.android.util.MiscUtils;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,15 +37,11 @@ import java.util.Map;
 import java.util.UUID;
 
 public class SyncTest extends OrgzlyTest {
-    private static final String TAG = SyncTest.class.getName();
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
     }
-
-    @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
 
     @Test
     public void testOrgRange() {
@@ -199,14 +188,9 @@ public class SyncTest extends OrgzlyTest {
         book = dataRepository.getBooks().get(0);
         assertEquals(BookSyncStatus.DUMMY_WITHOUT_LINK_AND_ONE_ROOK.toString(), book.getBook().getSyncStatus());
 
-        switch (EncodingDetect.USED_METHOD) {
-//            case JCHARDET:
-//                assertEquals("ASCII", versionedRook.getDetectedEncoding());
-//                assertEquals("ASCII", versionedRook.getUsedEncoding());
-            case JUNIVERSALCHARDET:
-                assertNull(book.getBook().getDetectedEncoding());
-                assertEquals("UTF-8", book.getBook().getUsedEncoding());
-                break;
+        if (EncodingDetect.USED_METHOD == EncodingDetect.Method.JUNIVERSALCHARDET) {
+            assertNull(book.getBook().getDetectedEncoding());
+            assertEquals("UTF-8", book.getBook().getUsedEncoding());
         }
         assertNull(book.getBook().getSelectedEncoding());
 
@@ -215,15 +199,9 @@ public class SyncTest extends OrgzlyTest {
         book = dataRepository.getBooks().get(0);
         assertEquals(BookSyncStatus.NO_CHANGE.toString(), book.getBook().getSyncStatus());
 
-        switch (EncodingDetect.USED_METHOD) {
-//            case JCHARDET:
-//                assertEquals("ASCII", versionedRook.getDetectedEncoding());
-//                assertEquals("ASCII", versionedRook.getUsedEncoding());
-//                break;
-            case JUNIVERSALCHARDET:
-                assertNull(book.getBook().getDetectedEncoding());
-                assertEquals("UTF-8", book.getBook().getUsedEncoding());
-                break;
+        if (EncodingDetect.USED_METHOD == EncodingDetect.Method.JUNIVERSALCHARDET) {
+            assertNull(book.getBook().getDetectedEncoding());
+            assertEquals("UTF-8", book.getBook().getUsedEncoding());
         }
         assertNull(book.getBook().getSelectedEncoding());
     }
@@ -292,7 +270,7 @@ public class SyncTest extends OrgzlyTest {
         book = dataRepository.getBooks().get(0);
 
         assertEquals(BookSyncStatus.DUMMY_WITH_LINK.toString(), book.getBook().getSyncStatus());
-        assertTrue(!book.getBook().isDummy());
+        assertFalse(book.getBook().isDummy());
         assertEquals("mock://repo-a/book.org", book.getSyncedTo().getUri().toString());
     }
 
@@ -369,18 +347,6 @@ public class SyncTest extends OrgzlyTest {
         assertEquals("mock://repo-c", book.getLinkRepo().getUrl());
         assertEquals("mock://repo-c", book.getSyncedTo().getRepoUri().toString());
     }
-
-//    public void testEncodingOnSyncSavingStaysTheSame() {
-//        setup.setupRepo("mock://repo-a");
-//        setup.setupRook("mock://repo-a", "mock://repo-a/book.org", "Content A", "1abcde", 1400067156000L);
-//        sync();
-//        setup.renameRepo("mock://repo-a", "mock://repo-b");
-//        sync();
-//        VersionedRook vrook = CurrentRooksHelper.get(testContext, "mock://repo-b/book.org");
-//        assertNull(vrook.getDetectedEncoding());
-//        assertEquals("UTF-8", vrook.getUsedEncoding());
-//
-//    }
 
     @Test
     public void testSyncingOrgTxt() {
@@ -576,7 +542,7 @@ public class SyncTest extends OrgzlyTest {
     }
 
     @Test
-    public void testIgnoreRulePreventsLinkingBook() throws Exception {
+    public void testIgnoreRulePreventsLinkingBook() {
         assumeTrue(Build.VERSION.SDK_INT >= 26);
         String ignoreRules = "*.org\n";
         Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
@@ -589,9 +555,8 @@ public class SyncTest extends OrgzlyTest {
 
         // Create book and sync it
         testUtils.setupBook("booky", "");
-        exceptionRule.expect(IOException.class);
-        exceptionRule.expectMessage("matches a rule in .orgzlyignore");
-        testUtils.syncOrThrow();
+        IOException exception = assertThrows(IOException.class, () -> testUtils.syncOrThrow());
+        assertTrue(exception.getMessage().contains("matches a rule in .orgzlyignore"));
     }
 
 
@@ -601,7 +566,7 @@ public class SyncTest extends OrgzlyTest {
      */
     @Test
     public void testForceLoadBookInSubfolder() {
-        Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
+        testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
         BookView bookView = testUtils.setupBook("a folder/a book", "content");
         testUtils.sync();
         var books = dataRepository.getBooks();
@@ -707,9 +672,9 @@ public class SyncTest extends OrgzlyTest {
     public void testForceLoadingBookWithNoLinkNoRepos() {
         BookView book = testUtils.setupBook("booky", "First book used for testing\n* Note A");
 
-        exceptionRule.expect(IOException.class);
-        exceptionRule.expectMessage(context.getString(R.string.message_book_has_no_link));
-        dataRepository.forceLoadBook(book.getBook().getId());
+        IOException exception = assertThrows(IOException.class,
+            () -> dataRepository.forceLoadBook(book.getBook().getId()));
+        assertEquals("Force-loading failed: " + context.getString(R.string.message_book_has_no_link), exception.getMessage());
     }
 
     @Test
@@ -717,9 +682,9 @@ public class SyncTest extends OrgzlyTest {
         testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
         BookView book = testUtils.setupBook("booky", "First book used for testing\n* Note A");
 
-        exceptionRule.expect(IOException.class);
-        exceptionRule.expectMessage(context.getString(R.string.message_book_has_no_link));
-        dataRepository.forceLoadBook(book.getBook().getId());
+        IOException exception = assertThrows(IOException.class,
+            () -> dataRepository.forceLoadBook(book.getBook().getId()));
+        assertEquals("Force-loading failed: " + context.getString(R.string.message_book_has_no_link), exception.getMessage());
     }
 
     /* Books view was returning multiple entries for the same book, due to duplicates in encodings
@@ -748,17 +713,19 @@ public class SyncTest extends OrgzlyTest {
         testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
         testUtils.setupRepo(RepoType.MOCK, "mock://repo-b");
         Book book = testUtils.setupBook("book-one", "First book used for testing\n* Note A").getBook();
-        exceptionRule.expect(IOException.class);
-        exceptionRule.expectMessage(context.getString(R.string.force_saving_failed, context.getString(R.string.multiple_repos)));
-        dataRepository.forceSaveBook(book.getId());
+        IOException exception = assertThrows(IOException.class,
+            () -> dataRepository.forceSaveBook(book.getId()));
+        assertEquals(context.getString(R.string.force_saving_failed, context.getString(R.string.multiple_repos)),
+            exception.getMessage());
     }
 
     @Test
     public void testForceSavingBookWithNoLinkNoRepos() {
         Book book = testUtils.setupBook("book-one", "First book used for testing\n* Note A").getBook();
-        exceptionRule.expect(IOException.class);
-        exceptionRule.expectMessage(context.getString(R.string.force_saving_failed, context.getString(R.string.no_repos)));
-        dataRepository.forceSaveBook(book.getId());
+        IOException exception = assertThrows(IOException.class,
+            () -> dataRepository.forceSaveBook(book.getId()));
+        assertEquals(context.getString(R.string.force_saving_failed, context.getString(R.string.no_repos)),
+            exception.getMessage());
     }
 
     @Test

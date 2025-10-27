@@ -105,7 +105,7 @@ class NoteFragmentTest : OrgzlyTest() {
         onView(withId(R.id.title)).perform(click())
         onView(withId(R.id.title_edit)).perform(*replaceTextCloseKeyboard("Note title changed"))
 
-        onView(withId(R.id.done)).perform(click()); // Note done
+        onView(withId(R.id.done)).perform(click()) // Note done
 
         onNoteInBook(1, R.id.item_head_title_view).check(matches(withText("Note title changed")))
     }
@@ -234,7 +234,7 @@ class NoteFragmentTest : OrgzlyTest() {
     @Test
     fun testTitleCanNotBeEmptyForNewNote() {
         onView(withId(R.id.fab)).perform(click()) // New note
-        onView(withId(R.id.done)).perform(click()); // Note done
+        onView(withId(R.id.done)).perform(click()) // Note done
         onSnackbar().check(matches(withText(R.string.title_can_not_be_empty)))
     }
 
@@ -243,14 +243,14 @@ class NoteFragmentTest : OrgzlyTest() {
         onNoteInBook(1).perform(click())
         onView(withId(R.id.title)).perform(click())
         onView(withId(R.id.title_edit)).perform(*replaceTextCloseKeyboard(""))
-        onView(withId(R.id.done)).perform(click()); // Note done
+        onView(withId(R.id.done)).perform(click()) // Note done
         onSnackbar().check(matches(withText(R.string.title_can_not_be_empty)))
     }
 
     @Test
     fun testSavingNoteWithRepeater() {
         onNoteInBook(4).perform(click())
-        onView(withId(R.id.done)).perform(click()); // Note done
+        onView(withId(R.id.done)).perform(click()) // Note done
     }
 
     @Test
@@ -483,7 +483,7 @@ class NoteFragmentTest : OrgzlyTest() {
         onView(allOf(withId(R.id.name), withText("prop-name-1"))).check(matches(isDisplayed()))
         onView(allOf(withId(R.id.value), withText("prop-value-1"))).check(matches(isDisplayed()))
 
-        onView(withId(R.id.done)).perform(click()); // Note done
+        onView(withId(R.id.done)).perform(click()) // Note done
 
         onNoteInBook(1).perform(click())
 
