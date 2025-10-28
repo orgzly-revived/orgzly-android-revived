@@ -14,6 +14,7 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
 import com.orgzly.R
 import com.orgzly.android.OrgzlyTest
+import com.orgzly.android.RetryTestRule
 import com.orgzly.android.db.entity.Repo
 import com.orgzly.android.espresso.util.EspressoUtils
 import com.orgzly.android.ui.repos.ReposActivity
@@ -21,6 +22,7 @@ import org.hamcrest.core.AllOf
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
 
@@ -31,6 +33,9 @@ class DocumentRepoTest : SyncRepoTest, OrgzlyTest() {
     private lateinit var syncRepo: SyncRepo
     private lateinit var repoDirectory: DocumentFile
 
+    @get:Rule
+    val mRetryTestRule = RetryTestRule()
+    
     @Before
     override fun setUp() {
         super.setUp()

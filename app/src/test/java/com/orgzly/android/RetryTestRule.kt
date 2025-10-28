@@ -33,11 +33,15 @@ class RetryTestRule(val retryCount: Int = 10) : TestRule {
                         if (caughtThrowable is AssumptionViolatedException) {
                             throw caughtThrowable
                         }
-                        Log.e(TAG, description.displayName + ": run " + (i + 1) + " failed")
+                        val message = "${description.displayName}: run ${i + 1} failed"
+                        System.err.println("[$TAG] $message")
+                        Log.e(TAG, message)
                     }
                 }
 
-                Log.e(TAG, description.displayName + ": giving up after " + retryCount + " failures")
+                val message = "${description.displayName}: giving up after $retryCount failures"
+                System.err.println("[$TAG] $message")
+                Log.e(TAG, message)
                 throw caughtThrowable!!
             }
         }

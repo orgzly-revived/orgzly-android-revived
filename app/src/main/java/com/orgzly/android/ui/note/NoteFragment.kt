@@ -3,7 +3,6 @@ package com.orgzly.android.ui.note
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
@@ -22,6 +21,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -138,12 +138,11 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
         val noteInitialData = noteInitialDataFromArguments()
 
-        sharedMainActivityViewModel = ViewModelProvider(requireActivity())
-            .get(SharedMainActivityViewModel::class.java)
+        sharedMainActivityViewModel = ViewModelProvider(requireActivity())[SharedMainActivityViewModel::class.java]
 
         val factory = NoteViewModelFactory.getInstance(dataRepository, noteInitialData)
 
-        viewModel = ViewModelProvider(this, factory).get(NoteViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory)[NoteViewModel::class.java]
 
         requireActivity().onBackPressedDispatcher.addCallback(this, userCancelBackPressHandler)
     }
@@ -367,8 +366,10 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             }
 
             R.id.sort_note -> {
-                val contentLines = binding.content.getSourceText()?.toString()?.split("\n");
-                Collections.sort(contentLines)
+                val contentLines = binding.content.getSourceText()?.toString()?.split("\n")
+                if (contentLines != null) {
+                    Collections.sort(contentLines)
+                }
                 val newContent = contentLines?.joinToString("\n")
                 binding.content.setSourceText(newContent)
             }
@@ -405,7 +406,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             listener?.onNoteUpdated(note)
         })
 
-        viewModel.noteDeletedEvent.observeSingle(viewLifecycleOwner, Observer { count ->
+        viewModel.noteDeletedEvent.observeSingle(viewLifecycleOwner) { count ->
             (activity as? MainActivity)?.popBackStackAndCloseKeyboard()
 
             val message = if (count == 0) {
@@ -415,35 +416,33 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             }
 
             activity?.showSnackbar(message)
-        })
+        }
 
-        viewModel.noteDeleteRequest.observeSingle(viewLifecycleOwner, Observer { count ->
+        viewModel.noteDeleteRequest.observeSingle(viewLifecycleOwner) { count ->
             val question = resources.getQuantityString(
-                R.plurals.delete_note_or_notes_with_count_question, count, count)
+                R.plurals.delete_note_or_notes_with_count_question, count, count
+            )
 
-            dialog = MaterialAlertDialogBuilder(requireContext())
-                .setTitle(question)
+            dialog = MaterialAlertDialogBuilder(requireContext()).setTitle(question)
                 .setPositiveButton(R.string.delete) { _, _ ->
                     viewModel.deleteNote()
-                }
-                .setNegativeButton(R.string.cancel) { _, _ -> }
-                .show()
+                }.setNegativeButton(R.string.cancel) { _, _ -> }.show()
 
-        })
+        }
 
-        viewModel.bookChangeRequestEvent.observeSingle(viewLifecycleOwner, Observer { books ->
+        viewModel.bookChangeRequestEvent.observeSingle(viewLifecycleOwner) { books ->
             if (books != null) {
                 handleNoteBookChangeRequest(books)
             }
-        })
+        }
 
-        viewModel.errorEvent.observeSingle(viewLifecycleOwner, Observer { error ->
+        viewModel.errorEvent.observeSingle(viewLifecycleOwner) { error ->
             activity?.showSnackbar((error.cause ?: error).localizedMessage)
-        })
+        }
 
-        viewModel.snackBarMessage.observeSingle(viewLifecycleOwner, Observer { resId ->
+        viewModel.snackBarMessage.observeSingle(viewLifecycleOwner) { resId ->
             activity?.showSnackbar(resId)
-        })
+        }
     }
 
     private fun updateViewsFromPayload() {
@@ -585,12 +584,13 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         // Planning times are updated in onDateTimeSet
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, savedInstanceState)
 
-        viewModel.noteDetailsDataEvent.observeSingle(viewLifecycleOwner, Observer { data ->
+        viewModel.noteDetailsDataEvent.observeSingle(viewLifecycleOwner) { data ->
             data.book?.let {
                 val bookTitle = BookUtils.getFragmentTitleForBook(it.book)
 
@@ -613,14 +613,13 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
                 binding.locationButton.text = bookTitle
             }
 
-            binding.viewFlipper.displayedChild =
-                if (viewModel.isNew()) {
-                    0
-                } else if (viewModel.notePayload != null) {
-                    0
-                } else {
-                    1
-                }
+            binding.viewFlipper.displayedChild = if (viewModel.isNew()) {
+                0
+            } else if (viewModel.notePayload != null) {
+                0
+            } else {
+                1
+            }
 
             // Load payload from saved Bundle if available
             if (savedInstanceState != null) {
@@ -639,7 +638,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             if (viewModel.isNew() && !viewModel.hasInitialTitleData()) {
                 binding.title.toEditMode(0)
             }
-        })
+        }
 
         viewModel.loadData()
     }
@@ -905,7 +904,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         if ((time != null) && time.hasTime()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (!requireContext().getAlarmManager().canScheduleExactAlarms()) {
-                    val uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+                    val uri = ("package:" + BuildConfig.APPLICATION_ID).toUri()
                     activity?.startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM, uri))
                 }
             }

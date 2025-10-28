@@ -95,16 +95,21 @@ allprojects {
         google()
 
         maven {
-            url 'https://oss.sonatype.org/content/repositories/snapshots'
+            url = 'https://oss.sonatype.org/content/repositories/snapshots'
         }
 
         // For sardine-android and org-java
         maven {
-            url 'https://jitpack.io'
+            url = 'https://jitpack.io'
         }
     }
 
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
+}
+
+tasks.register('pullScreenshot', Exec) {
+    final def command = ['adb', 'pull', '/sdcard/Pictures/.', buildDir]
+    commandLine command
 }

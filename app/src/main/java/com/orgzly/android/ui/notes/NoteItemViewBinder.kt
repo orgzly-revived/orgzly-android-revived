@@ -230,7 +230,7 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
                 }
 
                 // Inflate the rest
-                for (i in container.childCount + 1..level) {
+                (container.childCount + 1..level).forEach { i ->
                     View.inflate(container.context, R.layout.indent, container)
                 }
             }
@@ -464,10 +464,10 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
 
 
     private data class Attrs(
-        @ColorInt val todoColor: Int,
-        @ColorInt val doneColor: Int,
+        @param:ColorInt val todoColor: Int,
+        @param:ColorInt val doneColor: Int,
         val postTitleTextSize: Int,
-        @ColorInt val postTitleTextColor: Int
+        @param:ColorInt val postTitleTextColor: Int
     ) {
         companion object {
             @SuppressWarnings("ResourceType")

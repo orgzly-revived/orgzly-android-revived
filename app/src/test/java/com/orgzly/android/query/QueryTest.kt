@@ -1,20 +1,29 @@
 package com.orgzly.android.query
 
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
-import com.orgzly.android.OrgzlyTest
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
+import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.query.sql.SqliteQueryBuilder
 import com.orgzly.android.query.user.DottedQueryBuilder
 import com.orgzly.android.query.user.DottedQueryParser
-import org.hamcrest.Matchers.`is`
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
-import java.util.*
+import org.robolectric.ParameterizedRobolectricTestRunner
+import org.robolectric.annotation.Config
+import java.util.Calendar
 
-@RunWith(value = Parameterized::class)
-class QueryTest(private val param: Parameter) : OrgzlyTest() {
+/**
+ * Unit tests for query parsing and SQL generation.
+ * Migrated from instrumented tests to run on JVM with Robolectric.
+ */
+@RunWith(ParameterizedRobolectricTestRunner::class)
+@Config(sdk = [35])
+class QueryTest(private val param: Parameter) {
 
+    private lateinit var context: Context
     private lateinit var actualParsedQuery: String
     private lateinit var actualQueryString: String
     private lateinit var actualSqlSelection: String
@@ -36,7 +45,8 @@ class QueryTest(private val param: Parameter) : OrgzlyTest() {
     )
 
     companion object {
-        @JvmStatic @Parameterized.Parameters
+        @JvmStatic
+        @ParameterizedRobolectricTestRunner.Parameters
         fun data(): Collection<Parameter> {
             return listOf(
                     Parameter(
@@ -290,8 +300,13 @@ class QueryTest(private val param: Parameter) : OrgzlyTest() {
     }
 
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
+        // Get application context from Robolectric
+        context = ApplicationProvider.getApplicationContext()
+
+        // Set up default preferences for testing
+        AppPreferences.states(context, "TODO NEXT | DONE")
+        AppPreferences.defaultPriority(context, "B")
 
         // Parse query
         val parser = DottedQueryParser()

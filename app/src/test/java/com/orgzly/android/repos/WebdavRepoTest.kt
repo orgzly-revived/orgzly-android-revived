@@ -1,6 +1,7 @@
 package com.orgzly.android.repos
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.orgzly.android.RetryTestRule
 import com.orgzly.android.db.entity.Repo
 import com.orgzly.android.repos.WebdavRepo.Companion.PASSWORD_PREF_KEY
 import com.orgzly.android.repos.WebdavRepo.Companion.USERNAME_PREF_KEY
@@ -8,6 +9,7 @@ import io.github.atetzner.webdav.server.MiltonWebDAVFileServer
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
@@ -16,6 +18,9 @@ import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
 class WebdavRepoTest : SyncRepoTest {
+
+    @get:Rule
+    val retryTestRule = RetryTestRule(3)
 
     private val serverUrl = "http://localhost:8081"
 

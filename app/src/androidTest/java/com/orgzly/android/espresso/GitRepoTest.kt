@@ -10,6 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.orgzly.R
 import com.orgzly.android.OrgzlyTest
+import com.orgzly.android.RetryTestRule
 import com.orgzly.android.db.entity.Repo
 import com.orgzly.android.espresso.util.EspressoUtils.contextualToolbarOverflowMenu
 import com.orgzly.android.espresso.util.EspressoUtils.onBook
@@ -24,6 +25,7 @@ import org.eclipse.jgit.api.Git
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import java.io.File
 import kotlin.io.path.createTempDirectory
@@ -32,6 +34,9 @@ class GitRepoTest : OrgzlyTest() {
     private lateinit var bareRepoDir: File
     private lateinit var gitWorkingTree: File
     private lateinit var repo: Repo
+
+    @get:Rule
+    val mRetryTestRule = RetryTestRule()
 
     @Before
     override fun setUp() {

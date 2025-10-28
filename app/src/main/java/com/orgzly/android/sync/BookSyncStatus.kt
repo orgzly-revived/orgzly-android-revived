@@ -84,9 +84,6 @@ enum class BookSyncStatus {
 
             ROOK_NO_LONGER_EXISTS ->
                 return context.getString(R.string.sync_status_rook_no_longer_exists)
-
-            else ->
-                throw IllegalArgumentException("Unknown sync status " + this)
         }
     }
 }

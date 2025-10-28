@@ -23,6 +23,7 @@ import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.Matchers.anything;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.SystemClock;
@@ -38,15 +39,18 @@ import androidx.annotation.IdRes;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.DataInteraction;
+import androidx.test.espresso.FailureHandler;
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.action.CloseKeyboardAction;
+import androidx.test.espresso.base.DefaultFailureHandler;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.espresso.util.HumanReadables;
 import androidx.test.espresso.util.TreeIterables;
+import androidx.test.uiautomator.UiDevice;
 
 import com.orgzly.R;
 import com.orgzly.android.ui.SpanUtils;
@@ -56,6 +60,8 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 
+import java.io.File;
+import java.time.Instant;
 import java.util.concurrent.TimeoutException;
 
 /*
@@ -533,5 +539,27 @@ public class EspressoUtils {
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.sync_button_container)).perform(click());
         onView(withId(R.id.drawer_layout)).perform(close());
+    }
+
+    /**
+     * Use this with Espresso.setFailureHandler() for taking screenshots when tests fail. Not
+     * globally enabled because it gets triggered by all exceptions, even the ones that we expect
+     * and catch (resulting in "screenshot noise").
+     */
+    public static class OrgzlyCustomFailureHandler implements FailureHandler {
+        private final FailureHandler delegate;
+
+        public OrgzlyCustomFailureHandler(Context targetContext) {
+            delegate = new DefaultFailureHandler(targetContext);
+        }
+
+        @Override
+        public void handle(Throwable error, Matcher<View> viewMatcher) {
+            // take screenshot
+            UiDevice device = UiDevice.getInstance(getInstrumentation());
+            device.takeScreenshot(new File("/sdcard/Pictures/fail-screenshot-" + Instant.now().getEpochSecond() + ".png"));
+            // hand over to default handler
+            delegate.handle(error, viewMatcher);
+        }
     }
 }

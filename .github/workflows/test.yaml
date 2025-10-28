@@ -126,4 +126,12 @@ jobs:
           disable-spellchecker: true
           profile: Nexus 6
           # Tests should use the build which includes Dropbox code.
-          script: ./gradlew --no-configuration-cache connected${{matrix.flavor}}DebugAndroidTest --no-watch-fs --build-cache --info
+          script: ./gradlew --no-configuration-cache connected${{matrix.flavor}}DebugAndroidTest --no-watch-fs --build-cache --info || { ./gradlew pullScreenshot; exit 1; }
+
+      - name: Upload screenshot
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshot
+          path: ./build/fail-screenshot-*.png
+          if-no-files-found: ignore
