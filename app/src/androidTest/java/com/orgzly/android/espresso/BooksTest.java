@@ -47,48 +47,54 @@ import androidx.test.uiautomator.UiDevice;
 import com.orgzly.R;
 import com.orgzly.android.BookFormat;
 import com.orgzly.android.OrgzlyTest;
+import com.orgzly.android.RetryTestRule;
 import com.orgzly.android.repos.RepoType;
 import com.orgzly.android.ui.main.MainActivity;
 
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 
 public class BooksTest extends OrgzlyTest {
+
+    @Rule
+    public RetryTestRule mRetryTestRule = new RetryTestRule();
+
     @Before
     public void setUp() throws Exception {
         super.setUp();
 
-        testUtils.setupBook("book-1",
-                "First book used for testing\n" +
-                "* Note A.\n" +
-                "** Note B.\n" +
-                "* TODO Note C.\n" +
-                "SCHEDULED: <2014-01-01>\n" +
-                "** Note D.\n" +
-                "*** TODO Note E.\n" +
-                ""
+        testUtils.setupBook("book-1", """
+                First book used for testing
+                * Note A.
+                ** Note B.
+                * TODO Note C.
+                SCHEDULED: <2014-01-01>
+                ** Note D.
+                *** TODO Note E.
+                """
         );
 
-        testUtils.setupBook("book-2",
-                "Sample book used for tests\n" +
-                "* Note #1.\n" +
-                "* Note #2.\n" +
-                "** TODO Note #3.\n" +
-                "** Note #4.\n" +
-                "*** DONE Note #5.\n" +
-                "CLOSED: [2014-06-03 Tue 13:34]\n" +
-                "**** Note #6.\n" +
-                "** Note #7.\n" +
-                "* DONE Note #8.\n" +
-                "CLOSED: [2014-06-03 Tue 3:34]\n" +
-                "**** Note #9.\n" +
-                "SCHEDULED: <2014-05-26 Mon>\n" +
-                "** Note #10.\n" +
-                ""
+        testUtils.setupBook("book-2", """
+                Sample book used for tests
+                * Note #1.
+                * Note #2.
+                ** TODO Note #3.
+                ** Note #4.
+                *** DONE Note #5.
+                CLOSED: [2014-06-03 Tue 13:34]
+                **** Note #6.
+                ** Note #7.
+                * DONE Note #8.
+                CLOSED: [2014-06-03 Tue 3:34]
+                **** Note #9.
+                SCHEDULED: <2014-05-26 Mon>
+                ** Note #10.
+                """
         );
 
         testUtils.setupBook("book-3", "");
@@ -286,7 +292,7 @@ public class BooksTest extends OrgzlyTest {
     }
 
     @Test
-    public void testNoteCountDisplayed() throws IOException {
+    public void testNoteCountDisplayed() {
         onBook(0, R.id.item_book_note_count)
                 .check(matches(withText(context.getResources().getQuantityString(R.plurals.notes_count_nonzero, 5, 5))));
         onBook(1, R.id.item_book_note_count)
