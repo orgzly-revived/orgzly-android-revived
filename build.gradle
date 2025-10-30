@@ -65,7 +65,7 @@ buildscript {
 
     versions.okhttp_digest = '3.1.1'
 
-    versions.jgit = '5.13.3.202401111512-r'
+    versions.jgit = '5.13.5.202508271544-r'
 
     versions.security_crypto = '1.1.0'
 
