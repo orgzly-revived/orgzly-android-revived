@@ -65,6 +65,9 @@ public class BookTest extends OrgzlyTest {
         return longContentBuilder.toString();
     }
 
+    @Rule
+    public RetryTestRule mRetryTestRule = new RetryTestRule();
+
     @Before
     public void setUp() throws Exception {
         super.setUp();
