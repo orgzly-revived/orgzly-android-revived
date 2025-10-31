@@ -34,12 +34,14 @@ import androidx.test.core.app.ActivityScenario;
 
 import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
+import com.orgzly.android.RetryTestRule;
 import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.ui.main.MainActivity;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 public class BookTest extends OrgzlyTest {
