@@ -19,7 +19,7 @@ jobs:
       version: ${{ steps.daily-version.outputs.version }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - uses: fregante/daily-version-action@fb1a60b7c4daf1410cd755e360ebec3901e58588 # v2
         name: Tag commit unless already tagged
         id: daily-version
@@ -35,7 +35,7 @@ jobs:
     steps:
 
       - name: Checkout code
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
 
       - name: Store version/tag name in shell env variable
         run: echo "VERSION=${{ needs.AddTag.outputs.version }}" >> $GITHUB_ENV
