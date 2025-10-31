@@ -4,5 +4,7 @@
     "config:best-practices"
   ],
   "prConcurrentLimit": 1,
-  "ignoreDeps": ["com.android.tools.build:gradle"]
+  "ignoreDeps": ["com.android.tools.build:gradle"],
+  "minimumReleaseAge": "30 days",
+  "internalChecksFilter": "strict"
 }
