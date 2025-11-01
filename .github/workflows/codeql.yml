@@ -94,9 +94,7 @@ jobs:
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
     - if: matrix.build-mode == 'manual'
       shell: bash
-      run: |
-        ./gradlew :app:compileFdroidDebugKotlin
-        ./gradlew :app:compilePremiumDebugKotlin
+      run: ./gradlew clean :app:compileFdroidDebugSources :app:compilePremiumDebugSources
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@5d5cd550d3e189c569da8f16ea8de2d821c9bf7a # v3
