@@ -367,7 +367,7 @@ class DataRepository @Inject constructor(
         val oldName = book.name
 
         if (name.contains("../"))
-            throw IOException("Book name cannot contain '../'."))
+            throw IOException("Book name cannot contain '../'.")
 
         /* Make sure there is no notebook with this name. */
         if (doesBookExist(name)) {
