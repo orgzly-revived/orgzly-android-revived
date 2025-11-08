@@ -25,9 +25,6 @@ on:
       - 'metadata/**'
       - 'app/src/main/res/raw-*/*'
       - 'app/src/main/res/values-*/*'
-  push:
-    branches-ignore:
-      - 'master'
   workflow_dispatch:
 
 jobs:
