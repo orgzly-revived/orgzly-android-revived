@@ -311,6 +311,9 @@ class DataRepository @Inject constructor(
             throw IOException(resources.getString(R.string.book_name_already_exists, name))
         }
 
+        if (name.contains("../"))
+            throw IOException(context.getString(R.string.book_names_cannot_contain))
+
         val book = Book(
                 0,
                 name,
@@ -370,6 +373,9 @@ class DataRepository @Inject constructor(
         if (doesBookExist(name)) {
             throw IOException(resources.getString(R.string.book_name_already_exists, name))
         }
+
+        if (name.contains("../"))
+            throw IOException(context.getString(R.string.book_names_cannot_contain))
 
         /* Make sure link's repo is the same as sync book repo. */
         if (bookView.linkRepo != null && bookView.syncedTo != null) {
