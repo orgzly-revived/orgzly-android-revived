@@ -1,68 +1,57 @@
 package com.orgzly.android.sync
 
-import android.app.AlarmManager
 import android.app.Application
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.os.Build
-import android.os.SystemClock
-import com.orgzly.android.AppIntent
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.orgzly.android.data.logs.AppLogsRepository
 import com.orgzly.android.prefs.AppPreferences
-import com.orgzly.android.ui.util.ActivityUtils
-import com.orgzly.android.ui.util.getAlarmManager
 import com.orgzly.android.util.LogMajorEvents
 import org.joda.time.DateTime
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class AutoSyncScheduler @Inject constructor(val context: Application, val logs: AppLogsRepository) {
 
     companion object {
+        private const val WORK_NAME = "scheduled-auto-sync"
+
         fun schedule(context: Context) {
-            val intervalInMs = AppPreferences.scheduledSyncIntervalInMins(context).toLong() * 60 * 1000
-            val alarmManager = context.getAlarmManager()
-            alarmManager.set(
-                AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + intervalInMs,
-                buildPendingIntent(context))
+            val intervalInMins = AppPreferences.scheduledSyncIntervalInMins(context).toLong()
+
+            val workRequest = PeriodicWorkRequestBuilder<ScheduledSyncWorker>(
+                intervalInMins, TimeUnit.MINUTES
+            ).build()
+
+            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+                WORK_NAME,
+                ExistingPeriodicWorkPolicy.UPDATE,
+                workRequest
+            )
         }
 
         fun cancelAll(context: Context) {
-            context.getAlarmManager().cancel(buildPendingIntent(context))
-        }
-
-        private fun buildPendingIntent(context: Context): PendingIntent {
-            val intent = Intent(context, ScheduledAutoSyncBroadcastReceiver::class.java)
-            intent.setAction(AppIntent.ACTION_SYNC_START)
-            return PendingIntent.getBroadcast(context, 0, intent, ActivityUtils.mutable(PendingIntent.FLAG_UPDATE_CURRENT))
+            WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
         }
     }
 
     private fun logScheduled() {
         if (LogMajorEvents.isEnabled()) {
             val now = System.currentTimeMillis()
-            val intervalInMs = AppPreferences.scheduledSyncIntervalInMins(context).toLong() * 60 * 1000
+            val intervalInMins = AppPreferences.scheduledSyncIntervalInMins(context).toLong()
+            val intervalInMs = intervalInMins * 60 * 1000
+
             logs.log(
                 LogMajorEvents.SYNC,
-                "Scheduled sync in $intervalInMs ms (~ ${DateTime(now + intervalInMs)}) on ${Build.DEVICE} (API ${Build.VERSION.SDK_INT})"
+                "Scheduled sync every $intervalInMins minutes (next ~ ${DateTime(now + intervalInMs)}) on ${Build.DEVICE} (API ${Build.VERSION.SDK_INT})"
             )
         }
     }
 
-    private fun logCancelled() {
-        if (LogMajorEvents.isEnabled()) {
-            logs.log(LogMajorEvents.SYNC, "Canceled all scheduled syncs")
-        }
-    }
-
     fun schedule() {
-        Companion.schedule(context)
+        schedule(context)
         logScheduled()
-    }
-
-    fun cancelAll() {
-        Companion.cancelAll(context)
-        logCancelled()
     }
 }

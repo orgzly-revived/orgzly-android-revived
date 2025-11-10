@@ -45,8 +45,8 @@
     <SwitchPreference
         android:key="@string/pref_key_auto_sync_at_interval_enabled"
         android:dependency="@string/pref_key_auto_sync"
-        android:title="@string/pref_key_auto_sync_at_interval_title"
-        android:summary="@string/pref_key_auto_sync_at_interval_summary"
+        android:title="@string/pref_title_sync_at_interval"
+        android:summary="@string/pref_summary_sync_at_interval"
         android:defaultValue="@bool/pref_default_auto_sync_at_interval_enabled"/>
 
     <com.orgzly.android.prefs.IntegerPreference
@@ -54,9 +54,9 @@
         android:dependency="@string/pref_key_auto_sync_at_interval_enabled"
         android:title="@string/pref_key_auto_sync_interval_title"
         android:selectAllOnFocus="true"
-        android:inputType="numberSigned"
+        android:inputType="number"
         android:defaultValue="@string/pref_default_auto_sync_interval_in_mins"
-        app:min="@integer/pref_key_auto_sync_interval_minimum_value" />
+        app:min="@string/pref_key_auto_sync_interval_minimum_minutes" />
 
     <SwitchPreference
         android:key="@string/pref_key_auto_sync_on_repo_change"

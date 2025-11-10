@@ -50,13 +50,7 @@ class AutoSync @Inject constructor(val context: Application, val dataRepository:
     private fun startSync() {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG)
 
-        // Cancel any scheduled auto-sync - no matter what triggered this one.
-        autoSyncScheduler.cancelAll()
-
         SyncRunner.startAuto()
-
-        if (AppPreferences.scheduledSyncEnabled(context))
-            autoSyncScheduler.schedule()
     }
 
     enum class Type {

@@ -10,7 +10,7 @@ import com.orgzly.android.di.module.DatabaseModule
 import com.orgzly.android.external.actionhandlers.ExternalAccessActionHandler
 import com.orgzly.android.reminders.NoteReminders
 import com.orgzly.android.reminders.RemindersBroadcastReceiver
-import com.orgzly.android.sync.ScheduledAutoSyncBroadcastReceiver
+import com.orgzly.android.sync.ScheduledSyncWorker
 import com.orgzly.android.sync.SyncWorker
 import com.orgzly.android.ui.BookChooserActivity
 import com.orgzly.android.ui.TemplateChooserActivity
@@ -82,6 +82,7 @@ interface AppComponent {
     fun inject(arg: SyncFragment)
 
     fun inject(arg: SyncWorker)
+    fun inject(arg: ScheduledSyncWorker)
     fun inject(arg: NoteReminders)
     fun inject(arg: UseCaseRunner.Factory)
     fun inject(arg: UseCaseWorker)
@@ -90,7 +91,6 @@ interface AppComponent {
     fun inject(arg: NewNoteBroadcastReceiver)
     fun inject(arg: TimeChangeBroadcastReceiver)
     fun inject(arg: RemindersBroadcastReceiver)
-    fun inject(arg: ScheduledAutoSyncBroadcastReceiver)
     fun inject(arg: NotificationBroadcastReceiver)
     fun inject(arg: SharingShortcutsManager)
     fun inject(arg: ExternalAccessActionHandler)
