@@ -399,13 +399,13 @@
     <string name="auto_sync">Automatisk synkronisering</string>
     <string name="auto_sync_summary">Stöds ej med Dropbox</string>
     <string name="auto_sync_warning">Beroende på vilka inställningar du gör kan synkronisering triggas ofta. När en anteckningsbok ändras överförs allt dess innehåll till eller från lagringsplatsen. Vissa åtgärder kan fördröjas medan synkroniseringen pågår.</string>
-    <string name="pref_title_sync_after_note_create">Vid skapad anteckning</string>
+    <string name="pref_title_sync_after_note_create">När en anteckning skapas</string>
     <string name="pref_summary_sync_after_note_create">Synkronisera när en ny anteckning har skapats</string>
-    <string name="pref_title_sync_after_note_update">Vid uppdaterad eller borttagen anteckning</string>
+    <string name="pref_title_sync_after_note_update">När en anteckning uppdateras eller raderas</string>
     <string name="pref_summary_sync_after_note_update">Synkronisera efter att anteckning redigerats eller raderats</string>
-    <string name="pref_title_on_resume_sync">Appen startades eller återupptogs</string>
+    <string name="pref_title_on_resume_sync">När appen startas eller återfår fokus</string>
     <string name="pref_summary_on_resume_sync">Synkronisera när appen kommer till förgrunden</string>
-    <string name="pref_title_on_suspend_sync">Appen pausas</string>
+    <string name="pref_title_on_suspend_sync">När appen pausas</string>
     <string name="pref_summary_on_suspend_sync">Synkronisera när appen hamnar i bakgrunden</string>
     <string name="pref_title_repo_update_sync">När en lagringsplats ändras (inte implementerat ännu)</string>
     <string name="pref_summary_repo_update_sync">Synkronisera så snart en uppdatering av en lagringsplats upptäcks</string>
@@ -597,4 +597,8 @@
     <string name="allow_folding_in_search">Tillåt utfällning av innehåll i sökvyer</string>
     <string name="orgzlyignore_file">Fil med ignoreringsregler</string>
     <string name="orgzlyignore_file_desc">Sökväg till fil (relativt till lagringsplatsens rot-katalog) med ignoreringsregler för filnamn</string>
+    <string name="placement_of_shared_text">Placering av delad text</string>
+    <string name="in_note_heading">I anteckningens rubrik</string>
+    <string name="in_note_content">I anteckningens innehåll</string>
+    <string name="book_names_cannot_contain">Böckers namn får inte innehålla ”../”</string>
 </resources>
