@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="color_theme_system_default" translatable="true">Système par défaut</string>
+    <string name="color_theme_light" translatable="true">Clair</string>
+    <string name="color_theme_dark" translatable="true">Sombre</string>
+</resources>
