@@ -300,6 +300,15 @@
     <string name="pref_key_auto_sync_on_repo_change" translatable="false">pref_key_auto_sync_on_repo_change</string>
     <bool name="pref_default_auto_sync_on_repo_change" translatable="false">false</bool>
 
+    <string name="pref_key_auto_sync_at_interval_enabled" translatable="false">pref_key_auto_sync_at_interval_enabled</string>
+    <bool name="pref_default_auto_sync_at_interval_enabled" translatable="false">false</bool>
+
+    <string name="pref_key_auto_sync_interval_in_mins" translatable="false">pref_key_auto_sync_interval_in_mins</string>
+    <string name="pref_default_auto_sync_interval_in_mins" translatable="false">60</string>
+    <string name="pref_key_auto_sync_interval_minimum_minutes" translatable="false">15</string>
+
+    <integer name="pref_key_auto_sync_interval_minimum_value" translatable="false">1</integer>
+
 
     <string name="pref_key_snooze_time" translatable="false">pref_key_snooze_time</string>
     <string name="pref_default_snooze_time" translatable="false">5</string>
