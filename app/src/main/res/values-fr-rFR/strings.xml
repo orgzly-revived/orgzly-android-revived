@@ -515,4 +515,9 @@
     <string name="refresh_data">Rafraîchir</string>
     <string name="ssh_show_public_key_preference_title">Afficher la clé publique SSH générée</string>
     <string name="permissions_rationale_for_post_notifications">Autorisation nécessaire pour envoyer des notifications</string>
+    <string name="sortnote">Trier la note</string>
+    <string name="delete_amount_of_books">Supprimer %d bloc-notes</string>
+    <string name="moving_between_subdirectories_requires_api_24">Renommer le bloc-notes vers un autre sous-répertoire nécessite Android 7 ou une version supérieure</string>
+    <string name="sync_status_no_change">Pas de changement</string>
+    <string name="ssh_keygen_preference_title">Génération de clé SSH</string>
 </resources>
