@@ -58,6 +58,8 @@ import com.orgzly.android.ui.util.goneIf
 import com.orgzly.android.ui.util.goneUnless
 import com.orgzly.android.ui.util.invisibleIf
 import com.orgzly.android.ui.util.invisibleUnless
+import com.orgzly.android.ui.views.richtext.RichText
+import com.orgzly.android.ui.views.richtext.RichTextEdit
 import com.orgzly.android.util.LogUtils
 import com.orgzly.android.util.OrgFormatter
 import com.orgzly.android.util.SpaceTokenizer
@@ -73,7 +75,7 @@ import javax.inject.Inject
 /**
  * Note editor.
  */
-class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFragment.OnDateTimeSetListener, DrawerItem {
+class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFragment.OnDateTimeSetListener, DrawerItem, RichText.OnModeChangeListener {
 
     private lateinit var binding: FragmentNoteBinding
 
@@ -182,7 +184,6 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             binding.locationContainer.visibility = View.GONE
         }
 
-
         // Hide remove button if there are no tags
         binding.tagsButton.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -223,7 +224,6 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
         binding.content.setOnUserTextChangeListener { str ->
             binding.content.setSourceText(str)
-
         }
 
         /*
@@ -255,6 +255,16 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         }
 
         setContentFoldState(AppPreferences.isNoteContentFolded(context))
+        binding.content.setOnModeChangeListener(this)
+        binding.title.setOnModeChangeListener(this)
+    }
+
+    // Show/hide "insert timestamp" button
+    override fun onEditMode() {
+        binding.topToolbar.menu.findItem(R.id.insert_inline_timestamp).isVisible = true
+    }
+    override fun onViewMode() {
+        binding.topToolbar.menu.findItem(R.id.insert_inline_timestamp).isVisible = false
     }
 
     private fun topToolbarToViewMode() {
@@ -379,6 +389,21 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
                 }
                 val newContent = contentLines?.joinToString("\n")
                 binding.content.setSourceText(newContent)
+            }
+
+            R.id.insert_inline_timestamp -> {
+                // The current view can only be content_edit or title_edit
+                val originViewId = if (binding.content.isBeingEdited()) {
+                    R.id.content_edit
+                } else {
+                    R.id.title_edit
+                }
+                TimestampDialogFragment.getInstance(
+                    originViewId,
+                    TimeType.EVENT,
+                    emptySet(),
+                    null)
+                    .show(childFragmentManager, TimestampDialogFragment.FRAGMENT_TAG)
             }
         }
 
@@ -644,6 +669,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
              */
             if (viewModel.isNew() && !viewModel.hasInitialTitleData()) {
                 binding.title.toEditMode(0)
+                binding.topToolbar.menu.findItem(R.id.insert_inline_timestamp).isVisible = true
             }
         }
 
@@ -884,10 +910,10 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         return selected
     }
 
-    override fun onDateTimeSet(id: Int, noteIds: TreeSet<Long>, time: OrgDateTime?) {
+    override fun onDateTimeSet(originViewId: Int, noteIds: TreeSet<Long>, time: OrgDateTime?) {
         val range = if (time != null) OrgRange(time) else null
 
-        when (id) {
+        when (originViewId) {
             R.id.scheduled_button -> {
                 updateTimestampView(TimeType.SCHEDULED, range)
                 ensureAlarmPermissions(time)
@@ -904,6 +930,14 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
                 updateTimestampView(TimeType.CLOSED, range)
                 viewModel.updatePayloadClosedTime(range)
             }
+
+            R.id.content_edit, R.id.title_edit -> {
+                if (time != null) {
+                    val originView = this.view?.findViewById<RichTextEdit>(originViewId)
+                    originView?.insertStringAtCursorPosition(time.toString())
+                    ensureAlarmPermissions(time)
+                }
+            }
         }
     }
 
@@ -918,8 +952,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         }
     }
 
-    override fun onDateTimeAborted(id: Int, noteIds: TreeSet<Long>) {
-
+    override fun onDateTimeAborted(originViewId: Int, noteIds: TreeSet<Long>) {
     }
 
     private fun setMetadataViewsVisibility() {

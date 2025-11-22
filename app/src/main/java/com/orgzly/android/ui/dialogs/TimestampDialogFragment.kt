@@ -13,8 +13,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orgzly.BuildConfig
 import com.orgzly.R
+import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.TimeType
 import com.orgzly.android.ui.util.KeyboardUtils
+import com.orgzly.android.ui.views.richtext.RichTextEdit
 import com.orgzly.android.util.LogUtils
 import com.orgzly.android.util.UserTimeFormatter
 import com.orgzly.databinding.DialogTimestampBinding
@@ -22,6 +24,7 @@ import com.orgzly.databinding.DialogTimestampTitleBinding
 import com.orgzly.org.datetime.OrgDateTime
 import java.util.Calendar
 import java.util.TreeSet
+import kotlin.properties.Delegates
 
 class TimestampDialogFragment : DialogFragment(), View.OnClickListener {
     private var listener: OnDateTimeSetListener? = null
@@ -35,6 +38,10 @@ class TimestampDialogFragment : DialogFragment(), View.OnClickListener {
 
     // Currently opened picker. Keep the reference to avoid leak.
     private var pickerDialog: AlertDialog? = null
+
+    // The view that the dialog was launched from.
+    // Sometimes required for showing the keyboard again after closing the dialog.
+    private var originViewId: Int by Delegates.notNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +66,7 @@ class TimestampDialogFragment : DialogFragment(), View.OnClickListener {
 
         val args = requireArguments()
 
-        val dialogId = args.getInt(ARG_DIALOG_ID)
+        originViewId = args.getInt(ARG_ORIGIN_VIEW_ID)
         val timeType = TimeType.valueOf(requireNotNull(args.getString(ARG_TIME_TYPE)))
         val noteIds = TreeSet(args.getLongArray(ARG_NOTE_IDS)?.toList() ?: emptyList())
         val dateTimeString = args.getString(ARG_TIME)
@@ -70,12 +77,23 @@ class TimestampDialogFragment : DialogFragment(), View.OnClickListener {
             titleBinding = DialogTimestampTitleBinding.inflate(inflater)
         }
 
-
         val factory = TimestampDialogViewModelFactory.getInstance(timeType, dateTimeString)
         viewModel = ViewModelProvider(this, factory).get(TimestampDialogViewModel::class.java)
 
-        setupObservers()
+        if (timestampIsInline()) {
+            // Show/hide the active/inactive checkbox
+            val lastInlineTimestampWasActive = AppPreferences.lastInlineTimestampWasActive(context)
+            viewModel.setIsActive(lastInlineTimestampWasActive)
+            binding.isActiveCheckbox.isChecked = lastInlineTimestampWasActive
+            binding.isActiveCheckbox.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.setIsActive(isChecked)
+            }
+        } else {
+            binding.isActiveCheckbox.visibility = View.GONE
+            binding.isActiveLabel.visibility = View.GONE
+        }
 
+        setupObservers()
 
         // Pickers
 
@@ -116,15 +134,23 @@ class TimestampDialogFragment : DialogFragment(), View.OnClickListener {
             .setCustomTitle(titleBinding.root)
             .setView(binding.root)
             .setPositiveButton(R.string.set) { _, _ ->
-                listener?.onDateTimeSet(dialogId, noteIds, viewModel.getOrgDateTime())
+                val time = viewModel.getOrgDateTime()
+                if (time != null) {
+                    AppPreferences.lastInlineTimestampWasActive(context, time.isActive)
+                }
+                listener?.onDateTimeSet(originViewId, noteIds, time)
             }
             .setNeutralButton(R.string.clear) { _, _ ->
-                listener?.onDateTimeSet(dialogId, noteIds, null)
+                listener?.onDateTimeSet(originViewId, noteIds, null)
             }
             .setNegativeButton(R.string.cancel) { _, _ ->
-                listener?.onDateTimeAborted(dialogId, noteIds)
+                listener?.onDateTimeAborted(originViewId, noteIds)
             }
             .show()
+    }
+
+    private fun timestampIsInline(): Boolean {
+        return originViewId == R.id.content_edit || originViewId == R.id.title_edit
     }
 
     /**
@@ -260,12 +286,23 @@ class TimestampDialogFragment : DialogFragment(), View.OnClickListener {
         pickerDialog = null
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        if (timestampIsInline()) {
+            originViewId.let {
+                val view = requireParentFragment().view?.findViewById<RichTextEdit>(it)
+                if (view != null)
+                    KeyboardUtils.openSoftKeyboard(view)
+            }
+        }
+    }
+
     /**
      * The callback used to indicate the user is done filling in the date.
      */
     interface OnDateTimeSetListener {
-        fun onDateTimeSet(id: Int, noteIds: TreeSet<Long>, time: OrgDateTime?)
-        fun onDateTimeAborted(id: Int, noteIds: TreeSet<Long>)
+        fun onDateTimeSet(originViewId: Int, noteIds: TreeSet<Long>, time: OrgDateTime?)
+        fun onDateTimeAborted(originViewId: Int, noteIds: TreeSet<Long>)
     }
 
     companion object {
@@ -273,19 +310,19 @@ class TimestampDialogFragment : DialogFragment(), View.OnClickListener {
 
         private val TAG = TimestampDialogFragment::class.java.name
 
-        private const val ARG_DIALOG_ID = "id"
+        private const val ARG_ORIGIN_VIEW_ID = "origin_view_id"
         private const val ARG_TIME_TYPE = "time_type"
         private const val ARG_NOTE_IDS = "note_ids"
         private const val ARG_TIME = "time"
 
 
-        fun getInstance(id: Int, timeType: TimeType, noteIds: Set<Long>, time: OrgDateTime?): TimestampDialogFragment {
+        fun getInstance(originViewId: Int, timeType: TimeType, noteIds: Set<Long>, time: OrgDateTime?): TimestampDialogFragment {
             val fragment = TimestampDialogFragment()
 
             /* Set arguments for fragment. */
             val bundle = Bundle()
 
-            bundle.putInt(ARG_DIALOG_ID, id)
+            bundle.putInt(ARG_ORIGIN_VIEW_ID, originViewId)
             bundle.putString(ARG_TIME_TYPE, timeType.name)
             bundle.putLongArray(ARG_NOTE_IDS, toArray(noteIds))
 

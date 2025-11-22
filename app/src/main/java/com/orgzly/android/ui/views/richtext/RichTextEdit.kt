@@ -96,6 +96,10 @@ class RichTextEdit : AppCompatEditText {
         return super.onKeyPreIme(keyCode, event)
     }
 
+    fun insertStringAtCursorPosition(string: String) {
+        this.text?.replace(this.selectionStart, this.selectionEnd, string)
+    }
+
     companion object {
         val TAG: String = RichTextEdit::class.java.name
     }

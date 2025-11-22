@@ -11,6 +11,13 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/insert_inline_timestamp"
+        android:title="@string/insert_timestamp"
+        android:icon="@drawable/ic_today"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/clock"
         android:icon="@drawable/ic_hourglass_empty"
         app:showAsAction="never"

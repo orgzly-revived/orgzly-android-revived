@@ -1082,6 +1082,18 @@ public class AppPreferences {
     }
 
     /*
+     * Last choice of active/inactive inline timestamp
+     */
+    public static void lastInlineTimestampWasActive(Context context, boolean value) {
+        String key = context.getResources().getString(R.string.pref_key_last_inline_timestamp_was_active);
+        getStateSharedPreferences(context).edit().putBoolean(key, value).apply();
+    }
+    public static boolean lastInlineTimestampWasActive(Context context) {
+        String key = context.getResources().getString(R.string.pref_key_last_inline_timestamp_was_active);
+        return getStateSharedPreferences(context).getBoolean(key, false);
+    }
+
+    /*
      * ReminderWorker
      */
 
