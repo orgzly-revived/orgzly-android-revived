@@ -101,12 +101,34 @@ public class ShareActivity extends CommonActivity
     private Data getTextDataFromIntent(Intent intent) {
         Data data = new Data();
         if (intent.hasExtra(Intent.EXTRA_TEXT)) {
-            if (AppPreferences.sharedTextPlacement(App.getAppContext()).equals("in_note_heading")) {
-                data.title = intent.getStringExtra(Intent.EXTRA_TEXT);
-            } else {
+            if (intent.hasExtra(Intent.EXTRA_SUBJECT)) {
+                // Both "text" and "subject" received. Subject goes in heading, text goes in
+                // body.
+                String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+                if (subject != null && !subject.isEmpty()) {
+                    data.title = subject;
+                }
                 data.content = intent.getStringExtra(Intent.EXTRA_TEXT);
+                // If it's a URL with title, let's turn it into a org link, unless the "subject"
+                // contains line breaks.
+                if (!data.title.contains("\n")) {
+                    try {
+                        new URI(data.content);
+                        data.title = "[[" + data.content + "][" + data.title + "]]";
+                        data.content = null;
+                    } catch (URISyntaxException ignored) {}
+                }
+            } else {
+                // A single text string was shared. Put it in heading or body, depending on the
+                // user setting.
+                if (AppPreferences.sharedTextPlacement(App.getAppContext()).equals("in_note_heading")) {
+                    data.title = intent.getStringExtra(Intent.EXTRA_TEXT);
+                } else {
+                    data.content = intent.getStringExtra(Intent.EXTRA_TEXT);
+                }
             }
         } else if (intent.hasExtra(Intent.EXTRA_STREAM)) {
+            // A text file was shared
             Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
 
             data.title = uri.getLastPathSegment();
@@ -130,23 +152,6 @@ public class ShareActivity extends CommonActivity
             } catch (IOException e) {
                 e.printStackTrace();
                 mError = "Failed reading the content of " + uri.toString() + ": " + e.toString();
-            }
-        }
-        if (data.content != null && data.title == null && intent.hasExtra(Intent.EXTRA_SUBJECT)) {
-            String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
-            if (subject != null && !subject.isEmpty()) {
-                data.title = subject;
-            }
-        }
-        // if it's a url with title, let's turn it into org url
-        if (data.content != null && data.title != null) {
-            // A multi-line "subject" will not make a good link
-            if (!data.title.contains("\n")) {
-                try {
-                    new URI(data.content);
-                    data.title = "[[" + data.content + "][" + data.title + "]]";
-                    data.content = null;
-                } catch (URISyntaxException ignored) {}
             }
         }
         // TODO: Was used for direct share shortcuts to pass the book name. Used someplace else?
