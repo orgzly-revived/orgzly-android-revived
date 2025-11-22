@@ -639,6 +639,8 @@
     <!-- Share-to-new-note receiver behavior -->
     <string name="pref_key_shared_text_placement" translatable="false">pref_key_shared_text_placement</string>
     <string name="pref_default_shared_text_placement" translatable="false">in_note_content</string>
+    <string name="pref_key_create_org_links_from_shared_links" translatable="false">pref_key_create_org_links_from_shared_links</string>
+    <bool name="pref_default_create_org_links_from_shared_links" translatable="false">true</bool>
 
     <string-array name="shared_text_placement_options">
         <item>@string/in_note_heading</item>

@@ -257,6 +257,11 @@
             android:entryValues="@array/shared_text_placement_option_values"
             android:defaultValue="@string/pref_default_shared_text_placement"
             app:useSimpleSummaryProvider="true"/>
+
+        <SwitchPreference
+            android:key="@string/pref_key_create_org_links_from_shared_links"
+            android:title="@string/create_org_links_from_shared_links"
+            android:defaultValue="@bool/pref_default_create_org_links_from_shared_links" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/images">

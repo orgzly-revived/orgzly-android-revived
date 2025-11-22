@@ -109,9 +109,8 @@ public class ShareActivity extends CommonActivity
                     data.title = subject;
                 }
                 data.content = intent.getStringExtra(Intent.EXTRA_TEXT);
-                // If it's a URL with title, let's turn it into a org link, unless the "subject"
-                // contains line breaks.
-                if (!data.title.contains("\n")) {
+                if (AppPreferences.createOrgLinksFromSharedLinks(this) &&
+                        !data.title.contains("\n")) {
                     try {
                         new URI(data.content);
                         data.title = "[[" + data.content + "][" + data.title + "]]";
