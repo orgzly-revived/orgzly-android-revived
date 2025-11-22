@@ -223,6 +223,26 @@ class ShareActivityTest : OrgzlyTest() {
     }
 
     @Test
+    fun testUrlishTextWithSubjectExtraOrgLinksDisabled() {
+        val sharedText = "https://website.com/"
+        val sharedSubject = "Website Title"
+        AppPreferences.createOrgLinksFromSharedLinks(context, false)
+        startActivityWithIntent(
+            action = Intent.ACTION_SEND,
+            type = "text/plain",
+            extraText = sharedText,
+            extraSubjectText = sharedSubject)
+
+        // Content should contain the URL
+        onView(withId(R.id.content_view)).check(matches(withText(sharedText)))
+        // Title should contain the "subject"
+        onView(withId(R.id.title_view)).check(matches(withText(sharedSubject)))
+        // Neither title nor content should be in "edit mode"
+        onView(withId(R.id.content_edit)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.title_edit)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
     fun testUrlishAndOtherTextWithSubjectExtra() {
         val sharedText = "https://website.com/ is really cool"
         val sharedSubject = "Website Title"
