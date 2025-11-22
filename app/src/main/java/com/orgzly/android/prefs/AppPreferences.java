@@ -1205,6 +1205,24 @@ public class AppPreferences {
                 context.getResources().getString(R.string.pref_default_shared_text_placement));
     }
 
+    // Added for test purposes
+    public static void sharedTextPlacement(Context context, String value) {
+        String key = context.getResources().getString(R.string.pref_key_shared_text_placement);
+        getDefaultSharedPreferences(context).edit().putString(key, value).apply();
+    }
+
+    public static Boolean createOrgLinksFromSharedLinks(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_create_org_links_from_shared_links),
+                context.getResources().getBoolean(R.bool.pref_default_create_org_links_from_shared_links));
+    }
+
+    // Added for test purposes
+    public static void createOrgLinksFromSharedLinks(Context context, Boolean value) {
+        String key = context.getResources().getString(R.string.pref_key_create_org_links_from_shared_links);
+        getDefaultSharedPreferences(context).edit().putBoolean(key, value).apply();
+    }
+
     /*
      * Repository properties map
      */
