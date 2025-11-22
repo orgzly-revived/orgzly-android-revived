@@ -98,7 +98,7 @@ public class ShareActivity extends CommonActivity
         }
     }
 
-    public Data getDataFromIntent(Intent intent) {
+    private Data getDataFromIntent(Intent intent) {
         Data data = new Data();
         mError = null;
 
