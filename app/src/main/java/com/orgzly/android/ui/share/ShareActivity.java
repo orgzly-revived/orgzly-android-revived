@@ -98,6 +98,89 @@ public class ShareActivity extends CommonActivity
         }
     }
 
+    private Data getTextDataFromIntent(Intent intent) {
+        Data data = new Data();
+        if (intent.hasExtra(Intent.EXTRA_TEXT)) {
+            if (AppPreferences.sharedTextPlacement(App.getAppContext()).equals("in_note_heading")) {
+                data.title = intent.getStringExtra(Intent.EXTRA_TEXT);
+            } else {
+                data.content = intent.getStringExtra(Intent.EXTRA_TEXT);
+            }
+        } else if (intent.hasExtra(Intent.EXTRA_STREAM)) {
+            Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+
+            data.title = uri.getLastPathSegment();
+
+            /*
+             * Store file's content as note content.
+             */
+            try {
+                File file = new File(uri.getPath());
+
+                /* Don't read large files. */
+                if (file.length() > MAX_TEXT_FILE_LENGTH_FOR_CONTENT) {
+                    mError = "File has " + file.length() +
+                            " bytes (refusing to read files larger then " +
+                            MAX_TEXT_FILE_LENGTH_FOR_CONTENT + " bytes)";
+
+                } else {
+                    data.content = MiscUtils.readStringFromFile(file);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                mError = "Failed reading the content of " + uri.toString() + ": " + e.toString();
+            }
+        }
+        if (data.content != null && data.title == null && intent.hasExtra(Intent.EXTRA_SUBJECT)) {
+            String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+            if (subject != null && !subject.isEmpty()) {
+                data.title = subject;
+            }
+        }
+        // if it's a url with title, let's turn it into org url
+        if (data.content != null && data.title != null) {
+            // A multi-line "subject" will not make a good link
+            if (!data.title.contains("\n")) {
+                try {
+                    new URI(data.content);
+                    data.title = "[[" + data.content + "][" + data.title + "]]";
+                    data.content = null;
+                } catch (URISyntaxException ignored) {}
+            }
+        }
+        // TODO: Was used for direct share shortcuts to pass the book name. Used someplace else?
+        if (intent.hasExtra(AppIntent.EXTRA_QUERY_STRING)) {
+            Query query = new DottedQueryParser().parse(intent.getStringExtra(AppIntent.EXTRA_QUERY_STRING));
+            String bookName = QueryUtils.extractFirstBookNameFromQuery(query.getCondition());
+
+            if (bookName != null) {
+                Book book = dataRepository.getBook(bookName);
+                if (book != null) {
+                    data.bookId = book.getId();
+                    if (BuildConfig.LOG_DEBUG)
+                        LogUtils.d(TAG, "Using book " + data.bookId
+                                + " from passed query " + query + " (" + bookName + ")");
+                }
+            }
+        }
+        if (intent.hasExtra(AppIntent.EXTRA_BOOK_ID)) {
+            data.bookId = intent.getLongExtra(AppIntent.EXTRA_BOOK_ID, 0L);
+            if (BuildConfig.LOG_DEBUG)
+                LogUtils.d(TAG, "Using book " + data.bookId
+                        + " from passed book ID");
+        }
+        // Coming from Direct Share shortcut
+        if (intent.hasExtra(Intent.EXTRA_SHORTCUT_ID)) {
+            String shortcutId = intent.getStringExtra(ShortcutManagerCompat.EXTRA_SHORTCUT_ID);
+            data.bookId = SharingShortcutsManager.bookIdFromShortcutId(shortcutId);
+            if (BuildConfig.LOG_DEBUG)
+                LogUtils.d(TAG, "Using book " + data.bookId
+                        + " from passed shortcut ID");
+        }
+        return data;
+    }
+
     private Data getDataFromIntent(Intent intent) {
         Data data = new Data();
         mError = null;
@@ -107,119 +190,29 @@ public class ShareActivity extends CommonActivity
 
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, intent);
 
-        if (action == null) {
-            // mError = getString(R.string.share_action_not_set);
-
-        } else if (type == null) {
-            // mError = getString(R.string.share_type_not_set);
-
-        } else if (action.equals(Intent.ACTION_SEND)) {
-            if (type.startsWith("text/")) {
-
-                if (intent.hasExtra(Intent.EXTRA_TEXT)) {
-                    if (AppPreferences.sharedTextPlacement(App.getAppContext()).equals("in_note_heading")) {
-                        data.title = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (action != null && type != null) {
+            switch (action) {
+                case Intent.ACTION_SEND:
+                    if (type.startsWith("text/")) {
+                        data = getTextDataFromIntent(intent);
+                    } else if (type.startsWith("image/")) {
+                        handleSendImage(intent, data); // Handle single image being sent
                     } else {
-                        data.content = intent.getStringExtra(Intent.EXTRA_TEXT);
+                        mError = getString(R.string.share_type_not_supported, type);
                     }
-                } else if (intent.hasExtra(Intent.EXTRA_STREAM)) {
-                    Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-
-                    data.title = uri.getLastPathSegment();
-
-                    /*
-                     * Store file's content as note content.
-                     */
-                    try {
-                        File file = new File(uri.getPath());
-
-                        /* Don't read large files. */
-                        if (file.length() > MAX_TEXT_FILE_LENGTH_FOR_CONTENT) {
-                            mError = "File has " + file.length() +
-                                    " bytes (refusing to read files larger then " +
-                                    MAX_TEXT_FILE_LENGTH_FOR_CONTENT + " bytes)";
-
-                        } else {
-                            data.content = MiscUtils.readStringFromFile(file);
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        mError = "Failed reading the content of " + uri.toString() + ": " + e.toString();
+                    break;
+                case "com.google.android.gm.action.AUTO_SEND":
+                    if (type.startsWith("text/") && intent.hasExtra(Intent.EXTRA_TEXT)) {
+                        data.title = intent.getStringExtra(Intent.EXTRA_TEXT);
                     }
-                }
-
-                if (data.content != null && data.title == null && intent.hasExtra(Intent.EXTRA_SUBJECT)) {
-                    String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
-                    if (subject != null && !subject.isEmpty()) {
-                        data.title = subject;
-                    }
-                }
-
-                // if it's a url with title, let's turn it into org url
-                if (data.content != null && data.title != null) {
-                    // A multi-line "subject" will not make a good link
-                    if (!data.title.contains("\n")) {
-                        try {
-                            new URI(data.content);
-                            data.title = "[[" + data.content + "][" + data.title + "]]";
-                            data.content = null;
-                        } catch (URISyntaxException ignored) {}
-                    }
-                }
-
-                // TODO: Was used for direct share shortcuts to pass the book name. Used someplace else?
-                if (intent.hasExtra(AppIntent.EXTRA_QUERY_STRING)) {
-                    Query query = new DottedQueryParser().parse(intent.getStringExtra(AppIntent.EXTRA_QUERY_STRING));
-                    String bookName = QueryUtils.extractFirstBookNameFromQuery(query.getCondition());
-
-                    if (bookName != null) {
-                        Book book = dataRepository.getBook(bookName);
-                        if (book != null) {
-                            data.bookId = book.getId();
-                            if (BuildConfig.LOG_DEBUG)
-                                LogUtils.d(TAG, "Using book " + data.bookId
-                                        + " from passed query " + query + " (" + bookName + ")");
-                        }
-                    }
-                }
-
-                if (intent.hasExtra(AppIntent.EXTRA_BOOK_ID)) {
-                    data.bookId = intent.getLongExtra(AppIntent.EXTRA_BOOK_ID, 0L);
-                    if (BuildConfig.LOG_DEBUG)
-                        LogUtils.d(TAG, "Using book " + data.bookId
-                                + " from passed book ID");
-                }
-
-                // Coming from Direct Share shortcut
-                if (intent.hasExtra(Intent.EXTRA_SHORTCUT_ID)) {
-                    String shortcutId = intent.getStringExtra(ShortcutManagerCompat.EXTRA_SHORTCUT_ID);
-                    data.bookId = SharingShortcutsManager.bookIdFromShortcutId(shortcutId);
-                    if (BuildConfig.LOG_DEBUG)
-                        LogUtils.d(TAG, "Using book " + data.bookId
-                                + " from passed shortcut ID");
-                }
-
-            } else if (type.startsWith("image/")) {
-                handleSendImage(intent, data); // Handle single image being sent
-
-            } else {
-                mError = getString(R.string.share_type_not_supported, type);
+                    break;
+                default:
+                    mError = getString(R.string.share_action_not_supported, action);
             }
-
-        } else if (action.equals("com.google.android.gm.action.AUTO_SEND")) {
-            if (type.startsWith("text/") && intent.hasExtra(Intent.EXTRA_TEXT)) {
-                data.title = intent.getStringExtra(Intent.EXTRA_TEXT);
-            }
-
-        } else {
-            mError = getString(R.string.share_action_not_supported, action);
         }
 
         /* Make sure that title is never empty. */
-        if (data.title == null) {
-            data.title = "";
-        }
+        if (data.title == null) data.title = "";
 
         return data;
     }
