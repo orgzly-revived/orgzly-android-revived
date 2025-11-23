@@ -72,38 +72,6 @@ class RichTextEdit : AppCompatEditText {
                 }
 
                 if (BuildConfig.LOG_DEBUG) {
-//                    fun pad(n: Any) = "$n".padEnd(5)
-//
-//                    LogUtils.d(TAG, pad(y), "this.y")
-//                    LogUtils.d(TAG, pad(top), "this.top")
-//                    LogUtils.d(TAG, pad(bottom), "this.bottom")
-//                    LogUtils.d(TAG, pad(richText.top), "richText.top")
-//                    LogUtils.d(TAG, pad(richText.bottom), "richText.bottom")
-//                    LogUtils.d(TAG, pad(visibleHeight), "visibleHeight")
-//                    LogUtils.d(TAG, pad(scrollTopY), "scrollTopY")
-//                    LogUtils.d(TAG, pad(scroll75pY), "scroll75pY")
-//                    LogUtils.d(TAG, pad(cursorY), "cursorY")
-//                    Rect().let { rect -> getLocalVisibleRect(rect)
-//                        LogUtils.d(TAG, pad(rect.top), "getLocalVisibleRect.top")
-//                        LogUtils.d(TAG, pad(rect.bottom), "getLocalVisibleRect.bottom")
-//                    }
-//                    Rect().let { rect -> getWindowVisibleDisplayFrame(rect)
-//                        LogUtils.d(TAG, pad(rect.top), "getWindowVisibleDisplayFrame.top")
-//                        LogUtils.d(TAG, pad(rect.bottom), "getWindowVisibleDisplayFrame.bottom")
-//                    }
-//                    Rect().let { rect -> getGlobalVisibleRect(rect)
-//                        LogUtils.d(TAG,  pad(rect.top), "getGlobalVisibleRect.top")
-//                        LogUtils.d(TAG, pad(rect.bottom), "getGlobalVisibleRect.bottom")
-//                    }
-//                    Rect().let { rect -> scrollView.getDrawingRect(rect)
-//                        LogUtils.d(TAG, pad(rect.top), "scrollView.getDrawingRect.top")
-//                        LogUtils.d(TAG, pad(rect.bottom), "scrollView.getDrawingRect.bottom")
-//                    }
-//                    IntArray(2).let { arr -> scrollView.getLocationInWindow(arr)
-//                        LogUtils.d(TAG, pad(arr[0]), "scrollView.getLocationInWindow.x")
-//                        LogUtils.d(TAG, pad(arr[1]), "scrollView.getLocationInWindow.y")
-//                    }
-//
                     LogUtils.d(TAG, scrollTo)
                 }
             }
@@ -127,11 +95,6 @@ class RichTextEdit : AppCompatEditText {
 
         return super.onKeyPreIme(keyCode, event)
     }
-
-//    override fun onSelectionChanged(selStart: Int, selEnd: Int) {
-//        super.onSelectionChanged(selStart, selEnd)
-//        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "${selStart}-${selEnd}")
-//    }
 
     companion object {
         val TAG: String = RichTextEdit::class.java.name

@@ -972,8 +972,6 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
     }
 
     private fun userSave() {
-        // KeyboardUtils.closeSoftKeyboard(activity)
-
         updatePayloadFromViews()
 
         viewModel.saveNote()
