@@ -1217,6 +1217,12 @@ public class AppPreferences {
                 context.getResources().getString(R.string.pref_default_shared_text_placement));
     }
 
+    // Added for test purposes
+    public static void sharedTextPlacement(Context context, String value) {
+        String key = context.getResources().getString(R.string.pref_key_shared_text_placement);
+        getDefaultSharedPreferences(context).edit().putString(key, value).apply();
+    }
+
     /*
      * Repository properties map
      */

@@ -19,11 +19,12 @@ import com.orgzly.R
 import com.orgzly.android.AppIntent
 import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.RetryTestRule
+import com.orgzly.android.espresso.util.EspressoUtils.OrgzlyCustomFailureHandler
 import com.orgzly.android.espresso.util.EspressoUtils.onSnackbar
 import com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard
 import com.orgzly.android.espresso.util.EspressoUtils.scroll
 import com.orgzly.android.espresso.util.EspressoUtils.waitId
-import com.orgzly.android.espresso.util.EspressoUtils.OrgzlyCustomFailureHandler
+import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.share.ShareActivity
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
@@ -156,7 +157,29 @@ class ShareActivityTest : OrgzlyTest() {
                 extraText = sharedText)
 
         onView(withId(R.id.content_view)).check(matches(withText(sharedText)))
-        onView(withId(R.id.title_edit)).check(matches(withText("")))
+        onView(withId(R.id.title_view)).check(matches(withText("")))
+        // Content should be in "view mode"
+        onView(withId(R.id.content_edit)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.content_view)).check(matches(isDisplayed()))
+        // Title should be in "edit mode"
+        onView(withId(R.id.title_edit)).check(matches(isDisplayed()))
+        onView(withId(R.id.title_view)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun testTextSimpleNonDefaultSetting() {
+        val sharedText = "This is some shared text"
+        AppPreferences.sharedTextPlacement(context, "in_note_heading")
+        startActivityWithIntent(
+            action = Intent.ACTION_SEND,
+            type = "text/plain",
+            extraText = sharedText)
+
+        onView(withId(R.id.title_view)).check(matches(withText(sharedText)))
+        onView(withId(R.id.content_view)).check(matches(withText("")))
+        // Neither title nor content should be in "edit mode"
+        onView(withId(R.id.content_edit)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.title_edit)).check(matches(not(isDisplayed())))
     }
 
     @Test
@@ -170,6 +193,9 @@ class ShareActivityTest : OrgzlyTest() {
                 extraSubjectText = sharedSubject).use {
             onView(withId(R.id.content_view)).check(matches(withText(sharedText)))
             onView(withId(R.id.title_view)).check(matches(withText(sharedSubject)))
+            // Neither title nor content should be in "edit mode"
+            onView(withId(R.id.content_edit)).check(matches(not(isDisplayed())))
+            onView(withId(R.id.title_edit)).check(matches(not(isDisplayed())))
         }
     }
 
@@ -187,7 +213,8 @@ class ShareActivityTest : OrgzlyTest() {
         onView(withId(R.id.content_view)).check(matches(withText("")))
         // Title should be a link with the shared subject as title
         onView(withId(R.id.title_view)).check(matches(withText(sharedSubject)))
-        // Title should not be in "edit mode"
+        // Neither title nor content should be in "edit mode"
+        onView(withId(R.id.content_edit)).check(matches(not(isDisplayed())))
         onView(withId(R.id.title_edit)).check(matches(not(isDisplayed())))
 
         // Verify the link content
@@ -209,9 +236,9 @@ class ShareActivityTest : OrgzlyTest() {
         onView(withId(R.id.content_view)).check(matches(withText(sharedText)))
         // Title should match the subject extra
         onView(withId(R.id.title_view)).check(matches(withText(sharedSubject)))
-        // Title should not be in "edit mode"
+        // Neither title nor content should be in "edit mode"
+        onView(withId(R.id.content_edit)).check(matches(not(isDisplayed())))
         onView(withId(R.id.title_edit)).check(matches(not(isDisplayed())))
-
     }
 
     @Test
@@ -228,6 +255,24 @@ class ShareActivityTest : OrgzlyTest() {
         onView(withId(R.id.title_edit)).check(matches(allOf(withText(""), isDisplayed())))
         // Title should be in "edit mode"
         onView(withId(R.id.title_view)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun testUrlishTextWithNoSubjectExtraNonDefaultSetting() {
+        val sharedText = "https://website.com/"
+        AppPreferences.sharedTextPlacement(context, "in_note_heading")
+        startActivityWithIntent(
+            action = Intent.ACTION_SEND,
+            type = "text/plain",
+            extraText = sharedText)
+
+        // Title should contain the shared text verbatim
+        onView(withId(R.id.title_view)).check(matches(withText(sharedText)))
+        // Content should be empty
+        onView(withId(R.id.content_view)).check(matches(allOf(withText(""), isDisplayed())))
+        // Neither title nor content should be in "edit mode"
+        onView(withId(R.id.content_edit)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.title_edit)).check(matches(not(isDisplayed())))
     }
 
     @Test
