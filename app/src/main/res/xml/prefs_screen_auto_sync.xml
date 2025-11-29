@@ -56,7 +56,7 @@
         android:selectAllOnFocus="true"
         android:inputType="number"
         android:defaultValue="@string/pref_default_auto_sync_interval_in_mins"
-        app:min="@string/pref_key_auto_sync_interval_minimum_minutes" />
+        app:min="@string/pref_key_auto_sync_interval_minimum_value" />
 
     <SwitchPreference
         android:key="@string/pref_key_auto_sync_on_repo_change"
