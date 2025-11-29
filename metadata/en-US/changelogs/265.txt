@@ -1,0 +1,2 @@
+• Handle “edge-to-edge” graphics on Android 15 and above.
+• Dependency upgrades.
