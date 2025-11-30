@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.orgzly.R
+import com.orgzly.android.NotesOrgExporter
 import com.orgzly.android.sync.SyncRunner
 import com.orgzly.android.ui.dialogs.TimestampDialogFragment
 import com.orgzly.android.ui.drawer.DrawerItem
@@ -105,6 +106,10 @@ abstract class QueryFragment :
             R.id.focus ->
                 listener?.onNoteFocusInBookRequest(ids.first())
 
+            R.id.share -> {
+                shareNotes(ids)
+            }
+
             R.id.sync -> {
                 SyncRunner.startSync()
             }
@@ -112,6 +117,34 @@ abstract class QueryFragment :
             R.id.activity_action_settings -> {
                 startActivity(Intent(context, SettingsActivity::class.java))
             }
+        }
+    }
+
+    private fun shareNotes(ids: Set<Long>) {
+        try {
+            val exporter = NotesOrgExporter(dataRepository)
+            val exportedNotes = mutableListOf<String>()
+
+            for (noteId in ids) {
+                try {
+                    exportedNotes.add(exporter.exportNote(noteId))
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to export note $noteId", e)
+                }
+            }
+
+            val content = exportedNotes.joinToString(separator = "\n\n")
+
+            if (content.isNotEmpty()) {
+                val shareIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, content)
+                }
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.share)))
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to share notes", e)
         }
     }
 
