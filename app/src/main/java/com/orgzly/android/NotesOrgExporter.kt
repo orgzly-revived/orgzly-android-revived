@@ -48,6 +48,25 @@ class NotesOrgExporter(val dataRepository: DataRepository) {
         }
     }
 
+    /**
+     * Exports a single note to Org format string.
+     */
+    fun exportNote(noteId: Long): String {
+        val orgParserSettings = getOrgParserSettingsFromPreferences()
+        val orgWriter = OrgParserWriter(orgParserSettings)
+
+        val noteView = dataRepository.getNoteView(noteId)
+            ?: throw IllegalArgumentException("Note with id $noteId not found")
+
+        val note = noteView.note
+
+        val head = OrgMapper.toOrgHead(noteView).apply {
+            properties = OrgMapper.toOrgProperties(dataRepository.getNoteProperties(note.id))
+        }
+
+        return orgWriter.whiteSpacedHead(head, note.position.level, false)
+    }
+
     companion object {
         private fun getOrgParserSettingsFromPreferences(): OrgParserSettings {
             val parserSettings = OrgParserSettings.getBasic()

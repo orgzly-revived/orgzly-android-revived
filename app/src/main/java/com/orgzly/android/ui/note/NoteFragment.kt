@@ -30,6 +30,7 @@ import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.BookUtils
+import com.orgzly.android.NotesOrgExporter
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.db.entity.BookView
 import com.orgzly.android.db.entity.Note
@@ -275,9 +276,10 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
                 updateMenuMetadataItemVisibility(menu)
             }
 
-            /* Newly created note cannot be deleted. */
+            /* Newly created note cannot be deleted or shared. */
             if (viewModel.isNew()) {
                 menu.removeItem(R.id.delete)
+                menu.removeItem(R.id.share)
             }
 
             setOnMenuItemClickListener { menuItem ->
@@ -305,6 +307,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         menu.removeItem(R.id.done)
         menu.removeItem(R.id.metadata)
         menu.removeItem(R.id.delete)
+        menu.removeItem(R.id.share)
     }
 
     private fun handleActionItemClick(menuItem: MenuItem): Boolean {
@@ -355,6 +358,10 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
             R.id.delete -> {
                 userDelete()
+            }
+
+            R.id.share -> {
+                shareNote()
             }
 
             R.id.sync -> {
@@ -1003,6 +1010,26 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
     private fun userDelete() {
         viewModel.requestNoteDelete()
+    }
+
+    private fun shareNote() {
+        viewModel.noteId?.let { noteId ->
+            try {
+                val exporter = NotesOrgExporter(dataRepository)
+                val orgContent = exporter.exportNote(noteId)
+
+                val shareIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, orgContent)
+                }
+
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.share)))
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to share note", e)
+                activity?.showSnackbar(R.string.failed_sharing_note)
+            }
+        }
     }
 
     private fun userFollowBookBreadcrumb() {
