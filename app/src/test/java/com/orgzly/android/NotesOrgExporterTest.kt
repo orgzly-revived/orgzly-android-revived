@@ -1,15 +1,62 @@
-package com.orgzly.android.misc
+package com.orgzly.android
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
+import com.orgzly.android.LocalStorage
 import com.orgzly.android.NotesOrgExporter
-import com.orgzly.android.OrgzlyTest
-import org.junit.Assert.*
+import com.orgzly.android.TestUtils
+import com.orgzly.android.data.DataRepository
+import com.orgzly.android.data.DbRepoBookRepository
+import com.orgzly.android.db.OrgzlyDatabase
+import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.repos.RepoFactory
+import org.junit.After
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertThrows
+import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
-class NotesOrgExporterTest : OrgzlyTest() {
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [35])
+class NotesOrgExporterTest {
+
+    private lateinit var context: Context
+    private lateinit var database: OrgzlyDatabase
+    private lateinit var dataRepository: DataRepository
+    private lateinit var dbRepoBookRepository: DbRepoBookRepository
+    private lateinit var testUtils: TestUtils
+
+    @Before
+    fun setUp() {
+        context = ApplicationProvider.getApplicationContext()
+        AppPreferences.setToDefaults(context)
+
+        database = OrgzlyDatabase.forMemory(context)
+        dbRepoBookRepository = DbRepoBookRepository(database)
+        val localStorage = LocalStorage(context)
+        val repoFactory = RepoFactory(context, dbRepoBookRepository)
+
+        dataRepository = DataRepository(
+            context, database, repoFactory, context.resources, localStorage
+        )
+
+        testUtils = TestUtils(dataRepository, dbRepoBookRepository)
+
+        dataRepository.clearDatabase()
+    }
+
+    @After
+    fun tearDown() {
+        database.close()
+    }
 
     @Test
     fun testExportNoteWithBasicTitle() {
-        val book = testUtils.setupBook("test-book", "* Test Note")
+        testUtils.setupBook("test-book", "* Test Note")
         val note = dataRepository.getLastNote("Test Note")
         assertNotNull(note)
 
@@ -21,7 +68,7 @@ class NotesOrgExporterTest : OrgzlyTest() {
 
     @Test
     fun testExportNoteWithStateAndTags() {
-        val book = testUtils.setupBook(
+        testUtils.setupBook(
             "test-book",
             "* TODO Test Note :tag1:tag2:\n"
         )
@@ -37,7 +84,7 @@ class NotesOrgExporterTest : OrgzlyTest() {
 
     @Test
     fun testExportNoteWithScheduledTimestamp() {
-        val book = testUtils.setupBook(
+        testUtils.setupBook(
             "test-book",
             "* Test Note\nSCHEDULED: <2024-01-15 Mon>\n"
         )
@@ -53,7 +100,7 @@ class NotesOrgExporterTest : OrgzlyTest() {
 
     @Test
     fun testExportNoteWithProperties() {
-        val book = testUtils.setupBook(
+        testUtils.setupBook(
             "test-book",
             """
             * Test Note
@@ -77,7 +124,7 @@ class NotesOrgExporterTest : OrgzlyTest() {
 
     @Test
     fun testExportNoteWithContent() {
-        val book = testUtils.setupBook(
+        testUtils.setupBook(
             "test-book",
             """
             * Test Note
@@ -97,7 +144,7 @@ class NotesOrgExporterTest : OrgzlyTest() {
 
     @Test
     fun testExportNoteWithPriority() {
-        val book = testUtils.setupBook(
+        testUtils.setupBook(
             "test-book",
             "* TODO [#A] Important Note\n"
         )
@@ -110,15 +157,17 @@ class NotesOrgExporterTest : OrgzlyTest() {
         assertTrue(exported.contains("[#A]"))
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testExportNoteWithInvalidIdThrowsException() {
         val exporter = NotesOrgExporter(dataRepository)
-        exporter.exportNote(999999L) // Non-existent note ID
+        assertThrows(IllegalArgumentException::class.java) {
+            exporter.exportNote(999999L) // Non-existent note ID
+        }
     }
 
     @Test
     fun testExportNoteWithDeadline() {
-        val book = testUtils.setupBook(
+        testUtils.setupBook(
             "test-book",
             "* Test Note\nDEADLINE: <2024-12-31 Tue>\n"
         )
@@ -134,7 +183,7 @@ class NotesOrgExporterTest : OrgzlyTest() {
 
     @Test
     fun testExportNoteWithRepeater() {
-        val book = testUtils.setupBook(
+        testUtils.setupBook(
             "test-book",
             "* Test Note\nSCHEDULED: <2024-01-01 Mon +1w>\n"
         )
