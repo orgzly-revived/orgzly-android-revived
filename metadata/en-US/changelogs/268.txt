@@ -1,0 +1,5 @@
+• Add periodic auto-sync.
+• Allow disabling the creation of org links from shared web links.
+• Fix bug when receiving shared web links.
+• Update translations.
+• Upgrade dependencies.
