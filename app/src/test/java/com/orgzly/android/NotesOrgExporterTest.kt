@@ -195,4 +195,17 @@ class NotesOrgExporterTest {
 
         assertTrue(exported.contains("+1w"))
     }
+
+    @Test
+    fun testExportNoteEndsWithNewline() {
+        testUtils.setupBook("test-book", "* Test Note")
+        val note = dataRepository.getLastNote("Test Note")
+        assertNotNull(note)
+
+        val exporter = NotesOrgExporter(dataRepository)
+        val exported = exporter.exportNote(note!!.id)
+
+        assertTrue("Exported note should end with newline", exported.endsWith("\n"))
+    }
+
 }

@@ -133,7 +133,7 @@ abstract class QueryFragment :
                 }
             }
 
-            val content = exportedNotes.joinToString(separator = "\n\n")
+            val content = exportedNotes.joinToString("")
 
             if (content.isNotEmpty()) {
                 val shareIntent = Intent().apply {
