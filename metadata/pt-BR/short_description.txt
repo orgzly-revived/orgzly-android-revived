@@ -1,1 +1,1 @@
-Bloco de notas para fazer anotações e gerenciar listas de tarefas no formato de modo Org
+Bloco de notas para anotações e listas de tarefas no formato de modo Org

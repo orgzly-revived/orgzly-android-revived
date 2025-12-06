@@ -394,10 +394,12 @@
     <string name="notes_count_zero">Não contém notas</string>
     <plurals name="notes_count_nonzero">
         <item quantity="one">Contém <b>%d</b> nota</item>
+        <item quantity="many">Contém <b>%d</b> notas</item>
         <item quantity="other">Contém <b>%d</b> notas</item>
     </plurals>
     <plurals name="found_number_of_notebooks">
         <item quantity="one">Encontrado <b>%d</b> caderno</item>
+        <item quantity="many">Encontrados <b>%d</b> cadernos</item>
         <item quantity="other">Encontrados <b>%d</b> cadernos</item>
     </plurals>
     <string name="content_line_count_displayed">Exibir contador de linha de conteúdo</string>

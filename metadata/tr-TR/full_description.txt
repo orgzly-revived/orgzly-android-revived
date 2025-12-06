@@ -4,7 +4,7 @@ Not defterlerini düz metin olarak saklayabilir ve mobil cihazdaki, SD karttaki 
 
 Not defterleri Org mod dosya biçiminde kaydedilir.
 “Org mod, not tutmak, TODO listelerini takip etmek, projeleri planlamak ve belgeleri hızlı ve etkili bir düz metin sistemiyle oluşturmak içindir.”
-Daha fazla bilgi için http://orgmode.org adresine bak.
+Daha fazla bilgi için <a href='https://orgmode.org/'>https://orgmode.org/</a> adresine bak.
 
 <b>Özellikler:</b>
 
