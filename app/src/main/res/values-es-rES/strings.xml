@@ -399,6 +399,7 @@
     </plurals>
     <plurals name="found_number_of_notebooks">
         <item quantity="one">Encontrado <b>%d</b> bloc de notas</item>
+        <item quantity="many">Encontrados <b>%d</b> blocs de notas</item>
         <item quantity="other">Encontrados <b>%d</b> blocs de notas</item>
     </plurals>
     <string name="content_line_count_displayed">Mostrar contenido de contador de linea</string>
