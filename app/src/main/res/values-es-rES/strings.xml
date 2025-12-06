@@ -393,7 +393,8 @@
     <string name="not_modified">No modificado</string>
     <string name="notes_count_zero">No contiene notas</string>
     <plurals name="notes_count_nonzero">
-        <item quantity="one">Contiene <b>%d</b> notas</item>
+        <item quantity="one">Contiene <b>%d</b> nota</item>
+        <item quantity="many">Contiene <b>%d</b> notas</item>
         <item quantity="other">Contiene <b>%d</b> notas</item>
     </plurals>
     <plurals name="found_number_of_notebooks">
