@@ -25,4 +25,10 @@
         </menu>
     </item>
 
+    <item
+        android:id="@+id/share"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_share"
+        android:title="@string/share"/>
+
 </menu>

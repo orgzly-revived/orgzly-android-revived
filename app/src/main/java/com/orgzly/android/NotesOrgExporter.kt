@@ -5,6 +5,7 @@ import com.orgzly.R
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.data.mappers.OrgMapper
 import com.orgzly.android.db.entity.Book
+import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.org.parser.OrgParserSettings
 import com.orgzly.org.parser.OrgParserWriter
@@ -36,16 +37,36 @@ class NotesOrgExporter(val dataRepository: DataRepository) {
         // Write preface
         writer.write(orgWriter.whiteSpacedFilePreface(book.preface))
 
-        // Write each note
+        // Write each note using exportNote
         dataRepository.getNotes(book.name).forEach { noteView ->
-            val note = noteView.note
-
-            val head = OrgMapper.toOrgHead(noteView).apply {
-                properties = OrgMapper.toOrgProperties(dataRepository.getNoteProperties(note.id))
-            }
-
-            writer.write(orgWriter.whiteSpacedHead(head, note.position.level, book.isIndented == true))
+            writer.write(exportNote(noteView, book.isIndented == true))
         }
+    }
+
+    /**
+     * Exports a single note to Org format string.
+     */
+    fun exportNote(noteId: Long): String {
+        val noteView = dataRepository.getNoteView(noteId)
+            ?: throw IllegalArgumentException("Note with id $noteId not found")
+
+        return exportNote(noteView, false)
+    }
+
+    /**
+     * Exports a single note from NoteView to Org format string.
+     */
+    private fun exportNote(noteView: NoteView, isIndented: Boolean): String {
+        val orgParserSettings = getOrgParserSettingsFromPreferences()
+        val orgWriter = OrgParserWriter(orgParserSettings)
+
+        val note = noteView.note
+
+        val head = OrgMapper.toOrgHead(noteView).apply {
+            properties = OrgMapper.toOrgProperties(dataRepository.getNoteProperties(note.id))
+        }
+
+        return orgWriter.whiteSpacedHead(head, note.position.level, isIndented)
     }
 
     companion object {

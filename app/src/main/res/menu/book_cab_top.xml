@@ -73,6 +73,12 @@
     </item>
 
     <item
+        android:id="@+id/share"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_share"
+        android:title="@string/share"/>
+
+    <item
         android:id="@+id/delete_note"
         app:showAsAction="never"
         android:title="@string/delete"/>

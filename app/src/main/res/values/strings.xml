@@ -730,6 +730,7 @@
     <string name="settings_exported_to">Exported settings and saved searches to note “%1$s”</string>
     <string name="settings_imported_from">Imported settings and saved searches from note “%1$s”</string>
     <string name="failed_to_get_note_payload">Failed to get note payload</string>
+    <string name="failed_sharing_note">Failed to share note</string>
     <string name="export_settings">Export app settings</string>
     <string name="export_settings_summary">Write a JSON representation of all settings and saved searches to a note of your choice</string>
     <string name="import_settings">Import app settings</string>
