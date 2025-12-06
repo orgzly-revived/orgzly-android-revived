@@ -131,14 +131,20 @@ class NoteBuilder {
             return if (AppPreferences.isNewNoteScheduled(context)) {
                 val cal = Calendar.getInstance()
 
-                val timestamp = OrgDateTime.Builder()
-                        .setIsActive(true)
-                        .setYear(cal.get(Calendar.YEAR))
-                        .setMonth(cal.get(Calendar.MONTH))
-                        .setDay(cal.get(Calendar.DAY_OF_MONTH))
-                        .build()
+                val timestampBuilder = OrgDateTime.Builder()
+                    .setIsActive(true)
+                    .setYear(cal.get(Calendar.YEAR))
+                    .setMonth(cal.get(Calendar.MONTH))
+                    .setDay(cal.get(Calendar.DAY_OF_MONTH))
 
-                OrgRange(timestamp).toString()
+                if (AppPreferences.isNewNoteTimeScheduled(context)) {
+                    timestampBuilder
+                        .setHasTime(true)
+                        .setHour(cal.get(Calendar.HOUR_OF_DAY))
+                        .setMinute(cal.get(Calendar.MINUTE))
+                }
+
+                OrgRange(timestampBuilder.build()).toString()
 
             } else {
                 null
