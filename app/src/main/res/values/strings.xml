@@ -243,6 +243,8 @@
     <string name="permissions_rationale_for_schedule_exact_alarms">Permission needed to schedule reminders at exact times</string>
 
     <string name="cycle_visibility">Fold/Unfold All</string>
+    <string name="widen_view">Widen View</string>
+    <string name="narrow">Narrow to Subtree</string>
     <string name="note_has_been_modified">Note modified</string>
     <string name="discard_or_save_changes">Save changes?</string>
     <string name="rename">Rename</string>

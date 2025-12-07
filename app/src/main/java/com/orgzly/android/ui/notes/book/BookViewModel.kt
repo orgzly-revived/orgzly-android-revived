@@ -15,10 +15,6 @@ import com.orgzly.android.usecase.UseCaseRunner
 
 class BookViewModel(private val dataRepository: DataRepository, val bookId: Long) : CommonViewModel() {
 
-    private data class Params(val noteId: Long? = null)
-
-    private val params = MutableLiveData<Params>(Params())
-
     enum class FlipperDisplayedChild {
         LOADING,
         LOADED,
@@ -34,15 +30,23 @@ class BookViewModel(private val dataRepository: DataRepository, val bookId: Long
 
     data class Data(val book: Book?, val notes: List<NoteView>?)
 
-    val data = params.switchMap { _ ->
+    // Track narrowed state
+    val narrowedNoteId = MutableLiveData<Long?>(null)
+
+    val data = narrowedNoteId.switchMap { narrowedId ->
         MediatorLiveData<Data>().apply {
             addSource(dataRepository.getBookLiveData(bookId)) {
                 value = Data(it, value?.notes)
             }
-            addSource(dataRepository.getVisibleNotesLiveData(bookId)) {
+            // Query only the narrowed subtree if narrowed, otherwise all visible notes
+            addSource(dataRepository.getVisibleNotesLiveData(bookId, narrowedId)) {
                 value = Data(value?.book, it)
             }
         }
+    }
+
+    fun isNarrowed(): Boolean {
+        return narrowedNoteId.value != null
     }
 
     companion object {
@@ -65,6 +69,14 @@ class BookViewModel(private val dataRepository: DataRepository, val bookId: Long
                 }
             }
         }
+    }
+
+    fun narrowToSubtree(noteId: Long) {
+        narrowedNoteId.value = noteId
+    }
+
+    fun widenView() {
+        narrowedNoteId.value = null
     }
 
     data class NotesToRefile(val selected: Set<Long>, val count: Int)

@@ -259,7 +259,14 @@ class BookFragment :
                     binding.fab.run {
                         if (currentBook != null) {
                             setOnClickListener {
-                                listener?.onNoteNewRequest(NotePlace(mBookId))
+                                // If narrowed, add note under the narrowed root
+                                val narrowedId = viewModel.narrowedNoteId.value
+                                val notePlace = if (narrowedId != null) {
+                                    NotePlace(mBookId, narrowedId, Place.UNDER)
+                                } else {
+                                    NotePlace(mBookId)
+                                }
+                                listener?.onNoteNewRequest(notePlace)
                             }
                             show()
                         } else {
@@ -294,6 +301,12 @@ class BookFragment :
                     appBarBackPressHandler.isEnabled = true
                 }
             }
+        }
+
+        // Update widen button visibility when narrowed state changes
+        viewModel.narrowedNoteId.observe(viewLifecycleOwner) {
+            if (viewModel.appBar.mode.value != APP_BAR_DEFAULT_MODE) return@observe
+            binding.topToolbar.menu.findItem(R.id.books_options_menu_item_widen_view)?.isVisible = viewModel.isNarrowed()
         }
     }
 
@@ -537,6 +550,9 @@ class BookFragment :
             if (currentBook == null) {
                 menu.removeItem(R.id.books_options_menu_book_preface)
             }
+
+            // Show/hide widen button based on narrowed state
+            menu.findItem(R.id.books_options_menu_item_widen_view)?.isVisible = viewModel.isNarrowed()
 
             // Hide paste button if clipboard is empty, update title if not
             menu.findItem(R.id.book_actions_paste)?.apply {
@@ -795,6 +811,9 @@ class BookFragment :
             R.id.note_popup_focus,
             R.id.focus ->
                 listener?.onNoteFocusInBookRequest(ids.first())
+
+            R.id.note_popup_narrow ->
+                viewModel.narrowToSubtree(ids.first())
         }
     }
 
@@ -804,6 +823,10 @@ class BookFragment :
         when (itemId) {
             R.id.books_options_menu_item_cycle_visibility -> {
                 viewModel.cycleVisibility()
+            }
+
+            R.id.books_options_menu_item_widen_view -> {
+                viewModel.widenView()
             }
 
             R.id.book_actions_paste -> {

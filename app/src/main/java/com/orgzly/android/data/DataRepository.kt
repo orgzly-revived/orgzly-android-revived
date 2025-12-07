@@ -1256,13 +1256,10 @@ class DataRepository @Inject constructor(
     }
 
     fun getVisibleNotesLiveData(bookId: Long, noteId: Long? = null): LiveData<List<NoteView>> {
-        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, bookId)
+        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "bookId=$bookId, noteId=$noteId")
 
         return if (noteId != null) {
-            // Only return note's subtree
-            db.note().get(noteId)?.let { note ->
-                db.noteView().getVisibleLiveData(bookId, note.position.lft, note.position.rgt)
-            } ?: MutableLiveData<List<NoteView>>()
+            db.noteView().getVisibleLiveDataNarrowed(bookId, noteId)
         } else {
             db.noteView().getVisibleLiveData(bookId)
         }
