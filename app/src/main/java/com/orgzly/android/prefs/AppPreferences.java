@@ -434,6 +434,12 @@ public class AppPreferences {
                 context.getResources().getBoolean(R.bool.pref_default_show_sync_notifications));
     }
 
+    public static boolean isCalendarSyncEnabled(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_calendar_sync_enable),
+                context.getResources().getBoolean(R.bool.pref_default_calendar_sync_enable));
+    }
+
     public static String colorTheme(Context context) {
         return getDefaultSharedPreferences(context).getString(
                 context.getResources().getString(R.string.pref_key_color_theme),

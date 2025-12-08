@@ -20,20 +20,25 @@ object AppPermissions {
 
     @JvmStatic
     fun isGrantedOrRequest(activity: CommonActivity, requestCode: Usage): Boolean {
-        val permission = permissionForRequest(requestCode)
+        val permissions = permissionsForRequest(requestCode)
         val rationale = rationaleForRequest(requestCode)
 
         val grantedOrRequested = if (!isGranted(activity, requestCode)) {
             /* Should we show an explanation? */
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
+            // Check if any of the permissions need rationale
+            val shouldShowRationale = permissions.any { permission ->
+                ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)
+            }
+
+            if (shouldShowRationale) {
                 activity.showSnackbar(rationale, R.string.settings) {
                     ActivityUtils.openAppInfoSettings(activity)
                 }
 
             } else {
                 /* No explanation needed -- request the permission. */
-                if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, requestCode, permission, "Requesting...")
-                ActivityCompat.requestPermissions(activity, arrayOf(permission), requestCode.ordinal)
+                if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, requestCode, permissions.contentToString(), "Requesting...")
+                ActivityCompat.requestPermissions(activity, permissions, requestCode.ordinal)
             }
 
             false
@@ -42,42 +47,46 @@ object AppPermissions {
             true
         }
 
-        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, requestCode, permission, grantedOrRequested)
+        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, requestCode, permissions.contentToString(), grantedOrRequested)
 
         return grantedOrRequested
     }
 
     @JvmStatic
     fun isGranted(context: Context, requestCode: Usage): Boolean {
-        val permission = permissionForRequest(requestCode)
+        val permissions = permissionsForRequest(requestCode)
 
-        // WRITE_EXTERNAL_STORAGE is unused in API 30 and later
-        if (permission == Manifest.permission.WRITE_EXTERNAL_STORAGE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (BuildConfig.LOG_DEBUG)
-                LogUtils.d(TAG, requestCode, permission, "API " + Build.VERSION.SDK_INT + ", returning true")
-            return true
+        // Check if all permissions are granted
+        val allGranted = permissions.all { permission ->
+            // WRITE_EXTERNAL_STORAGE is unused in API 30 and later
+            if (permission == Manifest.permission.WRITE_EXTERNAL_STORAGE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (BuildConfig.LOG_DEBUG)
+                    LogUtils.d(TAG, requestCode, permission, "API " + Build.VERSION.SDK_INT + ", returning true")
+                true
+            } else {
+                val granted = ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+                if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, requestCode, permission, granted)
+                granted
+            }
         }
 
-        val isGranted = ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
-
-        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, requestCode, permission, isGranted)
-
-        return isGranted
+        return allGranted
     }
 
     /** Map request code to permission. */
-    private fun permissionForRequest(requestCode: Usage): String {
+    private fun permissionsForRequest(requestCode: Usage): Array<String> {
         return when (requestCode) {
-            Usage.LOCAL_REPO -> Manifest.permission.WRITE_EXTERNAL_STORAGE
-            Usage.BOOK_EXPORT -> Manifest.permission.WRITE_EXTERNAL_STORAGE
-            Usage.SYNC_START -> Manifest.permission.WRITE_EXTERNAL_STORAGE
-            Usage.SAVED_SEARCHES_EXPORT_IMPORT -> Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Usage.LOCAL_REPO -> arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            Usage.BOOK_EXPORT -> arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            Usage.SYNC_START -> arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            Usage.SAVED_SEARCHES_EXPORT_IMPORT -> arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             Usage.EXTERNAL_FILES_ACCESS -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                Manifest.permission.READ_MEDIA_IMAGES
+                arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
             else
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            Usage.POST_NOTIFICATIONS -> Manifest.permission.POST_NOTIFICATIONS
-            Usage.SCHEDULE_EXACT_ALARM -> Manifest.permission.SCHEDULE_EXACT_ALARM
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+            Usage.POST_NOTIFICATIONS -> arrayOf(Manifest.permission.POST_NOTIFICATIONS)
+            Usage.SCHEDULE_EXACT_ALARM -> arrayOf(Manifest.permission.SCHEDULE_EXACT_ALARM)
+            Usage.CALENDAR_SYNC -> arrayOf(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR)
         }
     }
 
@@ -91,6 +100,7 @@ object AppPermissions {
             Usage.EXTERNAL_FILES_ACCESS -> R.string.permissions_rationale_for_external_files_access
             Usage.POST_NOTIFICATIONS -> R.string.permissions_rationale_for_post_notifications
             Usage.SCHEDULE_EXACT_ALARM -> R.string.permissions_rationale_for_schedule_exact_alarms
+            Usage.CALENDAR_SYNC -> R.string.permissions_rationale_for_calendar_sync
         }
     }
 
@@ -115,5 +125,6 @@ object AppPermissions {
         EXTERNAL_FILES_ACCESS,
         POST_NOTIFICATIONS,
         SCHEDULE_EXACT_ALARM,
+        CALENDAR_SYNC,
     }
 }
