@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -16,6 +15,7 @@ import com.orgzly.R
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.TimeType
 import com.orgzly.android.ui.util.KeyboardUtils
+import com.orgzly.android.ui.util.getLayoutInflater
 import com.orgzly.android.ui.views.richtext.RichTextEdit
 import com.orgzly.android.util.LogUtils
 import com.orgzly.android.util.UserTimeFormatter
@@ -71,14 +71,13 @@ class TimestampDialogFragment : DialogFragment(), View.OnClickListener {
         val noteIds = TreeSet(args.getLongArray(ARG_NOTE_IDS)?.toList() ?: emptyList())
         val dateTimeString = args.getString(ARG_TIME)
 
-
-        LayoutInflater.from(requireContext()).let { inflater ->
+        requireContext().getLayoutInflater().let { inflater ->
             binding = DialogTimestampBinding.inflate(inflater)
             titleBinding = DialogTimestampTitleBinding.inflate(inflater)
         }
 
         val factory = TimestampDialogViewModelFactory.getInstance(timeType, dateTimeString)
-        viewModel = ViewModelProvider(this, factory).get(TimestampDialogViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory)[TimestampDialogViewModel::class.java]
 
         if (timestampIsInline()) {
             // Show/hide the active/inactive checkbox
