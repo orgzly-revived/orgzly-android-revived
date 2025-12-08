@@ -190,12 +190,14 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
     private fun buildEventContentValues(calendarId: Long, note: NoteView, eventStartTime: Long, eventEndTime: Long?, isAllDay: Boolean): ContentValues {
         val dtEnd = eventEndTime ?: (eventStartTime + if (isAllDay) DAY_IN_MILLIS else HOUR_IN_MILLIS)
         val eventTimeZone = if (isAllDay) TimeZone.getTimeZone("UTC").id else TimeZone.getDefault().id
+        
+        val description = (note.note.content ?: "") + "\n\nOpen in Orgzly: https://orgzlyrevived.com/note/${note.note.id}"
 
         return ContentValues().apply {
             put(CalendarContract.Events.DTSTART, eventStartTime)
             put(CalendarContract.Events.DTEND, dtEnd)
             put(CalendarContract.Events.TITLE, note.note.title)
-            put(CalendarContract.Events.DESCRIPTION, note.note.content)
+            put(CalendarContract.Events.DESCRIPTION, description)
             put(CalendarContract.Events.CALENDAR_ID, calendarId)
             put(CalendarContract.Events.EVENT_TIMEZONE, eventTimeZone)
             put(CalendarContract.Events.ALL_DAY, if (isAllDay) 1 else 0)

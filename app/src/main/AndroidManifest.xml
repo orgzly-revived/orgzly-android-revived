@@ -63,6 +63,23 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="org-protocol" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="orgzly" android:host="note" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="orgzlyrevived.com" />
+                <data android:pathPrefix="/note/" />
+            </intent-filter>
         </activity>
 
         <activity
