@@ -31,7 +31,7 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
     private val userTimeFormatter: UserTimeFormatter
 
     // Level offset for narrowing - hides indentation of parent levels
-    private var levelOffset: Int = 0
+    var levelOffset: Int = 0
 
     init {
 
@@ -44,10 +44,6 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
         titleGenerator = TitleGenerator(context, inBook, titleAttributes)
 
         userTimeFormatter = UserTimeFormatter(context)
-    }
-
-    fun setLevelOffset(offset: Int) {
-        levelOffset = offset
     }
 
     fun bind(holder: NoteItemViewHolder, noteView: NoteView, agendaTimeType: TimeType? = null) {
