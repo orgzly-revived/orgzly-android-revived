@@ -49,6 +49,18 @@ class BookViewModel(private val dataRepository: DataRepository, val bookId: Long
         return narrowedNoteId.value != null
     }
 
+    /**
+     * Calculate level offset for indentation when narrowed.
+     * Returns the narrowed note's level - 1 so it displays as root (level 1).
+     */
+    fun levelOffset(notes: List<NoteView>?): Int {
+        return if (isNarrowed() && notes != null && notes.isNotEmpty()) {
+            notes.first().note.position.level - 1
+        } else {
+            0
+        }
+    }
+
     companion object {
         const val APP_BAR_DEFAULT_MODE = 0
         const val APP_BAR_SELECTION_MODE = 1

@@ -213,7 +213,8 @@ class BookFragment :
 
             if (notes != null) {
                 if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Submitting list")
-                viewAdapter.submitList(notes)
+
+                viewAdapter.submitList(notes, viewModel.levelOffset(notes))
 
                 val ids = notes.mapTo(hashSetOf()) { it.note.id }
 

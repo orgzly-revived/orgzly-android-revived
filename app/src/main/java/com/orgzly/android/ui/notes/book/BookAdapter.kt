@@ -117,6 +117,12 @@ class BookAdapter(
         }
     }
 
+    fun submitList(list: List<NoteView>?, levelOffset: Int) {
+        noteItemViewBinder.setLevelOffset(levelOffset)
+        super.submitList(list)
+        notifyDataSetChanged()
+    }
+
     override fun getItemId(position: Int): Long {
         return if (position > 0) {
             getItem(position).note.id
