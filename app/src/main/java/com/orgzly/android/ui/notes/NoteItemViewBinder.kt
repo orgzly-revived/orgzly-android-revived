@@ -30,8 +30,8 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
 
     private val userTimeFormatter: UserTimeFormatter
 
-    // Level offset for narrowing - hides indentation of parent levels
-    var levelOffset: Int = 0
+    // Level offset for narrowing - null when not narrowed, offset value when narrowed
+    var levelOffset: Int? = null
 
     init {
 
@@ -226,7 +226,7 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
 
         // Ensure level is never negative
         val level = if (inBook) {
-            maxOf(0, note.position.level - 1 - levelOffset)
+            maxOf(0, note.position.level - 1 - (levelOffset ?: 0))
         } else {
             0
         }

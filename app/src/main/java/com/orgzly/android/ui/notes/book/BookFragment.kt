@@ -214,8 +214,6 @@ class BookFragment :
 
             this.currentBook = book
 
-            viewAdapter.setPreface(book)
-
             if (notes != null) {
                 if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Submitting list")
 
@@ -229,6 +227,8 @@ class BookFragment :
 
                 scrollToNoteIfSet(arguments?.getLong(ARG_NOTE_ID, 0) ?: 0)
             }
+
+            viewAdapter.setPreface(book)
 
             setFlipperDisplayedChild(notes)
         })

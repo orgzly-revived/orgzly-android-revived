@@ -11,6 +11,7 @@ import com.orgzly.android.ui.AppBar
 import com.orgzly.android.ui.CommonViewModel
 import com.orgzly.android.ui.SingleLiveEvent
 import com.orgzly.android.usecase.BookCycleVisibility
+import com.orgzly.android.usecase.NoteToggleFoldingSubtree
 import com.orgzly.android.usecase.UseCaseRunner
 
 class BookViewModel(private val dataRepository: DataRepository, val bookId: Long) : CommonViewModel() {
@@ -51,13 +52,14 @@ class BookViewModel(private val dataRepository: DataRepository, val bookId: Long
 
     /**
      * Calculate level offset for indentation when narrowed.
-     * Returns the narrowed note's level - 1 so it displays as root (level 1).
+     * Returns null when not narrowed, otherwise returns the narrowed note's level - 1
+     * so it displays as root (level 1).
      */
-    fun levelOffset(notes: List<NoteView>?): Int {
+    fun levelOffset(notes: List<NoteView>?): Int? {
         return if (isNarrowed() && notes != null && notes.isNotEmpty()) {
             notes.first().note.position.level - 1
         } else {
-            0
+            null
         }
     }
 
@@ -74,10 +76,18 @@ class BookViewModel(private val dataRepository: DataRepository, val bookId: Long
 
 
     fun cycleVisibility() {
-        data.value?.book?.let { book ->
-            App.EXECUTORS.diskIO().execute {
-                catchAndPostError {
-                    UseCaseRunner.run(BookCycleVisibility(book))
+        App.EXECUTORS.diskIO().execute {
+            catchAndPostError {
+                if (isNarrowed()) {
+                    // When narrowed, cycle visibility for the narrowed subtree only
+                    narrowedNoteId.value?.let { noteId ->
+                        UseCaseRunner.run(NoteToggleFoldingSubtree(noteId))
+                    }
+                } else {
+                    // When not narrowed, cycle visibility for the entire book
+                    data.value?.book?.let { book ->
+                        UseCaseRunner.run(BookCycleVisibility(book))
+                    }
                 }
             }
         }
