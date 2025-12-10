@@ -171,6 +171,11 @@ class BookFragment :
                     rv.findChildViewUnder(e1.x, e1.y)?.let { itemView ->
                         rv.findContainingViewHolder(itemView)?.let { vh ->
                             (vh as? NoteItemViewHolder)?.let {
+                                // Disable swipe popup for narrowed root note - tap-to-edit still works
+                                if (viewModel.isNarrowed() && vh.itemId == viewModel.narrowedNoteId.value) {
+                                    return@let
+                                }
+
                                 showPopupWindow(vh.itemId, NotePopup.Location.BOOK, direction, itemView, e1, e2) { noteId, buttonId ->
                                     handleActionItemClick(setOf(noteId), buttonId)
                                 }
@@ -489,6 +494,14 @@ class BookFragment :
     }
 
     override fun onNoteClick(view: View, position: Int, noteView: NoteView) {
+        // Disable selection on narrowed root note - opening for edit still works
+        if (viewModel.isNarrowed() && noteView.note.id == viewModel.narrowedNoteId.value) {
+            if (!AppPreferences.isReverseNoteClickAction(context) && viewAdapter.getSelection().count == 0) {
+                openNote(noteView.note.id)  // Allow edit in default mode when no selection
+            }
+            return
+        }
+
         if (!AppPreferences.isReverseNoteClickAction(context)) {
             if (viewAdapter.getSelection().count > 0) {
                 toggleNoteSelection(position, noteView)
@@ -501,6 +514,14 @@ class BookFragment :
     }
 
     override fun onNoteLongClick(view: View, position: Int, noteView: NoteView) {
+        // Disable selection on narrowed root note - opening for edit still works
+        if (viewModel.isNarrowed() && noteView.note.id == viewModel.narrowedNoteId.value) {
+            if (AppPreferences.isReverseNoteClickAction(context)) {
+                openNote(noteView.note.id)  // Allow edit
+            }
+            return
+        }
+
         if (!AppPreferences.isReverseNoteClickAction(context)) {
             toggleNoteSelection(position, noteView)
         } else {
