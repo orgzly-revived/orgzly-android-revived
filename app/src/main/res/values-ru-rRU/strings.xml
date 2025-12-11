@@ -624,4 +624,9 @@
     <string name="in_note_content">В содержании заметки</string>
     <string name="placement_of_shared_text">Размещение общего простого текста</string>
     <string name="book_names_cannot_contain">Название книги не может содержать \'. ./\'</string>
+    <string name="pref_title_sync_at_interval">Периодически</string>
+    <string name="pref_summary_sync_at_interval">Примечание: Может быть задержано при экономии батареи</string>
+    <string name="pref_key_auto_sync_interval_title">Интервал в минутах (минимум : 15)</string>
+    <string name="failed_sharing_note">Не удалось поделиться заметкой</string>
+    <string name="create_org_links_from_shared_links">Создание оргссылок из общих ссылок</string>
 </resources>
