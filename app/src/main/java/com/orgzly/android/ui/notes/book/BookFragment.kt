@@ -171,6 +171,11 @@ class BookFragment :
                     rv.findChildViewUnder(e1.x, e1.y)?.let { itemView ->
                         rv.findContainingViewHolder(itemView)?.let { vh ->
                             (vh as? NoteItemViewHolder)?.let {
+                                // Disable swipe popup for narrowed root note - tap-to-edit still works
+                                if (viewModel.isNarrowed() && vh.itemId == viewModel.narrowedNoteId.value) {
+                                    return@let
+                                }
+
                                 showPopupWindow(vh.itemId, NotePopup.Location.BOOK, direction, itemView, e1, e2) { noteId, buttonId ->
                                     handleActionItemClick(setOf(noteId), buttonId)
                                 }
@@ -209,11 +214,10 @@ class BookFragment :
 
             this.currentBook = book
 
-            viewAdapter.setPreface(book)
-
             if (notes != null) {
                 if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Submitting list")
-                viewAdapter.submitList(notes)
+
+                viewAdapter.submitList(notes, viewModel.levelOffset(notes))
 
                 val ids = notes.mapTo(hashSetOf()) { it.note.id }
 
@@ -223,6 +227,8 @@ class BookFragment :
 
                 scrollToNoteIfSet(arguments?.getLong(ARG_NOTE_ID, 0) ?: 0)
             }
+
+            viewAdapter.setPreface(book)
 
             setFlipperDisplayedChild(notes)
         })
@@ -259,7 +265,14 @@ class BookFragment :
                     binding.fab.run {
                         if (currentBook != null) {
                             setOnClickListener {
-                                listener?.onNoteNewRequest(NotePlace(mBookId))
+                                // If narrowed, add note under the narrowed root
+                                val narrowedId = viewModel.narrowedNoteId.value
+                                val notePlace = if (narrowedId != null) {
+                                    NotePlace(mBookId, narrowedId, Place.UNDER)
+                                } else {
+                                    NotePlace(mBookId)
+                                }
+                                listener?.onNoteNewRequest(notePlace)
                             }
                             show()
                         } else {
@@ -294,6 +307,12 @@ class BookFragment :
                     appBarBackPressHandler.isEnabled = true
                 }
             }
+        }
+
+        // Update widen button visibility when narrowed state changes
+        viewModel.narrowedNoteId.observe(viewLifecycleOwner) {
+            if (viewModel.appBar.mode.value != APP_BAR_DEFAULT_MODE) return@observe
+            binding.topToolbar.menu.findItem(R.id.books_options_menu_item_widen_view)?.isVisible = viewModel.isNarrowed()
         }
     }
 
@@ -475,6 +494,14 @@ class BookFragment :
     }
 
     override fun onNoteClick(view: View, position: Int, noteView: NoteView) {
+        // Disable selection on narrowed root note - opening for edit still works
+        if (viewModel.isNarrowed() && noteView.note.id == viewModel.narrowedNoteId.value) {
+            if (!AppPreferences.isReverseNoteClickAction(context) && viewAdapter.getSelection().count == 0) {
+                openNote(noteView.note.id)  // Allow edit in default mode when no selection
+            }
+            return
+        }
+
         if (!AppPreferences.isReverseNoteClickAction(context)) {
             if (viewAdapter.getSelection().count > 0) {
                 toggleNoteSelection(position, noteView)
@@ -487,6 +514,14 @@ class BookFragment :
     }
 
     override fun onNoteLongClick(view: View, position: Int, noteView: NoteView) {
+        // Disable selection on narrowed root note - opening for edit still works
+        if (viewModel.isNarrowed() && noteView.note.id == viewModel.narrowedNoteId.value) {
+            if (AppPreferences.isReverseNoteClickAction(context)) {
+                openNote(noteView.note.id)  // Allow edit
+            }
+            return
+        }
+
         if (!AppPreferences.isReverseNoteClickAction(context)) {
             toggleNoteSelection(position, noteView)
         } else {
@@ -537,6 +572,9 @@ class BookFragment :
             if (currentBook == null) {
                 menu.removeItem(R.id.books_options_menu_book_preface)
             }
+
+            // Show/hide widen button based on narrowed state
+            menu.findItem(R.id.books_options_menu_item_widen_view)?.isVisible = viewModel.isNarrowed()
 
             // Hide paste button if clipboard is empty, update title if not
             menu.findItem(R.id.book_actions_paste)?.apply {
@@ -795,6 +833,9 @@ class BookFragment :
             R.id.note_popup_focus,
             R.id.focus ->
                 listener?.onNoteFocusInBookRequest(ids.first())
+
+            R.id.note_popup_narrow ->
+                viewModel.narrowToSubtree(ids.first())
         }
     }
 
@@ -804,6 +845,10 @@ class BookFragment :
         when (itemId) {
             R.id.books_options_menu_item_cycle_visibility -> {
                 viewModel.cycleVisibility()
+            }
+
+            R.id.books_options_menu_item_widen_view -> {
+                viewModel.widenView()
             }
 
             R.id.book_actions_paste -> {
