@@ -4,9 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
+        android:id="@+id/books_options_menu_item_widen_view"
+        android:icon="@drawable/ic_arrow_back"
+        app:showAsAction="always"
+        android:title="@string/widen_view"
+        android:visible="false"/>
+
+    <item
         android:id="@+id/books_options_menu_item_cycle_visibility"
         android:icon="@drawable/ic_unfold_more"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:title="@string/cycle_visibility"/>
 
     <item
