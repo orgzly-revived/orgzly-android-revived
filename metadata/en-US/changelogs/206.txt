@@ -1,0 +1,1 @@
+• Enable sync failure notifications by default

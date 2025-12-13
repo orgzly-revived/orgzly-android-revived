@@ -128,9 +128,15 @@ public class TitleGenerator {
                 if (!AppPreferences.isNotesContentDisplayedInSearch(mContext)) {
                     display = false;
                 }
+
+                if(AppPreferences.isSearchFoldable(mContext) && note.getPosition().isFolded()) {
+                    display = false;
+                } else {
+                }
             }
 
         } else { // Never displaying content in list
+
             display = false;
         }
 

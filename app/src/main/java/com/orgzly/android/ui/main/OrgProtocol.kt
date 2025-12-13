@@ -10,7 +10,7 @@ import com.orgzly.android.util.LogUtils
 // TODO: Complete
 object OrgProtocol {
     interface Listener {
-        fun onNoteWithId(id: String)
+        fun onNoteOrBookWithId(id: String)
 
         fun onQuery(query: String)
 
@@ -49,9 +49,9 @@ object OrgProtocol {
 
                 if (id != null) {
                     if (BuildConfig.LOG_DEBUG)
-                        LogUtils.d(TAG, "Open note with property ID $id")
+                        LogUtils.d(TAG, "Open note or book with property ID $id")
 
-                    listener.onNoteWithId(id)
+                    listener.onNoteOrBookWithId(id)
 
                 } else {
                     listener.onError("Missing “$ID_PARAM” param in $uri")

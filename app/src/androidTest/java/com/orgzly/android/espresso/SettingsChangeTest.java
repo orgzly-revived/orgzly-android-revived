@@ -21,7 +21,7 @@ import static com.orgzly.android.espresso.util.EspressoUtils.onBook;
 import static com.orgzly.android.espresso.util.EspressoUtils.onItemInAgenda;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNoteInSearch;
-import static com.orgzly.android.espresso.util.EspressoUtils.searchForText;
+import static com.orgzly.android.espresso.util.EspressoUtils.searchForTextCloseKeyboard;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasToString;
@@ -35,7 +35,7 @@ public class SettingsChangeTest extends OrgzlyTest {
         testUtils.setupBook(
                 "book-a",
                 "* [#B] Note [a-1]\n" +
-                "SCHEDULED: <2018-01-01>\n" +
+                "SCHEDULED: <2014-01-01>\n" +
                 "Content for [a-1]\n" +
                 "* Note [a-2]\n" +
                 "SCHEDULED: <2014-01-01>\n"
@@ -46,7 +46,7 @@ public class SettingsChangeTest extends OrgzlyTest {
 
     @Test
     public void testChangeDefaultPrioritySearchResultsShouldBeReordered() {
-        searchForText("o.p");
+        searchForTextCloseKeyboard("o.p");
 
         onNoteInSearch(0, R.id.item_head_title_view)
                 .check(matches(allOf(withText(containsString("#B  Note [a-1]")), isDisplayed())));
@@ -63,7 +63,7 @@ public class SettingsChangeTest extends OrgzlyTest {
 
     @Test
     public void testChangeDefaultPriorityAgendaResultsShouldBeReordered() {
-        searchForText("o.p ad.2");
+        searchForTextCloseKeyboard("o.p ad.2");
 
         onItemInAgenda(1, R.id.item_head_title_view)
                 .check(matches(allOf(withText(containsString("#B  Note [a-1]")), isDisplayed())));
@@ -86,8 +86,8 @@ public class SettingsChangeTest extends OrgzlyTest {
                 .check(matches(allOf(withText(containsString("Content for [a-1]")), isDisplayed())));
 
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks);
-        clickSetting("pref_key_is_notes_content_displayed_in_list", R.string.display_content);
+        clickSetting(R.string.pref_title_notebooks);
+        clickSetting(R.string.display_content);
         pressBack();
         pressBack();
 
@@ -96,8 +96,8 @@ public class SettingsChangeTest extends OrgzlyTest {
 
     private void setDefaultPriority(String priority) {
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks);
-        clickSetting("pref_key_default_priority", R.string.default_priority);
+        clickSetting(R.string.pref_title_notebooks);
+        clickSetting(R.string.default_priority);
         onData(hasToString(containsString(priority))).perform(click());
         pressBack();
         pressBack();

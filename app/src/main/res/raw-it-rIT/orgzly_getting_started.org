@@ -33,6 +33,17 @@ Se si cerca note con tag “tag1” utilizzando la query “t.tag1”, questa no
 *** DONE Questa è una nota con il tipo di stato /Done/
 CLOSED: [2018-01-24 Mer 17:00]
 
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
 ** La nota può avere un orario programmato
 SCHEDULED: <2015-02-20 Ven 15:15>
 
@@ -41,6 +52,13 @@ SCHEDULED: <2015-02-16 Lun .+2d>
 
 ** Puoi anche stabilire una scadenza
 DEADLINE: <2015-02-20 Ven>
+
+** Event times can be used anywhere in the note's content
+
+You can have multiple event times:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
 ** Sono supportati i promemoria per i task pianificati e per le scadenze
 
@@ -52,11 +70,11 @@ Sono disabilitati di default e devono essere abilitati nelle impostazioni.
 
 ** Le note possono includere link
 
-Digita un numero di telefono (tel:555-0199), invia SMS (sms:555-0199), componi un'email (mailto:support@orgzly.com) o visita una pagina web ([[https://www.orgzly.com][Orgzly.com]]).
+Digita un numero di telefono (tel:555-0199), invia SMS (sms:555-0199), componi un'email (mailto:support@orgzlyrevived.com) o visita una pagina web ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
 Puoi anche collegarti a un'altra nota o a un taccuino all'interno dell'app.
 
-Vai su https://www.orgzly.com/help#links per maggiori informazioni.
+Vai su https://www.orgzlyrevived.com/docs#links per maggiori informazioni.
 
 ** Sono supportati i livelli di formattazione base
 
@@ -70,12 +88,18 @@ Puoi usare parole in *grassetto*, /corsivo/, _sottolineato_, =scandito=, ~tipo c
 
 Fare clic sulla casella per cambiare lo stato. Premere il pulsante nuova riga alla fine della linea per creare un nuovo elemento.
 
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] Attività 1
+- [ ] Attività 2
+- [X] Attività 3
+
 * Cerca
 ** Sono supportati molti operatori di ricerca
 
 Puoi cercare nelle note a seconda dello stato, del tag, della programmazione o della scadenza ecc.
 
-Vai su https://www.orgzly.com/help#search per saperne di più.
+Vai su [[https://www.orgzlyrevived.com/docs#search]] per saperne di più.
 
 ** Le stringhe di ricerca possono essere salvate per un rapido accesso
 
@@ -87,7 +111,7 @@ Puoi creare le proprie ricerche salvate premendo su "Ricerche" nel menu di navig
 
 ** I taccuini possono essere salvati come file di testo
 
-I file sono nel formato usato da "Org mode".
+I file sono nel formato usato da [[https://orgmode.org/][Org mode]].
 
 ** Tipo di percorso (repository)
 

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.os.SystemClock
 import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.documentfile.provider.DocumentFile
@@ -22,6 +23,7 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.orgzly.R
 import com.orgzly.android.OrgzlyTest
+import com.orgzly.android.RetryTestRule
 import com.orgzly.android.espresso.util.EspressoUtils.*
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.repos.RepoType
@@ -30,12 +32,18 @@ import com.orgzly.android.ui.share.ShareActivity
 import com.orgzly.android.util.MiscUtils
 import org.hamcrest.Matchers.*
 import org.junit.Assert
+import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import java.io.File
 
 class NoteFragmentTest : OrgzlyTest() {
     private lateinit var scenario: ActivityScenario<MainActivity>
+
+    @Rule
+    @JvmField
+    val mRetryTestRule = RetryTestRule()
 
     @Before
     @Throws(Exception::class)
@@ -80,6 +88,12 @@ class NoteFragmentTest : OrgzlyTest() {
         onBook(0).perform(click())
     }
 
+    @After
+    override fun tearDown() {
+        super.tearDown()
+        scenario.close()
+    }
+
     @Test
     fun testDeleteNote() {
         onNoteInBook(1).perform(click())
@@ -105,7 +119,7 @@ class NoteFragmentTest : OrgzlyTest() {
         onView(withId(R.id.title)).perform(click())
         onView(withId(R.id.title_edit)).perform(*replaceTextCloseKeyboard("Note title changed"))
 
-        onView(withId(R.id.done)).perform(click()); // Note done
+        onView(withId(R.id.done)).perform(click()) // Note done
 
         onNoteInBook(1, R.id.item_head_title_view).check(matches(withText("Note title changed")))
     }
@@ -234,7 +248,7 @@ class NoteFragmentTest : OrgzlyTest() {
     @Test
     fun testTitleCanNotBeEmptyForNewNote() {
         onView(withId(R.id.fab)).perform(click()) // New note
-        onView(withId(R.id.done)).perform(click()); // Note done
+        onView(withId(R.id.done)).perform(click()) // Note done
         onSnackbar().check(matches(withText(R.string.title_can_not_be_empty)))
     }
 
@@ -243,14 +257,14 @@ class NoteFragmentTest : OrgzlyTest() {
         onNoteInBook(1).perform(click())
         onView(withId(R.id.title)).perform(click())
         onView(withId(R.id.title_edit)).perform(*replaceTextCloseKeyboard(""))
-        onView(withId(R.id.done)).perform(click()); // Note done
+        onView(withId(R.id.done)).perform(click()) // Note done
         onSnackbar().check(matches(withText(R.string.title_can_not_be_empty)))
     }
 
     @Test
     fun testSavingNoteWithRepeater() {
         onNoteInBook(4).perform(click())
-        onView(withId(R.id.done)).perform(click()); // Note done
+        onView(withId(R.id.done)).perform(click()) // Note done
     }
 
     @Test
@@ -344,6 +358,7 @@ class NoteFragmentTest : OrgzlyTest() {
                 .check(matches(allOf(withText(userDateTime("[2014-01-01 Wed 20:07]")), isDisplayed())))
         onView(withId(R.id.state_button)).perform(click())
         onView(withText(R.string.clear)).perform(click())
+        SystemClock.sleep(500)
         onView(withId(R.id.closed_button)).check(matches(not(isDisplayed())))
     }
 
@@ -402,6 +417,7 @@ class NoteFragmentTest : OrgzlyTest() {
         scenario.onActivity { activity ->
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
+        SystemClock.sleep(500) // Give AVD time to complete rotation
 
         /* Set time. */
         onView(withText(R.string.set)).perform(click())
@@ -417,8 +433,8 @@ class NoteFragmentTest : OrgzlyTest() {
 
         /* Change lowest priority to A. */
         onActionItemClick(R.id.activity_action_settings, R.string.settings)
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks)
-        clickSetting("pref_key_min_priority", R.string.lowest_priority)
+        clickSetting(R.string.pref_title_notebooks)
+        clickSetting(R.string.lowest_priority)
         onData(hasToString(containsString("A"))).perform(click())
         pressBack()
         pressBack()
@@ -429,8 +445,8 @@ class NoteFragmentTest : OrgzlyTest() {
 
         /* Change lowest priority to C. */
         onActionItemClick(R.id.activity_action_settings, R.string.settings)
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks)
-        clickSetting("pref_key_min_priority", R.string.lowest_priority)
+        clickSetting(R.string.pref_title_notebooks)
+        clickSetting(R.string.lowest_priority)
         onData(hasToString(containsString("C"))).perform(click())
         pressBack()
         pressBack()
@@ -461,7 +477,8 @@ class NoteFragmentTest : OrgzlyTest() {
         }
 
         onView(withId(R.id.scroll_view)).perform(swipeUp()) // For small screens
-
+        SystemClock.sleep(500)
+        
         onView(allOf(withId(R.id.name), withText("prop-name-1"))).check(matches(isDisplayed()))
         onView(allOf(withId(R.id.value), withText("prop-value-1"))).check(matches(isDisplayed()))
         onView(allOf(withId(R.id.name), withText("prop-name-2"))).check(matches(isDisplayed()))
@@ -480,7 +497,7 @@ class NoteFragmentTest : OrgzlyTest() {
         onView(allOf(withId(R.id.name), withText("prop-name-1"))).check(matches(isDisplayed()))
         onView(allOf(withId(R.id.value), withText("prop-value-1"))).check(matches(isDisplayed()))
 
-        onView(withId(R.id.done)).perform(click()); // Note done
+        onView(withId(R.id.done)).perform(click()) // Note done
 
         onNoteInBook(1).perform(click())
 
@@ -495,6 +512,7 @@ class NoteFragmentTest : OrgzlyTest() {
         onView(withId(R.id.content)).perform(click())
         onView(withId(R.id.content_edit)).perform(typeTextIntoFocusedView("a\nb\nc"))
         onView(withId(R.id.done)).perform(click()) // Note done
+        SystemClock.sleep(1000)
         onNoteInBook(1, R.id.item_head_fold_button).perform(click())
         onNoteInBook(1, R.id.item_head_title_view).check(matches(withText(endsWith("3"))))
     }
@@ -521,7 +539,7 @@ class NoteFragmentTest : OrgzlyTest() {
     @Test
     fun testBreadcrumbsPromptWhenCreatingNewNote() {
         onNoteInBook(1).perform(longClick())
-        onActionItemClick(R.id.new_note, R.string.new_note);
+        onActionItemClick(R.id.new_note, R.string.new_note)
         onView(withText(R.string.new_under)).perform(click())
         onView(withId(R.id.title_edit)).perform(*replaceTextCloseKeyboard("1.1"))
         onView(withId(R.id.breadcrumbs_text)).perform(clickClickableSpan("Note #1."))
@@ -531,6 +549,7 @@ class NoteFragmentTest : OrgzlyTest() {
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
 
+        SystemClock.sleep(500) // If we click too early, the button doesn't yet work...
         onView(withText(R.string.cancel)).perform(click())
 
         // Title remains the same

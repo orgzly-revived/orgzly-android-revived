@@ -26,12 +26,23 @@ Si vous recherchez des notes avec le tag “tag1” en utilisant la requête “
 
 ** TODO Les notes peuvent avoir un état
 
-Vous pouvez configurer tous les états que vous souhaitez : TODO, NEXT, DONE, etc.
+Vous pouvez configurer tous les états que vous souhaitez: TODO, NEXT, DONE, etc.
 
-*** Il y a deux /types/ d'état : à faire et terminé
+*** Il y a deux /types/ d'état: à faire et terminé
 
 *** DONE C'est une note avec un type d'état /fait/
 CLOSED: [2018-01-24 Mer 17:00]
+
+** Les notes parents peuvent suivre l'état des notes enfants [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
 
 ** Une note peut avoir une date de début programmée
 SCHEDULED: <2015-02-20 Ven 15:15>
@@ -41,6 +52,13 @@ SCHEDULED: <2015-02-16 Mon .+2d>
 
 ** Vous pouvez également définir une échéance
 DEADLINE: <2015-02-20 Fri>
+
+** Event times can be used anywhere in the note's content
+
+You can have multiple event times:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
 ** Les rappels pour les dates planifiées ou d'échéances sont supportés
 
@@ -52,11 +70,11 @@ Vous pouvez modifier le nombre de priorités dans les paramètres. Vous pouvez �
 
 ** Les notes peuvent inclure des liens
 
-Composer un numéro de téléphone (tel:555-0199), envoyer un SMS (sms:555-0199), écrire un courriel (mailto:support@orgzly.com) ou aller à une page web ([[https://www.orgzly.com][Orgzly.com]]).
+Composer un numéro de téléphone (tel:555-0199), envoyer un SMS (sms:555-0199), écrire un courriel (mailto:support@orgzlyrevived.com) ou aller à une page web ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
 Vous pouvez également lier une autre note ou un autre bloc-note de l'application.
 
-Voir https://www.orgzly.com/help#links pour de plus amples informations (en anglais).
+Voir [[https://www.orgzlyrevived.com/docs#links]] pour de plus amples informations (en anglais).
 
 ** Les formatages de base sont supportés
 
@@ -70,24 +88,30 @@ Vous pouvez mettre les mots en *gras*, /italique/, _souligné_, =verbatim=, ~en 
 
 Un appui sur la case à cocher change son état. Un retour à la ligne crée une nouvelle case à cocher.
 
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
+
 * Recherche
 ** Il y a beaucoup d’opérateurs de recherche
 
 Vous pouvez rechercher des notes par état, étiquette, planification, échéance, etc.
 
-Voir https://www.orgzly.com/help#search pour en savoir plus.
+Voir [[https://www.orgzlyrevived.com/docs#search]] pour en savoir plus.
 
 ** Les recherches peuvent être enregistrées pour un accès rapide
 
 Essayez les exemples de recherche du menu et notez les requêtes qu’elles utilisent.
 
-Vous pouvez créer vos propres recherches enregistrées en cliquant sur « Recherche » dans le menu de navigation.
+Vous pouvez créer vos propres recherches enregistrées en cliquant sur «Recherche» dans le menu de navigation.
 
 * Synchronisation
 
 ** Les bloc-notes peuvent être enregistrés comme de simples fichiers de texte
 
-Les fichiers suivent les règles de formatage « Org mode ».
+Les fichiers suivent les règles de formatage [[https://orgmode.org/][Org mode]].
 
 ** Emplacements des dépôts
 

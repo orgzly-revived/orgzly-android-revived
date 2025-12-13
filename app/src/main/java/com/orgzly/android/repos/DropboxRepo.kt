@@ -2,16 +2,22 @@ package com.orgzly.android.repos
 
 import android.content.Context
 import android.net.Uri
+import com.orgzly.R
+import com.orgzly.android.App
+import com.orgzly.android.BookName
+import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.note.NoteAttachmentData
-import kotlin.Throws
 import com.orgzly.android.util.UriUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.io.InputStream
+import kotlin.Throws
 
 class DropboxRepo(repoWithProps: RepoWithProps, context: Context?) : SyncRepo {
     private val repoUri: Uri
     private val client: DropboxClient
+
     override fun isConnectionRequired(): Boolean {
         return true
     }
@@ -26,17 +32,27 @@ class DropboxRepo(repoWithProps: RepoWithProps, context: Context?) : SyncRepo {
 
     @Throws(IOException::class)
     override fun getBooks(): List<VersionedRook> {
-        return client.getBooks(repoUri)
+        val ignores = RepoIgnoreNode(this)
+        return client.getBooks(repoUri, ignores)
     }
 
     @Throws(IOException::class)
-    override fun retrieveBook(fileName: String, file: File): VersionedRook {
-        return client.download(repoUri, fileName, file)
+    override fun retrieveBook(repoRelativePath: String, file: File): VersionedRook {
+        return client.download(repoUri, repoRelativePath, file)
     }
 
     @Throws(IOException::class)
-    override fun storeBook(file: File, fileName: String): VersionedRook {
-        return client.upload(file, repoUri, fileName)
+    override fun openRepoFileInputStream(repoRelativePath: String): InputStream {
+        return client.streamFile(repoUri, repoRelativePath)
+    }
+
+    @Throws(IOException::class)
+    override fun storeBook(file: File, repoRelativePath: String): VersionedRook {
+        val context = App.getAppContext()
+        if (repoRelativePath.contains("/") && !AppPreferences.subfolderSupport(context)) {
+            throw IOException(context.getString(R.string.subfolder_support_disabled))
+        }
+        return client.upload(file, repoUri, repoRelativePath)
     }
 
     @Throws(IOException::class)
@@ -45,8 +61,8 @@ class DropboxRepo(repoWithProps: RepoWithProps, context: Context?) : SyncRepo {
             throw FileNotFoundException("File $file does not exist")
         }
 
-        val folderUri = Uri.withAppendedPath(uri, pathInRepo)
-        return client.upload(file, folderUri, fileName)
+        val relativePath = if (pathInRepo.isNotEmpty()) "$pathInRepo/$fileName" else fileName
+        return client.upload(file, repoUri, relativePath)
     }
 
     override fun listFilesInPath(pathInRepo: String?): MutableList<NoteAttachmentData> {
@@ -54,9 +70,16 @@ class DropboxRepo(repoWithProps: RepoWithProps, context: Context?) : SyncRepo {
     }
 
     @Throws(IOException::class)
-    override fun renameBook(fromUri: Uri, name: String): VersionedRook {
-        val toUri = UriUtils.getUriForNewName(fromUri, name)
-        return client.move(repoUri, fromUri, toUri)
+    override fun renameBook(oldFullUri: Uri, newName: String): VersionedRook {
+        val context = App.getAppContext()
+        if (newName.contains("/") && !AppPreferences.subfolderSupport(context)) {
+            throw IOException(context.getString(R.string.subfolder_support_disabled))
+        }
+        val oldBookName = BookName.fromRepoRelativePath(BookName.getRepoRelativePath(repoUri, oldFullUri))
+        val newRelativePath = BookName.repoRelativePath(newName, oldBookName.format)
+        val newEncodedRelativePath = Uri.encode(newRelativePath, "/")
+        val newFullUri = repoUri.buildUpon().appendEncodedPath(newEncodedRelativePath).build()
+        return client.move(repoUri, oldFullUri, newFullUri)
     }
 
     @Throws(IOException::class)

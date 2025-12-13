@@ -1,0 +1,1 @@
+Notatnik do robienia notatek i zarządzania listami zadań do wykonania w formacie Org-mode

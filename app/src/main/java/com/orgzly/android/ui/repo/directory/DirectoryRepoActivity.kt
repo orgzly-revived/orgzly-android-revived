@@ -1,10 +1,8 @@
 package com.orgzly.android.ui.repo.directory
 
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,11 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
-import com.orgzly.android.repos.ContentRepo
+import com.orgzly.android.repos.DocumentRepo
 import com.orgzly.android.repos.RepoFactory
 import com.orgzly.android.repos.RepoType
 import com.orgzly.android.ui.CommonActivity
-import com.orgzly.android.ui.repo.BrowserActivity
 import com.orgzly.android.ui.repo.RepoViewModel
 import com.orgzly.android.ui.repo.RepoViewModelFactory
 import com.orgzly.android.ui.showSnackbar
@@ -129,7 +126,7 @@ class DirectoryRepoActivity : CommonActivity() {
     }
 
     private fun persistPermissions(uri: Uri) {
-        if (ContentRepo.SCHEME == uri.scheme) {
+        if (DocumentRepo.SCHEME == uri.scheme) {
             grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
             val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION

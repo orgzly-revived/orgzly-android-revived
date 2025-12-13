@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.map
 import java.util.*
 
 class AppLogsViewModel(appLogsRepository: AppLogsRepository) : CommonViewModel() {
-    val logs = appLogsRepository.getFlow(LogMajorEvents.REMINDERS).map {
+    val logs = appLogsRepository.getFlow().map {
         it.map { logEntry ->
             val date = Date(logEntry.time)
             val type = logEntry.type

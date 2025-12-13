@@ -1,5 +1,7 @@
 package com.orgzly.android;
 
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +14,7 @@ import com.orgzly.R;
 import com.orgzly.android.data.DataRepository;
 import com.orgzly.android.data.DbRepoBookRepository;
 import com.orgzly.android.db.OrgzlyDatabase;
+import com.orgzly.android.db.entity.BookView;
 import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.prefs.AppPreferencesValues;
 import com.orgzly.android.repos.RepoFactory;
@@ -22,6 +25,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -56,9 +61,16 @@ public class OrgzlyTest {
     public GrantPermissionRule grantPermissionRule;
 
     public OrgzlyTest() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             this.grantPermissionRule =
                     GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        } else {
+            getInstrumentation().getUiAutomation().grantRuntimePermission(App.getProcessName(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            InstrumentationRegistry.getInstrumentation().getUiAutomation().grantRuntimePermission(App.getProcessName(),
+                    Manifest.permission.POST_NOTIFICATIONS);
         }
     }
 
@@ -183,6 +195,14 @@ public class OrgzlyTest {
         Field f = Activity.class.getDeclaredField("mResultData");
         f.setAccessible(true);
         return (Intent) f.get(activity);
+    }
+
+    protected String exportBook(BookView book) throws IOException {
+        StringWriter sw = new StringWriter();
+
+        new NotesOrgExporter(dataRepository).exportBook(book.getBook(), sw);
+
+        return sw.toString();
     }
 
     // @Category

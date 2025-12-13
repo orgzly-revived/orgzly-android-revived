@@ -1,94 +1,118 @@
 Välkommen till Orgzly!
 
 * Anteckningar
-** Tryck på en anteckning för att öppna den
-** Tryck och håll på en anteckning för att markera den
+** Klicka på en anteckning för att öppna den
+** Långklicka på anteckningen för att markera den
 
 Du kan markera flera anteckningar.
 
-** Skjut en anteckning till höger för att öppna snabbmenyn
+** Svep anteckningen åt höger för att öppna dess popup-meny
 
-Skjut den till vänster för att öppna en annan meny.
+Svep anteckningen åt vänster för att öppna en annan meny.
 
-** Fold a note which contains sub-notes by clicking the icon next to it
+** Du kan fälla ihop en anteckning som innehåller under-anteckningar genom att klicka på ikonen bredvid den
 
-Long-click the icon to unfold entire subtree.
+Långklicka på ikonen för att fälla ut hela underträdet.
 
-*** There is no limit in number of levels you can have
-**** Use this to better organize your notes
+*** Det finns ingen gräns för hur många nivåer du kan ha
+**** Använd detta för att organisera dina anteckningar bättre
 
-** Note can have tags :tag1:tag2:
-*** Sub-note inherits the tags :tag3:
+** En anteckning kan ha taggar :tag1:tag2:
+*** Underordnade anteckningar ärver taggar ovanför :tag3:
 
-If you search for notes with tag “tag1” using “t.tag1” query, this note will be included in search results.
+Om du söker efter anteckningar taggade med “tag1” med hjälp av sökfrågan “t.tag1” så kommer denna anteckning att komma med i sökresultatet.
 
-*** A note that has the =ARCHIVE= tag set is grayed out :ARCHIVE:
+*** En anteckning med taggen =ARCHIVE= visas som utgråad :ARCHIVE:
 
-** TODO Anteckningar kan ha en status
+** Anteckningar kan ha en status
 
-Du kan sätta upp olika status att jobba med: TODO, NEXT, DONE, osv.
+Du kan själv konfigurera valfritt antal möjliga statusar: TODO, NEXT, DONE, osv.
 
-*** There are two /types/ of states: to-do and done
+*** TODO Det finns två /typer/ av status: ”to-do” och ”klar”
 
-*** DONE This is a note with /done/ type of state
+*** DONE Denna antecknings status är av typen /klar/
 CLOSED: [2018-01-24 Wed 17:00]
 
-** Note can have a scheduled time
+** En antecknings rubrik kan visa status hos dess underordnade anteckningar [1/3] [33%]
+
+*** TODO För att se kvoten mellan TODO- och DONE-statusar, lägg till [/] i rubriken
+
+*** TODO För att visa relationen mellan TODO- och DONE-status i procent, lägg till [%] i rubriken
+
+*** DONE Båda två kan användas samtidigt
+CLOSED: [2025-03-13 Thu 08:37]
+
+Ordningen har ingen betydelse, och siffrorna uppdateras automatiskt.
+
+** Anteckningar kan schemaläggas till en viss tidpunkt
 SCHEDULED: <2015-02-20 Fri 15:15>
 
-*** Times can have a repeater
+*** Tidpunkter kan innehålla en repeterare
 SCHEDULED: <2015-02-16 Mon .+2d>
 
-** You can also set a deadline time
+** Du kan också sätta en deadline
 DEADLINE: <2015-02-20 Fri>
 
-** Reminders for scheduled and deadline times are supported
+** Händelsetider kan användas var som helst i anteckningens innehåll
 
-They are disabled by default and need to be enabled in Settings.
+Det kan finnas flera händelsetider:
 
-** [#A] Note can have a priority
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
-You can change the number of priorities in Settings. You can also change default priority - assumed priority for notes without one set.
+** Orgzly kan visa påminnelser om anteckningar som är schemalagda, har en deadline, eller innehåller en händelsetid
 
-** Note can include links
+Klarmarkera anteckningen för att flytta fram repeteraren.
 
-Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzly.com) or visit a webpage ([[https://www.orgzly.com][Orgzly.com]]).
+** [#A] Anteckningar kan ha en prioritet
 
-You can also link to another note or notebook within the app.
+Du kan ändra antalet möjliga prioritetsnivåer i Inställningar. Du kan också ändra standardprioriteten – den prioritet som anteckningar antas ha när ingen har angetts.
 
-See https://www.orgzly.com/help#links for more information.
+** Anteckningar kan innehålla länkar
 
-** Basic typographical emphasis is supported
+Ring ett telefonnummer (tel:555-0199), skicka ett SMS (sms:555-0199), skriv ett mail (mailto:support@orgzlyrevived.com) eller besök en webbplats ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
+Du kan också länka till en annan anteckning eller anteckningsbok i appen.
 
-** Checkbox list is available
+Besök [[https://www.orgzlyrevived.com/docs#links]] för mer information.
 
-- [X] Task 1
-- [ ] Task 2
-- [ ] Task 3
+** Orgzly stöder grundläggande typografisk formatering
 
-Click the checkbox to toggle it. Press new-line button at the end of the line to create a new item.
+Text kan visas som *fetstilt*, /kursiv/, _understruken_, =ordagrann=, ~kod~ och +överstruken+.
 
-* Search
-** There are many search operators supported
+** Du kan skapa och uppdatera checklistor
 
-You can search notes by state, tag, scheduled or deadline time etc.
+- [X] Uppgift 1
+- [ ] Uppgift 2
+- [ ] Uppgift 3
 
-See https://www.orgzly.com/help#search to learn more.
+Klicka i rutan för att klarmarkera den. Tryck på Enter vid slutet av den sista raden för att lägga till en post i listan.
 
-** Search queries can be saved for quick access
+** En antecknings rubrik kan också visa status hos checklistor [66%] [2/3]
 
-Try sample searches from navigation drawer and note the queries they use.
+- [X] Uppgift 1
+- [ ] Uppgift 2
+- [X] Uppgift 3
 
-You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+* Söka
+** Orgzly stöder många olika sökoperatorer
 
-* Syncing
+Du kan söka efter anteckningar baserat på status, taggar, schemalagd tid, deadline, händelsetider, med mera.
 
-** Notebooks can be saved as plain-text files
+Besök [[https://www.orgzlyrevived.com/docs#search]] för att få veta mer.
 
-Files are in the format used by “Org mode”.
+** Sökfrågor kan sparas för snabb åtkomst
 
-** Location (repository) type
+Testa de förinställda sökfrågorna i navigeringslådan och lägg märke till deras syntax.
 
-You can keep notebooks synced with a directory on your mobile device, SD card or Dropbox.
+Du kan skapa egna sparade sökningar genom att klicka på ”Sökningar” i navigeringslådan.
+
+* Synkronisera
+
+** Anteckningsböcker kan sparas som vanliga textfiler
+
+Textfilerna sparas i formatet som används av [[https://orgmode.org/][Org mode]].
+
+** Olika typer av lagringsplatser
+
+En lagringsplats är en plats dit du kan synka dina anteckningsböcker. Det kan vara en mapp på din mobila enhet eller SD-kort, en WebDAV-katalog, eller Dropbox.

@@ -1,0 +1,137 @@
+name: Build and publish "weekly" unstable snapshot release
+
+# Based on https://github.com/refined-github/refined-github/blob/5cda3447bf80cca0c64ae5eb79779ecd62fec18e/.github/workflows/release.yml#L30-L32
+ 
+on:
+  schedule:
+    - cron: '41 19 * * 2'
+
+permissions:
+  contents: read
+
+jobs:
+
+  AddTag:
+    permissions:
+      contents: write
+    outputs:
+      created: ${{ steps.daily-version.outputs.created }}
+      version: ${{ steps.daily-version.outputs.version }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: fregante/daily-version-action@fb1a60b7c4daf1410cd755e360ebec3901e58588 # v2.1.3
+        name: Tag commit unless already tagged
+        id: daily-version
+        with:
+          prefix: 'weekly-unstable-'
+
+  BuildAndRelease:
+    permissions:
+      contents: write
+    needs: AddTag
+    if: github.event_name == 'workflow_dispatch' || needs.AddTag.outputs.created
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+
+      - name: Store version/tag name in shell env variable
+        run: echo "VERSION=${{ needs.AddTag.outputs.version }}" >> $GITHUB_ENV
+
+      - name: Setup Java
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
+
+      - name: Setup build tool version variable
+        shell: bash
+        run: |
+          BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
+          echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+          echo Last build tool version is: $BUILD_TOOL_VERSION
+
+      # F-Droid APK
+
+      - name: Assemble F-Droid APK
+        run: ./gradlew :app:assembleFdroidRelease --stacktrace
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sign F-Droid APK
+        uses: r0adkll/sign-android-release@dbeba6b98a60b0fd540c02443c7f428cdedf0e7f # v1.0.4
+        id: sign_fdroid_apk
+        with:
+          releaseDirectory: app/build/outputs/apk/fdroid/release
+          signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
+          alias: orgzly-revived-20231013
+          keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+
+      - name: Rename F-Droid APK file
+        run: mv ${{steps.sign_fdroid_apk.outputs.signedReleaseFile}} orgzly-revived-fdroid-${{ env.VERSION }}.apk
+
+      # "Premium" APK
+
+      - name: Add Dropbox app identifier
+        shell: bash
+        run: |
+          echo "dropbox.app_key = \"${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
+          echo "dropbox.app_key_schema = \"db-${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
+
+      - name: Assemble "premium" APK
+        run: ./gradlew :app:assemblePremiumRelease --stacktrace
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sign "premium" APK
+        uses: r0adkll/sign-android-release@dbeba6b98a60b0fd540c02443c7f428cdedf0e7f # v1.0.4
+        id: sign_premium_apk
+        with:
+          releaseDirectory: app/build/outputs/apk/premium/release
+          signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
+          alias: orgzly-revived-20231013
+          keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+
+      - name: Rename "premium" APK file
+        run: mv ${{steps.sign_premium_apk.outputs.signedReleaseFile}} orgzly-revived-${{ env.VERSION }}.apk
+
+      # "Premium" AAB
+
+      - name: Assemble "premium" AAB
+        run: ./gradlew :app:bundlePremiumRelease --stacktrace
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sign "premium" AAB
+        uses: r0adkll/sign-android-release@dbeba6b98a60b0fd540c02443c7f428cdedf0e7f # v1.0.4
+        id: sign_premium_aab
+        with:
+          releaseDirectory: app/build/outputs/bundle/premiumRelease
+          signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
+          alias: orgzly-revived-20231013
+          keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+
+      - name: Rename "premium" AAB file
+        run: mv ${{steps.sign_premium_aab.outputs.signedReleaseFile}} orgzly-revived-${{ env.VERSION }}.aab
+
+      - name: Upload artifacts and create Github release
+        uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe # v2.4.2
+        with:
+          files: |
+            *.apk
+            *.aab
+          prerelease: true
+          tag_name: ${{ needs.AddTag.outputs.version }}
+          body: Install at your own risk! These "unstable" builds are generated once a week from the current main branch (if it has changed).
+          generate_release_notes: true

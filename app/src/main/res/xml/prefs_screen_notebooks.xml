@@ -83,6 +83,13 @@
             android:defaultValue="@bool/pref_default_is_notes_content_displayed_in_list"/>
 
         <SwitchPreference
+            android:key="@string/pref_key_is_notes_content_foldable"
+            android:dependency="@string/pref_key_is_notes_content_displayed_in_list"
+            android:title="@string/fold_content"
+            android:summary="@string/allow_folding_of_content"
+            android:defaultValue="@bool/pref_default_is_notes_content_foldable"/>
+
+        <SwitchPreference
             android:key="@string/pref_key_is_notes_content_displayed_in_search"
             android:dependency="@string/pref_key_is_notes_content_displayed_in_list"
             android:title="@string/display_content_in_search"
@@ -90,11 +97,11 @@
             android:defaultValue="@bool/pref_default_is_notes_content_displayed_in_search"/>
 
         <SwitchPreference
-            android:key="@string/pref_key_is_notes_content_foldable"
-            android:dependency="@string/pref_key_is_notes_content_displayed_in_list"
-            android:title="@string/fold_content"
-            android:summary="@string/allow_folding_of_content"
-            android:defaultValue="@bool/pref_default_is_notes_content_foldable"/>
+            android:key="@string/pref_key_is_search_foldable"
+            android:dependency="@string/pref_key_is_notes_content_displayed_in_search"
+            android:title="@string/fold_search"
+            android:summary="@string/allow_folding_in_search"
+            android:defaultValue="@bool/pref_default_is_search_foldable"/>
 
         <SwitchPreference
             android:key="@string/pref_key_content_line_count_displayed"
@@ -253,6 +260,25 @@
             android:title="@string/prepend"
             android:summary="@string/insert_new_note_at_beginning"
             android:defaultValue="@bool/pref_default_is_new_note_prepend"/>
+
+        <SwitchPreference
+            android:key="@string/pref_key_new_note_add_id"
+            android:title="@string/add_id_property"
+            android:summary="@string/populate_the_id_property"
+            android:defaultValue="@bool/pref_default_is_new_note_prepend"/>
+
+        <ListPreference
+            android:key="@string/pref_key_shared_text_placement"
+            android:title="@string/placement_of_shared_text"
+            android:entries="@array/shared_text_placement_options"
+            android:entryValues="@array/shared_text_placement_option_values"
+            android:defaultValue="@string/pref_default_shared_text_placement"
+            app:useSimpleSummaryProvider="true"/>
+
+        <SwitchPreference
+            android:key="@string/pref_key_create_org_links_from_shared_links"
+            android:title="@string/create_org_links_from_shared_links"
+            android:defaultValue="@bool/pref_default_create_org_links_from_shared_links" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/images">

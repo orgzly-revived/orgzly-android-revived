@@ -33,6 +33,17 @@ Puede configurar cualquier número de estados a utilizar: TODO, NEXT, DONE, etc.
 *** DONE Esta es una nota con el tipo de estado /done/
 CLOSED: [2018-01-24 Wed 17:00]
 
+**Las notas padres pueden mostrar el estado de las notas hijo [1/3] [33%]
+
+*** TODO Para llevar cuenta de la proporción entre tareas TODO vs DONE, agrega [/] al título de la nota
+
+*** TODO Para llevar cuenta del porcentaje de tareas DONE vs TODO, agrega [%] al título de la nota
+
+*** DONE Puedes usar ambas al tiempo
+CLOSED: [2025-03-13 Thu 08:37]
+
+El orden no importa y los tiempos serán actualizados automáticamente.
+
 ** Una nota puede tener un momento de inicio programado
 SCHEDULED: <2015-02-20 Fri 15:15>
 
@@ -42,21 +53,28 @@ SCHEDULED: <2015-02-16 Mon .+2d>
 ** También se puede establecer un tiempo límite
 DEADLINE: <2015-02-20 Fri>
 
-** Se soportan los recordatorios para horas programadas y de tiempo límite
+** Puedes poner fechas y tiempos en cualquier parte dentro de una nota
 
-Estan inhabilitadas por defecto y necesitan estar habilitadas en Configuración.
+Puedes tener múltiples fechas y tiempos.
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
+
+** Recordatorios para notas con fechas programadas, fechas límite o cualquier otras fechas son soportados
+
+Marca la nota como completada para actualizar el repetidor.
 
 ** [#A] Una nota puede tener una prioridad
 
-Puedes cambiar el número de prioridades en Configuración. También puedes cambiar la prioridad por defecto - la prioridad asumida para notas sin una puesta.
+Puedes cambiar el número de prioridades en Configuración. También puedes cambiar la prioridad por defecto - la prioridad asumida para notas sin una definida.
 
 ** Una nota puede incluir enlaces
 
-Marcar un número de teléfono (tel:555-0199), enviar SMS (sms:555-0199), componer un correo electrónico (mailto:support@orgzly.com) o visitar una página web ([[https://www.orgzly.com][Orgzly.com]]).
+Marcar un número de teléfono (tel:555-0199), enviar SMS (sms:555-0199), componer un correo electrónico (mailto:support@orgzlyrevived.com) o visitar una página web ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
-También puede enlazar a otra nota o bloc de notas dentro de la aplicación.
+También puede enlazar a otra nota o libreta dentro de la aplicación.
 
-Consulte https://www.orgzly.com/help#links para obtener más información.
+Consulte [[https://www.orgzlyrevived.com/docs#links]] para obtener más información.
 
 ** Están soportados formatos tipográficos básicos
 
@@ -70,12 +88,18 @@ Puede escribir palabras en *negrita*, /itálica/, _subrayadas_, =cita literal=, 
 
 Pulsa la caja de verificación para alternar su estado. Pulsa el botón de nueva línea al final de la línea para crear un nuevo elemento.
 
+** Puedes llevar cuenta del progreso de la lista de tareas de una nota en su título
+
+- [X] Tarea 1
+- [ ] Tarea 2
+- [X] Tarea 3
+
 * Buscar
 ** Existen muchos operadores de búsqueda soportados
 
 Puede buscar notas por estado, etiqueta, fecha de inicio, fecha límite, etc.
 
-Visite https://www.orgzly.com/help#search para aprender más.
+Visite [[https://www.orgzlyrevived.com/docs#search]] para aprender más.
 
 ** Las consultas se pueden guardar como accesos rápidos
 
@@ -85,10 +109,10 @@ Puede crear sus propias búsquedas y guardarlas haciendo clic en "Búsquedas" en
 
 * Sincronizando
 
-** Los cuadernos pueden guardarse como archivos de texto plano
+** Las libretas pueden guardarse como archivos de texto plano
 
-Los archivos se guardan en el formato de "Org mode".
+Los archivos se guardan en el formato de [[https://orgmode.org/][Org mode]].
 
 ** Tipo de ubicación (repositorio)
 
-Puede guardar cuadernos sincronizados en su dispositivo móvil, tarjeta SD o en Dropbox.
+Puede guardar libretas sincronizadas en su dispositivo móvil, tarjeta SD o en Dropbox.

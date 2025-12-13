@@ -2,6 +2,8 @@ package com.orgzly.android.repos;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
 import com.orgzly.android.data.DbRepoBookRepository;
 import com.orgzly.android.ui.note.NoteAttachmentData;
 import com.orgzly.android.util.MiscUtils;
@@ -9,6 +11,7 @@ import com.orgzly.android.util.UriUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -48,19 +51,24 @@ public class DatabaseRepo implements SyncRepo {
     }
 
     @Override
-    public VersionedRook retrieveBook(String fileName, File file) {
-        Uri uri = repoUri.buildUpon().appendPath(fileName).build();
+    public VersionedRook retrieveBook(String repoRelativePath, File file) {
+        Uri uri = repoUri.buildUpon().appendPath(repoRelativePath).build();
         return dbRepo.retrieveBook(repoId, repoUri, uri, file);
     }
 
     @Override
-    public VersionedRook storeBook(File file, String fileName) throws IOException {
+    public InputStream openRepoFileInputStream(String repoRelativePath) throws IOException {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public VersionedRook storeBook(File file, String repoRelativePath) throws IOException {
         String content = MiscUtils.readStringFromFile(file);
 
         String rev = "MockedRevision-" + System.currentTimeMillis();
         long mtime = System.currentTimeMillis();
 
-        Uri uri = repoUri.buildUpon().appendPath(fileName).build();
+        Uri uri = repoUri.buildUpon().appendPath(repoRelativePath).build();
 
         VersionedRook vrook = new VersionedRook(repoId, RepoType.MOCK, repoUri, uri, rev, mtime);
 
@@ -78,9 +86,9 @@ public class DatabaseRepo implements SyncRepo {
     }
 
     @Override
-    public VersionedRook renameBook(Uri fromUri, String name) {
-        Uri toUri = UriUtils.getUriForNewName(fromUri, name);
-        return dbRepo.renameBook(repoId, fromUri, toUri);
+    public VersionedRook renameBook(Uri oldFullUri, String newName) {
+        Uri toUri = UriUtils.getUriForNewName(oldFullUri, newName);
+        return dbRepo.renameBook(repoId, oldFullUri, toUri);
     }
 
     @Override
@@ -88,6 +96,7 @@ public class DatabaseRepo implements SyncRepo {
         dbRepo.deleteBook(uri);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return repoUri.toString();

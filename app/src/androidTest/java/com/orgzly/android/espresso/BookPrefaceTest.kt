@@ -84,8 +84,8 @@ class BookPrefaceTest : OrgzlyTest() {
     private fun setPrefaceSetting(@StringRes id: Int) {
         onActionItemClick(R.id.activity_action_settings, R.string.settings)
 
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks)
-        clickSetting("pref_key_preface_in_book", R.string.preface_in_book)
+        clickSetting(R.string.pref_title_notebooks)
+        clickSetting(R.string.preface_in_book)
 
         onView(withText(id)).perform(click())
 

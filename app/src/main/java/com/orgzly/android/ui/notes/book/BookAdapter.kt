@@ -117,6 +117,12 @@ class BookAdapter(
         }
     }
 
+    fun submitList(list: List<NoteView>?, levelOffset: Int?) {
+        noteItemViewBinder.levelOffset = levelOffset
+        super.submitList(list)
+        notifyDataSetChanged()
+    }
+
     override fun getItemId(position: Int): Long {
         return if (position > 0) {
             getItem(position).note.id
@@ -146,7 +152,7 @@ class BookAdapter(
             context.getString(R.string.pref_value_preface_in_book_hide) ==
                     AppPreferences.prefaceDisplay(context)
 
-        return !TextUtils.isEmpty(currentPreface) && !hidden
+        return !TextUtils.isEmpty(currentPreface) && !hidden && noteItemViewBinder.levelOffset == null
     }
 
     interface OnClickListener {

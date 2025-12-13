@@ -61,6 +61,26 @@ class NoteRemindersTest : OrgzlyTest() {
     }
 
     @Test
+    fun testNoteWithActiveTimestampInProperty() {
+        testUtils.setupBook(
+            "notebook",
+            """
+                * Note 1
+                :PROPERTIES:
+                :myproperty: <2024-08-29>
+                :END:
+            """.trimIndent()
+        )
+        val now = Instant.parse("2024-08-28T23:00")
+        val reminders = getNoteReminders(context, dataRepository, now, LastRun(), NoteReminders.INTERVAL_FROM_NOW)
+        Assert.assertEquals(1, reminders.size.toLong())
+        reminders[0].apply {
+            Assert.assertEquals("Note 1", payload.title)
+            Assert.assertEquals("2024-08-29T09:00:00.000", runTime.toLocalDateTime().toString())
+        }
+    }
+
+    @Test
     fun testReminderForDeadlineTime() {
         testUtils.setupBook(
                 "notebook",

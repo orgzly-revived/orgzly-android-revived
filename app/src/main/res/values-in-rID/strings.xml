@@ -9,20 +9,14 @@
     <string name="clear">Bersih</string>
     <string name="cancel">Batal</string>
     <string name="create">Buat baru</string>
-    <string name="new_">Baru</string>
     <!-- "new" is reserved -->
-    <string name="select">Pilih</string>
     <string name="set">Atur</string>
-    <string name="add">Tambahkan</string>
     <string name="not_now">Jangan sekarang</string>
     <string name="save">Simpan</string>
     <string name="discard">Buang</string>
     <string name="remove_notebook_link">Hapus tautan</string>
     <string name="browse">Peramban</string>
     <string name="dropbox">Dropbox</string>
-    <string name="view">View</string>
-    <string name="edit">Sunting</string>
-    <string name="edit_note">Edit catatan</string>
     <string name="delete">Hapus</string>
     <string name="delete_with_quoted_argument">Hapus \" %s\"</string>
     <string name="name">Nama</string>
@@ -40,23 +34,16 @@
     <string name="created">Dibuat</string>
     <string name="states">Propinsi</string>
     <string name="note">Catatan</string>
-    <string name="notes">Catatan</string>
     <string name="property">Properti</string>
     <string name="import_as">Impor sebagai…</string>
     <string name="new_notebook">Notebook baru</string>
     <string name="new_folder">Folder baru</string>
     <string name="scheduled">Dijadwalkan</string>
     <string name="agenda">Jadwal acara</string>
-    <string name="agenda_period">Agenda hari</string>
-    <string name="time">Waktu</string>
-    <string name="repeater">Pengulang</string>
     <string name="state">Keadaan</string>
     <string name="priority">Prioritas</string>
-    <string name="nothing">Tidak ada</string>
     <string name="open">Buka</string>
-    <string name="focus">Focus</string>
     <string name="widget">Widget</string>
-    <string name="history">History</string>
     <string name="event">Event</string>
     <plurals name="notes_cut">
         <item quantity="other">Potong <b>%d</b> catatan</item>
@@ -70,7 +57,6 @@
     </plurals>
     <string name="no_notes_pasted">Tidak ada yang bisa ditempelkan</string>
     <string name="fragment_note_title_hint">Judul</string>
-    <string name="fragment_note_tags_hint" tools:ignore="typos">tag tag</string>
     <string name="import_org_file">Impor file org</string>
     <string name="message_dropbox_unlinked">Lepaskan tautan DropBox</string>
     <string name="message_dropbox_linked">Terkait dengan DropBox berhasil</string>
@@ -79,20 +65,16 @@
     <string name="repos_preference_summary">Lokasi untuk mensinkronisasi notebookAnda dengan</string>
     <string name="message_book_has_no_link">Tidak ada tautan diatur</string>
     <string name="message_note_created">Membuat catatan</string>
-    <string name="message_failed_creating_note">Gagal membuat catatan</string>
-    <string name="message_failed_updating_note">Gagal memperbarui catatan</string>
     <string name="drawer_close">Tutup laci</string>
     <string name="drawer_open">Buka kotak</string>
     <string name="schedule">Jadwal</string>
     <string name="refile">Refile</string>
-    <string name="refile_to">Refile to</string>
     <string name="deadline">Batas Waktu</string>
     <string name="closed">Ditutup</string>
     <!-- TODO: Not hints, rename -->
     <string name="schedule_button_hint">Waktu terjadwal</string>
     <string name="deadline_button_hint">Waktu tenggat</string>
     <string name="closed_button_hint">Waktu ditutup</string>
-    <string name="fragment_note_content_hint">Konten catatan</string>
     <string name="books_context_menu_item_rename">Ubah Nama</string>
     <string name="books_context_menu_item_set_link">Atur Tautan</string>
     <string name="books_context_menu_item_force_save">Simpan Paksa</string>
@@ -112,7 +94,6 @@
     <string name="quick_note">Catatan cepat</string>
     <string name="tap_to_create_new_note">Ketuk untuk membuat catatan baru</string>
     <string name="options_menu_item_search">Cari</string>
-    <string name="no_user_repos_configured_pref_summary">Belum dikonfigurasi</string>
     <string name="repos_options_menu_new_repo">Repositori baru</string>
     <string name="book_name_already_exists">Notebook %s sudah ada.</string>
     <string name="filter_name_already_exists">Pencarian dengan nama yang sama sudah ada</string>
@@ -130,14 +111,11 @@
     <string name="book_does_not_exist_anymore">Notebook ini tidak ada lagi.</string>
     <string name="note_does_not_exist_anymore">Catatan ini tidak ada lagi.</string>
     <string name="search_does_not_exist_anymore">Pecarian ini tidak ada lagi.</string>
-    <string name="fragment_query_title">Cari</string>
     <string name="repo_dropbox_button_not_linked">Hubungkan ke DropBox</string>
     <string name="repo_dropbox_button_linked">Lepaskan Hubungan dari DropBox</string>
-    <string name="fragment_settings_title">Setelan</string>
     <string name="notes_update_needed_dialog_title">Preference affects notes</string>
     <string name="notes_update_needed_dialog_message">Update notes to reflect the changes?</string>
     <string name="updating_notes">Memperbarui catatan…</string>
-    <string name="failure">Uh oh</string>
     <string name="no_notes_found_after_search">Pencarian Anda tidak sesuai dengan catatan</string>
     <string name="today">Hari ini</string>
     <string name="tomorrow">Besok</string>
@@ -153,7 +131,6 @@
     <string name="notebooks">Notebook</string>
     <string name="searches">Pencarian</string>
     <string name="search">Cari</string>
-    <string name="new_search">Cari lagi</string>
     <string name="multiple_repos">Beberapa repositori ada</string>
     <string name="no_repos">Tidak ada repositori yang dikonfigurasi</string>
     <string name="no_books">No notebooks found</string>
@@ -161,7 +138,6 @@
     <string name="collecting_notebooks_in_progress">Collecting notebooks…</string>
     <string name="syncing_in_progress">Sinkronisasi…</string>
     <string name="syncing_book">Menyinkronkan %s…</string>
-    <string name="sync_with_argument">Sinkronisasi: %s</string>
     <string name="syncing_failed_title">Sinkronisasi gagal</string>
     <string name="canceled">Dibatalkan</string>
     <string name="canceling">Membatalkan…</string>
@@ -173,22 +149,13 @@
     <string name="git_url_hint">Remote URL (e.g. git@github.com:orgzly/orgzly-android.git)</string>
     <string name="git_directory_hint">Directory location (e.g. “/sdcard/orgzly”)</string>
     <string name="git_https_username_hint">Username</string>
-    <string name="git_https_password_hint">Password</string>
     <string name="git_author_hint">Author (e.g. John Doe)</string>
     <string name="git_email_hint">Email (e.g. john@email.com)</string>
     <string name="git_branch_hint">Branch (e.g. master)</string>
-    <string name="git_auth_https_username_hint">Username</string>
     <string name="git_auth_https_password_hint">Password</string>
-    <string name="git_generate_key_pair">Generate keypair</string>
-    <string name="git_copy_public_key">Copy public key</string>
-    <string name="git_auth_type_text">Authentication type</string>
-    <string name="git_auth_type_ssh">SSH</string>
-    <string name="git_auth_type_https">HTTPS</string>
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
-    <string name="git_clone_error_ssh_auth">Failure while cloning, authentication error</string>
     <string name="git_clone_error_invalid_repo">The remote address is not a git repo</string>
-    <string name="git_clone_error_unknown">Unknown error while cloning</string>
     <string name="git_clone_error_invalid_target_dir">The target directory does not exist</string>
     <string name="git_clone_error_target_not_empty">The target directory is not empty</string>
     <string name="git_clone_error_uri_not_supported">The remote address is not supported</string>
@@ -198,18 +165,12 @@
     <string name="webdav_test_error_auth">Login or password is invalid</string>
     <string name="webdav_test_error_unknown">Unknown error occurred</string>
     <!-- Share button - error messages (set as title). -->
-    <string name="share_action_not_set">Bagikan tindakan tidak diatur</string>
     <string name="share_action_not_supported">Bagikan tindakan %s tidak didukung</string>
-    <string name="share_type_not_set">Bagikan jenis tidak diatur</string>
     <string name="share_type_not_supported">Bagikan jenis %s tidak didukung</string>
     <string name="repositories">Repositori</string>
     <string name="repository_not_valid_with_reason">Repository invalid: %s</string>
     <string name="invalid_repo_url">URL Repositori tidak valid %s</string>
     <string name="repository_url_already_exists">Repository with this URL already exists</string>
-    <string name="fragment_left_drawer_list_view_content_description">Laci Kiri</string>
-    <string name="drawer_item">Item Laci</string>
-    <string name="prev_state">Negara yang sebenarnya</string>
-    <string name="next_state">Negara Bagian Berikutnya</string>
     <string name="new_above">Baru di atas</string>
     <string name="new_under">Baru di bawah</string>
     <string name="new_below">Baru di bawah</string>
@@ -225,16 +186,13 @@
     <string name="no_filters">Anda tidak memiliki pencarian tersimpan</string>
     <string name="book_shortcut_label">Notebook</string>
     <string name="new_note_shortcut_label">New note</string>
-    <string name="pick_a_notebook">Pilih buku catatan</string>
     <string name="down">Bawah</string>
     <string name="up">Atas</string>
-    <string name="notebook_modified">Notebook yang dimodifikasi</string>
     <string name="permissions_rationale_for_local_repo">Menyinkronkan dengan direktori lokal memerlukan izin penyimpanan</string>
     <string name="permissions_rationale_for_book_export">Mengekspor notebook memerlukan izin penyimpanan</string>
     <string name="permissions_rationale_for_sync_start">Menyinkronkan dengan repositori lokal memerlukan izin penyimpanan</string>
     <string name="permissions_rationale_for_external_files_access">Accessing external files requires storage permission</string>
     <string name="cycle_visibility">Lipat/Buka lipat semua</string>
-    <string name="running_database_update">Memperbarui database…</string>
     <string name="note_has_been_modified">Catatan yang dimodifikasi</string>
     <string name="discard_or_save_changes">Simpan perubahan?</string>
     <string name="rename">Ubah nama</string>
@@ -245,13 +203,10 @@
     <string name="also_delete_linked_book">Hapus terkait remote notebook</string>
     <string name="message_deleting_book_failed">Gagal menghapus notebook: %s</string>
     <string name="message_book_deleted">Notebook dihapus</string>
-    <string name="priority_with_argument">Priority %s</string>
     <string name="default_priority">Prioritas bawaan</string>
     <string name="lowest_priority">Prioritas terendah</string>
     <string name="todo_states">Kata kunci untuk tugas aktif (todo)</string>
     <string name="done_states">Kata kunci untuk menyelesaikan tugas (selesai)</string>
-    <string name="created_at">Dibuat pada</string>
-    <string name="insert_note_creation_time">Masukkan waktu pembuatan catatan</string>
     <string name="use_created_at_property">Use property for created-at time</string>
     <string name="use_created_at_property_summary">Sync created-at time using a property</string>
     <string name="created_at_property">Dibuat pada properti</string>
@@ -291,7 +246,6 @@
     <string name="prefs_title_new_note">Catatan baru</string>
     <string name="prefs_title_notifications">Pemberitahuan</string>
     <string name="app">Aplikasi</string>
-    <string name="no_repos_configured">Tidak ada repos yang dikonfigurasi</string>
     <string name="test_connection">Test connection</string>
     <string name="connecting">Connecting…</string>
     <string name="no_connection">Tidak ada koneksi</string>
@@ -316,7 +270,6 @@
     <string name="org_indent_mode">Sesuaikan berdasarkan mode indent</string>
     <string name="org_indent_mode_summary">Ambil indikator org-indent-mode</string>
     <string name="org_indent_indentation_per_level">Indentasi per tingkat</string>
-    <string name="add_property">Tambahkan properti</string>
     <string name="priority_a_highest">A (prioritas tinggi)</string>
     <string name="priority_z_lowest">Z (prioritas terendah)</string>
     <string name="hour">Jam</string>
@@ -348,7 +301,6 @@
     <string name="displayed_book_details_used_encoding">Pengkodean digunakan</string>
     <string name="displayed_book_details_last_action">Tindakan terakhir</string>
     <string name="displayed_book_details_notes_count">Hitungan catatan</string>
-    <string name="color_scheme_system">System</string>
     <string name="color_scheme_dynamic">Dynamic color</string>
     <string name="color_scheme_light">Terang</string>
     <string name="color_scheme_dark">Gelap</string>
@@ -368,16 +320,10 @@
         <item quantity="other">Delete <b>%d</b> notes?</item>
     </plurals>
     <!-- Unused -->
-    <string name="delete_note">Hapus catatan</string>
-    <string name="delete_notes">Hapus Catatan</string>
-    <string name="delete_note_and_all_subnotes">Hapus catatan ini dan semua sub catatannya?</string>
-    <string name="delete_notes_and_all_subnotes">Hapus catatan dan semua sub catatan?</string>
     <plurals name="notes_deleted">
         <item quantity="other">Catatan <b>%d</b> dihapus</item>
     </plurals>
     <string name="no_notes_deleted">Tidak ada catatan yang dihapus</string>
-    <string name="note_content_finish_editing">Lihat konten</string>
-    <string name="note_content_start_editing">Sunting konten</string>
     <string name="duplicate_keywords_not_allowed">Kata kunci %s sudah digunakan</string>
     <string name="no_states_defined">Tidak ada negara yang didefinisikan</string>
     <string name="book_name_in_search">Nama notebook di hasil pencarian</string>
@@ -412,10 +358,6 @@
     <string name="keep_screen_on_summary">Display menu item for toggling the option</string>
     <string name="keep_screen_on">Keep screen on</string>
     <string name="keep_screen_on_desc">Your screen will not turn off until you leave it or disable this option</string>
-    <string name="layout_direction">Direksi tata letak</string>
-    <string name="layout_direction_locale">Bawaan</string>
-    <string name="layout_direction_ltr">Kiri ke Kanan</string>
-    <string name="layout_direction_rtl">Kanan ke Kiri</string>
     <string name="preface_in_book">Kata pengantar notebook</string>
     <string name="preface_in_book_full">Tampilan</string>
     <string name="preface_in_book_hide">Sembunyikan</string>
@@ -432,9 +374,7 @@
     <string name="notebooks_start_folded_summary">Fold all notes when notebook is loaded</string>
     <string name="list_widget_name">Saved search</string>
     <string name="list_widget_select_search">Select search</string>
-    <string name="list_widget_nothing_selected">No search selected</string>
     <string name="auto_sync">Sinkron otomatis</string>
-    <string name="auto_sync_experimental_summary">Digunakan untuk repositori lokal saja</string>
     <string name="auto_sync_summary">Not supported for Dropbox</string>
     <string name="auto_sync_warning">Tergantung pada pilihan yang Anda pilih, sync bisa dipicu sering. Jika notebook dimodifikasi, isinya seluruh ditransfer ke atau dari repositori. Tindakan tertentu mungkin tertunda saat sinkronisasi berlangsung.</string>
     <string name="pref_title_sync_after_note_create">Membuat catatan</string>
@@ -482,7 +422,6 @@
     <string name="sync_failed_channel_description">Display when syncing fails</string>
     <string name="notification_channel_settings">Notifications</string>
     <string name="notification_channel_settings_summary">Sound, vibrate, notification dot</string>
-    <string name="hide_note_metadata">Hide metadata</string>
     <string name="overwrite_local_notebook_question">Overwrite local notebook?</string>
     <string name="overwrite_remote_notebook_question">Overwrite remote notebook?</string>
     <string name="drawers_folded_by_default">Drawers folded</string>
@@ -499,7 +438,6 @@
     <string name="show_all">Show all</string>
     <string name="always_show_set">Always show set</string>
     <string name="show_selected">Show selected</string>
-    <string name="hide_all">Hide all</string>
     <string name="external_file_no_app_found">No application found to open this file</string>
     <string name="failed_to_open_linked_file_with_reason">Failed to open file: %s</string>
     <string name="images">Images</string>
@@ -513,11 +451,9 @@
     <string name="argument_detected">%s detected</string>
     <string name="argument_selected">%s selected</string>
     <string name="fixed_width_value">Width (in pixels)</string>
-    <string name="share_target_service">Share to Orgzly notebook</string>
     <string name="under">Under</string>
     <string name="above">Above</string>
     <string name="below">Below</string>
-    <string name="loading">Loading…</string>
     <string name="go_to">Go to</string>
     <string name="cannot_refile_to_the_same_subtree">Cannot refile to the same subtree</string>
     <string name="notification_maximum_priority">Maximum</string>
@@ -535,16 +471,12 @@
     </plurals>
     <string name="display_checkmarks">Display checkmarks</string>
     <string name="display_checkmarks_summary">Allows marking notes as done</string>
-    <string name="last_used">Last used</string>
-    <string name="note_details_opening_mode">Opening mode</string>
     <string name="cleartext_traffic">Cleartext traffic</string>
     <string name="cleartext_traffic_message">Are you sure you want to use this URL?</string>
     <string name="credentials_in_url_not_supported">Passing credentials in URL is not supported</string>
-    <string name="access_token">Access token</string>
     <string name="trusted_certificates">Trusted certificates</string>
     <string name="add_trusted_certificates_optional">Add trusted certificates (optional)</string>
     <string name="edit_trusted_certificates">Edit trusted certificates</string>
-    <string name="this_action_cannot_be_undone">This action cannot be undone.</string>
     <plurals name="paste_note_or_notes_with_count">
         <item quantity="other">Paste <b>%d</b> notes</item>
     </plurals>

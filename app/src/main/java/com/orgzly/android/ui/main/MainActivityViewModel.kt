@@ -3,7 +3,7 @@ package com.orgzly.android.ui.main
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
@@ -15,14 +15,21 @@ import com.orgzly.android.db.entity.SavedSearch
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.CommonViewModel
 import com.orgzly.android.ui.SingleLiveEvent
-import com.orgzly.android.usecase.*
+import com.orgzly.android.usecase.BookScrollToNote
+import com.orgzly.android.usecase.BookSparseTreeForNote
+import com.orgzly.android.usecase.LinkFindTarget
+import com.orgzly.android.usecase.NoteOrBookFindWithProperty
+import com.orgzly.android.usecase.NoteUpdateClockingState
+import com.orgzly.android.usecase.SavedSearchExport
+import com.orgzly.android.usecase.SavedSearchImport
+import com.orgzly.android.usecase.UseCaseRunner
 import com.orgzly.android.util.LogUtils
 import java.io.File
 
 class MainActivityViewModel(private val dataRepository: DataRepository) : CommonViewModel() {
     private val booksParams = MutableLiveData<String>()
 
-    private val booksSubject: LiveData<List<BookView>> = Transformations.switchMap(booksParams) {
+    private val booksSubject: LiveData<List<BookView>> = booksParams.switchMap {
         dataRepository.getBooksLiveData()
     }
 
@@ -68,30 +75,42 @@ class MainActivityViewModel(private val dataRepository: DataRepository) : Common
         navigationActions.postValue(MainNavigationAction.DisplayQuery(query))
     }
 
-    fun followLinkToNoteWithProperty(name: String, value: String) {
+    fun followLinkToNoteOrBookWithProperty(name: String, value: String) {
         App.EXECUTORS.diskIO().execute {
-            val useCase = NoteFindWithProperty(name, value)
+            val useCase = NoteOrBookFindWithProperty(name, value)
 
             catchAndPostError {
                 val result = UseCaseRunner.run(useCase)
+                val data = result.userData as List<*>
 
-                if (result.userData == null) {
+                if (data.isEmpty()) {
                     val msg = App.getAppContext().getString(R.string.no_such_link_target, name, value)
                     errorEvent.postValue(Throwable(msg))
-
                 } else {
-                    val noteIdBookId = result.userData as NoteDao.NoteIdBookId
+                    if (data.size > 1) {
+                        val msg = App.getAppContext().getString(R.string.error_multiple_notes_with_matching_property_value, name, value)
+                        errorEvent.postValue(Throwable(msg))
+                    }
+                    when (data[0]) {
+                        is NoteDao.NoteIdBookId -> {
+                            val noteIdBookId = data[0] as NoteDao.NoteIdBookId
 
-                    when (AppPreferences.linkTarget(App.getAppContext())) {
-                        "note_details" ->
-                            navigationActions.postValue(
-                                MainNavigationAction.OpenNote(noteIdBookId.bookId, noteIdBookId.noteId))
+                            when (AppPreferences.linkTarget(App.getAppContext())) {
+                                "note_details" ->
+                                    navigationActions.postValue(
+                                        MainNavigationAction.OpenNote(noteIdBookId.bookId, noteIdBookId.noteId))
 
-                        "book_and_sparse_tree" ->
-                            UseCaseRunner.run(BookSparseTreeForNote(noteIdBookId.noteId))
+                                "book_and_sparse_tree" ->
+                                    UseCaseRunner.run(BookSparseTreeForNote(noteIdBookId.noteId))
 
-                        "book_and_scroll" ->
-                            UseCaseRunner.run(BookScrollToNote(noteIdBookId.noteId))
+                                "book_and_scroll" ->
+                                    UseCaseRunner.run(BookScrollToNote(noteIdBookId.noteId))
+                            }
+                        }
+                        is Book -> {
+                            val book = data[0] as Book
+                            navigationActions.postValue(MainNavigationAction.OpenBook(book.id))
+                        }
                     }
                 }
             }

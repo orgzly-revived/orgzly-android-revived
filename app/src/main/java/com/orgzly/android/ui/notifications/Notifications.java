@@ -8,19 +8,6 @@ import static com.orgzly.android.git.SshCredentialsProvider.ALLOW;
 import static com.orgzly.android.git.SshCredentialsProvider.ALLOW_AND_STORE;
 import static com.orgzly.android.git.SshCredentialsProvider.DENY;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import static com.orgzly.android.AppIntent.ACTION_ACCEPT_AND_STORE_REMOTE_HOST_KEY;
-import static com.orgzly.android.AppIntent.ACTION_ACCEPT_REMOTE_HOST_KEY;
-import static com.orgzly.android.AppIntent.ACTION_REJECT_REMOTE_HOST_KEY;
-import static com.orgzly.android.NewNoteBroadcastReceiver.NOTE_TITLE;
-import static com.orgzly.android.git.SshCredentialsProvider.ALLOW;
-import static com.orgzly.android.git.SshCredentialsProvider.ALLOW_AND_STORE;
-import static com.orgzly.android.git.SshCredentialsProvider.DENY;
-
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -47,6 +34,10 @@ import com.orgzly.android.util.LogUtils;
 import org.eclipse.jgit.internal.transport.sshd.SshdText;
 import org.eclipse.jgit.transport.CredentialItem;
 import org.eclipse.jgit.transport.URIish;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class Notifications {
     public static final String TAG = Notifications.class.getName();

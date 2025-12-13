@@ -1,7 +1,6 @@
 package com.orgzly.android.ui.dialogs
 
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,12 +16,12 @@ import com.orgzly.org.datetime.OrgInterval
  * A dialog that prompts the user for the repeater, delay or warning period.
  */
 abstract class PeriodWithTypePickerDialog(
-        context: Context,
-        @StringRes private val titleId: Int,
-        @StringRes private val descriptionId: Int,
-        @ArrayRes private val typesId: Int?,
-        @ArrayRes private val typesDescriptionsId: Int,
-        private val initialValue: String
+    context: Context,
+    @param:StringRes private val titleId: Int,
+    @param:StringRes private val descriptionId: Int,
+    @param:ArrayRes private val typesId: Int?,
+    @param:ArrayRes private val typesDescriptionsId: Int,
+    private val initialValue: String
 ) : AlertDialog(context) {
 
     abstract fun set(typeIndex: Int, interval: OrgInterval)
@@ -35,7 +34,7 @@ abstract class PeriodWithTypePickerDialog(
 
 
     fun setup() {
-        setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.ok)) { _, _ ->
+        setButton(BUTTON_POSITIVE, context.getString(R.string.ok)) { _, _ ->
             val typeIndex = binding.typePicker.value
 
             val interval = getInterval(
@@ -45,7 +44,7 @@ abstract class PeriodWithTypePickerDialog(
             set(typeIndex, interval)
         }
 
-        setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.cancel)) { _, _ ->
+        setButton(BUTTON_NEGATIVE, context.getString(R.string.cancel)) { _, _ ->
             cancel()
         }
 

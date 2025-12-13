@@ -7,19 +7,26 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.contrib.DrawerActions.close;
+import static androidx.test.espresso.contrib.DrawerActions.open;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.Matchers.anything;
 
+import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
+import android.os.SystemClock;
 import android.text.Spanned;
 import android.text.style.ClickableSpan;
 import android.view.KeyEvent;
@@ -32,13 +39,18 @@ import androidx.annotation.IdRes;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.DataInteraction;
+import androidx.test.espresso.FailureHandler;
+import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.action.CloseKeyboardAction;
+import androidx.test.espresso.base.DefaultFailureHandler;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.espresso.util.HumanReadables;
+import androidx.test.espresso.util.TreeIterables;
+import androidx.test.uiautomator.UiDevice;
 
 import com.orgzly.R;
 import com.orgzly.android.ui.SpanUtils;
@@ -47,6 +59,10 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
+
+import java.io.File;
+import java.time.Instant;
+import java.util.concurrent.TimeoutException;
 
 /*
  * Few espresso-related notes:
@@ -57,6 +73,8 @@ import org.hamcrest.TypeSafeMatcher;
  * - replaceText() is preferred over typeText() as it is much faster.
  */
 public class EspressoUtils {
+
+
     public static ViewInteraction onListView() {
         return onView(allOf(isAssignableFrom(ListView.class), isDisplayed()));
     }
@@ -178,8 +196,9 @@ public class EspressoUtils {
     }
 
     public static ViewInteraction onRecyclerViewItem(@IdRes int recyclerView, int position, @IdRes int childView) {
+        SystemClock.sleep(200);
+        onView(isRoot()).perform(waitId(recyclerView, 5000));
         onView(withId(recyclerView)).perform(RecyclerViewActions.scrollToPosition(position));
-
         return onView(new EspressoRecyclerViewMatcher(recyclerView)
                 .atPositionOnView(position, childView));
     }
@@ -288,12 +307,12 @@ public class EspressoUtils {
 
             // Open the overflow menu OR open the options menu,
             // depending on if the device has a hardware or software overflow menu button.
-            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getTargetContext());
+            openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
             onView(withText(resourceId)).perform(click());
         }
     }
 
-    public static void clickSetting(String key, int title) {
+    public static void clickSetting(int title) {
         onView(withId(R.id.recycler_view))
                 .perform(RecyclerViewActions.actionOnItem(
                         hasDescendant(withText(title)), click()));
@@ -310,8 +329,8 @@ public class EspressoUtils {
     private static void settingsSetKeywords(int viewId, String keywords) {
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
 
-        clickSetting("prefs_screen_notebooks", R.string.pref_title_notebooks);
-        clickSetting("pref_key_states", R.string.states);
+        clickSetting(R.string.pref_title_notebooks);
+        clickSetting(R.string.states);
 
         onView(withId(viewId)).perform(replaceTextCloseKeyboard(keywords));
         onView(withText(android.R.string.ok)).perform(click());
@@ -327,9 +346,15 @@ public class EspressoUtils {
                 withClassName(endsWith("OverflowMenuButton"))));
     }
 
-    public static void searchForText(String str) {
+    public static void searchForTextCloseKeyboard(String str) {
+        SystemClock.sleep(300);
+        onView(isRoot()).perform(waitId(R.id.search_view, 5000));
         onView(allOf(withId(R.id.search_view), isDisplayed())).perform(click());
+        SystemClock.sleep(300);
+        onView(isRoot()).perform(waitId(R.id.search_src_text, 5000));
         onView(withId(R.id.search_src_text)).perform(replaceText(str), pressKey(KeyEvent.KEYCODE_ENTER));
+        closeSoftKeyboardWithDelay();
+        SystemClock.sleep(300);
     }
 
     public static ViewAction[] replaceTextCloseKeyboard(String str) {
@@ -444,5 +469,97 @@ public class EspressoUtils {
 
     public static ViewAction scroll() {
         return new NestedScrollViewExtension();
+    }
+
+    /**
+     * Perform action of waiting for a specific view id. Copied from https://stackoverflow.com/a/49814995.
+     * @param viewId The id of the view to wait for.
+     * @param millis The timeout of until when to wait for.
+     */
+    public static ViewAction waitId(final int viewId, final long millis) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isRoot();
+            }
+
+            @Override
+            public String getDescription() {
+                return "wait for a specific view with id <" + viewId + "> during " + millis + " millis.";
+            }
+
+            @Override
+            public void perform(final UiController uiController, final View view) {
+                uiController.loopMainThreadUntilIdle();
+                final long startTime = System.currentTimeMillis();
+                final long endTime = startTime + millis;
+                final Matcher<View> viewMatcher = withId(viewId);
+
+                do {
+                    for (View child : TreeIterables.breadthFirstViewTraversal(view)) {
+                        // found view with required ID
+                        if (viewMatcher.matches(child)) {
+                            return;
+                        }
+                    }
+
+                    uiController.loopMainThreadForAtLeast(50);
+                }
+                while (System.currentTimeMillis() < endTime);
+
+                // timeout happens
+                throw new PerformException.Builder()
+                        .withActionDescription(this.getDescription())
+                        .withViewDescription(HumanReadables.describe(view))
+                        .withCause(new TimeoutException())
+                        .build();
+            }
+        };
+    }
+
+    public static void grantAlarmsAndRemindersSpecialPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            String shellCmd = "appops set --uid com.orgzlyrevived SCHEDULE_EXACT_ALARM allow";
+            getInstrumentation().getUiAutomation().executeShellCommand(shellCmd);
+        }
+    }
+
+    public static void denyAlarmsAndRemindersSpecialPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            String shellCmd = "appops set --uid com.orgzlyrevived SCHEDULE_EXACT_ALARM deny";
+            getInstrumentation().getUiAutomation().executeShellCommand(shellCmd);
+        }
+    }
+
+    /**
+     * Utility method for starting sync using drawer button.
+     */
+    public static void sync() {
+        grantAlarmsAndRemindersSpecialPermission();
+        onView(withId(R.id.drawer_layout)).perform(open());
+        onView(withId(R.id.sync_button_container)).perform(click());
+        onView(withId(R.id.drawer_layout)).perform(close());
+    }
+
+    /**
+     * Use this with Espresso.setFailureHandler() for taking screenshots when tests fail. Not
+     * globally enabled because it gets triggered by all exceptions, even the ones that we expect
+     * and catch (resulting in "screenshot noise").
+     */
+    public static class OrgzlyCustomFailureHandler implements FailureHandler {
+        private final FailureHandler delegate;
+
+        public OrgzlyCustomFailureHandler(Context targetContext) {
+            delegate = new DefaultFailureHandler(targetContext);
+        }
+
+        @Override
+        public void handle(Throwable error, Matcher<View> viewMatcher) {
+            // take screenshot
+            UiDevice device = UiDevice.getInstance(getInstrumentation());
+            device.takeScreenshot(new File("/sdcard/Pictures/fail-screenshot-" + Instant.now().getEpochSecond() + ".png"));
+            // hand over to default handler
+            delegate.handle(error, viewMatcher);
+        }
     }
 }

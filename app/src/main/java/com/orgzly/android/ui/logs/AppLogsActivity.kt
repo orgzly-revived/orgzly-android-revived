@@ -16,6 +16,7 @@ import com.orgzly.android.ui.util.getAlarmManager
 import com.orgzly.android.ui.util.sharePlainText
 import com.orgzly.android.ui.util.userFriendlyPeriod
 import com.orgzly.databinding.ActivityLogsBinding
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
 import javax.inject.Inject

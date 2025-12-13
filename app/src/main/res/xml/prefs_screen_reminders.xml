@@ -24,6 +24,22 @@
         android:defaultValue="@bool/pref_default_use_reminders_for_event_times" />
 
     <SwitchPreference
+        android:key="@string/pref_key_reminders_alarm"
+        android:title="@string/pref_title_reminders_alarm"
+        android:summary="@string/pref_summary_reminders_alarm"
+        android:defaultValue="@bool/pref_default_reminders_alarm" />
+
+    <EditTextPreference
+        android:key="@string/pref_key_reminders_alarm_tags"
+        android:title="@string/pref_title_reminders_alarm_tags"
+        android:selectAllOnFocus="true"
+        android:inputType="text"
+        android:singleLine="true"
+        android:dialogMessage="@string/pref_summary_reminders_alarm_tags"
+        android:defaultValue="@string/pref_default_reminders_alarm_tags"
+        app:useSimpleSummaryProvider="true"/>
+
+    <SwitchPreference
         android:key="@string/pref_key_reminders_use_alarm_clock_for_tod_reminders"
         android:title="@string/use_alarm_clock_for_tod_reminders"
         android:summary="@string/use_alarm_clock_for_tod_reminders_summary"
@@ -62,7 +78,7 @@
         android:summary="@string/notification_channel_settings_summary">
         <intent android:action="android.settings.CHANNEL_NOTIFICATION_SETTINGS">
             <extra android:name="android.provider.extra.CHANNEL_ID" android:value="reminders" />
-            <extra android:name="android.provider.extra.APP_PACKAGE" android:value="com.orgzlyrevived" />
+            <extra android:name="android.provider.extra.APP_PACKAGE" android:value="@string/application_id" />
         </intent>
     </androidx.preference.PreferenceScreen>
 

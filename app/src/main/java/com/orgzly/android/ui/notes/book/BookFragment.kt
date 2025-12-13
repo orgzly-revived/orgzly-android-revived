@@ -10,11 +10,14 @@ import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.BookUtils
+import com.orgzly.android.NotesOrgExporter
 import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.NoteView
@@ -42,7 +45,15 @@ import com.orgzly.android.ui.util.setup
 import com.orgzly.android.ui.util.styledAttributes
 import com.orgzly.android.util.LogUtils
 import com.orgzly.databinding.FragmentBookBinding
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.math.abs
 
+enum class ScrollDirection {
+    UP,
+    DOWN,
+}
 
 /**
  * Displays all notes from the notebook.
@@ -65,6 +76,10 @@ class BookFragment :
     private lateinit var sharedMainActivityViewModel: SharedMainActivityViewModel
 
     private lateinit var viewModel: BookViewModel
+
+    private var hideButtonJob: Job? = null
+
+    private var jumpButtonDirection = ScrollDirection.DOWN
 
     override fun getAdapter(): BookAdapter? {
         return if (::viewAdapter.isInitialized) viewAdapter else null
@@ -156,6 +171,11 @@ class BookFragment :
                     rv.findChildViewUnder(e1.x, e1.y)?.let { itemView ->
                         rv.findContainingViewHolder(itemView)?.let { vh ->
                             (vh as? NoteItemViewHolder)?.let {
+                                // Disable swipe popup for narrowed root note - tap-to-edit still works
+                                if (viewModel.isNarrowed() && vh.itemId == viewModel.narrowedNoteId.value) {
+                                    return@let
+                                }
+
                                 showPopupWindow(vh.itemId, NotePopup.Location.BOOK, direction, itemView, e1, e2) { noteId, buttonId ->
                                     handleActionItemClick(setOf(noteId), buttonId)
                                 }
@@ -164,6 +184,9 @@ class BookFragment :
                     }
                 }
             }))
+
+            // Add scroll listener for jump-to-end button
+            setupJumpToEndButton(rv)
         }
 
         binding.swipeContainer.setup()
@@ -191,11 +214,10 @@ class BookFragment :
 
             this.currentBook = book
 
-            viewAdapter.setPreface(book)
-
             if (notes != null) {
                 if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Submitting list")
-                viewAdapter.submitList(notes)
+
+                viewAdapter.submitList(notes, viewModel.levelOffset(notes))
 
                 val ids = notes.mapTo(hashSetOf()) { it.note.id }
 
@@ -205,6 +227,8 @@ class BookFragment :
 
                 scrollToNoteIfSet(arguments?.getLong(ARG_NOTE_ID, 0) ?: 0)
             }
+
+            viewAdapter.setPreface(book)
 
             setFlipperDisplayedChild(notes)
         })
@@ -241,7 +265,14 @@ class BookFragment :
                     binding.fab.run {
                         if (currentBook != null) {
                             setOnClickListener {
-                                listener?.onNoteNewRequest(NotePlace(mBookId))
+                                // If narrowed, add note under the narrowed root
+                                val narrowedId = viewModel.narrowedNoteId.value
+                                val notePlace = if (narrowedId != null) {
+                                    NotePlace(mBookId, narrowedId, Place.UNDER)
+                                } else {
+                                    NotePlace(mBookId)
+                                }
+                                listener?.onNoteNewRequest(notePlace)
                             }
                             show()
                         } else {
@@ -277,6 +308,12 @@ class BookFragment :
                 }
             }
         }
+
+        // Update widen button visibility when narrowed state changes
+        viewModel.narrowedNoteId.observe(viewLifecycleOwner) {
+            if (viewModel.appBar.mode.value != APP_BAR_DEFAULT_MODE) return@observe
+            binding.topToolbar.menu.findItem(R.id.books_options_menu_item_widen_view)?.isVisible = viewModel.isNarrowed()
+        }
     }
 
     private fun setFlipperDisplayedChild(notes: List<NoteView>?) {
@@ -306,6 +343,10 @@ class BookFragment :
         super.onDestroyView()
 
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG)
+
+        // Clean up coroutine job
+        hideButtonJob?.cancel()
+        hideButtonJob = null
     }
 
     override fun onDetach() {
@@ -420,11 +461,47 @@ class BookFragment :
         viewModel.requestNotesDelete(ids)
     }
 
+    private fun shareNotes(ids: Set<Long>) {
+        try {
+            val exporter = NotesOrgExporter(dataRepository)
+            val exportedNotes = mutableListOf<String>()
+
+            for (noteId in ids) {
+                try {
+                    exportedNotes.add(exporter.exportNote(noteId))
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to export note $noteId", e)
+                }
+            }
+
+            val content = exportedNotes.joinToString("")
+
+            if (content.isNotEmpty()) {
+                val shareIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, content)
+                }
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.share)))
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to share notes", e)
+        }
+    }
+
     override fun getCurrentDrawerItemId(): String {
         return getDrawerItemId(mBookId)
     }
 
     override fun onNoteClick(view: View, position: Int, noteView: NoteView) {
+        // Disable selection on narrowed root note - opening for edit still works
+        if (viewModel.isNarrowed() && noteView.note.id == viewModel.narrowedNoteId.value) {
+            if (!AppPreferences.isReverseNoteClickAction(context) && viewAdapter.getSelection().count == 0) {
+                openNote(noteView.note.id)  // Allow edit in default mode when no selection
+            }
+            return
+        }
+
         if (!AppPreferences.isReverseNoteClickAction(context)) {
             if (viewAdapter.getSelection().count > 0) {
                 toggleNoteSelection(position, noteView)
@@ -437,6 +514,14 @@ class BookFragment :
     }
 
     override fun onNoteLongClick(view: View, position: Int, noteView: NoteView) {
+        // Disable selection on narrowed root note - opening for edit still works
+        if (viewModel.isNarrowed() && noteView.note.id == viewModel.narrowedNoteId.value) {
+            if (AppPreferences.isReverseNoteClickAction(context)) {
+                openNote(noteView.note.id)  // Allow edit
+            }
+            return
+        }
+
         if (!AppPreferences.isReverseNoteClickAction(context)) {
             toggleNoteSelection(position, noteView)
         } else {
@@ -487,6 +572,9 @@ class BookFragment :
             if (currentBook == null) {
                 menu.removeItem(R.id.books_options_menu_book_preface)
             }
+
+            // Show/hide widen button based on narrowed state
+            menu.findItem(R.id.books_options_menu_item_widen_view)?.isVisible = viewModel.isNarrowed()
 
             // Hide paste button if clipboard is empty, update title if not
             menu.findItem(R.id.book_actions_paste)?.apply {
@@ -670,6 +758,11 @@ class BookFragment :
                 viewModel.appBar.toMode(APP_BAR_DEFAULT_MODE)
             }
 
+            R.id.share -> {
+                shareNotes(ids)
+                viewModel.appBar.toMode(APP_BAR_DEFAULT_MODE)
+            }
+
             R.id.cut -> {
                 listener?.onNotesCutRequest(mBookId, ids)
                 viewModel.appBar.toMode(APP_BAR_DEFAULT_MODE)
@@ -740,6 +833,9 @@ class BookFragment :
             R.id.note_popup_focus,
             R.id.focus ->
                 listener?.onNoteFocusInBookRequest(ids.first())
+
+            R.id.note_popup_narrow ->
+                viewModel.narrowToSubtree(ids.first())
         }
     }
 
@@ -749,6 +845,10 @@ class BookFragment :
         when (itemId) {
             R.id.books_options_menu_item_cycle_visibility -> {
                 viewModel.cycleVisibility()
+            }
+
+            R.id.books_options_menu_item_widen_view -> {
+                viewModel.widenView()
             }
 
             R.id.book_actions_paste -> {
@@ -775,6 +875,111 @@ class BookFragment :
         }
     }
 
+    private fun setupJumpToEndButton(recyclerView: RecyclerView) {
+        // Initially hide the button
+        binding.jumpToEndFab.hide()
+
+        // Set up the click listener
+        binding.jumpToEndFab.run {
+            setOnClickListener {
+                val adapter = binding.fragmentBookRecyclerView.adapter
+                val targetPosition: Int? =
+                    when (jumpButtonDirection) {
+                        ScrollDirection.UP -> 0
+                        ScrollDirection.DOWN -> adapter?.itemCount?.minus(1)?.let {
+                            if (it <= 0)
+                                null
+                            else
+                                it
+                        }
+                    }
+                if (targetPosition == null) return@setOnClickListener // Nothing to scroll to
+
+                val layoutManager = binding.fragmentBookRecyclerView.layoutManager as? LinearLayoutManager
+                if (layoutManager == null) {
+                    // Fallback or log error if layout manager is not LinearLayoutManager
+                    binding.fragmentBookRecyclerView.smoothScrollToPosition(targetPosition)
+                    return@setOnClickListener
+                }
+
+                val currentPosition = layoutManager.findFirstVisibleItemPosition()
+                if (currentPosition == RecyclerView.NO_POSITION) {
+                    // If current position is unknown, maybe just smooth scroll
+                    binding.fragmentBookRecyclerView.smoothScrollToPosition(targetPosition)
+                    return@setOnClickListener
+                }
+
+
+                // --- Conditional Logic ---
+                val totalItemCount = adapter?.itemCount ?: 0
+                val scrollDistance = abs(targetPosition - currentPosition)
+
+                // Define thresholds (adjust as needed)
+                val sizeThreshold = 500 // Jump instantly if total items > threshold
+                val distanceThreshold = 50 // Jump instantly if distance to scroll > threshold
+
+                if (totalItemCount > sizeThreshold || scrollDistance > distanceThreshold) {
+                    // Jump instantly for large lists or long distances
+                    layoutManager.scrollToPositionWithOffset(targetPosition, 0) // Or just scrollToPosition(targetPosition)
+                } else {
+                    // Smooth scroll for smaller lists/distances
+                    binding.fragmentBookRecyclerView.smoothScrollToPosition(targetPosition)
+                }
+            }
+        }
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
+                val totalItemCount = layoutManager.itemCount
+
+                when {
+                    // At bottom - hide button
+                    lastVisibleItem >= totalItemCount - 1 -> {
+                        binding.jumpToEndFab.hide()
+                    }
+                    // Scrolling fast - show button
+                    abs(dy) > SCROLL_SPEED_THRESHOLD -> {
+                        binding.jumpToEndFab.show()
+                        scheduleButtonHide()
+
+                        if (dy > 0) {
+                            jumpButtonDirection = ScrollDirection.DOWN
+                            binding.jumpToEndFab.setRotation(0f)
+                        } else {
+                            jumpButtonDirection = ScrollDirection.UP
+                            binding.jumpToEndFab.setRotation(180f)
+                        }
+                    }
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                when (newState) {
+                    RecyclerView.SCROLL_STATE_IDLE -> {
+                        // Schedule hide when scrolling stops
+                        scheduleButtonHide()
+                    }
+                    RecyclerView.SCROLL_STATE_DRAGGING -> {
+                        // Cancel scheduled hide when user starts dragging
+                        hideButtonJob?.cancel()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun scheduleButtonHide() {
+        hideButtonJob?.cancel()
+        hideButtonJob = lifecycleScope.launch {
+            delay(FADE_DELAY)
+            binding.jumpToEndFab.hide()
+        }
+    }
+
     interface Listener : NotesFragment.Listener {
         fun onBookPrefaceEditRequest(book: Book)
 
@@ -798,6 +1003,10 @@ class BookFragment :
         /** Name used for [android.app.FragmentManager].  */
         @JvmField
         val FRAGMENT_TAG: String = BookFragment::class.java.name
+
+        /* Jump to Bottom Consts */
+        private const val FADE_DELAY = 2000L
+        private const val SCROLL_SPEED_THRESHOLD = 50
 
         /* Arguments. */
         private const val ARG_BOOK_ID = "bookId"

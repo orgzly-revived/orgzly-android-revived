@@ -4,72 +4,76 @@ buildscript {
 
     def versions = [:]
 
-    versions.android_gradle_plugin = '7.4.2'
+    versions.android_gradle_plugin = '8.12.0'
 
-    versions.kotlin = '1.7.20'
+    versions.kotlin = '2.2.21'
 
-    versions.kotlin_coroutines = '1.6.4'
+    versions.kotlin_coroutines = '1.10.2'
 
-    versions.jetbrains_annotations = '23.0.0'
+    versions.jetbrains_annotations = '26.0.2-1'
 
     versions.android_multidex = '2.0.1'
 
-    versions.android_appcompat = '1.5.1'
+    versions.android_appcompat = '1.7.1'
 
-    versions.android_documentfile = '1.0.1'
+    versions.android_documentfile = '1.1.0'
     versions.android_localbroadcastmanager = '1.1.0'
 
     versions.android_cardview = '1.0.0'
-    versions.android_recyclerview = '1.2.1'
-    versions.android_viewpager = '1.0.0'
-    versions.android_constraint_layout = '2.1.4'
-    versions.android_preference = '1.2.0'
-    versions.android_material = '1.7.0'
+    versions.android_recyclerview = '1.4.0'
+    versions.android_viewpager = '1.1.0'
+    versions.android_constraint_layout = '2.2.1'
+    versions.android_preference = '1.2.1'
+    versions.android_material = '1.13.0'
     versions.android_swiperefreshlayout = '1.1.0'
 
-    versions.android_room = '2.4.3'
+    versions.android_room = '2.7.2'
 
-    versions.android_lifecycle = '2.5.1'
+    versions.android_lifecycle = '2.9.4'
 
-    versions.android_annotation = '1.3.0'
-
-    versions.android_workmanager = '2.7.1'
+    versions.android_workmanager = '2.10.5'
 
     versions.junit = '4.13.2'
 
-    versions.android_test_espresso = '3.4.0'
+    versions.android_test_espresso = '3.7.0'
 
-    versions.android_test = '1.4.0'
+    versions.android_test = '1.7.0'
 
-    versions.android_test_ext_junit = '1.1.3'
+    versions.android_test_runner = '1.7.0'
 
-    versions.android_test_uiautomator = '2.2.0'
+    versions.android_test_ext_junit = '1.3.0'
 
-    versions.org_java = '1.3-SNAPSHOT'
+    versions.android_test_uiautomator = '2.3.0'
+
+    versions.org_java = '1.3.5'
 
     versions.loremipsum = '1.0'
 
-    versions.dagger = '2.44'
+    versions.dagger = '2.57.2'
 
-    versions.gson = '2.10'
+    versions.gson = '2.13.2'
 
-    versions.dropbox_core_sdk = '5.4.4'
+    versions.dropbox_core_sdk = '7.0.0'
 
     versions.juniversalchardet = '1.0.3'
 
-    versions.joda_time = '2.12.0'
+    versions.joda_time = '2.14.0'
 
-    versions.glide = '4.14.2'
+    versions.glide = '5.0.5'
 
     versions.sardine = '0.8'
 
-    versions.okhttp_digest = '2.7'
+    versions.okhttp_digest = '3.1.1'
 
-    versions.jgit = '6.7.0.202309050840-r'
+    versions.jgit = '5.13.5.202508271544-r'
 
-    versions.security_crypto = '1.1.0-alpha03'
+    versions.security_crypto = '1.1.0'
 
-    versions.biometric_ktx = '1.2.0-alpha04'
+    versions.biometric_ktx = '1.2.0-alpha05'
+
+    versions.robolectric = '4.16'
+
+    versions.webdav_embedded_server = '0.2.1'
 
     ext.versions = versions
 
@@ -91,16 +95,21 @@ allprojects {
         google()
 
         maven {
-            url 'https://oss.sonatype.org/content/repositories/snapshots'
+            url = 'https://oss.sonatype.org/content/repositories/snapshots'
         }
 
-        // For sardine-android
+        // For sardine-android and org-java
         maven {
-            url 'https://jitpack.io'
+            url = 'https://jitpack.io'
         }
     }
 
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
+}
+
+tasks.register('pullScreenshot', Exec) {
+    final def command = ['adb', 'pull', '/sdcard/Pictures/.', buildDir]
+    commandLine command
 }

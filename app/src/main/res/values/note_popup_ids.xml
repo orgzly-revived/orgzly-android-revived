@@ -14,6 +14,7 @@
     <item type="id" name="note_popup_new_below" />
     <item type="id" name="note_popup_refile" />
     <item type="id" name="note_popup_focus" />
+    <item type="id" name="note_popup_narrow" />
 
     <!-- For preference -->
     <item type="id" name="note_popup_divider" />

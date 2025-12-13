@@ -1,5 +1,6 @@
 package com.orgzly.android.repos;
 
+import android.os.Build;
 import android.os.Environment;
 
 import com.orgzly.android.BookName;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assume.assumeTrue;
 
 public class DirectoryRepoTest extends OrgzlyTest {
     private static final String TAG = DirectoryRepoTest.class.getName();
@@ -60,8 +62,8 @@ public class DirectoryRepoTest extends OrgzlyTest {
         List<VersionedRook> books = repo.getBooks();
 
         assertEquals(1, books.size());
-        assertEquals("booky", BookName.getInstance(context, books.get(0)).getName());
-        assertEquals("booky.org", BookName.getInstance(context, books.get(0)).getFileName());
+        assertEquals("booky", BookName.fromRook(books.get(0)).getName());
+        assertEquals("booky.org", BookName.fromRook(books.get(0)).getRepoRelativePath());
         assertEquals(repoUriString, books.get(0).getRepoUri().toString());
         assertEquals(repoUriString + "/booky.org", books.get(0).getUri().toString());
     }
@@ -77,11 +79,32 @@ public class DirectoryRepoTest extends OrgzlyTest {
         List<VersionedRook> books = repo.getBooks();
 
         assertEquals(1, books.size());
-        assertEquals("03", BookName.getInstance(context, books.get(0)).getName());
-        assertEquals("03.org", BookName.getInstance(context, books.get(0)).getFileName());
+        assertEquals("03", BookName.fromRook(books.get(0)).getName());
+        assertEquals("03.org", BookName.fromRook(books.get(0)).getRepoRelativePath());
         assertEquals(13, books.get(0).getRepoId());
         assertEquals(repoUriString, books.get(0).getRepoUri().toString());
         assertEquals(repoUriString + "/03.org", books.get(0).getUri().toString());
+    }
+
+    @Test
+    public void testGetBooksRespectsIgnoreRules() throws IOException {
+        assumeTrue(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O);
+        RepoWithProps repoWithProps = new RepoWithProps(new Repo(13, RepoType.DIRECTORY, repoUriString));
+        DirectoryRepo repo = new DirectoryRepo(repoWithProps, true);
+
+        // Add .org files
+        MiscUtils.writeStringToFile("content", new File(dirFile, "file1.org"));
+        MiscUtils.writeStringToFile("content", new File(dirFile, "file2.org"));
+        MiscUtils.writeStringToFile("content", new File(dirFile, "file3.org"));
+
+        // Add .orgzlyignore file
+        MiscUtils.writeStringToFile("*1.org\nfile3*", new File(dirFile, RepoIgnoreNode.ignore_file()));
+
+        List<VersionedRook> books = repo.getBooks();
+
+        assertEquals(1, books.size());
+        assertEquals("file2", BookName.fromRook(books.get(0)).getName());
+        assertEquals(repoUriString + "/file2.org", books.get(0).getUri().toString());
     }
 
     @Test
@@ -95,7 +118,6 @@ public class DirectoryRepoTest extends OrgzlyTest {
         assertNotNull(repo.getBooks());
     }
 
-    // TODO: Do the same for dropbox repo
     @Test
     public void testRenameBook() {
         BookView bookView;

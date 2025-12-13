@@ -3,10 +3,14 @@ package com.orgzly.android.repos;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 
+import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.android.Auth;
+import com.dropbox.core.json.JsonReadException;
+import com.dropbox.core.oauth.DbxCredential;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.FolderMetadata;
@@ -24,6 +28,7 @@ import com.orgzly.android.util.LogUtils;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,7 +51,8 @@ public class DropboxClient {
 
     final private Context mContext;
     final private long repoId;
-
+    final private DbxRequestConfig requestConfig;
+    private DbxCredential credential;
     private DbxClientV2 dbxClient;
 
     private boolean tryLinking = false;
@@ -56,14 +62,31 @@ public class DropboxClient {
 
         repoId = id;
 
+        requestConfig = getRequestConfig();
+
         createClient();
     }
 
-    private void createClient() {
-        String accessToken = getToken();
+    private DbxRequestConfig getRequestConfig() {
+        String userLocale = Locale.getDefault().toString();
+        String clientId = String.format("%s/%s",
+                BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME);
+        return DbxRequestConfig
+                .newBuilder(clientId)
+                .withUserLocale(userLocale)
+                .build();
+    }
 
-        if (accessToken != null) {
-            dbxClient = getDbxClient(accessToken);
+    private void createClient() {
+        String serializedCredential = AppPreferences.dropboxSerializedCredential(mContext);
+        if (serializedCredential != null && serializedCredential.length() > 0) {
+            try {
+                credential =
+                        DbxCredential.Reader.readFully(serializedCredential);
+            } catch (JsonReadException e) {
+                throw new RuntimeException(e);
+            }
+            dbxClient = new DbxClientV2(requestConfig, credential);
         }
     }
 
@@ -79,68 +102,36 @@ public class DropboxClient {
 
     public void unlink() {
         dbxClient = null;
-        deleteToken();
+        deleteCredential();
         tryLinking = false;
     }
 
     public void beginAuthentication(Activity activity) {
         tryLinking = true;
-        Auth.startOAuth2Authentication(activity, BuildConfig.DROPBOX_APP_KEY);
+        Auth.startOAuth2PKCE(activity, BuildConfig.DROPBOX_APP_KEY, requestConfig);
     }
 
     public boolean finishAuthentication() {
         if (dbxClient == null && tryLinking) {
-            String accessToken = getToken();
-
-            if (accessToken == null) {
-                accessToken = Auth.getOAuth2Token();
-
-                if (accessToken != null) {
-                    saveToken(accessToken);
-                }
-            }
-
-            if (accessToken != null) {
-                dbxClient = getDbxClient(accessToken);
+            credential = Auth.getDbxCredential();
+            if (credential != null) {
+                saveCredential();
+                createClient();
                 return true;
             }
         }
-
         return false;
     }
 
-    private DbxClientV2 getDbxClient(String accessToken) {
-        String userLocale = Locale.getDefault().toString();
-
-        String clientId = String.format("%s/%s",
-                BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME);
-
-        DbxRequestConfig requestConfig = DbxRequestConfig
-                .newBuilder(clientId)
-                .withUserLocale(userLocale)
-                .build();
-
-        return new DbxClientV2(requestConfig, accessToken);
+    private void saveCredential() {
+        AppPreferences.dropboxSerializedCredential(mContext, credential.toString());
     }
 
-    public void setToken(String token) {
-        saveToken(token);
-        createClient();
+    private void deleteCredential() {
+        AppPreferences.dropboxSerializedCredential(mContext, null);
     }
 
-    private void saveToken(String token) {
-        AppPreferences.dropboxToken(mContext, token);
-    }
-
-    public String getToken() {
-        return AppPreferences.dropboxToken(mContext);
-    }
-
-    private void deleteToken() {
-        AppPreferences.dropboxToken(mContext, null);
-    }
-
-    public List<VersionedRook> getBooks(Uri repoUri) throws IOException {
+    public List<VersionedRook> getBooks(Uri repoUri, RepoIgnoreNode ignores) throws IOException {
         linkedOrThrow();
 
         List<VersionedRook> list = new ArrayList<>();
@@ -155,35 +146,56 @@ public class DropboxClient {
         /* Strip trailing slashes. */
         path = path.replaceAll("/+$", "");
 
+        List<String> folderPaths = new ArrayList<>(List.of(path));
+
         try {
             if (ROOT_PATH.equals(path) || dbxClient.files().getMetadata(path) instanceof FolderMetadata) {
                 /* Get folder content. */
-                ListFolderResult result = dbxClient.files().listFolder(path);
-                while (true) {
-                    for (Metadata metadata : result.getEntries()) {
-                        if (metadata instanceof FileMetadata) {
-                            FileMetadata file = (FileMetadata) metadata;
+                while (folderPaths.size() > 0) {
+                    ListFolderResult result = dbxClient.files().listFolder(folderPaths.remove(0));
+                    while (true) {
+                        for (Metadata metadata : result.getEntries()) {
+                            String pathRelativeToRepoRoot =
+                                    metadata.getPathDisplay().replaceAll("^" + path + "/", "");
+                            if (metadata instanceof FileMetadata) {
+                                FileMetadata file = (FileMetadata) metadata;
 
-                            if (BookName.isSupportedFormatFileName(file.getName())) {
-                                Uri uri = repoUri.buildUpon().appendPath(file.getName()).build();
-                                VersionedRook book = new VersionedRook(
-                                        repoId,
-                                        RepoType.DROPBOX,
-                                        repoUri,
-                                        uri,
-                                        file.getRev(),
-                                        file.getServerModified().getTime());
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    if (ignores.isPathIgnored(pathRelativeToRepoRoot, false)) {
+                                        continue;
+                                    }
+                                }
 
-                                list.add(book);
+                                if (BookName.isSupportedFormatFileName(file.getName())) {
+                                    String encodedRelativePath = Uri.encode(pathRelativeToRepoRoot, "/");
+                                    Uri uri = repoUri.buildUpon().appendEncodedPath(encodedRelativePath).build();
+                                    VersionedRook book = new VersionedRook(
+                                            repoId,
+                                            RepoType.DROPBOX,
+                                            repoUri,
+                                            uri,
+                                            file.getRev(),
+                                            file.getServerModified().getTime());
+
+                                    list.add(book);
+                                }
+                            }
+                            if (metadata instanceof FolderMetadata && AppPreferences.subfolderSupport(mContext)) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    if (ignores.isPathIgnored(pathRelativeToRepoRoot, true)) {
+                                        continue;
+                                    }
+                                }
+                                folderPaths.add(metadata.getPathDisplay());
                             }
                         }
-                    }
 
-                    if (!result.getHasMore()) {
-                        break;
-                    }
+                        if (!result.getHasMore()) {
+                            break;
+                        }
 
-                    result = dbxClient.files().listFolderContinue(result.getCursor());
+                        result = dbxClient.files().listFolderContinue(result.getCursor());
+                    }
                 }
 
             } else {
@@ -208,13 +220,18 @@ public class DropboxClient {
         return list;
     }
 
+    private Uri getFullUriFromRelativePath(Uri repoUri, String repoRelativePath) {
+        String encodedPath = Uri.encode(repoRelativePath, "/");
+        return Uri.withAppendedPath(repoUri, encodedPath);
+    }
+
     /**
      * Download file from Dropbox and store it to a local file.
      */
-    public VersionedRook download(Uri repoUri, String fileName, File localFile) throws IOException {
+    public VersionedRook download(Uri repoUri, String repoRelativePath, File localFile) throws IOException {
         linkedOrThrow();
 
-        Uri uri = repoUri.buildUpon().appendPath(fileName).build();
+        Uri uri = getFullUriFromRelativePath(repoUri, repoRelativePath);
 
         OutputStream out = new BufferedOutputStream(new FileOutputStream(localFile));
 
@@ -247,12 +264,35 @@ public class DropboxClient {
         }
     }
 
-
-    /** Upload file to Dropbox. */
-    public VersionedRook upload(File file, Uri repoUri, String fileName) throws IOException {
+    public InputStream streamFile(Uri repoUri, String repoRelativePath) throws IOException {
         linkedOrThrow();
 
-        Uri bookUri = repoUri.buildUpon().appendPath(fileName).build();
+        Uri uri = repoUri.buildUpon().appendPath(repoRelativePath).build();
+        FileMetadata metadata;
+        String rev;
+        DbxDownloader<FileMetadata> downloader;
+
+        try {
+            Metadata pathMetadata = dbxClient.files().getMetadata(uri.getPath());
+            metadata = (FileMetadata) pathMetadata;
+            rev = metadata.getRev();
+            downloader = dbxClient.files().download(metadata.getPathLower(), rev);
+        } catch (DbxException e) {
+            if (e instanceof GetMetadataErrorException) {
+                if (((GetMetadataErrorException) e).errorValue.getPathValue() == LookupError.NOT_FOUND) {
+                    throw new FileNotFoundException();
+                }
+            }
+            throw new RuntimeException(e);
+        }
+        return downloader.getInputStream();
+    }
+
+    /** Upload file to Dropbox. */
+    public VersionedRook upload(File file, Uri repoUri, String relativePath) throws IOException {
+        linkedOrThrow();
+
+        Uri bookUri = getFullUriFromRelativePath(repoUri, relativePath);
 
         if (file.length() > UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024) {
             throw new IOException(LARGE_FILE);
@@ -306,6 +346,12 @@ public class DropboxClient {
     public VersionedRook move(Uri repoUri, Uri from, Uri to) throws IOException {
         linkedOrThrow();
 
+        /* Abort if destination file already exists. */
+        try {
+            if (dbxClient.files().getMetadata(to.getPath()) instanceof FileMetadata)
+                throw new IOException("File at " + to.getPath() + " already exists");
+        } catch (DbxException ignored) {}
+
         try {
             RelocationResult relocationRes = dbxClient.files().moveV2(from.getPath(), to.getPath());
             Metadata metadata = relocationRes.getMetadata();
@@ -328,6 +374,27 @@ public class DropboxClient {
                 throw new IOException("Failed moving " + from + " to " + to + ": " + e.getMessage(), e);
             } else {
                 throw new IOException("Failed moving " + from + " to " + to + ": " + e.toString(), e);
+            }
+        }
+    }
+
+    public void deleteFolder(String path) throws IOException {
+        linkedOrThrow();
+
+        try {
+            if (dbxClient.files().getMetadata(path) instanceof FolderMetadata) {
+                dbxClient.files().deleteV2(path);
+            } else {
+                throw new IOException("Not a directory: " + path);
+            }
+        } catch (GetMetadataErrorException e) {
+            // Do nothing; the folder does not exist.
+        } catch (DbxException e) {
+            e.printStackTrace();
+            if (e.getMessage() != null) {
+                throw new IOException("Failed deleting " + path + " on Dropbox: " + e.getMessage());
+            } else {
+                throw new IOException("Failed deleting " + path + " on Dropbox: " + e);
             }
         }
     }

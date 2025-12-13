@@ -1,16 +1,23 @@
 package com.orgzly.android.espresso
 
+import android.os.Build
 import android.os.Environment
+import android.os.SystemClock
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.rule.GrantPermissionRule
 import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.OrgzlyTest
-import com.orgzly.android.espresso.util.EspressoUtils.*
+import com.orgzly.android.espresso.util.EspressoUtils.clickClickableSpan
+import com.orgzly.android.espresso.util.EspressoUtils.onBook
+import com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook
+import com.orgzly.android.espresso.util.EspressoUtils.onSnackbar
 import com.orgzly.android.ui.main.MainActivity
 import org.hamcrest.Matchers.startsWith
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -20,6 +27,13 @@ import org.junit.runners.Parameterized
 class ExternalLinksTest(private val param: Parameter) : OrgzlyTest() {
 
     data class Parameter(val link: String, val check: () -> Any)
+
+    @get:Rule
+    val grantPermissionRule: GrantPermissionRule = if (Build.VERSION.SDK_INT >= 33) {
+        GrantPermissionRule.grant(android.Manifest.permission.READ_MEDIA_IMAGES)
+    } else {
+        GrantPermissionRule.grant()
+    }
 
     companion object {
         @JvmStatic
@@ -53,14 +67,16 @@ class ExternalLinksTest(private val param: Parameter) : OrgzlyTest() {
     fun testLink() {
         testUtils.setupBook("book", "* Note\n${param.link}")
 
-        ActivityScenario.launch(MainActivity::class.java)
+        ActivityScenario.launch(MainActivity::class.java).use {
+            // Open book
+            onBook(0).perform(click())
 
-        // Open book
-        onBook(0).perform(click())
+            // Click on link
+            onNoteInBook(1, R.id.item_head_content_view).perform(clickClickableSpan(param.link))
 
-        // Click on link
-        onNoteInBook(1, R.id.item_head_content_view).perform(clickClickableSpan(param.link))
+            SystemClock.sleep(500)
 
-        param.check()
+            param.check()
+        }
     }
 }

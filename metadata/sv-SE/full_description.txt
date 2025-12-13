@@ -1,0 +1,20 @@
+Orgzly är ett outliner-program för att hantera anteckningar och att-göra-listor.
+
+Du kan lagra dina anteckningar i vanliga textfiler och synkronisera dem med en mapp på din mobila enhet, SD-kort eller över WebDAV.
+
+Anteckningsböckerna lagras i Org-mode-filformatet.
+”Org-mode är gjort för att hantera anteckningar och att-göra-listor, planera projekt och skriva dokument med en snabbt och effektivt system som utgår från vanliga textfiler.”
+Besök <a href='https://orgmode.org/'>orgmode.org</a> för mer information.
+
+<b>Funktioner</b>
+
+* Skapa, redigera och radera anteckningar och uppgifter
+* Fäll ihop och veckla ut underordnade anteckningar
+* Schemalägg uppgifter och ge dem deadlines
+* Sätt prioritet och taggar på anteckningar
+* Svep åt höger eller vänster för att öppna snabbmenyer
+* Sök bland dina anteckningar baserat på många olika egenskaper
+* Skapa och spara sökfrågor för snabb åtkomst
+* Synkronisera anteckningar med en eller flera lagringsplatser
+
+Orgzly Revived är en ”fork” av appen Orgzly.

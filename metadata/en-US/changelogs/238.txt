@@ -1,0 +1,4 @@
+• Parse properties in notebook "preface".
+• Allow linking to notebooks by the "ID" property.
+• New option to add a "ID" property to all new notes.
+• Automatically create org links when sharing URIs to Orgzly.

@@ -83,6 +83,23 @@ abstract class NoteDao : BaseDao<Note> {
     """)
     abstract fun getNoteAndAncestors(id: Long): List<Note>
 
+    @Query("""
+            SELECT * FROM (
+                SELECT a.*
+                FROM notes n, notes a
+                WHERE n.id = (:id)
+                AND n.book_id = a.book_id
+                AND a.is_cut = 0
+                AND a.level > 0
+                AND a.lft <= n.lft
+                AND n.rgt <= a.rgt
+                ORDER BY a.lft DESC
+                LIMIT 2
+            )
+            ORDER BY lft
+    """)
+    abstract fun getNoteAndParent(id: Long): List<Note>
+
     @Query(SELECT_SUBTREE_FOR_IDS)
     abstract fun getNotesForSubtrees(ids: Set<Long>): List<Note>
 
@@ -306,9 +323,8 @@ abstract class NoteDao : BaseDao<Note> {
         LEFT JOIN notes ON (notes.id = note_properties.note_id)
         WHERE LOWER(note_properties.name) = :name AND LOWER(note_properties.value) = :value AND notes.id IS NOT NULL
         ORDER BY notes.lft
-        LIMIT 1
     """)
-    abstract fun firstNoteHavingPropertyLowerCase(name: String, value: String): NoteIdBookId?
+    abstract fun allNotesHavingPropertyLowerCase(name: String, value: String): List<NoteIdBookId>
 
     @Query("""
         UPDATE notes

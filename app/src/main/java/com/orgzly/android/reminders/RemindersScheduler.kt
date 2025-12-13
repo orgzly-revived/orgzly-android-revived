@@ -10,11 +10,13 @@ import android.os.Build
 import android.os.SystemClock
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.orgzly.android.App
 import com.orgzly.android.AppIntent
 import com.orgzly.android.data.logs.AppLogsRepository
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.util.ActivityUtils
 import com.orgzly.android.ui.util.getAlarmManager
+import com.orgzly.android.util.AppPermissions
 import com.orgzly.android.util.LogMajorEvents
 import org.joda.time.DateTime
 import javax.inject.Inject
@@ -75,11 +77,25 @@ class RemindersScheduler @Inject constructor(val context: Application, val logs:
     private fun schedule(intent: PendingIntent, inMs: Long, hasTime: Boolean, origin: String) {
         val alarmManager = context.getAlarmManager()
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (!AppPermissions.isGranted(context, AppPermissions.Usage.POST_NOTIFICATIONS)) {
+                val activity = App.getCurrentActivity()
+                if (activity != null) {
+                    AppPermissions.isGrantedOrRequest(activity, AppPermissions.Usage.POST_NOTIFICATIONS)
+                }
+                return
+            }
+        }
+
         // TODO: Add preferences to control *how* to schedule the alarms
         if (hasTime) {
+            if (!AppPermissions.canScheduleExactAlarms(context)) {
+                // We will not be allowed to schedule this reminder, but the user will
+                // hopefully grant the permission before our next scheduling attempt.
+                return
+            }
             if (AppPreferences.remindersUseAlarmClockForTodReminders(context)) {
                 scheduleAlarmClock(alarmManager, intent, inMs, origin)
-
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     scheduleExactAndAllowWhileIdle(alarmManager, intent, inMs, origin)
@@ -87,10 +103,10 @@ class RemindersScheduler @Inject constructor(val context: Application, val logs:
                     scheduleExact(alarmManager, intent, inMs, origin)
                 }
             }
-
         } else {
-            // Does not trigger while dozing
-            scheduleExact(alarmManager, intent, inMs, origin)
+            // This reminder does not contain clock time information; it's
+            // probably a daily reminder. Schedule an inexact alarm.
+            scheduleInExact(alarmManager, intent, inMs, origin)
         }
 
         // Intent received, notifications not displayed by default
@@ -111,6 +127,14 @@ class RemindersScheduler @Inject constructor(val context: Application, val logs:
             SystemClock.elapsedRealtime() + inMs,
             intent)
         logScheduled("setExact", origin, inMs)
+    }
+
+    private fun scheduleInExact(alarmManager: AlarmManager, intent: PendingIntent, inMs: Long, origin: String) {
+        alarmManager.set(
+            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            SystemClock.elapsedRealtime() + inMs,
+            intent)
+        logScheduled("set", origin, inMs)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

@@ -1,0 +1,2 @@
+• Fix broken image linking on Android 13 and above
+• Support selecting multiple notebooks

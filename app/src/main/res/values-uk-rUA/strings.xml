@@ -9,20 +9,14 @@
     <string name="clear">Очистити</string>
     <string name="cancel">Скасувати</string>
     <string name="create">Створити</string>
-    <string name="new_">Нова</string>
     <!-- "new" is reserved -->
-    <string name="select">Вибрати</string>
     <string name="set">Задати</string>
-    <string name="add">Додати</string>
     <string name="not_now">Не зараз</string>
     <string name="save">Зберегти</string>
     <string name="discard">Відхилити</string>
     <string name="remove_notebook_link">Вилучити посилання</string>
     <string name="browse">Огляд</string>
     <string name="dropbox">Dropbox</string>
-    <string name="view">Вигляд</string>
-    <string name="edit">Змінити</string>
-    <string name="edit_note">Змінити нотатку</string>
     <string name="delete">Видалити</string>
     <string name="delete_with_quoted_argument">Видалити «%s»</string>
     <string name="name">Назва</string>
@@ -40,23 +34,16 @@
     <string name="created">Створено</string>
     <string name="states">Стани</string>
     <string name="note">Нотатка</string>
-    <string name="notes">Нотатки</string>
     <string name="property">Властивість</string>
     <string name="import_as">Імпортувати як…</string>
     <string name="new_notebook">Новий записник</string>
     <string name="new_folder">Нова тека</string>
     <string name="scheduled">Заплановано</string>
     <string name="agenda">Розклад</string>
-    <string name="agenda_period">Розклад днів</string>
-    <string name="time">Час</string>
-    <string name="repeater">Повторення</string>
     <string name="state">Стан</string>
     <string name="priority">Пріоритет</string>
-    <string name="nothing">Пусто</string>
     <string name="open">Відкрити</string>
-    <string name="focus">Фокус</string>
     <string name="widget">Віджет</string>
-    <string name="history">Історія</string>
     <string name="event">Подія</string>
     <plurals name="notes_cut">
         <item quantity="one">Нотатку вирізано</item>
@@ -79,7 +66,6 @@
     </plurals>
     <string name="no_notes_pasted">Нічого вставляти</string>
     <string name="fragment_note_title_hint">Заголовок</string>
-    <string name="fragment_note_tags_hint" tools:ignore="typos">мітка мітка</string>
     <string name="import_org_file">Імпорт файлу Org</string>
     <string name="message_dropbox_unlinked">Відʼєднано від Dropbox</string>
     <string name="message_dropbox_linked">Успішно приєднано до Dropbox</string>
@@ -88,20 +74,16 @@
     <string name="repos_preference_summary">Місце для синхронізації Ваших записників з</string>
     <string name="message_book_has_no_link">Посилання відсутнє</string>
     <string name="message_note_created">Нотатку створено</string>
-    <string name="message_failed_creating_note">Не вдалося створити нотатку</string>
-    <string name="message_failed_updating_note">Не вдалося оновити нотатку</string>
     <string name="drawer_close">Закрити меню</string>
     <string name="drawer_open">Відкрити меню</string>
     <string name="schedule">Розклад</string>
     <string name="refile">Перемістити</string>
-    <string name="refile_to">Перемістити в</string>
     <string name="deadline">Кінцева дата</string>
     <string name="closed">Закрито</string>
     <!-- TODO: Not hints, rename -->
     <string name="schedule_button_hint">Запланований час</string>
     <string name="deadline_button_hint">Кінцевий час</string>
     <string name="closed_button_hint">Час закриття</string>
-    <string name="fragment_note_content_hint">Вміст нотатки</string>
     <string name="books_context_menu_item_rename">Перейменувати</string>
     <string name="books_context_menu_item_set_link">Додати посилання</string>
     <string name="books_context_menu_item_force_save">Примусово зберегти</string>
@@ -121,7 +103,6 @@
     <string name="quick_note">Швидка нотатка</string>
     <string name="tap_to_create_new_note">Натисніть, щоб створити нотатку</string>
     <string name="options_menu_item_search">Пошук</string>
-    <string name="no_user_repos_configured_pref_summary">Поки що не налаштовано</string>
     <string name="repos_options_menu_new_repo">Новий репозиторій</string>
     <string name="book_name_already_exists">Записник %s вже існує</string>
     <string name="filter_name_already_exists">Пошук із такою назвою вже існує</string>
@@ -139,14 +120,11 @@
     <string name="book_does_not_exist_anymore">Такий записник уже не існує.</string>
     <string name="note_does_not_exist_anymore">Така нотатка вже не існує.</string>
     <string name="search_does_not_exist_anymore">Такий пошуковий запит уже не існує.</string>
-    <string name="fragment_query_title">Пошук</string>
     <string name="repo_dropbox_button_not_linked">Приєднати до Dropbox</string>
     <string name="repo_dropbox_button_linked">Від\'єднати від Dropbox</string>
-    <string name="fragment_settings_title">Налаштування</string>
     <string name="notes_update_needed_dialog_title">Впливає на нотатки</string>
     <string name="notes_update_needed_dialog_message">Оновити нотатки, щоб показати зміни?</string>
     <string name="updating_notes">Оновлення нотаток…</string>
-    <string name="failure">Ой-ой</string>
     <string name="no_notes_found_after_search">За Вашим запитом нотаток не знайдено</string>
     <string name="today">Сьогодні</string>
     <string name="tomorrow">Завтра</string>
@@ -162,7 +140,6 @@
     <string name="notebooks">Записники</string>
     <string name="searches">Пошукові запити</string>
     <string name="search">Пошук</string>
-    <string name="new_search">Новий пошук</string>
     <string name="multiple_repos">Існує декілька репозиторіїв</string>
     <string name="no_repos">Нема налаштованих репозиторіїв</string>
     <string name="no_books">Записники не знайдені</string>
@@ -170,7 +147,6 @@
     <string name="collecting_notebooks_in_progress">Збирання записників…</string>
     <string name="syncing_in_progress">Синхронізування…</string>
     <string name="syncing_book">Синхронізація %s…</string>
-    <string name="sync_with_argument">Синхронізація: %s</string>
     <string name="syncing_failed_title">Помилка синхронізації</string>
     <string name="canceled">Скасовано</string>
     <string name="canceling">Скасування…</string>
@@ -182,22 +158,13 @@
     <string name="git_url_hint">Віддалена адреса (напр. git@github.com:orgzly/orgzly-android.git)</string>
     <string name="git_directory_hint">Розташування каталогу (напр. «file:/sdcard/orgzly»)</string>
     <string name="git_https_username_hint">Імʼя користувача</string>
-    <string name="git_https_password_hint">Пароль</string>
     <string name="git_author_hint">Автор (напр. John Doe)</string>
     <string name="git_email_hint">Ел. пошта (напр. john@email.com)</string>
     <string name="git_branch_hint">Гілка (напр. master)</string>
-    <string name="git_auth_https_username_hint">Імʼя користувача</string>
     <string name="git_auth_https_password_hint">Пароль</string>
-    <string name="git_generate_key_pair">Створити пару ключів</string>
-    <string name="git_copy_public_key">Копіювати відкритий ключ</string>
-    <string name="git_auth_type_text">Тип автентифікації</string>
-    <string name="git_auth_type_ssh">SSH</string>
-    <string name="git_auth_type_https">HTTPS</string>
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
-    <string name="git_clone_error_ssh_auth">Збій клонування, помилка автентифікації</string>
     <string name="git_clone_error_invalid_repo">Віддалена адреса не є git-репозиторієм</string>
-    <string name="git_clone_error_unknown">Невідома помилка під час клонування</string>
     <string name="git_clone_error_invalid_target_dir">Цільовий каталог не існує</string>
     <string name="git_clone_error_target_not_empty">Цільовий каталог не порожній</string>
     <string name="git_clone_error_uri_not_supported">Віддалена адреса не підтримується</string>
@@ -207,18 +174,12 @@
     <string name="webdav_test_error_auth">Неправильний пароль або імʼя користувача</string>
     <string name="webdav_test_error_unknown">Сталася невідома помилка</string>
     <!-- Share button - error messages (set as title). -->
-    <string name="share_action_not_set">Не задано дію «Поширити»</string>
     <string name="share_action_not_supported">Дія Поширити %s не підтримується</string>
-    <string name="share_type_not_set">Не задано тип дії «Поширити»</string>
     <string name="share_type_not_supported">Тип дії Поділитись %s не підтримується</string>
     <string name="repositories">Репозиторії</string>
     <string name="repository_not_valid_with_reason">Неправильний репозиторій: %s</string>
     <string name="invalid_repo_url">Неправильна URL-адреса репозиторію «%s»</string>
     <string name="repository_url_already_exists">Репозиторій із такою URL-адресою вже існує</string>
-    <string name="fragment_left_drawer_list_view_content_description">Ліва шторка</string>
-    <string name="drawer_item">Елемент меню</string>
-    <string name="prev_state">Попередній стан</string>
-    <string name="next_state">Наступний стан</string>
     <string name="new_above">Нова вище</string>
     <string name="new_under">Нова під</string>
     <string name="new_below">Нова нижче</string>
@@ -234,16 +195,13 @@
     <string name="no_filters">Відсутні збережені пошукові запити</string>
     <string name="book_shortcut_label">Записник</string>
     <string name="new_note_shortcut_label">Нова нотатка</string>
-    <string name="pick_a_notebook">Виберіть записник</string>
     <string name="down">Униз</string>
     <string name="up">Уверх</string>
-    <string name="notebook_modified">Записник змінено</string>
     <string name="permissions_rationale_for_local_repo">Для синхронізації з локальним каталогом потрібен дозвіл на зберігання</string>
     <string name="permissions_rationale_for_book_export">Для експортування записника потрібен дозвіл на зберігання</string>
     <string name="permissions_rationale_for_sync_start">Для синхронізування з локальними репозиторіями потрібен дозвіл на зберігання</string>
     <string name="permissions_rationale_for_external_files_access">Для доступу до зовнішніх файлів потрібен дозвіл на зберігання</string>
     <string name="cycle_visibility">Згорнути/Розгорнути все</string>
-    <string name="running_database_update">Оновлення бази даних…</string>
     <string name="note_has_been_modified">Нотатку змінено</string>
     <string name="discard_or_save_changes">Зберегти зміни?</string>
     <string name="rename">Перейменувати</string>
@@ -254,13 +212,10 @@
     <string name="also_delete_linked_book">Видалити привʼязаний віддалений записник</string>
     <string name="message_deleting_book_failed">Не вдалося видалити записник: %s</string>
     <string name="message_book_deleted">Записник видалено</string>
-    <string name="priority_with_argument">Пріоритет %s</string>
     <string name="default_priority">Типовий пріоритет</string>
     <string name="lowest_priority">Найнижчий пріоритет</string>
     <string name="todo_states">Ключові слова для активних (todo) завдань</string>
     <string name="done_states">Ключові слова для виконаних (done) завдань</string>
-    <string name="created_at">Створено</string>
-    <string name="insert_note_creation_time">Вставляти час створення нотатки</string>
     <string name="use_created_at_property">Використовувати властивість для створеного часу</string>
     <string name="use_created_at_property_summary">Синхронізувати виконувану властивість</string>
     <string name="created_at_property">Створено у властивості</string>
@@ -300,7 +255,6 @@
     <string name="prefs_title_new_note">Нова нотатка</string>
     <string name="prefs_title_notifications">Сповіщення</string>
     <string name="app">Застосунок</string>
-    <string name="no_repos_configured">Репозиторії не налаштовано</string>
     <string name="test_connection">Перевірка зʼєднання</string>
     <string name="connecting">Зʼєднання…</string>
     <string name="no_connection">Відсутнє зʼєднання</string>
@@ -325,7 +279,6 @@
     <string name="org_indent_mode">На основі режиму відступу</string>
     <string name="org_indent_mode_summary">Враховувати org-indent-mode в обліківці</string>
     <string name="org_indent_indentation_per_level">Відступи на рівень</string>
-    <string name="add_property">Додати властивість</string>
     <string name="priority_a_highest">A (найвищий пріоритет)</string>
     <string name="priority_z_lowest">Z (найнижчий пріоритет)</string>
     <string name="hour">Година</string>
@@ -357,7 +310,6 @@
     <string name="displayed_book_details_used_encoding">Використовується кодування</string>
     <string name="displayed_book_details_last_action">Остання дія</string>
     <string name="displayed_book_details_notes_count">Кількість нотаток</string>
-    <string name="color_scheme_system">Система</string>
     <string name="color_scheme_dynamic">Динамічний колір</string>
     <string name="color_scheme_light">Світла</string>
     <string name="color_scheme_dark">Темна</string>
@@ -380,10 +332,6 @@
         <item quantity="other">Видалити <b>%d</b> нотаток?</item>
     </plurals>
     <!-- Unused -->
-    <string name="delete_note">Видалити нотатку</string>
-    <string name="delete_notes">Видалити нотатки</string>
-    <string name="delete_note_and_all_subnotes">Видалити цю нотатку з усіма піднотатками?</string>
-    <string name="delete_notes_and_all_subnotes">Видалити нотатки з усіма піднотатками?</string>
     <plurals name="notes_deleted">
         <item quantity="one">Нотатку видалено</item>
         <item quantity="few">Видалено <b>%d</b> нотаток</item>
@@ -391,8 +339,6 @@
         <item quantity="other">Видалено <b>%d</b> нотаток</item>
     </plurals>
     <string name="no_notes_deleted">Видалені нотатки відсутні</string>
-    <string name="note_content_finish_editing">Переглянути вміст</string>
-    <string name="note_content_start_editing">Змінити вміст</string>
     <string name="duplicate_keywords_not_allowed">Ключове слово %s вже використовується</string>
     <string name="no_states_defined">Стани не визначені</string>
     <string name="book_name_in_search">Назва блокнота в результатах пошуку</string>
@@ -427,10 +373,6 @@
     <string name="keep_screen_on_summary">Показувати вимикач в меню</string>
     <string name="keep_screen_on">Не вимикати екран</string>
     <string name="keep_screen_on_desc">Екран не погасне допоки увімкнено цей вимикач</string>
-    <string name="layout_direction">Напрям макету</string>
-    <string name="layout_direction_locale">Стандартно</string>
-    <string name="layout_direction_ltr">Зліва направо</string>
-    <string name="layout_direction_rtl">Справа наліво</string>
     <string name="preface_in_book">Предмова блокноту</string>
     <string name="preface_in_book_full">Показувати</string>
     <string name="preface_in_book_hide">Ховати</string>
@@ -447,9 +389,7 @@
     <string name="notebooks_start_folded_summary">Згорнути усі нотатки, коли блокнот завантажено</string>
     <string name="list_widget_name">Збережений пошуковий запит</string>
     <string name="list_widget_select_search">Виберіть пошук</string>
-    <string name="list_widget_nothing_selected">Пошук не вибрано</string>
     <string name="auto_sync">Автоматично синхронізувати</string>
-    <string name="auto_sync_experimental_summary">Використовується тільки для локальних сховищ</string>
     <string name="auto_sync_summary">Не підтримується Dropbox</string>
     <string name="auto_sync_warning">В залежності від того, які параметри Ви оберете, синхронування може відбуватися часто. Якщо записник змінено, весь його вміст переноситься в сховище або з нього. Деякі дії можуть затриматися під час синхронування.</string>
     <string name="pref_title_sync_after_note_create">Нотатку створено</string>
@@ -509,7 +449,6 @@
     <string name="sync_failed_channel_description">Показувати при помилці синхронізації</string>
     <string name="notification_channel_settings">Сповіщення</string>
     <string name="notification_channel_settings_summary">Звук, вібрація, точка сповіщення</string>
-    <string name="hide_note_metadata">Сховати метадані</string>
     <string name="overwrite_local_notebook_question">Перезаписати локальний блокнот?</string>
     <string name="overwrite_remote_notebook_question">Перезаписати віддалений блокнот?</string>
     <string name="drawers_folded_by_default">Меню згорнуто</string>
@@ -526,7 +465,6 @@
     <string name="show_all">Показати все</string>
     <string name="always_show_set">Завжди показувати набір</string>
     <string name="show_selected">Показати вибрані</string>
-    <string name="hide_all">Сховати все</string>
     <string name="external_file_no_app_found">Не знайдено додатків для відкриття цього файлу</string>
     <string name="failed_to_open_linked_file_with_reason">Не можу відкрити файл: %s</string>
     <string name="images">Малюнки</string>
@@ -540,11 +478,9 @@
     <string name="argument_detected">%s виявлено</string>
     <string name="argument_selected">%s вибрано</string>
     <string name="fixed_width_value">Ширина (в пікселях)</string>
-    <string name="share_target_service">Передати в блокнот Orgzly</string>
     <string name="under">Нижче</string>
     <string name="above">Вище</string>
     <string name="below">Нижче</string>
-    <string name="loading">Завантаження…</string>
     <string name="go_to">Перейти</string>
     <string name="cannot_refile_to_the_same_subtree">Неможливо повторити на тій самій гілці</string>
     <string name="notification_maximum_priority">Максимальний</string>
@@ -565,16 +501,12 @@
     </plurals>
     <string name="display_checkmarks">Показувати прапорці</string>
     <string name="display_checkmarks_summary">Дозволяти маркувати нотатки як виконані</string>
-    <string name="last_used">Останнє використане</string>
-    <string name="note_details_opening_mode">Режим відкриття</string>
     <string name="cleartext_traffic">Незашифрований трафік</string>
     <string name="cleartext_traffic_message">Ви впевнені, що хочете використовувати цей URL?</string>
     <string name="credentials_in_url_not_supported">Передача облікових даних в URL не підтримується</string>
-    <string name="access_token">Маркер доступу</string>
     <string name="trusted_certificates">Довірені сертифікати</string>
     <string name="add_trusted_certificates_optional">Додати довірені сертифікати (необов\'язково)</string>
     <string name="edit_trusted_certificates">Редагувати довірені сертифікати</string>
-    <string name="this_action_cannot_be_undone">Цю дію не можна скасувати.</string>
     <plurals name="paste_note_or_notes_with_count">
         <item quantity="one">Вставити нотатку</item>
         <item quantity="few">Вставити <b>%d</b> нотатки</item>

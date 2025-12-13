@@ -33,6 +33,17 @@ Sie können eine beliebige Anzahl zu verwendender Status konfigurieren: TODO, NE
 *** DONE Dies ist eine Notiz mit dem Status /done/ (also erledigt)
 CLOSED: [2018-01-24 Wed 17:00]
 
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
 ** Sie können einen Termin festlegen
 SCHEDULED: <2015-02-20 Fri 15:15>
 
@@ -41,6 +52,13 @@ SCHEDULED: <2015-02-16 Mon .+2d>
 
 ** Sie können auch eine Frist festlegen
 DEADLINE: <2015-02-20 Fri>
+
+** Event times can be used anywhere in the note's content
+
+You can have multiple event times:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
 ** Erinnerungen für Termine und Fristen
 
@@ -52,11 +70,11 @@ Die verschiedenen Prioritätsstufen können in den Einstellungen verändert werd
 
 ** Notizen können Links enthalten
 
-Wählen Sie eine Telefonnummer (tel:555-0199), senden Sie SMS (sms:555-0199), schreiben Sie eine E-Mail (mailto:support@orgzly.com) oder besuchen Sie eine Webseite ([[https://www.orgzly.com][Orgzly.com]]).
+Wählen Sie eine Telefonnummer (tel:555-0199), senden Sie SMS (sms:555-0199), schreiben Sie eine E-Mail (mailto:support@orgzlyrevived.com) oder besuchen Sie eine Webseite ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
 Sie können auch auf eine andere Notiz oder ein anderes Notizbuch innerhalb der App verweisen.
 
-Siehe https://www.orgzly.com/help#links für weitere Informationen.
+Siehe [[https://www.orgzlyrevived.com/docs#links]] für weitere Informationen.
 
 ** Grundlegende typografische Hervorhebungen werden unterstützt
 
@@ -70,12 +88,18 @@ Sie können Wörter *fett*, /kursiv/, _unterstrichen_, =verbatim=, ~als Code~ un
 
 Klicken Sie auf das Kontrollkästchen, um es zu wechseln. Wenn Sie aus einer Zeile mit Kontrollkästchen eine neue Zeile erstellen, wird diese Zeile ebenfalls ein Kontrollkästchen beinhalten.
 
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] Aufgabe 1
+- [ ] Aufgabe 2
+- [X] Aufgabe 3
+
 * Suchen
 ** Es werden viele Suchoperatoren unterstützt
 
 Sie können Notizen nach Status (state), Schlagwort (tag), Termin (scheduled) oder Frist (deadline) usw. durchsuchen.
 
-Besuchen Sie https://www.orgzly.com/help#search, um mehr zu erfahren.
+Besuchen Sie [[https://www.orgzlyrevived.com/docs#search]], um mehr zu erfahren.
 
 ** Suchabfragen können für den Schnellzugriff gespeichert werden
 
@@ -87,7 +111,7 @@ Sie können Ihre eigenen gespeicherten Suchen erstellen, indem Sie in der Naviga
 
 ** Notizbücher können als reine Textdateien gespeichert werden
 
-Diese Dateien haben das "Org mode"-Format.
+Diese Dateien haben das [[https://orgmode.org/][Org mode]]-Format.
 
 ** Speicherort (Repository)
 

@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class AppLogDao : BaseDao<AppLog> {
-    @Query("SELECT * FROM app_logs WHERE name = :name ORDER BY timestamp")
-    abstract fun getFlow(name: String): Flow<List<AppLog>>
+    @Query("SELECT * FROM app_logs ORDER BY timestamp")
+    abstract fun getFlow(): Flow<List<AppLog>>
 }

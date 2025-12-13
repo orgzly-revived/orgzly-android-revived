@@ -2,22 +2,19 @@ package com.orgzly.android.ui.notes.book
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import com.orgzly.android.App
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.NoteView
+import com.orgzly.android.ui.AppBar
 import com.orgzly.android.ui.CommonViewModel
 import com.orgzly.android.ui.SingleLiveEvent
-import com.orgzly.android.ui.AppBar
 import com.orgzly.android.usecase.BookCycleVisibility
+import com.orgzly.android.usecase.NoteToggleFoldingSubtree
 import com.orgzly.android.usecase.UseCaseRunner
 
 class BookViewModel(private val dataRepository: DataRepository, val bookId: Long) : CommonViewModel() {
-
-    private data class Params(val noteId: Long? = null)
-
-    private val params = MutableLiveData<Params>(Params())
 
     enum class FlipperDisplayedChild {
         LOADING,
@@ -34,14 +31,35 @@ class BookViewModel(private val dataRepository: DataRepository, val bookId: Long
 
     data class Data(val book: Book?, val notes: List<NoteView>?)
 
-    val data = Transformations.switchMap(params) { _ ->
+    // Track narrowed state
+    val narrowedNoteId = MutableLiveData<Long?>(null)
+
+    val data = narrowedNoteId.switchMap { narrowedId ->
         MediatorLiveData<Data>().apply {
             addSource(dataRepository.getBookLiveData(bookId)) {
                 value = Data(it, value?.notes)
             }
-            addSource(dataRepository.getVisibleNotesLiveData(bookId)) {
+            // Query only the narrowed subtree if narrowed, otherwise all visible notes
+            addSource(dataRepository.getVisibleNotesLiveData(bookId, narrowedId)) {
                 value = Data(value?.book, it)
             }
+        }
+    }
+
+    fun isNarrowed(): Boolean {
+        return narrowedNoteId.value != null
+    }
+
+    /**
+     * Calculate level offset for indentation when narrowed.
+     * Returns null when not narrowed, otherwise returns the narrowed note's level - 1
+     * so it displays as root (level 1).
+     */
+    fun levelOffset(notes: List<NoteView>?): Int? {
+        return if (isNarrowed() && notes != null && notes.isNotEmpty()) {
+            notes.first().note.position.level - 1
+        } else {
+            null
         }
     }
 
@@ -58,13 +76,29 @@ class BookViewModel(private val dataRepository: DataRepository, val bookId: Long
 
 
     fun cycleVisibility() {
-        data.value?.book?.let { book ->
-            App.EXECUTORS.diskIO().execute {
-                catchAndPostError {
-                    UseCaseRunner.run(BookCycleVisibility(book))
+        App.EXECUTORS.diskIO().execute {
+            catchAndPostError {
+                if (isNarrowed()) {
+                    // When narrowed, cycle visibility for the narrowed subtree only
+                    narrowedNoteId.value?.let { noteId ->
+                        UseCaseRunner.run(NoteToggleFoldingSubtree(noteId))
+                    }
+                } else {
+                    // When not narrowed, cycle visibility for the entire book
+                    data.value?.book?.let { book ->
+                        UseCaseRunner.run(BookCycleVisibility(book))
+                    }
                 }
             }
         }
+    }
+
+    fun narrowToSubtree(noteId: Long) {
+        narrowedNoteId.value = noteId
+    }
+
+    fun widenView() {
+        narrowedNoteId.value = null
     }
 
     data class NotesToRefile(val selected: Set<Long>, val count: Int)

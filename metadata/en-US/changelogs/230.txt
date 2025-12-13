@@ -1,0 +1,2 @@
+• Add Belarusian, Lithuanian translations and update multiple languages.
+• Fix "sync in progress" notification not showing.

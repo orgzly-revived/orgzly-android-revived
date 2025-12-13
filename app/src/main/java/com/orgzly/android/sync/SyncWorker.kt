@@ -9,13 +9,19 @@ import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.SharingShortcutsManager
 import com.orgzly.android.data.DataRepository
+import com.orgzly.android.data.logs.AppLogsRepository
 import com.orgzly.android.db.entity.BookAction
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.reminders.RemindersScheduler
-import com.orgzly.android.repos.*
+import com.orgzly.android.repos.DirectoryRepo
+import com.orgzly.android.repos.RepoType
+import com.orgzly.android.repos.RepoUtils
+import com.orgzly.android.repos.SyncRepo
+import com.orgzly.android.repos.TwoWaySyncRepo
 import com.orgzly.android.ui.notifications.SyncNotifications
 import com.orgzly.android.ui.util.haveNetworkConnection
 import com.orgzly.android.util.AppPermissions
+import com.orgzly.android.util.LogMajorEvents
 import com.orgzly.android.util.LogUtils
 import com.orgzly.android.widgets.ListWidgetProvider
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +34,9 @@ class SyncWorker(val context: Context, val params: WorkerParameters) :
 
     @Inject
     lateinit var dataRepository: DataRepository
+
+    @Inject
+    lateinit var appLogs: AppLogsRepository
 
     override suspend fun doWork(): Result {
         App.appComponent.inject(this)
@@ -49,6 +58,7 @@ class SyncWorker(val context: Context, val params: WorkerParameters) :
             Result.success(state.toData())
         }
 
+        SyncNotifications.cancelSyncInProgressNotification(context)
         showNotificationOnFailures(state)
 
         if (BuildConfig.LOG_DEBUG)
@@ -79,10 +89,13 @@ class SyncWorker(val context: Context, val params: WorkerParameters) :
 
     private suspend fun tryDoWork(): SyncState {
         SyncNotifications.cancelSyncFailedNotification(context)
+        SyncNotifications.showSyncInProgressNotification(context)
 
         sendProgress(SyncState.getInstance(SyncState.Type.STARTING))
 
         checkConditions()?.let { return it }
+
+        val syncStartTime = System.currentTimeMillis()
 
         syncRepos()?.let { return it }
 
@@ -90,9 +103,20 @@ class SyncWorker(val context: Context, val params: WorkerParameters) :
         ListWidgetProvider.notifyDataSetChanged(App.getAppContext())
         SharingShortcutsManager().replaceDynamicShortcuts(App.getAppContext())
 
+        val syncEndTime = System.currentTimeMillis()
+
         // Save last successful sync time to preferences
-        val time = System.currentTimeMillis()
-        AppPreferences.lastSuccessfulSyncTime(context, time)
+        AppPreferences.lastSuccessfulSyncTime(context, syncEndTime)
+
+        if (LogMajorEvents.isEnabled()) {
+            val syncDuration = (syncEndTime - syncStartTime)
+            val numberOfRepos = dataRepository.getRepos().size
+            val numberOfBooks = dataRepository.getBooks().size
+            appLogs.log(
+                LogMajorEvents.SYNC,
+                "Sync took $syncDuration milliseconds. Synced $numberOfBooks books in $numberOfRepos repos."
+            )
+        }
 
         return SyncState.getInstance(SyncState.Type.FINISHED)
     }

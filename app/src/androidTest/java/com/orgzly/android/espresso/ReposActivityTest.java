@@ -4,14 +4,18 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.orgzly.android.espresso.util.EspressoUtils.onListItem;
 import static com.orgzly.android.espresso.util.EspressoUtils.onSnackbar;
 import static com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard;
 import static com.orgzly.android.espresso.util.EspressoUtils.scroll;
+import static com.orgzly.android.espresso.util.EspressoUtils.waitId;
 
 import androidx.test.core.app.ActivityScenario;
+
+import android.os.SystemClock;
 
 import com.orgzly.BuildConfig;
 import com.orgzly.R;
@@ -46,6 +50,8 @@ public class ReposActivityTest extends OrgzlyTest {
         ActivityScenario.launch(ReposActivity.class);
 
         onView(withId(R.id.activity_repos_flipper)).check(matches(isDisplayed()));
+        SystemClock.sleep(100);
+        onView(isRoot()).perform(waitId(R.id.activity_repos_directory, 5000));
         onView(withId(R.id.activity_repos_directory)).perform(scroll(), click());
         onView(withId(R.id.activity_repo_directory)).perform(replaceTextCloseKeyboard(repoUri));
         onView(withId(R.id.fab)).perform(click()); // Repo done
@@ -85,6 +91,7 @@ public class ReposActivityTest extends OrgzlyTest {
         String url = "file:" + context.getExternalCacheDir().getAbsolutePath();
         // file:/storage/emulated/0/Android/data/com.orgzly/cache
 
+        SystemClock.sleep(500);
         onView(withId(R.id.activity_repos_directory)).perform(scroll(), click());
         onView(withId(R.id.activity_repo_directory)).perform(replaceTextCloseKeyboard(url));
         onView(withId(R.id.fab)).perform(click()); // Repo done

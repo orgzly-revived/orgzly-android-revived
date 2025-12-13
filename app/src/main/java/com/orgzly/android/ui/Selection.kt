@@ -5,10 +5,11 @@ import android.view.View
 import androidx.annotation.ColorInt
 import com.orgzly.R
 import com.orgzly.android.ui.util.styledAttributes
-import java.util.*
+import java.util.LinkedHashSet
 
 class Selection {
-    private val idSet = TreeSet<Long>()
+    // Preserve insertion order so multi-selection actions can respect the order of user clicks.
+    private val idSet = LinkedHashSet<Long>()
 
     /** Map from adapter ID to real note ID, used for agenda. */
     private var idMap: HashMap<Long, Long>? = null

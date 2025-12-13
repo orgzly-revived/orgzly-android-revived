@@ -4,7 +4,7 @@
 
     <string name="whats_new_intro"><![CDATA[
         Visit
-        <a href="https://www.orgzly.com">Orgzly.com</a>
+        <a href="https://www.orgzlyrevived.com">Orgzlyrevived.com</a>
         for documentation.
 
         <br><br>
@@ -21,13 +21,13 @@
         <br><br>
 
         Help us
-        <a href="https://crowdin.com/project/orgzly">translate</a>
-        the app on Crowdin.
+        <a href="https://toolate.othing.xyz/projects/orgzly-revived/">translate</a>
+        the app on Weblate.
     ]]></string>
 
     <string name="whats_new_outro"><![CDATA[
         Visit
-        <a href="https://www.orgzly.com/changelog">Changelog</a>
+        <a href="https://www.orgzlyrevived.com/changelog">Changelog</a>
         for the full list.
     ]]></string>
 </resources>

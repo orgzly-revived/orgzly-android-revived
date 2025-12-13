@@ -28,7 +28,7 @@ public class AppIntent {
     public static final String ACTION_UPDATE_TIMESTAMPS = "com.orgzly.intent.action.UPDATE_TIMESTAMPS";
 
     public static final String ACTION_OPEN_NOTE = "com.orgzly.intent.action.OPEN_NOTE";
-    public static final String ACTION_FOLLOW_LINK_TO_NOTE_WITH_PROPERTY = "com.orgzly.intent.action.FOLLOW_LINK_TO_NOTE_WITH_PROPERTY";
+    public static final String ACTION_FOLLOW_LINK_TO_NOTE_OR_BOOK_WITH_PROPERTY = "com.orgzly.intent.action.FOLLOW_LINK_TO_NOTE_OR_BOOK_WITH_PROPERTY";
     public static final String ACTION_FOLLOW_LINK_TO_FILE = "com.orgzly.intent.action.FOLLOW_LINK_TO_FILE";
     public static final String ACTION_OPEN_SAVED_SEARCHES = "com.orgzly.intent.action.OPEN_SAVED_SEARCHES";
     public static final String ACTION_OPEN_QUERY = "com.orgzly.intent.action.OPEN_QUERY";
@@ -48,6 +48,7 @@ public class AppIntent {
     public static final String EXTRA_NOTE_ID = "com.orgzly.intent.extra.NOTE_ID";
     public static final String EXTRA_NOTE_CONTENT = "com.orgzly.intent.extra.NOTE_CONTENT";
     public static final String EXTRA_QUERY_STRING = "com.orgzly.intent.extra.QUERY_STRING";
+    public static final String EXTRA_SEARCH_NAME = "com.orgzly.intent.extra.SEARCH_NAME";
     public static final String EXTRA_PROPERTY_NAME  = "com.orgzly.intent.extra.PROPERTY_NAME";
     public static final String EXTRA_PROPERTY_VALUE  = "com.orgzly.intent.extra.PROPERTY_VALUE";
     public static final String EXTRA_PATH  = "com.orgzly.intent.extra.PATH";

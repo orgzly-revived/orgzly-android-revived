@@ -82,6 +82,7 @@
         app:layout_constraintTop_toTopOf="@id/item_head_first_line_anchor"
         app:layout_constraintStart_toEndOf="@+id/item_head_bullet"
         app:layout_constraintEnd_toStartOf="@+id/item_head_fold_button_text"
+        android:inputType="text"
         app:editable="false" />
 
     <!-- Notebook's name. -->
@@ -214,6 +215,7 @@
         app:layout_constraintStart_toStartOf="@+id/item_head_title"
         app:layout_constraintEnd_toStartOf="@+id/item_head_fold_button_text"
         app:editable="false"
+        android:inputType="textMultiLine"
         android:visibility="visible" />
 
     <!-- Folding button -->

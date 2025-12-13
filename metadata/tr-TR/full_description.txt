@@ -1,0 +1,20 @@
+Orgzly, not almak ve yapılacaklar listelerini yönetmek için genel bir uygulamadır.
+
+Not defterlerini düz metin olarak saklayabilir ve mobil cihazdaki, SD karttaki veya WebDAV üzerindeki bir dizinle senkronize edebilirsin.
+
+Not defterleri Org mod dosya biçiminde kaydedilir.
+“Org mod, not tutmak, TODO listelerini takip etmek, projeleri planlamak ve belgeleri hızlı ve etkili bir düz metin sistemiyle oluşturmak içindir.”
+Daha fazla bilgi için http://orgmode.org adresine bak.
+
+<b>Özellikler:</b>
+
+* Notlar ve görevler oluşturma, düzenleme ve silme
+* Alt notları daraltma ve genişletme
+* Görevleri planlama ve son tarihlerini belirleme
+* Notlar için öncelikler ve etiketler ayarlama
+* Hızlı menüleri açmak için notları sola veya sağa kaydırma
+* Notları çeşitli özelliklere göre arama
+* Hızlı erişim için aramalar oluşturma ve kaydetme
+* Not defterlerini bir veya daha fazla dizinle senkronize etme
+
+Orgzly Diriliş, orijinal Orgzly uygulamasının bir topluluk çatalıdır.

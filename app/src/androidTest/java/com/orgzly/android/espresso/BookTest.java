@@ -4,7 +4,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -29,20 +28,47 @@ import static org.hamcrest.Matchers.startsWith;
 
 import android.content.pm.ActivityInfo;
 import android.widget.DatePicker;
+import android.os.SystemClock;
 
 import androidx.test.core.app.ActivityScenario;
 
 import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
+import com.orgzly.android.RetryTestRule;
 import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.ui.main.MainActivity;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 public class BookTest extends OrgzlyTest {
     private ActivityScenario<MainActivity> scenario;
+
+    private static final String LONG_CONTENT_NOTE_TITLE = "Note with very long content";
+    private static final String LONG_CONTENT_START = "START OF LONG CONTENT...";
+    private static final String LONG_CONTENT_END = "...END OF LONG CONTENT";
+    // 5000 is the default size limit for a single-line Text View.
+    // a single-line TextView. See the source code for Android API 34
+    // https://github.com/AndroidSDKSources/android-sdk-sources-for-api-level-34/blob/master/android/widget/TextView.java#L11941-L11942
+    // In this test, we want to make sure that a longer string are not capped.
+    private static final int LONG_CONTENT_LENGTH = 6000;
+
+    private String buildLongString() {
+        StringBuilder longContentBuilder = new StringBuilder(LONG_CONTENT_LENGTH);
+        longContentBuilder.append(LONG_CONTENT_START);
+        int repeatLength = LONG_CONTENT_LENGTH - LONG_CONTENT_START.length() - LONG_CONTENT_END.length();
+        for (int i = 0; i < repeatLength; i++) {
+            longContentBuilder.append('x'); // Fill with repeating characters
+        }
+        longContentBuilder.append(LONG_CONTENT_END);
+        return longContentBuilder.toString();
+    }
+
+    @Rule
+    public RetryTestRule mRetryTestRule = new RetryTestRule();
 
     @Before
     public void setUp() throws Exception {
@@ -71,7 +97,7 @@ public class BookTest extends OrgzlyTest {
                 ":PROPERTIES:\n" +
                 ":CREATED: [2017-01-01]\n" +
                 ":END:\n" +
-                "** Note #15.\n" +
+                "** Note #15.\n" + buildLongString() + "\n" +
                 "** Note #16.\n" +
                 "** Note #17.\n" +
                 "** Note #18.\n" +
@@ -105,6 +131,13 @@ public class BookTest extends OrgzlyTest {
         scenario = ActivityScenario.launch(MainActivity.class);
 
         onView(allOf(withText("book-name"), isDisplayed())).perform(click());
+    }
+
+    @After
+    @Override
+    public void tearDown() throws Exception {
+        super.tearDown();
+        scenario.close();
     }
 
     @Test
@@ -180,6 +213,7 @@ public class BookTest extends OrgzlyTest {
         scenario.onActivity(activity ->
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE));
 
+        SystemClock.sleep(500);
         onNoteInBook(40).check(matches(isDisplayed())); // Scroll to note
 
         scenario.onActivity(activity ->
@@ -275,6 +309,7 @@ public class BookTest extends OrgzlyTest {
         onActionItemClick(R.id.move, R.string.move);
         onView(withId(R.id.notes_action_move_down)).check(matches(isDisplayed()));
 
+        SystemClock.sleep(500);
         scenario.onActivity(activity ->
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE));
 
@@ -418,14 +453,6 @@ public class BookTest extends OrgzlyTest {
         onView(withText(R.string.note_does_not_exist_anymore)).check(matches(isDisplayed()));
         onView(withId(R.id.done)).check(doesNotExist());
         onView(withId(R.id.delete)).check(doesNotExist());
-
-        // Rotate
-        scenario.onActivity(activity -> {
-            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        });
-
-        pressBack(); // Leave note
     }
 
     @Test
@@ -435,6 +462,7 @@ public class BookTest extends OrgzlyTest {
         onView(withId(R.id.date_picker_button)).perform(click());
         onView(withClassName(equalTo(DatePicker.class.getName()))).perform(setDate(2014, 4, 1));
         onView(withText(android.R.string.ok)).perform(click());
+        SystemClock.sleep(100);
         onView(withText(R.string.set)).perform(click());
         onView(withId(R.id.deadline_button)).check(matches(withText(userDateTime("<2014-04-01 Tue>"))));
     }
@@ -487,5 +515,11 @@ public class BookTest extends OrgzlyTest {
         onView(withId(R.id.state)).perform(click());
 
         onView(withText("TODO")).check(matches(isChecked()));
+    }
+
+    @Test
+    public void testLongContentDisplayedInNote() {
+        onNoteInBook(15, R.id.item_head_content_view).check(matches(withText(
+                allOf(startsWith(LONG_CONTENT_START), endsWith(LONG_CONTENT_END)))));
     }
 }

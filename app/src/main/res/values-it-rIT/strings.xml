@@ -9,20 +9,14 @@
     <string name="clear">Annulla</string>
     <string name="cancel">Annulla</string>
     <string name="create">Crea</string>
-    <string name="new_">Nuovo</string>
     <!-- "new" is reserved -->
-    <string name="select">Seleziona</string>
     <string name="set">Imposta</string>
-    <string name="add">Aggiungi</string>
     <string name="not_now">Non ora</string>
     <string name="save">Salva</string>
     <string name="discard">Ignora</string>
     <string name="remove_notebook_link">Rimuovi il collegamento</string>
     <string name="browse">Cerca</string>
     <string name="dropbox">Dropbox</string>
-    <string name="view">Vista</string>
-    <string name="edit">Modifica</string>
-    <string name="edit_note">Modifica la nota</string>
     <string name="delete">Cancella</string>
     <string name="delete_with_quoted_argument">Elimina \"%s\"</string>
     <string name="name">Nome</string>
@@ -30,7 +24,7 @@
     <string name="done">Completato</string>
     <string name="mark_as_done">Contrassegna come completato</string>
     <string name="mark_as_done_with_repeater">Ripianifica %s</string>
-    <string name="reminder_snooze">Sveglia</string>
+    <string name="reminder_snooze">Rinvia</string>
     <string name="close">Chiudi</string>
     <string name="import_">Importa</string>
     <!-- Reserved keyword -->
@@ -40,23 +34,16 @@
     <string name="created">Creato</string>
     <string name="states">Stati</string>
     <string name="note">Nota</string>
-    <string name="notes">Note</string>
     <string name="property">Proprietà</string>
     <string name="import_as">Importa come…</string>
     <string name="new_notebook">Nuovo taccuino</string>
     <string name="new_folder">Nuova cartella</string>
     <string name="scheduled">Pianificato</string>
     <string name="agenda">Agenda</string>
-    <string name="agenda_period">Giorni agenda</string>
-    <string name="time">Ora</string>
-    <string name="repeater">Ripetitore</string>
     <string name="state">Stato</string>
     <string name="priority">Priorità</string>
-    <string name="nothing">Vuoto</string>
     <string name="open">Apri</string>
-    <string name="focus">Focus</string>
     <string name="widget">Widget</string>
-    <string name="history">Cronologia</string>
     <string name="event">Evento</string>
     <plurals name="notes_cut">
         <item quantity="one">Nota tagliata</item>
@@ -73,7 +60,6 @@
     </plurals>
     <string name="no_notes_pasted">Niente da incollare</string>
     <string name="fragment_note_title_hint">Titolo</string>
-    <string name="fragment_note_tags_hint" tools:ignore="typos">etichetta etichetta</string>
     <string name="import_org_file">Importa file Org</string>
     <string name="message_dropbox_unlinked">Scollega da Dropbox</string>
     <string name="message_dropbox_linked">Collegato a Dropbox con successo</string>
@@ -82,20 +68,16 @@
     <string name="repos_preference_summary">Posizione con cui sincronizzare i tuoi taccuini</string>
     <string name="message_book_has_no_link">Nessun collegamento stabilito</string>
     <string name="message_note_created">Nota creata</string>
-    <string name="message_failed_creating_note">Impossibile creare la nota</string>
-    <string name="message_failed_updating_note">Impossibile aggiornare la nota</string>
     <string name="drawer_close">Chiudi Menu</string>
     <string name="drawer_open">Apri Menu</string>
     <string name="schedule">Programma</string>
     <string name="refile">Sposta in</string>
-    <string name="refile_to">Sposta in</string>
     <string name="deadline">Data di scadenza</string>
     <string name="closed">Chiuso</string>
     <!-- TODO: Not hints, rename -->
     <string name="schedule_button_hint">Ora pianificata</string>
     <string name="deadline_button_hint">Data di scadenza</string>
     <string name="closed_button_hint">Ora di chiusura</string>
-    <string name="fragment_note_content_hint">Contenuto della nota</string>
     <string name="books_context_menu_item_rename">Rinomina</string>
     <string name="books_context_menu_item_set_link">Imposta il collegamento</string>
     <string name="books_context_menu_item_force_save">Forza salvataggio</string>
@@ -115,7 +97,6 @@
     <string name="quick_note">Nota Rapida</string>
     <string name="tap_to_create_new_note">Tocca per creare una nuova nota</string>
     <string name="options_menu_item_search">Cerca</string>
-    <string name="no_user_repos_configured_pref_summary">Ancora nessuna configurazione</string>
     <string name="repos_options_menu_new_repo">Nuovo deposito</string>
     <string name="book_name_already_exists">Il taccuino %s esiste già.</string>
     <string name="filter_name_already_exists">Cerca con lo stesso nome che esiste già</string>
@@ -133,14 +114,11 @@
     <string name="book_does_not_exist_anymore">Questo taccuino non esiste più.</string>
     <string name="note_does_not_exist_anymore">Questa nota non esiste più.</string>
     <string name="search_does_not_exist_anymore">Questa ricerca non esiste più.</string>
-    <string name="fragment_query_title">Cerca</string>
     <string name="repo_dropbox_button_not_linked">Collega a Dropbox</string>
     <string name="repo_dropbox_button_linked">Scollega da Dropbox</string>
-    <string name="fragment_settings_title">Impostazioni</string>
     <string name="notes_update_needed_dialog_title">Le preferenze influiscono sulle note</string>
     <string name="notes_update_needed_dialog_message">Aggiorno le note per mostrare le modifiche?</string>
     <string name="updating_notes">Aggiornamento note…</string>
-    <string name="failure">Uh oh</string>
     <string name="no_notes_found_after_search">La tua ricerca non corrisponde ad alcuna nota</string>
     <string name="today">Oggi</string>
     <string name="tomorrow">Domani</string>
@@ -156,7 +134,6 @@
     <string name="notebooks">Taccuini</string>
     <string name="searches">Ricerche</string>
     <string name="search">Cerca</string>
-    <string name="new_search">Nuova ricerca</string>
     <string name="multiple_repos">Esistono depositi multipli</string>
     <string name="no_repos">Nessun deposito è configurato</string>
     <string name="no_books">No notebooks found</string>
@@ -164,7 +141,6 @@
     <string name="collecting_notebooks_in_progress">Sincronizzando i taccuini…</string>
     <string name="syncing_in_progress">Sincronizzazione…</string>
     <string name="syncing_book">Sincronizzazione di %s…</string>
-    <string name="sync_with_argument">Sincronizza: %s</string>
     <string name="syncing_failed_title">Sincronizzazione non riuscita</string>
     <string name="canceled">Annullato</string>
     <string name="canceling">Annullamento…</string>
@@ -176,22 +152,13 @@
     <string name="git_url_hint">Indirizzo remoto (es. git@github.com:orgzly / orgzly-android.git)</string>
     <string name="git_directory_hint">Percorso directory (es. \"file:/sdcard/orgzly\")</string>
     <string name="git_https_username_hint">Username</string>
-    <string name="git_https_password_hint">Password</string>
     <string name="git_author_hint">Autore (es. Sergio Rossi)</string>
     <string name="git_email_hint">E-mail (es. sergio@email.com)</string>
     <string name="git_branch_hint">Ramo (es. master)</string>
-    <string name="git_auth_https_username_hint">Nome utente</string>
     <string name="git_auth_https_password_hint">Password</string>
-    <string name="git_generate_key_pair">Genera keypair</string>
-    <string name="git_copy_public_key">Copia la chiave pubblica</string>
-    <string name="git_auth_type_text">Tipo di autenticazione</string>
-    <string name="git_auth_type_ssh">SSH</string>
-    <string name="git_auth_type_https">HTTPS</string>
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
-    <string name="git_clone_error_ssh_auth">Errore durante la clonazione, errore di autenticazione</string>
     <string name="git_clone_error_invalid_repo">L\'indirizzo remoto non è un git repo</string>
-    <string name="git_clone_error_unknown">Errore sconosciuto durante la clonazione</string>
     <string name="git_clone_error_invalid_target_dir">Il percorso specificato non esiste</string>
     <string name="git_clone_error_target_not_empty">La directory di destinazione non è vuota</string>
     <string name="git_clone_error_uri_not_supported">L\'indirizzo remoto non è supportato</string>
@@ -201,18 +168,12 @@
     <string name="webdav_test_error_auth">Nome utente o password non validi</string>
     <string name="webdav_test_error_unknown">Si è verificato un errore sconosciuto</string>
     <!-- Share button - error messages (set as title). -->
-    <string name="share_action_not_set">Condividi azione non stabilita</string>
     <string name="share_action_not_supported">L\'azione condivisa %s non è supportata</string>
-    <string name="share_type_not_set">Il tipo di condivisione non è stabilita</string>
     <string name="share_type_not_supported">Il tipo di condivisione %s non è supportata</string>
     <string name="repositories">Depositi</string>
     <string name="repository_not_valid_with_reason">Repository non valido: %s</string>
     <string name="invalid_repo_url">URL \"%s\" del deposito non valido</string>
     <string name="repository_url_already_exists">Un repository con questo URL esiste già</string>
-    <string name="fragment_left_drawer_list_view_content_description">Menu di sinistra</string>
-    <string name="drawer_item">Elemento del Menu</string>
-    <string name="prev_state">Stato precedente</string>
-    <string name="next_state">Prossimo stato</string>
     <string name="new_above">Sopra</string>
     <string name="new_under">Indentata</string>
     <string name="new_below">Sotto</string>
@@ -228,16 +189,13 @@
     <string name="no_filters">Non hai ricerche salvate</string>
     <string name="book_shortcut_label">Taccuino</string>
     <string name="new_note_shortcut_label">Nuova nota</string>
-    <string name="pick_a_notebook">Scegli un taccuino</string>
     <string name="down">Giù</string>
     <string name="up">Su</string>
-    <string name="notebook_modified">Taccuino modificato</string>
     <string name="permissions_rationale_for_local_repo">La sincronizzazione con una directory locale richiede il permesso di scrittura</string>
     <string name="permissions_rationale_for_book_export">L\'esportazione del taccuino richiede i permessi di scrittura</string>
     <string name="permissions_rationale_for_sync_start">La sincronizzazione con un deposito locale richiede il permesso di scrittura</string>
     <string name="permissions_rationale_for_external_files_access">L\'accesso a file esterni richiede il permesso di archiviazione</string>
     <string name="cycle_visibility">Apri/Chiudi tutto</string>
-    <string name="running_database_update">Aggiornamento database in corso…</string>
     <string name="note_has_been_modified">Nota modificata</string>
     <string name="discard_or_save_changes">Salvare le modifiche?</string>
     <string name="rename">Rinomina</string>
@@ -248,13 +206,10 @@
     <string name="also_delete_linked_book">Cancella taccuino collegato in remoto</string>
     <string name="message_deleting_book_failed">Eliminazione del taccuino non riuscita: %s</string>
     <string name="message_book_deleted">Taccuino cancellato</string>
-    <string name="priority_with_argument">Priorità %s</string>
     <string name="default_priority">Priorità predefinita</string>
     <string name="lowest_priority">Priorità più bassa</string>
     <string name="todo_states">Parole chiave per i compiti (da-fare) attivi</string>
     <string name="done_states">Parole chiave per i compiti (da-fare) completati</string>
-    <string name="created_at">Creato il</string>
-    <string name="insert_note_creation_time">Inserisci l\'ora di creazione della nota</string>
     <string name="use_created_at_property">Usa proprietà per l\'ora di creato-per</string>
     <string name="use_created_at_property_summary">Sincronizza l\'ora del creato-per usando una proprietà</string>
     <string name="created_at_property">Proprietà del creato-per</string>
@@ -294,7 +249,6 @@
     <string name="prefs_title_new_note">Nuova nota</string>
     <string name="prefs_title_notifications">Notifiche</string>
     <string name="app">App</string>
-    <string name="no_repos_configured">Nessun deposito configurato</string>
     <string name="test_connection">Test connessione</string>
     <string name="connecting">Connessione in corso…</string>
     <string name="no_connection">Nessuna connessione</string>
@@ -319,7 +273,6 @@
     <string name="org_indent_mode">Personalizzazione basata su modalità indentata</string>
     <string name="org_indent_mode_summary">Scegli org-indentazione-modalità</string>
     <string name="org_indent_indentation_per_level">Indentazione per livello</string>
-    <string name="add_property">Aggiungi proprietà</string>
     <string name="priority_a_highest">A (priorità più alta)</string>
     <string name="priority_z_lowest">Z (priorità più bassa)</string>
     <string name="hour">Ora</string>
@@ -351,7 +304,6 @@
     <string name="displayed_book_details_used_encoding">Codifica utilizzata</string>
     <string name="displayed_book_details_last_action">Ultima azione</string>
     <string name="displayed_book_details_notes_count">Conteggio note</string>
-    <string name="color_scheme_system">System</string>
     <string name="color_scheme_dynamic">Dynamic color</string>
     <string name="color_scheme_light">Illuminazione</string>
     <string name="color_scheme_dark">Scuro</string>
@@ -372,17 +324,11 @@
         <item quantity="other">Elimina <b>%d</b> note?</item>
     </plurals>
     <!-- Unused -->
-    <string name="delete_note">Elimina nota</string>
-    <string name="delete_notes">Elimina le note</string>
-    <string name="delete_note_and_all_subnotes">Elimina questa nota e tutte le sue sotto-note?</string>
-    <string name="delete_notes_and_all_subnotes">Elimina queste note e tutte le sue sotto-note?</string>
     <plurals name="notes_deleted">
         <item quantity="one">Nota cancellata</item>
         <item quantity="other">Cancellate <b>%d</b> note</item>
     </plurals>
     <string name="no_notes_deleted">Nessuna nota cancellata</string>
-    <string name="note_content_finish_editing">Mostra il contenuto</string>
-    <string name="note_content_start_editing">Modifica il contenuto</string>
     <string name="duplicate_keywords_not_allowed">La parola chiave %s è già stata usata</string>
     <string name="no_states_defined">Nessuno stato definito</string>
     <string name="book_name_in_search">Nome del taccuino nei risultati della ricerca</string>
@@ -404,8 +350,8 @@
     <string name="pref_title_reminders_sound">Suono</string>
     <string name="pref_title_reminders_vibrate">Vibrazione</string>
     <string name="pref_title_reminders_led">Illuminazione</string>
-    <string name="pref_title_snooze_time">Durata sveglia (minuti)</string>
-    <string name="pref_title_snooze_type">Tipo di allarme</string>
+    <string name="pref_title_snooze_time">Durata rinvio (minuti)</string>
+    <string name="pref_title_snooze_type">Tipo di rinvio</string>
     <string name="pref_title_daily_reminder_time">Ora promemoria giornaliero</string>
     <string name="primary_storage">Memoria principale</string>
     <string name="book_exported">Taccuino esportato su %s</string>
@@ -417,10 +363,6 @@
     <string name="keep_screen_on_summary">Visualizzare il menù per modificare l\'opzione</string>
     <string name="keep_screen_on">Mantieni lo schermo acceso</string>
     <string name="keep_screen_on_desc">Lo schermo rimarrà acceso finché questa opzione non viene disabilitata</string>
-    <string name="layout_direction">Direzione della vista</string>
-    <string name="layout_direction_locale">Predefinito</string>
-    <string name="layout_direction_ltr">Da sinistra a destra</string>
-    <string name="layout_direction_rtl">Da destra a sinistra</string>
     <string name="preface_in_book">Prefazione del taccuino</string>
     <string name="preface_in_book_full">Schermo</string>
     <string name="preface_in_book_hide">Nascondi</string>
@@ -437,9 +379,7 @@
     <string name="notebooks_start_folded_summary">Chiudi tutte le note quando il taccuino è stato caricato</string>
     <string name="list_widget_name">Ricerca salvata</string>
     <string name="list_widget_select_search">Selezionare il tipo di ricerca</string>
-    <string name="list_widget_nothing_selected">Nessuna ricerca selezionata</string>
     <string name="auto_sync">Sincronizzazione automatica</string>
-    <string name="auto_sync_experimental_summary">Usato solo per depositi locali</string>
     <string name="auto_sync_summary">Not supported for Dropbox</string>
     <string name="auto_sync_warning">A seconda dell\'opzioni che scegli, la sincronizzazione potrebbe essere fatta spesso. Se il taccuino è modificato, il suo intero contentuto è trasferito a o dal deposito. Alcune azioni possono ritardare la sincronizzazione mentre è in corso.</string>
     <string name="pref_title_sync_after_note_create">Nota creata</string>
@@ -491,7 +431,6 @@
     <string name="sync_failed_channel_description">Mostra quando la sincronizzazione non è riuscita</string>
     <string name="notification_channel_settings">Notifiche</string>
     <string name="notification_channel_settings_summary">Suono, vibrazione, puntino di notifica</string>
-    <string name="hide_note_metadata">Nascondi i metadati</string>
     <string name="overwrite_local_notebook_question">Sovrascrivere il taccuino locale?</string>
     <string name="overwrite_remote_notebook_question">Sovrascrivere il taccuino remoto?</string>
     <string name="drawers_folded_by_default">Menu chiuso</string>
@@ -508,7 +447,6 @@
     <string name="show_all">Mostra tutto</string>
     <string name="always_show_set">Mostra sempre il gruppo</string>
     <string name="show_selected">Mostra selezionati</string>
-    <string name="hide_all">Nascondi tutto</string>
     <string name="external_file_no_app_found">Non è stata trovata alcuna applicazione per aprire questo file</string>
     <string name="failed_to_open_linked_file_with_reason">Impossibile aprire il file: %s</string>
     <string name="images">Immagini</string>
@@ -522,11 +460,9 @@
     <string name="argument_detected">%s rilevato</string>
     <string name="argument_selected">%s selezionati</string>
     <string name="fixed_width_value">Larghezza ( in pixel)</string>
-    <string name="share_target_service">Condividere con i taccuini Orgzily</string>
     <string name="under">Sotto</string>
     <string name="above">Sopra</string>
     <string name="below">Sotto</string>
-    <string name="loading">Caricamento…</string>
     <string name="go_to">Vai a</string>
     <string name="cannot_refile_to_the_same_subtree">Impossibile riferirsi allo stesso sotto-albero</string>
     <string name="notification_maximum_priority">Massimo</string>
@@ -545,16 +481,12 @@
     </plurals>
     <string name="display_checkmarks">Visualizza checkmarks</string>
     <string name="display_checkmarks_summary">Consenti di segnare le note come Done</string>
-    <string name="last_used">Ultimo utilizzato</string>
-    <string name="note_details_opening_mode">Modalità di apertura</string>
     <string name="cleartext_traffic">Traffico non criptato</string>
     <string name="cleartext_traffic_message">Sei sicuro di voler usare questo URL?</string>
     <string name="credentials_in_url_not_supported">Gli URL contenenti credenziali non sono supportati</string>
-    <string name="access_token">Token di accesso</string>
     <string name="trusted_certificates">Certificati di sistema affidabili</string>
     <string name="add_trusted_certificates_optional">Aggiungi certificati attendibili (facoltativo)</string>
     <string name="edit_trusted_certificates">Modifica certificati attendibili</string>
-    <string name="this_action_cannot_be_undone">L\'operazione non può essere annullata.</string>
     <plurals name="paste_note_or_notes_with_count">
         <item quantity="one">Incolla nota</item>
         <item quantity="other">Incolla <b>%d</b> note</item>

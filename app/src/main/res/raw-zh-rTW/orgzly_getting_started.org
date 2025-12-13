@@ -33,6 +33,17 @@
 *** DONE 是筆記“完成”類型的狀態
 CLOSED: [2018-01-24 Wed 17:00]
 
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
 ** 筆記可以有預定日程"scheduled"的時間
 SCHEDULED: <2015-02-20 Fri 15:15>
 
@@ -41,6 +52,13 @@ SCHEDULED: <2015-02-16 Mon .+2d>
 
 ** 還可以設置截止時間
 DEADLINE: <2018-02-20 Sat>
+
+** Event times can be used anywhere in the note's content
+
+You can have multiple event times:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
 ** 支援行事曆和截止時間的提醒
 
@@ -52,11 +70,11 @@ DEADLINE: <2018-02-20 Sat>
 
 ** 筆記可以包含連結
 
-撥打電話號碼 (tel:555-0199), 傳送簡訊 (sms:555-0199), 撰寫電子郵件 (mailto:support@orgzly.com) 或訪問網頁 ([[https://www.orgzly.com][Orgzly.com]])。
+撥打電話號碼 (tel:555-0199), 傳送簡訊 (sms:555-0199), 撰寫電子郵件 (mailto:support@orgzlyrevived.com) 或訪問網頁 ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]])。
 
 你還可以連結到其他筆記或筆記本。
 
-有關詳細資訊, 請參閱 https://www.orgzly.com/help#links。
+有關詳細資訊, 請參閱 [[https://www.orgzlyrevived.com/docs#links]]。
 
 ** 筆記支持基本的標記重點
 
@@ -65,17 +83,23 @@ DEADLINE: <2018-02-20 Sat>
 ** 核取方塊清單可用
 
 - [X] 任務1
--[ ] 任務2
--[ ] 任務3
+- [ ] 任務2
+- [ ] 任務3
 
 按一下核取方塊以切換它。 按下行末的new-line新建行，創建新項目
+
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] 任務1
+- [ ] 任務2
+- [X] 任務3
 
 * 搜尋
 ** 有許多支援的搜索操作符
 
 您可以按狀態、標籤、日程“schedule"或截止時間"deadline"等來搜索筆記。
 
-請參閱 https://www.orgzly.com/help#search 瞭解更多。
+請參閱 [[https://www.orgzlyrevived.com/docs#search]] 瞭解更多。
 
 ** 可以將搜尋保存以便快速訪問
 
@@ -87,7 +111,7 @@ DEADLINE: <2018-02-20 Sat>
 
 ** 筆記本可保存為純文字檔
 
-檔案採用 "org-mode" 所使用的格式。
+檔案採用 [[https://orgmode.org/][org-mode]] 所使用的格式。
 
 ** 位置 (存儲庫) 類型
 

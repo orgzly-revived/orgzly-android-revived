@@ -15,6 +15,7 @@ import com.orgzly.android.SharingShortcutsManager
 import com.orgzly.android.git.SshKey
 import com.orgzly.android.prefs.*
 import com.orgzly.android.reminders.RemindersScheduler
+import com.orgzly.android.sync.AutoSyncScheduler
 import com.orgzly.android.ui.CommonActivity
 import com.orgzly.android.ui.NoteStates
 import com.orgzly.android.ui.dialogs.ShowSshKeyDialogFragment
@@ -26,6 +27,8 @@ import com.orgzly.android.usecase.UseCase
 import com.orgzly.android.util.AppPermissions
 import com.orgzly.android.util.LogUtils
 import com.orgzly.android.widgets.ListWidgetProvider
+import com.orgzly.android.ui.settings.exporting.SettingsExportFragment
+import com.orgzly.android.ui.settings.importing.SettingsImportFragment
 
 /**
  * Displays settings.
@@ -68,6 +71,20 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             }
         }
 
+        preference(R.string.pref_key_export_settings)?.let {
+            it.setOnPreferenceClickListener {
+                SettingsExportFragment().show(childFragmentManager, SettingsExportFragment.FRAGMENT_TAG)
+                true
+            }
+        }
+
+        preference(R.string.pref_key_import_settings)?.let {
+            it.setOnPreferenceClickListener {
+                SettingsImportFragment().show(childFragmentManager, SettingsImportFragment.FRAGMENT_TAG)
+                true
+            }
+        }
+
         preference(R.string.pref_key_reload_getting_started)?.let {
             it.setOnPreferenceClickListener {
                 listener?.onGettingStartedNotebookReloadRequest()
@@ -76,6 +93,8 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         }
 
         setupVersionPreference()
+
+        setupGitCommitPreference()
 
         setDefaultStateForNewNote()
 
@@ -99,8 +118,8 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             }
         }
 
-        // Disable Git repos completely on API < 23
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+        // Disable Git repos completely on API < 23 and in the Play Store build
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || BuildConfig.IS_GIT_REMOVED) {
             preference(R.string.pref_key_git_is_enabled)?.let {
                 preferenceScreen.removePreference(it)
             }
@@ -139,6 +158,12 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 listener?.onWhatsNewDisplayRequest()
                 true
             }
+        }
+    }
+
+    private fun setupGitCommitPreference() {
+        preference(R.string.pref_key_git_commit)?.let { pref ->
+            pref.summary = BuildConfig.GIT_COMMIT
         }
     }
 
@@ -250,6 +275,10 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             getString(R.string.pref_key_ongoing_notification),
             getString(R.string.pref_key_ongoing_notification_priority) -> {
                 if (AppPreferences.newNoteNotification(context)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        AppPermissions.isGrantedOrRequest(
+                            activity, AppPermissions.Usage.POST_NOTIFICATIONS)
+                    }
                     Notifications.showOngoingNotification(context)
                 } else {
                     Notifications.cancelNewNoteNotification(context)
@@ -303,17 +332,55 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 context?.sendBroadcast(intent)
             }
 
-            // Reminders for scheduled notes - reset last run time
-            getString(R.string.pref_key_use_reminders_for_scheduled_times) ->
+            // Reminders for scheduled notes
+            getString(R.string.pref_key_use_reminders_for_scheduled_times) -> {
+                // Reset last run time
                 AppPreferences.reminderLastRunForScheduled(context, 0L)
+                if (AppPreferences.remindersForScheduledEnabled(context)) {
+                    // Ensure notifications permission
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        AppPermissions.isGrantedOrRequest(
+                            activity, AppPermissions.Usage.POST_NOTIFICATIONS)
+                    }
+                }
+            }
 
-            // Reminders for deadlines - reset last run time
-            getString(R.string.pref_key_use_reminders_for_deadline_times) ->
+            // Reminders for deadlines
+            getString(R.string.pref_key_use_reminders_for_deadline_times) -> {
+                // Reset last run time
                 AppPreferences.reminderLastRunForDeadline(context, 0L)
+                if (AppPreferences.remindersForDeadlineEnabled(context)) {
+                    // Ensure notifications permission
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        AppPermissions.isGrantedOrRequest(
+                            activity, AppPermissions.Usage.POST_NOTIFICATIONS)
+                    }
+                }
+            }
 
-            // Reminders for events - reset last run time
-            getString(R.string.pref_key_use_reminders_for_event_times) ->
+            // Reminders for events
+            getString(R.string.pref_key_use_reminders_for_event_times) -> {
+                // Reset last run time
                 AppPreferences.reminderLastRunForEvents(context, 0L)
+                if (AppPreferences.remindersForEventsEnabled(context)) {
+                    // Ensure notifications permission
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        AppPermissions.isGrantedOrRequest(
+                            activity, AppPermissions.Usage.POST_NOTIFICATIONS)
+                    }
+                }
+            }
+
+            // Scheduled sync
+            getString(R.string.pref_key_auto_sync_at_interval_enabled),
+            getString(R.string.pref_key_auto_sync_interval_in_mins) -> {
+                if (AppPreferences.scheduledSyncEnabled(context)) {
+                    AutoSyncScheduler.cancelAll(requireContext())
+                    AutoSyncScheduler.schedule(requireContext())
+                } else {
+                    AutoSyncScheduler.cancelAll(requireContext())
+                }
+            }
 
             // Display images inline enabled - request permission
             getString(R.string.pref_key_images_enabled) -> {
@@ -321,6 +388,16 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                     Handler().post {
                         AppPermissions.isGrantedOrRequest(
                                 activity, AppPermissions.Usage.EXTERNAL_FILES_ACCESS)
+                    }
+                }
+            }
+
+            // Notification on failed sync - request permission
+            getString(R.string.pref_key_show_sync_notifications) -> {
+                if (AppPreferences.showSyncNotifications(context)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        AppPermissions.isGrantedOrRequest(
+                            activity, AppPermissions.Usage.POST_NOTIFICATIONS)
                     }
                 }
             }

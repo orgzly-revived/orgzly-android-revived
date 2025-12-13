@@ -1,7 +1,7 @@
 package com.orgzly.android.sync
 
+import androidx.core.net.toUri
 import com.orgzly.BuildConfig
-import com.orgzly.android.App
 import com.orgzly.android.BookFormat
 import com.orgzly.android.BookName
 import com.orgzly.android.NotesOrgExporter
@@ -31,10 +31,8 @@ object SyncUtils {
         for (repo in repoList) {
             if (repo is GitRepo && repo.isUnchanged) {
                 for (book in dataRepository.getBooks()) {
-                    if (book.hasLink()) {
-                        if (book.linkRepo!!.url == repo.uri.toString()) {
-                            result.add(book.syncedTo!!)
-                        }
+                    if (book.hasLink() && book.linkRepo!!.url == repo.uri.toString() && book.hasSync()) {
+                        result.add(book.syncedTo!!)
                     }
                 }
                 if (result.isNotEmpty()) {
@@ -65,8 +63,7 @@ object SyncUtils {
         val versionedRooks = getBooksFromAllRepos(dataRepository, repos)
 
         /* Group local and remote books by name. */
-        val namesakes = BookNamesake.getAll(
-            App.getAppContext(), localBooks, versionedRooks)
+        val namesakes = BookNamesake.getAll(localBooks, versionedRooks)
 
         /* If there is no local book, create empty "dummy" one. */
         for (namesake in namesakes.values) {
@@ -90,7 +87,7 @@ object SyncUtils {
     fun syncNamesake(dataRepository: DataRepository, namesake: BookNamesake): BookAction {
         val repoEntity: Repo?
         val repoUrl: String
-        val fileName: String
+        val repositoryPath: String
         var bookAction: BookAction? = null
 
         // FIXME: This is a pretty nasty hack that completely circumvents the existing code path
@@ -114,6 +111,8 @@ object SyncUtils {
             BookSyncStatus.NO_CHANGE ->
                 bookAction = BookAction.forNow(BookAction.Type.INFO, namesake.status.msg())
 
+            /* Error states */
+
             BookSyncStatus.BOOK_WITHOUT_LINK_AND_ONE_OR_MORE_ROOKS_EXIST,
             BookSyncStatus.DUMMY_WITHOUT_LINK_AND_MULTIPLE_ROOKS,
             BookSyncStatus.NO_BOOK_MULTIPLE_ROOKS,
@@ -123,8 +122,17 @@ object SyncUtils {
             BookSyncStatus.CONFLICT_BOOK_WITH_LINK_AND_ROOK_BUT_NEVER_SYNCED_BEFORE,
             BookSyncStatus.CONFLICT_LAST_SYNCED_ROOK_AND_LATEST_ROOK_ARE_DIFFERENT,
             BookSyncStatus.ROOK_AND_VROOK_HAVE_DIFFERENT_REPOS,
-            BookSyncStatus.ONLY_DUMMY ->
+            BookSyncStatus.ONLY_DUMMY,
+            BookSyncStatus.BOOK_WITH_PREVIOUS_ERROR_AND_NO_LINK ->
                 bookAction = BookAction.forNow(BookAction.Type.ERROR, namesake.status.msg())
+
+            BookSyncStatus.ROOK_NO_LONGER_EXISTS -> {
+                /* Remove repository link and "synced to" information. User must set a repo link if
+                 * they want to keep the book and sync it. */
+                dataRepository.setLink(namesake.book.book.id, null)
+                dataRepository.removeBookSyncedTo(namesake.book.book.id)
+                bookAction = BookAction.forNow(BookAction.Type.ERROR, namesake.status.msg())
+            }
 
             /* Load remote book. */
 
@@ -147,29 +155,29 @@ object SyncUtils {
             BookSyncStatus.ONLY_BOOK_WITHOUT_LINK_AND_ONE_REPO -> {
                 repoEntity = dataRepository.getRepos().iterator().next()
                 repoUrl = repoEntity.url
-                fileName = BookName.fileName(namesake.book.book.name, BookFormat.ORG)
-                dataRepository.saveBookToRepo(repoEntity, fileName, namesake.book, BookFormat.ORG)
+                repositoryPath = BookName.repoRelativePath(namesake.book.book.name, BookFormat.ORG)
+                /* Set repo link before saving to ensure repo ignore rules are checked */
+                dataRepository.setLink(namesake.book.book.id, repoEntity)
+                dataRepository.saveBookToRepo(repoEntity, repositoryPath, namesake.book, BookFormat.ORG)
                 bookAction = BookAction.forNow(BookAction.Type.INFO, namesake.status.msg(repoUrl))
             }
 
             BookSyncStatus.BOOK_WITH_LINK_LOCAL_MODIFIED -> {
                 repoEntity = namesake.book.linkRepo
                 repoUrl = repoEntity!!.url
-                fileName = BookName.getFileName(App.getAppContext(), namesake.book.syncedTo!!.uri)
-                dataRepository.saveBookToRepo(repoEntity, fileName, namesake.book, BookFormat.ORG)
+                repositoryPath = BookName.getRepoRelativePath(repoUrl.toUri(), namesake.book.syncedTo!!.uri)
+                dataRepository.saveBookToRepo(repoEntity, repositoryPath, namesake.book, BookFormat.ORG)
                 bookAction = BookAction.forNow(BookAction.Type.INFO, namesake.status.msg(repoUrl))
             }
 
             BookSyncStatus.ONLY_BOOK_WITH_LINK -> {
                 repoEntity = namesake.book.linkRepo
                 repoUrl = repoEntity!!.url
-                fileName = BookName.fileName(namesake.book.book.name, BookFormat.ORG)
-                dataRepository.saveBookToRepo(repoEntity, fileName, namesake.book, BookFormat.ORG)
+                repositoryPath = BookName.repoRelativePath(namesake.book.book.name, BookFormat.ORG)
+                dataRepository.saveBookToRepo(repoEntity, repositoryPath, namesake.book, BookFormat.ORG)
                 bookAction = BookAction.forNow(BookAction.Type.INFO, namesake.status.msg(repoUrl))
             }
         }
-
-        // if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Syncing $namesake: $bookAction")
 
         return bookAction
     }
@@ -182,8 +190,8 @@ object SyncUtils {
         var noNewMergeConflicts = true
         // If there are only local changes, the GitRepo.syncBook method is overly complicated.
         if (namesake.status == BookSyncStatus.BOOK_WITH_LINK_LOCAL_MODIFIED) {
-            val fileName = BookName.getFileName(App.getAppContext(), namesake.book.syncedTo!!.uri)
-            dataRepository.saveBookToRepo(namesake.book.linkRepo!!, fileName, namesake.book, BookFormat.ORG)
+            val repoRelativePath = BookName.getRepoRelativePath(repo.getUri(), namesake.book.syncedTo!!.uri)
+            dataRepository.saveBookToRepo(namesake.book.linkRepo!!, repoRelativePath, namesake.book, BookFormat.ORG)
         } else {
             val dbFile = dataRepository.getTempBookFile()
             try {
@@ -194,8 +202,8 @@ object SyncUtils {
                 newRook = newRook1
                 // We only need to write it if syncback is needed
                 if (loadFile != null) {
-                    val fileName = BookName.getFileName(App.getAppContext(), newRook.uri)
-                    val bookName = BookName.fromFileName(fileName)
+                    val repoRelativePath = BookName.getRepoRelativePath(repo.getUri(), newRook.uri)
+                    val bookName = BookName.fromRepoRelativePath(repoRelativePath)
                     if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Loading from file '$loadFile'")
                     dataRepository.loadBookFromFile(
                         bookName.name,

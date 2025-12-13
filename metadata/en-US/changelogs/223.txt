@@ -1,0 +1,1 @@
+• Target Android 14 and upgrade some Android dependencies

@@ -1,6 +1,7 @@
 package com.orgzly.android.espresso;
 
 import android.content.pm.ActivityInfo;
+import android.os.SystemClock;
 
 import androidx.test.core.app.ActivityScenario;
 
@@ -8,6 +9,7 @@ import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
 import com.orgzly.android.ui.main.MainActivity;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -65,6 +67,13 @@ public class ActionModeTest extends OrgzlyTest {
         onView(allOf(withText("book-one"), isDisplayed())).perform(click());
     }
 
+    @After
+    @Override
+    public void tearDown() throws Exception {
+        super.tearDown();
+        scenario.close();
+    }
+
     @Test
     public void testQueryFragmentCabShouldBeOpenedOnNoteLongClick() {
         onView(withId(R.id.drawer_layout)).perform(open());
@@ -103,6 +112,7 @@ public class ActionModeTest extends OrgzlyTest {
 
         // TODO: Check *the same* note is selected.
 
+        SystemClock.sleep(500);
         scenario.onActivity(activity ->
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT));
 

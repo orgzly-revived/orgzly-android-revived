@@ -1,27 +1,15 @@
 #+BEGIN_HTML
 <div>
-<a title="Build" target="_blank" href="https://github.com/orgzly-revived/orgzly-android-revived/actions/workflows/android-build-master.yml"><img src="https://github.com/orgzly-revived/orgzly-android-revived/actions/workflows/android-build-master.yml/badge.svg"></a>
-<a title="Crowdin" target="_blank" href="https://crowdin.com/project/orgzly"><img src="https://d322cqt584bo4o.cloudfront.net/orgzly/localized.svg"></a>
+<a title="Tests" target="_blank" href="https://github.com/orgzly-revived/orgzly-android-revived/actions/workflows/test.yaml"><img src="https://github.com/orgzly-revived/orgzly-android-revived/actions/workflows/test.yaml/badge.svg"></a>
+<a href="https://toolate.othing.xyz/engage/orgzly-revived/"><img src="https://toolate.othing.xyz/widget/orgzly-revived/svg-badge.svg" alt="Translation status" /></a>
+<a href="https://shields.rbtlog.dev/com.orgzlyrevived"><img src="https://shields.rbtlog.dev/simple/com.orgzlyrevived" alt="RB Status"></a>
 </div>
-<a href="https://f-droid.org/packages/com.orgzlyrevived">
-    <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-    alt="Get it on F-Droid"
-    height="80">
-</a>
 #+END_HTML
 
 * Orgzly Revived
 
-Orgzly Revived is a community-maintained version of Orgzly, as the development of the original app is no longer active.
-
-The Orgzly Revived project aims to continue development of the Orgzly application. The rebranding is due 
-to the disappearance of the Orgzly author so we, as the community, had to come up with a new solution.
-We plan to continue adding useful features, fixing bugs, keeping up-to-date with technological evolution, 
-and generally maintaining the [[https://orgmode.org/][Org Mode]] outreach and its support on Android.
-
-[[https://orgzly.com/][Orgzly]] is an outliner for taking notes and managing to-do lists. The source code
-[[https://github.com/orgzly/orgzly-android][repository]] is available on GitHub but is no longer actively 
-maintained. We have used this code as the base for Orgzly Revived.
+Orgzly is an outliner for taking notes and managing to-do lists. Orgzly Revived is a community-maintained version of Orgzly, as the development of the original app has been halted. The original Orgzly source code can be found
+[[https://github.com/orgzly/orgzly-android][here]].
 
 With Orgzly, you can keep notebooks stored in plain-text and have them synchronized
 with a directory on your mobile device or an SD card, WebDAV server, or Dropbox.
@@ -31,24 +19,64 @@ keeping notes, maintaining TODO lists, planning projects, and
 authoring documents with a fast and effective plain-text system.” See
 http://orgmode.org for more information.
 
-* End-user documentation
+#+BEGIN_HTML
+<a href="https://f-droid.org/packages/com.orgzlyrevived">
+    <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+    alt="Get it on F-Droid"
+    height="80">
+</a>
+<a href="https://play.google.com/store/apps/details?id=com.orgzlyrevived">
+<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Get it on Google Play" height="80">
+</a>
+<a href="https://apt.izzysoft.de/packages/com.orgzlyrevived">
+<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height="80">
+</a>
+#+END_HTML
 
-Find out more here: https://github.com/orgzly/documentation
+The Orgzly Revived project aims to continue development of the Orgzly application. The rebranding is due to the disappearance of the Orgzly author so we, as the community, had to come up with a new solution. We plan to continue adding useful features, fixing bugs, keeping up-to-date with technological evolution, and generally maintaining the [[https://orgmode.org/][Org Mode]] outreach and its support on Android. Orgzly Revived is a community-maintained version of Orgzly, as the development of the original app is no longer active.
+
+* Support 
+
+- See the detailed [[https://github.com/orgzly-revived/documentation][End-user documentation]]
+- Ask your question in the [[https://github.com/orgzly-revived/orgzly-android-revived/discussions][Discussions]]
+- There is also a Matrix chat room where anyone is welcome to join: [[https://matrix.to/#/#orgzly:matrix.org][#orgzly:matrix.org]].
+
+* Verifying the APK signature
+
+This is the SHA-256 checksum of our APK signing certificate, so that you can verify your downloaded APK using tools such as [[https://github.com/soupslurpr/AppVerifier][AppVerifier]] or [[https://developer.android.com/tools/apksigner][apksigner]]:
+
+#+begin_quote
+com.orgzlyrevived 6F:C9:C2:E2:2D:07:D2:5C:E7:7E:2E:96:34:55:05:3C:38:B8:31:8A:1A:24:91:B3:ED:95:D5:0C:BA:85:49:3D
+#+end_quote
+
+You should also check that this checksum matches the one published at [[https://orgzlyrevived.com/docs#verify-apk-signature][orgzlyrevived.com]].
+
+Once you have installed the APK, Android should refuse to update the app to any new version which was not signed by the same private key.
 
 * Building & testing
 
-If you don't use Android Studio and wish to [[https://developer.android.com/studio/build/building-cmdline.html][build]] and [[https://developer.android.com/studio/test/command-line.html][test]] the app
-from command line, the standard set of Gradle tasks is available.  For
-example:
+If you don't use Android Studio and wish to [[https://developer.android.com/studio/build/building-cmdline.html][build]] and [[https://developer.android.com/studio/test/command-line.html][test]] the app from command line, the standard set of Gradle tasks is available. For example:
 
 - ~./gradlew build~ builds the project and generates APK files
 - ~./gradlew connectedAndroidTest~ runs instrumented unit tests
 
 Make sure you [[https://developer.android.com/training/testing/espresso/setup][turn off animations]] for the device you're testing on.
 
+** Nix
+
+If you are using Nix/NixOS, a flake with a =devShell= exists and can be used via [[https://direnv.net/][direnv]].
+
+# TODO remove this when the issue is fixed and flake is bumped past the fix
+Due to [[https://github.com/NixOS/nixpkgs/issues/402297][this nixpkgs issue]], you must run gradle like this:
+
+#+begin_src shell
+gradle $GRADLE_OPTS app:assembleDebug
+#+end_src
+
 * Contributing
 
 Please feel free to get involved in the project on GitHub by contributing issues, ideas, or features! 
+Translations can be contributed on the [[https://toolate.othing.xyz/projects/orgzly-revived/][Toolate]] i18n platform.
 We generally plan to leave existing open issues in the original 
 [[https://github.com/orgzly/orgzly-android][repository]] and reference them here as 
 they are addressed.

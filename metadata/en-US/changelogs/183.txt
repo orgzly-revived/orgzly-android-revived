@@ -1,0 +1,5 @@
+• Fix reminder notification settings opening 
+• Fix agenda jitter
+• Git: Further lower the garbage collection threshold
+• Git: Show branch information in namesake status
+• Git: Fix some SSH keygen bugs

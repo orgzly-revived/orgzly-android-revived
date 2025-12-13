@@ -1,0 +1,2 @@
+• Target Android 13
+• Prompt user to grant permission for alarms, notifications

@@ -43,6 +43,8 @@ import com.orgzly.org.OrgStringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.inject.Inject;
 
@@ -102,7 +104,94 @@ public class ShareActivity extends CommonActivity
         }
     }
 
-    public Data getDataFromIntent(Intent intent) {
+    private Data getTextDataFromIntent(Intent intent) {
+        Data data = new Data();
+        if (intent.hasExtra(Intent.EXTRA_TEXT)) {
+            if (intent.hasExtra(Intent.EXTRA_SUBJECT)) {
+                // Both "text" and "subject" received. Subject goes in heading, text goes in
+                // body.
+                String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+                if (subject != null && !subject.isEmpty()) {
+                    data.title = subject;
+                }
+                data.content = intent.getStringExtra(Intent.EXTRA_TEXT);
+                if (AppPreferences.createOrgLinksFromSharedLinks(this) &&
+                        !data.title.contains("\n")) {
+                    try {
+                        new URI(data.content);
+                        data.title = "[[" + data.content + "][" + data.title + "]]";
+                        data.content = null;
+                    } catch (URISyntaxException ignored) {}
+                }
+            } else {
+                // A single text string was shared. Put it in heading or body, depending on the
+                // user setting.
+                if (AppPreferences.sharedTextPlacement(App.getAppContext()).equals("in_note_heading")) {
+                    data.title = intent.getStringExtra(Intent.EXTRA_TEXT);
+                } else {
+                    data.content = intent.getStringExtra(Intent.EXTRA_TEXT);
+                }
+            }
+        } else if (intent.hasExtra(Intent.EXTRA_STREAM)) {
+            // A text file was shared
+            Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+
+            data.title = uri.getLastPathSegment();
+
+            /*
+             * Store file's content as note content.
+             */
+            try {
+                File file = new File(uri.getPath());
+
+                /* Don't read large files. */
+                if (file.length() > MAX_TEXT_FILE_LENGTH_FOR_CONTENT) {
+                    mError = "File has " + file.length() +
+                            " bytes (refusing to read files larger then " +
+                            MAX_TEXT_FILE_LENGTH_FOR_CONTENT + " bytes)";
+
+                } else {
+                    data.content = MiscUtils.readStringFromFile(file);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                mError = "Failed reading the content of " + uri.toString() + ": " + e.toString();
+            }
+        }
+        // TODO: Was used for direct share shortcuts to pass the book name. Used someplace else?
+        if (intent.hasExtra(AppIntent.EXTRA_QUERY_STRING)) {
+            Query query = new DottedQueryParser().parse(intent.getStringExtra(AppIntent.EXTRA_QUERY_STRING));
+            String bookName = QueryUtils.extractFirstBookNameFromQuery(query.getCondition());
+
+            if (bookName != null) {
+                Book book = dataRepository.getBook(bookName);
+                if (book != null) {
+                    data.bookId = book.getId();
+                    if (BuildConfig.LOG_DEBUG)
+                        LogUtils.d(TAG, "Using book " + data.bookId
+                                + " from passed query " + query + " (" + bookName + ")");
+                }
+            }
+        }
+        if (intent.hasExtra(AppIntent.EXTRA_BOOK_ID)) {
+            data.bookId = intent.getLongExtra(AppIntent.EXTRA_BOOK_ID, 0L);
+            if (BuildConfig.LOG_DEBUG)
+                LogUtils.d(TAG, "Using book " + data.bookId
+                        + " from passed book ID");
+        }
+        // Coming from Direct Share shortcut
+        if (intent.hasExtra(Intent.EXTRA_SHORTCUT_ID)) {
+            String shortcutId = intent.getStringExtra(ShortcutManagerCompat.EXTRA_SHORTCUT_ID);
+            data.bookId = SharingShortcutsManager.bookIdFromShortcutId(shortcutId);
+            if (BuildConfig.LOG_DEBUG)
+                LogUtils.d(TAG, "Using book " + data.bookId
+                        + " from passed shortcut ID");
+        }
+        return data;
+    }
+
+    private Data getDataFromIntent(Intent intent) {
         Data data = new Data();
         mError = null;
 
@@ -111,104 +200,52 @@ public class ShareActivity extends CommonActivity
 
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, intent);
 
-        if (action == null) {
-            // mError = getString(R.string.share_action_not_set);
-
-        } else if (type == null) {
-            // mError = getString(R.string.share_type_not_set);
-
-        } else if (action.equals(Intent.ACTION_SEND)) {
-            if (type.startsWith("text/")) {
-
-                if (intent.hasExtra(Intent.EXTRA_TEXT)) {
-                    data.title = intent.getStringExtra(Intent.EXTRA_TEXT);
-
-                } else if (intent.hasExtra(Intent.EXTRA_STREAM)) {
-                    Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-
-                    data.title = uri.getLastPathSegment();
-
-                    /*
-                     * Store file's content as note content.
-                     */
-                    try {
-                        File file = new File(uri.getPath());
-
-                        /* Don't read large files. */
-                        if (file.length() > MAX_TEXT_FILE_LENGTH_FOR_CONTENT) {
-                            mError = "File has " + file.length() +
-                                    " bytes (refusing to read files larger then " +
-                                    MAX_TEXT_FILE_LENGTH_FOR_CONTENT + " bytes)";
-
+        if (action != null && type != null) {
+            switch (action) {
+                case Intent.ACTION_SEND:
+                    if (type.startsWith("text/")) {
+                        data = getTextDataFromIntent(intent);
+                    } else {
+                        if (ATTACH_METHOD_COPY_DIR.equals(AppPreferences.attachMethod(this))) {
+                            handleCopyFile(intent, data, "file:");
+                        } else if (ATTACH_METHOD_COPY_ID.equals(AppPreferences.attachMethod(this))) {
+                            handleCopyFile(intent, data, "attachment:");
                         } else {
-                            data.content = MiscUtils.readStringFromFile(file);
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        mError = "Failed reading the content of " + uri.toString() + ": " + e.toString();
-                    }
-                }
-
-                if (data.title != null && data.content == null && intent.hasExtra(Intent.EXTRA_SUBJECT)) {
-                    data.content = data.title;
-                    data.title = intent.getStringExtra(Intent.EXTRA_SUBJECT);
-                }
-
-                // TODO: Was used for direct share shortcuts to pass the book name. Used someplace else?
-                if (intent.hasExtra(AppIntent.EXTRA_QUERY_STRING)) {
-                    Query query = new DottedQueryParser().parse(intent.getStringExtra(AppIntent.EXTRA_QUERY_STRING));
-                    String bookName = QueryUtils.extractFirstBookNameFromQuery(query.getCondition());
-
-                    if (bookName != null) {
-                        Book book = dataRepository.getBook(bookName);
-                        if (book != null) {
-                            data.bookId = book.getId();
-                            if (BuildConfig.LOG_DEBUG)
-                                LogUtils.d(TAG, "Using book " + data.bookId
-                                        + " from passed query " + query + " (" + bookName + ")");
+                            // Link method.
+                            handleLinkFile(intent, data);
                         }
                     }
-                }
+                    break;
+                case "com.google.android.gm.action.AUTO_SEND":
+                    if (type.startsWith("text/") && intent.hasExtra(Intent.EXTRA_TEXT)) {
+                        data.title = intent.getStringExtra(Intent.EXTRA_TEXT);
+                    }
+                    break;
+                default:
+                    mError = getString(R.string.share_action_not_supported, action);
+            }
+        }
 
-                if (intent.hasExtra(AppIntent.EXTRA_BOOK_ID)) {
-                    data.bookId = intent.getLongExtra(AppIntent.EXTRA_BOOK_ID, 0L);
-                    if (BuildConfig.LOG_DEBUG)
-                        LogUtils.d(TAG, "Using book " + data.bookId
-                                + " from passed book ID");
-                }
-
-                // Coming from Direct Share shortcut
-                if (intent.hasExtra(Intent.EXTRA_SHORTCUT_ID)) {
-                    String shortcutId = intent.getStringExtra(ShortcutManagerCompat.EXTRA_SHORTCUT_ID);
-                    data.bookId = SharingShortcutsManager.bookIdFromShortcutId(shortcutId);
-                    if (BuildConfig.LOG_DEBUG)
-                        LogUtils.d(TAG, "Using book " + data.bookId
-                                + " from passed shortcut ID");
-                }
-
-            } else if (ATTACH_METHOD_COPY_DIR.equals(AppPreferences.attachMethod(this))) {
-                handleCopyFile(intent, data, "file:");
-            } else if (ATTACH_METHOD_COPY_ID.equals(AppPreferences.attachMethod(this))) {
-                handleCopyFile(intent, data, "attachment:");
-            } else {
-                // Link method.
-                handleLinkFile(intent, data);
+        if (data.bookId == null) {
+            if (intent.hasExtra(AppIntent.EXTRA_BOOK_ID)) {
+                data.bookId = intent.getLongExtra(AppIntent.EXTRA_BOOK_ID, 0L);
+                if (BuildConfig.LOG_DEBUG)
+                    LogUtils.d(TAG, "Using book " + data.bookId
+                            + " from passed book ID");
             }
 
-        } else if (action.equals("com.google.android.gm.action.AUTO_SEND")) {
-            if (type.startsWith("text/") && intent.hasExtra(Intent.EXTRA_TEXT)) {
-                data.title = intent.getStringExtra(Intent.EXTRA_TEXT);
+            // Coming from Direct Share shortcut
+            if (intent.hasExtra(Intent.EXTRA_SHORTCUT_ID)) {
+                String shortcutId = intent.getStringExtra(ShortcutManagerCompat.EXTRA_SHORTCUT_ID);
+                data.bookId = SharingShortcutsManager.bookIdFromShortcutId(shortcutId);
+                if (BuildConfig.LOG_DEBUG)
+                    LogUtils.d(TAG, "Using book " + data.bookId
+                            + " from passed shortcut ID");
             }
-
-        } else {
-            mError = getString(R.string.share_action_not_supported, action);
         }
 
         /* Make sure that title is never empty. */
-        if (data.title == null) {
-            data.title = "";
-        }
+        if (data.title == null) data.title = "";
 
         return data;
     }

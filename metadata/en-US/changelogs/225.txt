@@ -1,0 +1,3 @@
+• Fix crash when pasting notes
+• Update translations for Brazilian Portuguese and Turkish
+• Upgrade dependencies

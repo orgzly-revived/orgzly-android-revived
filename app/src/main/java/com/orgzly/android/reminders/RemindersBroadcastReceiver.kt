@@ -28,19 +28,29 @@ class RemindersBroadcastReceiver : BroadcastReceiver() {
     lateinit var remindersScheduler: RemindersScheduler
 
     override fun onReceive(context: Context, intent: Intent) {
-        App.appComponent.inject(this)
+        if (intent.action in listOf(Intent.ACTION_BOOT_COMPLETED, AppIntent.ACTION_REMINDER_DATA_CHANGED,
+                AppIntent.ACTION_REMINDER_TRIGGERED, AppIntent.ACTION_REMINDER_SNOOZE_ENDED)) {
 
-        if (!anyRemindersEnabled(context, intent)) {
-            return
-        }
+            App.appComponent.inject(this)
 
-        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, intent)
+            if (!anyRemindersEnabled(context, intent)) {
+                return
+            }
 
-        async {
-            when (intent.action) {
-                Intent.ACTION_BOOT_COMPLETED,
-                AppIntent.ACTION_REMINDER_DATA_CHANGED,
-                AppIntent.ACTION_REMINDER_TRIGGERED -> {
+            if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, intent)
+
+            async {
+                if (intent.action == AppIntent.ACTION_REMINDER_SNOOZE_ENDED) {
+                    intent.extras?.apply {
+                        val noteId: Long = getLong(AppIntent.EXTRA_NOTE_ID, 0)
+                        val noteTimeType: Int = getInt(AppIntent.EXTRA_NOTE_TIME_TYPE, 0)
+                        val timestamp: Long = getLong(AppIntent.EXTRA_SNOOZE_TIMESTAMP, 0)
+
+                        if (noteId > 0) {
+                            snoozeEnded(context, noteId, noteTimeType, timestamp)
+                        }
+                    }
+                } else {
                     val now = DateTime()
                     val lastRun = LastRun.fromPreferences(context)
 
@@ -51,20 +61,7 @@ class RemindersBroadcastReceiver : BroadcastReceiver() {
                     scheduleNextReminder(context, now, lastRun)
                     LastRun.toPreferences(context, now)
                 }
-
-                AppIntent.ACTION_REMINDER_SNOOZE_ENDED -> {
-                    intent.extras?.apply {
-                        val noteId: Long = getLong(AppIntent.EXTRA_NOTE_ID, 0)
-                        val noteTimeType: Int = getInt(AppIntent.EXTRA_NOTE_TIME_TYPE, 0)
-                        val timestamp: Long = getLong(AppIntent.EXTRA_SNOOZE_TIMESTAMP, 0)
-
-                        if (noteId > 0) {
-                            snoozeEnded(context, noteId, noteTimeType, timestamp)
-                        }
-                    }
-                }
             }
-
         }
     }
 
@@ -201,6 +198,7 @@ class RemindersBroadcastReceiver : BroadcastReceiver() {
                     noteTime.bookId,
                     noteTime.bookName,
                     noteTime.title,
+                    noteTime.tags,
                     noteTime.timeType,
                     orgDateTime)
 

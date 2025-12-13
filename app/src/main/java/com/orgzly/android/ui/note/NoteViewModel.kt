@@ -291,8 +291,8 @@ class NoteViewModel(
         return place != null
     }
 
-    fun hasInitialData(): Boolean {
-        return !TextUtils.isEmpty(initialData.title) || !TextUtils.isEmpty(initialData.content)
+    fun hasInitialTitleData(): Boolean {
+        return !TextUtils.isEmpty(initialData.title)
     }
 
     fun setBook(b: BookView) {

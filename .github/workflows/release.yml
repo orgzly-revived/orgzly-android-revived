@@ -1,4 +1,4 @@
-name: Build release APK and prepare Github release draft
+name: Build release artifacts and draft Github release
 
 on:
   # Trigger by pushing a version tag (which are protected)
@@ -11,60 +11,109 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  release:
+  build-release:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '11'
-
-      # Build the standard version binary.
-      - name: Generate "premium" release APK
-        run: ./gradlew assemblePremiumRelease --stacktrace
-
-      - name: Sign APK using key store from repo secrets
-        uses: r0adkll/sign-android-release@v1
-        id: sign_apk
-        with:
-          releaseDirectory: app/build/outputs/apk/premium/release
-          signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
-          alias: orgzly-revived-20231013
-          keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
 
       - name: Get version name from git tag
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
-      - name: Rename APK file
-        run: mv ${{steps.sign_apk.outputs.signedReleaseFile}} orgzly-revived-${{ env.VERSION }}.apk
+      - name: Setup Java
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+        with:
+          distribution: temurin
+          java-version: 17
 
-      # Now do the same for the F-Droid flavor.
-      - name: Generate "fdroid" release APK
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
+
+      - name: Setup build tool version variable
+        shell: bash
+        run: |
+          BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
+          echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+          echo Last build tool version is: $BUILD_TOOL_VERSION
+
+      # F-Droid APK
+
+      - name: Assemble F-Droid APK
         run: ./gradlew assembleFdroidRelease --stacktrace
-  
-      - name: Sign APK using key store from repo secrets
-        uses: r0adkll/sign-android-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sign F-Droid APK
+        uses: r0adkll/sign-android-release@dbeba6b98a60b0fd540c02443c7f428cdedf0e7f # v1.0.4
         id: sign_fdroid_apk
         with:
           releaseDirectory: app/build/outputs/apk/fdroid/release
           signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
           alias: orgzly-revived-20231013
           keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
 
-      - name: Rename APK file
+      - name: Rename F-Droid APK file
         run: mv ${{steps.sign_fdroid_apk.outputs.signedReleaseFile}} orgzly-revived-fdroid-${{ env.VERSION }}.apk
 
-      # Now upload all the binaries and create a release
-      - name: Upload APK and create Github release draft
-        uses: softprops/action-gh-release@v1
+      # "Premium" APK
+
+      - name: Add Dropbox app identifier
+        shell: bash
+        run: |
+          echo "dropbox.app_key = \"${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
+          echo "dropbox.app_key_schema = \"db-${{ secrets.DROPBOX_APP_KEY }}\"" >> app.properties
+
+      - name: Assemble "premium" APK
+        run: ./gradlew assemblePremiumRelease --stacktrace
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sign "premium" APK
+        uses: r0adkll/sign-android-release@dbeba6b98a60b0fd540c02443c7f428cdedf0e7f # v1.0.4
+        id: sign_premium_apk
         with:
-          files: 'orgzly-revived-*.apk'
+          releaseDirectory: app/build/outputs/apk/premium/release
+          signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
+          alias: orgzly-revived-20231013
+          keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+
+      - name: Rename "premium" APK file
+        run: mv ${{steps.sign_premium_apk.outputs.signedReleaseFile}} orgzly-revived-${{ env.VERSION }}.apk
+
+      # "Premium" AAB
+
+      - name: Assemble "premium" AAB
+        run: ./gradlew bundlePremiumRelease --stacktrace
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sign "premium" AAB
+        uses: r0adkll/sign-android-release@dbeba6b98a60b0fd540c02443c7f428cdedf0e7f # v1.0.4
+        id: sign_premium_aab
+        with:
+          releaseDirectory: app/build/outputs/bundle/premiumRelease
+          signingKeyBase64: ${{ secrets.APK_SIGNING_KEYSTORE_FILE }}
+          alias: orgzly-revived-20231013
+          keyStorePassword: ${{ secrets.APK_SIGNING_KEYSTORE_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+
+      - name: Rename "premium" AAB file
+        run: mv ${{steps.sign_premium_aab.outputs.signedReleaseFile}} orgzly-revived-${{ env.VERSION }}.aab
+
+      - name: Upload artifacts and create Github release draft
+        uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe # v2.4.2
+        with:
+          files: |
+            *.apk
+            *.aab
           draft: true
-  

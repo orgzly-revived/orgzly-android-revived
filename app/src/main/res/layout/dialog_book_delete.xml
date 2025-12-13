@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start|center_vertical"
         android:gravity="start|center_vertical"
-        android:text="@string/also_delete_linked_book"
+        android:text="@string/also_delete_linked_books"
         android:paddingStart="8dp"
         android:paddingEnd="8dp" />
 

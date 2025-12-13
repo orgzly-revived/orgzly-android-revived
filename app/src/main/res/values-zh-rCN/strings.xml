@@ -9,20 +9,14 @@
     <string name="clear">清除</string>
     <string name="cancel">取消</string>
     <string name="create">创建</string>
-    <string name="new_">新建</string>
     <!-- "new" is reserved -->
-    <string name="select">选择</string>
     <string name="set">设定</string>
-    <string name="add">添加</string>
     <string name="not_now">以后再说</string>
     <string name="save">保存</string>
     <string name="discard">不保存</string>
     <string name="remove_notebook_link">移除链接</string>
     <string name="browse">浏览</string>
     <string name="dropbox">Dropbox</string>
-    <string name="view">查看</string>
-    <string name="edit">编辑</string>
-    <string name="edit_note">编辑笔记</string>
     <string name="delete">删除</string>
     <string name="delete_with_quoted_argument">删除 “%s”</string>
     <string name="name">名称</string>
@@ -40,23 +34,16 @@
     <string name="created">已创建</string>
     <string name="states">状态</string>
     <string name="note">笔记</string>
-    <string name="notes">笔记</string>
     <string name="property">属性</string>
     <string name="import_as">导入为…</string>
     <string name="new_notebook">新建笔记本</string>
     <string name="new_folder">新建文件夹</string>
     <string name="scheduled">计划</string>
     <string name="agenda">日程</string>
-    <string name="agenda_period">日程日</string>
-    <string name="time">时间</string>
-    <string name="repeater">重复器</string>
     <string name="state">状态</string>
     <string name="priority">优先级</string>
-    <string name="nothing">无</string>
     <string name="open">打开</string>
-    <string name="focus">专注</string>
     <string name="widget">桌面小部件</string>
-    <string name="history">历史</string>
     <string name="event">事件</string>
     <plurals name="notes_cut">
         <item quantity="other">已剪切 <b>%d</b> 条笔记</item>
@@ -70,7 +57,6 @@
     </plurals>
     <string name="no_notes_pasted">无可粘贴内容</string>
     <string name="fragment_note_title_hint">标题</string>
-    <string name="fragment_note_tags_hint" tools:ignore="typos">标签 标签</string>
     <string name="import_org_file">导入 Org 文件</string>
     <string name="message_dropbox_unlinked">已从Dropbox断开连接</string>
     <string name="message_dropbox_linked">已成功连接到 Dropbox</string>
@@ -79,20 +65,16 @@
     <string name="repos_preference_summary">用于同步笔记本的位置</string>
     <string name="message_book_has_no_link">无设定的连接</string>
     <string name="message_note_created">笔记已创建</string>
-    <string name="message_failed_creating_note">创建笔记失败</string>
-    <string name="message_failed_updating_note">更新笔记失败</string>
     <string name="drawer_close">关闭抽屉</string>
     <string name="drawer_open">打开抽屉</string>
     <string name="schedule">计划</string>
     <string name="refile">重新归档</string>
-    <string name="refile_to">重新归档到</string>
     <string name="deadline">截止期限</string>
     <string name="closed">已关闭</string>
     <!-- TODO: Not hints, rename -->
     <string name="schedule_button_hint">计划时间</string>
     <string name="deadline_button_hint">截止时间</string>
     <string name="closed_button_hint">关闭时间</string>
-    <string name="fragment_note_content_hint">笔记内容</string>
     <string name="books_context_menu_item_rename">重命名</string>
     <string name="books_context_menu_item_set_link">设定连接</string>
     <string name="books_context_menu_item_force_save">强制保存</string>
@@ -112,7 +94,6 @@
     <string name="quick_note">快速笔记</string>
     <string name="tap_to_create_new_note">点击新建笔记</string>
     <string name="options_menu_item_search">搜索</string>
-    <string name="no_user_repos_configured_pref_summary">尚无配置</string>
     <string name="repos_options_menu_new_repo">新增存储库</string>
     <string name="book_name_already_exists">笔记本 %s 已存在。</string>
     <string name="filter_name_already_exists">同名搜索已存在</string>
@@ -130,14 +111,11 @@
     <string name="book_does_not_exist_anymore">此笔记本不再存在。</string>
     <string name="note_does_not_exist_anymore">此笔记不再存在。</string>
     <string name="search_does_not_exist_anymore">此搜索不再存在。</string>
-    <string name="fragment_query_title">搜索</string>
     <string name="repo_dropbox_button_not_linked">连接到 Dropbox</string>
     <string name="repo_dropbox_button_linked">从 Dropbox 断开连接</string>
-    <string name="fragment_settings_title">设置</string>
     <string name="notes_update_needed_dialog_title">偏好影响笔记</string>
     <string name="notes_update_needed_dialog_message">更新笔记以显示更改？</string>
     <string name="updating_notes">正在更新笔记…</string>
-    <string name="failure">呃哦</string>
     <string name="no_notes_found_after_search">搜索不匹配任何笔记</string>
     <string name="today">今天</string>
     <string name="tomorrow">明天</string>
@@ -153,7 +131,6 @@
     <string name="notebooks">笔记本</string>
     <string name="searches">搜索</string>
     <string name="search">搜索</string>
-    <string name="new_search">新建搜索</string>
     <string name="multiple_repos">存在多个存储库</string>
     <string name="no_repos">无已配置的存储库</string>
     <string name="no_books">未找到笔记本</string>
@@ -161,7 +138,6 @@
     <string name="collecting_notebooks_in_progress">收藏笔记本...</string>
     <string name="syncing_in_progress">正在同步…</string>
     <string name="syncing_book">正在同步 %s…</string>
-    <string name="sync_with_argument">同步：%s</string>
     <string name="syncing_failed_title">同步失败</string>
     <string name="canceled">已取消</string>
     <string name="canceling">正在取消…</string>
@@ -173,22 +149,13 @@
     <string name="git_url_hint">远程地址（例如 git@github.com:orgzly/orgzly-android.git）</string>
     <string name="git_directory_hint">目录位置（例如 “file:/sdcard/orgzly”）</string>
     <string name="git_https_username_hint">用户名</string>
-    <string name="git_https_password_hint">密码</string>
     <string name="git_author_hint">作者（例如 John Doe）</string>
     <string name="git_email_hint">电子邮件（例如 john@email.com）</string>
     <string name="git_branch_hint">分支（例如 master）</string>
-    <string name="git_auth_https_username_hint">用户名</string>
     <string name="git_auth_https_password_hint">密码</string>
-    <string name="git_generate_key_pair">生成密钥对</string>
-    <string name="git_copy_public_key">复制公钥</string>
-    <string name="git_auth_type_text">验证类型</string>
-    <string name="git_auth_type_ssh">SSH</string>
-    <string name="git_auth_type_https">HTTPS</string>
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
-    <string name="git_clone_error_ssh_auth">克隆失败，验证错误</string>
     <string name="git_clone_error_invalid_repo">远程地址不是一个git repo</string>
-    <string name="git_clone_error_unknown">克隆时发生未知错误</string>
     <string name="git_clone_error_invalid_target_dir">目标目录不存在</string>
     <string name="git_clone_error_target_not_empty">目标目录不是空的</string>
     <string name="git_clone_error_uri_not_supported">远程地址不受支持</string>
@@ -198,18 +165,12 @@
     <string name="webdav_test_error_auth">登录或密码无效。</string>
     <string name="webdav_test_error_unknown">发生未知错误。</string>
     <!-- Share button - error messages (set as title). -->
-    <string name="share_action_not_set">分享操作未设定</string>
     <string name="share_action_not_supported">分享操作 %s 不受支持</string>
-    <string name="share_type_not_set">分享类型未设定</string>
     <string name="share_type_not_supported">分享类型 %s 不受支持</string>
     <string name="repositories">存储库</string>
     <string name="repository_not_valid_with_reason">仓库无效： %s</string>
     <string name="invalid_repo_url">无效的仓库地址 %s</string>
     <string name="repository_url_already_exists">此地址仓库已存在</string>
-    <string name="fragment_left_drawer_list_view_content_description">左侧抽屉</string>
-    <string name="drawer_item">抽屉条目</string>
-    <string name="prev_state">上一个状态</string>
-    <string name="next_state">下一个状态</string>
     <string name="new_above">在上面新建</string>
     <string name="new_under">在底下新建</string>
     <string name="new_below">在下面新建</string>
@@ -225,16 +186,13 @@
     <string name="no_filters">没有已保存的搜索</string>
     <string name="book_shortcut_label">笔记本</string>
     <string name="new_note_shortcut_label">新建笔记</string>
-    <string name="pick_a_notebook">选择一个笔记本</string>
     <string name="down">向下</string>
     <string name="up">向上</string>
-    <string name="notebook_modified">笔记本已修改</string>
     <string name="permissions_rationale_for_local_repo">与本地目录同步需要存储权限</string>
     <string name="permissions_rationale_for_book_export">导出笔记本需要存储权限</string>
     <string name="permissions_rationale_for_sync_start">与本地存储库同步需要存储权限</string>
     <string name="permissions_rationale_for_external_files_access">访问外部文件需要存储权限</string>
     <string name="cycle_visibility">收起/展开全部</string>
-    <string name="running_database_update">正在升级数据库…</string>
     <string name="note_has_been_modified">笔记已修改</string>
     <string name="discard_or_save_changes">保存更改?</string>
     <string name="rename">重命名</string>
@@ -245,13 +203,10 @@
     <string name="also_delete_linked_book">删除已连接的远程笔记本</string>
     <string name="message_deleting_book_failed">删除笔记本失败：%s</string>
     <string name="message_book_deleted">笔记本已删除</string>
-    <string name="priority_with_argument">优先级 %s</string>
     <string name="default_priority">默认优先级</string>
     <string name="lowest_priority">最低优先级</string>
     <string name="todo_states">激活(待办)任务的关键词</string>
     <string name="done_states">已完成(完成)任务的关键词</string>
-    <string name="created_at">创建于</string>
-    <string name="insert_note_creation_time">插入笔记的创建时间</string>
     <string name="use_created_at_property">为创建时间使用属性</string>
     <string name="use_created_at_property_summary">使用属性同步创建时间</string>
     <string name="created_at_property">创建属性</string>
@@ -291,7 +246,6 @@
     <string name="prefs_title_new_note">新建笔记</string>
     <string name="prefs_title_notifications">通知</string>
     <string name="app">应用程序</string>
-    <string name="no_repos_configured">无已配置的存储库</string>
     <string name="test_connection">测试连接</string>
     <string name="connecting">正在连接...</string>
     <string name="no_connection">无网络连接</string>
@@ -316,7 +270,6 @@
     <string name="org_indent_mode">根据缩进模式调整</string>
     <string name="org_indent_mode_summary">将org-indent-mode计算在内</string>
     <string name="org_indent_indentation_per_level">每层级缩进量</string>
-    <string name="add_property">添加属性</string>
     <string name="priority_a_highest">A（最高优先级）</string>
     <string name="priority_z_lowest">Z（最低优先级）</string>
     <string name="hour">小时</string>
@@ -348,7 +301,6 @@
     <string name="displayed_book_details_used_encoding">已使用编码</string>
     <string name="displayed_book_details_last_action">最后的操作</string>
     <string name="displayed_book_details_notes_count">笔记数量</string>
-    <string name="color_scheme_system">系统</string>
     <string name="color_scheme_dynamic">动态颜色</string>
     <string name="color_scheme_light">亮</string>
     <string name="color_scheme_dark">暗</string>
@@ -368,16 +320,10 @@
         <item quantity="other">删除 <b>%d</b> 笔记？</item>
     </plurals>
     <!-- Unused -->
-    <string name="delete_note">删除笔记</string>
-    <string name="delete_notes">删除笔记</string>
-    <string name="delete_note_and_all_subnotes">删除此笔记和它的所有子笔记？</string>
-    <string name="delete_notes_and_all_subnotes">删除笔记和它的所有子笔记？</string>
     <plurals name="notes_deleted">
         <item quantity="other">已删除 <b>%d</b> 笔记</item>
     </plurals>
     <string name="no_notes_deleted">没有笔记被删除</string>
-    <string name="note_content_finish_editing">查看内容</string>
-    <string name="note_content_start_editing">编辑内容</string>
     <string name="duplicate_keywords_not_allowed">关键字 %s 已使用</string>
     <string name="no_states_defined">无已定义状态</string>
     <string name="book_name_in_search">搜索结果中的笔记本名称</string>
@@ -412,10 +358,6 @@
     <string name="keep_screen_on_summary">显示用于切换选项的菜单项</string>
     <string name="keep_screen_on">保持屏幕常亮</string>
     <string name="keep_screen_on_desc">退出应用或禁用此选项前屏幕不会关闭</string>
-    <string name="layout_direction">布局方向</string>
-    <string name="layout_direction_locale">默认</string>
-    <string name="layout_direction_ltr">从左到右</string>
-    <string name="layout_direction_rtl">从右到左</string>
     <string name="preface_in_book">笔记本序言</string>
     <string name="preface_in_book_full">显示</string>
     <string name="preface_in_book_hide">隐藏</string>
@@ -432,9 +374,7 @@
     <string name="notebooks_start_folded_summary">加载笔记本时折叠所有笔记</string>
     <string name="list_widget_name">已保存的搜索</string>
     <string name="list_widget_select_search">选择搜索</string>
-    <string name="list_widget_nothing_selected">未选择搜索</string>
     <string name="auto_sync">自动同步</string>
-    <string name="auto_sync_experimental_summary">仅用于本地存储库</string>
     <string name="auto_sync_summary">不支持 Dropbox</string>
     <string name="auto_sync_warning">根据所选选项，同步可能被经常触发。如果笔记本被修改，它的全部内容会与存储库保持双向同步。当同步正在进行时，某些操作可能会被延迟。</string>
     <string name="pref_title_sync_after_note_create">笔记已创建</string>
@@ -482,7 +422,6 @@
     <string name="sync_failed_channel_description">当同步失败时显示</string>
     <string name="notification_channel_settings">通知</string>
     <string name="notification_channel_settings_summary">声音, 震动, 通知角标</string>
-    <string name="hide_note_metadata">隐藏元数据</string>
     <string name="overwrite_local_notebook_question">覆盖本地笔记本？</string>
     <string name="overwrite_remote_notebook_question">覆盖远程笔记本？</string>
     <string name="drawers_folded_by_default">收起抽屉</string>
@@ -499,7 +438,6 @@
     <string name="show_all">显示全部</string>
     <string name="always_show_set">始终显示设定</string>
     <string name="show_selected">显示已选择</string>
-    <string name="hide_all">隐藏全部</string>
     <string name="external_file_no_app_found">找不到可打开此文件的应用程序</string>
     <string name="failed_to_open_linked_file_with_reason">打开文件失败：%s</string>
     <string name="images">图片</string>
@@ -513,11 +451,9 @@
     <string name="argument_detected">检测到 %s</string>
     <string name="argument_selected">已选择 %s</string>
     <string name="fixed_width_value">宽度（以像素为单位）</string>
-    <string name="share_target_service">分享到 Orgzly 笔记本</string>
     <string name="under">底下</string>
     <string name="above">上面</string>
     <string name="below">下面</string>
-    <string name="loading">载入中...</string>
     <string name="go_to">转至</string>
     <string name="cannot_refile_to_the_same_subtree">无法重定向到同一个子段</string>
     <string name="notification_maximum_priority">最大</string>
@@ -535,16 +471,12 @@
     </plurals>
     <string name="display_checkmarks">显示选中标记</string>
     <string name="display_checkmarks_summary">允许标记笔记为已完成</string>
-    <string name="last_used">上次使用</string>
-    <string name="note_details_opening_mode">开放模式</string>
     <string name="cleartext_traffic">明文流量</string>
     <string name="cleartext_traffic_message">确定要使用此URL？</string>
     <string name="credentials_in_url_not_supported">不支持通过URL传递凭据</string>
-    <string name="access_token">访问令牌</string>
     <string name="trusted_certificates">信任证书</string>
     <string name="add_trusted_certificates_optional">添加信任证书（可选）</string>
     <string name="edit_trusted_certificates">编辑信任证书</string>
-    <string name="this_action_cannot_be_undone">无法撤消此操作。</string>
     <plurals name="paste_note_or_notes_with_count">
         <item quantity="other">粘贴 <b>%d</b> 笔记</item>
     </plurals>
@@ -570,4 +502,47 @@
     <string name="logs">日志</string>
     <string name="share">分享</string>
     <string name="refresh_data">刷新</string>
+    <string name="pref_title_on_suspend_sync">挂起应用程序</string>
+    <string name="pref_summary_on_suspend_sync">当应用程序进入后台时同步</string>
+    <string name="ssh_keygen_existing_title">SSH 密钥</string>
+    <string name="ssh_keygen_existing_replace">替换</string>
+    <string name="ssh_keygen_existing_keep">保留</string>
+    <string name="ssh_keygen_explanation_ecdsa"><b>ECDSA (NIST P-256)</b>\n认证速度快，并且受到大多数仍在接收更新的服务器支持。</string>
+    <string name="ssh_keygen_explanation_ed25519"><b>ED25519</b>\n认证速度快，但仅受较新服务器支持。</string>
+    <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 bit)</b>\n受较旧的服务器支持。</string>
+    <string name="ssh_keygen_generating_progress">生成密钥中……</string>
+    <string name="ssh_key_failed_get_public">获取 SSH 公钥失败</string>
+    <string name="biometric_prompt_title_ssh_keygen">生成 SSH 密钥</string>
+    <string name="biometric_auth_not_available">生物识别认证不可用</string>
+    <string name="ssh_keygen_message">%1$s\n\n将此公钥提供给你的 Git 服务器。</string>
+    <string name="your_public_key">你的公钥</string>
+    <string name="ssh_keygen_share">分享</string>
+    <string name="ssh_key_error_dialog_text">消息： \n</string>
+    <string name="sync_status_no_change">无变更</string>
+    <string name="export_settings">导出应用程序设置</string>
+    <string name="export_settings_summary">将所有设置和已保存的搜索以 JSON 形式写入您选择的笔记</string>
+    <string name="import_settings">导入应用程序设置</string>
+    <string name="export_settings_warning_text">警告！选择的笔记会被完全覆写！</string>
+    <string name="error">错误</string>
+    <string name="note_does_not_contain_valid_json">笔记不包含合法的 JSON。</string>
+    <string name="imported_json_is_missing_mandatory_fields">导入的 JSON 缺少必要字段。</string>
+    <string name="note_has_no_content">笔记没有内容。</string>
+    <string name="permissions_rationale_for_post_notifications">发布通知需要权限</string>
+    <string name="ssh_keygen_preference_title">SSH 密钥生成</string>
+    <string name="git_ssh_on_missing_key_dialog_text">未找到 SSH 密钥对。你想要生成一对吗？</string>
+    <string name="git_ssh_on_missing_key_dialog_title">未找到 SSH 密钥</string>
+    <string name="search_results">搜索结果</string>
+    <string name="sync_status_rook_no_longer_exists">远程文件已不存在；已移除存储库链接。如果您想同步到存储库，请设置链接。</string>
+    <string name="ssh_keygen_generate">生成</string>
+    <string name="ssh_keygen_existing_message">替换已有的 SSH 密钥？你可能会无法访问你的服务器。</string>
+    <string name="ssh_key_failed_get_private">获取 SSH 私钥失败</string>
+    <string name="error_generate_ssh_key">尝试生成 SSH 密钥对时出错</string>
+    <string name="import_settings_summary">从您选择的笔记中以 JSON 格式导入设置和已保存的搜索</string>
+    <string name="pref_title_reminders_alarm">播放闹钟声音</string>
+    <string name="permissions_rationale_for_schedule_exact_alarms">在精确时间安排提醒需要权限</string>
+    <string name="orgzlyignore_file">忽略模式文件名</string>
+    <string name="orgzlyignore_file_desc">包含忽略模式的文件相对于存储库根目录的路径。</string>
+    <string name="delete_amount_of_books">删除 %d 个笔记本</string>
+    <string name="ssh_keygen_preference_summary">生成用于 Git 存储库同步的密钥对</string>
+    <string name="ssh_show_public_key_preference_title">浏览生成的 SSH 公钥</string>
 </resources>

@@ -11,9 +11,25 @@
         android:summary="@string/repos_preference_summary">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="com.orgzlyrevived"
+            android:targetPackage="@string/application_id"
             android:targetClass="com.orgzly.android.ui.repos.ReposActivity"/>
     </Preference>
+
+    <EditTextPreference
+        android:key="@string/pref_key_orgzlyignore_file"
+        android:title="@string/orgzlyignore_file"
+        android:selectAllOnFocus="true"
+        android:inputType="text"
+        android:singleLine="true"
+        android:dialogMessage="@string/orgzlyignore_file_desc"
+        android:defaultValue="@string/pref_default_orgzlyignore_file"
+        app:useSimpleSummaryProvider="true"/>
+
+    <SwitchPreference
+        android:key="@string/pref_key_enable_repo_subfolders"
+        android:title="@string/enable_repo_subfolders_preferences_title"
+        android:summary="@string/enable_repo_subfolders_preferences_summary"
+        android:defaultValue="@bool/pref_default_enable_repo_subfolders"/>
 
     <androidx.preference.PreferenceScreen
         android:key="prefs_screen_auto_sync"
@@ -27,7 +43,7 @@
         android:summary="@string/ssh_keygen_preference_summary">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="com.orgzlyrevived"
+            android:targetPackage="@string/application_id"
             android:targetClass="com.orgzly.android.ui.SshKeygenActivity"/>
     </Preference>
 

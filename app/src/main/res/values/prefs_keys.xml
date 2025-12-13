@@ -69,6 +69,10 @@
     <string name="pref_key_styled_text_with_marks" translatable="false">pref_key_styled_text_with_marks</string>
     <bool name="pref_default_styled_text_with_marks" translatable="false">false</bool>
 
+    <!-- Folding in search -->
+    <string name="pref_key_is_search_foldable" translatable="false">pref_key_is_search_foldable</string>
+    <bool name="pref_default_is_search_foldable" translatable="false">false</bool>
+
     <!-- Notebooks' sort order. -->
     <string name="pref_key_notebooks_sort_order" translatable="false">pref_key_notebooks_sort_order</string>
     <string name="pref_default_notebooks_sort_order" translatable="false">@string/pref_value_notebooks_sort_order_name</string>
@@ -101,9 +105,9 @@
     </string-array>
 
     <!-- Theme -->
-    <string name="color_theme_system_default">System default</string>
-    <string name="color_theme_light">Light</string>
-    <string name="color_theme_dark">Dark</string>
+    <string name="color_theme_system_default" translatable="true">System default</string>
+    <string name="color_theme_light" translatable="true">Light</string>
+    <string name="color_theme_dark" translatable="true">Dark</string>
     <string name="pref_key_color_theme" translatable="false">pref_key_color_theme</string>
     <string name="pref_default_color_theme" translatable="false">system</string>
     <string-array name="color_theme">
@@ -118,8 +122,8 @@
     </string-array>
 
     <!-- Light theme scheme -->
-    <string name="pref_key_light_color_scheme">pref_key_light_color_scheme</string>
-    <string name="pref_default_light_color_scheme">dynamic</string>
+    <string name="pref_key_light_color_scheme" translatable="false">pref_key_light_color_scheme</string>
+    <string name="pref_default_light_color_scheme" translatable="false">dynamic</string>
     <string-array name="light_color_scheme_list">
         <item>@string/color_scheme_dynamic</item>
         <item>@string/color_scheme_light</item>
@@ -130,8 +134,8 @@
     </string-array>
     
     <!-- Dark theme scheme -->
-    <string name="pref_key_dark_color_scheme">pref_key_dark_color_scheme</string>
-    <string name="pref_default_dark_color_scheme">dynamic</string>
+    <string name="pref_key_dark_color_scheme" translatable="false">pref_key_dark_color_scheme</string>
+    <string name="pref_default_dark_color_scheme" translatable="false">dynamic</string>
     <string-array name="dark_color_scheme_list">
         <item>@string/color_scheme_dynamic</item>
         <item>@string/color_scheme_dark</item>
@@ -205,6 +209,9 @@
     <string name="pref_key_new_note_state" translatable="false">pref_key_new_note_state</string>
     <string name="pref_default_new_note_state" translatable="false">NOTE</string>
 
+    <string name="pref_key_new_note_add_id" translatable="false">pref_key_new_note_add_id</string>
+    <bool name="pref_default_new_note_add_id" translatable="false">false</bool>
+
     <string name="pref_key_is_new_note_scheduled" translatable="false">pref_key_is_new_note_scheduled</string>
     <bool name="pref_default_is_new_note_scheduled" translatable="false">false</bool>
 
@@ -232,7 +239,7 @@
     <string name="pref_key_ongoing_notification_priority" translatable="false">pref_key_ongoing_notification_priority</string>
 
     <!-- Try to display notification expanded to see the actions -->
-    <string name="pref_default_ongoing_notification_priority">max</string>
+    <string name="pref_default_ongoing_notification_priority" translatable="false">max</string>
 
     <string-array name="notification_priorities">
         <item>@string/notification_maximum_priority</item>
@@ -253,6 +260,12 @@
 
     <string name="pref_key_reminders_sound" translatable="false">pref_key_reminders_sound</string>
     <bool name="pref_default_reminders_sound" translatable="false">true</bool>
+
+    <string name="pref_key_reminders_alarm" translatable="false">pref_key_reminders_alarm</string>
+    <bool name="pref_default_reminders_alarm" translatable="false">false</bool>
+
+    <string name="pref_key_reminders_alarm_tags" translatable="false">pref_key_reminders_alarm_tags</string>
+    <string name="pref_default_reminders_alarm_tags" translatable="false">alarm</string>
 
     <string name="pref_key_reminders_vibrate" translatable="false">pref_key_reminders_vibrate</string>
     <bool name="pref_default_reminders_vibrate" translatable="false">false</bool>
@@ -287,12 +300,18 @@
     <string name="pref_key_auto_sync_on_repo_change" translatable="false">pref_key_auto_sync_on_repo_change</string>
     <bool name="pref_default_auto_sync_on_repo_change" translatable="false">false</bool>
 
+    <string name="pref_key_auto_sync_at_interval_enabled" translatable="false">pref_key_auto_sync_at_interval_enabled</string>
+    <bool name="pref_default_auto_sync_at_interval_enabled" translatable="false">false</bool>
+
+    <string name="pref_key_auto_sync_interval_in_mins" translatable="false">pref_key_auto_sync_interval_in_mins</string>
+    <string name="pref_default_auto_sync_interval_in_mins" translatable="false">60</string>
+    <string name="pref_key_auto_sync_interval_minimum_value" translatable="false">15</string>
 
     <string name="pref_key_snooze_time" translatable="false">pref_key_snooze_time</string>
     <string name="pref_default_snooze_time" translatable="false">5</string>
 
     <string name="pref_key_snooze_type" translatable="false">pref_key_snooze_type</string>
-    <string name="pref_default_snooze_type">button</string>
+    <string name="pref_default_snooze_type" translatable="false">button</string>
     <string-array name="snooze_types">
         <item>Relative to when you tap the snooze button</item>
         <item>Relative to reminder time</item>
@@ -317,7 +336,7 @@
     <string name="pref_key_reminders_notification_settings_V26" translatable="false">pref_key_reminders_notification_settings_v26</string>
 
     <string name="pref_key_show_sync_notifications" translatable="false">pref_key_show_sync_notifications</string>
-    <bool name="pref_default_show_sync_notifications" translatable="false">false</bool>
+    <bool name="pref_default_show_sync_notifications" translatable="false">true</bool>
 
     <string name="pref_key_note_metadata_folded" translatable="false">pref_key_note_metadata_folded</string>
     <bool name="pref_default_note_metadata_folded" translatable="false">false</bool>
@@ -472,10 +491,10 @@
     <string name="pref_key_images_scale_down_to_width_value" translatable="false">pref_key_set_images_fixed_width_value</string>
     <string name="pref_default_images_scale_down_to_width_value" translatable="false">256</string>
 
-    <string name="pref_key_file_absolute_root">pref_key_file_absolute_root</string>
-    <string name="pref_default_file_absolute_root">/</string>
+    <string name="pref_key_file_absolute_root" translatable="false">pref_key_file_absolute_root</string>
+    <string name="pref_default_file_absolute_root" translatable="false">/</string>
 
-    <string name="pref_key_file_relative_root">pref_key_file_relative_root</string>
+    <string name="pref_key_file_relative_root" translatable="false">pref_key_file_relative_root</string>
 
     <string name="pref_key_attach_method" translatable="false">pref_key_attach_method</string>
     <string name="pref_default_attach_method" translatable="false">copy_id</string>
@@ -577,16 +596,20 @@
     <string name="pref_key_highlight_edited_rich_text" translatable="false">pref_key_highlight_edited_rich_text</string>
     <bool name="pref_default_highlight_edited_rich_text" translatable="false">false</bool>
 
+    <!-- Subfolder support -->
+    <string name="pref_key_enable_repo_subfolders" translatable="false">pref_key_enable_repo_subfolders</string>
+    <bool name="pref_default_enable_repo_subfolders" translatable="false">false</bool>
+
     <!-- Git preferences -->
     <string name="pref_key_git_ssh_key_type" translatable="false">pref_key_git_ssh_key_type</string>
-    <string name="pref_key_git_author" traslatable="false">pref_key_git_author</string>
-    <string name="pref_key_git_email" traslatable="false">pref_key_git_email</string>
+    <string name="pref_key_git_author" translatable="false">pref_key_git_author</string>
+    <string name="pref_key_git_email" translatable="false">pref_key_git_email</string>
     <string name="pref_key_git_https_username" translatable="false">pref_key_git_https_username</string>
     <string name="pref_key_git_https_password" translatable="false">pref_key_git_https_password</string>
-    <string name="pref_key_git_repository_filepath" traslatable="false">pref_key_git_repository_filepath</string>
-    <string name="pref_key_git_remote_name" traslatable="false">pref_key_git_remote_name</string>
-    <string name="pref_key_git_branch_name" traslatable="false">pref_key_git_branch_name</string>
-    <string name="pref_key_git_default_repository_directory">pref_key_git_default_repository_directory</string>
+    <string name="pref_key_git_repository_filepath" translatable="false">pref_key_git_repository_filepath</string>
+    <string name="pref_key_git_remote_name" translatable="false">pref_key_git_remote_name</string>
+    <string name="pref_key_git_branch_name" translatable="false">pref_key_git_branch_name</string>
+    <string name="pref_key_git_default_repository_directory" translatable="false">pref_key_git_default_repository_directory</string>
 
     <!-- Developer options -->
 
@@ -598,16 +621,21 @@
 
     <string name="pref_key_major_events_logs" translatable="false">pref_key_major_events_logs</string>
 
+    <string name="pref_key_note_id_for_settings_export_and_import" translatable="false">pref_key_settings_export_note_id</string>
+
     <!-- These do not store any data. -->
     <string name="pref_key_repos" translatable="false">pref_key_repos</string>
     <string name="pref_key_ssh_keygen" translatable="false">pref_key_ssh_keygen</string>
     <string name="pref_key_ssh_show_public_key" translatable="false">pref_key_ssh_show_public_key</string>
     <string name="pref_key_version" translatable="false">pref_key_version</string>
+    <string name="pref_key_git_commit" translatable="false">pref_key_git_commit</string>
     <string name="pref_key_reload_getting_started" translatable="false">pref_key_reload_getting_started</string>
     <string name="pref_key_clear_database" translatable="false">pref_key_clear_database</string>
+    <string name="pref_key_export_settings" translatable="false">pref_key_export_settings</string>
+    <string name="pref_key_import_settings" translatable="false">pref_key_import_settings</string>
 
     <!-- State-type preferences, not changeable by user. They have no defaults. -->
-    <string name="pref_key_dropbox_token" translatable="false">pref_key_dropbox_token</string>
+    <string name="pref_key_dropbox_credential" translatable="false">pref_key_dropbox_token</string>
     <string name="pref_key_is_getting_started_notebook_loaded" translatable="false">pref_key_is_getting_started_notebook_loaded</string>
     <string name="pref_key_last_used_version_code" translatable="false">pref_key_last_used_version_code</string>
     <string name="pref_key_last_successful_sync_time" translatable="false">pref_key_last_successful_sync_time</string>
@@ -617,4 +645,23 @@
     <string name="pref_key_notes_clipboard" translatable="false">pref_key_notes_clipboard</string>
     <string name="pref_key_refile_last_location" translatable="false">pref_key_refile_last_location</string>
 
+    <!-- Repository ignore file. -->
+    <string name="pref_key_orgzlyignore_file" translatable="false">pref_key_orgzlyignore_file</string>
+    <string name="pref_default_orgzlyignore_file" translatable="false">.orgzlyignore</string>
+
+    <!-- Share-to-new-note receiver behavior -->
+    <string name="pref_key_shared_text_placement" translatable="false">pref_key_shared_text_placement</string>
+    <string name="pref_default_shared_text_placement" translatable="false">in_note_content</string>
+    <string name="pref_key_create_org_links_from_shared_links" translatable="false">pref_key_create_org_links_from_shared_links</string>
+    <bool name="pref_default_create_org_links_from_shared_links" translatable="false">true</bool>
+
+    <string-array name="shared_text_placement_options">
+        <item>@string/in_note_heading</item>
+        <item>@string/in_note_content</item>
+    </string-array>
+
+    <string-array name="shared_text_placement_option_values">
+        <item>in_note_heading</item>
+        <item>in_note_content</item>
+    </string-array>
 </resources>

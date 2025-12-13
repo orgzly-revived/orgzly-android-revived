@@ -31,6 +31,9 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
 
     private val userTimeFormatter: UserTimeFormatter
 
+    // Level offset for narrowing - null when not narrowed, offset value when narrowed
+    var levelOffset: Int? = null
+
     init {
 
         val titleAttributes = TitleGenerator.TitleAttributes(
@@ -108,7 +111,7 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
 
             /* If content changes (for example by toggling the checkbox), update the note. */
             holder.binding.itemHeadContent.setOnUserTextChangeListener { str ->
-                val useCase = NoteUpdateContent(note.position.bookId, note.id, str)
+                val useCase = NoteUpdateContent(note.id, str)
 
                 App.EXECUTORS.diskIO().execute {
                     UseCaseRunner.run(useCase)
@@ -218,11 +221,17 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
 
     /**
      * Set indentation views, depending on note level.
+     * When narrowed, levelOffset hides parent indentation so narrowed note appears as root.
      */
     private fun setupIndent(holder: NoteItemViewHolder, note: Note) {
         val container = holder.binding.itemHeadIndentContainer
 
-        val level = if (inBook) note.position.level - 1 else 0
+        // Ensure level is never negative
+        val level = if (inBook) {
+            maxOf(0, note.position.level - 1 - (levelOffset ?: 0))
+        } else {
+            0
+        }
 
         when {
             container.childCount < level -> { // More levels needed
@@ -232,7 +241,7 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
                 }
 
                 // Inflate the rest
-                for (i in container.childCount + 1..level) {
+                (container.childCount + 1..level).forEach { i ->
                     View.inflate(container.context, R.layout.indent, container)
                 }
             }
@@ -316,7 +325,7 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
     private fun updateFoldingButtons(context: Context, note: Note, holder: NoteItemViewHolder): Boolean {
         var isVisible = false
 
-        if (inBook) {
+        if (AppPreferences.isSearchFoldable(context) || inBook) {
             val contentFoldable = note.hasContent() &&
                     AppPreferences.isNotesContentFoldable(context) &&
                     AppPreferences.isNotesContentDisplayedInList(context)
@@ -337,7 +346,7 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
             holder.binding.itemHeadFoldButton.visibility = View.VISIBLE
             holder.binding.itemHeadFoldButtonText.visibility = View.VISIBLE
         } else {
-            if (inBook) { // Leave invisible for padding
+            if (AppPreferences.isSearchFoldable(context) || inBook) { // Leave invisible for padding
                 holder.binding.itemHeadFoldButton.visibility = View.INVISIBLE
                 holder.binding.itemHeadFoldButtonText.visibility = View.INVISIBLE
             } else {
@@ -348,7 +357,7 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
 
         // Add horizontal padding when in search results (no bullet, no folding button)
         val horizontalPadding = context.resources.getDimension(R.dimen.screen_edge).toInt()
-        if (!inBook) {
+        if (!(inBook || AppPreferences.isSearchFoldable(context))) {
             holder.binding.itemHeadContainer.setPadding(
                     horizontalPadding,
                     holder.binding.itemHeadContainer.paddingTop,
@@ -466,10 +475,10 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
 
 
     private data class Attrs(
-        @ColorInt val todoColor: Int,
-        @ColorInt val doneColor: Int,
+        @param:ColorInt val todoColor: Int,
+        @param:ColorInt val doneColor: Int,
         val postTitleTextSize: Int,
-        @ColorInt val postTitleTextColor: Int
+        @param:ColorInt val postTitleTextColor: Int
     ) {
         companion object {
             @SuppressWarnings("ResourceType")

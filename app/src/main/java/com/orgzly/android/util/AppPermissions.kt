@@ -9,9 +9,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.orgzly.BuildConfig
 import com.orgzly.R
+import com.orgzly.android.App
 import com.orgzly.android.ui.CommonActivity
 import com.orgzly.android.ui.showSnackbar
 import com.orgzly.android.ui.util.ActivityUtils
+import com.orgzly.android.ui.util.getAlarmManager
 
 object AppPermissions {
     private val TAG = AppPermissions::class.java.name
@@ -70,7 +72,12 @@ object AppPermissions {
             Usage.BOOK_EXPORT -> Manifest.permission.WRITE_EXTERNAL_STORAGE
             Usage.SYNC_START -> Manifest.permission.WRITE_EXTERNAL_STORAGE
             Usage.SAVED_SEARCHES_EXPORT_IMPORT -> Manifest.permission.WRITE_EXTERNAL_STORAGE
-            Usage.EXTERNAL_FILES_ACCESS -> Manifest.permission.READ_EXTERNAL_STORAGE
+            Usage.EXTERNAL_FILES_ACCESS -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                Manifest.permission.READ_MEDIA_IMAGES
+            else
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            Usage.POST_NOTIFICATIONS -> Manifest.permission.POST_NOTIFICATIONS
+            Usage.SCHEDULE_EXACT_ALARM -> Manifest.permission.SCHEDULE_EXACT_ALARM
         }
     }
 
@@ -82,7 +89,22 @@ object AppPermissions {
             Usage.SYNC_START -> R.string.permissions_rationale_for_sync_start
             Usage.SAVED_SEARCHES_EXPORT_IMPORT -> R.string.storage_permissions_missing
             Usage.EXTERNAL_FILES_ACCESS -> R.string.permissions_rationale_for_external_files_access
+            Usage.POST_NOTIFICATIONS -> R.string.permissions_rationale_for_post_notifications
+            Usage.SCHEDULE_EXACT_ALARM -> R.string.permissions_rationale_for_schedule_exact_alarms
         }
+    }
+
+    @JvmStatic
+    fun canScheduleExactAlarms(context: Context): Boolean {
+        var isGranted = true
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !context.getAlarmManager().canScheduleExactAlarms()) {
+            isGranted = false
+            val activity = App.getCurrentActivity()
+            activity?.showSnackbar(rationaleForRequest(Usage.SCHEDULE_EXACT_ALARM), R.string.settings) {
+                ActivityUtils.openAppScheduleExactAlarmsPermissionSetting(activity)
+            }
+        }
+        return isGranted
     }
 
     enum class Usage {
@@ -90,6 +112,8 @@ object AppPermissions {
         BOOK_EXPORT,
         SYNC_START,
         SAVED_SEARCHES_EXPORT_IMPORT,
-        EXTERNAL_FILES_ACCESS
+        EXTERNAL_FILES_ACCESS,
+        POST_NOTIFICATIONS,
+        SCHEDULE_EXACT_ALARM,
     }
 }

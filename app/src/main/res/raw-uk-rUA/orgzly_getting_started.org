@@ -33,6 +33,17 @@
 *** DONE Це нотатка з /виконаним/ типом стану
 CLOSED: [2018-01-24 Wed 17:00]
 
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
 ** Нотатки дозволяють планувати час
 SCHEDULED: <2015-02-20 Fri 15:15>
 
@@ -41,6 +52,13 @@ SCHEDULED: <2015-02-16 Mon .+2d>
 
 ** Ви також можете встановити час завершення
 DEADLINE: <2015-02-20 Fri>
+
+** Event times can be used anywhere in the note's content
+
+You can have multiple event times:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
 
 ** Підтримуються нагадування для нотаток із запланованим часом і кінцевим терміном
 
@@ -52,11 +70,11 @@ DEADLINE: <2015-02-20 Fri>
 
 ** Нотатка може мати посилання
 
-Подзвонити за номером (tel:555-0199), надіслати SMS (sms:555-0199), написати електронного листа (mailto:support@orgzly.com) або відвідати вебсторінку ([[https://www.orgzly.com][Orgzly.com]]).
+Подзвонити за номером (tel:555-0199), надіслати SMS (sms:555-0199), написати електронного листа (mailto:support@orgzlyrevived.com) або відвідати вебсторінку ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
 
 Також Ви можете посилатися на іншу нотатку або записник.
 
-Детальніше дивіться https://www.orgzly.com/help#links.
+Детальніше дивіться [[https://www.orgzlyrevived.com/docs#links]].
 
 ** Підтримуються основні типографічні виділення
 
@@ -70,12 +88,18 @@ DEADLINE: <2015-02-20 Fri>
 
 Натисніть на вимикач, щоб змінити стан. Натисніть кнопку нового рядка *⤶* в кінці рядка, щоб додати новий елемент.
 
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] Завдання 1
+- [ ] Завдання 2
+- [X] Завдання 3
+
 * Пошук
 ** Підтримуються різні оператори пошуку
 
 Ви можете шукати нотатки за станом, мітками, запланованим або кінцевим часом тощо.
 
-Детальніше дивіться https://www.orgzly.com/help#search.
+Детальніше дивіться [[https://www.orgzlyrevived.com/docs#search]].
 
 ** Пошукові запити можна зберігати для швидкого доступу
 
@@ -87,7 +111,7 @@ DEADLINE: <2015-02-20 Fri>
 
 ** Записники можна зберігати як прості текстові файли
 
-Файли знаходяться у форматі, який використовує «Org mode».
+Файли знаходяться у форматі, який використовує [[https://orgmode.org/][Org mode]].
 
 ** Тип розташування (репозиторію)
 

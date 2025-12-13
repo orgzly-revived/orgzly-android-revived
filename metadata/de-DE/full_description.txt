@@ -1,0 +1,16 @@
+<i>Orgzly Revived</i> ist ein Outliner zum Notieren und Verwalten von To-Do-Listen. Sie können Notizbücher im Klartext speichern und sie mit einem Verzeichnis auf Ihrem Mobilgerät, Ihrer SD-Karte, Dropbox oder über WebDAV synchronisieren.
+
+Notizbücher werden im Dateiformat des Org-Modus gespeichert. „Der Org-Modus dient dazu, Notizen zu machen, TODO-Listen zu verwalten, Projekte zu planen und Dokumente mit einem schnellen und effektiven Klartextsystem zu verfassen.“ Weitere Informationen finden Sie unter <a href="https://orgmode.org/" target="_blank" rel="nofollow noopener">orgmode.org</a>.
+
+<b>Features:</b>
+
+* Notizen und Aufgaben erstellen, bearbeiten und löschen
+* Untergeordnete Notizen ein- und ausblenden
+* Aufgaben planen und Fristen festlegen
+* Prioritäten und Tags für Notizen festlegen
+* Notizen nach links oder rechts wischen, um Schnellmenüs zu öffnen
+* Notizen nach verschiedenen Eigenschaften suchen
+* Suchanfragen erstellen und speichern, um schnell darauf zugreifen zu können
+* Notizbücher mit einem oder mehreren Verzeichnissen synchronisieren
+
+<i>Orgzly Revived</i> ist ein Fork der Orgzly-App.

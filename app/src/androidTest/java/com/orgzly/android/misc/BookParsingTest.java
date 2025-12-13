@@ -14,6 +14,8 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -79,14 +81,14 @@ public class BookParsingTest extends OrgzlyTest {
     }
 
     @Test
-    public void testEmptyProperties() {
+    public void testEmptyNoteProperties() {
         onBook("* Note 1\n  :PROPERTIES:\n  :END:").onLoad()
                 .isWhenSaved("* Note 1\n");
 
     }
 
     @Test
-    public void testProperties() {
+    public void testNoteProperties() {
         onBook("* Note 1\n" +
                "  :PROPERTIES:\n" +
                "  :name: value\n" +
@@ -98,7 +100,7 @@ public class BookParsingTest extends OrgzlyTest {
     }
 
     @Test
-    public void testPropertiesMultiple() {
+    public void testNotePropertiesMultiple() {
         onBook("* Note 1\n" +
                "  :PROPERTIES:\n" +
                "  :name2: value2\n" +
@@ -112,7 +114,7 @@ public class BookParsingTest extends OrgzlyTest {
     }
 
     @Test
-    public void testPropertiesOrder() {
+    public void testNotePropertiesOrder() {
         onBook("* Note 1\n" +
                "  :PROPERTIES:\n" +
                "  :LAST_REPEAT: [2017-04-03 Mon 10:26]\n" +
@@ -142,7 +144,7 @@ public class BookParsingTest extends OrgzlyTest {
     }
 
     @Test
-    public void testPropertiesEmpty() {
+    public void testNotePropertiesEmpty() {
         onBook("* Note 1\n" +
                "  :PROPERTIES:\n" +
                "  :END:").onLoad()
@@ -160,6 +162,98 @@ public class BookParsingTest extends OrgzlyTest {
                              "  CLOCK: [2016-10-27 Thu 18:40]--[2016-10-27 Thu 18:51] =>  0:11\n" +
                              "  CLOCK: [2016-10-27 Thu 18:10]--[2016-10-27 Thu 18:25] =>  0:15\n" +
                              "  CLOCK: [2016-10-27 Thu 17:50]--[2016-10-27 Thu 18:05] =>  0:15\n\n");
+    }
+
+    @Test
+    public void testBookSinglePropertyIsParsed() {
+        String content = """
+            :PROPERTIES:
+            :FOO: bar
+            :END:
+            
+            content
+            
+        """;
+        TestedBook testedBook = onBook(content);
+        testedBook.onLoad().isWhenSaved(content);
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)),
+                dataRepository.findNotesOrBooksHavingProperty("foo", "bar"));
+    }
+
+    /**
+     * So far, we never write properties into the preface -- the preface is only edited as
+     * regular text. So there is no risk of Orgzly changing the order of the properties, and
+     * therefore we don't need to keep track of their order.
+     */
+    @Test
+    public void testBookMultiplePropertiesAreParsed() {
+        String content = """
+            :PROPERTIES:
+            :FOO: bar
+            :BAR: foo
+            :END:
+            
+            content
+            
+        """;
+        TestedBook testedBook = onBook(content);
+        testedBook.onLoad().isWhenSaved(content);
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)), dataRepository.findNotesOrBooksHavingProperty("foo", "bar"));
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)), dataRepository.findNotesOrBooksHavingProperty("bar", "foo"));
+    }
+
+    /**
+     * The preface is left untouched, but if a property is duplicated, we only parse the last
+     * defined value.
+     */
+    @Test
+    public void testBookDuplicateProperties() {
+        String content = """
+            :PROPERTIES:
+            :FOO: firstvalue
+            :BAR: firstvalue
+            :FOO: secondvalue
+            :BAR: secondvalue
+            :END:
+            
+            content
+            
+        """;
+        TestedBook testedBook = onBook(content);
+        testedBook.onLoad().isWhenSaved(content);
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)),
+                dataRepository.findNotesOrBooksHavingProperty("foo", "secondvalue"));
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)),
+                dataRepository.findNotesOrBooksHavingProperty("bar", "secondvalue"));
+        assertEquals(0, dataRepository.findNotesOrBooksHavingProperty("foo", "firstvalue").size());
+        assertEquals(0, dataRepository.findNotesOrBooksHavingProperty("bar", "firstvalue").size());
+    }
+
+    @Test
+    public void testBookDuplicatePropertiesDifferentCase() {
+        String content = """
+            :PROPERTIES:
+            :foo: firstvalue
+            :bar: firstvalue
+            :FOO: secondvalue
+            :BAR: secondvalue
+            :END:
+            
+            content
+            
+        """;
+        TestedBook testedBook = onBook(content);
+        testedBook.onLoad().isWhenSaved(content);
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)),
+                dataRepository.findNotesOrBooksHavingProperty("foo", "secondvalue"));
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)),
+                dataRepository.findNotesOrBooksHavingProperty("bar", "secondvalue"));
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)),
+                dataRepository.findNotesOrBooksHavingProperty("FOO", "secondvalue"));
+        assertEquals(new ArrayList<>(Collections.singleton(testedBook.book)),
+                dataRepository.findNotesOrBooksHavingProperty("BAR", "secondvalue"));
+        assertEquals(0, dataRepository.findNotesOrBooksHavingProperty("foo", "firstvalue").size());
+        assertEquals(0, dataRepository.findNotesOrBooksHavingProperty("bar", "firstvalue").size());
     }
 
     /*

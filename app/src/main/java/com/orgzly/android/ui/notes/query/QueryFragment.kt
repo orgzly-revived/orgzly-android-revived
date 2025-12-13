@@ -4,16 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
-import android.widget.PopupWindow
 import androidx.lifecycle.ViewModelProvider
 import com.orgzly.R
+import com.orgzly.android.NotesOrgExporter
 import com.orgzly.android.sync.SyncRunner
 import com.orgzly.android.ui.dialogs.TimestampDialogFragment
 import com.orgzly.android.ui.drawer.DrawerItem
 import com.orgzly.android.ui.main.SharedMainActivityViewModel
-import com.orgzly.android.ui.notes.NotePopup
 import com.orgzly.android.ui.notes.NotesFragment
 import com.orgzly.android.ui.settings.SettingsActivity
 
@@ -28,12 +25,14 @@ abstract class QueryFragment :
     /** Currently active query.  */
     var currentQuery: String? = null
 
+    /** Currently active query name. */
+    var currentQueryName: String? = null
+
     protected var listener: Listener? = null
 
     protected lateinit var sharedMainActivityViewModel: SharedMainActivityViewModel
 
     protected lateinit var viewModel: QueryViewModel
-
 
     override fun getCurrentListener(): Listener? {
         return listener
@@ -49,6 +48,7 @@ abstract class QueryFragment :
         listener = activity as Listener
 
         currentQuery = requireArguments().getString(ARG_QUERY)
+        currentQueryName = requireArguments().getString(ARG_QUERY_NAME)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,6 +106,10 @@ abstract class QueryFragment :
             R.id.focus ->
                 listener?.onNoteFocusInBookRequest(ids.first())
 
+            R.id.share -> {
+                shareNotes(ids)
+            }
+
             R.id.sync -> {
                 SyncRunner.startSync()
             }
@@ -116,10 +120,39 @@ abstract class QueryFragment :
         }
     }
 
+    private fun shareNotes(ids: Set<Long>) {
+        try {
+            val exporter = NotesOrgExporter(dataRepository)
+            val exportedNotes = mutableListOf<String>()
+
+            for (noteId in ids) {
+                try {
+                    exportedNotes.add(exporter.exportNote(noteId))
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to export note $noteId", e)
+                }
+            }
+
+            val content = exportedNotes.joinToString("")
+
+            if (content.isNotEmpty()) {
+                val shareIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, content)
+                }
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.share)))
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to share notes", e)
+        }
+    }
+
     companion object {
         private val TAG = QueryFragment::class.java.name
 
         const val ARG_QUERY = "query"
+        const val ARG_QUERY_NAME = "query_name"
 
         fun getDrawerItemId(query: String?): String {
             return "$TAG $query"

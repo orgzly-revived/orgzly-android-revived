@@ -15,7 +15,7 @@ class CustomIdLinkSpan(val type: Int, val value: String, val name: String?) : Li
 
     override fun onClick(view: View) {
         if (view is ActionableRichTextView) {
-            view.followLinkToNoteWithProperty(PROPERTY, propertyValue)
+            view.followLinkToNoteOrBookWithProperty(PROPERTY, propertyValue)
         }
     }
 

@@ -10,6 +10,7 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
@@ -155,7 +156,7 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
 
         } else {
             // There are books selected
-            viewAdapter.getSelection().toggleSingleSelect(item.book.id)
+            viewAdapter.getSelection().toggle(item.book.id)
             viewAdapter.notifyDataSetChanged() // FIXME
 
             viewModel.appBar.toModeFromSelectionCount(viewAdapter.getSelection().count)
@@ -168,7 +169,7 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
             return
         }
 
-        viewAdapter.getSelection().toggleSingleSelect(item.book.id)
+        viewAdapter.getSelection().toggle(item.book.id)
         viewAdapter.notifyDataSetChanged() // FIXME
 
         viewModel.appBar.toModeFromSelectionCount(viewAdapter.getSelection().count)
@@ -225,6 +226,7 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
         binding.topToolbar.run {
             menu.clear()
             inflateMenu(R.menu.books_cab)
+            hideMenuItemsBasedOnSelection(menu)
 
             setNavigationIcon(R.drawable.ic_arrow_back)
 
@@ -233,20 +235,21 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
             }
 
             setOnMenuItemClickListener { menuItem ->
-                val bookId = viewAdapter.getSelection().getOnly()
+                val bookIds = viewAdapter.getSelection().getIds()
 
-                if (bookId == null) {
+                if (bookIds.isEmpty()) {
                     Log.e(TAG, "Cannot handle action when there are no items selected")
                     return@setOnMenuItemClickListener true
                 }
 
                 when (menuItem.itemId) {
                     R.id.books_context_menu_rename -> {
-                        viewModel.renameBookRequest(bookId)
+                        // N.B. Menu item is hidden when multiple books are selected
+                        viewModel.renameBookRequest(bookIds.first())
                     }
 
                     R.id.books_context_menu_set_link -> {
-                        viewModel.setBookLinkRequest(bookId)
+                        viewModel.setBookLinksRequest(bookIds)
                     }
 
                     R.id.books_context_menu_force_save -> {
@@ -254,7 +257,7 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
                             .setTitle(R.string.books_context_menu_item_force_save)
                             .setMessage(R.string.overwrite_remote_notebook_question)
                             .setPositiveButton(R.string.overwrite) { _, _ ->
-                                viewModel.forceSaveBookRequest(bookId)
+                                viewModel.forceSaveBookRequest(bookIds)
                             }
                             .setNegativeButton(R.string.cancel, null)
                             .show()
@@ -265,18 +268,19 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
                             .setTitle(R.string.books_context_menu_item_force_load)
                             .setMessage(R.string.overwrite_local_notebook_question)
                             .setPositiveButton(R.string.overwrite) { _, _ ->
-                                viewModel.forceLoadBookRequest(bookId)
+                                viewModel.forceLoadBookRequest(bookIds)
                             }
                             .setNegativeButton(R.string.cancel, null)
                             .show()
                     }
 
                     R.id.books_context_menu_export -> {
-                        viewModel.exportBookRequest(bookId, BookFormat.ORG)
+                        // N.B. Menu item is hidden when multiple books are selected
+                        viewModel.exportBookRequest(bookIds.first(), BookFormat.ORG)
                     }
 
                     R.id.books_context_menu_delete -> {
-                        viewModel.deleteBookRequest(bookId)
+                        viewModel.deleteBooksRequest(bookIds)
                     }
                 }
 
@@ -291,6 +295,13 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
         }
     }
 
+    private fun hideMenuItemsBasedOnSelection(menu: Menu) {
+        // Hide choices which are not applicable when multiple books are selected
+        for (id in listOf(R.id.books_context_menu_rename, R.id.books_context_menu_export)) {
+            menu.findItem(id)?.isVisible = viewAdapter.getSelection().count == 1
+        }
+    }
+
     private val pickFileForBookExport =
         registerForActivityResult(ActivityResultContracts.CreateDocument()) { uri ->
             if (uri != null) {
@@ -301,12 +312,21 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
         }
 
     private fun exportBook(book: Book, format: BookFormat) {
-        val defaultFileName = BookName.fileName(book.name, format)
+        val defaultFileName = BookName.lastPathSegment(book.name, format)
         pickFileForBookExport.launch(defaultFileName)
     }
 
-    private fun deleteBookDialog(book: BookView) {
+    private fun deleteBooksDialog(books: Set<BookView>) {
         val dialogBinding = DialogBookDeleteBinding.inflate(LayoutInflater.from(context))
+        val dialogTitle: String
+        val book: BookView?
+        if (books.size == 1) {
+            book = books.first()
+            dialogTitle = getString(R.string.delete_with_quoted_argument, book.book.name)
+        } else {
+            book = null
+            dialogTitle = getString(R.string.delete_amount_of_books, books.size)
+        }
 
         dialogBinding.deleteLinkedCheckbox.setOnCheckedChangeListener { _, isChecked ->
             dialogBinding.deleteLinkedUrl.isEnabled = isChecked
@@ -316,20 +336,22 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
             when (which) {
                 DialogInterface.BUTTON_POSITIVE -> {
                     val deleteLinked = dialogBinding.deleteLinkedCheckbox.isChecked
-                    viewModel.deleteBook(book.book.id, deleteLinked)
+                    val bookIds = books.map { it.book.id }.toSet()
+                    viewModel.deleteBooks(bookIds, deleteLinked)
                 }
             }
         }
 
         val builder = MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.delete_with_quoted_argument, book.book.name))
+                .setTitle(dialogTitle)
                 .setPositiveButton(R.string.delete, dialogClickListener)
                 .setNegativeButton(R.string.cancel, dialogClickListener)
 
-        if (book.syncedTo != null) {
+        if (book?.syncedTo != null) {
             dialogBinding.deleteLinkedUrl.text = book.syncedTo.uri.toString()
-            builder.setView(dialogBinding.root)
+            dialogBinding.deleteLinkedCheckbox.text = getString(R.string.also_delete_linked_book)
         }
+        builder.setView(dialogBinding.root)
 
         dialog = builder.show()
     }
@@ -421,9 +443,9 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
         })
 
 
-        viewModel.bookToDeleteEvent.observeSingle(viewLifecycleOwner, Observer { bookView ->
-            if (bookView != null) {
-                deleteBookDialog(bookView)
+        viewModel.booksToDeleteEvent.observeSingle(viewLifecycleOwner, Observer { bookViews ->
+            if (bookViews.isNotEmpty()) {
+                deleteBooksDialog(bookViews)
             }
         })
 
@@ -445,7 +467,7 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
             activity?.showSnackbar(R.string.message_book_deleted)
         })
 
-        viewModel.setBookLinkRequestEvent.observeSingle(this) { (book, links, urls, checked) ->
+        viewModel.setBookLinkRequestEvent.observeSingle(this) { (bookIds, links, urls, checked) ->
             if (links.isEmpty()) {
                 activity?.showSnackbar(getString(R.string.no_repos), R.string.repositories) {
                     activity?.let {
@@ -454,7 +476,6 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
                         ContextCompat.startActivity(it, intent, null)
                     }
                 }
-
             } else {
                 dialog = MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.book_link)
@@ -462,12 +483,12 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
                         urls.toTypedArray(),
                         checked
                     ) { _: DialogInterface, which: Int ->
-                        viewModel.setBookLink(book.id, links[which])
+                        viewModel.setBookLinks(bookIds, links[which])
                         dialog?.dismiss()
                         dialog = null
                     }
-                    .setNeutralButton(R.string.remove_notebook_link) { dialog, which ->
-                        viewModel.setBookLink(book.id)
+                    .setNeutralButton(R.string.remove_notebook_link) { _, _ ->
+                        viewModel.setBookLinks(bookIds)
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .show()
@@ -577,7 +598,7 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
     private fun guessBookNameFromUri(uri: Uri): String? {
         val fileName: String = BookName.getFileName(requireContext(), uri)
         return if (BookName.isSupportedFormatFileName(fileName)) {
-            val bookName = BookName.fromFileName(fileName)
+            val bookName = BookName.fromRepoRelativePath(fileName)
             bookName.name
         } else {
             null

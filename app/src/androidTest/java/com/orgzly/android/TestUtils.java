@@ -5,11 +5,13 @@ import static org.junit.Assert.fail;
 
 import android.net.Uri;
 
+import com.orgzly.BuildConfig;
 import com.orgzly.android.data.DataRepository;
 import com.orgzly.android.data.DbRepoBookRepository;
 import com.orgzly.android.db.entity.BookAction;
 import com.orgzly.android.db.entity.BookView;
 import com.orgzly.android.db.entity.Repo;
+import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.repos.RepoType;
 import com.orgzly.android.repos.RepoWithProps;
 import com.orgzly.android.repos.SyncRepo;
@@ -17,6 +19,10 @@ import com.orgzly.android.repos.VersionedRook;
 import com.orgzly.android.sync.BookNamesake;
 import com.orgzly.android.sync.SyncUtils;
 import com.orgzly.android.util.MiscUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.junit.Assume;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,9 +46,18 @@ public class TestUtils {
         return dataRepository.getRepoInstance(13, type, url);
     }
 
+    public SyncRepo repoInstance(RepoType type, String url, Long id) {
+        return dataRepository.getRepoInstance(id, type, url);
+    }
+
     public Repo setupRepo(RepoType type, String url) {
         long id = dataRepository.createRepo(new RepoWithProps(new Repo(0, type, url)));
 
+        return dataRepository.getRepo(id);
+    }
+
+    public Repo setupRepo(RepoType type, String url, Map<String, String> props) {
+        long id = dataRepository.createRepo(new RepoWithProps(new Repo(0, type, url), props));
         return dataRepository.getRepo(id);
     }
 
@@ -148,5 +163,39 @@ public class TestUtils {
         }
 
         return null;
+    }
+
+    public Map<String, BookNamesake> syncOrThrow() throws Exception {
+        Map<String, BookNamesake> nameGroups = SyncUtils.groupAllNotebooksByName(dataRepository);
+
+        for (BookNamesake group : nameGroups.values()) {
+            BookAction action = SyncUtils.syncNamesake(dataRepository, group);
+            dataRepository.setBookLastActionAndSyncStatus(
+                    group.getBook().getBook().getId(), action, group.getStatus().toString());
+        }
+
+        return nameGroups;
+    }
+
+    public void dropboxTestPreflight() throws JSONException {
+        Assume.assumeTrue(BuildConfig.IS_DROPBOX_ENABLED);
+        Assume.assumeTrue(BuildConfig.DROPBOX_APP_KEY.length() > 0);
+        Assume.assumeTrue(BuildConfig.DROPBOX_REFRESH_TOKEN.length() > 0);
+
+        JSONObject mockSerializedDbxCredential = new JSONObject();
+        mockSerializedDbxCredential.put("access_token", "dummy");
+        mockSerializedDbxCredential.put("expires_at", System.currentTimeMillis());
+        mockSerializedDbxCredential.put("refresh_token", BuildConfig.DROPBOX_REFRESH_TOKEN);
+        mockSerializedDbxCredential.put("app_key", BuildConfig.DROPBOX_APP_KEY);
+        AppPreferences.dropboxSerializedCredential(App.getAppContext(), mockSerializedDbxCredential.toString());
+    }
+
+    /**
+     * Creates a saved search with the given name and query.
+     * @param name Name of the saved search
+     * @param query Search query
+     */
+    public void createSavedSearch(String name, String query) {
+        dataRepository.createSavedSearch(new com.orgzly.android.db.entity.SavedSearch(0, name, query, 0));
     }
 }

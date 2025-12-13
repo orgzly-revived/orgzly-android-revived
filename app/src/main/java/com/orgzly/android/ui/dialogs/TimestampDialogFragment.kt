@@ -20,7 +20,8 @@ import com.orgzly.android.util.UserTimeFormatter
 import com.orgzly.databinding.DialogTimestampBinding
 import com.orgzly.databinding.DialogTimestampTitleBinding
 import com.orgzly.org.datetime.OrgDateTime
-import java.util.*
+import java.util.Calendar
+import java.util.TreeSet
 
 class TimestampDialogFragment : DialogFragment(), View.OnClickListener {
     private var listener: OnDateTimeSetListener? = null
@@ -115,8 +116,7 @@ class TimestampDialogFragment : DialogFragment(), View.OnClickListener {
             .setCustomTitle(titleBinding.root)
             .setView(binding.root)
             .setPositiveButton(R.string.set) { _, _ ->
-                val time = viewModel.getOrgDateTime()
-                listener?.onDateTimeSet(dialogId, noteIds, time)
+                listener?.onDateTimeSet(dialogId, noteIds, viewModel.getOrgDateTime())
             }
             .setNeutralButton(R.string.clear) { _, _ ->
                 listener?.onDateTimeSet(dialogId, noteIds, null)

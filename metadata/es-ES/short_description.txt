@@ -1,0 +1,1 @@
+Aplicación para tomar y organizar notas y tareas en formato Org-mode

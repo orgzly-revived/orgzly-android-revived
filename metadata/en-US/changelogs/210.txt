@@ -1,0 +1,2 @@
+• Fix crash when scheduling reminders
+• Git repos: Fix broken .orgzlyignore rule check

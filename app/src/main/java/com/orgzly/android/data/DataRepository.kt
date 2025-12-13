@@ -6,15 +6,19 @@ import android.content.Intent
 import android.content.res.Resources
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.text.TextUtils
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.sqlite.db.SupportSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.JsonSyntaxException
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.*
@@ -22,6 +26,7 @@ import com.orgzly.android.data.mappers.OrgMapper
 import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.OrgzlyDatabase
 import com.orgzly.android.db.dao.NoteDao
+import com.orgzly.android.db.dao.NoteDao.NoteIdBookId
 import com.orgzly.android.db.dao.NoteViewDao
 import com.orgzly.android.db.dao.ReminderTimeDao
 import com.orgzly.android.db.entity.*
@@ -46,6 +51,7 @@ import com.orgzly.org.OrgActiveTimestamps
 import com.orgzly.org.OrgFile
 import com.orgzly.org.OrgFileSettings
 import com.orgzly.org.OrgProperties
+import com.orgzly.org.OrgProperty
 import com.orgzly.org.datetime.OrgDateTime
 import com.orgzly.org.datetime.OrgRange
 import com.orgzly.org.parser.OrgNestedSetParserListener
@@ -54,7 +60,6 @@ import com.orgzly.org.parser.OrgParser
 import com.orgzly.org.parser.OrgParserWriter
 import com.orgzly.org.utils.StateChangeLogic
 import java.io.*
-import java.lang.IllegalStateException
 import java.util.*
 import java.util.concurrent.Callable
 import javax.inject.Inject
@@ -82,9 +87,9 @@ class DataRepository @Inject constructor(
                     BookAction.Type.PROGRESS,
                     resources.getString(R.string.force_loading_from_uri, book.linkRepo.url)))
 
-            val fileName = BookName.getFileName(context, book)
+            val repoRelativePath = BookName.getRepoRelativePath(book)
 
-            val loadedBook = loadBookFromRepo(book.linkRepo.id, book.linkRepo.type, book.linkRepo.url, fileName)
+            val loadedBook = loadBookFromRepo(book.linkRepo.id, book.linkRepo.type, book.linkRepo.url, repoRelativePath)
 
             setBookLastActionAndSyncStatus(loadedBook!!.book.id, BookAction.forNow(
                     BookAction.Type.INFO,
@@ -105,7 +110,7 @@ class DataRepository @Inject constructor(
         val book = getBookView(bookId)
                 ?: throw IOException(resources.getString(R.string.book_does_not_exist_anymore))
 
-        val fileName: String = BookName.getFileName(context, book)
+        val repositoryPath: String = BookName.getRepoRelativePath(book)
 
         try {
             /* Prefer link. */
@@ -115,7 +120,7 @@ class DataRepository @Inject constructor(
                     BookAction.Type.PROGRESS,
                     resources.getString(R.string.force_saving_to_uri, repoEntity)))
 
-            saveBookToRepo(repoEntity, fileName, book, BookFormat.ORG)
+            saveBookToRepo(repoEntity, repositoryPath, book, BookFormat.ORG)
 
             val savedBook = getBookView(bookId)
 
@@ -146,7 +151,7 @@ class DataRepository @Inject constructor(
     @Throws(IOException::class)
     fun saveBookToRepo(
             repoEntity: Repo,
-            fileName: String,
+            repositoryPath: String,
             bookView: BookView,
             @Suppress("UNUSED_PARAMETER") format: BookFormat) {
 
@@ -160,7 +165,7 @@ class DataRepository @Inject constructor(
             NotesOrgExporter(this).exportBook(bookView.book, tmpFile)
 
             /* Upload to repo. */
-            uploadedBook = repo.storeBook(tmpFile, fileName)
+            uploadedBook = repo.storeBook(tmpFile, repositoryPath)
 
         } finally {
             /* Delete temporary file. */
@@ -308,6 +313,9 @@ class DataRepository @Inject constructor(
             throw IOException(resources.getString(R.string.book_name_already_exists, name))
         }
 
+        if (name.contains("../"))
+            throw IOException(context.getString(R.string.book_names_cannot_contain))
+
         val book = Book(
                 0,
                 name,
@@ -368,6 +376,9 @@ class DataRepository @Inject constructor(
             throw IOException(resources.getString(R.string.book_name_already_exists, name))
         }
 
+        if (name.contains("../"))
+            throw IOException(context.getString(R.string.book_names_cannot_contain))
+
         /* Make sure link's repo is the same as sync book repo. */
         if (bookView.linkRepo != null && bookView.syncedTo != null) {
             if (!TextUtils.equals(bookView.linkRepo.url, bookView.syncedTo.repoUri.toString())) {
@@ -385,6 +396,10 @@ class DataRepository @Inject constructor(
         /* Prefer link. */
         bookView.syncedTo?.let { vrook ->
             val repo = getRepoInstance(vrook.repoId, vrook.repoType, vrook.repoUri.toString())
+
+            /* Do not rename if the new filename will be ignored */
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                RepoUtils.ensurePathIsNotIgnored(repo, BookName.repoRelativePath(name, BookFormat.ORG))
 
             val movedVrook = repo.renameBook(vrook.uri, name)
 
@@ -404,6 +419,7 @@ class DataRepository @Inject constructor(
         val settings = OrgFileSettings.fromPreface(preface)
 
         db.book().updatePreface(bookId, preface, settings.title)
+        setBookPropertiesFromPreface(bookId, preface)
 
         updateBookIsModified(bookId, true)
     }
@@ -440,6 +456,10 @@ class DataRepository @Inject constructor(
 
         db.bookLink().upsert(bookId, repoId)
         db.bookSync().upsert(bookId, versionedRookId)
+    }
+
+    fun removeBookSyncedTo(bookId: Long) {
+        db.bookSync().delete(bookId)
     }
 
     private fun updateBookIsModified(bookId: Long, isModified: Boolean, time: Long = System.currentTimeMillis()) {
@@ -502,6 +522,14 @@ class DataRepository @Inject constructor(
         val repoId = checkNotNull(db.repo().get(repo.url)) {
             "Repo ${repo.url} not found"
         }.id
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Ensure that the resulting file name is not ignored in this repo
+            val syncRepo = getRepoInstance(repo.id, repo.type, repo.url)
+            val bookName = getBook(bookId)!!.name
+            val repoRelativePath = BookName.repoRelativePath(bookName, BookFormat.ORG)
+            RepoUtils.ensurePathIsNotIgnored(syncRepo, repoRelativePath)
+        }
 
         db.bookLink().upsert(bookId, repoId)
     }
@@ -706,7 +734,7 @@ class DataRepository @Inject constructor(
             }
 
             insertNoteProperties(lastNoteId, properties)
-            insertNoteEvents(lastNoteId, note.title, note.content)
+            insertNoteEvents(lastNoteId, note.title, note.content, properties)
 
             idsMap[entry.note.id] = lastNoteId
 
@@ -1134,23 +1162,35 @@ class DataRepository @Inject constructor(
                         getOrgRangeId(scl.closed))
 
                     if (scl.isShifted) {
-                        replaceNoteEvents(note.noteId, title, content)
+                        replaceNoteEvents(note.noteId, title, content, null)
                     }
+
+                    tryUpdateTitleCookiesOfParent(note.noteId)
                 }
 
                 updated
 
             } else { // Set to non-done state
-                db.note().updateStateAndRemoveClosedTime(noteIds, state)
+                val ret = db.note().updateStateAndRemoveClosedTime(noteIds, state)
+
+                for (noteId in noteIds) {
+                    tryUpdateTitleCookiesOfParent(noteId)
+                }
+
+                ret
             }
         })
     }
 
-    fun updateNoteContent(bookId: Long, noteId: Long, content: String?) {
+    fun updateNoteContent(noteId: Long, content: String?) {
         db.runInTransaction {
             db.note().updateContent(noteId, content, MiscUtils.lineCount(content))
 
-            updateBookIsModified(bookId, true)
+            val note = db.note().get(noteId)!!
+
+            tryUpdateTitleCookies(note)
+
+            updateBookIsModified(note.position.bookId, true)
         }
     }
 
@@ -1218,13 +1258,10 @@ class DataRepository @Inject constructor(
     }
 
     fun getVisibleNotesLiveData(bookId: Long, noteId: Long? = null): LiveData<List<NoteView>> {
-        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, bookId)
+        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "bookId=$bookId, noteId=$noteId")
 
         return if (noteId != null) {
-            // Only return note's subtree
-            db.note().get(noteId)?.let { note ->
-                db.noteView().getVisibleLiveData(bookId, note.position.lft, note.position.rgt)
-            } ?: MutableLiveData<List<NoteView>>()
+            db.noteView().getVisibleLiveDataNarrowed(bookId, noteId)
         } else {
             db.noteView().getVisibleLiveData(bookId)
         }
@@ -1485,9 +1522,13 @@ class DataRepository @Inject constructor(
         val noteId = db.note().insert(noteEntity)
 
         replaceNoteProperties(noteId, notePayload.properties)
-        replaceNoteEvents(noteId, notePayload.title, notePayload.content)
+        replaceNoteEvents(noteId, notePayload.title, notePayload.content, notePayload.properties)
 
         db.noteAncestor().insertAncestorsForNote(noteId)
+
+        tryUpdateTitleCookiesOfParent(noteId)
+
+        tryUpdateTitleCookies(noteEntity.copy(id = noteId))
 
         updateBookIsModified(target.bookId, true, time)
 
@@ -1529,13 +1570,20 @@ class DataRepository @Inject constructor(
 
 
     fun updateNote(noteId: Long, notePayload: NotePayload): Note? {
-        val note = db.note().get(noteId) ?: return null
+        val noteAndParent = db.note().getNoteAndParent(noteId)
+
+        if (noteAndParent.isEmpty()) return null
+
+        val ancestors = noteAndParent.dropLast(1)
+
+        val note = noteAndParent.last()
+        val noteParent = if (ancestors.isEmpty()) null else ancestors.last()
 
         return db.runInTransaction(Callable {
             updateBookIsModified(note.position.bookId, true)
 
             replaceNoteProperties(noteId, notePayload.properties)
-            replaceNoteEvents(noteId, notePayload.title, notePayload.content)
+            replaceNoteEvents(noteId, notePayload.title, notePayload.content, notePayload.properties)
 
             val newNote = note.copy(
                     title = notePayload.title,
@@ -1551,10 +1599,64 @@ class DataRepository @Inject constructor(
 
             val count = db.note().update(newNote)
 
+            // first we try to update our title in case we have child tasks or checkboxes
+            tryUpdateTitleCookies(newNote)
+
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Updated $count note: $newNote")
+
+            // then we try to update our parent's title in case we're a child task with a
+            // todo/done state
+            if (newNote.state != note.state && noteParent != null) {
+                tryUpdateTitleCookies(noteParent)
+            }
 
             newNote
         })
+    }
+
+    private fun tryUpdateTitleCookiesOfParent(childNoteId: Long) {
+        val ancestors = getNoteAncestors(childNoteId)
+
+        if (ancestors.isNotEmpty()) {
+            tryUpdateTitleCookies(ancestors.last())
+        }
+    }
+
+    private fun tryUpdateTitleCookies(note: Note) {
+        // as of my testing in org 9.6.15, if a heading has child headings which are TODO items
+        // as well as content which are checkboxes, it's unpredictable how the title changes, but:
+        //
+        // 1. it does NOT count both the checkboxes and child headings together, but rather favors
+        //    one or the other
+        // 2. it seems to favor them in the order they appear (top-down), but also somehow seems to
+        //    favor child headings more
+        //
+        // for sanity's sake, we're just going to process for any checkboxes and then process for
+        // any children, in that order
+
+        val doneKeywords = AppPreferences.doneKeywordsSet(context)
+        val todoKeywords = AppPreferences.todoKeywordsSet(context)
+
+        val titleUpdater = StateChangeParentTitleUpdater(todoKeywords, doneKeywords)
+
+        var newTitle = if (note.content.isNullOrEmpty()) note.title
+            else titleUpdater.updateTitleForPossibleCheckboxes(note.title, note.content)
+
+        val children = getNoteChildren(note.id)
+
+        if (children.any()) {
+            newTitle = titleUpdater.updateTitleForChildStates(newTitle, children.map { it.state })
+        }
+
+        if (newTitle == note.title) {
+            return
+        }
+
+        val newNote = note.copy(title = newTitle)
+
+        val count = db.note().update(newNote)
+
+        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Updated $count note: $newNote")
     }
 
     fun deleteNotes(bookId: Long, ids: Set<Long>): Int {
@@ -1575,19 +1677,28 @@ class DataRepository @Inject constructor(
         return db.noteEvent().get(noteId)
     }
 
-    private fun replaceNoteEvents(noteId: Long, title: String, content: String?) {
+    private fun replaceNoteEvents(noteId: Long, title: String, content: String?, properties: OrgProperties?) {
         db.noteEvent().deleteForNote(noteId)
 
-        insertNoteEvents(noteId, title, content)
+        insertNoteEvents(noteId, title, content, properties)
     }
 
-    private fun insertNoteEvents(noteId: Long, title: String, content: String?) {
+    /**
+     * Events may come from the note's title, content or properties
+     */
+    private fun insertNoteEvents(noteId: Long, title: String, content: String?, properties: OrgProperties?) {
         if (title.isNotEmpty()) {
             parseAndInsertEvents(noteId, title)
         }
 
         if (!content.isNullOrEmpty()) {
             parseAndInsertEvents(noteId, content)
+        }
+
+        if (properties != null && !properties.isEmpty) {
+            for (property: OrgProperty in properties.all) {
+                parseAndInsertEvents(noteId, property.value)
+            }
         }
     }
 
@@ -1657,13 +1768,13 @@ class DataRepository @Inject constructor(
 
     @Throws(IOException::class)
     fun loadBookFromRepo(rook: Rook): BookView? {
-        val fileName = BookName.getFileName(context, rook.uri)
+        val repoRelativePath = BookName.getRepoRelativePath(rook.repoUri, rook.uri)
 
-        return loadBookFromRepo(rook.repoId, rook.repoType, rook.repoUri.toString(), fileName)
+        return loadBookFromRepo(rook.repoId, rook.repoType, rook.repoUri.toString(), repoRelativePath)
     }
 
     @Throws(IOException::class)
-    fun loadBookFromRepo(repoId: Long, repoType: RepoType, repoUrl: String, fileName: String): BookView? {
+    fun loadBookFromRepo(repoId: Long, repoType: RepoType, repoUrl: String, repoRelativePath: String): BookView? {
         val book: BookView?
 
         val repo = getRepoInstance(repoId, repoType, repoUrl)
@@ -1671,9 +1782,9 @@ class DataRepository @Inject constructor(
         val tmpFile = getTempBookFile()
         try {
             /* Download from repo. */
-            val vrook = repo.retrieveBook(fileName, tmpFile)
+            val vrook = repo.retrieveBook(repoRelativePath, tmpFile)
 
-            val bookName = BookName.fromFileName(fileName)
+            val bookName = BookName.fromRepoRelativePath(repoRelativePath)
 
             /* Store from file to Shelf. */
             book = loadBookFromFile(bookName.name, bookName.format, tmpFile, vrook)
@@ -1834,7 +1945,7 @@ class DataRepository @Inject constructor(
                             val noteId = db.note().insert(note)
 
                             insertNoteProperties(noteId, node.head.properties)
-                            insertNoteEvents(noteId, note.title, note.content)
+                            insertNoteEvents(noteId, note.title, note.content, node.head.properties)
 
                             /*
                              * Update notes' parent IDs and insert ancestors.
@@ -1881,6 +1992,10 @@ class DataRepository @Inject constructor(
                             )
 
                             db.book().update(book)
+
+                            // Parse and store any properties in the book's preface
+                            if (file.preface.isNotEmpty())
+                                setBookPropertiesFromPreface(bookId, file.preface)
                         }
 
                     })
@@ -1899,6 +2014,12 @@ class DataRepository @Inject constructor(
         updateBookIsModified(bookId, false)
 
         return bookId
+    }
+
+    private fun setBookPropertiesFromPreface(bookId: Long, preface: String) {
+        for (property: OrgProperty in OrgProperties.fromString(preface).all) {
+            db.bookProperty().upsert(bookId, property.name, property.value)
+        }
     }
 
     private fun getOrgRangeId(range: String?): Long? {
@@ -1998,8 +2119,82 @@ class DataRepository @Inject constructor(
         NotesOrgExporter(this).exportBook(book, writer)
     }
 
-    fun findNoteHavingProperty(name: String, value: String): NoteDao.NoteIdBookId? {
-        return db.note().firstNoteHavingPropertyLowerCase(name.lowercase(), value.lowercase())
+    fun findNotesHavingProperty(name: String, value: String): List<NoteIdBookId> {
+        return db.note().allNotesHavingPropertyLowerCase(name.lowercase(), value.lowercase())
+    }
+
+    fun findNotesOrBooksHavingProperty(name: String, value: String): List<Any?> {
+        val foundNote = findNotesHavingProperty(name, value)
+        if (foundNote.isNotEmpty())
+            return foundNote
+        return db.book().allBooksHavingPropertyLowerCase(name.lowercase(), value.lowercase())
+    }
+
+    fun findUniqueNoteHavingProperty(name: String, value: String): NoteIdBookId? {
+        val foundNotes = db.note().allNotesHavingPropertyLowerCase(name.lowercase(), value.lowercase())
+        return if (foundNotes.isEmpty()) null
+        else if (foundNotes.size == 1) foundNotes[0]
+        else {
+            val msg = App.getAppContext().getString(R.string.error_multiple_notes_with_matching_property_value, name, value)
+            throw RuntimeException(msg)
+        }
+    }
+
+    fun exportSettingsAndSearchesToNote(note: Note) {
+        val notePayload = getNotePayload(note.id) ?: throw RuntimeException(context.getString(R.string.failed_to_get_note_payload))
+        var noteIdPropertyValue = notePayload.properties.get("ID")
+        if (noteIdPropertyValue == null) {
+            // Note has no "ID" property - let's add one
+            noteIdPropertyValue = UUID.randomUUID().toString()
+            notePayload.properties.put("ID", noteIdPropertyValue)
+            updateNote(note.id, notePayload)
+        }
+        // Ensure that the note's "ID" property value is unique
+        val targetNote = findUniqueNoteHavingProperty("ID", noteIdPropertyValue)
+        // Get settings as JSON
+        val settingsJsonObject = AppPreferences.getDefaultPrefsAsJsonObject(context)
+        // Get saved searches as JSON
+        val savedSearchesJsonObject = Gson().fromJson("{}", JsonObject::class.java)
+        getSavedSearches().forEach {
+            savedSearchesJsonObject.addProperty(it.name, it.query)
+        }
+        // Put them together
+        val finalMap = mapOf("settings" to settingsJsonObject, "saved_searches" to savedSearchesJsonObject)
+        val finalJsonString = Gson().toJson(finalMap)
+        updateNoteContent(targetNote!!.noteId, finalJsonString)
+        AppPreferences.settingsExportAndImportNoteId(context, noteIdPropertyValue)
+    }
+
+    fun importSettingsAndSearchesFromNote(note: Note) {
+        var importedSomething = false
+        val notePayload = getNotePayload(note.id) ?: throw RuntimeException(
+            context.getString(R.string.failed_to_get_note_payload))
+        if (notePayload.content.isNullOrEmpty())
+            throw RuntimeException(context.getString(R.string.note_has_no_content))
+        val gson: Map<*, *>
+        try {
+            gson = Gson().fromJson(notePayload.content, Map::class.java)
+        } catch (e: JsonSyntaxException) {
+            throw RuntimeException(context.getString(R.string.note_does_not_contain_valid_json))
+        }
+        if (!("settings" in gson.keys && "saved_searches" in gson.keys)) // Both keys must be present
+            throw RuntimeException(context.getString(R.string.imported_json_is_missing_mandatory_fields))
+        val settings = gson["settings"] as Map<String, *>
+        if (settings.isNotEmpty()) {
+            AppPreferences.setDefaultPrefsFromJsonMap(context, settings)
+            importedSomething = true
+        }
+        val savedSearches: List<SavedSearch> = (gson["saved_searches"] as Map<String, String>)
+            .entries
+            .mapIndexed { index, entry ->
+                SavedSearch(0, entry.key, entry.value, index + 1)
+            }
+        if (savedSearches.isNotEmpty()) {
+            replaceSavedSearches(savedSearches)
+            importedSomething = true
+        }
+        if (!importedSomething)
+            throw RuntimeException("Found no settings or saved searches to import.")
     }
 
     /*
@@ -2141,7 +2336,7 @@ class DataRepository @Inject constructor(
      * Return all known tags
      */
     fun selectAllTagsLiveData(): LiveData<List<String>> {
-        return Transformations.map(db.note().getDistinctTagsLiveData()) { tagsList ->
+        return db.note().getDistinctTagsLiveData().map { tagsList ->
             tagsList.flatMap { Note.dbDeSerializeTags(it) }.distinct().sorted()
         }
     }

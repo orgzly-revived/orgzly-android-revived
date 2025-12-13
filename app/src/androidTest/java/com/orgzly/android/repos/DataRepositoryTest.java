@@ -10,13 +10,19 @@ import com.orgzly.android.BookName;
 import com.orgzly.android.OrgzlyTest;
 import com.orgzly.android.db.entity.BookView;
 import com.orgzly.android.db.entity.Note;
+import com.orgzly.android.db.entity.NoteView;
 import com.orgzly.android.db.entity.Repo;
+import com.orgzly.android.query.Query;
+import com.orgzly.android.query.user.InternalQueryParser;
 import com.orgzly.android.sync.BookNamesake;
 import com.orgzly.android.sync.SyncUtils;
 
+import org.joda.time.DateTime;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 // FIXME: Clean this up - split it up.
@@ -70,9 +76,10 @@ public class DataRepositoryTest extends OrgzlyTest {
 
         assertEquals("remote-book-1", book.getBook().getName());
         assertEquals("/remote-book-1.org", book.getSyncedTo().getUri().getPath());
-        assertEquals("remote-book-1", BookName.getInstance(context, book.getSyncedTo()).getName());
+        assertEquals("remote-book-1", BookName.fromRook(book.getSyncedTo()).getName());
         assertEquals("0abcdef", book.getSyncedTo().getRevision());
         assertEquals(1400067156000L, book.getSyncedTo().getMtime());
+        assertEquals(repo.getUrl(), vrook.getRepoUri().toString());
     }
 
     @Test
@@ -163,5 +170,17 @@ public class DataRepositoryTest extends OrgzlyTest {
                 fail("unexpected name " + name);
             }
         }
+    }
+
+    @Test
+    public void testActiveTimestampInNotePropertyIsAnEvent() {
+        String tomorrow = DateTime.now().withTimeAtStartOfDay().plusDays(1).toString("YYYY-MM-dd");
+        testUtils.setupBook(
+                "notebook-1",
+                "* Note A\n:PROPERTIES:\n:myprop: <" + tomorrow + ">\n:END:"
+        );
+        Query query = new InternalQueryParser().parse("ad.2");
+        List<NoteView> notes = dataRepository.selectNotesFromQuery(query);
+        Assert.assertEquals(1, notes.size());
     }
 }
