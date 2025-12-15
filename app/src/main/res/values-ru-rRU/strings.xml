@@ -629,4 +629,6 @@
     <string name="pref_key_auto_sync_interval_title">Интервал в минутах (минимум : 15)</string>
     <string name="failed_sharing_note">Не удалось поделиться заметкой</string>
     <string name="create_org_links_from_shared_links">Создание оргссылок из общих ссылок</string>
+    <string name="widen_view">Широкий вид</string>
+    <string name="narrow">Сжать в поддерево</string>
 </resources>
