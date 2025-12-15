@@ -39,6 +39,7 @@ import com.orgzly.android.usecase.UseCase;
 import com.orgzly.android.usecase.UseCaseResult;
 import com.orgzly.android.util.LogUtils;
 import com.orgzly.android.util.MiscUtils;
+import com.orgzly.android.OrgFormat;
 import com.orgzly.org.OrgStringUtils;
 
 import java.io.File;
@@ -52,8 +53,10 @@ import javax.inject.Inject;
  * Activity started when shared to Orgzly.
  *
  * TODO: Resuming - intent will stay the same.
- * If activity is not finished (by save, cancel or pressing back), next share will resume the
- * activity and the intent will stay the same. Other apps seem to have the same problem and
+ * If activity is not finished (by save, cancel or pressing back), next share
+ * will resume the
+ * activity and the intent will stay the same. Other apps seem to have the same
+ * problem and
  * it's not a common scenario, but it should be fixed.
  */
 public class ShareActivity extends CommonActivity
@@ -63,7 +66,6 @@ public class ShareActivity extends CommonActivity
 
     public static final String TAG = ShareActivity.class.getName();
 
-    public static final String ATTACH_METHOD_LINK = "link";
     public static final String ATTACH_METHOD_COPY_DIR = "copy_dir";
     public static final String ATTACH_METHOD_COPY_ID = "copy_id";
 
@@ -85,7 +87,8 @@ public class ShareActivity extends CommonActivity
 
         super.onCreate(savedInstanceState);
 
-        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, savedInstanceState);
+        if (BuildConfig.LOG_DEBUG)
+            LogUtils.d(TAG, savedInstanceState);
 
         setContentView(R.layout.activity_share);
 
@@ -121,7 +124,8 @@ public class ShareActivity extends CommonActivity
                         new URI(data.content);
                         data.title = "[[" + data.content + "][" + data.title + "]]";
                         data.content = null;
-                    } catch (URISyntaxException ignored) {}
+                    } catch (URISyntaxException ignored) {
+                    }
                 }
             } else {
                 // A single text string was shared. Put it in heading or body, depending on the
@@ -159,7 +163,8 @@ public class ShareActivity extends CommonActivity
                 mError = "Failed reading the content of " + uri.toString() + ": " + e.toString();
             }
         }
-        // TODO: Was used for direct share shortcuts to pass the book name. Used someplace else?
+        // TODO: Was used for direct share shortcuts to pass the book name. Used
+        // someplace else?
         if (intent.hasExtra(AppIntent.EXTRA_QUERY_STRING)) {
             Query query = new DottedQueryParser().parse(intent.getStringExtra(AppIntent.EXTRA_QUERY_STRING));
             String bookName = QueryUtils.extractFirstBookNameFromQuery(query.getCondition());
@@ -198,7 +203,8 @@ public class ShareActivity extends CommonActivity
         String action = intent.getAction();
         String type = intent.getType();
 
-        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, intent);
+        if (BuildConfig.LOG_DEBUG)
+            LogUtils.d(TAG, intent);
 
         if (action != null && type != null) {
             switch (action) {
@@ -207,12 +213,9 @@ public class ShareActivity extends CommonActivity
                         data = getTextDataFromIntent(intent);
                     } else {
                         if (ATTACH_METHOD_COPY_DIR.equals(AppPreferences.attachMethod(this))) {
-                            handleCopyFile(intent, data, "file:");
+                            handleCopyFile(intent, data, OrgFormat.LINK_PREFIX_FILE);
                         } else if (ATTACH_METHOD_COPY_ID.equals(AppPreferences.attachMethod(this))) {
-                            handleCopyFile(intent, data, "attachment:");
-                        } else {
-                            // Link method.
-                            handleLinkFile(intent, data);
+                            handleCopyFile(intent, data, OrgFormat.LINK_PREFIX_ATTACHMENT);
                         }
                     }
                     break;
@@ -245,7 +248,8 @@ public class ShareActivity extends CommonActivity
         }
 
         /* Make sure that title is never empty. */
-        if (data.title == null) data.title = "";
+        if (data.title == null)
+            data.title = "";
 
         return data;
     }
@@ -316,7 +320,8 @@ public class ShareActivity extends CommonActivity
             resultIntent.putExtra(AppIntent.EXTRA_QUERY_STRING, savedSearch.getQuery());
         }
 
-        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, resultIntent);
+        if (BuildConfig.LOG_DEBUG)
+            LogUtils.d(TAG, resultIntent);
 
         // The stack builder object will contain an artificial back stack for the
         // started Activity.
@@ -374,58 +379,6 @@ public class ShareActivity extends CommonActivity
         String content;
         public Uri attachmentUri;
         Long bookId = null;
-    }
-
-    /**
-     * Get file path shared with Orgzly
-     * and put it as a file link in the note's content.
-     */
-    private void handleLinkFile(Intent intent, Data data) {
-        // Get file uri from intent which probably looks like this:
-        // content://media/external/images/...
-        Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-
-        try (Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
-            if (cursor != null) {
-                cursor.moveToFirst();
-
-                if (BuildConfig.LOG_DEBUG)
-                    LogUtils.d(TAG, DatabaseUtils.dumpCursorToString(cursor));
-
-                /*
-                 * Get real file path from content:// link pointing to file
-                 * ( https://stackoverflow.com/a/20059657 )
-                 */
-                int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-
-                if (dataColumnIndex != -1) {
-                    String mediaData = cursor.getString(dataColumnIndex);
-                    if (mediaData != null) {
-                        data.content = "file:" + mediaData;
-                    }
-                }
-
-                if (data.content == null) {
-                    data.content = uri.toString()
-                            + "\n\nCannot determine a local path to this file.";
-
-                    Log.e(TAG, DatabaseUtils.dumpCursorToString(cursor));
-                }
-
-                int displayNameColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
-
-                if (displayNameColumnIndex != -1) {
-                    data.title = cursor.getString(displayNameColumnIndex);
-                } else {
-                    data.title = uri.toString();
-                }
-            }
-        }
-
-        if (data.title == null) {
-            data.title = uri.toString();
-            data.content = "Cannot find filename using this URI.";
-        }
     }
 
     private void handleCopyFile(Intent intent, Data data, String linkPrefix) {

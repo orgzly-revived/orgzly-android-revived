@@ -66,7 +66,8 @@ class DropboxRepo(repoWithProps: RepoWithProps, context: Context?) : SyncRepo {
     }
 
     override fun listFilesInPath(pathInRepo: String?): MutableList<NoteAttachmentData> {
-        TODO("Not yet implemented")
+        // TODO: Implement listFilesInPath.
+        return mutableListOf()
     }
 
     @Throws(IOException::class)
@@ -93,6 +94,11 @@ class DropboxRepo(repoWithProps: RepoWithProps, context: Context?) : SyncRepo {
 
     companion object {
         const val SCHEME = "dropbox"
+    }
+
+    override fun getUriForPath(path: String): Uri? {
+        // TODO: Implement getUriForPath.
+        return null
     }
 
     init {

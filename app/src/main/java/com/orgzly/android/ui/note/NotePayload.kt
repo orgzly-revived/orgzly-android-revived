@@ -8,6 +8,8 @@ import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.share.ShareActivity
 import com.orgzly.android.util.AttachmentUtils
 import com.orgzly.org.OrgProperties
+import com.orgzly.android.OrgFormat
+import java.io.File
 
 data class NotePayload @JvmOverloads constructor(
         val title: String = "",
@@ -55,24 +57,31 @@ data class NotePayload @JvmOverloads constructor(
 
     /** Returns the path to store the attachment. */
     fun attachDir(context: Context): String {
-        val idStr = properties.get("ID")
+        val idStr = properties.get(OrgFormat.PROPERTY_ID)
         // TODO idStr could be null. Throw a warning exception, show a toast, don't attach anything
         if (idStr == null) {
             return ""
         }
         when(AppPreferences.attachMethod(context)) {
-            ShareActivity.ATTACH_METHOD_LINK -> return ""
             ShareActivity.ATTACH_METHOD_COPY_DIR -> return AppPreferences.attachDirDefaultPath(context)
             ShareActivity.ATTACH_METHOD_COPY_ID -> {
-                return AttachmentUtils.getAttachDir(context, idStr)
+                return orgAttachDir(context) ?: ""
             }
         }
         return ""
     }
 
+    fun orgAttachDir(context: Context): String? {
+        val idStr = properties.get(OrgFormat.PROPERTY_ID)
+        if (idStr != null) {
+            return File(AppPreferences.attachDirDefaultPath(context), AttachmentUtils.getAttachDir(idStr)).path
+        }
+        return null
+    }
+
     fun hasEligibleIdDirectory(context: Context): Boolean {
         // TODO: Support DIR property.
-        return AppPreferences.attachMethod(context) == ShareActivity.ATTACH_METHOD_COPY_ID && properties.get("ID") != null;
+        return properties.get(OrgFormat.PROPERTY_ID) != null;
     }
 
     companion object {

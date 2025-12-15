@@ -67,6 +67,7 @@ class RichText(context: Context, attrs: AttributeSet?) :
     private val richTextEdit: RichTextEdit
     private val richTextView: RichTextView
     var noteId: Long = 0
+    var bookId: Long = 0
 
     init {
         parseAttrs(attrs)
@@ -216,7 +217,7 @@ class RichText(context: Context, attrs: AttributeSet?) :
             richTextView.setText(parsed, TextView.BufferType.SPANNABLE)
 
             AttachmentSpanLoader.loadAttachmentPaths(noteId, this)
-            ImageLoader.loadImages(richTextView)
+            ImageLoader.loadImages(richTextView, bookId)
 
         } else {
             richTextView.text = null
@@ -291,7 +292,7 @@ class RichText(context: Context, attrs: AttributeSet?) :
     }
 
     override fun followLinkToFile(path: String) {
-        MainActivity.followLinkToFile(path)
+        MainActivity.followLinkToFile(path, bookId)
     }
 
     companion object {

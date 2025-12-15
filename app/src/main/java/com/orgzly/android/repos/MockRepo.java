@@ -59,6 +59,11 @@ public class MockRepo implements SyncRepo {
     }
 
     @Override
+    public Uri getUriForPath(String path) {
+        return databaseRepo.getUriForPath(path);
+    }
+
+    @Override
     public List<VersionedRook> getBooks() throws IOException {
         SystemClock.sleep(SLEEP_FOR_GET_BOOKS);
         return databaseRepo.getBooks();

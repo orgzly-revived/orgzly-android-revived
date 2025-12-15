@@ -123,9 +123,9 @@ class NoteViewModel(
         return list
     }
 
-    private fun createNoteAttachmentData(context: Context, attachmentUri: Uri, isNew: Boolean): NoteAttachmentData {
+    private fun createNoteAttachmentData(context: Context, attachmentUri: Uri, isNew: Boolean, type: NoteAttachmentData.Type? = null): NoteAttachmentData {
         val filename = BookName.getFileName(context, attachmentUri)?: "Unknown filename"
-        return NoteAttachmentData(attachmentUri, filename, isNew)
+        return NoteAttachmentData(attachmentUri, filename, isNew, type = type)
     }
 
     fun requestNoteDelete() {
@@ -209,15 +209,22 @@ class NoteViewModel(
     /**
      * Adds one attachment. This may update payload (ID property).
      */
-    fun addAttachment(attachmentUri: Uri) {
-        val data = createNoteAttachmentData(App.getAppContext(), attachmentUri, true)
+    fun addAttachment(attachmentUri: Uri, type: NoteAttachmentData.Type? = null) {
+        val data = createNoteAttachmentData(App.getAppContext(), attachmentUri, true, type)
         attachments.value = attachments.value!! + data
-        maybeUpdatePayloadForAttachment()
+        maybeUpdatePayloadForAttachment(type)
     }
 
-    private fun maybeUpdatePayloadForAttachment() {
+    private fun maybeUpdatePayloadForAttachment(type: NoteAttachmentData.Type? = null) {
         // Auto generate ID property if it has attachment.
-        if (attachments.value!!.isNotEmpty() && AppPreferences.attachMethod(App.getAppContext()) == ShareActivity.ATTACH_METHOD_COPY_ID) {
+        val shouldAddId = if (type != null) {
+            type == NoteAttachmentData.Type.COPY_TO_ID
+        } else {
+            // Fallback to preference for initial attachment or when type is not specified
+            AppPreferences.attachMethod(App.getAppContext()) == ShareActivity.ATTACH_METHOD_COPY_ID
+        }
+
+        if (attachments.value!!.isNotEmpty() && shouldAddId) {
             updatePayloadCreateIdProperty()
         }
     }

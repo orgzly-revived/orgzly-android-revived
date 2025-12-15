@@ -1,6 +1,7 @@
 package com.orgzly.android.ui.views.style
 
 import android.view.View
+import com.orgzly.android.OrgFormat
 import com.orgzly.android.ui.views.richtext.ActionableRichTextView
 
 class IdLinkSpan(val type: Int, val link: String, val name: String?) : LinkSpan(), Offsetting {
@@ -20,7 +21,7 @@ class IdLinkSpan(val type: Int, val link: String, val name: String?) : LinkSpan(
     }
 
     companion object {
-        const val PROPERTY = "ID"
+        const val PROPERTY = OrgFormat.PROPERTY_ID
 
         const val PREFIX = "id:"
     }

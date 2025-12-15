@@ -384,6 +384,12 @@ public class MainActivity extends CommonActivity
 
                 openFileIfExists(thisAction.getFile());
 
+            } else if (action instanceof MainNavigationAction.OpenUri) {
+                MainNavigationAction.OpenUri thisAction =
+                        (MainNavigationAction.OpenUri) action;
+
+                openUri(thisAction.getUri());
+
             } else if (action instanceof MainNavigationAction.DisplayQuery) {
                 MainNavigationAction.DisplayQuery thisAction =
                         (MainNavigationAction.DisplayQuery) action;
@@ -740,13 +746,13 @@ public class MainActivity extends CommonActivity
 
 //    private void animateNotesAfterEdit(Set<Long> noteIds) {
 //        Fragment f;
-//
+    //
 //        f = getSupportFragmentManager().findFragmentByTag(BookFragment.FRAGMENT_TAG);
 //        if (f != null && f.isVisible()) {
 //            BookFragment heads = (BookFragment) f;
 //            heads.animateNotes(noteIds, HeadAnimator.ANIMATE_FOR_HEAD_MODIFIED);
 //        }
-//
+    //
 //        f = getSupportFragmentManager().findFragmentByTag(QueryFragment.FRAGMENT_TAG);
 //        if (f != null && f.isVisible()) {
 //            QueryFragment heads = (QueryFragment) f;
@@ -911,9 +917,10 @@ public class MainActivity extends CommonActivity
         LocalBroadcastManager.getInstance(App.getAppContext()).sendBroadcast(intent);
     }
 
-    public static void followLinkToFile(String path) {
+    public static void followLinkToFile(String path, long bookId) {
         Intent intent = new Intent(AppIntent.ACTION_FOLLOW_LINK_TO_FILE);
         intent.putExtra(AppIntent.EXTRA_PATH, path);
+        intent.putExtra(AppIntent.EXTRA_BOOK_ID, bookId);
         LocalBroadcastManager.getInstance(App.getAppContext()).sendBroadcast(intent);
     }
 
@@ -996,7 +1003,8 @@ public class MainActivity extends CommonActivity
 
                 case AppIntent.ACTION_FOLLOW_LINK_TO_FILE: {
                     String path = intent.getStringExtra(AppIntent.EXTRA_PATH);
-                    viewModel.followLinkToFile(path);
+                    long bookId = intent.getLongExtra(AppIntent.EXTRA_BOOK_ID, 0);
+                    viewModel.followLinkToFile(path, bookId);
                     break;
                 }
             }

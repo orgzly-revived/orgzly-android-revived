@@ -103,10 +103,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             pref.text = AppPreferences.fileAbsoluteRoot(context)
         }
 
-        preference(R.string.pref_key_file_relative_root)?.let {
-            val pref = it as EditTextPreference
-            pref.text = AppPreferences.fileRelativeRoot(context)
-        }
+
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             preference(R.string.pref_key_reminders_notification_settings_V26)?.let {

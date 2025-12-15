@@ -293,14 +293,6 @@
                     android:textSize="?attr/fragment_note_content_text_size"
                     android:text="@string/attachments"/>
 
-                <ImageButton
-                    android:id="@+id/attachments_header_add_button"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:padding="12dp"
-                    style="@style/NoteFragmentMetadataItemButton"
-                    android:src="@drawable/ic_add" />
-
                 <ImageView
                     android:id="@+id/attachments_header_up_icon"
                     android:layout_width="48dp"

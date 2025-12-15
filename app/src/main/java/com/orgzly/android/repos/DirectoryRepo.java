@@ -92,7 +92,7 @@ public class DirectoryRepo implements SyncRepo {
         File[] files;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             files = mDirectory.listFiles(
-                (dir, filename) -> BookName.isSupportedFormatFileName(filename)
+                    (dir, filename) -> BookName.isSupportedFormatFileName(filename)
                     && !ignores.isPathIgnored(filename, false)
             );
         } else {
@@ -130,10 +130,19 @@ public class DirectoryRepo implements SyncRepo {
         File[] files = path.listFiles();
         ArrayList<NoteAttachmentData> list = new ArrayList<>(files.length);
         for (File file : files) {
-            list.add(new NoteAttachmentData(Uri.fromFile(file), file.getName(), false, false));
+            list.add(new NoteAttachmentData(Uri.fromFile(file), file.getName(), false, false, null));
         }
 
         return list;
+    }
+
+    @Override
+    public Uri getUriForPath(String path) {
+        File file = new File(mDirectory, path);
+        if (file.exists()) {
+            return Uri.fromFile(file);
+        }
+        return null;
     }
 
     @Override

@@ -90,7 +90,10 @@ class OrgFormatterLinkTest(private val param: Parameter) : OrgFormatterTest() {
 
                 // Do not linkify
                 Parameter("strhttps://www.orgzlyrevived.com/", "strhttps://www.orgzlyrevived.com/", emptyList()),
-                Parameter("Need activity with <action android:name=\"android.intent.action.VIEW\"/>", "Need activity with <action android:name=\"android.intent.action.VIEW\"/>", emptyList())
+                Parameter("Need activity with <action android:name=\"android.intent.action.VIEW\"/>", "Need activity with <action android:name=\"android.intent.action.VIEW\"/>", emptyList()),
+
+                Parameter("[[content://com.android.providers.media.documents/document/image:1234][Image]]", "Image", listOf(Span(0, 5, FileOrNotLinkSpan::class.java))),
+                Parameter("[[content://foo]]", "content://foo", listOf(Span(0, 13, FileOrNotLinkSpan::class.java)))
             )
         }
     }

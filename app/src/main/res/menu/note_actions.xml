@@ -63,8 +63,20 @@
 
     <item
         android:id="@+id/attach_file"
-        app:showAsAction="never"
-        android:title="@string/attachment_add"/>
+        android:title="@string/attachment_add"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/attach_link"
+                android:title="@string/attachment_link" />
+            <item
+                android:id="@+id/attach_copy"
+                android:title="@string/attachment_copy" />
+            <item
+                android:id="@+id/attach_org"
+                android:title="@string/attachment_org" />
+        </menu>
+    </item>
 
     <item
         android:id="@+id/delete"

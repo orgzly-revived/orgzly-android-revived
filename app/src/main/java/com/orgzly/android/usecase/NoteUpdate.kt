@@ -12,7 +12,7 @@ class NoteUpdate(val bookId: Long, val noteId: Long, val notePayload: NotePayloa
         // TODO: Delete attachments if they need to be deleted.
         notePayload.attachments.forEach {
             if (it.isNew) {
-                dataRepository.storeAttachment(bookId, notePayload, it.uri)
+                dataRepository.storeAttachment(bookId, notePayload, it)
             }
         }
 

@@ -162,6 +162,11 @@ class WebdavRepo(
         return uri
     }
 
+    override fun getUriForPath(path: String): Uri? {
+        // TODO: Implement getUriForPath.
+        return null
+    }
+
     override fun getBooks(): MutableList<VersionedRook> {
         val url = uri.toUrl()
 
@@ -262,7 +267,8 @@ class WebdavRepo(
     }
 
     override fun listFilesInPath(pathInRepo: String?): MutableList<NoteAttachmentData> {
-        TODO("Not yet implemented")
+        // TODO: Implement listFilesInPath.
+        return mutableListOf()
     }
 
     private fun createRecursive(parent: String, path: String): String {

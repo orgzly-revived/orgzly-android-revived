@@ -46,6 +46,11 @@ public class DatabaseRepo implements SyncRepo {
     }
 
     @Override
+    public Uri getUriForPath(String path) {
+        return null;
+    }
+
+    @Override
     public List<VersionedRook> getBooks() {
         return dbRepo.getBooks(repoId, repoUri);
     }

@@ -22,7 +22,7 @@ class FindAttachmentPath(val noteId: Long) : UseCase() {
         val noteProperties = dataRepository.getNoteProperties(noteId)
         val idStr = getProperty(noteProperties, "ID")
 
-        val path = if (idStr == null) null else AttachmentUtils.getAttachDir(context, idStr)
+        val path = if (idStr == null) null else AttachmentUtils.getAttachDir(idStr)
 
         return UseCaseResult(
                 userData = path

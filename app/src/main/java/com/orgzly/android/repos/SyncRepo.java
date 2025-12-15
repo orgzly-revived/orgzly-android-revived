@@ -54,6 +54,11 @@ public interface SyncRepo {
     VersionedRook storeBook(File file, String repoRelativePath) throws IOException;
 
     /**
+     * Returns a Uri specifically for the given path within the repository.
+     */
+    Uri getUriForPath(String path);
+
+    /**
      * Uploads file storing it under directory (pathInRepo) under repo's url.
      * @param file The contents of this file should be stored at the remote location/repo
      * @param pathInRepo The "/" separated path within the remote location/repo, create it if it doesn't exist

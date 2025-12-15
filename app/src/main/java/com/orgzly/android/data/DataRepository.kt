@@ -23,6 +23,9 @@ import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.*
 import com.orgzly.android.data.mappers.OrgMapper
+import com.orgzly.android.ui.share.ShareActivity
+import com.orgzly.android.util.LogUtils
+import com.orgzly.android.util.AttachmentUtils
 import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.OrgzlyDatabase
 import com.orgzly.android.db.dao.NoteDao
@@ -1716,15 +1719,34 @@ class DataRepository @Inject constructor(
      * @throws IOException
      */
     @Throws(IOException::class)
-    fun storeAttachment(bookId: Long, notePayload: NotePayload, attachmentUri: Uri) {
+    fun storeAttachment(bookId: Long, notePayload: NotePayload, attachment: NoteAttachmentData) {
+        val type = attachment.type ?: run {
+            // Fallback to preference if type is missing (e.g. older objects)
+            when (AppPreferences.attachMethod(context)) {
+                ShareActivity.ATTACH_METHOD_COPY_DIR -> NoteAttachmentData.Type.COPY_TO_DIR
+                ShareActivity.ATTACH_METHOD_COPY_ID -> NoteAttachmentData.Type.COPY_TO_ID
+                else -> NoteAttachmentData.Type.LINK
+            }
+        }
+
+        if (type == NoteAttachmentData.Type.LINK) {
+            return
+        }
+
         // Get the fileName from the provider.
         // TODO provide a way to customize the fileName
-        val uri = attachmentUri
+        val uri = attachment.uri
         val documentFile: DocumentFile = DocumentFile.fromSingleUri(context, uri)
                 ?: throw IOException("Cannot get the fileName for Uri $uri")
-        val fileName = documentFile.name
+        val fileName = documentFile.name ?: "attachment_${System.currentTimeMillis()}"
 
-        val attachDir = notePayload.attachDir(context)
+        val attachDir = when (type) {
+            NoteAttachmentData.Type.COPY_TO_DIR -> AppPreferences.attachDirDefaultPath(context)
+            NoteAttachmentData.Type.COPY_TO_ID -> {
+                 notePayload.orgAttachDir(context) ?: throw IOException("Cannot attach file: Note has no ID")
+            }
+            else -> "" // Defaults to LINK, no directory needed
+        }
 
         val book = getBookView(bookId)
                 ?: throw IOException(resources.getString(R.string.book_does_not_exist_anymore))
@@ -1751,7 +1773,7 @@ class DataRepository @Inject constructor(
                 ?: throw IOException(resources.getString(R.string.book_does_not_exist_anymore))
         val repoEntity = book.linkRepo ?: defaultRepoForSavingBook()
         val repo = getRepoInstance(repoEntity.id, repoEntity.type, repoEntity.url)
-        val attachDir = notePayload.attachDir(context)
+        val attachDir = notePayload.orgAttachDir(context) ?: return emptyList()
 
         return repo.listFilesInPath(attachDir)
     }
@@ -2142,15 +2164,15 @@ class DataRepository @Inject constructor(
 
     fun exportSettingsAndSearchesToNote(note: Note) {
         val notePayload = getNotePayload(note.id) ?: throw RuntimeException(context.getString(R.string.failed_to_get_note_payload))
-        var noteIdPropertyValue = notePayload.properties.get("ID")
+        var noteIdPropertyValue = notePayload.properties.get(OrgFormat.PROPERTY_ID)
         if (noteIdPropertyValue == null) {
             // Note has no "ID" property - let's add one
             noteIdPropertyValue = UUID.randomUUID().toString()
-            notePayload.properties.put("ID", noteIdPropertyValue)
+            notePayload.properties.put(OrgFormat.PROPERTY_ID, noteIdPropertyValue)
             updateNote(note.id, notePayload)
         }
         // Ensure that the note's "ID" property value is unique
-        val targetNote = findUniqueNoteHavingProperty("ID", noteIdPropertyValue)
+        val targetNote = findUniqueNoteHavingProperty(OrgFormat.PROPERTY_ID, noteIdPropertyValue)
         // Get settings as JSON
         val settingsJsonObject = AppPreferences.getDefaultPrefsAsJsonObject(context)
         // Get saved searches as JSON

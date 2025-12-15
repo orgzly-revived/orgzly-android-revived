@@ -207,38 +207,7 @@
             android:defaultValue="@string/pref_default_link_target"
             app:useSimpleSummaryProvider="true"/>
 
-        <EditTextPreference
-            android:key="@string/pref_key_file_absolute_root"
-            android:title="@string/file_absolute_root"
-            android:selectAllOnFocus="false"
-            android:inputType="text"
-            android:maxLines="1"
-            app:useSimpleSummaryProvider="true"/>
 
-        <EditTextPreference
-            android:key="@string/pref_key_file_relative_root"
-            android:title="@string/file_relative_root"
-            android:selectAllOnFocus="false"
-            android:inputType="text"
-            android:maxLines="1"
-            app:useSimpleSummaryProvider="true"/>
-
-        <ListPreference
-            android:key="@string/pref_key_attach_method"
-            android:title="@string/attach_method"
-            android:entries="@array/attach_method_names"
-            android:entryValues="@array/attach_method_values"
-            android:defaultValue="@string/pref_default_attach_method"
-            app:useSimpleSummaryProvider="true"/>
-
-        <EditTextPreference
-            android:key="@string/pref_key_attach_dir_default_path"
-            android:defaultValue="@string/pref_default_attach_dir_default_path"
-            android:title="@string/attach_dir_default_path"
-            android:selectAllOnFocus="false"
-            android:inputType="text"
-            android:maxLines="1"
-            app:useSimpleSummaryProvider="true"/>
 
     </PreferenceCategory>
 
@@ -281,7 +250,32 @@
             android:defaultValue="@bool/pref_default_create_org_links_from_shared_links" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/images">
+    <PreferenceCategory android:title="@string/pref_category_attachments">
+        <ListPreference
+            android:key="@string/pref_key_attach_method"
+            android:title="@string/attach_method"
+            android:entries="@array/attach_method_names"
+            android:entryValues="@array/attach_method_values"
+            android:defaultValue="@string/pref_default_attach_method"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            android:key="@string/pref_key_attach_dir_default_path"
+            android:defaultValue="@string/pref_default_attach_dir_default_path"
+            android:title="@string/attach_dir_default_path"
+            android:selectAllOnFocus="false"
+            android:inputType="text"
+            android:maxLines="1"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            android:key="@string/pref_key_file_absolute_root"
+            android:title="@string/file_absolute_root"
+            android:selectAllOnFocus="false"
+            android:inputType="text"
+            android:maxLines="1"
+            app:useSimpleSummaryProvider="true"/>
+
         <SwitchPreference
             android:key="@string/pref_key_images_enabled"
             android:title="@string/display_inline_images"

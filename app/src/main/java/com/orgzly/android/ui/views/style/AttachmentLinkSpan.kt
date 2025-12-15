@@ -3,6 +3,7 @@ package com.orgzly.android.ui.views.style
 import android.os.Handler
 import android.text.style.ClickableSpan
 import android.view.View
+import com.orgzly.android.OrgFormat
 import com.orgzly.android.ui.views.richtext.ActionableRichTextView
 
 /**
@@ -25,6 +26,6 @@ class AttachmentLinkSpan(val path: String) : ClickableSpan() {
     }
 
     companion object {
-        const val PREFIX = "attachment:"
+        const val PREFIX = OrgFormat.LINK_PREFIX_ATTACHMENT
     }
 }

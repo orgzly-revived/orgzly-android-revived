@@ -146,6 +146,15 @@ public class DocumentRepo implements SyncRepo {
     }
 
     @Override
+    public Uri getUriForPath(String path) {
+        DocumentFile df = getDocumentFileFromPath(path);
+        if (df != null && df.exists()) {
+            return df.getUri();
+        }
+        return null;
+    }
+
+    @Override
     public VersionedRook retrieveBook(String repoRelativePath, File destinationFile) throws IOException {
         DocumentFile sourceFile = getDocumentFileFromPath(repoRelativePath);
         if (sourceFile == null) {
@@ -309,7 +318,7 @@ public class DocumentRepo implements SyncRepo {
 
         DocumentFile destinationDir = repoDocumentFile;
         if (pathInRepo != null && !pathInRepo.isEmpty()) {
-            destinationDir = ensureDirectoryHierarchy(pathInRepo);
+            destinationDir = ensureDirectory(pathInRepo);
         }
 
         /* Delete existing file. */
@@ -340,14 +349,36 @@ public class DocumentRepo implements SyncRepo {
 
     @Override
     public List<NoteAttachmentData> listFilesInPath(String pathInRepo) {
-        DocumentFile documentFile = ensureDirectoryHierarchy(pathInRepo);
+        DocumentFile documentFile = ensureDirectory(pathInRepo);
         DocumentFile[] documentFiles = documentFile.listFiles();
         ArrayList<NoteAttachmentData> list = new ArrayList<>(documentFiles.length);
         for (DocumentFile file : documentFiles) {
-            list.add(new NoteAttachmentData(file.getUri(), file.getName(), false, false));
+            list.add(new NoteAttachmentData(file.getUri(), file.getName(), false, false, null));
         }
 
         return list;
+    }
+
+    /**
+     * Given a relative path, ensures that all directory levels are created unless they already
+     * exist.
+     * @param relativePath Path relative to the repository root directory
+     * @return The DocumentFile object of the leaf directory.
+     */
+    private DocumentFile ensureDirectory(String relativePath) {
+        List<String> levels = new ArrayList<>(Arrays.asList(relativePath.split("/")));
+        DocumentFile currentDir = repoDocumentFile;
+        while (!levels.isEmpty()) {
+            String nextDirName = levels.remove(0);
+            if (nextDirName.isEmpty()) continue;
+            DocumentFile nextDir = Objects.requireNonNull(currentDir).findFile(nextDirName);
+            if (nextDir == null) {
+                currentDir = currentDir.createDirectory(nextDirName);
+            } else {
+                currentDir = nextDir;
+            }
+        }
+        return currentDir;
     }
 
     @Override

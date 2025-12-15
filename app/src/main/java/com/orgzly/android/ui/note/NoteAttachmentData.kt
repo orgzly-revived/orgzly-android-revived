@@ -6,7 +6,15 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class NoteAttachmentData(
-        val uri: Uri,
-        val filename: String,
-        val isNew: Boolean = false,
-        var isDeleted: Boolean = false): Parcelable
+    val uri: Uri,
+    val filename: String,
+    var isNew: Boolean,
+    var isDeleted: Boolean = false,
+    val type: Type? = null
+) : Parcelable {
+    enum class Type {
+        LINK,
+        COPY_TO_DIR,
+        COPY_TO_ID
+    }
+}

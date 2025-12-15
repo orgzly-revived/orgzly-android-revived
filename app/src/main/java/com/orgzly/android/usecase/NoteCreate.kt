@@ -10,7 +10,7 @@ class NoteCreate(val notePayload: NotePayload, val notePlace: NotePlace) : UseCa
 
         notePayload.attachments.forEach {
             if (!it.isDeleted) {
-                dataRepository.storeAttachment(notePlace.bookId, notePayload, it.uri)
+                dataRepository.storeAttachment(notePlace.bookId, notePayload, it)
             }
         }
 

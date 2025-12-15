@@ -60,8 +60,9 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
     }
 
     public static GitRepo getInstance(RepoWithProps props, Context context) throws IOException {
-        // TODO: This doesn't seem to be implemented in the same way as WebdavRepo.kt, do
-        //  we want to store configuration data the same way they do?
+        // TODO: This doesn't seem to be implemented in the same way as WebdavRepo.kt,
+        // do
+        // we want to store configuration data the same way they do?
         Repo repo = props.getRepo();
         Uri repoUri = Uri.parse(repo.getUrl());
         RepoPreferences repoPreferences = new RepoPreferences(context, repo.getId(), repoUri);
@@ -110,13 +111,16 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
 
     /**
      * Check that the given path contains a valid git repository
+     * 
      * @param directoryFile the path to check
      * @return A Git repo instance
-     * @throws IOException Thrown when either the directory doesnt exist or is not a git repository
+     * @throws IOException Thrown when either the directory doesnt exist or is not a
+     *                     git repository
      */
     private static Git verifyExistingRepo(File directoryFile) throws IOException {
         if (!directoryFile.exists()) {
-            throw new IOException(String.format("The directory %s does not exist", directoryFile.toString()), new FileNotFoundException());
+            throw new IOException(String.format("The directory %s does not exist", directoryFile.toString()),
+                    new FileNotFoundException());
         }
 
         FileRepositoryBuilder frb = new FileRepositoryBuilder();
@@ -130,37 +134,40 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
 
     /**
      * Attempts to clone a git repository
-     * @param repoUri Remote location of git repository
-     * @param directoryFile Location to clone to
+     * 
+     * @param repoUri         Remote location of git repository
+     * @param directoryFile   Location to clone to
      * @param transportSetter Transport information
-     * @param pm Progress reporting helper
+     * @param pm              Progress reporting helper
      * @return A Git repo instance
-     * @throws IOException Thrown when directoryFile doesn't exist or isn't empty. Also thrown
-     * when the clone fails
+     * @throws IOException Thrown when directoryFile doesn't exist or isn't empty.
+     *                     Also thrown
+     *                     when the clone fails
      */
     private static Git cloneRepo(Uri repoUri, File directoryFile, GitTransportSetter transportSetter,
-                      ProgressMonitor pm) throws IOException {
+            ProgressMonitor pm) throws IOException {
         if (!directoryFile.exists()) {
-            throw new IOException(String.format("The directory %s does not exist", directoryFile.toString()), new FileNotFoundException());
+            throw new IOException(String.format("The directory %s does not exist", directoryFile.toString()),
+                    new FileNotFoundException());
         }
 
-        // Using list() can be resource intensive if there's many files, but since we just call it
+        // Using list() can be resource intensive if there's many files, but since we
+        // just call it
         // at the time of cloning once we should be fine for now
         if (directoryFile.list().length != 0) {
             throw new IOException(String.format("The directory must be empty"), new DirectoryNotEmpty(directoryFile));
         }
 
         try {
-            CloneCommand cloneCommand = Git.cloneRepository().
-                    setURI(repoUri.toString()).
-                    setProgressMonitor(pm).
-                    setDirectory(directoryFile);
+            CloneCommand cloneCommand = Git.cloneRepository().setURI(repoUri.toString()).setProgressMonitor(pm)
+                    .setDirectory(directoryFile);
             transportSetter.setTransport(cloneCommand);
             return cloneCommand.call();
         } catch (GitAPIException | JGitInternalException e) {
             try {
                 FileUtils.delete(directoryFile, FileUtils.RECURSIVE);
-                // This is done to show sensible error messages when trying to create a new git sync
+                // This is done to show sensible error messages when trying to create a new git
+                // sync
                 directoryFile.mkdirs();
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -203,12 +210,14 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
 
     @Override
     public VersionedRook storeFile(File file, String pathInRepo, String fileName) throws IOException {
-        throw new UnsupportedOperationException();
+        // TODO: Implement storeFile.
+        throw new IOException("Attachments are not yet supported for Git repositories.");
     }
 
     @Override
     public List<NoteAttachmentData> listFilesInPath(String pathInRepo) {
-        throw new UnsupportedOperationException();
+        // TODO: Implement listFilesInPath.
+        return new ArrayList<>();
     }
 
     private RevWalk walk() {
@@ -224,7 +233,8 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
 
         Uri sourceUri = Uri.parse("/" + repoRelativePath);
 
-        // Ensure our repo copy is up-to-date. This is necessary when force-loading a book.
+        // Ensure our repo copy is up-to-date. This is necessary when force-loading a
+        // book.
         synchronizer.mergeWithRemote();
 
         synchronizer.retrieveLatestVersionOfFile(sourceUri.getPath(), destination);
@@ -247,7 +257,7 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
             e.printStackTrace();
         }
         assert commit != null;
-        long mtime = (long)commit.getCommitTime()*1000;
+        long mtime = (long) commit.getCommitTime() * 1000;
         return new VersionedRook(repoId, RepoType.GIT, getUri(), uri, commit.name(), mtime);
     }
 
@@ -255,9 +265,11 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
         // Check if the current head is unchanged.
         // If so, we can read all the VersionedRooks from the database.
         synchronizer.setBranchAndGetLatest();
-        // If current HEAD is null, there are no commits, and this means there are no remote
+        // If current HEAD is null, there are no commits, and this means there are no
+        // remote
         // changes to handle.
-        if (synchronizer.currentHead() == null) return true;
+        if (synchronizer.currentHead() == null)
+            return true;
         if (synchronizer.currentHead().equals(synchronizer.getCommit(PRE_SYNC_MARKER_BRANCH)))
             return true;
         return false;
@@ -308,8 +320,15 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
         return preferences.remoteUri();
     }
 
+    @Override
+    public Uri getUriForPath(String path) {
+        // Not yet implemented.
+        return null;
+    }
+
     public void delete(Uri uri) throws IOException {
-        if (synchronizer.deleteFileFromRepo(uri)) synchronizer.tryPush();
+        if (synchronizer.deleteFileFromRepo(uri))
+            synchronizer.tryPush();
     }
 
     public VersionedRook renameBook(Uri oldFullUri, String newName) throws IOException {

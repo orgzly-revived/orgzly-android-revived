@@ -107,6 +107,7 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
             }
 
             holder.binding.itemHeadContent.noteId = note.id
+            holder.binding.itemHeadContent.bookId = note.position.bookId
             holder.binding.itemHeadContent.setSourceText(note.content)
 
             /* If content changes (for example by toggling the checkbox), update the note. */
