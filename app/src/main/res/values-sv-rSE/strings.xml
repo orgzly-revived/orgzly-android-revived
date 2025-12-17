@@ -601,4 +601,9 @@
     <string name="in_note_heading">I anteckningens rubrik</string>
     <string name="in_note_content">I anteckningens innehåll</string>
     <string name="book_names_cannot_contain">Böckers namn får inte innehålla ”../”</string>
+    <string name="pref_title_sync_at_interval">Regelbundet</string>
+    <string name="pref_summary_sync_at_interval">Kan fördröjas av batteribesparande funktioner</string>
+    <string name="pref_key_auto_sync_interval_title">Intervall i minuter (15 är minimum)</string>
+    <string name="failed_sharing_note">Delning av anteckningen misslyckades</string>
+    <string name="create_org_links_from_shared_links">Skapa org-länkar från mottagna delade länkar</string>
 </resources>

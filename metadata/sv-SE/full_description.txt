@@ -1,4 +1,4 @@
-Orgzly är ett outliner-program för att hantera anteckningar och att-göra-listor.
+Orgzly Revived är ett program för att hantera anteckningar och att-göra-listor.
 
 Du kan lagra dina anteckningar i vanliga textfiler och synkronisera dem med en mapp på din mobila enhet, SD-kort eller över WebDAV.
 
