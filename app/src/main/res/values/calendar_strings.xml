@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_key_calendar_sync_enable">pref_key_calendar_sync_enable</string>
+    <string name="pref_title_calendar_sync_enable">Enable Calendar Sync</string>
+    <string name="pref_summary_calendar_sync_enable">Sync scheduled and deadline events to Android Calendar</string>
+    <bool name="pref_default_calendar_sync_enable">false</bool>
+
+    <string name="permissions_rationale_for_calendar_sync">Syncing with Calendar requires calendar permission</string>
+</resources>

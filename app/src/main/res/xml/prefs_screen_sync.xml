@@ -31,6 +31,12 @@
         android:summary="@string/enable_repo_subfolders_preferences_summary"
         android:defaultValue="@bool/pref_default_enable_repo_subfolders"/>
 
+    <SwitchPreference
+        android:key="@string/pref_key_calendar_sync_enable"
+        android:title="@string/pref_title_calendar_sync_enable"
+        android:summary="@string/pref_summary_calendar_sync_enable"
+        android:defaultValue="@bool/pref_default_calendar_sync_enable"/>
+
     <androidx.preference.PreferenceScreen
         android:key="prefs_screen_auto_sync"
         android:title="@string/auto_sync"

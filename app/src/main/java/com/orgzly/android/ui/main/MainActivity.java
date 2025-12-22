@@ -210,6 +210,38 @@ public class MainActivity extends CommonActivity
 
             } else {
                 handleOrgProtocolIntent(getIntent());
+                handleDeepLinkIntent(getIntent());
+            }
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleOrgProtocolIntent(intent);
+        handleDeepLinkIntent(intent);
+    }
+
+    private void handleDeepLinkIntent(Intent intent) {
+        Uri data = intent.getData();
+        if (data != null) {
+            boolean isOrgzlyScheme = "orgzly".equals(data.getScheme()) && "note".equals(data.getHost());
+            boolean isHttpScheme = ("https".equals(data.getScheme()) || "http".equals(data.getScheme()))
+                    && "orgzlyrevived.com".equals(data.getHost())
+                    && data.getPath() != null && data.getPath().startsWith("/note/");
+
+            if (isOrgzlyScheme || isHttpScheme) {
+                String path = data.getPath(); // "/note/123" or "/123"
+                if (path != null) {
+                    String idStr = data.getLastPathSegment();
+                    try {
+                        long noteId = Long.parseLong(idStr);
+                        viewModel.openNote(noteId);
+                    } catch (NumberFormatException e) {
+                        // Ignore
+                    }
+                }
             }
         }
     }

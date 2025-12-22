@@ -8,9 +8,12 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.annotation.StringRes
 import androidx.preference.*
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.AppIntent
+import com.orgzly.android.calendar.CalendarWorker
 import com.orgzly.android.SharingShortcutsManager
 import com.orgzly.android.git.SshKey
 import com.orgzly.android.prefs.*
@@ -399,6 +402,23 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                         AppPermissions.isGrantedOrRequest(
                             activity, AppPermissions.Usage.POST_NOTIFICATIONS)
                     }
+                }
+            }
+
+            // Calendar sync
+            getString(R.string.pref_key_calendar_sync_enable) -> {
+                if (AppPreferences.isCalendarSyncEnabled(requireContext())) {
+                    AppPermissions.isGrantedOrRequest(
+                        activity, AppPermissions.Usage.CALENDAR_SYNC)
+
+                    val calendarRequest = OneTimeWorkRequestBuilder<CalendarWorker>().build()
+                    WorkManager.getInstance(requireContext()).enqueue(calendarRequest)
+                } else {
+                    // Cleanup: Delete calendar if disabled
+                    val calendarRequest = OneTimeWorkRequestBuilder<CalendarWorker>()
+                        .setInputData(androidx.work.workDataOf(CalendarWorker.KEY_ACTION to CalendarWorker.ACTION_DELETE))
+                        .build()
+                    WorkManager.getInstance(requireContext()).enqueue(calendarRequest)
                 }
             }
         }
