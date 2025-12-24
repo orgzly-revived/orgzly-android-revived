@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.os.SystemClock;
 
 
+import com.orgzly.android.data.DbRepoBookRepository;
+import com.orgzly.android.ui.note.NoteAttachmentData;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.orgzly.android.data.DbRepoBookRepository;
@@ -57,6 +59,11 @@ public class MockRepo implements SyncRepo {
     }
 
     @Override
+    public Uri getUriForPath(String path) {
+        return databaseRepo.getUriForPath(path);
+    }
+
+    @Override
     public List<VersionedRook> getBooks() throws IOException {
         SystemClock.sleep(SLEEP_FOR_GET_BOOKS);
         return databaseRepo.getBooks();
@@ -81,6 +88,17 @@ public class MockRepo implements SyncRepo {
     public VersionedRook storeBook(File file, String repoRelativePath) throws IOException {
         SystemClock.sleep(SLEEP_FOR_STORE_BOOK);
         return databaseRepo.storeBook(file, repoRelativePath);
+    }
+
+    @Override
+    public VersionedRook storeFile(File file, String pathInRepo, String fileName) throws IOException {
+        SystemClock.sleep(SLEEP_FOR_STORE_BOOK);
+        return databaseRepo.storeFile(file, pathInRepo, fileName);
+    }
+
+    @Override
+    public List<NoteAttachmentData> listFilesInPath(String pathInRepo) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

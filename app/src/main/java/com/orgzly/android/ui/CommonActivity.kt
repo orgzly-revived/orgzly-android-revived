@@ -326,14 +326,14 @@ abstract class CommonActivity : AppCompatActivity() {
         val contentUri = FileProvider.getUriForFile(
             this, BuildConfig.APPLICATION_ID + ".fileprovider", file)
 
-        val intent = Intent(Intent.ACTION_VIEW, contentUri)
+        openUri(contentUri)
+    }
 
+    fun openUri(uri: android.net.Uri) {
+        val intent = Intent(Intent.ACTION_VIEW, uri)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-        // Added for support on API 16
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
-        // Try to start an activity for opening the file
         try {
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {

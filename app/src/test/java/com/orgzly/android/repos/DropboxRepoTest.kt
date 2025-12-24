@@ -44,7 +44,7 @@ class DropboxRepoTest : SyncRepoTest {
     fun tearDown() {
         if (this::syncRepo.isInitialized) {
             val dropboxRepo = syncRepo as DropboxRepo
-            dropboxRepo.deleteDirectory(syncRepo.uri)
+            dropboxRepo.delete(syncRepo.uri)
         }
     }
 
