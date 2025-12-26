@@ -90,7 +90,10 @@ class AgendaItems(private val hideEmptyDaysInAgenda : Boolean) {
             val times = AgendaUtils.expandOrgDateTime(expandable, now, agendaDays)
 
             if (times.isOverdueToday) {
-                overdueNotes.add(AgendaItem.Note(agendaItemId, note, timeType))
+                when (timeType) {
+                    TimeType.SCHEDULED -> dailyNotes[now.millis]?.add(AgendaItem.Note(agendaItemId, note, timeType))
+                    else -> overdueNotes.add(AgendaItem.Note(agendaItemId, note, timeType))
+                }
                 item2databaseIds[agendaItemId] = note.note.id
                 agendaItemId++
             }
