@@ -13,9 +13,8 @@ class StateChangeParentTitleUpdater(
     private val checkedRegex =
         Regex("^\\s*(?:-|\\d+\\.)\\s+\\[X\\]\\s+.*$", RegexOption.MULTILINE)
 
-    private fun countMatches(content: String, regex: Regex): Int {
-        return regex.findAll(content).count()
-    }
+    private fun percentage(done: Int, total: Int): Int =
+        if (total == 0) 0 else ((done.toDouble() / total) * 100).roundToInt()
 
     fun updateTitleForChildStates(title: String, childStates: Collection<String?>): String {
         if (!percentageRegex.containsMatchIn(title) && !fractionRegex.containsMatchIn(title)) {
@@ -24,10 +23,9 @@ class StateChangeParentTitleUpdater(
 
         val doneCount = childStates.count { this.doneKeywords.contains(it) }
         val totalCount = doneCount + childStates.count { todoKeywords.contains(it) }
-        val percentage = ((doneCount.toDouble() / totalCount) * 100).roundToInt()
 
         return title
-            .replace(percentageRegex, "[$percentage%]")
+            .replace(percentageRegex, "[${percentage(doneCount, totalCount)}%]")
             .replace(fractionRegex, "[$doneCount/$totalCount]")
     }
 
@@ -37,13 +35,11 @@ class StateChangeParentTitleUpdater(
             return title
         }
 
-        val undoneCount = countMatches(content, uncheckedRegex)
-        val doneCount = countMatches(content, checkedRegex)
-        val totalCount = undoneCount + doneCount
-        val percentage = ((doneCount.toDouble() / totalCount) * 100).roundToInt()
+        val doneCount = checkedRegex.findAll(content).count()
+        val totalCount = uncheckedRegex.findAll(content).count() + doneCount
 
         return title
-            .replace(percentageRegex, "[$percentage%]")
+            .replace(percentageRegex, "[${percentage(doneCount, totalCount)}%]")
             .replace(fractionRegex, "[$doneCount/$totalCount]")
     }
 }
