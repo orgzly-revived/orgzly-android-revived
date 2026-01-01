@@ -22,6 +22,28 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.16.0"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Implement Android Calendar Provider integration" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Implement “narrowing” as a note swipe-action." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix divide-by-zero bug in statistics cookies." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Update translations." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.15.0"
             tools:ignore="HardcodedText"
             android:autoLink="web" />
