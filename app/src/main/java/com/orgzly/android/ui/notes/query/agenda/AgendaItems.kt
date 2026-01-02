@@ -71,6 +71,7 @@ class AgendaItems(private val hideEmptyDaysInAgenda : Boolean) {
         val now = DateTime.now().withTimeAtStartOfDay()
 
         val overdueNotes = mutableListOf<AgendaItem>()
+        val scheduledOverdueNotes = mutableListOf<AgendaItem>()
 
         val dailyNotes = (0 until agendaDays)
                 .map { i -> now.plusDays(i) }
@@ -91,7 +92,7 @@ class AgendaItems(private val hideEmptyDaysInAgenda : Boolean) {
 
             if (times.isOverdueToday) {
                 when (timeType) {
-                    TimeType.SCHEDULED -> dailyNotes[now.millis]?.add(AgendaItem.Note(agendaItemId, note, timeType))
+                    TimeType.SCHEDULED -> scheduledOverdueNotes.add(AgendaItem.Note(agendaItemId, note, timeType))
                     else -> overdueNotes.add(AgendaItem.Note(agendaItemId, note, timeType))
                 }
                 item2databaseIds[agendaItemId] = note.note.id
@@ -160,7 +161,14 @@ class AgendaItems(private val hideEmptyDaysInAgenda : Boolean) {
                         b !is AgendaItem.Note -> 1   // Non-notes go first
                         else -> AgendaItem.Note.compareByTimeInDay(a, b)
                     }
+                } + scheduledOverdueNotes.sortedWith { a, b ->
+                    when {
+                        a !is AgendaItem.Note -> -1  // Non-notes go first
+                        b !is AgendaItem.Note -> 1   // Non-notes go first
+                        else -> AgendaItem.Note.compareByTimeInDay(a, b)
+                    }
                 }
+
                 result.addAll(sortedItems)
             }
         }
