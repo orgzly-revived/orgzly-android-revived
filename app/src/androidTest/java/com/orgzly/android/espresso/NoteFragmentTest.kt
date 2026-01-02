@@ -3,22 +3,54 @@ package com.orgzly.android.espresso
 import android.content.pm.ActivityInfo
 import android.os.SystemClock
 import android.widget.DatePicker
+import android.widget.TextView
 import android.widget.TimePicker
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso.*
+import androidx.test.espresso.Espresso.onData
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.longClick
+import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.swipeUp
+import androidx.test.espresso.action.ViewActions.typeTextIntoFocusedView
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.PickerActions.setDate
 import androidx.test.espresso.contrib.PickerActions.setTime
 import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.hasSibling
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withClassName
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.orgzly.R
 import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.RetryTestRule
-import com.orgzly.android.espresso.util.EspressoUtils.*
+import com.orgzly.android.espresso.util.EspressoUtils
+import com.orgzly.android.espresso.util.EspressoUtils.clickClickableSpan
+import com.orgzly.android.espresso.util.EspressoUtils.clickSetting
+import com.orgzly.android.espresso.util.EspressoUtils.closeSoftKeyboardWithDelay
+import com.orgzly.android.espresso.util.EspressoUtils.listViewItemCount
+import com.orgzly.android.espresso.util.EspressoUtils.onActionItemClick
+import com.orgzly.android.espresso.util.EspressoUtils.onBook
+import com.orgzly.android.espresso.util.EspressoUtils.onListView
+import com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook
+import com.orgzly.android.espresso.util.EspressoUtils.onSnackbar
+import com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard
+import com.orgzly.android.espresso.util.EspressoUtils.scroll
+import com.orgzly.android.espresso.util.EspressoUtils.setNumber
+import com.orgzly.android.espresso.util.EspressoUtils.settingsSetTodoKeywords
 import com.orgzly.android.ui.main.MainActivity
-import org.hamcrest.Matchers.*
+import junit.framework.TestCase.assertTrue
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.containsString
+import org.hamcrest.Matchers.endsWith
+import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.hasToString
+import org.hamcrest.Matchers.not
+import org.hamcrest.Matchers.startsWith
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -115,6 +147,8 @@ class NoteFragmentTest : OrgzlyTest() {
         onNoteInBook(1).perform(click())
         onView(withId(R.id.scheduled_button)).check(matches(withText("")))
         onView(withId(R.id.scheduled_button)).perform(click())
+        onView(withId(R.id.is_active_label)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.is_active_checkbox)).check(matches(not(isDisplayed())))
         onView(withText(R.string.set)).perform(click())
         onView(withId(R.id.scheduled_button))
                 .check(matches(withText(startsWith(defaultDialogUserDate()))))
@@ -153,6 +187,8 @@ class NoteFragmentTest : OrgzlyTest() {
         onNoteInBook(1).perform(click())
         onView(withId(R.id.deadline_button)).check(matches(withText("")))
         onView(withId(R.id.deadline_button)).perform(click())
+        onView(withId(R.id.is_active_label)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.is_active_checkbox)).check(matches(not(isDisplayed())))
         onView(withText(R.string.set)).perform(click())
         onView(withId(R.id.deadline_button))
                 .check(matches(allOf(withText(startsWith(defaultDialogUserDate())), isDisplayed())))
@@ -350,6 +386,7 @@ class NoteFragmentTest : OrgzlyTest() {
 
     @Test
     fun testSettingPmTimeDisplays24HourTime() {
+        EspressoUtils.grantAlarmsAndRemindersSpecialPermission()
         onNoteInBook(1).perform(click())
 
         onView(withId(R.id.deadline_button)).check(matches(withText("")))
@@ -563,5 +600,52 @@ class NoteFragmentTest : OrgzlyTest() {
         pressBack() // Leave note
 
         onView(withId(R.id.fragment_book_view_flipper)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testTimestampButtonVisibleWhenEditing() {
+        onNoteInBook(1).perform(click())
+        onView(withId(R.id.insert_inline_timestamp))
+            .check(doesNotExist())
+        onView(withId(R.id.content_view)).perform(click())
+        onView(withId(R.id.insert_inline_timestamp))
+            .check(matches(isDisplayed()))
+        onView(withId(R.id.tags_button)).perform(scroll(), click())
+        onView(withId(R.id.insert_inline_timestamp))
+            .check(doesNotExist())
+        onView(withId(R.id.title_view)).perform(scroll(), click())
+        onView(withId(R.id.insert_inline_timestamp))
+            .check(matches(isDisplayed()))
+        onView(withId(R.id.tags_button)).perform(scroll(), click())
+        onView(withId(R.id.insert_inline_timestamp))
+            .check(doesNotExist())
+    }
+
+    @Test
+    fun testInsertInactiveTimestamp() {
+        onNoteInBook(1).perform(click())
+        onView(withId(R.id.content_view)).perform(click())
+        onView(withId(R.id.insert_inline_timestamp)).perform(click())
+        onView(withId(R.id.is_active_label)).perform(scroll())
+        onView(withId(R.id.is_active_label)).check(matches(isDisplayed()))
+        onView(withId(R.id.is_active_checkbox)).check(matches(isDisplayed()))
+        onView(withText(R.string.set)).perform(click())
+        scenario.onActivity { activity ->
+            val view = activity.findViewById<TextView>(R.id.content_edit)
+            assertTrue(view.text.contains(Regex("\\[[0-9]{4}-[0-9]{2}-[0-9]{2} [A-Z][a-z]{2}\\]")))
+        }
+    }
+
+    @Test
+    fun testInsertActiveTimestamp() {
+        onNoteInBook(1).perform(click())
+        onView(withId(R.id.content_view)).perform(click())
+        onView(withId(R.id.insert_inline_timestamp)).perform(click())
+        onView(withId(R.id.is_active_checkbox)).perform(scroll(), click())
+        onView(withText(R.string.set)).perform(click())
+        scenario.onActivity { activity ->
+            val view = activity.findViewById<TextView>(R.id.content_edit)
+            assertTrue(view.text.contains(Regex("<[0-9]{4}-[0-9]{2}-[0-9]{2} [A-Z][a-z]{2}>")))
+        }
     }
 }

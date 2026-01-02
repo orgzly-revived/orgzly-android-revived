@@ -20,7 +20,7 @@ import com.orgzly.android.ui.dialogs.TimestampDialogFragment
 import com.orgzly.android.ui.util.ActivityUtils
 import com.orgzly.android.util.LogUtils
 import com.orgzly.org.datetime.OrgDateTime
-import java.util.*
+import java.util.TreeSet
 import javax.inject.Inject
 
 /**
@@ -177,16 +177,16 @@ abstract class NotesFragment : CommonFragment(), TimestampDialogFragment.OnDateT
 
     }
 
-    override fun onDateTimeSet(id: Int, noteIds: TreeSet<Long>, time: OrgDateTime?) {
-        if (id in scheduledTimeButtonIds()) {
+    override fun onDateTimeSet(originViewId: Int, noteIds: TreeSet<Long>, time: OrgDateTime?) {
+        if (originViewId in scheduledTimeButtonIds()) {
             getCurrentListener()?.onScheduledTimeUpdateRequest(noteIds, time)
         } else {
             getCurrentListener()?.onDeadlineTimeUpdateRequest(noteIds, time)
         }
     }
 
-    override fun onDateTimeAborted(id: Int, noteIds: TreeSet<Long>) {
-        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, id)
+    override fun onDateTimeAborted(originViewId: Int, noteIds: TreeSet<Long>) {
+        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, originViewId)
     }
 
     fun scheduledTimeButtonIds(): Set<Int> {
