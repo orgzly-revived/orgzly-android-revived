@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.text.Spannable
+import android.text.style.ClickableSpan
 import android.text.style.ImageSpan
 import android.view.View
 import android.widget.TextView
@@ -21,6 +22,8 @@ import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.views.style.FileLinkSpan
+import com.orgzly.android.ui.views.style.AttachmentLinkSpan
+import com.orgzly.android.ui.views.style.FileOrNotLinkSpan
 import com.orgzly.android.usecase.LinkFindTarget
 import com.orgzly.android.usecase.UseCaseRunner
 import com.orgzly.android.util.AppPermissions
@@ -29,7 +32,7 @@ import java.io.File
 
 object ImageLoader {
     @JvmStatic
-    fun loadImages(textWithMarkup: TextView) {
+    fun loadImages(textWithMarkup: TextView, bookId: Long) {
         val context = textWithMarkup.context
 
         // Only if AppPreferences.displayImages(context) is true
@@ -39,89 +42,110 @@ object ImageLoader {
                 && AppPermissions.isGranted(context, AppPermissions.Usage.EXTERNAL_FILES_ACCESS)) {
             // Load the associated image for each FileLinkSpan
             SpanUtils.forEachSpan(textWithMarkup.text as Spannable, FileLinkSpan::class.java) { span, _, _ ->
-                loadImage(textWithMarkup, span)
+                loadImage(textWithMarkup, span, span.path, bookId)
+            }
+            // Load the associated image for each AttachmentLinkSpan
+            SpanUtils.forEachSpan(textWithMarkup.text as Spannable, AttachmentLinkSpan::class.java) { span, _, _ ->
+                loadImage(textWithMarkup, span, span.getPrefixedPath(), bookId)
+            }
+            // Load the associated image for each FileOrNotLinkSpan
+            SpanUtils.forEachSpan(textWithMarkup.text as Spannable, FileOrNotLinkSpan::class.java) { span, _, _ ->
+                loadImage(textWithMarkup, span, span.link, bookId)
             }
         }
     }
 
-    private fun loadImage(textWithMarkup: TextView, fileLinkSpan: FileLinkSpan) {
-        val path = fileLinkSpan.path
-
+    private fun loadImage(textWithMarkup: TextView, fileLinkSpan: ClickableSpan, path: String, bookId: Long) {
         if (hasSupportedExtension(path)) {
             val text = textWithMarkup.text as Spannable
             // Get the current context
             val context = App.getAppContext()
 
-            val file = UseCaseRunner.run(LinkFindTarget(path)).userData
+            val target = UseCaseRunner.run(LinkFindTarget(path, bookId)).userData
+            var uri: android.net.Uri? = null
 
-            if (file !is File) {
-                if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Did not find a File target for $path, actually found $file")
+            if (target is File) {
+                if (target.exists()) {
+                    uri = FileProvider.getUriForFile(
+                        context, BuildConfig.APPLICATION_ID + ".fileprovider", target
+                    )
+                } else {
+                    return
+                }
+            } else if (target is android.net.Uri) {
+                uri = target
+            } else {
                 return
             }
 
-            if (file.exists()) {
-                // Get the Uri
-                val contentUri = FileProvider.getUriForFile(
-                        context, BuildConfig.APPLICATION_ID + ".fileprovider", file)
+            if (uri == null) return
 
-                // Get image sizes to reduce their memory footprint by rescaling
-                val options = BitmapFactory.Options()
-                options.inJustDecodeBounds = true
-                BitmapFactory.decodeFile(file.absolutePath, options)
+            // Get image sizes to reduce their memory footprint by rescaling
+            val options = BitmapFactory.Options()
+            options.inJustDecodeBounds = true
 
-                val size = calculateImageDisplaySize(
-                        file.name, "pre-load", textWithMarkup, options.outWidth, options.outHeight)
-
-                // Setup a placeholder
-                val drawable = ResourcesCompat.getDrawable(
-                        context.resources, R.drawable.image_placeholder, context.applicationContext.theme)
-                        ?: ColorDrawable(Color.TRANSPARENT)
-                drawable.setBounds(0, 0, size.first, size.second)
-
-                Glide.with(context)
-                        .asBitmap()
-                        .apply(RequestOptions().placeholder(drawable))
-                        .load(contentUri)
-                        .into(object : CustomTarget<Bitmap>() {
-
-                            val start = text.getSpanStart(fileLinkSpan)
-                            val end = text.getSpanEnd(fileLinkSpan)
-                            val flags = text.getSpanFlags(fileLinkSpan)
-
-                            var placeholderSpan: ImageSpan? = null
-
-                            override fun onLoadStarted(placeholder: Drawable?) {
-                                if (placeholder != null) {
-                                    placeholderSpan = ImageSpan(placeholder)
-                                    text.setSpan(placeholderSpan, start, end, flags)
-                                }
-                            }
-
-                            override fun onResourceReady(bitmap: Bitmap, transition: Transition<in Bitmap>?) {
-                                val bitmapDrawable = BitmapDrawable(
-                                        textWithMarkup.context.resources, bitmap)
-
-                                val newSize = calculateImageDisplaySize(
-                                        file.name, "on-load",
-                                        textWithMarkup,
-                                        bitmapDrawable.bitmap.width,
-                                        bitmapDrawable.bitmap.height)
-
-                                bitmapDrawable.setBounds(0, 0, newSize.first, newSize.second)
-
-                                placeholderSpan?.let {
-                                    text.removeSpan(it)
-                                }
-
-                                text.setSpan(ImageSpan(bitmapDrawable), start, end, flags)
-                            }
-
-                            override fun onLoadCleared(placeholder: Drawable?) {
-                            }
-                        })
-            } else {
-                if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "File $file (from $path) does not exist")
+            try {
+                context.contentResolver.openInputStream(uri).use { stream ->
+                    BitmapFactory.decodeStream(stream, null, options)
+                }
+            } catch (e: Exception) {
+                return
             }
+
+            val size = calculateImageDisplaySize(
+                path, "pre-load", textWithMarkup, options.outWidth, options.outHeight
+            )
+
+            // Setup a placeholder
+            val drawable = ResourcesCompat.getDrawable(
+                context.resources, R.drawable.image_placeholder, context.applicationContext.theme
+            )
+                ?: ColorDrawable(Color.TRANSPARENT)
+            drawable.setBounds(0, 0, size.first, size.second)
+
+            Glide.with(context)
+                .asBitmap()
+                .apply(RequestOptions().placeholder(drawable))
+                .load(uri)
+                .into(object : CustomTarget<Bitmap>() {
+
+                    val start = text.getSpanStart(fileLinkSpan)
+                    val end = text.getSpanEnd(fileLinkSpan)
+                    val flags = text.getSpanFlags(fileLinkSpan)
+
+                    var placeholderSpan: ImageSpan? = null
+
+                    override fun onLoadStarted(placeholder: Drawable?) {
+                        if (placeholder != null) {
+                            placeholderSpan = ImageSpan(placeholder)
+                            text.setSpan(placeholderSpan, start, end, flags)
+                        }
+                    }
+
+                    override fun onResourceReady(bitmap: Bitmap, transition: Transition<in Bitmap>?) {
+                        val bitmapDrawable = BitmapDrawable(
+                            textWithMarkup.context.resources, bitmap
+                        )
+
+                        val newSize = calculateImageDisplaySize(
+                            path, "on-load",
+                            textWithMarkup,
+                            bitmapDrawable.bitmap.width,
+                            bitmapDrawable.bitmap.height
+                        )
+
+                        bitmapDrawable.setBounds(0, 0, newSize.first, newSize.second)
+
+                        placeholderSpan?.let {
+                            text.removeSpan(it)
+                        }
+
+                        text.setSpan(ImageSpan(bitmapDrawable), start, end, flags)
+                    }
+
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                    }
+                })
         }
     }
 
