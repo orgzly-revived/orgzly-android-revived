@@ -1365,6 +1365,7 @@ class DataRepository @Inject constructor(
 
     fun getNotePropertyNames(): List<String> {
         return (PropertyUtils.DEFAULT_PROPERTIES + db.noteProperty().allDistinctNames())
+            .map { it.trim('+') } // Drop "+" property modifiers
             .distinctBy { it.lowercase() }
     }
 
