@@ -65,6 +65,8 @@ class NoteViewModel(
 
     var notePayload: NotePayload? = null
 
+    val propertyNames = MutableLiveData<List<String>>()
+
     private var originalHash: Long = 0L
 
     fun loadData() {
@@ -98,6 +100,8 @@ class NoteViewModel(
             bookView.postValue(book)
 
             noteDetailsDataEvent.postValue(NoteDetailsData(book, note, ancestors))
+
+            propertyNames.postValue(dataRepository.getNotePropertyNames())
         }
     }
 

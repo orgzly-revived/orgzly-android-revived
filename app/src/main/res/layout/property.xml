@@ -10,7 +10,7 @@
         android:contentDescription="@string/property"
         android:src="@drawable/ic_abc" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/name"
         style="@style/NoteFragmentMetadataItemValueButton"
         android:maxLines="1"
