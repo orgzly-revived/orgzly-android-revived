@@ -17,6 +17,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
@@ -492,7 +493,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
         val propView = lastProperty()
 
-        val name = propView.findViewById<EditText>(R.id.name)
+        val name = propView.findViewById<AutoCompleteTextView>(R.id.name)
         val value = propView.findViewById<EditText>(R.id.value)
         val remove = propView.findViewById<View>(R.id.remove)
 
@@ -518,6 +519,16 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             } else {
                 binding.propertiesContainer.removeView(propView)
             }
+        }
+
+        val propertyNameSuggestionAdapter = NotePropertySuggestionAdapter(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line
+        )
+        name.setAdapter(propertyNameSuggestionAdapter)
+
+        viewModel.propertyNames.observe(viewLifecycleOwner) {
+            propertyNameSuggestionAdapter.updateDictionary(it)
         }
 
         /*
