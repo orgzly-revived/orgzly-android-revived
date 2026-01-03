@@ -9,7 +9,10 @@ import com.orgzly.org.datetime.OrgInterval
 import com.orgzly.org.datetime.OrgRange
 import org.joda.time.DateTime
 
-class AgendaItems(private val hideEmptyDaysInAgenda : Boolean) {
+class AgendaItems(
+    private val hideEmptyDaysInAgenda : Boolean,
+    private val groupScheduledWithToday: Boolean) {
+
     data class ExpandableOrgRange(
             val range: OrgRange,
             val canBeOverdueToday: Boolean,
@@ -91,9 +94,10 @@ class AgendaItems(private val hideEmptyDaysInAgenda : Boolean) {
             val times = AgendaUtils.expandOrgDateTime(expandable, now, agendaDays)
 
             if (times.isOverdueToday) {
-                when (timeType) {
-                    TimeType.SCHEDULED -> scheduledOverdueNotes.add(AgendaItem.Note(agendaItemId, note, timeType))
-                    else -> overdueNotes.add(AgendaItem.Note(agendaItemId, note, timeType))
+                if (timeType == TimeType.SCHEDULED && groupScheduledWithToday) {
+                    scheduledOverdueNotes.add(AgendaItem.Note(agendaItemId, note, timeType))
+                } else {
+                    overdueNotes.add(AgendaItem.Note(agendaItemId, note, timeType))
                 }
                 item2databaseIds[agendaItemId] = note.note.id
                 agendaItemId++

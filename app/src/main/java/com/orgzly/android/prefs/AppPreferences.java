@@ -913,6 +913,16 @@ public class AppPreferences {
     }
 
     /*
+     * Group scheduled tasks with today in agenda
+     */
+
+    public static boolean groupScheduledWithTodayInAgenda(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_group_scheduled_with_today),
+                context.getResources().getBoolean(R.bool.pref_default_group_scheduled_with_today));
+    }
+
+    /*
      * Widget
      */
 
