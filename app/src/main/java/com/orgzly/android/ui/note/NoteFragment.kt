@@ -521,16 +521,14 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             }
         }
 
-        val propertyNameSuggestionAdapter = ArrayAdapter(
+        val propertyNameSuggestionAdapter = NotePropertySuggestionAdapter(
             requireContext(),
-            android.R.layout.simple_dropdown_item_1line,
-            mutableListOf<String>()
+            android.R.layout.simple_dropdown_item_1line
         )
         name.setAdapter(propertyNameSuggestionAdapter)
 
         viewModel.propertyNames.observe(viewLifecycleOwner) {
-            propertyNameSuggestionAdapter.clear()
-            propertyNameSuggestionAdapter.addAll(it)
+            propertyNameSuggestionAdapter.updateDictionary(it)
         }
 
         /*
