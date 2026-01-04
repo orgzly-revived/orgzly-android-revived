@@ -74,7 +74,7 @@ class AgendaItems(
         val now = DateTime.now().withTimeAtStartOfDay()
 
         val overdueNotes = mutableListOf<AgendaItem>()
-        val scheduledOverdueNotes = mutableListOf<AgendaItem>()
+        val scheduledOverdueNotes = mutableListOf<AgendaItem.Note>()
 
         val dailyNotes = (0 until agendaDays)
                 .map { i -> now.plusDays(i) }
@@ -170,12 +170,13 @@ class AgendaItems(
                 }
 
                 if (d.key == now.millis) {
-                    sortedItems += scheduledOverdueNotes.sortedWith { a, b ->
-                        when {
-                            a !is AgendaItem.Note -> -1  // Non-notes go first
-                            b !is AgendaItem.Note -> 1   // Non-notes go first
-                            else -> AgendaItem.Note.compareByTimeInDay(a, b)
-                        }
+                    val existingNoteIds = sortedItems
+                        .filterIsInstance<AgendaItem.Note>()
+                        .map { it.note.note.id }
+                    sortedItems += scheduledOverdueNotes.filter {
+                        !existingNoteIds.contains(it.note.note.id)
+                    }.sortedWith { a, b ->
+                        AgendaItem.Note.compareByTimeInDay(a, b)
                     }
                 }
 
