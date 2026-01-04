@@ -140,6 +140,20 @@ public class AgendaFragmentTest extends OrgzlyTest {
     }
 
     @Test
+    public void testOverdueScheduledNotRepeating() {
+        testUtils.setupBook("book-three",
+                "Sample book used for tests\n" +
+
+                        "**** Repeating note 1\n" +
+                        "SCHEDULED: <2014-01-01 Sat .+1d>\n");
+        scenario = ActivityScenario.launch(MainActivity.class);
+        searchForTextCloseKeyboard("ad.1");
+
+        onNotesInAgenda().check(matches(recyclerViewItemCount(2)));
+        onItemInAgenda(1, R.id.item_head_title_view).check(matches(allOf(withText(endsWith("Repeating note 1")), isDisplayed())));
+    }
+
+    @Test
     public void testAgendaRangeEvent() {
         DateTime start = DateTime.now().withTimeAtStartOfDay();
         DateTime end = DateTime.now().withTimeAtStartOfDay().plusDays(4);
