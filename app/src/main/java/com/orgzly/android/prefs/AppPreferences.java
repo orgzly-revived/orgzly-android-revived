@@ -922,6 +922,12 @@ public class AppPreferences {
                 context.getResources().getBoolean(R.bool.pref_default_group_scheduled_with_today));
     }
 
+    public static void groupScheduledWithTodayInAgenda(Context context, boolean value) {
+        getDefaultSharedPreferences(context).edit().putBoolean(
+                context.getResources().getString(R.string.pref_key_group_scheduled_with_today),
+                value).apply();
+    }
+
     /*
      * Widget
      */
