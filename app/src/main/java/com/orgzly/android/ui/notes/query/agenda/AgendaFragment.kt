@@ -230,7 +230,11 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Observed notes: ${notes.size}")
 
             val hideEmptyDaysInAgenda = AppPreferences.hideEmptyDaysInAgenda(context)
-            val items = AgendaItems(hideEmptyDaysInAgenda).getList(notes, currentQuery, item2databaseIds)
+            val groupScheduledWithToday = AppPreferences.groupScheduledWithTodayInAgenda(context)
+            val items = AgendaItems(
+                hideEmptyDaysInAgenda,
+                groupScheduledWithToday
+            ).getList(notes, currentQuery, item2databaseIds)
 
             if (BuildConfig.LOG_DEBUG)
                 LogUtils.d(TAG, "Replacing data with ${items.size} agenda items")

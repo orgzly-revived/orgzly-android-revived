@@ -76,18 +76,23 @@ public class AgendaFragmentTest extends OrgzlyTest {
 
     @Test
     public void testAgendaSavedSearch() {
+        testUtils.setupBook("book-three",
+                "Sample book used for tests\n" +
+
+                    "**** Note 5\n" +
+                    "DEADLINE: <2014-01-04 Sat>\n");
         scenario = defaultSetUp();
         searchForTextCloseKeyboard(".it.done ad.7");
+
         /*
          * 1 Overdue
-         * 1 Note B
-         * 1 Note C
-         * 1 Note 2
+         * 1 Note 5
          * 7 Day
+         * 1 Note B
          * 7 Note C
          * 7 Note 2
          */
-        onView(withId(R.id.fragment_query_agenda_recycler_view)).check(matches(recyclerViewItemCount(25)));
+        onView(withId(R.id.fragment_query_agenda_recycler_view)).check(matches(recyclerViewItemCount(24)));
     }
 
     @Test
@@ -101,8 +106,29 @@ public class AgendaFragmentTest extends OrgzlyTest {
 
     @Test
     public void testDayAgenda() {
+        testUtils.setupBook("book-three",
+            "Sample book used for tests\n" +
+
+                    "**** Note 5\n" +
+                    "DEADLINE: <2014-01-04 Sat>\n");
         scenario = defaultSetUp();
         searchForTextCloseKeyboard(".it.done (s.7d or d.7d) ad.1");
+
+        onNotesInAgenda().check(matches(recyclerViewItemCount(6)));
+        onItemInAgenda(0, R.id.item_agenda_divider_text).check(matches(allOf(withText(R.string.overdue), isDisplayed())));
+        onItemInAgenda(1, R.id.item_head_title_view).check(matches(allOf(withText(endsWith("Note 5")), isDisplayed())));
+        // Day 1
+        onItemInAgenda(3, R.id.item_head_title_view).check(matches(allOf(withText(endsWith("Note C")), isDisplayed())));
+        onItemInAgenda(4, R.id.item_head_title_view).check(matches(allOf(withText(endsWith("Note 2")), isDisplayed())));
+        onItemInAgenda(5, R.id.item_head_title_view).check(matches(allOf(withText(endsWith("Note B")), isDisplayed())));
+    }
+
+    @Test
+    public void testDayAgendaLegacyGrouping() {
+        scenario = defaultSetUp();
+        AppPreferences.groupScheduledWithTodayInAgenda(context, false);
+        searchForTextCloseKeyboard(".it.done (s.7d or d.7d) ad.1");
+
         onNotesInAgenda().check(matches(recyclerViewItemCount(7)));
         onItemInAgenda(0, R.id.item_agenda_divider_text).check(matches(allOf(withText(R.string.overdue), isDisplayed())));
         onItemInAgenda(1, R.id.item_head_title_view).check(matches(allOf(withText(endsWith("Note B")), isDisplayed())));
@@ -111,6 +137,20 @@ public class AgendaFragmentTest extends OrgzlyTest {
         // Day 1
         onItemInAgenda(5, R.id.item_head_title_view).check(matches(allOf(withText(endsWith("Note C")), isDisplayed())));
         onItemInAgenda(6, R.id.item_head_title_view).check(matches(allOf(withText(endsWith("Note 2")), isDisplayed())));
+    }
+
+    @Test
+    public void testOverdueScheduledNotRepeating() {
+        testUtils.setupBook("book-three",
+                "Sample book used for tests\n" +
+
+                        "**** Repeating note 1\n" +
+                        "SCHEDULED: <2014-01-01 Sat .+1d>\n");
+        scenario = ActivityScenario.launch(MainActivity.class);
+        searchForTextCloseKeyboard("ad.1");
+
+        onNotesInAgenda().check(matches(recyclerViewItemCount(2)));
+        onItemInAgenda(1, R.id.item_head_title_view).check(matches(allOf(withText(endsWith("Repeating note 1")), isDisplayed())));
     }
 
     @Test
@@ -130,36 +170,57 @@ public class AgendaFragmentTest extends OrgzlyTest {
     public void testOneTimeTaskMarkedDone() {
         scenario = defaultSetUp();
         searchForTextCloseKeyboard(".it.done ad.7");
+
         /*
-         * 1 Overdue
-         * 1 Note B   <- Mark as done
+         * Today
          * 1 Note C
          * 1 Note 2
-         * 7 Day
-         * 7 Note C
-         * 7 Note 2
+         * 1 Note B <- Mark as done
+         * 6 Day
+         * 6 Note C
+         * 6 Note 2
          */
-        onItemInAgenda(1).perform(longClick());
+        onItemInAgenda(3).perform(longClick());
         onView(withId(R.id.toggle_state)).perform(click());
-        onNotesInAgenda().check(matches(recyclerViewItemCount(24)));
+        onNotesInAgenda().check(matches(recyclerViewItemCount(21)));
     }
 
     @Test
     public void testRepeaterTaskMarkedDone() {
         scenario = defaultSetUp();
         searchForTextCloseKeyboard(".it.done ad.7");
+
+        /*
+         * Today
+         * 1 Note C
+         * 1 Note 2 <- Mark as done
+         * 1 Note B
+         * 6 Day
+         * 6 Note C
+         * 6 Note 2
+         */
         onItemInAgenda(2).perform(longClick());
         onView(withId(R.id.toggle_state)).perform(click());
-        onNotesInAgenda().check(matches(recyclerViewItemCount(23)));
+        onNotesInAgenda().check(matches(recyclerViewItemCount(15)));
     }
 
     @Test
     public void testRangeTaskMarkedDone() {
         scenario = defaultSetUp();
         searchForTextCloseKeyboard(".it.done ad.7");
-        onItemInAgenda(3).perform(longClick());
+
+        /*
+         * Today
+         * 1 Note C
+         * 1 Note 2 <- Mark as done
+         * 1 Note B
+         * 6 Day
+         * 6 Note C
+         * 6 Note 2
+         */
+        onItemInAgenda(2).perform(longClick());
         onView(withId(R.id.toggle_state)).perform(click());
-        onNotesInAgenda().check(matches(recyclerViewItemCount(17)));
+        onNotesInAgenda().check(matches(recyclerViewItemCount(15)));
     }
 
     @Test
@@ -168,7 +229,17 @@ public class AgendaFragmentTest extends OrgzlyTest {
         DateTime tomorrow = DateTime.now().withTimeAtStartOfDay().plusDays(1);
         scenario = defaultSetUp();
         searchForTextCloseKeyboard(".it.done ad.7");
-        onItemInAgenda(2).perform(longClick());
+
+        /*
+         * Today
+         * 1 Note C <- Move to tomorrow
+         * 1 Note 2
+         * 1 Note B
+         * 6 Day
+         * 6 Note C
+         * 6 Note 2
+         */
+        onItemInAgenda(1).perform(longClick());
         onView(withId(R.id.schedule)).perform(click());
         onView(withId(R.id.date_picker_button)).perform(click());
         onView(withClassName(equalTo(DatePicker.class.getName())))
@@ -179,7 +250,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
         onView(withText(android.R.string.ok)).perform(click());
         SystemClock.sleep(500);
         onView(withText(R.string.set)).perform(click());
-        onNotesInAgenda().check(matches(recyclerViewItemCount(23)));
+        onNotesInAgenda().check(matches(recyclerViewItemCount(21)));
     }
 
     @Test
@@ -187,13 +258,13 @@ public class AgendaFragmentTest extends OrgzlyTest {
         scenario = defaultSetUp();
 
         searchForTextCloseKeyboard(".it.done ad.7");
-        onNotesInAgenda().check(matches(recyclerViewItemCount(25)));
+        onNotesInAgenda().check(matches(recyclerViewItemCount(22)));
 
         SystemClock.sleep(500);
         scenario.onActivity(activity ->
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE));
 
-        onNotesInAgenda().check(matches(recyclerViewItemCount(25)));
+        onNotesInAgenda().check(matches(recyclerViewItemCount(22)));
     }
 
     @Test
@@ -207,7 +278,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
 
         searchForTextCloseKeyboard("i.todo ad.3");
 
-        onNotesInAgenda().check(matches(recyclerViewItemCount(12)));
+        onNotesInAgenda().check(matches(recyclerViewItemCount(9)));
 
         onItemInAgenda(1).perform(longClick());
 
@@ -219,7 +290,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
         onView(withId(R.id.state)).perform(click());
         onView(withText(R.string.clear)).perform(click());
 
-        onNotesInAgenda().check(matches(recyclerViewItemCount(8)));
+        onNotesInAgenda().check(matches(recyclerViewItemCount(6)));
 
         // Check subtitle for search query
         onView(allOf(instanceOf(TextView.class), not(withText(R.string.agenda)), withParent(withId(R.id.top_toolbar))))
@@ -282,6 +353,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
         testUtils.setupBook("notebook-1", "* Note A\nSCHEDULED: [2020-07-01]\nDEADLINE: <2020-07-01>");
         scenario = ActivityScenario.launch(MainActivity.class);
         searchForTextCloseKeyboard("ad.1");
+
         // Overdue, note (deadline), today
         onNotesInAgenda().check(matches(recyclerViewItemCount(3)));
     }
@@ -291,9 +363,9 @@ public class AgendaFragmentTest extends OrgzlyTest {
         testUtils.setupBook("notebook-1", "* Note A\nDEADLINE: [2020-07-01]\nSCHEDULED: <2020-07-01>");
         scenario = ActivityScenario.launch(MainActivity.class);
         searchForTextCloseKeyboard("ad.1");
-        // Overdue, note (scheduled), today
+        // today, note (scheduled)
         SystemClock.sleep(500);
-        onNotesInAgenda().check(matches(recyclerViewItemCount(3)));
+        onNotesInAgenda().check(matches(recyclerViewItemCount(2)));
     }
 
     @Test
