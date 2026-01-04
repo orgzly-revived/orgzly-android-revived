@@ -159,17 +159,23 @@ class AgendaItems(
 
             if (d.value.isNotEmpty()) {
                 // Sort agenda items by their time before adding to result
-                val sortedItems = d.value.sortedWith { a, b ->
+                val sortedItems = mutableListOf<AgendaItem>()
+
+                sortedItems += d.value.sortedWith { a, b ->
                     when {
                         a !is AgendaItem.Note -> -1  // Non-notes go first
                         b !is AgendaItem.Note -> 1   // Non-notes go first
                         else -> AgendaItem.Note.compareByTimeInDay(a, b)
                     }
-                } + scheduledOverdueNotes.sortedWith { a, b ->
-                    when {
-                        a !is AgendaItem.Note -> -1  // Non-notes go first
-                        b !is AgendaItem.Note -> 1   // Non-notes go first
-                        else -> AgendaItem.Note.compareByTimeInDay(a, b)
+                }
+
+                if (d.key == now.millis) {
+                    sortedItems += scheduledOverdueNotes.sortedWith { a, b ->
+                        when {
+                            a !is AgendaItem.Note -> -1  // Non-notes go first
+                            b !is AgendaItem.Note -> 1   // Non-notes go first
+                            else -> AgendaItem.Note.compareByTimeInDay(a, b)
+                        }
                     }
                 }
 
