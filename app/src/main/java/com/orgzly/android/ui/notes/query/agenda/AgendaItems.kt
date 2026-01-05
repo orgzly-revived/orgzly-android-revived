@@ -9,7 +9,10 @@ import com.orgzly.org.datetime.OrgInterval
 import com.orgzly.org.datetime.OrgRange
 import org.joda.time.DateTime
 
-class AgendaItems(private val hideEmptyDaysInAgenda : Boolean) {
+class AgendaItems(
+    private val hideEmptyDaysInAgenda : Boolean,
+    private val groupScheduledWithToday: Boolean) {
+
     data class ExpandableOrgRange(
             val range: OrgRange,
             val canBeOverdueToday: Boolean,
@@ -71,6 +74,7 @@ class AgendaItems(private val hideEmptyDaysInAgenda : Boolean) {
         val now = DateTime.now().withTimeAtStartOfDay()
 
         val overdueNotes = mutableListOf<AgendaItem>()
+        val scheduledOverdueNotes = mutableListOf<AgendaItem.Note>()
 
         val dailyNotes = (0 until agendaDays)
                 .map { i -> now.plusDays(i) }
@@ -90,7 +94,11 @@ class AgendaItems(private val hideEmptyDaysInAgenda : Boolean) {
             val times = AgendaUtils.expandOrgDateTime(expandable, now, agendaDays)
 
             if (times.isOverdueToday) {
-                overdueNotes.add(AgendaItem.Note(agendaItemId, note, timeType))
+                if (timeType == TimeType.SCHEDULED && groupScheduledWithToday) {
+                    scheduledOverdueNotes.add(AgendaItem.Note(agendaItemId, note, timeType))
+                } else {
+                    overdueNotes.add(AgendaItem.Note(agendaItemId, note, timeType))
+                }
                 item2databaseIds[agendaItemId] = note.note.id
                 agendaItemId++
             }
@@ -145,19 +153,33 @@ class AgendaItems(private val hideEmptyDaysInAgenda : Boolean) {
 
         // Add daily
         dailyNotes.forEach { d ->
-            if (d.value.isNotEmpty() || !hideEmptyDaysInAgenda) {
+            // Sort agenda items by their time before adding to result
+            val sortedItems = mutableListOf<AgendaItem>()
+
+            sortedItems += d.value.sortedWith { a, b ->
+                when {
+                    a !is AgendaItem.Note -> -1  // Non-notes go first
+                    b !is AgendaItem.Note -> 1   // Non-notes go first
+                    else -> AgendaItem.Note.compareByTimeInDay(a, b)
+                }
+            }
+
+            if (d.key == now.millis) {
+                val existingNoteIds = sortedItems
+                    .filterIsInstance<AgendaItem.Note>()
+                    .map { it.note.note.id }
+                sortedItems += scheduledOverdueNotes.filter {
+                    !existingNoteIds.contains(it.note.note.id)
+                }.sortedWith { a, b ->
+                    AgendaItem.Note.compareByTimeInDay(a, b)
+                }
+            }
+
+            if (sortedItems.isNotEmpty() || !hideEmptyDaysInAgenda) {
                 result.add(AgendaItem.Day(agendaItemId++, DateTime(d.key)))
             }
 
-            if (d.value.isNotEmpty()) {
-                // Sort agenda items by their time before adding to result
-                val sortedItems = d.value.sortedWith { a, b ->
-                    when {
-                        a !is AgendaItem.Note -> -1  // Non-notes go first
-                        b !is AgendaItem.Note -> 1   // Non-notes go first
-                        else -> AgendaItem.Note.compareByTimeInDay(a, b)
-                    }
-                }
+            if (sortedItems.isNotEmpty()) {
                 result.addAll(sortedItems)
             }
         }

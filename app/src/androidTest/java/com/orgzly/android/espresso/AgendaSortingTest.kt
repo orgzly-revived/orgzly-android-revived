@@ -16,6 +16,7 @@ import com.orgzly.android.espresso.util.EspressoUtils.onItemInAgenda
 import com.orgzly.android.espresso.util.EspressoUtils.onNotesInAgenda
 import com.orgzly.android.espresso.util.EspressoUtils.recyclerViewItemCount
 import com.orgzly.android.espresso.util.EspressoUtils.searchForTextCloseKeyboard
+import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.main.MainActivity
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
@@ -230,7 +231,8 @@ class AgendaSortingTest : OrgzlyTest() {
     }
 
     @Test
-    fun testRecurringTasksSorting() {
+    fun testRecurringTasksSortingLegacyGrouping() {
+        AppPreferences.groupScheduledWithTodayInAgenda(context, false)
         testUtils.setupBook(
             "book-one",
             """
@@ -274,21 +276,65 @@ class AgendaSortingTest : OrgzlyTest() {
     }
 
     @Test
+    fun testRecurringTasksSorting() {
+        testUtils.setupBook(
+            "book-one",
+            """
+            * Note A
+            SCHEDULED: <${getToday()} 10:00>
+            
+            * Note B
+            SCHEDULED: <${getYesterday()} 14:30 +1d>
+            
+            * Note C
+            SCHEDULED: <${getTwoDaysAgo()} 09:00 +1d>
+            
+            * Note D
+            SCHEDULED: <${getToday()} 08:45>
+            """.trimIndent()
+        )
+
+        scenario = ActivityScenario.launch(MainActivity::class.java)
+
+        // Search for agenda items for that specific day
+        searchForTextCloseKeyboard("ad.1")
+
+        // Verify total number of items (1 day header + 4 notes)
+        onNotesInAgenda().check(matches(recyclerViewItemCount(5)))
+
+        // Note D with today's scheduled time (08:45) should be first in today's
+        onItemInAgenda(1, R.id.item_head_title_view).check(matches(withText(containsString("Note D"))))
+        onItemInAgenda(1, R.id.item_head_scheduled_text).check(matches(isDisplayed()))
+
+        // Note C with recurring time from two days ago (09:00) should be second
+        onItemInAgenda(2, R.id.item_head_title_view).check(matches(withText(containsString("Note C"))))
+        onItemInAgenda(2, R.id.item_head_scheduled_text).check(matches(isDisplayed()))
+
+        // Note A with today's scheduled time (10:00) should be third
+        onItemInAgenda(3, R.id.item_head_title_view).check(matches(withText(containsString("Note A"))))
+        onItemInAgenda(3, R.id.item_head_scheduled_text).check(matches(isDisplayed()))
+
+        // Note B with recurring time from yesterday (14:30) should be fourth
+        onItemInAgenda(4, R.id.item_head_title_view).check(matches(withText(containsString("Note B"))))
+        onItemInAgenda(4, R.id.item_head_scheduled_text).check(matches(isDisplayed()))
+    }
+
+    @Test
     fun testOverdueTasksSorting() {
         testUtils.setupBook(
             "book-one",
             """
             * Note A
-            SCHEDULED: <${getYesterday()} 10:00>
+            DEADLINE: <${getYesterday()} 10:00>
             
             * Note B
-            SCHEDULED: <${getYesterday()} 14:30>
+            DEADLINE: <${getYesterday()} 14:30>
             
             * Note C
-            SCHEDULED: <${getTwoDaysAgo()} 15:00>
+            DEADLINE: <${getTwoDaysAgo()} 15:00>
             
             * Note D
-            SCHEDULED: <${getYesterday()}>
+            DEADLINE: <${getYesterday()}>
             """.trimIndent()
         )
 
