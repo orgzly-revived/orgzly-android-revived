@@ -14,6 +14,9 @@ abstract class NotePropertyDao : BaseDao<NoteProperty> {
     @Query("SELECT * FROM note_properties WHERE note_id = :noteId AND name = :name ORDER BY position")
     abstract fun get(noteId: Long, name: String): List<NoteProperty>
 
+    @Query("SELECT name FROM note_properties GROUP BY LOWER(name)")
+    abstract fun allDistinctNames(): List<String>
+
     @Query("SELECT * FROM note_properties")
     abstract fun getAll(): List<NoteProperty>
 
