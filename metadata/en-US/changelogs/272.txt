@@ -1,0 +1,4 @@
+• Implement Android Calendar Provider integration.
+• Implement “narrowing” as a note swipe-action.
+• Fix divide-by-zero bug in statistics cookies.
+• Update translations.
