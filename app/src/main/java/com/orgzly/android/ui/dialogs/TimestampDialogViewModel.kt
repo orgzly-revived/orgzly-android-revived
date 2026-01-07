@@ -8,7 +8,8 @@ import com.orgzly.org.datetime.OrgDateTime
 import com.orgzly.org.datetime.OrgDelay
 import com.orgzly.org.datetime.OrgInterval
 import com.orgzly.org.datetime.OrgRepeater
-import java.util.*
+import java.util.Calendar
+import java.util.TimeZone
 
 
 class TimestampDialogViewModel(val timeType: TimeType, orgDateTime: String?) : CommonViewModel() {
@@ -26,7 +27,8 @@ class TimestampDialogViewModel(val timeType: TimeType, orgDateTime: String?) : C
         val isRepeaterUsed: Boolean,
         val repeater: OrgRepeater,
         val isDelayUsed: Boolean,
-        val delay: OrgDelay) {
+        val delay: OrgDelay,
+        val isActive: Boolean) {
 
         companion object {
             fun getInstance(str: String?): DateTime {
@@ -71,6 +73,8 @@ class TimestampDialogViewModel(val timeType: TimeType, orgDateTime: String?) : C
                 val isRepeaterUsed = orgDateTime?.hasRepeater() ?: false
                 val repeater = orgDateTime?.repeater ?: DEFAULT_REPEATER
 
+                val isActive = orgDateTime?.isActive ?: true
+
                 return DateTime(
                     year,
                     month,
@@ -84,7 +88,8 @@ class TimestampDialogViewModel(val timeType: TimeType, orgDateTime: String?) : C
                     isRepeaterUsed,
                     repeater,
                     isDelayUsed,
-                    delay
+                    delay,
+                    isActive
                 )
             }
         }
@@ -160,7 +165,7 @@ class TimestampDialogViewModel(val timeType: TimeType, orgDateTime: String?) : C
 
     fun getOrgDateTime(dateTime: DateTime): OrgDateTime {
         val builder = OrgDateTime.Builder()
-            .setIsActive(true) // TODO: Add a checkbox or switch for this
+            .setIsActive(dateTime.isActive)
 
             .setYear(dateTime.year)
             .setMonth(dateTime.month)
@@ -230,6 +235,12 @@ class TimestampDialogViewModel(val timeType: TimeType, orgDateTime: String?) : C
     fun setIsDelayUsed(isChecked: Boolean) {
         dateTimeMutable.value?.let { value ->
             dateTimeMutable.postValue(value.copy(isDelayUsed = isChecked))
+        }
+    }
+
+    fun setIsActive(isChecked: Boolean) {
+        dateTimeMutable.value?.let { value ->
+            dateTimeMutable.postValue(value.copy(isActive = isChecked))
         }
     }
 
