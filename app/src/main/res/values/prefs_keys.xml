@@ -631,6 +631,7 @@
     <string name="pref_key_reminder_service_last_run_for_event" translatable="false">pref_key_reminder_service_last_run_for_event</string>
     <string name="pref_key_notes_clipboard" translatable="false">pref_key_notes_clipboard</string>
     <string name="pref_key_refile_last_location" translatable="false">pref_key_refile_last_location</string>
+    <string name="pref_key_last_inline_timestamp_was_active" translatable="false">pref_key_last_inline_timestamp_was_active</string>
 
     <!-- Repository ignore file. -->
     <string name="pref_key_orgzlyignore_file" translatable="false">pref_key_orgzlyignore_file</string>
