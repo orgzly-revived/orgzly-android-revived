@@ -301,6 +301,9 @@
     <string name="displayed_book_details_used_encoding">已使用编码</string>
     <string name="displayed_book_details_last_action">最后的操作</string>
     <string name="displayed_book_details_notes_count">笔记数量</string>
+    <string name="color_theme_system_default">系统默认</string>
+    <string name="color_theme_light">浅色</string>
+    <string name="color_theme_dark">深色</string>
     <string name="color_scheme_dynamic">动态颜色</string>
     <string name="color_scheme_light">亮</string>
     <string name="color_scheme_dark">暗</string>

@@ -317,6 +317,9 @@
     <string name="displayed_book_details_used_encoding">Använd teckenkodning</string>
     <string name="displayed_book_details_last_action">Senaste aktivitet</string>
     <string name="displayed_book_details_notes_count">Antal anteckningar</string>
+    <string name="color_theme_system_default">Systemets standard</string>
+    <string name="color_theme_light">Ljust</string>
+    <string name="color_theme_dark">Mörkt</string>
     <string name="color_scheme_dynamic">Dynamiska färger</string>
     <string name="color_scheme_light">Ljust</string>
     <string name="color_scheme_dark">Mörkt</string>

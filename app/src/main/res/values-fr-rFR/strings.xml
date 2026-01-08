@@ -304,6 +304,9 @@
     <string name="displayed_book_details_used_encoding">Encodage utilisé</string>
     <string name="displayed_book_details_last_action">Dernière action</string>
     <string name="displayed_book_details_notes_count">Nombre de notes</string>
+    <string name="color_theme_system_default">Système par défaut</string>
+    <string name="color_theme_light">Clair</string>
+    <string name="color_theme_dark">Sombre</string>
     <string name="color_scheme_dynamic">Couleurs dynamiques</string>
     <string name="color_scheme_light">Clair</string>
     <string name="color_scheme_dark">Sombre</string>

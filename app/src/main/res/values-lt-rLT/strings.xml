@@ -322,6 +322,9 @@
     <string name="displayed_book_details_used_encoding">Naudojama koduotė</string>
     <string name="displayed_book_details_last_action">Paskutinis veiksmas</string>
     <string name="displayed_book_details_notes_count">Įrašų kiekis</string>
+    <string name="color_theme_system_default">Sistemos numatyta</string>
+    <string name="color_theme_light">Šviesi</string>
+    <string name="color_theme_dark">Tamsi</string>
     <string name="color_scheme_dynamic">Dinaminė spalva</string>
     <string name="color_scheme_light">Šviesi</string>
     <string name="color_scheme_dark">Tamsi</string>
