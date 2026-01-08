@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="color_theme_light" translatable="true">Claro</string>
-    <string name="color_theme_dark" translatable="true">Oscuro</string>
-    <string name="color_theme_system_default" translatable="true">Valor predeterminado del sistema</string>
-</resources>

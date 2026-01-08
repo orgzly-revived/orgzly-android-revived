@@ -316,6 +316,9 @@
     <string name="displayed_book_details_used_encoding">Kullanılanan kodlama</string>
     <string name="displayed_book_details_last_action">Son eylem</string>
     <string name="displayed_book_details_notes_count">Not sayısı</string>
+    <string name="color_theme_light">Açık</string>
+    <string name="color_theme_dark">Koyu</string>
+    <string name="color_theme_system_default">Sistem varsayılanı</string>
     <string name="color_scheme_dynamic">Dinamik renk</string>
     <string name="color_scheme_light">Açık</string>
     <string name="color_scheme_dark">Koyu</string>

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="color_theme_system_default" translatable="true">Systemets standard</string>
-    <string name="color_theme_light" translatable="true">Ljust</string>
-    <string name="color_theme_dark" translatable="true">Mörkt</string>
-</resources>

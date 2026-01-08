@@ -374,6 +374,10 @@
     <string name="displayed_book_details_last_action">Last action</string>
     <string name="displayed_book_details_notes_count">Notes count</string>
 
+    <string name="color_theme_system_default">System default</string>
+    <string name="color_theme_light">Light</string>
+    <string name="color_theme_dark">Dark</string>
+
     <string name="color_scheme_dynamic">Dynamic color</string>
     <string name="color_scheme_light">Light</string>
     <string name="color_scheme_dark">Dark</string>
