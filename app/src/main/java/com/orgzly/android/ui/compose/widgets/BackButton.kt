@@ -13,7 +13,7 @@ fun BackButton(
     modifier: Modifier = Modifier,
 ) {
     val fragmentManager = provideFragmentManager()
-    if (fragmentManager == null || fragmentManager.backStackEntryCount <= 1) return
+    if (fragmentManager == null || fragmentManager.backStackEntryCount == 0) return
     BaseBackButton(
         onClick = {
             fragmentManager.popBackStack()
