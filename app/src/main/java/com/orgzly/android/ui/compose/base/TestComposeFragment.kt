@@ -36,9 +36,7 @@ class TestComposeFragment: ComposeFragment() {
                         Text("Test Title")
                     },
                     navigationIcon = {
-                        BackButton(
-                            onClick = {}
-                        )
+                        BackButton()
                     }
                 )
             }
@@ -135,4 +133,17 @@ class TestComposeFragment: ComposeFragment() {
             }
         }
     }
+
+    companion object {
+
+        @JvmStatic
+        val FRAGMENT_TAG: String = TestComposeFragment::class.java.name
+
+        @JvmStatic
+        fun getInstance(): TestComposeFragment {
+            return TestComposeFragment()
+        }
+
+    }
+
 }
