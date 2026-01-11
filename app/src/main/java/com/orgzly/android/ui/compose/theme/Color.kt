@@ -89,17 +89,15 @@ fun ColorScheme.adjustFromTheme(
     themeResource: Int
 ): ColorScheme {
     val context = LocalContext.current
-    val styles = remember(context, themeResource) {
-        context.obtainStyledAttributes(themeAttrs)
-    }
+    return remember(context, themeResource) {
+        val styles = context.obtainStyledAttributes(themeAttrs)
 
-    fun getColor(@AttrRes attr: Int, default: Color): Color {
-        return Color(styles.getColor(
-            themeAttrs.indexOf(attr), default.value.toInt()
-        ))
-    }
+        fun getColor(@AttrRes attr: Int, default: Color): Color {
+            return Color(styles.getColor(
+                themeAttrs.indexOf(attr), default.value.toInt()
+            ))
+        }
 
-    return remember(styles) {
         copy(
             primary = getColor(R.attr.colorPrimary, primary),
             onPrimary = getColor(R.attr.colorOnPrimary, onPrimary),
