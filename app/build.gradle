@@ -153,6 +153,7 @@ dependencies {
     implementation 'androidx.compose.material3:material3'
     implementation "androidx.activity:activity-compose:$versions.compose_activity"
     implementation 'androidx.compose.runtime:runtime-livedata'
+    implementation "cl.emilym.compose:units:$versions.compose_emily_units"
 
     // Room
     implementation "androidx.room:room-runtime:$versions.android_room"
