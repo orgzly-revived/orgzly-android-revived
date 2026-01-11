@@ -181,7 +181,7 @@ public class DisplayManager {
                 fragmentManager,
                 R.id.single_pane_container,
                 fragment,
-                TestComposeFragment.FRAGMENT_TAG,
+                TestComposeFragment.getFRAGMENT_TAG(),
                 true);
     }
 
