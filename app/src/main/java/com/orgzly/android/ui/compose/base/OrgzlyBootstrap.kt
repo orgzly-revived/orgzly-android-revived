@@ -1,7 +1,10 @@
 package com.orgzly.android.ui.compose.base
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
+import cl.emilym.compose.units.LocalBaseDp
 import com.orgzly.android.ui.compose.theme.OrgzlyTheme
 
 
@@ -11,7 +14,13 @@ import com.orgzly.android.ui.compose.theme.OrgzlyTheme
 fun OrgzlyBootstrap(
     content: @Composable () -> Unit
 ) {
-    OrgzlyTheme(content)
+    OrgzlyTheme {
+        CompositionLocalProvider(
+            LocalBaseDp provides 16.dp
+        ) {
+            content()
+        }
+    }
 }
 
 @Composable
