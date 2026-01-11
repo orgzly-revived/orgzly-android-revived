@@ -61,7 +61,7 @@ fun Typography.adjustForTheme(@StyleRes resource: Int): Typography {
         val style = context.obtainStyledAttributes(resource, themeAttrs)
 
         fun getSp(@AttrRes attr: Int, default: TextUnit): TextUnit {
-            return style.getDimensionPixelSize(themeAttrs.indexOf(resource), 0).let {
+            return style.getDimensionPixelSize(themeAttrs.indexOf(attr), 0).let {
                 when (it) {
                     0 -> default
                     else -> with(density) { it.toSp() }
