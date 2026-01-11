@@ -37,6 +37,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        compose = true
     }
 
     testOptions {
@@ -144,6 +145,14 @@ dependencies {
     implementation "androidx.preference:preference-ktx:$versions.android_preference"
     implementation "com.google.android.material:material:$versions.android_material"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$versions.android_swiperefreshlayout"
+
+    // Compose
+    def composeBom = platform("androidx.compose:compose-bom:$versions.compose")
+    implementation composeBom
+    androidTestImplementation composeBom
+    implementation 'androidx.compose.material3:material3'
+    implementation "androidx.activity:activity-compose:$versions.compose_activity"
+    implementation 'androidx.compose.runtime:runtime-livedata'
 
     // Room
     implementation "androidx.room:room-runtime:$versions.android_room"
