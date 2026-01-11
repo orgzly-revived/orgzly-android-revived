@@ -1,15 +1,10 @@
-package com.orgzly.android.ui.compose.base
+package com.orgzly.android.ui.compose.theme
 
 import android.os.Build
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
@@ -17,7 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.orgzly.R
 import com.orgzly.android.prefs.AppPreferences
 
-enum class OrgzlyThemeType(
+enum class OrgzlyColorScheme(
     @field:StyleRes
     val resource: Int
 ) {
@@ -27,7 +22,7 @@ enum class OrgzlyThemeType(
     DYNAMIC_LIGHT(R.style.AppLightTheme),
     DYNAMIC_DARK(R.style.AppDarkTheme);
 
-    companion object {
+    companion object Companion {
 
         private const val THEME_FORCE_LIGHT = "light"
         private const val THEME_FORCE_DARK = "dark"
@@ -35,7 +30,7 @@ enum class OrgzlyThemeType(
         private const val THEME_DARK_BLACK = "black"
 
 
-        val current: OrgzlyThemeType
+        val current: OrgzlyColorScheme
             @Composable
             get() {
                 val context = LocalContext.current
@@ -89,7 +84,7 @@ private val themeAttrs = intArrayOf(
 )
 
 @Composable
-private fun ColorScheme.adjustFromTheme(
+fun ColorScheme.adjustFromTheme(
     @StyleRes
     themeResource: Int
 ): ColorScheme {
@@ -122,20 +117,4 @@ private fun ColorScheme.adjustFromTheme(
             onError = getColor(R.attr.colorOnError, onError),
         )
     }
-}
-
-@Composable
-fun OrgzlyTheme(content: @Composable () -> Unit) {
-    val context = LocalContext.current
-    val scheme = when (val themeType = OrgzlyThemeType.current) {
-        OrgzlyThemeType.DYNAMIC_LIGHT -> dynamicLightColorScheme(context)
-        OrgzlyThemeType.DYNAMIC_DARK -> dynamicDarkColorScheme(context)
-        OrgzlyThemeType.LIGHT -> lightColorScheme().adjustFromTheme(themeType.resource)
-        OrgzlyThemeType.DARK, OrgzlyThemeType.BLACK -> darkColorScheme()
-            .adjustFromTheme(themeType.resource)
-    }
-    MaterialTheme(
-        colorScheme = scheme,
-        content = content
-    )
 }
