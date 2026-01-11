@@ -75,7 +75,7 @@ import java.util.Calendar
             AppLog::class
         ],
 
-        version = 158
+        version = 159
 )
 @TypeConverters(com.orgzly.android.db.TypeConverters::class)
 abstract class OrgzlyDatabase : RoomDatabase() {
@@ -152,7 +152,8 @@ abstract class OrgzlyDatabase : RoomDatabase() {
                             MIGRATION_154_155,
                             MIGRATION_155_156,
                             MIGRATION_156_157,
-                            MIGRATION_157_158
+                            MIGRATION_157_158,
+                            MIGRATION_158_159
                     )
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
@@ -641,6 +642,13 @@ abstract class OrgzlyDatabase : RoomDatabase() {
                 } finally {
                     cursor.close()
                 }
+            }
+        }
+
+        private val MIGRATION_158_159 = object : Migration(158, 159) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_notes_level` ON `notes` (`level`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_notes_book_id_is_cut_level` ON `notes` (`book_id`, `is_cut`, `level`)")
             }
         }
     }
