@@ -24,6 +24,7 @@ import com.orgzly.android.ui.compose.widgets.OrgzlyButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyButtonColorScheme
 import com.orgzly.android.ui.compose.widgets.OrgzlyOutlinedButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyTextButton
+import com.orgzly.android.ui.compose.widgets.OrgzlyTextField
 
 private const val LORUM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
 private const val TEST_BUTTON = "Test Button"
@@ -148,7 +149,7 @@ class TestComposeFragment: ComposeFragment() {
                         Text(TEST_BUTTON)
                     }
                     val textFieldState = remember { TextFieldState() }
-                    TextField(
+                    OrgzlyTextField(
                         textFieldState
                     )
                 }
