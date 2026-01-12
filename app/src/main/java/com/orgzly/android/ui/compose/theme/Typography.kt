@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.TextUnit
 import com.orgzly.R
 import com.orgzly.android.prefs.AppPreferences
-import com.orgzly.android.ui.compose.base.appPreference
+import com.orgzly.android.ui.compose.providers.appPreference
 
 enum class OrgzlyFontSize(
     @field:StyleRes

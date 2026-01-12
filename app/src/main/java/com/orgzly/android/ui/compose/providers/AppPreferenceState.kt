@@ -1,4 +1,4 @@
-package com.orgzly.android.ui.compose.base
+package com.orgzly.android.ui.compose.providers
 
 import android.content.Context
 import android.content.SharedPreferences
