@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.orgzly.R
 import com.orgzly.android.prefs.AppPreferences
-import com.orgzly.android.ui.compose.base.appPreference
+import com.orgzly.android.ui.compose.providers.appPreference
 
 enum class OrgzlyColorScheme(
     @field:StyleRes
