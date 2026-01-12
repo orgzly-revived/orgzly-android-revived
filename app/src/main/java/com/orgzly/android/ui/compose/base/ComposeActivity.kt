@@ -6,6 +6,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import com.orgzly.android.ui.CommonActivity
 
+/**
+ * Base class for Compose based activities
+ */
 abstract class ComposeActivity: CommonActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
