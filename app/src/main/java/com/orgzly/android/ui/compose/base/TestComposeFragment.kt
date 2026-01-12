@@ -20,6 +20,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import cl.emilym.compose.units.rdp
 import com.orgzly.android.ui.compose.widgets.BackButton
+import com.orgzly.android.ui.compose.widgets.OrgzlyButton
+import com.orgzly.android.ui.compose.widgets.OrgzlyButtonColorScheme
+import com.orgzly.android.ui.compose.widgets.OrgzlyOutlinedButton
+import com.orgzly.android.ui.compose.widgets.OrgzlyTextButton
 
 private const val LORUM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
 private const val TEST_BUTTON = "Test Button"
@@ -110,18 +114,36 @@ class TestComposeFragment: ComposeFragment() {
                         LORUM_IPSUM,
                         style = MaterialTheme.typography.labelSmall
                     )
-                    Button(
+                    OrgzlyButton(
                         onClick = {}
                     ) {
                         Text(TEST_BUTTON)
                     }
-                    OutlinedButton(
+                    OrgzlyButton(
+                        onClick = {},
+                        colorScheme = OrgzlyButtonColorScheme.ERROR
+                    ) {
+                        Text(TEST_BUTTON)
+                    }
+                    OrgzlyOutlinedButton(
                         onClick = {}
                     ) {
                         Text(TEST_BUTTON)
                     }
-                    TextButton(
+                    OrgzlyOutlinedButton(
+                        onClick = {},
+                        colorScheme = OrgzlyButtonColorScheme.ERROR
+                    ) {
+                        Text(TEST_BUTTON)
+                    }
+                    OrgzlyTextButton(
                         onClick = {}
+                    ) {
+                        Text(TEST_BUTTON)
+                    }
+                    OrgzlyTextButton(
+                        onClick = {},
+                        colorScheme = OrgzlyButtonColorScheme.ERROR
                     ) {
                         Text(TEST_BUTTON)
                     }
