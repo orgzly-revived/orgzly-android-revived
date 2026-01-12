@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 
 @Composable
-fun provideFragmentManager(): FragmentManager? {
+fun currentFragmentManager(): FragmentManager? {
     val activity = LocalActivity.current as? FragmentActivity ?: return null
     return remember(activity) { activity.supportFragmentManager }
 }

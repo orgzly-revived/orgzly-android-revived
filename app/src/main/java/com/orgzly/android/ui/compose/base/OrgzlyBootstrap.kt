@@ -8,8 +8,9 @@ import cl.emilym.compose.units.LocalBaseDp
 import com.orgzly.android.ui.compose.theme.OrgzlyTheme
 
 
-// This wraps the theme to provide any configuration or CompositionLocal defaults
-// we may want
+/**
+ * Used to bootstrap and set the content of a ComposeView with expected configuration and providers
+ */
 @Composable
 fun OrgzlyBootstrap(
     content: @Composable () -> Unit
@@ -25,6 +26,9 @@ fun OrgzlyBootstrap(
     }
 }
 
+/**
+ * Used to bootstrap and set the content of a ComposeView with expected configuration and providers
+ */
 @Composable
 fun ComposeView.bootstrapContent(content: @Composable () -> Unit) {
     setContent {

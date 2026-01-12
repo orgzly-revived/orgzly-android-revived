@@ -25,6 +25,12 @@ private val Icons.resource: Int
         Icons.ARROW_UPWARD -> R.drawable.ic_arrow_upward
     }
 
+/**
+ * Creates a painter from an Icon
+ *
+ * @param icon The icon to use
+ * @param autoMirror Whether to mirror the icon if the layout direction is RTL and the icon is mirrorable
+ */
 @Composable
 fun painterIcon(icon: Icons, autoMirror: Boolean = true): Painter {
     val layoutDirection = LocalLayoutDirection.current

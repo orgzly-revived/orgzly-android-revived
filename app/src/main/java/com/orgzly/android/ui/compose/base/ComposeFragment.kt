@@ -9,6 +9,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.orgzly.android.ui.CommonFragment
 
+/**
+ * Base class for Compose based fragments
+ */
 abstract class ComposeFragment: CommonFragment() {
 
     override fun onCreateView(
