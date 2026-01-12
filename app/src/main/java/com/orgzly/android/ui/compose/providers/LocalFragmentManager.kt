@@ -6,6 +6,13 @@ import androidx.compose.runtime.remember
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 
+@RequiresOptIn(
+    message = "Use com.orgzly.android.ui.compose.base.Navigator instead of accessing FragmentManager directly",
+    level = RequiresOptIn.Level.WARNING
+)
+annotation class DirectFragmentManagerAccess
+
+@DirectFragmentManagerAccess
 @Composable
 fun currentFragmentManager(): FragmentManager? {
     val activity = LocalActivity.current as? FragmentActivity ?: return null

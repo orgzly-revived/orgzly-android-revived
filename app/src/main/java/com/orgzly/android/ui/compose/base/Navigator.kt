@@ -6,6 +6,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.fragment.app.FragmentManager
 import com.orgzly.android.ui.DisplayManager
 import com.orgzly.android.ui.NotePlace
+import com.orgzly.android.ui.compose.providers.DirectFragmentManagerAccess
 import com.orgzly.android.ui.compose.providers.currentFragmentManager
 
 sealed interface NavigationDestination {
@@ -94,6 +95,7 @@ private class DefaultNavigator(
 
 val LocalNavigator = staticCompositionLocalOf<Navigator> { error("No navigator provided") }
 
+@OptIn(DirectFragmentManagerAccess::class)
 @Composable
 fun createNavigator(): Navigator? {
     val fragmentManager = currentFragmentManager()
