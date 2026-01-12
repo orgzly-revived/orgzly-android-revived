@@ -1,6 +1,7 @@
 package com.orgzly.android.ui.compose.base
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.fragment.app.FragmentManager
 import com.orgzly.android.ui.DisplayManager
@@ -94,4 +95,9 @@ private class DefaultNavigator(
 val LocalNavigator = staticCompositionLocalOf<Navigator> { error("No navigator provided") }
 
 @Composable
-fun createNavigator(): Navigator? = currentFragmentManager()?.let { DefaultNavigator(it) }
+fun createNavigator(): Navigator? {
+    val fragmentManager = currentFragmentManager()
+    return remember(fragmentManager) {
+        DefaultNavigator(fragmentManager ?: return@remember null)
+    }
+}
