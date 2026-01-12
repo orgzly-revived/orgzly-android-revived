@@ -15,8 +15,10 @@ fun OrgzlyBootstrap(
     content: @Composable () -> Unit
 ) {
     OrgzlyTheme {
+        val navigator = createNavigator()
         CompositionLocalProvider(
-            LocalBaseDp provides 16.dp
+            LocalBaseDp provides 16.dp,
+            LocalNavigator provides navigator!!
         ) {
             content()
         }

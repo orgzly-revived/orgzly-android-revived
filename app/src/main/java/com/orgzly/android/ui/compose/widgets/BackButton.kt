@@ -6,17 +6,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orgzly.R
+import com.orgzly.android.ui.compose.base.LocalNavigator
 import com.orgzly.android.ui.compose.providers.provideFragmentManager
 
 @Composable
 fun BackButton(
     modifier: Modifier = Modifier,
 ) {
-    val fragmentManager = provideFragmentManager()
-    if (fragmentManager == null || fragmentManager.backStackEntryCount == 0) return
+    val navigator = LocalNavigator.current
+    if (navigator.canPop()) return
     BaseBackButton(
         onClick = {
-            fragmentManager.popBackStack()
+            navigator.pop()
         },
         modifier = modifier
     )
