@@ -11,7 +11,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cl.emilym.compose.units.rdp
@@ -23,6 +22,7 @@ import com.orgzly.android.ui.compose.widgets.OrgzlyFloatingActionButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyOutlinedButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyTextButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyTextField
+import com.orgzly.android.ui.compose.widgets.OrgzlyTopAppBar
 import com.orgzly.android.ui.compose.widgets.painterIcon
 
 private const val LORUM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
@@ -35,10 +35,8 @@ class TestComposeFragment: ComposeFragment() {
     override fun Content() {
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = {
-                        Text("Test Title")
-                    },
+                OrgzlyTopAppBar(
+                    title = "Test Title",
                     navigationIcon = {
                         BackButton()
                     }
