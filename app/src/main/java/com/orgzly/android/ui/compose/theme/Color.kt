@@ -6,11 +6,13 @@ import androidx.annotation.StyleRes
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.orgzly.R
 import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.ui.compose.base.appPreference
 
 enum class OrgzlyColorScheme(
     @field:StyleRes
@@ -33,17 +35,19 @@ enum class OrgzlyColorScheme(
         val current: OrgzlyColorScheme
             @Composable
             get() {
-                val context = LocalContext.current
                 val systemDarkTheme = isSystemInDarkTheme()
-                return remember(context, systemDarkTheme) {
-                    val dark = when (AppPreferences.colorTheme(context)) {
+                val colorTheme by appPreference { AppPreferences.colorTheme(it) }
+                val darkColorScheme by appPreference { AppPreferences.darkColorScheme(it) }
+                val lightColorScheme by appPreference { AppPreferences.lightColorScheme(it) }
+                return remember(systemDarkTheme, colorTheme, darkColorScheme, lightColorScheme) {
+                    val dark = when (colorTheme) {
                         THEME_FORCE_LIGHT -> false
                         THEME_FORCE_DARK -> true
                         else -> systemDarkTheme
                     }
 
                     when (dark) {
-                        true -> when (AppPreferences.darkColorScheme(context)) {
+                        true -> when (darkColorScheme) {
                             THEME_DYNAMIC -> when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> DYNAMIC_DARK
                                 else -> DARK
@@ -51,7 +55,7 @@ enum class OrgzlyColorScheme(
                             THEME_DARK_BLACK -> BLACK
                             else -> DARK
                         }
-                        else -> when (AppPreferences.lightColorScheme(context)) {
+                        else -> when (lightColorScheme) {
                             THEME_DYNAMIC -> when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> DYNAMIC_LIGHT
                                 else -> LIGHT

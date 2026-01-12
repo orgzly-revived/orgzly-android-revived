@@ -4,6 +4,7 @@ import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -12,6 +13,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.TextUnit
 import com.orgzly.R
 import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.ui.compose.base.appPreference
 
 enum class OrgzlyFontSize(
     @field:StyleRes
@@ -28,9 +30,9 @@ enum class OrgzlyFontSize(
         val current: OrgzlyFontSize
             @Composable
             get() {
-                val context = LocalContext.current
-                return remember(context) {
-                    when (AppPreferences.fontSize(context)) {
+                val fontSize by appPreference { AppPreferences.fontSize(it) }
+                return remember(fontSize) {
+                    when (fontSize) {
                         PREF_SMALL -> SMALL
                         PREF_LARGE -> LARGE
                         else -> DEFAULT
@@ -39,13 +41,6 @@ enum class OrgzlyFontSize(
             }
     }
 }
-
-val isFontMonospaced: Boolean
-    @Composable
-    get() {
-        val context = LocalContext.current
-        return remember(context) { AppPreferences.isFontMonospaced(context) }
-    }
 
 private val themeAttrs = intArrayOf(
     R.attr.font_micro,
@@ -93,10 +88,9 @@ val typography: Typography
 
 @Composable
 fun TextStyle.asMonospacedIfConfigured(): TextStyle {
-    val context = LocalContext.current
-    return remember(context) {
-        val monospaced = AppPreferences.isFontMonospaced(context)
-        when (monospaced) {
+    val isFontMonospaced by appPreference { AppPreferences.isFontMonospaced(it) }
+    return remember(isFontMonospaced) {
+        when (isFontMonospaced) {
             true -> copy(
                 fontFamily = FontFamily.Monospace
             )
