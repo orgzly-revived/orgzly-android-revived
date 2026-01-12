@@ -12,9 +12,55 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import kotlinx.coroutines.flow.collectLatest
 
+/**
+ * Hoist the updates of a TextFieldState to the ViewModel
+ *
+ * ```kotlin
+ * data class UiState(
+ *     val textField: String = ""
+ * )
+ *
+ * class SimpleViewModel: ViewModel() {
+ *     private val _uiState = MutableStateFlow(UiState())
+ *     val uiState: StateFlow<UiState>
+ *         get() = _uiState.asStateFlow()
+ *
+ *     fun updateTextField(textField: String) = _uiState.update {
+ *         it.copy(textField = textField)
+ *     }
+ * }
+ *
+ * @Composable
+ * fun TextFieldForm(
+ *     viewModel: SimpleViewModel = SimpleViewModel()
+ * ) {
+ *     val initialUiState = remember(viewModel) { viewModel.uiState.value }
+ *     val textFieldState = rememberTextFieldState(initialUiState.textField)
+ *     HoistEffect(textFieldState) {
+ *         viewModel.updateTextField(it)
+ *     }
+ *
+ *     OrgzlyTextField(textFieldState)
+ * }
+ * ```
+ *
+ * @param state The TextFieldState to track
+ * @param update Hoist the UI update to the ViewModel
+ */
+@Composable
+fun TextFieldHoistEffect(state: TextFieldState, update: (String) -> Unit) {
+    LaunchedEffect(state) {
+        snapshotFlow { state.text.toString() }.collectLatest {
+            update(it)
+        }
+    }
+}
 
 @Composable
 fun OrgzlyTextField(
