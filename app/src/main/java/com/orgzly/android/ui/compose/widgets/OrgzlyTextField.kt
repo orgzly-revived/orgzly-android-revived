@@ -11,7 +11,6 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldLabelScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -24,7 +23,7 @@ fun OrgzlyTextField(
     enabled: Boolean = true,
     readOnly: Boolean = false,
     textStyle: TextStyle = LocalTextStyle.current,
-    label: @Composable (TextFieldLabelScope.() -> Unit)? = null,
+    label: @Composable (() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
@@ -45,7 +44,8 @@ fun OrgzlyTextField(
         enabled = enabled,
         readOnly = readOnly,
         textStyle = textStyle,
-        label = label,
+        // Wrapped to avoid exposing any m3 dependency
+        label = label?.let { { label() } },
         placeholder = placeholder,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
@@ -71,7 +71,7 @@ fun OrgzlyOutlinedTextField(
     enabled: Boolean = true,
     readOnly: Boolean = false,
     textStyle: TextStyle = LocalTextStyle.current,
-    label: @Composable (TextFieldLabelScope.() -> Unit)? = null,
+    label: @Composable (() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
@@ -92,7 +92,7 @@ fun OrgzlyOutlinedTextField(
         enabled = enabled,
         readOnly = readOnly,
         textStyle = textStyle,
-        label = label,
+        label = label?.let { { label() } },
         placeholder = placeholder,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,

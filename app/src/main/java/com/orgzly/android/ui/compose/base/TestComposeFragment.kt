@@ -6,25 +6,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import cl.emilym.compose.units.rdp
 import com.orgzly.android.ui.compose.widgets.BackButton
+import com.orgzly.android.ui.compose.widgets.Icons
 import com.orgzly.android.ui.compose.widgets.OrgzlyButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyButtonColorScheme
+import com.orgzly.android.ui.compose.widgets.OrgzlyFloatingActionButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyOutlinedButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyTextButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyTextField
+import com.orgzly.android.ui.compose.widgets.painterIcon
 
 private const val LORUM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
 private const val TEST_BUTTON = "Test Button"
@@ -44,6 +44,22 @@ class TestComposeFragment: ComposeFragment() {
                         BackButton()
                     }
                 )
+            },
+            floatingActionButton = {
+                val navigator = LocalNavigator.current
+                OrgzlyFloatingActionButton(
+                    onClick = {
+                        navigator.navigate(
+                            NavigationDestination.Books
+                        )
+                    },
+                    colorScheme = OrgzlyButtonColorScheme.ERROR
+                ) {
+                    Icon(
+                        painterIcon(Icons.ARROW_UPWARD),
+                        contentDescription = null
+                    )
+                }
             }
         ) { contentPadding ->
             Column(
@@ -150,7 +166,22 @@ class TestComposeFragment: ComposeFragment() {
                     }
                     val textFieldState = remember { TextFieldState() }
                     OrgzlyTextField(
-                        textFieldState
+                        textFieldState,
+                        label = {
+                            Text("Test text field")
+                        },
+                        placeholder = {
+                            Text("Placeholder")
+                        },
+                        supportingText = {
+                            Text("Supporting text")
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painterIcon(Icons.ARROW_UPWARD),
+                                contentDescription = null
+                            )
+                        }
                     )
                 }
             }
