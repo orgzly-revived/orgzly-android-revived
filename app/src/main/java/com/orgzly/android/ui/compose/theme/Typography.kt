@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.TextUnit
 import com.orgzly.R
 import com.orgzly.android.prefs.AppPreferences
@@ -89,3 +90,17 @@ val typography: Typography
         val fontSize = OrgzlyFontSize.current
         return Typography().adjustForTheme(fontSize.resource)
     }
+
+@Composable
+fun TextStyle.asMonospacedIfConfigured(): TextStyle {
+    val context = LocalContext.current
+    return remember(context) {
+        val monospaced = AppPreferences.isFontMonospaced(context)
+        when (monospaced) {
+            true -> copy(
+                fontFamily = FontFamily.Monospace
+            )
+            else -> this
+        }
+    }
+}
