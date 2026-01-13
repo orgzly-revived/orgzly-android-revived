@@ -235,6 +235,6 @@ class CalendarManagerTest {
         // Test that the calendar color constant is set to the expected value
         // This uses the Orgzly pink/red color: #FF6B68
         val expectedColor = android.graphics.Color.parseColor("#FF6B68")
-        assertEquals("Calendar color should be Orgzly pink/red", expectedColor, CalendarManager.CALENDAR_COLOR)
+        assertEquals("Calendar color should be Orgzly pink/red", expectedColor, CalendarManager.DEFAULT_CALENDAR_COLOR)
     }
 }
