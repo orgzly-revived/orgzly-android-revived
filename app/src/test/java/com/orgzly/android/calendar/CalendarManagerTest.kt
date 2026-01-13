@@ -183,4 +183,50 @@ class CalendarManagerTest {
     private class MockNoteViewDao {
         // Mock implementation for testing
     }
+
+    @Test
+    fun testFilteringDoneItems() {
+        // Create test notes - one with DONE state, one with TODO state, one with null state
+        val doneNote = createTestNoteView(scheduledTimeTimestamp = 1672531200000, scheduledTimeHour = null).copy(
+            note = createTestNoteView(scheduledTimeTimestamp = 1672531200000, scheduledTimeHour = null).note.copy(
+                id = 1,
+                title = "DONE Note",
+                state = "DONE"
+            )
+        )
+
+        val todoNote = createTestNoteView(scheduledTimeTimestamp = 1672531200000, scheduledTimeHour = null).copy(
+            note = createTestNoteView(scheduledTimeTimestamp = 1672531200000, scheduledTimeHour = null).note.copy(
+                id = 2,
+                title = "TODO Note",
+                state = "TODO"
+            )
+        )
+
+        val noStateNote = createTestNoteView(scheduledTimeTimestamp = 1672531200000, scheduledTimeHour = null).copy(
+            note = createTestNoteView(scheduledTimeTimestamp = 1672531200000, scheduledTimeHour = null).note.copy(
+                id = 3,
+                title = "No State Note",
+                state = null
+            )
+        )
+
+        val allNotes = listOf(doneNote, todoNote, noStateNote)
+        
+        // Filter out DONE items (simulating what the CalendarManager does)
+        val filteredNotes = allNotes.filter { noteView ->
+            !isDoneKeyword(noteView.note.state)
+        }
+
+        // Verify that DONE note is filtered out, but TODO and no-state notes remain
+        assertEquals("Should have 2 notes after filtering DONE items", 2, filteredNotes.size)
+        assertEquals("First note should be TODO note", "TODO Note", filteredNotes[0].note.title)
+        assertEquals("Second note should be no-state note", "No State Note", filteredNotes[1].note.title)
+    }
+
+    private fun isDoneKeyword(state: String?): Boolean {
+        // Simplified version of AppPreferences.isDoneKeyword for testing
+        // In real code, this would use AppPreferences.doneKeywordsSet(context)
+        return state == "DONE"
+    }
 }

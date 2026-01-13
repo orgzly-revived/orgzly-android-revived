@@ -55,8 +55,14 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
 
         val notes = noteViewDao.getAllWithScheduledOrDeadline()
         LogUtils.d(TAG, "Found ${notes.size} notes to sync")
+
+        // Filter out DONE items
+        val filteredNotes = notes.filter { noteView ->
+            !AppPreferences.isDoneKeyword(context, noteView.note.state)
+        }
+        LogUtils.d(TAG, "After filtering DONE items: ${filteredNotes.size} notes to sync")
         
-        syncNotesToCalendar(calendarId, notes)
+        syncNotesToCalendar(calendarId, filteredNotes)
     }
 
     fun deleteCalendar() {
