@@ -24,6 +24,9 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         private const val CALENDAR_NAME = "Orgzly"
         private const val CALENDAR_DISPLAY_NAME = "Orgzly"
 
+        // Calendar color - can be changed to any valid Android color
+        const val CALENDAR_COLOR = android.graphics.Color.parseColor("#FF6B68") // Orgzly pink/red color
+
         // Constants for time calculations
         private const val HOUR_IN_MILLIS = 60 * 60 * 1000L
         private const val DAY_IN_MILLIS = 24 * HOUR_IN_MILLIS
@@ -74,6 +77,18 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         }
     }
 
+    fun updateCalendarColor(newColor: Int) {
+        val calendarId = getCalendarId()
+        if (calendarId != -1L) {
+            val values = ContentValues().apply {
+                put(CalendarContract.Calendars.CALENDAR_COLOR, newColor)
+            }
+            val uri = asSyncAdapter(ContentUris.withAppendedId(CalendarContract.Calendars.CONTENT_URI, calendarId))
+            context.contentResolver.update(uri, values, null, null)
+            LogUtils.d(TAG, "Updated calendar color to: $newColor")
+        }
+    }
+
     private fun getCalendarId(): Long {
         val projection = arrayOf(CalendarContract.Calendars._ID)
         val selection = "${CalendarContract.Calendars.ACCOUNT_NAME} = ? AND ${CalendarContract.Calendars.ACCOUNT_TYPE} = ?"
@@ -105,7 +120,7 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
             put(CalendarContract.Calendars.ACCOUNT_TYPE, CALENDAR_ACCOUNT_TYPE)
             put(CalendarContract.Calendars.NAME, CALENDAR_NAME)
             put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, CALENDAR_DISPLAY_NAME)
-            put(CalendarContract.Calendars.CALENDAR_COLOR, Color.BLUE)
+            put(CalendarContract.Calendars.CALENDAR_COLOR, CALENDAR_COLOR)
             put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_OWNER)
             put(CalendarContract.Calendars.OWNER_ACCOUNT, CALENDAR_ACCOUNT_NAME)
             put(CalendarContract.Calendars.CALENDAR_TIME_ZONE, TimeZone.getDefault().id)
