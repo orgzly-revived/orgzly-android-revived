@@ -30,14 +30,11 @@
             android:defaultValue="@string/pref_default_dark_color_scheme"
             app:useSimpleSummaryProvider="true"/>
 
-        <EditTextPreference
+        <com.orgzly.android.prefs.ColorPickerPreference
             android:key="@string/pref_key_calendar_color"
             android:title="@string/pref_title_calendar_color"
             android:summary="@string/pref_summary_calendar_color"
-            android:defaultValue="@string/pref_default_calendar_color"
-            android:inputType="text"
-            android:singleLine="true"
-            app:useSimpleSummaryProvider="true"/>
+            android:defaultValue="@string/pref_default_calendar_color"/>
 
     </PreferenceCategory>
 

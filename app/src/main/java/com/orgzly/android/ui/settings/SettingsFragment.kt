@@ -197,6 +197,10 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                     NotePopupPreferenceFragment.getInstance(preference),
                     NotePopupPreferenceFragment.FRAGMENT_TAG)
 
+            is ColorPickerPreference ->
+                displayCustomPreferenceDialogFragment(
+                    ColorPickerDialogFragment.newInstance(preference.key),
+                    ColorPickerDialogFragment.FRAGMENT_TAG)
 
             else -> super.onDisplayPreferenceDialog(preference)
         }
