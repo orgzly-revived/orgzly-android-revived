@@ -22,10 +22,16 @@ class CalendarTimezoneFixTest {
         // Verify the conversion produces a valid result
         assertNotNull("Converted timestamp should not be null", startTimeInUtc)
         
-        // The converted time should be different from the original if we're not in UTC timezone
-        if (localTimeZone.id != "UTC") {
+        // The converted time should be different from the original if the timezone offset is not zero
+        val timezoneOffset = localTimeZone.getOffset(localTimestamp)
+        if (timezoneOffset != 0) {
             assert(startTimeInUtc != localTimestamp) {
-                "UTC conversion should change the timestamp when not in UTC timezone"
+                "UTC conversion should change the timestamp when timezone offset is not zero"
+            }
+        } else {
+            // When timezone offset is 0 (UTC or equivalent), the conversion should not change the timestamp
+            assert(startTimeInUtc == localTimestamp) {
+                "UTC conversion should not change the timestamp when timezone offset is zero"
             }
         }
         
@@ -33,7 +39,7 @@ class CalendarTimezoneFixTest {
         println("Local timezone: ${localTimeZone.id}")
         println("Local timestamp: $localTimestamp")
         println("UTC timestamp: $startTimeInUtc")
-        println("Timezone offset: ${localTimeZone.getOffset(localTimestamp)} ms")
+        println("Timezone offset: $timezoneOffset ms")
     }
 
     @Test
