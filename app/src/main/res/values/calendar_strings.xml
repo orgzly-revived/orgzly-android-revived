@@ -6,4 +6,10 @@
     <bool name="pref_default_calendar_sync_enable">false</bool>
 
     <string name="permissions_rationale_for_calendar_sync">Syncing with Calendar requires calendar permission</string>
+
+    <!-- Calendar Color -->
+    <string name="pref_key_calendar_color">pref_key_calendar_color</string>
+    <string name="pref_title_calendar_color">Calendar Color</string>
+    <string name="pref_summary_calendar_color">Select color for calendar events</string>
+    <string name="pref_default_calendar_color">#FF6B68</string>
 </resources>

@@ -24,8 +24,8 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         private const val CALENDAR_NAME = "Orgzly"
         private const val CALENDAR_DISPLAY_NAME = "Orgzly"
 
-        // Calendar color - can be changed to any valid Android color
-        val CALENDAR_COLOR = android.graphics.Color.parseColor("#FF6B68") // Orgzly pink/red color
+        // Default calendar color - can be changed to any valid Android color
+        val DEFAULT_CALENDAR_COLOR = android.graphics.Color.parseColor("#FF6B68") // Orgzly pink/red color
 
         // Constants for time calculations
         private const val HOUR_IN_MILLIS = 60 * 60 * 1000L
@@ -55,6 +55,9 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
             LogUtils.d(TAG, "Failed to get or create calendar")
             return
         }
+
+        // Update calendar color if it has changed
+        updateCalendarColorIfNeeded(calendarId)
 
         val notes = noteViewDao.getAllWithScheduledOrDeadline()
         LogUtils.d(TAG, "Found ${notes.size} notes to sync")
@@ -89,6 +92,52 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         }
     }
 
+    fun updateCalendarColorFromPreferences() {
+        val calendarId = getCalendarId()
+        if (calendarId != -1L) {
+            val desiredColor = getCalendarColor()
+            updateCalendarColor(desiredColor)
+        }
+    }
+
+    private fun getCalendarColor(): Int {
+        try {
+            val colorHex = AppPreferences.calendarColor(context)
+            return Color.parseColor(colorHex)
+        } catch (e: IllegalArgumentException) {
+            LogUtils.d(TAG, "Invalid calendar color format, using default", e)
+            return DEFAULT_CALENDAR_COLOR
+        }
+    }
+
+    private fun updateCalendarColorIfNeeded(calendarId: Long) {
+        val currentColor = getCurrentCalendarColor(calendarId)
+        val desiredColor = getCalendarColor()
+        
+        if (currentColor != desiredColor) {
+            updateCalendarColor(desiredColor)
+        }
+    }
+
+    private fun getCurrentCalendarColor(calendarId: Long): Int {
+        val projection = arrayOf(CalendarContract.Calendars.CALENDAR_COLOR)
+        val selection = "${CalendarContract.Calendars._ID} = ?"
+        val selectionArgs = arrayOf(calendarId.toString())
+
+        context.contentResolver.query(
+            CalendarContract.Calendars.CONTENT_URI,
+            projection,
+            selection,
+            selectionArgs,
+            null
+        )?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                return cursor.getInt(0)
+            }
+        }
+        return -1
+    }
+
     private fun getCalendarId(): Long {
         val projection = arrayOf(CalendarContract.Calendars._ID)
         val selection = "${CalendarContract.Calendars.ACCOUNT_NAME} = ? AND ${CalendarContract.Calendars.ACCOUNT_TYPE} = ?"
@@ -115,12 +164,13 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
     }
 
     private fun createCalendar(): Long {
+        val calendarColor = getCalendarColor()
         val values = ContentValues().apply {
             put(CalendarContract.Calendars.ACCOUNT_NAME, CALENDAR_ACCOUNT_NAME)
             put(CalendarContract.Calendars.ACCOUNT_TYPE, CALENDAR_ACCOUNT_TYPE)
             put(CalendarContract.Calendars.NAME, CALENDAR_NAME)
             put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, CALENDAR_DISPLAY_NAME)
-            put(CalendarContract.Calendars.CALENDAR_COLOR, CALENDAR_COLOR)
+            put(CalendarContract.Calendars.CALENDAR_COLOR, calendarColor)
             put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_OWNER)
             put(CalendarContract.Calendars.OWNER_ACCOUNT, CALENDAR_ACCOUNT_NAME)
             put(CalendarContract.Calendars.CALENDAR_TIME_ZONE, TimeZone.getDefault().id)
