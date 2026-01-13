@@ -17,7 +17,7 @@ import java.io.File
 import java.io.IOException
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-@Config(sdk = [35])
+@Config(sdk = [36])
 class OrgFormatterLinkTest(private val param: Parameter) : OrgFormatterTest() {
 
     data class Span(val start: Int, val end: Int, val klass: Class<*>)

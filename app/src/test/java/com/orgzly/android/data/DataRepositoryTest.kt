@@ -19,7 +19,7 @@ import org.robolectric.annotation.Config
 import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [35])
+@Config(sdk = [36])
 class DataRepositoryTest {
 
     private lateinit var context: Context
