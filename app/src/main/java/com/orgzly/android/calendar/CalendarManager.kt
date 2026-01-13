@@ -189,13 +189,26 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
 
     private fun buildEventContentValues(calendarId: Long, note: NoteView, eventStartTime: Long, eventEndTime: Long?, isAllDay: Boolean): ContentValues {
         val dtEnd = eventEndTime ?: (eventStartTime + if (isAllDay) DAY_IN_MILLIS else HOUR_IN_MILLIS)
-        val eventTimeZone = if (isAllDay) TimeZone.getTimeZone("UTC").id else TimeZone.getDefault().id
+        
+        // For all-day events, convert local time to UTC since Android Calendar expects all-day events in UTC
+        val (adjustedStartTime, adjustedEndTime, eventTimeZone) = if (isAllDay) {
+            val localTimeZone = TimeZone.getDefault()
+            val utcTimeZone = TimeZone.getTimeZone("UTC")
+            
+            // Convert local timestamp to UTC for all-day events
+            val startTimeInUtc = eventStartTime - localTimeZone.getOffset(eventStartTime) + utcTimeZone.getOffset(eventStartTime)
+            val endTimeInUtc = dtEnd - localTimeZone.getOffset(dtEnd) + utcTimeZone.getOffset(dtEnd)
+            
+            Triple(startTimeInUtc, endTimeInUtc, "UTC")
+        } else {
+            Triple(eventStartTime, dtEnd, TimeZone.getDefault().id)
+        }
         
         val description = (note.note.content ?: "") + "\n\nOpen in Orgzly: https://orgzlyrevived.com/note/${note.note.id}"
 
         return ContentValues().apply {
-            put(CalendarContract.Events.DTSTART, eventStartTime)
-            put(CalendarContract.Events.DTEND, dtEnd)
+            put(CalendarContract.Events.DTSTART, adjustedStartTime)
+            put(CalendarContract.Events.DTEND, adjustedEndTime)
             put(CalendarContract.Events.TITLE, note.note.title)
             put(CalendarContract.Events.DESCRIPTION, description)
             put(CalendarContract.Events.CALENDAR_ID, calendarId)
