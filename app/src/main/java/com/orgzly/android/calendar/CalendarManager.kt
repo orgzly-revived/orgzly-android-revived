@@ -25,7 +25,8 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         private const val CALENDAR_DISPLAY_NAME = "Orgzly"
 
         // Default calendar color - can be changed to any valid Android color
-        val DEFAULT_CALENDAR_COLOR = android.graphics.Color.parseColor("#FF6B68") // Orgzly pink/red color
+        // Color value for #FF6B68: 0xFFFF6B68 (ARGB format)
+        val DEFAULT_CALENDAR_COLOR = 0xFFFF6B68.toInt() // Orgzly pink/red color
 
         // Constants for time calculations
         private const val HOUR_IN_MILLIS = 60 * 60 * 1000L

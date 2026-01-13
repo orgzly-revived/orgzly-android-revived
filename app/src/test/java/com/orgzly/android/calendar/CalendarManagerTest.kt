@@ -2,6 +2,7 @@ package com.orgzly.android.calendar
 
 import android.content.ContentValues
 import android.provider.CalendarContract
+import com.orgzly.android.calendar.CalendarManager.Companion.DEFAULT_CALENDAR_COLOR
 import com.orgzly.android.db.entity.Note
 import com.orgzly.android.db.entity.NotePosition
 import com.orgzly.android.db.entity.NoteView
@@ -235,7 +236,8 @@ class CalendarManagerTest {
     fun testCalendarColorConstant() {
         // Test that the calendar color constant is set to the expected value
         // This uses the Orgzly pink/red color: #FF6B68
-        val expectedColor = android.graphics.Color.parseColor("#FF6B68")
-        assertEquals("Calendar color should be Orgzly pink/red", expectedColor, CalendarManager.DEFAULT_CALENDAR_COLOR)
+        // Color value for #FF6B68: 0xFFFF6B68 (ARGB format)
+        val expectedColor = 0xFFFF6B68.toInt()
+        assertEquals("Calendar color should be Orgzly pink/red", expectedColor, DEFAULT_CALENDAR_COLOR)
     }
 }
