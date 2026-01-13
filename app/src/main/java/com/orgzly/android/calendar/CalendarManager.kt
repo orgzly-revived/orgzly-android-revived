@@ -267,8 +267,8 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
             val utcTimeZone = TimeZone.getTimeZone("UTC")
             
             // Convert local timestamp to UTC for all-day events
-            val startTimeInUtc = eventStartTime - localTimeZone.getOffset(eventStartTime) + utcTimeZone.getOffset(eventStartTime)
-            val endTimeInUtc = dtEnd - localTimeZone.getOffset(dtEnd) + utcTimeZone.getOffset(dtEnd)
+            val startTimeInUtc = eventStartTime - localTimeZone.getOffset(eventStartTime)
+            val endTimeInUtc = dtEnd - localTimeZone.getOffset(dtEnd)
             
             Triple(startTimeInUtc, endTimeInUtc, "UTC")
         } else {

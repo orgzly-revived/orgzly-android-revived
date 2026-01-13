@@ -17,7 +17,7 @@ class CalendarTimezoneFixTest {
         val utcTimeZone = TimeZone.getTimeZone("UTC")
         
         // This is the fix: convert local timestamp to UTC for all-day events
-        val startTimeInUtc = localTimestamp - localTimeZone.getOffset(localTimestamp) + utcTimeZone.getOffset(localTimestamp)
+        val startTimeInUtc = localTimestamp - localTimeZone.getOffset(localTimestamp)
         
         // Verify the conversion produces a valid result
         assertNotNull("Converted timestamp should not be null", startTimeInUtc)
@@ -46,11 +46,20 @@ class CalendarTimezoneFixTest {
             "Event with null hour should be considered all-day"
         }
         
+        // Test with a specific hour (timed event)
         val scheduledTimeHourWithTime = 14 // specific hour means timed event
         val isTimedEvent = scheduledTimeHourWithTime != null
         
         assert(isTimedEvent) {
             "Event with specific hour should be considered a timed event (not all-day)"
+        }
+        
+        // Test the inverse - ensure null hour is all-day and non-null hour is timed
+        assert(scheduledTimeHour == null) {
+            "Null hour should be considered all-day"
+        }
+        assert(scheduledTimeHourWithTime != null) {
+            "Non-null hour should be considered timed event"
         }
         
         println("All-day event detection test passed!")

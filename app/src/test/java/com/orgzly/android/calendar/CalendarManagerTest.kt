@@ -12,13 +12,14 @@ import java.util.TimeZone
 
 class CalendarManagerTest {
 
-    private lateinit var calendarManager: CalendarManager
     private lateinit var mockNoteViewDao: MockNoteViewDao
 
     @Before
     fun setup() {
         // We'll test the static method directly since we can't easily mock Context
         mockNoteViewDao = MockNoteViewDao()
+        // Note: calendarManager is not initialized here because we're testing
+        // the helper methods directly without needing a full CalendarManager instance
     }
 
     @Test
@@ -157,8 +158,8 @@ class CalendarManagerTest {
                 val utcTimeZone = TimeZone.getTimeZone("UTC")
                 
                 // Convert local timestamp to UTC for all-day events
-                val startTimeInUtc = eventStartTime - localTimeZone.getOffset(eventStartTime) + utcTimeZone.getOffset(eventStartTime)
-                val endTimeInUtc = dtEnd - localTimeZone.getOffset(dtEnd) + utcTimeZone.getOffset(dtEnd)
+                val startTimeInUtc = eventStartTime - localTimeZone.getOffset(eventStartTime)
+                val endTimeInUtc = dtEnd - localTimeZone.getOffset(dtEnd)
                 
                 Triple(startTimeInUtc, endTimeInUtc, "UTC")
             } else {
