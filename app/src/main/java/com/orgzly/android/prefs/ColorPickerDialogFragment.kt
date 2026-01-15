@@ -5,12 +5,11 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.GridView
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.preference.PreferenceDialogFragmentCompat
 import com.orgzly.R
 import com.orgzly.databinding.DialogColorPickerBinding
+import kotlin.math.pow
 
 class ColorPickerDialogFragment : PreferenceDialogFragmentCompat() {
     
@@ -70,7 +69,21 @@ class ColorPickerDialogFragment : PreferenceDialogFragmentCompat() {
     private fun updateColorPreview() {
         binding.colorPreview.setBackgroundColor(selectedColor)
         binding.colorHexText.text = String.format("#%06X", 0xFFFFFF and selectedColor)
-        binding.colorHexText.setTextColor(if (Color.luminance(selectedColor) > 0.5) Color.BLACK else Color.WHITE)
+        binding.colorHexText.setTextColor(if (calculateLuminance(selectedColor) > 0.5) Color.BLACK else Color.WHITE)
+    }
+
+    private fun calculateLuminance(color: Int): Double {
+        val r = Color.red(color) / 255.0
+        val g = Color.green(color) / 255.0
+        val b = Color.blue(color) / 255.0
+        
+        // Apply gamma correction
+        val linearR = if (r <= 0.03928) r / 12.92 else ((r + 0.055) / 1.055).pow(2.4)
+        val linearG = if (g <= 0.03928) g / 12.92 else ((g + 0.055) / 1.055).pow(2.4)
+        val linearB = if (b <= 0.03928) b / 12.92 else ((b + 0.055) / 1.055).pow(2.4)
+        
+        // Calculate luminance using standard formula
+        return 0.2126 * linearR + 0.7152 * linearG + 0.0722 * linearB
     }
 
     inner class ColorAdapter : BaseAdapter() {

@@ -5,15 +5,14 @@ import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.provider.CalendarContract
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColorInt
 import com.orgzly.android.db.dao.NoteViewDao
 import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.util.LogUtils
 import java.util.TimeZone
-import java.util.HashMap
 
 class CalendarManager(private val context: Context, private val noteViewDao: NoteViewDao) {
 
@@ -26,7 +25,7 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
 
         // Default calendar color - can be changed to any valid Android color
         // Color value for #FF6B68: 0xFFFF6B68 (ARGB format)
-        val DEFAULT_CALENDAR_COLOR = 0xFFFF6B68.toInt() // Orgzly pink/red color
+        const val DEFAULT_CALENDAR_COLOR = 0xFFFF6B68.toInt() // Orgzly pink/red color
 
         // Constants for time calculations
         private const val HOUR_IN_MILLIS = 60 * 60 * 1000L
@@ -93,18 +92,10 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         }
     }
 
-    fun updateCalendarColorFromPreferences() {
-        val calendarId = getCalendarId()
-        if (calendarId != -1L) {
-            val desiredColor = getCalendarColor()
-            updateCalendarColor(desiredColor)
-        }
-    }
-
     private fun getCalendarColor(): Int {
         try {
             val colorHex = AppPreferences.calendarColor(context)
-            return Color.parseColor(colorHex)
+            return colorHex.toColorInt()
         } catch (e: IllegalArgumentException) {
             LogUtils.d(TAG, "Invalid calendar color format, using default", e)
             return DEFAULT_CALENDAR_COLOR

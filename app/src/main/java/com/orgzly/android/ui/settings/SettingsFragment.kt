@@ -32,6 +32,7 @@ import com.orgzly.android.util.LogUtils
 import com.orgzly.android.widgets.ListWidgetProvider
 import com.orgzly.android.ui.settings.exporting.SettingsExportFragment
 import com.orgzly.android.ui.settings.importing.SettingsImportFragment
+import androidx.core.graphics.toColorInt
 
 /**
  * Displays settings.
@@ -576,7 +577,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     private fun updateCalendarColorFromPreferences(context: Context) {
         try {
             val colorHex = AppPreferences.calendarColor(context)
-            val calendarColor = android.graphics.Color.parseColor(colorHex)
+            val calendarColor = colorHex.toColorInt()
             
             // Get calendar ID
             val projection = arrayOf(android.provider.CalendarContract.Calendars._ID)
@@ -610,7 +611,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             }
         } catch (e: Exception) {
             // Log error but don't crash
-            com.orgzly.android.util.LogUtils.d(TAG, "Failed to update calendar color", e)
+            LogUtils.d(TAG, "Failed to update calendar color", e)
         }
     }
 }
