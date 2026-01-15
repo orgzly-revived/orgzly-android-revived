@@ -243,7 +243,8 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         }
     }
 
-    private fun insertEvent(calendarId: Long, note: NoteView, eventStartTime: Long, eventEndTime: Long?, isAllDay: Boolean) {
+    private fun insertEvent(calendarId: Long, note: NoteView, eventStartTime: Long,
+                            eventEndTime: Long?, isAllDay: Boolean) {
         LogUtils.d(TAG, "Inserting event for note ${note.note.id}: ${note.note.title} (AllDay: $isAllDay)")
         val values = buildEventContentValues(calendarId, note, eventStartTime, eventEndTime, isAllDay)
         val uri = asSyncAdapter(CalendarContract.Events.CONTENT_URI)
@@ -251,7 +252,8 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         LogUtils.d(TAG, "Inserted event URI: $resultUri")
     }
 
-    private fun updateEvent(calendarId: Long, eventId: Long, note: NoteView, eventStartTime: Long, eventEndTime: Long?, isAllDay: Boolean) {
+    private fun updateEvent(calendarId: Long, eventId: Long, note: NoteView, eventStartTime: Long,
+                            eventEndTime: Long?, isAllDay: Boolean) {
         LogUtils.d(TAG, "Updating event $eventId for note ${note.note.id} (AllDay: $isAllDay)")
         val values = buildEventContentValues(calendarId, note, eventStartTime, eventEndTime, isAllDay)
         val uri = asSyncAdapter(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId))
@@ -259,22 +261,12 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         LogUtils.d(TAG, "Updated rows: $rows")
     }
 
-    private fun buildEventContentValues(calendarId: Long, note: NoteView, eventStartTime: Long, eventEndTime: Long?, isAllDay: Boolean): ContentValues {
+    private fun buildEventContentValues(calendarId: Long, note: NoteView, eventStartTime: Long,
+                                        eventEndTime: Long?, isAllDay: Boolean): ContentValues {
         val dtEnd = eventEndTime ?: (eventStartTime + if (isAllDay) DAY_IN_MILLIS else HOUR_IN_MILLIS)
         
         // For all-day events, convert local time to UTC since Android Calendar expects all-day events in UTC
-        val (adjustedStartTime, adjustedEndTime, eventTimeZone) = if (isAllDay) {
-            val localTimeZone = TimeZone.getDefault()
-            val utcTimeZone = TimeZone.getTimeZone("UTC")
-            
-            // Convert local timestamp to UTC for all-day events
-            val startTimeInUtc = eventStartTime - localTimeZone.getOffset(eventStartTime)
-            val endTimeInUtc = dtEnd - localTimeZone.getOffset(dtEnd)
-            
-            Triple(startTimeInUtc, endTimeInUtc, "UTC")
-        } else {
-            Triple(eventStartTime, dtEnd, TimeZone.getDefault().id)
-        }
+        val (adjustedStartTime, adjustedEndTime, eventTimeZone) = adjustEventTimesForTimezone(eventStartTime, dtEnd, isAllDay)
         
         val description = (note.note.content ?: "") + "\n\nOpen in Orgzly: https://orgzlyrevived.com/note/${note.note.id}"
 
@@ -294,6 +286,20 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         LogUtils.d(TAG, "Deleting event $eventId")
         val uri = asSyncAdapter(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId))
         context.contentResolver.delete(uri, null, null)
+    }
+
+    private fun adjustEventTimesForTimezone(eventStartTime: Long, eventEndTime: Long, isAllDay: Boolean): Triple<Long, Long, String> {
+        return if (isAllDay) {
+            val localTimeZone = TimeZone.getDefault()
+            
+            // Convert local timestamp to UTC for all-day events
+            val startTimeInUtc = eventStartTime - localTimeZone.getOffset(eventStartTime)
+            val endTimeInUtc = eventEndTime - localTimeZone.getOffset(eventEndTime)
+            
+            Triple(startTimeInUtc, endTimeInUtc, "UTC")
+        } else {
+            Triple(eventStartTime, eventEndTime, TimeZone.getDefault().id)
+        }
     }
 
     private fun asSyncAdapter(uri: android.net.Uri): android.net.Uri {

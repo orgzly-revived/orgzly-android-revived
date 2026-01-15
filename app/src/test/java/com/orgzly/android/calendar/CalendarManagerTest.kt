@@ -154,21 +154,10 @@ class CalendarManagerTest {
             val dtEnd = eventEndTime ?: (eventStartTime + if (isAllDay) 24 * 60 * 60 * 1000 else 60 * 60 * 1000)
             
             // For all-day events, convert local time to UTC since Android Calendar expects all-day events in UTC
-            val (adjustedStartTime, adjustedEndTime, eventTimeZone) = if (isAllDay) {
-                val localTimeZone = TimeZone.getDefault()
-                val utcTimeZone = TimeZone.getTimeZone("UTC")
-                
-                // Convert local timestamp to UTC for all-day events
-                val startTimeInUtc = eventStartTime - localTimeZone.getOffset(eventStartTime)
-                val endTimeInUtc = dtEnd - localTimeZone.getOffset(dtEnd)
-                
-                Triple(startTimeInUtc, endTimeInUtc, "UTC")
-            } else {
-                Triple(eventStartTime, dtEnd, TimeZone.getDefault().id)
-            }
+            val (adjustedStartTime, adjustedEndTime, eventTimeZone) = adjustEventTimesForTimezone(eventStartTime, dtEnd, isAllDay)
             
             val description = (note.note.content ?: "") + "\n\nOpen in Orgzly: https://orgzlyrevived.com/note/${note.note.id}"
-
+ 
             return mapOf(
                 "DTSTART" to adjustedStartTime,
                 "DTEND" to adjustedEndTime,
@@ -179,6 +168,20 @@ class CalendarManagerTest {
                 "ALL_DAY" to (if (isAllDay) 1 else 0),
                 "SYNC_DATA1" to note.note.id.toString()
             )
+        }
+        
+        protected fun adjustEventTimesForTimezone(eventStartTime: Long, eventEndTime: Long, isAllDay: Boolean): Triple<Long, Long, String> {
+            return if (isAllDay) {
+                val localTimeZone = TimeZone.getDefault()
+                
+                // Convert local timestamp to UTC for all-day events
+                val startTimeInUtc = eventStartTime - localTimeZone.getOffset(eventStartTime)
+                val endTimeInUtc = eventEndTime - localTimeZone.getOffset(eventEndTime)
+                
+                Triple(startTimeInUtc, endTimeInUtc, "UTC")
+            } else {
+                Triple(eventStartTime, eventEndTime, TimeZone.getDefault().id)
+            }
         }
     }
 
