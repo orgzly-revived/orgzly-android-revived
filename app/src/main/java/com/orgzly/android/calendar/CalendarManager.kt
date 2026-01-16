@@ -259,7 +259,7 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         // For all-day events, convert local time to UTC since Android Calendar expects all-day events in UTC
         val (adjustedStartTime, adjustedEndTime, eventTimeZone) = adjustEventTimesForTimezone(eventStartTime, dtEnd, isAllDay)
         
-        val description = (note.note.content ?: "") + "\n\nOpen in Orgzly: https://orgzlyrevived.com/note/${note.note.id}"
+        val description = "Open in Orgzly: https://orgzlyrevived.com/note/${note.note.id}" + if (note.note.content.isNullOrEmpty()) "" else "\n\n${note.note.content}"
 
         return ContentValues().apply {
             put(CalendarContract.Events.DTSTART, adjustedStartTime)
