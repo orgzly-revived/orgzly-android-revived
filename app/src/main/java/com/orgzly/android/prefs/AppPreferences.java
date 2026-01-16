@@ -473,6 +473,17 @@ public class AppPreferences {
         getDefaultSharedPreferences(context).edit().putString(key, value).apply();
     }
 
+    public static String calendarColor(Context context) {
+        return getDefaultSharedPreferences(context).getString(
+                context.getResources().getString(R.string.pref_key_calendar_color),
+                context.getResources().getString(R.string.pref_default_calendar_color));
+    }
+
+    public static void calendarColor(Context context, String value) {
+        String key = context.getResources().getString(R.string.pref_key_calendar_color);
+        getDefaultSharedPreferences(context).edit().putString(key, value).apply();
+    }
+
     public static boolean ignoreSystemLocale(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(
                 context.getResources().getString(R.string.pref_key_ignore_system_locale),

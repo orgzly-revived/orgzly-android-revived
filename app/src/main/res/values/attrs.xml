@@ -66,4 +66,8 @@
         <attr name="paddingHorizontal" format="dimension"/>
         <attr name="paddingVertical" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="ColorPickerPreference">
+        <attr name="android:defaultValue" format="string"/>
+    </declare-styleable>
 </resources>

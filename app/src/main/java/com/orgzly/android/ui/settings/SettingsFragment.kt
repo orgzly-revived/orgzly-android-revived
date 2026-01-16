@@ -32,6 +32,7 @@ import com.orgzly.android.util.LogUtils
 import com.orgzly.android.widgets.ListWidgetProvider
 import com.orgzly.android.ui.settings.exporting.SettingsExportFragment
 import com.orgzly.android.ui.settings.importing.SettingsImportFragment
+import androidx.core.graphics.toColorInt
 
 /**
  * Displays settings.
@@ -197,6 +198,10 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                     NotePopupPreferenceFragment.getInstance(preference),
                     NotePopupPreferenceFragment.FRAGMENT_TAG)
 
+            is ColorPickerPreference ->
+                displayCustomPreferenceDialogFragment(
+                    ColorPickerDialogFragment.newInstance(preference.key),
+                    ColorPickerDialogFragment.FRAGMENT_TAG)
 
             else -> super.onDisplayPreferenceDialog(preference)
         }
@@ -421,6 +426,14 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                     WorkManager.getInstance(requireContext()).enqueue(calendarRequest)
                 }
             }
+
+            // Calendar color
+            getString(R.string.pref_key_calendar_color) -> {
+                if (AppPreferences.isCalendarSyncEnabled(requireContext())) {
+                    // Update calendar color when preference changes
+                    updateCalendarColorFromPreferences(requireContext())
+                }
+            }
         }
 
         updateRemindersScreen()
@@ -558,6 +571,47 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             fragment.arguments = args
 
             return fragment
+        }
+    }
+
+    private fun updateCalendarColorFromPreferences(context: Context) {
+        try {
+            val colorHex = AppPreferences.calendarColor(context)
+            val calendarColor = colorHex.toColorInt()
+            
+            // Get calendar ID
+            val projection = arrayOf(android.provider.CalendarContract.Calendars._ID)
+            val selection = "${android.provider.CalendarContract.Calendars.ACCOUNT_NAME} = ? AND ${android.provider.CalendarContract.Calendars.ACCOUNT_TYPE} = ?"
+            val selectionArgs = arrayOf("Orgzly", "com.orgzly.android")
+
+            context.contentResolver.query(
+                android.provider.CalendarContract.Calendars.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                null
+            )?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    val calendarId = cursor.getLong(0)
+                    
+                    // Update calendar color
+                    val values = android.content.ContentValues().apply {
+                        put(android.provider.CalendarContract.Calendars.CALENDAR_COLOR, calendarColor)
+                    }
+                    val uri = android.provider.CalendarContract.Calendars.CONTENT_URI
+                        .buildUpon()
+                        .appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER, "true")
+                        .appendQueryParameter(android.provider.CalendarContract.Calendars.ACCOUNT_NAME, "Orgzly")
+                        .appendQueryParameter(android.provider.CalendarContract.Calendars.ACCOUNT_TYPE, "com.orgzly.android")
+                        .appendPath(calendarId.toString())
+                        .build()
+                    
+                    context.contentResolver.update(uri, values, null, null)
+                }
+            }
+        } catch (e: Exception) {
+            // Log error but don't crash
+            LogUtils.d(TAG, "Failed to update calendar color", e)
         }
     }
 }

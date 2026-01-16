@@ -5,15 +5,14 @@ import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.provider.CalendarContract
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColorInt
 import com.orgzly.android.db.dao.NoteViewDao
 import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.util.LogUtils
 import java.util.TimeZone
-import java.util.HashMap
 
 class CalendarManager(private val context: Context, private val noteViewDao: NoteViewDao) {
 
@@ -23,6 +22,10 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         private const val CALENDAR_ACCOUNT_TYPE = "com.orgzly.android"
         private const val CALENDAR_NAME = "Orgzly"
         private const val CALENDAR_DISPLAY_NAME = "Orgzly"
+
+        // Default calendar color - can be changed to any valid Android color
+        // Color value for #FF6B68: 0xFFFF6B68 (ARGB format)
+        const val DEFAULT_CALENDAR_COLOR = 0xFFFF6B68.toInt() // Orgzly pink/red color
 
         // Constants for time calculations
         private const val HOUR_IN_MILLIS = 60 * 60 * 1000L
@@ -53,10 +56,19 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
             return
         }
 
+        // Update calendar color if it has changed
+        updateCalendarColorIfNeeded(calendarId)
+
         val notes = noteViewDao.getAllWithScheduledOrDeadline()
         LogUtils.d(TAG, "Found ${notes.size} notes to sync")
+
+        // Filter out DONE items
+        val filteredNotes = notes.filter { noteView ->
+            !AppPreferences.isDoneKeyword(context, noteView.note.state)
+        }
+        LogUtils.d(TAG, "After filtering DONE items: ${filteredNotes.size} notes to sync")
         
-        syncNotesToCalendar(calendarId, notes)
+        syncNotesToCalendar(calendarId, filteredNotes)
     }
 
     fun deleteCalendar() {
@@ -66,6 +78,56 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
             context.contentResolver.delete(uri, null, null)
             LogUtils.d(TAG, "Deleted Calendar ID: $calendarId")
         }
+    }
+
+    fun updateCalendarColor(newColor: Int) {
+        val calendarId = getCalendarId()
+        if (calendarId != -1L) {
+            val values = ContentValues().apply {
+                put(CalendarContract.Calendars.CALENDAR_COLOR, newColor)
+            }
+            val uri = asSyncAdapter(ContentUris.withAppendedId(CalendarContract.Calendars.CONTENT_URI, calendarId))
+            context.contentResolver.update(uri, values, null, null)
+            LogUtils.d(TAG, "Updated calendar color to: $newColor")
+        }
+    }
+
+    private fun getCalendarColor(): Int {
+        try {
+            val colorHex = AppPreferences.calendarColor(context)
+            return colorHex.toColorInt()
+        } catch (e: IllegalArgumentException) {
+            LogUtils.d(TAG, "Invalid calendar color format, using default", e)
+            return DEFAULT_CALENDAR_COLOR
+        }
+    }
+
+    private fun updateCalendarColorIfNeeded(calendarId: Long) {
+        val currentColor = getCurrentCalendarColor(calendarId)
+        val desiredColor = getCalendarColor()
+        
+        if (currentColor != desiredColor) {
+            updateCalendarColor(desiredColor)
+        }
+    }
+
+    private fun getCurrentCalendarColor(calendarId: Long): Int {
+        val projection = arrayOf(CalendarContract.Calendars.CALENDAR_COLOR)
+        val selection = "${CalendarContract.Calendars._ID} = ?"
+        val selectionArgs = arrayOf(calendarId.toString())
+
+        context.contentResolver.query(
+            CalendarContract.Calendars.CONTENT_URI,
+            projection,
+            selection,
+            selectionArgs,
+            null
+        )?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                return cursor.getInt(0)
+            }
+        }
+        return -1
     }
 
     private fun getCalendarId(): Long {
@@ -94,12 +156,13 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
     }
 
     private fun createCalendar(): Long {
+        val calendarColor = getCalendarColor()
         val values = ContentValues().apply {
             put(CalendarContract.Calendars.ACCOUNT_NAME, CALENDAR_ACCOUNT_NAME)
             put(CalendarContract.Calendars.ACCOUNT_TYPE, CALENDAR_ACCOUNT_TYPE)
             put(CalendarContract.Calendars.NAME, CALENDAR_NAME)
             put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, CALENDAR_DISPLAY_NAME)
-            put(CalendarContract.Calendars.CALENDAR_COLOR, Color.BLUE)
+            put(CalendarContract.Calendars.CALENDAR_COLOR, calendarColor)
             put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_OWNER)
             put(CalendarContract.Calendars.OWNER_ACCOUNT, CALENDAR_ACCOUNT_NAME)
             put(CalendarContract.Calendars.CALENDAR_TIME_ZONE, TimeZone.getDefault().id)
@@ -171,7 +234,8 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         }
     }
 
-    private fun insertEvent(calendarId: Long, note: NoteView, eventStartTime: Long, eventEndTime: Long?, isAllDay: Boolean) {
+    private fun insertEvent(calendarId: Long, note: NoteView, eventStartTime: Long,
+                            eventEndTime: Long?, isAllDay: Boolean) {
         LogUtils.d(TAG, "Inserting event for note ${note.note.id}: ${note.note.title} (AllDay: $isAllDay)")
         val values = buildEventContentValues(calendarId, note, eventStartTime, eventEndTime, isAllDay)
         val uri = asSyncAdapter(CalendarContract.Events.CONTENT_URI)
@@ -179,7 +243,8 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         LogUtils.d(TAG, "Inserted event URI: $resultUri")
     }
 
-    private fun updateEvent(calendarId: Long, eventId: Long, note: NoteView, eventStartTime: Long, eventEndTime: Long?, isAllDay: Boolean) {
+    private fun updateEvent(calendarId: Long, eventId: Long, note: NoteView, eventStartTime: Long,
+                            eventEndTime: Long?, isAllDay: Boolean) {
         LogUtils.d(TAG, "Updating event $eventId for note ${note.note.id} (AllDay: $isAllDay)")
         val values = buildEventContentValues(calendarId, note, eventStartTime, eventEndTime, isAllDay)
         val uri = asSyncAdapter(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId))
@@ -187,15 +252,18 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         LogUtils.d(TAG, "Updated rows: $rows")
     }
 
-    private fun buildEventContentValues(calendarId: Long, note: NoteView, eventStartTime: Long, eventEndTime: Long?, isAllDay: Boolean): ContentValues {
+    private fun buildEventContentValues(calendarId: Long, note: NoteView, eventStartTime: Long,
+                                        eventEndTime: Long?, isAllDay: Boolean): ContentValues {
         val dtEnd = eventEndTime ?: (eventStartTime + if (isAllDay) DAY_IN_MILLIS else HOUR_IN_MILLIS)
-        val eventTimeZone = if (isAllDay) TimeZone.getTimeZone("UTC").id else TimeZone.getDefault().id
+        
+        // For all-day events, convert local time to UTC since Android Calendar expects all-day events in UTC
+        val (adjustedStartTime, adjustedEndTime, eventTimeZone) = adjustEventTimesForTimezone(eventStartTime, dtEnd, isAllDay)
         
         val description = (note.note.content ?: "") + "\n\nOpen in Orgzly: https://orgzlyrevived.com/note/${note.note.id}"
 
         return ContentValues().apply {
-            put(CalendarContract.Events.DTSTART, eventStartTime)
-            put(CalendarContract.Events.DTEND, dtEnd)
+            put(CalendarContract.Events.DTSTART, adjustedStartTime)
+            put(CalendarContract.Events.DTEND, adjustedEndTime)
             put(CalendarContract.Events.TITLE, note.note.title)
             put(CalendarContract.Events.DESCRIPTION, description)
             put(CalendarContract.Events.CALENDAR_ID, calendarId)
@@ -209,6 +277,20 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         LogUtils.d(TAG, "Deleting event $eventId")
         val uri = asSyncAdapter(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId))
         context.contentResolver.delete(uri, null, null)
+    }
+
+    private fun adjustEventTimesForTimezone(eventStartTime: Long, eventEndTime: Long, isAllDay: Boolean): Triple<Long, Long, String> {
+        return if (isAllDay) {
+            val localTimeZone = TimeZone.getDefault()
+            
+            // Convert local timestamp to UTC for all-day events
+            val startTimeInUtc = eventStartTime - localTimeZone.getOffset(eventStartTime)
+            val endTimeInUtc = eventEndTime - localTimeZone.getOffset(eventEndTime)
+            
+            Triple(startTimeInUtc, endTimeInUtc, "UTC")
+        } else {
+            Triple(eventStartTime, eventEndTime, TimeZone.getDefault().id)
+        }
     }
 
     private fun asSyncAdapter(uri: android.net.Uri): android.net.Uri {
