@@ -66,29 +66,24 @@ class CalendarManager(
         val notes = getNotesForSync()
         LogUtils.d(TAG, "Found ${notes.size} notes to sync")
 
-        // Filter out DONE items
-        val filteredNotes = notes.filter { noteView ->
-            !AppPreferences.isDoneKeyword(context, noteView.note.state)
-        }
-        LogUtils.d(TAG, "After filtering DONE items: ${filteredNotes.size} notes to sync")
-        
-        syncNotesToCalendar(calendarId, filteredNotes)
+        syncNotesToCalendar(calendarId, notes)
     }
 
     private fun getNotesForSync(): List<NoteView> {
         val searchId = AppPreferences.calendarSyncSearchId(context)
-        return if (searchId > 0) {
+
+        if (searchId > 0) {
             val search = dataRepository.getSavedSearch(searchId)
             if (search != null) {
                 LogUtils.d(TAG, "Using saved search: ${search.name} (${search.query})")
                 val query = InternalQueryParser().parse(search.query)
-                dataRepository.selectNotesFromQuery(query)
-            } else {
-                LogUtils.d(TAG, "Saved search not found, falling back to default")
-                dataRepository.getNotesWithScheduledOrDeadline()
+                return dataRepository.selectNotesFromQuery(query)
             }
-        } else {
-            dataRepository.getNotesWithScheduledOrDeadline()
+        }
+
+        LogUtils.d(TAG, "Using default search (all notes with scheduled/deadline, no DONE)")
+        return dataRepository.getNotesWithScheduledOrDeadline().filter { noteView ->
+            !AppPreferences.isDoneKeyword(context, noteView.note.state)
         }
     }
 
