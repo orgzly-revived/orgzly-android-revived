@@ -60,6 +60,8 @@ android {
         }
 
         debug {
+            applicationIdSuffix ".debug"
+
             buildConfigField "boolean", "LOG_DEBUG", "true"
 
             buildConfigField "String", "DROPBOX_REFRESH_TOKEN", gradle.ext.appProperties.getProperty("dropbox.refresh_token", '""')
