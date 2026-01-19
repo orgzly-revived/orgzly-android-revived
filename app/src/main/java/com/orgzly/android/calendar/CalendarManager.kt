@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.provider.CalendarContract
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
+import com.orgzly.BuildConfig
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.prefs.AppPreferences
@@ -22,10 +23,10 @@ class CalendarManager(
 
     companion object {
         private const val TAG = "CalendarManager"
-        private const val CALENDAR_ACCOUNT_NAME = "Orgzly"
-        private const val CALENDAR_ACCOUNT_TYPE = "com.orgzly.android"
-        private const val CALENDAR_NAME = "Orgzly"
-        private const val CALENDAR_DISPLAY_NAME = "Orgzly"
+        private val CALENDAR_ACCOUNT_NAME = "Orgzly${if (BuildConfig.DEBUG) " Debug" else ""}"
+        private val CALENDAR_ACCOUNT_TYPE = "com.orgzly.android${if (BuildConfig.DEBUG) ".debug" else ""}"
+        private val CALENDAR_NAME = CALENDAR_ACCOUNT_NAME
+        private val CALENDAR_DISPLAY_NAME = CALENDAR_ACCOUNT_NAME
 
         // Default calendar color - can be changed to any valid Android color
         // Color value for #FF6B68: 0xFFFF6B68 (ARGB format)
