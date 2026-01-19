@@ -37,6 +37,15 @@
         android:summary="@string/pref_summary_calendar_sync_enable"
         android:defaultValue="@bool/pref_default_calendar_sync_enable"/>
 
+    <ListPreference
+        android:key="@string/pref_key_calendar_sync_search"
+        android:title="@string/pref_title_calendar_sync_search"
+        android:summary="@string/pref_summary_calendar_sync_search"
+        android:defaultValue="@string/pref_default_calendar_sync_search"
+        android:dependency="@string/pref_key_calendar_sync_enable"
+        android:entryValues="@array/calendar_sync_search_entries"
+        app:useSimpleSummaryProvider="true"/>
+
     <androidx.preference.PreferenceScreen
         android:key="prefs_screen_auto_sync"
         android:title="@string/auto_sync"

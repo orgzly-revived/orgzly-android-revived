@@ -8,13 +8,17 @@ import android.content.pm.PackageManager
 import android.provider.CalendarContract
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
-import com.orgzly.android.db.dao.NoteViewDao
+import com.orgzly.android.data.DataRepository
 import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.query.user.InternalQueryParser
 import com.orgzly.android.util.LogUtils
 import java.util.TimeZone
 
-class CalendarManager(private val context: Context, private val noteViewDao: NoteViewDao) {
+class CalendarManager(
+    private val context: Context,
+    private val dataRepository: DataRepository
+) {
 
     companion object {
         private const val TAG = "CalendarManager"
@@ -59,7 +63,7 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         // Update calendar color if it has changed
         updateCalendarColorIfNeeded(calendarId)
 
-        val notes = noteViewDao.getAllWithScheduledOrDeadline()
+        val notes = getNotesForSync()
         LogUtils.d(TAG, "Found ${notes.size} notes to sync")
 
         // Filter out DONE items
@@ -69,6 +73,23 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         LogUtils.d(TAG, "After filtering DONE items: ${filteredNotes.size} notes to sync")
         
         syncNotesToCalendar(calendarId, filteredNotes)
+    }
+
+    private fun getNotesForSync(): List<NoteView> {
+        val searchId = AppPreferences.calendarSyncSearchId(context)
+        return if (searchId > 0) {
+            val search = dataRepository.getSavedSearch(searchId)
+            if (search != null) {
+                LogUtils.d(TAG, "Using saved search: ${search.name} (${search.query})")
+                val query = InternalQueryParser().parse(search.query)
+                dataRepository.selectNotesFromQuery(query)
+            } else {
+                LogUtils.d(TAG, "Saved search not found, falling back to default")
+                dataRepository.getNotesWithScheduledOrDeadline()
+            }
+        } else {
+            dataRepository.getNotesWithScheduledOrDeadline()
+        }
     }
 
     fun deleteCalendar() {
