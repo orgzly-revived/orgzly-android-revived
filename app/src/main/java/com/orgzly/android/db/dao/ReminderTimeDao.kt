@@ -16,7 +16,7 @@ interface ReminderTimeDao {
             var tags: String?,
             var timeType: Int,
             var orgTimestampString: String,
-            var orgPreAlerts: String)
+            var orgPreAlerts: String?)
 
     @Query("""
         SELECT
@@ -33,7 +33,7 @@ interface ReminderTimeDao {
         JOIN org_timestamps t ON (r.start_timestamp_id = t.id )
         JOIN notes n ON (r.id = n.scheduled_range_id)
         JOIN books b ON (b.id = n.book_id)
-        JOIN note_properties p ON (p.note_id = n.id AND p.name = :preNotifyProperty)
+        LEFT JOIN note_properties p ON (p.note_id = n.id AND p.name = :preNotifyProperty)
         WHERE t.is_active = 1
 
         UNION
@@ -52,7 +52,7 @@ interface ReminderTimeDao {
         JOIN org_timestamps t ON (r.start_timestamp_id = t.id )
         JOIN notes n ON (r.id = n.deadline_range_id)
         JOIN books b ON (b.id = n.book_id)
-        JOIN note_properties p ON (p.note_id = n.id AND p.name = :preNotifyProperty)
+        LEFT JOIN note_properties p ON (p.note_id = n.id AND p.name = :preNotifyProperty)
         WHERE t.is_active = 1
 
         UNION
@@ -72,7 +72,7 @@ interface ReminderTimeDao {
         JOIN org_timestamps t ON (t.id = r.start_timestamp_id)
         JOIN notes n ON (n.id = e.note_id)
         JOIN books b ON (b.id = n.book_id)
-        JOIN note_properties p ON (p.note_id = n.id AND p.name = :preNotifyProperty)
+        LEFT JOIN note_properties p ON (p.note_id = n.id AND p.name = :preNotifyProperty)
     """)
     fun getAll(preNotifyProperty: String): List<NoteTime>
 

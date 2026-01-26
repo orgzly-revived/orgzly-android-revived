@@ -48,7 +48,7 @@ object NoteReminders {
                     null
                 }
 
-                for (period in preNotifyParser.parse(noteTime.orgPreAlerts)) {
+                for (period in preNotifyParser.parse(noteTime.orgPreAlerts ?: "")) {
                     var time = getFirstTime(
                         orgDateTime,
                         interval,
