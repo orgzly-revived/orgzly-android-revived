@@ -16,6 +16,7 @@ import com.orgzly.android.query.Query;
 import com.orgzly.android.query.QueryParser;
 import com.orgzly.android.query.user.InternalQueryParser;
 import com.orgzly.android.ui.books.BooksFragment;
+import com.orgzly.android.ui.compose.base.TestComposeFragment;
 import com.orgzly.android.ui.main.MainActivity;
 import com.orgzly.android.ui.note.NoteFragment;
 import com.orgzly.android.ui.notes.book.BookFragment;
@@ -170,6 +171,17 @@ public class DisplayManager {
                 R.id.single_pane_container,
                 fragment,
                 NoteFragment.FRAGMENT_TAG,
+                true);
+    }
+
+    public static void displayTestFragment(FragmentManager fragmentManager) {
+        Fragment fragment = TestComposeFragment.getInstance();
+
+        replaceFragment(
+                fragmentManager,
+                R.id.single_pane_container,
+                fragment,
+                TestComposeFragment.getFRAGMENT_TAG(),
                 true);
     }
 

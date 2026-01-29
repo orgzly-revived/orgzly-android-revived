@@ -32,7 +32,7 @@ import java.io.IOException
  * without requiring UI or Espresso.
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [35])
+@Config(sdk = [36])
 class QueryResultTest {
 
     private lateinit var context: Context
