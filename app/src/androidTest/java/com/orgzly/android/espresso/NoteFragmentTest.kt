@@ -31,7 +31,6 @@ import com.orgzly.android.RetryTestRule
 import com.orgzly.android.espresso.util.EspressoUtils
 import com.orgzly.android.espresso.util.EspressoUtils.clickClickableSpan
 import com.orgzly.android.espresso.util.EspressoUtils.clickSetting
-import com.orgzly.android.espresso.util.EspressoUtils.closeSoftKeyboardWithDelay
 import com.orgzly.android.espresso.util.EspressoUtils.listViewItemCount
 import com.orgzly.android.espresso.util.EspressoUtils.onActionItemClick
 import com.orgzly.android.espresso.util.EspressoUtils.onBook
@@ -368,7 +367,7 @@ class NoteFragmentTest : OrgzlyTest() {
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
-        onView(withText(R.string.set)).perform(closeSoftKeyboardWithDelay(), click())
+        onView(withText(R.string.set)).perform(click())
         onView(withId(R.id.scheduled_button))
                 .check(matches(withText(startsWith(defaultDialogUserDate()))))
     }
