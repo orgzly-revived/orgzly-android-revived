@@ -12,7 +12,12 @@ import com.orgzly.android.db.dao.NoteViewDao
 import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.util.LogUtils
+import com.orgzly.org.datetime.OrgRange
+import com.orgzly.org.datetime.OrgRepeater
+import com.orgzly.org.datetime.OrgInterval
 import java.util.TimeZone
+
+data class Quad<T1, T2, T3, T4>(val t1: T1, val t2: T2, val t3: T3, val t4: T4)
 
 class CalendarManager(private val context: Context, private val noteViewDao: NoteViewDao) {
 
@@ -204,27 +209,29 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
 
         for (note in notes) {
             // Determine start/end time and if it's an all-day event
-            val (eventStartTime, eventEndTime, isAllDay) = when {
-                note.scheduledTimeTimestamp != null -> Triple(
+            val (eventStartTime, eventEndTime, isAllDay, repeater) = when {
+                note.scheduledTimeTimestamp != null -> Quad(
                     note.scheduledTimeTimestamp,
                     null, // End time not supported in this version
-                    note.scheduledTimeHour == null
+                    note.scheduledTimeHour == null,
+                    OrgRange.parse(note.scheduledRangeString).getStartTime().getRepeater()
                 )
-                note.deadlineTimeTimestamp != null -> Triple(
+                note.deadlineTimeTimestamp != null -> Quad(
                     note.deadlineTimeTimestamp,
                     null, // End time not supported in this version
-                    note.deadlineTimeHour == null
+                    note.deadlineTimeHour == null,
+                    OrgRange.parse(note.deadlineRangeString).getStartTime().getRepeater()
                 )
-                else -> Triple(null, null, false)
+                else -> Quad(null, null, false, null)
             }
 
             if (eventStartTime != null) {
                 if (existingEvents.containsKey(note.note.id)) {
                     val eventId = existingEvents[note.note.id]!!
-                    updateEvent(calendarId, eventId, note, eventStartTime, eventEndTime, isAllDay)
+                    updateEvent(calendarId, eventId, note, eventStartTime, eventEndTime, isAllDay, repeater)
                     existingEvents.remove(note.note.id)
                 } else {
-                    insertEvent(calendarId, note, eventStartTime, eventEndTime, isAllDay)
+                    insertEvent(calendarId, note, eventStartTime, eventEndTime, isAllDay, repeater)
                 }
             }
         }
@@ -235,25 +242,25 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
     }
 
     private fun insertEvent(calendarId: Long, note: NoteView, eventStartTime: Long,
-                            eventEndTime: Long?, isAllDay: Boolean) {
+                            eventEndTime: Long?, isAllDay: Boolean, repeater: OrgRepeater?) {
         LogUtils.d(TAG, "Inserting event for note ${note.note.id}: ${note.note.title} (AllDay: $isAllDay)")
-        val values = buildEventContentValues(calendarId, note, eventStartTime, eventEndTime, isAllDay)
+        val values = buildEventContentValues(calendarId, note, eventStartTime, eventEndTime, isAllDay, repeater)
         val uri = asSyncAdapter(CalendarContract.Events.CONTENT_URI)
         val resultUri = context.contentResolver.insert(uri, values)
         LogUtils.d(TAG, "Inserted event URI: $resultUri")
     }
 
     private fun updateEvent(calendarId: Long, eventId: Long, note: NoteView, eventStartTime: Long,
-                            eventEndTime: Long?, isAllDay: Boolean) {
+                            eventEndTime: Long?, isAllDay: Boolean, repeater: OrgRepeater?) {
         LogUtils.d(TAG, "Updating event $eventId for note ${note.note.id} (AllDay: $isAllDay)")
-        val values = buildEventContentValues(calendarId, note, eventStartTime, eventEndTime, isAllDay)
+        val values = buildEventContentValues(calendarId, note, eventStartTime, eventEndTime, isAllDay, repeater)
         val uri = asSyncAdapter(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId))
         val rows = context.contentResolver.update(uri, values, null, null)
         LogUtils.d(TAG, "Updated rows: $rows")
     }
 
     private fun buildEventContentValues(calendarId: Long, note: NoteView, eventStartTime: Long,
-                                        eventEndTime: Long?, isAllDay: Boolean): ContentValues {
+                                        eventEndTime: Long?, isAllDay: Boolean, repeater: OrgRepeater?): ContentValues {
         val dtEnd = eventEndTime ?: (eventStartTime + if (isAllDay) DAY_IN_MILLIS else HOUR_IN_MILLIS)
         
         // For all-day events, convert local time to UTC since Android Calendar expects all-day events in UTC
@@ -270,6 +277,10 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
             put(CalendarContract.Events.EVENT_TIMEZONE, eventTimeZone)
             put(CalendarContract.Events.ALL_DAY, if (isAllDay) 1 else 0)
             put(CalendarContract.Events.SYNC_DATA1, note.note.id.toString())
+
+            if (repeater != null) {
+                put(CalendarContract.Events.RRULE, makeRepeaterString(repeater))
+            }
         }
     }
 
@@ -299,5 +310,16 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
             .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, CALENDAR_ACCOUNT_NAME)
             .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_TYPE, CALENDAR_ACCOUNT_TYPE)
             .build()
+    }
+
+    private fun makeRepeaterString(repeater: OrgRepeater): String {
+        val freq = when (repeater.getUnit()) {
+            OrgInterval.Unit.HOUR -> "HOURLY"
+            OrgInterval.Unit.DAY -> "DAILY"
+            OrgInterval.Unit.WEEK -> "WEEKLY"
+            OrgInterval.Unit.MONTH -> "MONTHLY"
+            OrgInterval.Unit.YEAR -> "YEARLY"
+        }
+        return "FREQ=$freq;INTERVAL=${repeater.getValue()}"
     }
 }
