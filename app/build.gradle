@@ -11,8 +11,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 35
-        versionCode 269
-        versionName "1.15.0-beta.1"
+        versionCode 274
+        versionName "1.17.0"
         applicationId = "com.orgzlyrevived"
         resValue "string", "application_id", "com.orgzlyrevived"
 
@@ -96,6 +96,10 @@ android {
 
             dimension "store"
         }
+    }
+
+    androidResources {
+        generateLocaleConfig = true
     }
 
     compileOptions {
@@ -195,7 +199,7 @@ dependencies {
         exclude group: 'xpp3', module: 'xpp3'
     }
 
-    implementation('com.squareup.okhttp3:okhttp:5.2.1') {
+    implementation('com.squareup.okhttp3:okhttp:5.3.2') {
         because 'https://github.com/orgzly/orgzly-android/issues/880'
     }
 

@@ -62,6 +62,9 @@ import com.orgzly.org.parser.OrgNodeInSet
 import com.orgzly.org.parser.OrgParser
 import com.orgzly.org.parser.OrgParserWriter
 import com.orgzly.org.utils.StateChangeLogic
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import com.orgzly.android.calendar.CalendarWorker
 import java.io.*
 import java.util.*
 import java.util.concurrent.Callable
@@ -76,6 +79,11 @@ class DataRepository @Inject constructor(
         private val repoFactory: RepoFactory,
         private val resources: Resources,
         private val localStorage: LocalStorage) {
+
+    private fun triggerCalendarSync() {
+        val calendarRequest = OneTimeWorkRequestBuilder<CalendarWorker>().build()
+        WorkManager.getInstance(context).enqueue(calendarRequest)
+    }
 
     fun forceLoadBook(bookId: Long) {
         val book = getBookView(bookId)
@@ -1011,6 +1019,7 @@ class DataRepository @Inject constructor(
         db.note().get(noteIds).mapTo(hashSetOf()) { it.position.bookId }.let {
             updateBookIsModified(it, true)
         }
+        triggerCalendarSync()
     }
 
     fun setNotesDeadlineTime(noteIds: Set<Long>, time: OrgDateTime?) {
@@ -1021,6 +1030,7 @@ class DataRepository @Inject constructor(
         db.note().get(noteIds).mapTo(hashSetOf()) { it.position.bookId }.let {
             updateBookIsModified(it, true)
         }
+        triggerCalendarSync()
     }
 
     fun setNotesClockingState(noteIds: Set<Long>, type: Int) {
@@ -1260,6 +1270,10 @@ class DataRepository @Inject constructor(
         return db.noteView().getBookNotes(bookName)
     }
 
+    fun getNotesWithScheduledOrDeadline(): List<NoteView> {
+        return db.noteView().getAllWithScheduledOrDeadline()
+    }
+
     fun getVisibleNotesLiveData(bookId: Long, noteId: Long? = null): LiveData<List<NoteView>> {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "bookId=$bookId, noteId=$noteId")
 
@@ -1352,6 +1366,12 @@ class DataRepository @Inject constructor(
 
     fun getNoteProperties(noteId: Long): List<NoteProperty> {
         return db.noteProperty().get(noteId)
+    }
+
+    fun getNotePropertyNames(): List<String> {
+        return (PropertyUtils.DEFAULT_PROPERTIES + db.noteProperty().allDistinctNames())
+            .map { it.trim('+') } // Drop "+" property modifiers
+            .distinctBy { it.lowercase() }
     }
 
     private fun setNoteProperty(noteId: Long, name: String, value: String) {
@@ -1535,6 +1555,8 @@ class DataRepository @Inject constructor(
 
         updateBookIsModified(target.bookId, true, time)
 
+        triggerCalendarSync()
+
         return noteEntity.copy(id = noteId)
     }
 
@@ -1613,6 +1635,8 @@ class DataRepository @Inject constructor(
                 tryUpdateTitleCookies(noteParent)
             }
 
+            triggerCalendarSync()
+
             newNote
         })
     }
@@ -1671,6 +1695,8 @@ class DataRepository @Inject constructor(
             val count = db.note().deleteById(ids)
 
             updateBookIsModified(bookId, true)
+
+            triggerCalendarSync()
 
             count
         })

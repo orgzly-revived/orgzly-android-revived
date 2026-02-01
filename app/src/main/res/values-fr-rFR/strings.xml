@@ -304,6 +304,9 @@
     <string name="displayed_book_details_used_encoding">Encodage utilisé</string>
     <string name="displayed_book_details_last_action">Dernière action</string>
     <string name="displayed_book_details_notes_count">Nombre de notes</string>
+    <string name="color_theme_system_default">Système par défaut</string>
+    <string name="color_theme_light">Clair</string>
+    <string name="color_theme_dark">Sombre</string>
     <string name="color_scheme_dynamic">Couleurs dynamiques</string>
     <string name="color_scheme_light">Clair</string>
     <string name="color_scheme_dark">Sombre</string>
@@ -394,11 +397,13 @@
     <string name="notes_count_zero">Ne contient aucune note</string>
     <plurals name="notes_count_nonzero">
         <item quantity="one">Contient <b>%d</b> note</item>
+        <item quantity="many">Contient <b>%d</b> notes</item>
         <item quantity="other">Contient <b>%d</b> notes</item>
     </plurals>
     <plurals name="found_number_of_notebooks">
         <item quantity="one">Trouvé <b>%d</b> bloc-notes</item>
-        <item quantity="other">Trouvé <b>%d</b> bloc-note</item>
+        <item quantity="many">Trouvé <b>%d</b> bloc-notes</item>
+        <item quantity="other">Trouvé <b>%d</b> bloc-notes</item>
     </plurals>
     <string name="content_line_count_displayed">Afficher le nombre de lignes</string>
     <string name="content_line_count_displayed_summary">Afficher le nombre de lignes lorsque le contenu n\'est pas affiché</string>

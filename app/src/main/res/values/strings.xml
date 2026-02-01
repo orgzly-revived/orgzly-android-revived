@@ -3,6 +3,7 @@
     <string name="sync">Sync</string>
     <string name="settings">Settings</string>
     <string name="sortnote">Sort note</string>
+    <string name="insert_timestamp">Insert timestamp</string>
     <string name="ok">OK</string>
     <string name="yes">Yes</string>
     <string name="unlink">Unlink</string> <!-- Unlink from Dropbox -->
@@ -373,6 +374,10 @@
     <string name="displayed_book_details_last_action">Last action</string>
     <string name="displayed_book_details_notes_count">Notes count</string>
 
+    <string name="color_theme_system_default">System default</string>
+    <string name="color_theme_light">Light</string>
+    <string name="color_theme_dark">Dark</string>
+
     <string name="color_scheme_dynamic">Dynamic color</string>
     <string name="color_scheme_light">Light</string>
     <string name="color_scheme_dark">Dark</string>
@@ -413,6 +418,8 @@
 
     <string name="display_notebook_name">Display notebook name</string>
     <string name="hide_empty_days_in_agenda">Hide empty days in agenda</string>
+    <string name="group_scheduled_with_today">Don\'t show Scheduled tasks as overdue in agenda</string>
+    <string name="group_scheduled_with_today_summary">Enabling this groups tasks past the Scheduled date with other tasks for today</string>
 
     <string name="display_inherited_tags_in_search_results">Inherited tags in search results</string>
     <string name="display_inherited_tags_in_search_results_summary">Display inherited tags in search results</string>
@@ -766,4 +773,5 @@
     <string name="in_note_content">In note content</string>
     <string name="create_org_links_from_shared_links">Create org links from shared links</string>
     <string name="book_names_cannot_contain">Book names cannot contain \'../\'</string>
+    <string name="is_active_label">Active</string>
 </resources>

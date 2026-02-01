@@ -97,7 +97,11 @@ class BookFragment :
 
     private val appBarBackPressHandler = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
-            viewModel.appBar.handleOnBackPressed()
+            if (viewModel.isNarrowed()) {
+                viewModel.widenView()
+            } else {
+                viewModel.appBar.handleOnBackPressed()
+            }
         }
     }
 
@@ -282,7 +286,7 @@ class BookFragment :
 
                     sharedMainActivityViewModel.unlockDrawer()
 
-                    appBarBackPressHandler.isEnabled = false
+                    appBarBackPressHandler.isEnabled = viewModel.isNarrowed()
                 }
 
                 APP_BAR_SELECTION_MODE -> {
@@ -309,10 +313,11 @@ class BookFragment :
             }
         }
 
-        // Update widen button visibility when narrowed state changes
+        // Update widen button visibility and back handler when narrowed state changes
         viewModel.narrowedNoteId.observe(viewLifecycleOwner) {
             if (viewModel.appBar.mode.value != APP_BAR_DEFAULT_MODE) return@observe
             binding.topToolbar.menu.findItem(R.id.books_options_menu_item_widen_view)?.isVisible = viewModel.isNarrowed()
+            appBarBackPressHandler.isEnabled = viewModel.isNarrowed()
         }
     }
 

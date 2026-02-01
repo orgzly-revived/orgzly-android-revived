@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
@@ -27,6 +29,7 @@ import com.orgzly.android.widgets.ListWidgetProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.concurrent.CancellationException
+import com.orgzly.android.calendar.CalendarWorker
 import javax.inject.Inject
 
 class SyncWorker(val context: Context, val params: WorkerParameters) :
@@ -117,6 +120,10 @@ class SyncWorker(val context: Context, val params: WorkerParameters) :
                 "Sync took $syncDuration milliseconds. Synced $numberOfBooks books in $numberOfRepos repos."
             )
         }
+
+        // Trigger Calendar Sync
+        val calendarRequest = OneTimeWorkRequestBuilder<CalendarWorker>().build()
+        WorkManager.getInstance(context).enqueue(calendarRequest)
 
         return SyncState.getInstance(SyncState.Type.FINISHED)
     }

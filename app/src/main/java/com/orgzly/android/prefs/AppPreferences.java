@@ -434,6 +434,12 @@ public class AppPreferences {
                 context.getResources().getBoolean(R.bool.pref_default_show_sync_notifications));
     }
 
+    public static boolean isCalendarSyncEnabled(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_calendar_sync_enable),
+                context.getResources().getBoolean(R.bool.pref_default_calendar_sync_enable));
+    }
+
     public static String colorTheme(Context context) {
         return getDefaultSharedPreferences(context).getString(
                 context.getResources().getString(R.string.pref_key_color_theme),
@@ -464,6 +470,17 @@ public class AppPreferences {
 
     public static void darkColorScheme(Context context, String value) {
         String key = context.getResources().getString(R.string.pref_key_dark_color_scheme);
+        getDefaultSharedPreferences(context).edit().putString(key, value).apply();
+    }
+
+    public static String calendarColor(Context context) {
+        return getDefaultSharedPreferences(context).getString(
+                context.getResources().getString(R.string.pref_key_calendar_color),
+                context.getResources().getString(R.string.pref_default_calendar_color));
+    }
+
+    public static void calendarColor(Context context, String value) {
+        String key = context.getResources().getString(R.string.pref_key_calendar_color);
         getDefaultSharedPreferences(context).edit().putString(key, value).apply();
     }
 
@@ -922,6 +939,22 @@ public class AppPreferences {
     }
 
     /*
+     * Group scheduled tasks with today in agenda
+     */
+
+    public static boolean groupScheduledWithTodayInAgenda(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_group_scheduled_with_today),
+                context.getResources().getBoolean(R.bool.pref_default_group_scheduled_with_today));
+    }
+
+    public static void groupScheduledWithTodayInAgenda(Context context, boolean value) {
+        getDefaultSharedPreferences(context).edit().putBoolean(
+                context.getResources().getString(R.string.pref_key_group_scheduled_with_today),
+                value).apply();
+    }
+
+    /*
      * Widget
      */
 
@@ -1094,6 +1127,18 @@ public class AppPreferences {
     public static long lastSuccessfulSyncTime(Context context) {
         String key = context.getResources().getString(R.string.pref_key_last_successful_sync_time);
         return getStateSharedPreferences(context).getLong(key, 0L);
+    }
+
+    /*
+     * Last choice of active/inactive inline timestamp
+     */
+    public static void lastInlineTimestampWasActive(Context context, boolean value) {
+        String key = context.getResources().getString(R.string.pref_key_last_inline_timestamp_was_active);
+        getStateSharedPreferences(context).edit().putBoolean(key, value).apply();
+    }
+    public static boolean lastInlineTimestampWasActive(Context context) {
+        String key = context.getResources().getString(R.string.pref_key_last_inline_timestamp_was_active);
+        return getStateSharedPreferences(context).getBoolean(key, false);
     }
 
     /*

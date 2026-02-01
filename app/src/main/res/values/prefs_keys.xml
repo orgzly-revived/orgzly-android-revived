@@ -105,9 +105,6 @@
     </string-array>
 
     <!-- Theme -->
-    <string name="color_theme_system_default" translatable="true">System default</string>
-    <string name="color_theme_light" translatable="true">Light</string>
-    <string name="color_theme_dark" translatable="true">Dark</string>
     <string name="pref_key_color_theme" translatable="false">pref_key_color_theme</string>
     <string name="pref_default_color_theme" translatable="false">system</string>
     <string-array name="color_theme">
@@ -355,6 +352,9 @@
 
     <string name="pref_key_hide_empty_days_in_agenda" translatable="false">pref_key_hide_empty_days_in_agenda</string>
     <bool name="pref_default_hide_empty_days_in_agenda" translatable="false">false</bool>
+
+    <string name="pref_key_group_scheduled_with_today" translatable="false">pref_key_group_scheduled_with_today</string>
+    <bool name="pref_default_group_scheduled_with_today" translatable="false">true</bool>
 
     <string name="pref_key_selected_note_metadata" translatable="false">pref_key_selected_note_metadata</string>
     <string-array name="note_metadata">
@@ -641,6 +641,7 @@
     <string name="pref_key_reminder_service_last_run_for_event" translatable="false">pref_key_reminder_service_last_run_for_event</string>
     <string name="pref_key_notes_clipboard" translatable="false">pref_key_notes_clipboard</string>
     <string name="pref_key_refile_last_location" translatable="false">pref_key_refile_last_location</string>
+    <string name="pref_key_last_inline_timestamp_was_active" translatable="false">pref_key_last_inline_timestamp_was_active</string>
 
     <!-- Repository ignore file. -->
     <string name="pref_key_orgzlyignore_file" translatable="false">pref_key_orgzlyignore_file</string>

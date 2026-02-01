@@ -4,7 +4,7 @@ Mantén tus libretas de notas en texto plano y sincronízalas con un directorio 
 
 Las libretas son guardadas en el formato de Org mode.
 "Org mode is para tomar notas, manejar listas de tareas, planear proyectos y crear documentos con un sistema efectivo y rápido de texto plano."
-Visita http://orgmode.org para más información.
+Visita <a href='https://orgmode.org/'>orgmode.org</a> para más información.
 
 <b>Características:</b>
 

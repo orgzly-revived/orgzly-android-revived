@@ -83,6 +83,7 @@ interface AppComponent {
 
     fun inject(arg: SyncWorker)
     fun inject(arg: ScheduledSyncWorker)
+    fun inject(arg: com.orgzly.android.calendar.CalendarWorker)
     fun inject(arg: NoteReminders)
     fun inject(arg: UseCaseRunner.Factory)
     fun inject(arg: UseCaseWorker)

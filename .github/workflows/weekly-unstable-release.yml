@@ -5,6 +5,7 @@ name: Build and publish "weekly" unstable snapshot release
 on:
   schedule:
     - cron: '41 19 * * 2'
+  workflow_dispatch:
 
 permissions:
   contents: read
