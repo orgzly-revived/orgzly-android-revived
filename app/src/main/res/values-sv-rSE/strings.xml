@@ -609,4 +609,5 @@
     <string name="pref_key_auto_sync_interval_title">Intervall i minuter (15 är minimum)</string>
     <string name="failed_sharing_note">Delning av anteckningen misslyckades</string>
     <string name="create_org_links_from_shared_links">Skapa org-länkar från mottagna delade länkar</string>
+    <string name="insert_timestamp">Infoga tidstämpel</string>
 </resources>
