@@ -41,4 +41,8 @@
         <item>@string/above</item>
         <item>@string/below</item>
     </string-array>
+
+    <string-array name="calendar_sync_search_entries">
+        <item>-1</item>
+    </string-array>
 </resources>
