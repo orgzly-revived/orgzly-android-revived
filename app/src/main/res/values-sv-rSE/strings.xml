@@ -610,4 +610,9 @@
     <string name="failed_sharing_note">Delning av anteckningen misslyckades</string>
     <string name="create_org_links_from_shared_links">Skapa org-länkar från mottagna delade länkar</string>
     <string name="insert_timestamp">Infoga tidstämpel</string>
+    <string name="widen_view">Vidga vy</string>
+    <string name="narrow">Visa endast underträdet</string>
+    <string name="group_scheduled_with_today">Visa inte schemalagda uppgifter som förfallna i agendan</string>
+    <string name="group_scheduled_with_today_summary">Aktivera för att visa förfallna schemalagda uppgifter tillsammans med dagens uppgifter</string>
+    <string name="is_active_label">Aktiv</string>
 </resources>
