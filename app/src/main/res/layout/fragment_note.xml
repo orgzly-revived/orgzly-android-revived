@@ -270,7 +270,9 @@
 
                 </LinearLayout>
 
-                <View style="@style/HorizontalDivider" />
+                <View
+                    android:id="@+id/attachments_divider"
+                    style="@style/HorizontalDivider" />
 
             <!-- Attachments header -->
             <LinearLayout

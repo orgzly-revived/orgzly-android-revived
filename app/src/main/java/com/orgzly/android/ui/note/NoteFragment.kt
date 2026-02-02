@@ -544,6 +544,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
             val hasId = viewModel.notePayload?.properties?.containsKey(OrgFormat.PROPERTY_ID) ?: false
             binding.attachmentsHeader.goneUnless(filteredAttachments.isNotEmpty() && hasId)
+            binding.attachmentsDivider.goneUnless(filteredAttachments.isNotEmpty() && hasId)
         }
     }
 
