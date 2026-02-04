@@ -1,1 +1,0 @@
-Buku catatan untuk membuat catatan dan mengelola daftar tugas dalam format Org-mode

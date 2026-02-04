@@ -33,6 +33,7 @@ import com.orgzly.android.ui.repos.ReposActivity
 import com.orgzly.android.ui.savedsearch.SavedSearchFragment
 import com.orgzly.android.ui.savedsearches.SavedSearchesFragment
 import com.orgzly.android.ui.settings.SettingsActivity
+import com.orgzly.android.ui.settings.SettingsFragment
 import com.orgzly.android.ui.settings.exporting.SettingsExportFragment
 import com.orgzly.android.ui.settings.importing.SettingsImportFragment
 import com.orgzly.android.ui.share.ShareActivity
@@ -42,6 +43,7 @@ import com.orgzly.android.usecase.UseCaseWorker
 import com.orgzly.android.widgets.ListWidgetProvider
 import com.orgzly.android.widgets.ListWidgetSelectionActivity
 import com.orgzly.android.widgets.ListWidgetService
+import com.orgzly.android.calendar.CalendarWorker
 import dagger.Component
 import javax.inject.Singleton
 
@@ -81,10 +83,13 @@ interface AppComponent {
     fun inject(arg: SettingsImportFragment)
     fun inject(arg: SyncFragment)
 
+    fun inject(arg: SettingsFragment)
+
+    fun inject(arg: CalendarWorker)
+
     fun inject(arg: SyncWorker)
     fun inject(arg: ScheduledSyncWorker)
-    fun inject(arg: com.orgzly.android.calendar.CalendarWorker)
-    fun inject(arg: NoteReminders)
+
     fun inject(arg: UseCaseRunner.Factory)
     fun inject(arg: UseCaseWorker)
     fun inject(arg: ListWidgetService)

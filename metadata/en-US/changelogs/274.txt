@@ -1,0 +1,4 @@
+• Show overdue scheduled notes on the current day (can be reverted in settings).
+• Add “insert inline timestamp” button when editing notes.
+• Support Android per-app language configuration.
+• Upgrade dependencies.

@@ -30,6 +30,12 @@
             android:defaultValue="@string/pref_default_dark_color_scheme"
             app:useSimpleSummaryProvider="true"/>
 
+        <com.orgzly.android.prefs.ColorPickerPreference
+            android:key="@string/pref_key_calendar_color"
+            android:title="@string/pref_title_calendar_color"
+            android:summary="@string/pref_summary_calendar_color"
+            android:defaultValue="@string/pref_default_calendar_color"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/other">

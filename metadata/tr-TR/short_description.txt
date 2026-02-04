@@ -1,1 +1,0 @@
-org-mode formatında not almak ve yapılacaklar listelerini yönetmek için genel uygulama

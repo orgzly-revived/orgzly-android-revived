@@ -11,8 +11,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 36
-        versionCode 273
-        versionName "1.17.0-beta.1"
+        versionCode 274
+        versionName "1.17.0"
         applicationId = "com.orgzlyrevived"
         resValue "string", "application_id", "com.orgzlyrevived"
 
@@ -100,7 +100,7 @@ android {
     }
 
     androidResources {
-        generateLocaleConfig true
+        generateLocaleConfig = true
     }
 
     compileOptions {
