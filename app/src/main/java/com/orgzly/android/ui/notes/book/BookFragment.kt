@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.widget.ArrayAdapter
+import android.widget.MultiAutoCompleteTextView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orgzly.BuildConfig
 import com.orgzly.R
@@ -44,6 +46,7 @@ import com.orgzly.android.ui.util.setDecorFitsSystemWindowsForBottomToolbar
 import com.orgzly.android.ui.util.setup
 import com.orgzly.android.ui.util.styledAttributes
 import com.orgzly.android.util.LogUtils
+import com.orgzly.android.util.SpaceTokenizer
 import com.orgzly.databinding.FragmentBookBinding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -555,6 +558,70 @@ class BookFragment :
         }
     }
 
+    private fun showFiletagsDialog() {
+        val book = currentBook ?: return
+
+        val view = layoutInflater.inflate(R.layout.dialog_filetags, null, false)
+        val input = view.findViewById<MultiAutoCompleteTextView>(R.id.filetags_input)
+
+        input.setTokenizer(SpaceTokenizer())
+
+        // Pre-fill with current filetags
+        book.filetags?.let { tags ->
+            if (tags.isNotEmpty()) {
+                input.setText(tags.toString())
+            }
+        }
+
+        // Set up autocomplete from all known tags
+        viewModel.tags.observe(viewLifecycleOwner) { tags ->
+            context?.let {
+                input.setAdapter(ArrayAdapter(it, R.layout.dropdown_item, tags))
+            }
+        }
+
+        dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.file_tags)
+            .setView(view)
+            .setPositiveButton(R.string.set) { _, _ ->
+                val newTagsText = input.text.toString().trim()
+                val newPreface = updateFiletagsInPreface(book.preface, newTagsText)
+                listener?.onBookPrefaceUpdate(mBookId, newPreface)
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun updateFiletagsInPreface(preface: String?, tagsText: String): String {
+        val filetagsLine = if (tagsText.isNotBlank()) {
+            val tags = tagsText.split("\\s+".toRegex()).filter { it.isNotBlank() }
+            "#+FILETAGS: :${tags.joinToString(":")}:"
+        } else {
+            null
+        }
+
+        if (preface.isNullOrBlank()) {
+            return filetagsLine ?: ""
+        }
+
+        val lines = preface.lines().toMutableList()
+        val existingIndex = lines.indexOfFirst {
+            it.trimStart().startsWith("#+FILETAGS:", ignoreCase = true)
+        }
+
+        if (existingIndex >= 0) {
+            if (filetagsLine != null) {
+                lines[existingIndex] = filetagsLine
+            } else {
+                lines.removeAt(existingIndex)
+            }
+        } else if (filetagsLine != null) {
+            lines.add(0, filetagsLine)
+        }
+
+        return lines.joinToString("\n")
+    }
+
     private fun topToolbarToDefault() {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG)
 
@@ -576,6 +643,7 @@ class BookFragment :
 
             if (currentBook == null) {
                 menu.removeItem(R.id.books_options_menu_book_preface)
+                menu.removeItem(R.id.books_options_menu_book_filetags)
             }
 
             // Show/hide widen button based on narrowed state
@@ -862,6 +930,10 @@ class BookFragment :
 
             R.id.books_options_menu_book_preface -> {
                 onPrefaceClick()
+            }
+
+            R.id.books_options_menu_book_filetags -> {
+                showFiletagsDialog()
             }
 
             R.id.keep_screen_on -> {

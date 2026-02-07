@@ -75,7 +75,7 @@ import java.util.Calendar
             AppLog::class
         ],
 
-        version = 157
+        version = 158
 )
 @TypeConverters(com.orgzly.android.db.TypeConverters::class)
 abstract class OrgzlyDatabase : RoomDatabase() {
@@ -151,7 +151,8 @@ abstract class OrgzlyDatabase : RoomDatabase() {
                             MIGRATION_153_154,
                             MIGRATION_154_155,
                             MIGRATION_155_156,
-                            MIGRATION_156_157
+                            MIGRATION_156_157,
+                            MIGRATION_157_158
                     )
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
@@ -609,6 +610,36 @@ abstract class OrgzlyDatabase : RoomDatabase() {
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_book_properties_book_id` ON `book_properties` (`book_id`)")
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_book_properties_name` ON `book_properties` (`name`)")
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_book_properties_value` ON `book_properties` (`value`)")
+            }
+        }
+
+        private val MIGRATION_157_158 = object : Migration(157, 158) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE books ADD COLUMN filetags TEXT")
+
+                // Populate filetags from existing prefaces using OrgFileSettings parser
+                val cursor = db.query("SELECT id, preface FROM books WHERE preface IS NOT NULL")
+                try {
+                    val idIndex = cursor.getColumnIndex("id")
+                    val prefaceIndex = cursor.getColumnIndex("preface")
+
+                    while (cursor.moveToNext()) {
+                        val id = cursor.getLong(idIndex)
+                        val preface = cursor.getString(prefaceIndex) ?: continue
+
+                        val settings = com.orgzly.org.OrgFileSettings.fromPreface(preface)
+                        val filetags = settings?.filetags?.joinToString(" ")
+
+                        if (!filetags.isNullOrBlank()) {
+                            db.execSQL(
+                                "UPDATE books SET filetags = ? WHERE id = ?",
+                                arrayOf(filetags, id)
+                            )
+                        }
+                    }
+                } finally {
+                    cursor.close()
+                }
             }
         }
     }

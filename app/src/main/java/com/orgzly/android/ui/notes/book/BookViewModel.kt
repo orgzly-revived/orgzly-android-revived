@@ -7,6 +7,7 @@ import com.orgzly.android.App
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.NoteView
+import androidx.lifecycle.LiveData
 import com.orgzly.android.ui.AppBar
 import com.orgzly.android.ui.CommonViewModel
 import com.orgzly.android.ui.SingleLiveEvent
@@ -61,6 +62,10 @@ class BookViewModel(private val dataRepository: DataRepository, val bookId: Long
         } else {
             null
         }
+    }
+
+    val tags: LiveData<List<String>> by lazy {
+        dataRepository.selectAllTagsLiveData()
     }
 
     companion object {
