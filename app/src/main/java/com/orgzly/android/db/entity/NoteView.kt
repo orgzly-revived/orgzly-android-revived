@@ -76,6 +76,6 @@ data class NoteView(
     }
 
     fun getInheritedTagsList(): List<String> {
-        return Note.dbDeSerializeTags(inheritedTags)
+        return inheritedTags?.let { Tags.fromString(it).tags } ?: emptyList()
     }
 }

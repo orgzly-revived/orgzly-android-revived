@@ -1525,7 +1525,7 @@ class DataRepository @Inject constructor(
                 0,
                 time,
                 notePayload.title,
-                Note.dbSerializeTags(notePayload.tags),
+                Tags(notePayload.tags),
                 notePayload.state,
                 notePayload.priority,
                 notePayload.content,
@@ -1614,7 +1614,7 @@ class DataRepository @Inject constructor(
                     scheduledRangeId = getOrgRangeId(notePayload.scheduled),
                     deadlineRangeId = getOrgRangeId(notePayload.deadline),
                     closedRangeId = getOrgRangeId(notePayload.closed),
-                    tags = Note.dbSerializeTags(notePayload.tags)
+                    tags = Tags(notePayload.tags)
             )
 
             val count = db.note().update(newNote)
@@ -1913,7 +1913,7 @@ class DataRepository @Inject constructor(
                                     deadlineRangeId = deadlineRangeId,
                                     closedRangeId = closedRangeId,
                                     clockRangeId = clockRangeId,
-                                    tags = if (node.head.hasTags()) Note.dbSerializeTags(node.head.tags) else null,
+                                    tags = if (node.head.hasTags()) Tags(node.head.tags) else null,
                                     createdAt = getCreatedAtFromProperty(node, useCreatedAtProperty, createdAtProperty),
                                     content = content,
                                     contentLineCount = contentLineCount,
@@ -2315,15 +2315,13 @@ class DataRepository @Inject constructor(
      */
     fun selectAllTagsLiveData(): LiveData<List<String>> {
         return db.note().getDistinctTagsLiveData().map { tagsList ->
-            tagsList.flatMap { Note.dbDeSerializeTags(it) }.distinct().sorted()
+            tagsList.flatMap { Tags.fromString(it).tags }.distinct().sorted()
         }
     }
 
     fun selectAllTags(): List<String> {
         return db.note().getDistinctTags()
-                .flatMap { tagsList ->
-                    Note.dbDeSerializeTags(tagsList)
-                }
+                .flatMap { Tags.fromString(it).tags }
                 .distinct()
     }
 

@@ -5,6 +5,7 @@ package com.orgzly.android.db
 import android.net.Uri
 import androidx.room.TypeConverter
 import com.orgzly.android.db.entity.BookAction
+import com.orgzly.android.db.entity.Tags
 import com.orgzly.android.repos.RepoType
 
 object TypeConverters {
@@ -47,4 +48,17 @@ object TypeConverters {
     fun fromRepoTypeToId(type: RepoType): Int {
         return type.id
     }
+
+    @TypeConverter
+    @JvmStatic
+    fun fromTagsToString(tags: Tags?): String? {
+        return tags?.takeIf { it.isNotEmpty() }?.toString()
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun fromStringToTags(str: String?): Tags? {
+        return str?.let { Tags.fromString(it) }
+    }
 }
+
