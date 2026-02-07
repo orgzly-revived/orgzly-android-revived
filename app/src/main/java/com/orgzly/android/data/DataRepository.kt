@@ -423,8 +423,9 @@ class DataRepository @Inject constructor(
 
     fun setBookPreface(bookId: Long, preface: String) {
         val settings = OrgFileSettings.fromPreface(preface)
+        val filetags = Tags.fromList(settings?.filetags)
 
-        db.book().updatePreface(bookId, preface, settings.title)
+        db.book().updatePreface(bookId, preface, settings.title, filetags)
         setBookPropertiesFromPreface(bookId, preface)
 
         updateBookIsModified(bookId, true)
@@ -1956,11 +1957,15 @@ class DataRepository @Inject constructor(
 
                         @Throws(IOException::class)
                         override fun onFile(file: OrgFile) {
+                            val settings = OrgFileSettings.fromPreface(file.preface)
+                            val filetags = Tags.fromList(settings?.filetags)
+
                             val book = Book(
                                     bookId,
                                     bookName,
                                     mtime = vrook?.mtime, // Set book's mtime to remote book's
                                     preface = file.preface, // TODO: Move to and rename OrgFileSettings
+                                    filetags = filetags,
                                     isIndented = file.settings.isIndented,
                                     title = file.settings.title,
                                     isDummy = false,
@@ -2311,7 +2316,8 @@ class DataRepository @Inject constructor(
     }
 
     /**
-     * Return all known tags
+     * Return all known tags.
+     * Splits space-separated tag strings from database into individual tags, deduplicates, and sorts.
      */
     fun selectAllTagsLiveData(): LiveData<List<String>> {
         return db.note().getDistinctTagsLiveData().map { tagsList ->
