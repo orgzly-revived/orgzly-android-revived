@@ -43,7 +43,7 @@ import java.util.UUID
  * without requiring Android instrumentation or emulator.
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [35])
+@Config(sdk = [36])
 class SyncTest {
 
     private lateinit var context: Context
