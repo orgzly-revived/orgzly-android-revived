@@ -3,6 +3,7 @@ package com.orgzly.android.data.mappers
 import com.orgzly.android.db.entity.Note
 import com.orgzly.android.db.entity.NoteProperty
 import com.orgzly.android.db.entity.NoteView
+import com.orgzly.android.db.entity.toList
 import com.orgzly.android.ui.note.NotePayload
 import com.orgzly.org.OrgHead
 import com.orgzly.org.OrgProperties
@@ -29,7 +30,7 @@ object OrgMapper {
         return OrgHead().apply {
             title = note.title
 
-            setTags(Note.dbDeSerializeTags(note.tags).toTypedArray())
+            setTags(note.tags.toList().toTypedArray())
 
             state = note.state
 

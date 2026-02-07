@@ -3,6 +3,7 @@ package com.orgzly.android.ui.note
 import android.content.Context
 import com.orgzly.android.db.entity.NoteProperty
 import com.orgzly.android.db.entity.NoteView
+import com.orgzly.android.db.entity.toList
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.NoteStates
 import com.orgzly.android.util.EventsInNote
@@ -95,7 +96,7 @@ class NoteBuilder {
                     noteView.scheduledRangeString,
                     noteView.deadlineRangeString,
                     noteView.closedRangeString,
-                    noteView.note.getTagsList(),
+                    noteView.note.tags.toList(),
                     OrgProperties().apply { properties.forEach { put(it.name, it.value) } })
         }
 
