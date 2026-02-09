@@ -8,9 +8,11 @@ import android.content.pm.PackageManager
 import android.provider.CalendarContract
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
-import com.orgzly.android.db.dao.NoteViewDao
+import com.orgzly.BuildConfig
+import com.orgzly.android.data.DataRepository
 import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.query.user.InternalQueryParser
 import com.orgzly.android.util.LogUtils
 import com.orgzly.org.datetime.OrgRange
 import com.orgzly.org.datetime.OrgRepeater
@@ -19,14 +21,17 @@ import java.util.TimeZone
 
 data class Quad<T1, T2, T3, T4>(val t1: T1, val t2: T2, val t3: T3, val t4: T4)
 
-class CalendarManager(private val context: Context, private val noteViewDao: NoteViewDao) {
+class CalendarManager(
+    private val context: Context,
+    private val dataRepository: DataRepository
+) {
 
     companion object {
         private const val TAG = "CalendarManager"
-        private const val CALENDAR_ACCOUNT_NAME = "Orgzly"
-        private const val CALENDAR_ACCOUNT_TYPE = "com.orgzly.android"
-        private const val CALENDAR_NAME = "Orgzly"
-        private const val CALENDAR_DISPLAY_NAME = "Orgzly"
+        private val CALENDAR_ACCOUNT_NAME = "Orgzly${if (BuildConfig.DEBUG) " Debug" else ""}"
+        private val CALENDAR_ACCOUNT_TYPE = "com.orgzly.android${if (BuildConfig.DEBUG) ".debug" else ""}"
+        private val CALENDAR_NAME = CALENDAR_ACCOUNT_NAME
+        private val CALENDAR_DISPLAY_NAME = CALENDAR_ACCOUNT_NAME
 
         // Default calendar color - can be changed to any valid Android color
         // Color value for #FF6B68: 0xFFFF6B68 (ARGB format)
@@ -64,16 +69,28 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         // Update calendar color if it has changed
         updateCalendarColorIfNeeded(calendarId)
 
-        val notes = noteViewDao.getAllWithScheduledOrDeadline()
+        val notes = getNotesForSync()
         LogUtils.d(TAG, "Found ${notes.size} notes to sync")
 
-        // Filter out DONE items
-        val filteredNotes = notes.filter { noteView ->
+        syncNotesToCalendar(calendarId, notes)
+    }
+
+    private fun getNotesForSync(): List<NoteView> {
+        val searchId = AppPreferences.calendarSyncSearchId(context)
+
+        if (searchId > 0) {
+            val search = dataRepository.getSavedSearch(searchId)
+            if (search != null) {
+                LogUtils.d(TAG, "Using saved search: ${search.name} (${search.query})")
+                val query = InternalQueryParser().parse(search.query)
+                return dataRepository.selectNotesFromQuery(query)
+            }
+        }
+
+        LogUtils.d(TAG, "Using default search (all notes with scheduled/deadline, no DONE)")
+        return dataRepository.getNotesWithScheduledOrDeadline().filter { noteView ->
             !AppPreferences.isDoneKeyword(context, noteView.note.state)
         }
-        LogUtils.d(TAG, "After filtering DONE items: ${filteredNotes.size} notes to sync")
-        
-        syncNotesToCalendar(calendarId, filteredNotes)
     }
 
     fun deleteCalendar() {
@@ -222,6 +239,12 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
                     note.deadlineTimeHour == null,
                     OrgRange.parse(note.deadlineRangeString).getStartTime().getRepeater()
                 )
+                note.eventTimestamp != null -> Quad(
+                    note.eventTimestamp,
+                    note.eventEndTimestamp,
+                    note.eventHour == null,
+                    OrgRange.parse(note.eventString).getStartTime().getRepeater(),
+                )
                 else -> Quad(null, null, false, null)
             }
 
@@ -266,7 +289,7 @@ class CalendarManager(private val context: Context, private val noteViewDao: Not
         // For all-day events, convert local time to UTC since Android Calendar expects all-day events in UTC
         val (adjustedStartTime, adjustedEndTime, eventTimeZone) = adjustEventTimesForTimezone(eventStartTime, dtEnd, isAllDay)
         
-        val description = (note.note.content ?: "") + "\n\nOpen in Orgzly: https://orgzlyrevived.com/note/${note.note.id}"
+        val description = "Open in Orgzly: https://orgzlyrevived.com/note/${note.note.id}" + if (note.note.content.isNullOrEmpty()) "" else "\n\n${note.note.content}"
 
         return ContentValues().apply {
             put(CalendarContract.Events.DTSTART, adjustedStartTime)
