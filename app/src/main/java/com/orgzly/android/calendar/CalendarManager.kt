@@ -239,6 +239,12 @@ class CalendarManager(
                     note.deadlineTimeHour == null,
                     OrgRange.parse(note.deadlineRangeString).getStartTime().getRepeater()
                 )
+                note.eventTimestamp != null -> Quad(
+                    note.eventTimestamp,
+                    note.eventEndTimestamp,
+                    note.eventHour == null,
+                    OrgRange.parse(note.eventString).getStartTime().getRepeater(),
+                )
                 else -> Quad(null, null, false, null)
             }
 
