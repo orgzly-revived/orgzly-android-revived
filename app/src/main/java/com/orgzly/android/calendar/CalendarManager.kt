@@ -225,7 +225,6 @@ class CalendarManager(
                     noteIdStr?.toLongOrNull()?.let { noteId ->
                         existingEvents.getOrPut(noteId) { mutableListOf<Long>() }.add(eventId)
                     }
-                      
                 }
             }
         }
@@ -262,7 +261,7 @@ class CalendarManager(
                     }
 
                     if (events.isEmpty()) {
-			existingEvents.remove(note.note.id)
+                        existingEvents.remove(note.note.id)
                     }
                 } else {
                     insertEvent(calendarId, note, eventTime)
