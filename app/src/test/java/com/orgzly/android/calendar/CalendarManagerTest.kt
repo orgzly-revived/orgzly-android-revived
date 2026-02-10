@@ -6,6 +6,9 @@ import com.orgzly.android.calendar.CalendarManager.Companion.DEFAULT_CALENDAR_CO
 import com.orgzly.android.db.entity.Note
 import com.orgzly.android.db.entity.NotePosition
 import com.orgzly.android.db.entity.NoteView
+import com.orgzly.org.datetime.OrgRange
+import com.orgzly.org.datetime.OrgRepeater
+import com.orgzly.org.datetime.OrgInterval
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -83,9 +86,40 @@ class CalendarManagerTest {
         assertEquals("Start time should remain in local time for timed events", 1672531200000L, startTime)
     }
 
+    @Test
+    fun testBuildEventContentValues_TimedEvent_UsesRepeats() {
+        // Create a test note with a scheduled time that has a specific hour
+        val note = createTestNoteView(
+            scheduledTimeTimestamp = 1672531200000, // 2023-01-01 00:00:00 in local time
+            scheduledTimeHour = 14, // This makes it a timed event
+            scheduledRangeString = "<2023-01-01 Wed Sun +1w>"// This makes it a repeating event
+        )
+
+        // Call the method we want to test
+        val contentValues = buildEventContentValuesForTest(
+            calendarId = 1,
+            note = note,
+            eventStartTime = 1672531200000, // 2023-01-01 00:00:00 local
+            eventEndTime = null,
+            isAllDay = false,
+            repeater = OrgRange.parse(note.scheduledRangeString).getStartTime().getRepeater()
+        )
+
+        // Verify the results
+        assertEquals("Should not be marked as all-day event", 0, contentValues["ALL_DAY"])
+        assertEquals("Should use local timezone for timed events", TimeZone.getDefault().id, contentValues["EVENT_TIMEZONE"])
+
+        // For timed events, the time should remain unchanged (in local time)
+        val startTime = contentValues["DTSTART"] as Long
+        assertEquals("Start time should remain in local time for timed events", 1672531200000L, startTime)
+
+        assertEquals("Should have correct RRULE", contentValues["RRULE"], "FREQ=WEEKLY;INTERVAL=1")
+    }
+
     private fun createTestNoteView(
         scheduledTimeTimestamp: Long? = null,
-        scheduledTimeHour: Int? = null
+        scheduledTimeHour: Int? = null,
+        scheduledRangeString: String? = null,
     ): NoteView {
         return NoteView(
             note = Note(
@@ -114,6 +148,7 @@ class CalendarManagerTest {
             ),
             scheduledTimeTimestamp = scheduledTimeTimestamp,
             scheduledTimeHour = scheduledTimeHour,
+            scheduledRangeString = scheduledRangeString,
             bookName = "Test Book"
         )
     }
@@ -124,10 +159,11 @@ class CalendarManagerTest {
         note: NoteView,
         eventStartTime: Long,
         eventEndTime: Long?,
-        isAllDay: Boolean
+        isAllDay: Boolean,
+        repeater: OrgRepeater? = null
     ): Map<String, Any> {
         val calendarManager = CalendarManagerForTesting()
-        return calendarManager.buildEventContentValues(calendarId, note, eventStartTime, eventEndTime, isAllDay)
+        return calendarManager.buildEventContentValues(calendarId, note, eventStartTime, eventEndTime, isAllDay, repeater)
     }
 
     // Mock implementation for testing
@@ -137,9 +173,10 @@ class CalendarManagerTest {
             note: NoteView,
             eventStartTime: Long,
             eventEndTime: Long?,
-            isAllDay: Boolean
+            isAllDay: Boolean,
+            repeater: OrgRepeater?
         ): Map<String, Any> {
-            return super.buildEventContentValues(calendarId, note, eventStartTime, eventEndTime, isAllDay)
+            return super.buildEventContentValues(calendarId, note, eventStartTime, eventEndTime, isAllDay, repeater)
         }
     }
 
@@ -149,7 +186,8 @@ class CalendarManagerTest {
             note: NoteView,
             eventStartTime: Long,
             eventEndTime: Long?,
-            isAllDay: Boolean
+            isAllDay: Boolean,
+            repeater: OrgRepeater?
         ): Map<String, Any> {
             val dtEnd = eventEndTime ?: (eventStartTime + if (isAllDay) 24 * 60 * 60 * 1000 else 60 * 60 * 1000)
             
@@ -158,7 +196,7 @@ class CalendarManagerTest {
             
             val description = (note.note.content ?: "") + "\n\nOpen in Orgzly: https://orgzlyrevived.com/note/${note.note.id}"
  
-            return mapOf(
+            return listOfNotNull(
                 "DTSTART" to adjustedStartTime,
                 "DTEND" to adjustedEndTime,
                 "TITLE" to note.note.title,
@@ -166,8 +204,9 @@ class CalendarManagerTest {
                 "CALENDAR_ID" to calendarId,
                 "EVENT_TIMEZONE" to eventTimeZone,
                 "ALL_DAY" to (if (isAllDay) 1 else 0),
+                if (repeater != null) "RRULE" to makeRepeaterString(repeater) else null,
                 "SYNC_DATA1" to note.note.id.toString()
-            )
+            ).toMap()
         }
         
         protected fun adjustEventTimesForTimezone(eventStartTime: Long, eventEndTime: Long, isAllDay: Boolean): Triple<Long, Long, String> {
@@ -182,6 +221,17 @@ class CalendarManagerTest {
             } else {
                 Triple(eventStartTime, eventEndTime, TimeZone.getDefault().id)
             }
+        }
+
+        protected fun makeRepeaterString(repeater: OrgRepeater): String {
+            val freq = when (repeater.getUnit()) {
+                OrgInterval.Unit.HOUR -> "HOURLY"
+                OrgInterval.Unit.DAY -> "DAILY"
+                OrgInterval.Unit.WEEK -> "WEEKLY"
+                OrgInterval.Unit.MONTH -> "MONTHLY"
+                OrgInterval.Unit.YEAR -> "YEARLY"
+            }
+            return "FREQ=$freq;INTERVAL=${repeater.getValue()}"
         }
     }
 
