@@ -128,7 +128,7 @@ class CalendarManagerTest {
                 content = "Test content",
                 isCut = 0,
                 createdAt = System.currentTimeMillis(),
-                tags = "",
+                tags = null,
                 state = null,
                 priority = null,
                 contentLineCount = 0,
