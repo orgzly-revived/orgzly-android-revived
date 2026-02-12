@@ -49,7 +49,9 @@ import com.google.gson.Gson
             Index("descendants_count"),
             Index("scheduled_range_id"),
             Index("deadline_range_id"),
-            Index("closed_range_id")
+            Index("closed_range_id"),
+            Index("level"),
+            Index(value = ["book_id", "is_cut", "level"])
         ]
 )
 data class Note(

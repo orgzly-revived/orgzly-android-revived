@@ -1,8 +1,10 @@
 package com.orgzly.android.ui.drawer
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Resources
 import android.view.Menu
+import androidx.appcompat.view.menu.MenuBuilder
 import androidx.lifecycle.Observer
 import com.google.android.material.navigation.NavigationView
 import com.orgzly.BuildConfig
@@ -80,23 +82,30 @@ internal class DrawerNavigationView(
         }
     }
 
+    @SuppressLint("RestrictedApi")
     private fun refreshFromSavedSearches(savedSearches: List<SavedSearch>) {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, savedSearches.size)
 
-        removeItemsWithOrder(1)
+        // Batch menu updates to avoid expensive per-item notifications
+        (menu as? MenuBuilder)?.stopDispatchingItemsChanged()
+        try {
+            removeItemsWithOrder(1)
 
-        savedSearches.forEach { savedSearch ->
-            val intent = Intent(AppIntent.ACTION_OPEN_QUERY)
-            intent.putExtra(AppIntent.EXTRA_QUERY_STRING, savedSearch.query)
-            intent.putExtra(AppIntent.EXTRA_SEARCH_NAME, savedSearch.name)
+            savedSearches.forEach { savedSearch ->
+                val intent = Intent(AppIntent.ACTION_OPEN_QUERY)
+                intent.putExtra(AppIntent.EXTRA_QUERY_STRING, savedSearch.query)
+                intent.putExtra(AppIntent.EXTRA_SEARCH_NAME, savedSearch.name)
 
-            val id = generateRandomUniqueId()
-            val item = menu.add(R.id.drawer_group, id, 1, savedSearch.name)
+                val id = generateRandomUniqueId()
+                val item = menu.add(R.id.drawer_group, id, 1, savedSearch.name)
 
-            menuItemIdMap[QueryFragment.getDrawerItemId(savedSearch.query)] = id
+                menuItemIdMap[QueryFragment.getDrawerItemId(savedSearch.query)] = id
 
-            item.intent = intent
-            item.isCheckable = true
+                item.intent = intent
+                item.isCheckable = true
+            }
+        } finally {
+            (menu as? MenuBuilder)?.startDispatchingItemsChanged()
         }
 
         activeFragmentTag?.let {
@@ -104,32 +113,39 @@ internal class DrawerNavigationView(
         }
     }
 
+    @SuppressLint("RestrictedApi")
     private fun refreshFromBooks(books: List<BookView>) {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, books.size)
 
-        removeItemsWithOrder(3)
+        // Batch menu updates to avoid expensive per-item notifications
+        (menu as? MenuBuilder)?.stopDispatchingItemsChanged()
+        try {
+            removeItemsWithOrder(3)
 
-        books.forEach { book ->
-            val intent = Intent(AppIntent.ACTION_OPEN_BOOK)
-            intent.putExtra(AppIntent.EXTRA_BOOK_ID, book.book.id)
+            books.forEach { book ->
+                val intent = Intent(AppIntent.ACTION_OPEN_BOOK)
+                intent.putExtra(AppIntent.EXTRA_BOOK_ID, book.book.id)
 
-            val id = generateRandomUniqueId()
-            val name = book.book.run { title ?: name }
+                val id = generateRandomUniqueId()
+                val name = book.book.run { title ?: name }
 
-            val item = menu.add(R.id.drawer_group, id, 3, name)
+                val item = menu.add(R.id.drawer_group, id, 3, name)
 
-            item.isEnabled = !book.book.isDummy
-            item.intent = intent
-            item.isCheckable = true
+                item.isEnabled = !book.book.isDummy
+                item.intent = intent
+                item.isCheckable = true
 
-            if (book.book.lastAction?.type == BookAction.Type.ERROR) {
-                item.setActionView(R.layout.drawer_item_sync_failed)
+                if (book.book.lastAction?.type == BookAction.Type.ERROR) {
+                    item.setActionView(R.layout.drawer_item_sync_failed)
 
-            } else if (book.isOutOfSync()) {
-                item.setActionView(R.layout.drawer_item_sync_needed)
+                } else if (book.isOutOfSync()) {
+                    item.setActionView(R.layout.drawer_item_sync_needed)
+                }
+
+                menuItemIdMap[BookFragment.getDrawerItemId(book.book.id)] = id
             }
-
-            menuItemIdMap[BookFragment.getDrawerItemId(book.book.id)] = id
+        } finally {
+            (menu as? MenuBuilder)?.startDispatchingItemsChanged()
         }
 
         activeFragmentTag?.let {
