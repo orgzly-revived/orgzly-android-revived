@@ -34,6 +34,11 @@
         app:showAsAction="never"
         android:title="@string/edit_book_preface"/>
 
+    <item
+        android:id="@+id/books_options_menu_book_filetags"
+        app:showAsAction="never"
+        android:title="@string/file_tags"/>
+
     <!-- Title is updated depending on the number of notes in clipboard -->
     <item
         android:id="@+id/book_actions_paste"

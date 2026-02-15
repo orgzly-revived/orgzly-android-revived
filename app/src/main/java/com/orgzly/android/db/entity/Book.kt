@@ -29,6 +29,8 @@ data class Book constructor(
 
         val preface: String? = null,
 
+        val filetags: Tags? = null,
+
         @ColumnInfo(name = "is_indented")
         val isIndented: Boolean? = false,
 
