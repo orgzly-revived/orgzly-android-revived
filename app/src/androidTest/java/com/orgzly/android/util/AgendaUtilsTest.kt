@@ -3,7 +3,6 @@ package com.orgzly.android.util
 import com.orgzly.android.ui.TimeType
 import com.orgzly.android.ui.notes.query.agenda.AgendaItems
 import com.orgzly.org.datetime.OrgRange
-import org.hamcrest.Matchers
 import org.joda.time.DateTime
 import org.junit.Assert
 import org.junit.Test
@@ -35,9 +34,9 @@ class AgendaUtilsTest(private val param: Parameter) {
         Assert.assertEquals(param.isOverdueToday, expandedDates.isOverdueToday)
 
         Assert.assertEquals(param.dates.size.toLong(), expandedDates.expanded.size.toLong())
-        Assert.assertThat(
-                toStringArray(expandedDates.expanded.toList()),
-                Matchers.`is`(toStringArray(param.dates)))
+        Assert.assertEquals(
+                toStringArray(param.dates),
+                toStringArray(expandedDates.expanded.toList()))
     }
 
     private fun toStringArray(times: List<DateTime>): List<String>? {

@@ -21,7 +21,6 @@ import com.orgzly.android.espresso.SettingsChangeTest
 import com.orgzly.android.espresso.SettingsFragmentTest
 import com.orgzly.android.espresso.ShareActivityTest
 import com.orgzly.android.espresso.SyncingTest
-import com.orgzly.android.misc.BookNameTest
 import com.orgzly.android.misc.BookParsingTest
 import com.orgzly.android.misc.ContentCheckboxesTitleUpdateViaUpdateNoteContentTest
 import com.orgzly.android.misc.ContentCheckboxesTitleUpdateViaUpdateNoteTest
@@ -32,8 +31,6 @@ import com.orgzly.android.misc.StateChangeParentTitleUpdateTest
 import com.orgzly.android.misc.StateChangeTest
 import com.orgzly.android.misc.StructureTest
 import com.orgzly.android.misc.UriTest
-import com.orgzly.android.query.QueryTokenizerTest
-import com.orgzly.android.query.QueryUtilsTest
 import com.orgzly.android.reminders.NoteRemindersTest
 import com.orgzly.android.repos.DataRepositoryTest
 import com.orgzly.android.repos.DirectoryRepoTest
@@ -47,9 +44,9 @@ import com.orgzly.android.usecase.NoteUpdateScheduledTimeTest
 import com.orgzly.android.util.AgendaUtilsTest
 import com.orgzly.android.util.EncodingDetectTest
 import com.orgzly.android.util.MiscUtilsTest
+import com.orgzly.android.util.UriUtilsTest
 import com.orgzly.android.util.OrgFormatterSpeedTest
 import com.orgzly.android.util.OrgFormatterStyleTextTest
-import com.orgzly.android.util.UriUtilsTest
 import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
@@ -79,7 +76,6 @@ import org.junit.runners.Suite
         ShareActivityTest::class,
         SyncingTest::class,
 
-        BookNameTest::class,
         BookParsingTest::class,
         CreatedAtPropertyTest::class,
         DataTest::class,
@@ -87,10 +83,6 @@ import org.junit.runners.Suite
         StateChangeTest::class,
         StructureTest::class,
         UriTest::class,
-
-        QueryTokenizerTest::class,
-        QueryUtilsTest::class,
-
         NoteRemindersTest::class,
 
         DataRepositoryTest::class,
@@ -111,10 +103,10 @@ import org.junit.runners.Suite
         MiscUtilsTest::class,
         OrgFormatterSpeedTest::class,
         OrgFormatterStyleTextTest::class,
+        UriUtilsTest::class,
         ContentCheckboxesTitleUpdateViaUpdateNoteTest::class,
         ContentCheckboxesTitleUpdateViaUpdateNoteContentTest::class,
         NewNoteContentCheckboxesTitleUpdateTest::class,
-        StateChangeParentTitleUpdateTest::class,
-        UriUtilsTest::class
+        StateChangeParentTitleUpdateTest::class
 )
 class AllTestSuite
