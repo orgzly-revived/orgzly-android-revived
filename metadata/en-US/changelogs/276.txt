@@ -1,0 +1,3 @@
+• Allow selecting a saved search for calendar export.
+• Fix calendar sync bugs.
+• Update translations.
