@@ -332,7 +332,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
 
         onItemInAgenda(1).perform(click());
 
-        SystemClock.sleep(500);
+        onView(isRoot()).perform(waitId(R.id.scroll_view, 5000));
         onView(withId(R.id.scroll_view)).check(matches(isDisplayed()));
         onView(withId(R.id.title_view)).check(matches(withText("Note A")));
     }
@@ -366,7 +366,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
         scenario = ActivityScenario.launch(MainActivity.class);
         searchForTextCloseKeyboard("ad.1");
         // today, note (scheduled)
-        SystemClock.sleep(500);
+        onView(isRoot()).perform(waitId(R.id.fragment_query_agenda_recycler_view, 5000));
         onNotesInAgenda().check(matches(recyclerViewItemCount(2)));
     }
 

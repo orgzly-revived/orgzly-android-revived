@@ -27,6 +27,7 @@ import static com.orgzly.android.espresso.util.EspressoUtils.recyclerViewItemCou
 import static com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard;
 import static com.orgzly.android.espresso.util.EspressoUtils.scroll;
 import static com.orgzly.android.espresso.util.EspressoUtils.searchForTextCloseKeyboard;
+import static com.orgzly.android.espresso.util.EspressoUtils.waitForView;
 import static com.orgzly.android.espresso.util.EspressoUtils.waitId;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -392,7 +393,7 @@ public class QueryFragmentTest extends OrgzlyTest {
     public void testNoNotesFoundMessageIsDisplayedInSearch() {
         scenario = ActivityScenario.launch(MainActivity.class);
         searchForTextCloseKeyboard("Note");
-        SystemClock.sleep(200);
+        onView(isRoot()).perform(waitForView(withText(R.string.no_notes_found_after_search), 5000));
         onView(withText(R.string.no_notes_found_after_search)).check(matches(isDisplayed()));
     }
 

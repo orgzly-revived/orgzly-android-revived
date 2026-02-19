@@ -1,7 +1,6 @@
 package com.orgzly.android.espresso
 
 import android.icu.util.Calendar
-import android.os.SystemClock
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -20,6 +19,8 @@ import com.orgzly.android.espresso.util.EspressoUtils.onNotesInAgenda
 import com.orgzly.android.espresso.util.EspressoUtils.onNotesInSearch
 import com.orgzly.android.espresso.util.EspressoUtils.recyclerViewItemCount
 import com.orgzly.android.espresso.util.EspressoUtils.searchForTextCloseKeyboard
+import com.orgzly.android.espresso.util.EspressoUtils.waitId
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import com.orgzly.android.ui.main.MainActivity
 import com.orgzly.org.datetime.OrgDateTime
 import org.hamcrest.Matchers.not
@@ -126,7 +127,7 @@ class NoteEventsTest : OrgzlyTest() {
         scenario = ActivityScenario.launch(MainActivity::class.java)
 
         searchForTextCloseKeyboard("ad.1")
-        SystemClock.sleep(500)
+        onView(isRoot()).perform(waitId(R.id.fragment_query_agenda_recycler_view, 5000))
         onNotesInAgenda().check(matches(recyclerViewItemCount(2)))
     }
 
@@ -237,7 +238,7 @@ class NoteEventsTest : OrgzlyTest() {
         scenario = ActivityScenario.launch(MainActivity::class.java)
 
         searchForTextCloseKeyboard("ad.2")
-        SystemClock.sleep(500)
+        onView(isRoot()).perform(waitId(R.id.fragment_query_agenda_recycler_view, 5000))
         onNotesInAgenda().check(matches(recyclerViewItemCount(2)))
     }
 
