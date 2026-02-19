@@ -20,6 +20,8 @@ import static com.orgzly.android.espresso.util.EspressoUtils.onActionItemClick;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook;
 import static com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard;
 import static com.orgzly.android.espresso.util.EspressoUtils.scroll;
+import static com.orgzly.android.espresso.util.EspressoUtils.waitId;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
@@ -213,7 +215,7 @@ public class BookTest extends OrgzlyTest {
         scenario.onActivity(activity ->
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE));
 
-        SystemClock.sleep(500);
+        onView(isRoot()).perform(waitId(R.id.fragment_book_recycler_view, 5000));
         onNoteInBook(40).check(matches(isDisplayed())); // Scroll to note
 
         scenario.onActivity(activity ->
@@ -309,7 +311,7 @@ public class BookTest extends OrgzlyTest {
         onActionItemClick(R.id.move, R.string.move);
         onView(withId(R.id.notes_action_move_down)).check(matches(isDisplayed()));
 
-        SystemClock.sleep(500);
+        onView(isRoot()).perform(waitId(R.id.notes_action_move_down, 5000));
         scenario.onActivity(activity ->
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE));
 

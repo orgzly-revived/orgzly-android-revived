@@ -42,6 +42,9 @@ import com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard
 import com.orgzly.android.espresso.util.EspressoUtils.scroll
 import com.orgzly.android.espresso.util.EspressoUtils.setNumber
 import com.orgzly.android.espresso.util.EspressoUtils.settingsSetTodoKeywords
+import com.orgzly.android.espresso.util.EspressoUtils.waitForView
+import com.orgzly.android.espresso.util.EspressoUtils.waitId
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import com.orgzly.android.ui.main.MainActivity
 import junit.framework.TestCase.assertTrue
 import org.hamcrest.Matchers.allOf
@@ -440,7 +443,7 @@ class NoteFragmentTest : OrgzlyTest() {
         scenario.onActivity { activity ->
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
-        SystemClock.sleep(500) // Give AVD time to complete rotation
+        onView(isRoot()).perform(waitForView(withText(R.string.set), 5000))
 
         /* Set time. */
         onView(withText(R.string.set)).perform(click())
@@ -500,8 +503,8 @@ class NoteFragmentTest : OrgzlyTest() {
         }
 
         onView(withId(R.id.scroll_view)).perform(swipeUp()) // For small screens
-        SystemClock.sleep(500)
-        
+        onView(isRoot()).perform(waitId(R.id.name, 5000))
+
         onView(allOf(withId(R.id.name), withText("prop-name-1"))).check(matches(isDisplayed()))
         onView(allOf(withId(R.id.value), withText("prop-value-1"))).check(matches(isDisplayed()))
         onView(allOf(withId(R.id.name), withText("prop-name-2"))).check(matches(isDisplayed()))

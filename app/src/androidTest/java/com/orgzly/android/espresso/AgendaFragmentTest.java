@@ -15,6 +15,8 @@ import static com.orgzly.android.espresso.util.EspressoUtils.onItemInAgenda;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNotesInAgenda;
 import static com.orgzly.android.espresso.util.EspressoUtils.recyclerViewItemCount;
 import static com.orgzly.android.espresso.util.EspressoUtils.searchForTextCloseKeyboard;
+import static com.orgzly.android.espresso.util.EspressoUtils.waitId;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
@@ -260,7 +262,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
         searchForTextCloseKeyboard(".it.done ad.7");
         onNotesInAgenda().check(matches(recyclerViewItemCount(22)));
 
-        SystemClock.sleep(500);
+        onView(isRoot()).perform(waitId(R.id.fragment_query_agenda_recycler_view, 5000));
         scenario.onActivity(activity ->
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE));
 

@@ -1,7 +1,6 @@
 package com.orgzly.android.espresso;
 
 import android.content.pm.ActivityInfo;
-import android.os.SystemClock;
 
 import androidx.test.core.app.ActivityScenario;
 
@@ -25,6 +24,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNoteInSearch;
+import static com.orgzly.android.espresso.util.EspressoUtils.waitId;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 
@@ -112,7 +113,7 @@ public class ActionModeTest extends OrgzlyTest {
 
         // TODO: Check *the same* note is selected.
 
-        SystemClock.sleep(500);
+        onView(isRoot()).perform(waitId(R.id.toggle_state, 5000));
         scenario.onActivity(activity ->
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT));
 
