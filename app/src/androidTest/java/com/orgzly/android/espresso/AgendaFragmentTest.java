@@ -15,7 +15,6 @@ import static com.orgzly.android.espresso.util.EspressoUtils.onItemInAgenda;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNotesInAgenda;
 import static com.orgzly.android.espresso.util.EspressoUtils.recyclerViewItemCount;
 import static com.orgzly.android.espresso.util.EspressoUtils.searchForTextCloseKeyboard;
-import static com.orgzly.android.espresso.util.EspressoUtils.waitForView;
 import static com.orgzly.android.espresso.util.EspressoUtils.waitId;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static org.hamcrest.Matchers.allOf;
@@ -25,6 +24,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 
 import android.content.pm.ActivityInfo;
+import android.os.SystemClock;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
@@ -250,7 +250,8 @@ public class AgendaFragmentTest extends OrgzlyTest {
                         tomorrow.getMonthOfYear(),
                         tomorrow.getDayOfMonth()));
         onView(withText(android.R.string.ok)).perform(click());
-        onView(isRoot()).perform(waitForView(withText(R.string.set), 5000));
+        // Sleep needed for dialog focus transfer — no observable view state change to wait for
+        SystemClock.sleep(500);
         onView(withText(R.string.set)).perform(click());
         onNotesInAgenda().check(matches(recyclerViewItemCount(21)));
     }

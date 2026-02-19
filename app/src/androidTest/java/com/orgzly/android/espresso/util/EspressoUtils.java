@@ -7,6 +7,7 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerActions.close;
 import static androidx.test.espresso.contrib.DrawerActions.open;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
@@ -529,6 +530,26 @@ public class EspressoUtils {
      */
     public static ViewAction waitId(final int viewId, final long millis) {
         return waitForView(withId(viewId), millis);
+    }
+
+    /**
+     * Poll from the instrumentation thread until a view is displayed.
+     * Unlike {@link #waitForView}, each iteration makes a fresh {@code onView()} call
+     * that picks the current root — safe across activity recreation (rotation) and
+     * dialog focus transitions.
+     */
+    public static void waitUntilDisplayed(final Matcher<View> viewMatcher, final long millis) {
+        final long endTime = System.currentTimeMillis() + millis;
+        while (System.currentTimeMillis() < endTime) {
+            try {
+                onView(viewMatcher).check(matches(isDisplayed()));
+                return;
+            } catch (Exception | AssertionError e) {
+                SystemClock.sleep(50);
+            }
+        }
+        // Final attempt — let the real error propagate
+        onView(viewMatcher).check(matches(isDisplayed()));
     }
 
     /**
