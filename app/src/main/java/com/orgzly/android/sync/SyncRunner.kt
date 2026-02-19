@@ -24,7 +24,7 @@ object SyncRunner {
 
     private val TAG: String = SyncRunner::class.java.name
 
-    private const val UNIQUE_WORK_NAME = "sync"
+    const val UNIQUE_WORK_NAME = "sync"
 
     @JvmStatic
     fun startAuto() {

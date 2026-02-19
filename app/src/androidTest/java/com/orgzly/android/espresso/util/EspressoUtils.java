@@ -62,7 +62,15 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.io.File;
 import java.time.Instant;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Supplier;
+
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+
+import com.orgzly.android.App;
+import com.orgzly.android.sync.SyncRunner;
 
 /*
  * Few espresso-related notes:
@@ -471,11 +479,11 @@ public class EspressoUtils {
     }
 
     /**
-     * Perform action of waiting for a specific view id. Copied from https://stackoverflow.com/a/49814995.
-     * @param viewId The id of the view to wait for.
+     * Perform action of waiting for a view matching the given matcher.
+     * @param viewMatcher The matcher for the view to wait for.
      * @param millis The timeout of until when to wait for.
      */
-    public static ViewAction waitId(final int viewId, final long millis) {
+    public static ViewAction waitForView(final Matcher<View> viewMatcher, final long millis) {
         return new ViewAction() {
             @Override
             public Matcher<View> getConstraints() {
@@ -484,7 +492,7 @@ public class EspressoUtils {
 
             @Override
             public String getDescription() {
-                return "wait for a specific view with id <" + viewId + "> during " + millis + " millis.";
+                return "wait for view matching <" + viewMatcher + "> during " + millis + " millis.";
             }
 
             @Override
@@ -492,11 +500,9 @@ public class EspressoUtils {
                 uiController.loopMainThreadUntilIdle();
                 final long startTime = System.currentTimeMillis();
                 final long endTime = startTime + millis;
-                final Matcher<View> viewMatcher = withId(viewId);
 
                 do {
                     for (View child : TreeIterables.breadthFirstViewTraversal(view)) {
-                        // found view with required ID
                         if (viewMatcher.matches(child)) {
                             return;
                         }
@@ -514,6 +520,49 @@ public class EspressoUtils {
                         .build();
             }
         };
+    }
+
+    /**
+     * Perform action of waiting for a specific view id.
+     * @param viewId The id of the view to wait for.
+     * @param millis The timeout of until when to wait for.
+     */
+    public static ViewAction waitId(final int viewId, final long millis) {
+        return waitForView(withId(viewId), millis);
+    }
+
+    /**
+     * Block the current thread until the condition is met or timeout expires.
+     * Polls every 50ms. Safe to call from the instrumentation thread.
+     */
+    public static void waitForCondition(Supplier<Boolean> condition, long millis) {
+        final long endTime = System.currentTimeMillis() + millis;
+        while (System.currentTimeMillis() < endTime) {
+            if (condition.get()) {
+                return;
+            }
+            SystemClock.sleep(50);
+        }
+        throw new AssertionError("Condition not met within " + millis + "ms");
+    }
+
+    /**
+     * Block until WorkManager's sync work reaches a terminal state.
+     * Safe to call from the instrumentation thread.
+     */
+    public static void waitForSyncToFinish(long millis) {
+        WorkManager workManager = WorkManager.getInstance(App.getAppContext());
+        waitForCondition(() -> {
+            try {
+                List<WorkInfo> workInfos = workManager
+                        .getWorkInfosForUniqueWork(SyncRunner.UNIQUE_WORK_NAME)
+                        .get();
+                return workInfos.isEmpty()
+                        || workInfos.stream().allMatch(info -> info.getState().isFinished());
+            } catch (Exception e) {
+                return false;
+            }
+        }, millis);
     }
 
     public static void grantAlarmsAndRemindersSpecialPermission() {
