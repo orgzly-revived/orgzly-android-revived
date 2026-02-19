@@ -23,6 +23,7 @@ import static com.orgzly.android.espresso.util.EspressoUtils.recyclerViewItemCou
 import static com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard;
 import static com.orgzly.android.espresso.util.EspressoUtils.settingsSetTodoKeywords;
 import static com.orgzly.android.espresso.util.EspressoUtils.sync;
+import static com.orgzly.android.espresso.util.EspressoUtils.waitForSyncToFinish;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.endsWith;
@@ -701,7 +702,7 @@ public class SyncingTest extends OrgzlyTest {
 
         // Sync by starting the service directly, to keep note selected
         SyncRunner.startSync();
-        SystemClock.sleep(1000);
+        waitForSyncToFinish(10_000);
 
         onNotesInBook().check(matches(recyclerViewItemCount(2)));
 
