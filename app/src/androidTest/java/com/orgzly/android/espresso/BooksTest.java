@@ -26,6 +26,8 @@ import static com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook;
 import static com.orgzly.android.espresso.util.EspressoUtils.onSnackbar;
 import static com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard;
 import static com.orgzly.android.espresso.util.EspressoUtils.sync;
+import static com.orgzly.android.espresso.util.EspressoUtils.waitId;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.endsWith;
@@ -125,7 +127,7 @@ public class BooksTest extends OrgzlyTest {
         onView(withId(R.id.fab)).check(matches(not(isDisplayed())));
         pressBack();
 
-        SystemClock.sleep(500);
+        onView(isRoot()).perform(waitId(R.id.fragment_books_view_flipper, 5000));
         onView(withId(R.id.fragment_books_view_flipper)).check(matches(isDisplayed()));
         onView(allOf(withText("book-2"), withId(R.id.item_book_title))).perform(click());
         onView(allOf(withText(R.string.book_does_not_exist_anymore), isDisplayed())).check(doesNotExist());
