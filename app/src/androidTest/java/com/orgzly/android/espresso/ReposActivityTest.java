@@ -15,8 +15,6 @@ import static com.orgzly.android.espresso.util.EspressoUtils.waitId;
 
 import androidx.test.core.app.ActivityScenario;
 
-import android.os.SystemClock;
-
 import com.orgzly.BuildConfig;
 import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
@@ -50,7 +48,6 @@ public class ReposActivityTest extends OrgzlyTest {
         ActivityScenario.launch(ReposActivity.class);
 
         onView(withId(R.id.activity_repos_flipper)).check(matches(isDisplayed()));
-        SystemClock.sleep(100);
         onView(isRoot()).perform(waitId(R.id.activity_repos_directory, 5000));
         onView(withId(R.id.activity_repos_directory)).perform(scroll(), click());
         onView(withId(R.id.activity_repo_directory)).perform(replaceTextCloseKeyboard(repoUri));
@@ -91,7 +88,7 @@ public class ReposActivityTest extends OrgzlyTest {
         String url = "file:" + context.getExternalCacheDir().getAbsolutePath();
         // file:/storage/emulated/0/Android/data/com.orgzly/cache
 
-        SystemClock.sleep(500);
+        onView(isRoot()).perform(waitId(R.id.activity_repos_directory, 5000));
         onView(withId(R.id.activity_repos_directory)).perform(scroll(), click());
         onView(withId(R.id.activity_repo_directory)).perform(replaceTextCloseKeyboard(url));
         onView(withId(R.id.fab)).perform(click()); // Repo done

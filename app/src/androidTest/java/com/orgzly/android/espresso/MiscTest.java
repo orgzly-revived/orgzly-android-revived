@@ -367,7 +367,7 @@ public class MiscTest extends OrgzlyTest {
         try (ActivityScenario<MainActivity> ignored = ActivityScenario.launch(MainActivity.class)) {
             settingsSetDoneKeywords("DONE OLD");
 
-            SystemClock.sleep(500);
+            onView(isRoot()).perform(waitForView(allOf(withText("book-name"), isDisplayed()), 5000));
             onView(allOf(withText("book-name"), isDisplayed())).perform(click());
 
             onNoteInBook(1).perform(click());

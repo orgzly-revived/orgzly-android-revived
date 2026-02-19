@@ -23,6 +23,7 @@ import static com.orgzly.android.espresso.util.EspressoUtils.recyclerViewItemCou
 import static com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard;
 import static com.orgzly.android.espresso.util.EspressoUtils.settingsSetTodoKeywords;
 import static com.orgzly.android.espresso.util.EspressoUtils.sync;
+import static com.orgzly.android.espresso.util.EspressoUtils.waitForCondition;
 import static com.orgzly.android.espresso.util.EspressoUtils.waitForSyncToFinish;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -31,7 +32,6 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 
 import android.net.Uri;
-import android.os.SystemClock;
 import android.widget.TextView;
 
 import androidx.test.core.app.ActivityScenario;
@@ -742,8 +742,7 @@ public class SyncingTest extends OrgzlyTest {
         onView(withText(R.string.delete)).perform(click());
         onView(withId(R.id.delete_linked_checkbox)).perform(click());
         onView(withText(R.string.delete)).perform(click());
-        SystemClock.sleep(500);
-        Assert.assertEquals(0, dbRepoBookRepository.getBooks(
-                repo.getId(), Uri.parse("mock://repo-a")).size());
+        waitForCondition(() -> dbRepoBookRepository.getBooks(
+                repo.getId(), Uri.parse("mock://repo-a")).size() == 0, 5000);
     }
 }

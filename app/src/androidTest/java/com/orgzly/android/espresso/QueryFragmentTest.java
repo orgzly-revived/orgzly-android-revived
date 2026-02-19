@@ -39,7 +39,6 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assume.assumeTrue;
 
 import android.icu.util.Calendar;
-import android.os.SystemClock;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -216,7 +215,6 @@ public class QueryFragmentTest extends OrgzlyTest {
         onView(withId(R.id.date_picker_button)).perform(click());
         onView(withClassName(equalTo(DatePicker.class.getName()))).perform(setDate(2014, 4, 1));
         onView(withText(android.R.string.ok)).perform(click());
-        SystemClock.sleep(500);
         onView(isRoot()).perform(waitId(R.id.time_picker_button, 5000));
         onView(withId(R.id.time_picker_button)).perform(scroll(), click());
         onView(withClassName(equalTo(TimePicker.class.getName()))).perform(setTime(9, 15));
@@ -493,7 +491,7 @@ public class QueryFragmentTest extends OrgzlyTest {
         // Click on the saved search
         onView(withText("My Search")).perform(click());
 
-        SystemClock.sleep(200);
+        onView(isRoot()).perform(waitId(R.id.fragment_query_search_recycler_view, 5000));
 
         // Verify SearchFragment is displayed
         onView(withId(R.id.fragment_query_search_recycler_view)).check(matches(isDisplayed()));
