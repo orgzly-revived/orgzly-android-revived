@@ -325,11 +325,12 @@ class CalendarManager(
     private fun adjustEventTimesForTimezone(eventStartTime: Long, eventEndTime: Long, isAllDay: Boolean): Triple<Long, Long, String> {
         return if (isAllDay) {
             val localTimeZone = TimeZone.getDefault()
-            
-            // Convert local timestamp to UTC for all-day events
-            val startTimeInUtc = eventStartTime - localTimeZone.getOffset(eventStartTime)
-            val endTimeInUtc = eventEndTime - localTimeZone.getOffset(eventEndTime)
-            
+
+            // Org all-day timestamps are UTC; Android expects local midnight in UTC.
+            // Add the local offset so the event appears on the correct day.
+            val startTimeInUtc = eventStartTime + localTimeZone.getOffset(eventStartTime)
+            val endTimeInUtc = eventEndTime + localTimeZone.getOffset(eventEndTime)
+
             Triple(startTimeInUtc, endTimeInUtc, "UTC")
         } else {
             Triple(eventStartTime, eventEndTime, TimeZone.getDefault().id)
