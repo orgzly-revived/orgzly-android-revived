@@ -44,9 +44,9 @@ import com.orgzly.android.usecase.NoteUpdateScheduledTimeTest
 import com.orgzly.android.util.AgendaUtilsTest
 import com.orgzly.android.util.EncodingDetectTest
 import com.orgzly.android.util.MiscUtilsTest
-import com.orgzly.android.util.UriUtilsTest
 import com.orgzly.android.util.OrgFormatterSpeedTest
 import com.orgzly.android.util.OrgFormatterStyleTextTest
+import com.orgzly.android.util.UriUtilsTest
 import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
@@ -103,10 +103,10 @@ import org.junit.runners.Suite
         MiscUtilsTest::class,
         OrgFormatterSpeedTest::class,
         OrgFormatterStyleTextTest::class,
-        UriUtilsTest::class,
         ContentCheckboxesTitleUpdateViaUpdateNoteTest::class,
         ContentCheckboxesTitleUpdateViaUpdateNoteContentTest::class,
         NewNoteContentCheckboxesTitleUpdateTest::class,
-        StateChangeParentTitleUpdateTest::class
+        StateChangeParentTitleUpdateTest::class,
+        UriUtilsTest::class
 )
 class AllTestSuite
