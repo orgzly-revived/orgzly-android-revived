@@ -32,6 +32,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 
 import androidx.core.content.pm.PackageInfoCompat;
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.IdlingResource;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 
@@ -76,6 +78,15 @@ public class OrgzlyTest {
 
     @Before
     public void setUp() throws Exception {
+        // Espresso contrib's DrawerActions registers IdlingDrawerListener without
+        // try-finally.  If a drawer operation times out, the listener stays registered
+        // and blocks every subsequent onView() call.  Clean up any stale ones here.
+        for (IdlingResource r : IdlingRegistry.getInstance().getResources()) {
+            if (r.getName().startsWith("IdlingDrawer")) {
+                IdlingRegistry.getInstance().unregister(r);
+            }
+        }
+
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         database = OrgzlyDatabase.forFile(context, OrgzlyDatabase.NAME_FOR_TESTS);
