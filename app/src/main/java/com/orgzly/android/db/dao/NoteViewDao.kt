@@ -82,7 +82,10 @@ abstract class NoteViewDao {
 
             notes.*,
 
-            group_concat(t_notes_with_inherited_tags.tags, ' ') AS inherited_tags,
+            -- MAX() is required by SQLite's GROUP BY syntax. Since each note belongs
+            -- to exactly one book, all grouped rows have identical filetags values,
+            -- so MAX() effectively just returns that single value.
+            TRIM(COALESCE(MAX(t_books.filetags) || ' ', '') || COALESCE(group_concat(t_notes_with_inherited_tags.tags, ' '), '')) AS inherited_tags,
 
             t_scheduled_range.string AS scheduled_range_string,
             t_scheduled_timestamps_start.string AS scheduled_time_string,
@@ -142,7 +145,10 @@ abstract class NoteViewDao {
 
             notes.*,
 
-            group_concat(t_notes_with_inherited_tags.tags, ' ') AS inherited_tags,
+            -- MAX() is required by SQLite's GROUP BY syntax. Since each note belongs
+            -- to exactly one book, all grouped rows have identical filetags values,
+            -- so MAX() effectively just returns that single value.
+            TRIM(COALESCE(MAX(t_books.filetags) || ' ', '') || COALESCE(group_concat(t_notes_with_inherited_tags.tags, ' '), '')) AS inherited_tags,
 
             t_scheduled_range.string AS scheduled_range_string,
             t_scheduled_timestamps_start.is_active AS scheduled_is_active,

@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.BookAction
+import com.orgzly.android.db.entity.Tags
 
 
 @Dao
@@ -29,8 +30,8 @@ abstract class BookDao : BaseDao<Book> {
     @Update
     abstract fun updateBooks(vararg book: Book): Int
 
-    @Query("UPDATE books SET preface = :preface, title = :title WHERE id = :id")
-    abstract fun updatePreface(id: Long, preface: String?, title: String?)
+    @Query("UPDATE books SET preface = :preface, title = :title, filetags = :filetags WHERE id = :id")
+    abstract fun updatePreface(id: Long, preface: String?, title: String?, filetags: Tags?)
 
     @Query("UPDATE books SET last_action_type = :type, last_action_message = :message, last_action_timestamp = :timestamp WHERE id = :id")
     abstract fun updateLastAction(id: Long, type: BookAction.Type, message: String, timestamp: Long)

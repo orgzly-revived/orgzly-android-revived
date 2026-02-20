@@ -64,7 +64,7 @@ data class Note(
 
         val title: String = "",
 
-        val tags: String? = null,
+        val tags: Tags? = null,
 
         val state: String? = null,
 
@@ -95,29 +95,11 @@ data class Note(
         return content != null && !content.isEmpty()
     }
 
-    fun hasTags(): Boolean {
-        return tags != null && !tags.isEmpty()
-    }
-
-    fun getTagsList(): List<String> {
-        return dbDeSerializeTags(tags)
-    }
-
     fun toJson(): String {
         val note = Note(0, position = NotePosition(0))
         val gson = Gson()
         return gson.toJson(note)
     }
 
-    companion object {
-        @JvmStatic
-        fun dbSerializeTags(tags: List<String>): String {
-            return TextUtils.join(" ", tags)
-        }
-
-        @JvmStatic
-        fun dbDeSerializeTags(str: String?): List<String> {
-            return str?.split(" +".toRegex())?.filter { it.isNotBlank() } ?: emptyList()
-        }
-    }
+    companion object
 }

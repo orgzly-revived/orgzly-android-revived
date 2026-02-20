@@ -11,12 +11,13 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import com.orgzly.android.db.entity.Note
 import com.orgzly.android.db.entity.NoteView
+import com.orgzly.android.db.entity.isNotEmpty
+import com.orgzly.android.db.entity.toList
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.util.OrgFormatter
 
 class TitleGenerator(
     private val context: Context,
-    /** Can be in book or search results. */
     private val inBook: Boolean,
     private val attributes: TitleAttributes
 ) {
@@ -32,19 +33,19 @@ class TitleGenerator(
 
         /* Priority. */
         if (note.priority != null) {
-            if (builder.length > 0) {
+            if (builder.isNotEmpty()) {
                 builder.append(TITLE_SEPARATOR)
             }
             builder.append(generatePriority(note))
         }
 
         /* Bold everything up until now. */
-        if (builder.length > 0) {
+        if (builder.isNotEmpty()) {
             builder.setSpan(StyleSpan(Typeface.BOLD), 0, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
         /* Space before title, unless there's nothing added. */
-        if (builder.length > 0) {
+        if (builder.isNotEmpty()) {
             builder.append(TITLE_SEPARATOR)
         }
 
@@ -59,14 +60,14 @@ class TitleGenerator(
         var hasPostTitleText = false
 
         /* Tags. */
-        if (note.hasTags()) {
-            builder.append(TITLE_SEPARATOR).append(generateTags(note.getTagsList()))
+        if (note.tags.isNotEmpty()) {
+            builder.append(TITLE_SEPARATOR).append(generateTags(note.tags.toList()))
             hasPostTitleText = true
         }
 
         /* Inherited tags in search results. */
         if (!inBook && noteView.hasInheritedTags() && AppPreferences.inheritedTagsInSearchResults(context)) {
-            if (note.hasTags()) {
+            if (note.tags.isNotEmpty()) {
                 builder.append(INHERITED_TAGS_SEPARATOR)
             } else {
                 builder.append(TITLE_SEPARATOR)

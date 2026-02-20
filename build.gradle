@@ -25,7 +25,7 @@ buildscript {
     versions.android_constraint_layout = '2.2.1'
     versions.android_preference = '1.2.1'
     versions.android_material = '1.13.0'
-    versions.android_swiperefreshlayout = '1.1.0'
+    versions.android_swiperefreshlayout = '1.2.0'
 
     versions.android_room = '2.7.2'
 
@@ -52,7 +52,7 @@ buildscript {
 
     versions.compose_emily_units = '2.0.3'
 
-    versions.org_java = '1.3.5'
+    versions.org_java = '1.3.6'
 
     versions.loremipsum = '1.0'
 
