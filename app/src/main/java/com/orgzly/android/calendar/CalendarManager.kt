@@ -17,6 +17,7 @@ import com.orgzly.android.util.LogUtils
 import com.orgzly.org.datetime.OrgRange
 import com.orgzly.org.datetime.OrgRepeater
 import com.orgzly.org.datetime.OrgInterval
+import org.joda.time.Period
 import java.util.TimeZone
 
 data class CalendarEventTime(
@@ -302,7 +303,6 @@ class CalendarManager(
 
         return ContentValues().apply {
             put(CalendarContract.Events.DTSTART, adjustedStartTime)
-            put(CalendarContract.Events.DTEND, adjustedEndTime)
             put(CalendarContract.Events.TITLE, note.note.title)
             put(CalendarContract.Events.DESCRIPTION, description)
             put(CalendarContract.Events.CALENDAR_ID, calendarId)
@@ -310,8 +310,21 @@ class CalendarManager(
             put(CalendarContract.Events.ALL_DAY, if (eventTime.isAllDay) 1 else 0)
             put(CalendarContract.Events.SYNC_DATA1, note.note.id.toString())
 
+            // DURATION is used for recurring events while DTEND is used for non-recurring events.
+            // It is probably fine to have both DURATION and DTEND, remove just to be safe and signal intent.
             if (eventTime.repeater != null) {
+                putNull(CalendarContract.Events.DTEND)
+
                 put(CalendarContract.Events.RRULE, makeRepeaterString(eventTime.repeater))
+                if (!eventTime.isAllDay) {
+                    put(CalendarContract.Events.DURATION, makeDurationString(adjustedStartTime, adjustedEndTime))
+                }
+            } else {
+                // Remove RRULE, otherwise events which were converted from non-recurring will remain recurring.
+                putNull(CalendarContract.Events.RRULE)
+                putNull(CalendarContract.Events.DURATION)
+
+                put(CalendarContract.Events.DTEND, adjustedEndTime)
             }
         }
     }
@@ -353,5 +366,10 @@ class CalendarManager(
             OrgInterval.Unit.YEAR -> "YEARLY"
         }
         return "FREQ=$freq;INTERVAL=${repeater.getValue()}"
+    }
+
+    private fun makeDurationString(start: Long, end: Long): String {
+        val period = Period(start, end)
+        return "P${period.getHours()}H${period.getMinutes()}M${period.getSeconds()}S"
     }
 }
