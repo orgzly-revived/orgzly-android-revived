@@ -45,6 +45,13 @@ buildscript {
 
     versions.android_test_uiautomator = '2.3.0'
 
+    // Last version to support API 21 by default
+    versions.compose = '2025.11.01'
+
+    versions.compose_activity = '1.11.0'
+
+    versions.compose_emily_units = '2.0.3'
+
     versions.org_java = '1.3.6'
 
     versions.loremipsum = '1.0'
@@ -85,6 +92,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:$versions.android_gradle_plugin"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+        classpath "org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin:$versions.kotlin"
     }
 }
 

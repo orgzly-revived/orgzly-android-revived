@@ -760,4 +760,6 @@
     <string name="create_org_links_from_shared_links">Create org links from shared links</string>
     <string name="book_names_cannot_contain">Book names cannot contain \'../\'</string>
     <string name="is_active_label">Active</string>
+
+    <string name="content_description_back_button">Navigate back</string>
 </resources>
