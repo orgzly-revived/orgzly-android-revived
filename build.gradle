@@ -48,7 +48,7 @@ buildscript {
     // Last version to support API 21 by default
     versions.compose = '2025.11.01'
 
-    versions.compose_activity = '1.11.0'
+    versions.compose_activity = '1.12.2'
 
     versions.compose_emily_units = '2.0.3'
 
