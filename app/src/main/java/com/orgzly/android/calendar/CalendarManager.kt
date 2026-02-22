@@ -326,9 +326,9 @@ class CalendarManager(
         return if (isAllDay) {
             val localTimeZone = TimeZone.getDefault()
             
-            // Convert local timestamp to UTC for all-day events
-            val startTimeInUtc = eventStartTime - localTimeZone.getOffset(eventStartTime)
-            val endTimeInUtc = eventEndTime - localTimeZone.getOffset(eventEndTime)
+            // Convert local timestamp to UTC for all-day events (Add the offset instead of substracting it)
+            val startTimeInUtc = eventStartTime + localTimeZone.getOffset(eventStartTime)
+            val endTimeInUtc = eventEndTime + localTimeZone.getOffset(eventEndTime)
             
             Triple(startTimeInUtc, endTimeInUtc, "UTC")
         } else {
