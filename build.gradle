@@ -46,7 +46,7 @@ buildscript {
     versions.android_test_uiautomator = '2.3.0'
 
     // Last version to support API 21 by default
-    versions.compose = '2025.11.01'
+    versions.compose = '2025.12.01'
 
     versions.compose_activity = '1.11.0'
 
