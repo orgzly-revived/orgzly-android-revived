@@ -9,8 +9,11 @@ import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
 import com.orgzly.android.ui.main.MainActivity;
 
+import com.orgzly.android.RetryTestRule;
+
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -29,6 +32,9 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 
 public class ActionModeTest extends OrgzlyTest {
+    @Rule
+    public RetryTestRule mRetryTestRule = new RetryTestRule();
+
     private ActivityScenario<MainActivity> scenario;
 
     @Before
@@ -92,6 +98,7 @@ public class ActionModeTest extends OrgzlyTest {
         scenario.onActivity(activity ->
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE));
 
+        onView(isRoot()).perform(waitId(R.id.toggle_state, 5000));
         onView(withId(R.id.toggle_state)).check(matches(isDisplayed()));
 
         // TODO: Check *the same* note is selected.
@@ -116,6 +123,7 @@ public class ActionModeTest extends OrgzlyTest {
         scenario.onActivity(activity ->
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT));
 
+        onView(isRoot()).perform(waitId(R.id.toggle_state, 5000));
         onView(withId(R.id.toggle_state)).check(matches(isDisplayed()));
     }
 
