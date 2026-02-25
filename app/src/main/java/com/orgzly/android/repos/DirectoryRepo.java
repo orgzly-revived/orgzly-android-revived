@@ -128,6 +128,9 @@ public class DirectoryRepo implements SyncRepo {
     public List<NoteAttachmentData> listFilesInPath(String pathInRepo) {
         File path = new File(mDirectory, pathInRepo);
         File[] files = path.listFiles();
+        if (files == null) {
+            return new ArrayList<>();
+        }
         ArrayList<NoteAttachmentData> list = new ArrayList<>(files.length);
         for (File file : files) {
             list.add(new NoteAttachmentData(Uri.fromFile(file), file.getName(), false, false, null));

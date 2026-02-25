@@ -17,10 +17,15 @@ import com.orgzly.R
 import com.orgzly.android.AppIntent
 import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.RetryTestRule
+import com.orgzly.android.db.entity.Repo
+import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.espresso.util.EspressoUtils.*
 import com.orgzly.android.espresso.util.EspressoUtils.OrgzlyCustomFailureHandler
 import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.repos.RepoType
+import com.orgzly.android.ui.main.MainActivity
 import com.orgzly.android.ui.share.ShareActivity
+import com.orgzly.android.util.MiscUtils
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.startsWith
@@ -81,6 +86,20 @@ class ShareActivityTest : OrgzlyTest() {
 
     private fun setNoteTitle(title: String = "Dummy title") {
         onView(withId(R.id.title_edit)).perform(*replaceTextCloseKeyboard(title))
+    }
+
+    private fun waitForLastNote(bookName: String, timeoutMs: Long = 5000): NoteView {
+        val deadline = SystemClock.uptimeMillis() + timeoutMs
+        var lastNote: NoteView? = null
+        while (SystemClock.uptimeMillis() < deadline) {
+            val notes = dataRepository.getNotes(bookName)
+            if (notes.isNotEmpty()) {
+                lastNote = notes.last()
+                break
+            }
+            SystemClock.sleep(100)
+        }
+        return requireNotNull(lastNote) { "No notes created in $bookName within ${timeoutMs}ms" }
     }
 
     @Test
@@ -355,6 +374,7 @@ class ShareActivityTest : OrgzlyTest() {
         AppPreferences.attachMethod(context, ShareActivity.ATTACH_METHOD_COPY_DIR);
 
         val file = File(context.cacheDir, "test.pdf")
+        MiscUtils.writeStringToFile("pdf data", file)
         val uri = DocumentFile.fromFile(file).uri
 
         val scenario = startActivityWithIntent(
@@ -443,5 +463,67 @@ class ShareActivityTest : OrgzlyTest() {
                 queryString = "b.foo")
 
         onView(withId(R.id.location_button)).check(matches(withText("foo")))
+    }
+
+    @Test
+    fun testImageShare_OrgAttachMethod() {
+        AppPreferences.attachMethod(context, ShareActivity.ATTACH_METHOD_COPY_ID);
+        val dataDir = File(context.cacheDir, "data-share")
+        testUtils.setupRepo(RepoType.DIRECTORY, dataDir.toURI().toString())
+
+        val file = File(context.cacheDir, "shared_image.png")
+        MiscUtils.writeStringToFile("image data", file)
+        val uri = DocumentFile.fromFile(file).uri
+
+        val scenario = startActivityWithIntent(
+            action = Intent.ACTION_SEND,
+            type = "image/png",
+            extraStreamUri = uri.toString())
+
+        onView(withId(R.id.done)).perform(click())
+
+        // Verify ID property added to the last created note
+        val bookView = dataRepository.getBooks()[0]
+        val lastNoteView = waitForLastNote(bookView.book.name)
+        val lastNote = dataRepository.getNote(lastNoteView.note.id)!!
+        val payload = dataRepository.getNotePayload(lastNoteView.note.id)!!
+        assertTrue(payload.properties.containsKey("ID"))
+        
+        // Verify file in repo
+        var filesFound = false
+        for (i in 1..10) {
+            val files = dataRepository.listFiles(bookView.book.id, payload)
+            if (files.isNotEmpty()) {
+                filesFound = true
+                break
+            }
+            SystemClock.sleep(500)
+        }
+        assertTrue(filesFound)
+    }
+
+    @Test
+    fun testFileShare_RotationPersistence() {
+        val file = File(context.cacheDir, "rotate.pdf")
+        MiscUtils.writeStringToFile("content", file)
+        val uri = DocumentFile.fromFile(file).uri
+
+        val scenario = startActivityWithIntent(
+            action = Intent.ACTION_SEND,
+            type = "application/pdf",
+            extraStreamUri = uri.toString())
+
+        scenario.onActivity { activity ->
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+        onView(allOf(withText("rotate.pdf"), isDisplayed())).check(matches(isDisplayed()))
+
+        scenario.onActivity { activity ->
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+        onView(isRoot()).perform(waitId(R.id.content_view, 5000))
+
+        onView(withId(R.id.content_view)).perform(scroll())
+        onView(allOf(withText("rotate.pdf"), isDisplayed())).check(matches(isDisplayed()))
     }
 }

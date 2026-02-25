@@ -1229,8 +1229,12 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
                     val uri = data.data
                     if (uri != null) {
                         if (pendingAttachmentType == NoteAttachmentData.Type.LINK) {
-                            val takeFlags: Int = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                            context?.contentResolver?.takePersistableUriPermission(uri, takeFlags)
+                            try {
+                                val takeFlags: Int = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                                context?.contentResolver?.takePersistableUriPermission(uri, takeFlags)
+                            } catch (e: SecurityException) {
+                                Log.w(TAG, "Failed to take persistable URI permission for $uri", e)
+                            }
                         }
 
                         if (pendingAttachmentType != null) {

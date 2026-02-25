@@ -9,9 +9,9 @@ class NoteUpdate(val bookId: Long, val noteId: Long, val notePayload: NotePayloa
         val note = dataRepository.updateNote(noteId, notePayload)
                 ?: throw IllegalStateException("Note not found")
 
-        // TODO: Delete attachments if they need to be deleted.
+        // TODO: Handle attachment deletions during note updates.
         notePayload.attachments.forEach {
-            if (it.isNew) {
+            if (it.isNew && !it.isDeleted) {
                 dataRepository.storeAttachment(bookId, notePayload, it)
             }
         }

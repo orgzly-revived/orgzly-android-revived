@@ -101,9 +101,10 @@ class NoteViewModel(
                 }
             }
 
-            attachments.postValue(loadAttachments(notePayload))
-            notePayload?.attachments = attachments.value!!
-            maybeUpdatePayloadForAttachment()
+            val loadedAttachments = loadAttachments(notePayload)
+            notePayload?.attachments = loadedAttachments
+            maybeUpdatePayloadForAttachment(null, loadedAttachments)
+            attachments.postValue(loadedAttachments)
 
             bookView.postValue(book)
 
@@ -210,16 +211,14 @@ class NoteViewModel(
         notePayload?.properties!!.put("ID", idStr)
     }
 
-    /**
-     * Adds one attachment. This may update payload (ID property).
-     */
     fun addAttachment(attachmentUri: Uri, type: NoteAttachmentData.Type? = null) {
         val data = createNoteAttachmentData(App.getAppContext(), attachmentUri, true, type)
-        attachments.value = attachments.value!! + data
-        maybeUpdatePayloadForAttachment(type)
+        val newAttachments = attachments.value!! + data
+        maybeUpdatePayloadForAttachment(type, newAttachments)
+        attachments.value = newAttachments
     }
 
-    private fun maybeUpdatePayloadForAttachment(type: NoteAttachmentData.Type? = null) {
+    private fun maybeUpdatePayloadForAttachment(type: NoteAttachmentData.Type? = null, currentAttachments: List<NoteAttachmentData>) {
         // Auto generate ID property if it has attachment.
         val shouldAddId = if (type != null) {
             type == NoteAttachmentData.Type.COPY_TO_ID
@@ -228,7 +227,7 @@ class NoteViewModel(
             AppPreferences.attachMethod(App.getAppContext()) == ShareActivity.ATTACH_METHOD_COPY_ID
         }
 
-        if (attachments.value!!.isNotEmpty() && shouldAddId) {
+        if (currentAttachments.isNotEmpty() && shouldAddId) {
             updatePayloadCreateIdProperty()
         }
     }
