@@ -2,6 +2,8 @@ package com.orgzly.android.db.dao
 
 import androidx.room.Dao
 import androidx.room.Query
+import com.orgzly.android.App
+import com.orgzly.android.prefs.AppPreferences
 
 @Dao
 interface ReminderTimeDao {
@@ -13,7 +15,8 @@ interface ReminderTimeDao {
             var title: String,
             var tags: String?,
             var timeType: Int,
-            var orgTimestampString: String)
+            var orgTimestampString: String,
+            var orgPreAlerts: String?)
 
     @Query("""
         SELECT
@@ -24,11 +27,13 @@ interface ReminderTimeDao {
         n.title as title,
         n.tags as tags,
         $SCHEDULED_TIME as timeType,
-        t.string as orgTimestampString
+        t.string as orgTimestampString,
+        p.value as orgPreAlerts
         FROM org_ranges r
         JOIN org_timestamps t ON (r.start_timestamp_id = t.id )
         JOIN notes n ON (r.id = n.scheduled_range_id)
         JOIN books b ON (b.id = n.book_id)
+        LEFT JOIN note_properties p ON (p.note_id = n.id AND p.name = :preNotifyProperty)
         WHERE t.is_active = 1
 
         UNION
@@ -41,11 +46,13 @@ interface ReminderTimeDao {
         n.title as title,
         n.tags as tags,
         $DEADLINE_TIME as timeType,
-        t.string as orgTimestampString
+        t.string as orgTimestampString,
+        p.value as orgPreAlerts
         FROM org_ranges r
         JOIN org_timestamps t ON (r.start_timestamp_id = t.id )
         JOIN notes n ON (r.id = n.deadline_range_id)
         JOIN books b ON (b.id = n.book_id)
+        LEFT JOIN note_properties p ON (p.note_id = n.id AND p.name = :preNotifyProperty)
         WHERE t.is_active = 1
 
         UNION
@@ -58,15 +65,21 @@ interface ReminderTimeDao {
         n.title as title,
         n.tags as tags,
         $EVENT_TIME as timeType,
-        t.string as orgTimestampString
+        t.string as orgTimestampString,
+        p.value as orgPreAlerts
         FROM note_events e
         JOIN org_ranges r ON (r.id = e.org_range_id)
         JOIN org_timestamps t ON (t.id = r.start_timestamp_id)
         JOIN notes n ON (n.id = e.note_id)
         JOIN books b ON (b.id = n.book_id)
-
+        LEFT JOIN note_properties p ON (p.note_id = n.id AND p.name = :preNotifyProperty)
     """)
-    fun getAll(): List<NoteTime>
+    fun getAll(preNotifyProperty: String): List<NoteTime>
+
+    fun getAll(): List<NoteTime> {
+        return getAll(AppPreferences.preNotifyProperty(App.getAppContext()));
+    }
+
 
     companion object {
         const val SCHEDULED_TIME = 1
