@@ -72,10 +72,10 @@ data class NoteView(
         val bookName: String
 ) {
     fun hasInheritedTags(): Boolean {
-        return inheritedTags != null
+        return !inheritedTags.isNullOrBlank()
     }
 
     fun getInheritedTagsList(): List<String> {
-        return Note.dbDeSerializeTags(inheritedTags)
+        return inheritedTags?.let { Tags.fromString(it).tags } ?: emptyList()
     }
 }

@@ -22,6 +22,24 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.18.0"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Allow selecting a saved search for calendar export." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix calendar sync bugs." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Update translations." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.17.0"
             tools:ignore="HardcodedText"
             android:autoLink="web" />

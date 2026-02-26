@@ -20,7 +20,7 @@ import java.util.Calendar
  * Migrated from instrumented tests to run on JVM with Robolectric.
  */
 @RunWith(ParameterizedRobolectricTestRunner::class)
-@Config(sdk = [35])
+@Config(sdk = [36])
 class QueryTest(private val param: Parameter) {
 
     private lateinit var context: Context

@@ -11,6 +11,7 @@ import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.db.entity.Note
 import com.orgzly.android.db.entity.NoteView
+import com.orgzly.android.db.entity.toList
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.AttachmentSpanLoader
 import com.orgzly.android.ui.TimeType
@@ -187,7 +188,7 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
     /** Set alpha for done and archived items. */
     private fun setupAlpha(holder: NoteItemViewHolder, noteView: NoteView) {
         val state = noteView.note.state
-        val tags = noteView.note.getTagsList()
+        val tags = noteView.note.tags.toList()
         val inheritedTags = noteView.getInheritedTagsList()
 
         val isDone = state != null && AppPreferences.doneKeywordsSet(context).contains(state)

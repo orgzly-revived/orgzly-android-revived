@@ -1,23 +1,23 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 apply plugin: 'kotlin-parcelize'
 
 android {
     namespace = 'com.orgzly'
 
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 35
-        versionCode 274
-        versionName "1.17.0"
+        targetSdkVersion 36
+        versionCode 276
+        versionName "1.18.0"
         applicationId = "com.orgzlyrevived"
         resValue "string", "application_id", "com.orgzlyrevived"
 
         testInstrumentationRunner "com.orgzly.android.OrgzlyTestRunner"
-        // testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled = true
 
@@ -38,6 +38,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        compose = true
     }
 
     testOptions {
@@ -145,6 +146,15 @@ dependencies {
     implementation "androidx.preference:preference-ktx:$versions.android_preference"
     implementation "com.google.android.material:material:$versions.android_material"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$versions.android_swiperefreshlayout"
+
+    // Compose
+    def composeBom = platform("androidx.compose:compose-bom:$versions.compose")
+    implementation composeBom
+    androidTestImplementation composeBom
+    implementation 'androidx.compose.material3:material3'
+    implementation "androidx.activity:activity-compose:$versions.compose_activity"
+    implementation 'androidx.compose.runtime:runtime-livedata'
+    implementation "cl.emilym.compose:units:$versions.compose_emily_units"
 
     // Room
     implementation "androidx.room:room-runtime:$versions.android_room"

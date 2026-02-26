@@ -79,6 +79,7 @@
                 <data android:scheme="https" />
                 <data android:host="orgzlyrevived.com" />
                 <data android:pathPrefix="/note/" />
+                <data android:autoVerify="true" />
             </intent-filter>
         </activity>
 

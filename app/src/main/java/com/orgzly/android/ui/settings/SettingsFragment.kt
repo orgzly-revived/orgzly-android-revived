@@ -12,9 +12,11 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.orgzly.BuildConfig
 import com.orgzly.R
+import com.orgzly.android.App
 import com.orgzly.android.AppIntent
 import com.orgzly.android.calendar.CalendarWorker
 import com.orgzly.android.SharingShortcutsManager
+import com.orgzly.android.data.DataRepository
 import com.orgzly.android.git.SshKey
 import com.orgzly.android.prefs.*
 import com.orgzly.android.reminders.RemindersScheduler
@@ -33,6 +35,7 @@ import com.orgzly.android.widgets.ListWidgetProvider
 import com.orgzly.android.ui.settings.exporting.SettingsExportFragment
 import com.orgzly.android.ui.settings.importing.SettingsImportFragment
 import androidx.core.graphics.toColorInt
+import javax.inject.Inject
 
 /**
  * Displays settings.
@@ -40,8 +43,12 @@ import androidx.core.graphics.toColorInt
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
     private var listener: Listener? = null
 
+    @Inject
+    lateinit var dataRepository: DataRepository
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        App.appComponent.inject(this)
 
         listener = activity as Listener
     }
@@ -147,6 +154,32 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         /* Update preferences which depend on multiple others. */
         updateRemindersScreen()
         updateWidgetScreen()
+        setupCalendarSyncSearchPreference()
+    }
+
+    private fun setupCalendarSyncSearchPreference() {
+        val pref = preference(R.string.pref_key_calendar_sync_search) as? ListPreference ?: return
+
+        val entries = ArrayList<CharSequence>()
+        val entryValues = ArrayList<CharSequence>()
+
+        // Default option: all notes with scheduled/deadline
+        entries.add(getString(R.string.calendar_sync_search_all_notes))
+        entryValues.add("-1")
+
+        // Add saved searches
+        try {
+            val searches = dataRepository.getSavedSearches()
+            for (search in searches) {
+                entries.add(search.name)
+                entryValues.add(search.id.toString())
+            }
+        } catch (e: Exception) {
+            LogUtils.d(TAG, "Failed to load saved searches")
+        }
+
+        pref.entries = entries.toTypedArray()
+        pref.entryValues = entryValues.toTypedArray()
     }
 
     private fun setupVersionPreference() {

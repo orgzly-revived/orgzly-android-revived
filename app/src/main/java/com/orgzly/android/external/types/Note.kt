@@ -2,6 +2,7 @@ package com.orgzly.android.external.types
 
 import com.orgzly.android.db.entity.NoteProperty
 import com.orgzly.android.db.entity.NoteView
+import com.orgzly.android.db.entity.toList
 
 data class Note(
         val id: Long,
@@ -25,9 +26,7 @@ data class Note(
                 note.id,
                 note.title,
                 note.content,
-                note.tags?.split(" +".toRegex())
-                        ?.filter { it.isNotEmpty() }
-                        ?: emptyList(),
+                note.tags.toList(),
                 view.getInheritedTagsList()
                         .filter { it.isNotEmpty() },
                 view.bookName,

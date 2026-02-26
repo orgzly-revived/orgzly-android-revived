@@ -484,6 +484,12 @@ public class AppPreferences {
         getDefaultSharedPreferences(context).edit().putString(key, value).apply();
     }
 
+    public static long calendarSyncSearchId(Context context) {
+        return Long.parseLong(getDefaultSharedPreferences(context).getString(
+                context.getResources().getString(R.string.pref_key_calendar_sync_search),
+                context.getResources().getString(R.string.pref_default_calendar_sync_search)));
+    }
+
     public static boolean ignoreSystemLocale(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(
                 context.getResources().getString(R.string.pref_key_ignore_system_locale),

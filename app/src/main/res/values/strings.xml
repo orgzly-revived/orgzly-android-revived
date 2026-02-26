@@ -464,6 +464,7 @@
     <string name="failed_importing_book">Failed importing notebook: %s</string>
 
     <string name="edit_book_preface">Edit preface</string>
+    <string name="file_tags">Tags</string>
     <string name="book_preface_hint">Text displayed before the first note</string>
 
     <string name="keep_screen_on_title">Enable option to keep the screen on</string>
@@ -774,4 +775,6 @@
     <string name="create_org_links_from_shared_links">Create org links from shared links</string>
     <string name="book_names_cannot_contain">Book names cannot contain \'../\'</string>
     <string name="is_active_label">Active</string>
+
+    <string name="content_description_back_button">Navigate back</string>
 </resources>
