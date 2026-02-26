@@ -607,6 +607,14 @@
     <string name="file_absolute_root">Root for absolute links (e.g. file:/readme.txt)</string>
     <string name="file_relative_root">Root for relative links (e.g. file:readme.txt)</string>
 
+    <string name="pref_category_attachments">Attachments</string>
+    <string name="attachments">Org Attachments</string>
+    <string name="attachment_add">Attach file</string>
+    <string name="attachment_link">Link file</string>
+    <string name="attachment_copy">Copy file</string>
+    <string name="attachment_org">Org-attach file</string>
+    <string name="attachments_none">No attachments</string>
+
     <string name="argument_used">%s used</string>
     <string name="argument_detected">%s detected</string>
     <string name="argument_selected">%s selected</string>
@@ -669,6 +677,13 @@
 
     <string name="prepend">Prepend</string>
     <string name="insert_new_note_at_beginning">Insert new note at beginning</string>
+
+    <string name="attach_method">Default method to add attachments</string>
+    <string name="attach_method_link">Link</string>
+    <string name="attach_method_copy_dir">Copy to attachment directory root</string>
+    <string name="attach_method_copy_id">Org-attach: Copy to ID property based directory under attachment directory</string>
+
+    <string name="attach_dir_default_path">Attachment directory, a relative path under the repository</string>
 
     <string name="add_id_property">Add ID property</string>
     <string name="populate_the_id_property">Populate the \"ID\" property in all new notes</string>

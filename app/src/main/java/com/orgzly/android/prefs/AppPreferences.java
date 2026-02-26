@@ -833,12 +833,27 @@ public class AppPreferences {
                 context.getResources().getString(R.string.pref_default_file_absolute_root));
     }
 
-    /** Root for file: links */
-    public static String fileRelativeRoot(Context context) {
+    public static String attachMethod(Context context) {
         return getDefaultSharedPreferences(context).getString(
-                context.getResources().getString(R.string.pref_key_file_relative_root),
-                LocalStorage.storage(context)
-        );
+                context.getResources().getString(R.string.pref_key_attach_method),
+                context.getResources().getString(R.string.pref_default_attach_method));
+    }
+
+    public static void attachMethod(Context context, String value) {
+        String key = context.getResources().getString(R.string.pref_key_attach_method);
+        getDefaultSharedPreferences(context).edit().putString(key, value).apply();
+    }
+
+    /**
+     * When attachMethod is `link`, this pref is not used for saving attachment.
+     * When attachMethod is `copy_dir`, this pref is the target for saving attachment.
+     * When attachMethod is `copy_id`, this pref is used as a prefix for saving attachment, used
+     * together with ID subdirectory.
+     */
+    public static String attachDirDefaultPath(Context context) {
+        return getDefaultSharedPreferences(context).getString(
+                context.getResources().getString(R.string.pref_key_attach_dir_default_path),
+                context.getResources().getString(R.string.pref_default_attach_dir_default_path));
     }
 
     /*
@@ -1052,7 +1067,7 @@ public class AppPreferences {
     public static void gitIsEnabled(Context context, Boolean value) {
         getDefaultSharedPreferences(context).edit().putBoolean(context.getResources().getString(R.string.pref_key_git_is_enabled), value).apply();
     }
-    
+
     public static String defaultRepositoryStorageDirectory(Context context) {
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         return getStringFromSelector(

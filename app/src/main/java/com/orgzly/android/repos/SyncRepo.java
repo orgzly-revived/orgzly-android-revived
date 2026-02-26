@@ -4,6 +4,8 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
+import com.orgzly.android.ui.note.NoteAttachmentData;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,6 +52,28 @@ public interface SyncRepo {
      *                       (non-encoded) name
      */
     VersionedRook storeBook(File file, String repoRelativePath) throws IOException;
+
+    /**
+     * Returns a Uri specifically for the given path within the repository.
+     */
+    Uri getUriForPath(String path);
+
+    /**
+     * Uploads file storing it under directory (pathInRepo) under repo's url.
+     * @param file The contents of this file should be stored at the remote location/repo
+     * @param pathInRepo The "/" separated path within the remote location/repo, create it if it doesn't exist
+     * @param fileName The contents ({@code file}) should be stored under this name
+     * @return {@code VersionedRook}
+     * @throws IOException
+     */
+    VersionedRook storeFile(File file, String pathInRepo, String fileName) throws IOException;
+
+    /**
+     * Lists the files under directory (pathInRepo) under repo's url.
+     * @param pathInRepo
+     * @return list of {@link NoteAttachmentData}
+     */
+    List<NoteAttachmentData> listFilesInPath(String pathInRepo);
 
     /**
      *

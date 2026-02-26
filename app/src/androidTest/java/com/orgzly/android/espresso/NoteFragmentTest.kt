@@ -1,10 +1,14 @@
 package com.orgzly.android.espresso
 
+import android.app.Activity
+import android.app.Instrumentation
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.SystemClock
 import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.TimePicker
+import androidx.documentfile.provider.DocumentFile
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
@@ -19,9 +23,23 @@ import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.PickerActions.setDate
 import androidx.test.espresso.contrib.PickerActions.setTime
+import android.net.Uri
+import com.orgzly.android.OrgFormat
+import com.orgzly.android.ui.note.NotePayload
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.matcher.IntentMatchers.anyIntent
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.containsString
+import org.hamcrest.Matchers.not
 import androidx.test.espresso.matcher.RootMatchers.isDialog
+import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
+import androidx.test.espresso.matcher.ViewMatchers.hasChildCount
 import androidx.test.espresso.matcher.ViewMatchers.hasSibling
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withClassName
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -41,7 +59,12 @@ import com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard
 import com.orgzly.android.espresso.util.EspressoUtils.scroll
 import com.orgzly.android.espresso.util.EspressoUtils.setNumber
 import com.orgzly.android.espresso.util.EspressoUtils.settingsSetTodoKeywords
+import com.orgzly.android.espresso.util.EspressoUtils.waitId
+import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.repos.RepoType
 import com.orgzly.android.ui.main.MainActivity
+import com.orgzly.android.ui.share.ShareActivity
+import com.orgzly.android.util.MiscUtils
 import junit.framework.TestCase.assertTrue
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
@@ -50,10 +73,12 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasToString
 import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.startsWith
+import org.junit.Assert
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
 
 class NoteFragmentTest : OrgzlyTest() {
     private lateinit var scenario: ActivityScenario<MainActivity>
@@ -108,6 +133,11 @@ class NoteFragmentTest : OrgzlyTest() {
     @After
     override fun tearDown() {
         super.tearDown()
+        try {
+            Intents.release()
+        } catch (e: Exception) {
+            // Ignore if Intents was not initialized
+        }
         scenario.close()
     }
 
@@ -601,6 +631,81 @@ class NoteFragmentTest : OrgzlyTest() {
         onView(withId(R.id.fragment_book_view_flipper)).check(matches(isDisplayed()))
     }
 
+
+    @Test
+    fun testAttachmentsHiddenByDefault() {
+        onNoteInBook(1).perform(click())
+        // By default attachments list is hidden.
+        onView(withId(R.id.attachments_header_up_icon)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.attachments_header_down_icon)).check(matches(not(isDisplayed())))
+
+        // Check attachments header (hidden by default)
+        onView(withId(R.id.attachments_header)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun testAttachmentsAddFirst() {
+        onNoteInBook(1).perform(click())
+
+        // Stub response to pick a file.
+        Intents.init()
+        stubFilePicker()
+
+        // Click attach file in the menu.
+        onActionItemClick(R.id.attach_file, R.string.attachment_add)
+        onView(withText(R.string.attachment_org)).inRoot(isPlatformPopup()).perform(click())
+
+        // Verify the intent was sent correctly.
+        intended(allOf(
+            hasAction(Intent.ACTION_CHOOSER),
+            hasExtra(Intent.EXTRA_INTENT, hasAction(Intent.ACTION_GET_CONTENT))
+        ))
+
+        // Verify the list.
+        onView(withId(R.id.attachments_header)).check(matches(isDisplayed()))
+        onView(withId(R.id.attachments_header_up_icon)).check(matches(isDisplayed()))
+        onView(withId(R.id.attachments_header_down_icon)).check(matches(not(isDisplayed())))
+        onView(withText(ATTACHMENT_FILE_NAME)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testNewNoteAddAttachment_autoAddIdProperty() {
+        AppPreferences.attachMethod(context, ShareActivity.ATTACH_METHOD_COPY_ID);
+        val dataDir = File(context.cacheDir, "data")
+        val testRepo = testUtils.setupRepo(RepoType.DIRECTORY, dataDir.toURI().toString())
+        val bookView = dataRepository.getBooks()[0]
+        dataRepository.setLink(bookView.book.id, testRepo)
+
+        onNoteInBook(1).perform(longClick())
+        onActionItemClick(R.id.new_note, R.string.new_note)
+        onView(withText(R.string.new_above)).perform(click())
+
+        onView(withId(R.id.title_edit)).perform(*replaceTextCloseKeyboard("Note with attachment"))
+
+        // Stub response to pick a file.
+        Intents.init()
+        stubFilePicker()
+
+        // Click attach file in the menu.
+        onActionItemClick(R.id.attach_file, R.string.attachment_add)
+        onView(withText(R.string.attachment_org)).inRoot(isPlatformPopup()).perform(click())
+
+        // Verify ID property is set.
+        onView(allOf(withId(R.id.name), withText("ID"))).check(matches(isDisplayed()))
+
+        // Save and reopen the note.
+        onView(withId(R.id.done)).perform(click())
+        onView(isRoot()).perform(waitId(R.id.fragment_book_recycler_view, 5000))
+        onNoteInBook(1).perform(click())
+
+        // Verify ID property is saved.
+        onView(allOf(withId(R.id.name), withText("ID"))).check(matches(isDisplayed()))
+        // Verify the attachment list is shown
+        onView(withId(R.id.attachments_header_up_icon)).check(matches(isDisplayed()))
+        onView(withId(R.id.attachments_header_down_icon)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.attachments_list)).check(matches(not(hasChildCount(0))))
+    }
+
     @Test
     fun testTimestampButtonVisibleWhenEditing() {
         onNoteInBook(1).perform(click())
@@ -646,5 +751,135 @@ class NoteFragmentTest : OrgzlyTest() {
             val view = activity.findViewById<TextView>(R.id.content_edit)
             assertTrue(view.text.contains(Regex("<[0-9]{4}-[0-9]{2}-[0-9]{2} [A-Z][a-z]{2}>")))
         }
+    }
+
+    @Test
+    fun testAddAttachment_LinkFile() {
+        onNoteInBook(1).perform(click())
+
+        Intents.init()
+        val contentUri = Uri.parse("content://com.android.providers.downloads.documents/document/raw%3A%2Fstorage%2Femulated%2F0%2FDownload%2Ftest.txt")
+        stubFilePicker(contentUri)
+
+        onActionItemClick(R.id.attach_file, R.string.attachment_add)
+        onView(withText(R.string.attachment_link)).inRoot(isPlatformPopup()).perform(click())
+
+        // Link inserted in content
+        onView(withId(R.id.content_edit)).check(matches(withText(containsString("[[${contentUri}]]"))))
+        
+        // Attachments list should NOT show it as it's a link (not in ID dir)
+        onView(withId(R.id.attachments_header)).check(matches(not(isDisplayed())))
+        
+        // ID property should NOT be added
+        onView(withText("ID")).check(doesNotExist())
+    }
+
+    @Test
+    fun testAddAttachment_CopyFile() {
+        testUtils.setupRepo(RepoType.DIRECTORY, File(context.cacheDir, "repo").toURI().toString())
+        onNoteInBook(1).perform(click())
+
+        Intents.init()
+        val file = File(context.cacheDir, "to_copy.txt")
+        MiscUtils.writeStringToFile("content", file)
+        stubFilePicker(Uri.fromFile(file))
+
+        onActionItemClick(R.id.attach_file, R.string.attachment_add)
+        onView(withText(R.string.attachment_copy)).inRoot(isPlatformPopup()).perform(click())
+
+        // Link inserted in content
+        onView(withId(R.id.content_edit)).check(matches(withText(containsString("[[file:to_copy.txt]]"))))
+
+        // No ID property forced
+        onView(withText("ID")).check(doesNotExist())
+    }
+
+    @Test
+    fun testRemoveAttachment_MarkDeleted() {
+        val repoUrl = File(context.cacheDir, "repo").toURI().toString()
+        val testRepo = testUtils.setupRepo(com.orgzly.android.repos.RepoType.DIRECTORY, repoUrl)
+
+        var bookView = dataRepository.getBooks()[0]
+        dataRepository.setLink(bookView.book.id, testRepo)
+        bookView = dataRepository.getBooks()[0]
+
+        val noteView = dataRepository.getNotes(bookView.book.name)[0]
+        val noteId = noteView.note.id
+        val payload = dataRepository.getNotePayload(noteId)!!
+        val id = "test-id-123"
+        payload.properties.put(OrgFormat.PROPERTY_ID, id)
+        dataRepository.updateNote(noteId, payload)
+        
+        val repo = bookView.linkRepo!!
+        val repoInstance = dataRepository.getRepoInstance(repo.id, repo.type, repo.url) as com.orgzly.android.repos.DirectoryRepo
+        val attachDir = payload.orgAttachDir(context)!!
+        val file = File(context.cacheDir, "attached.txt")
+        MiscUtils.writeStringToFile("content", file)
+        repoInstance.storeFile(file, attachDir, "attached.txt")
+
+        onNoteInBook(1).perform(click())
+
+        // Verify attachment is shown
+        onView(withId(R.id.attachments_header)).check(matches(isDisplayed()))
+        onView(withText("attached.txt")).check(matches(isDisplayed()))
+
+        // Click delete
+        onView(allOf(withId(R.id.delete), isDisplayed())).perform(click())
+
+        // Verify it shows as deleted
+        onView(withText("deleted: attached.txt")).check(matches(isDisplayed()))
+        
+        // TODO: Verify deletion once attachment removal on update is implemented.
+    }
+
+    @Test
+    fun testAttachmentsPersistAfterSave() {
+        val repoUrl = File(context.cacheDir, "repo").toURI().toString()
+        val testRepo = testUtils.setupRepo(com.orgzly.android.repos.RepoType.DIRECTORY, repoUrl)
+
+        var bookView = dataRepository.getBooks()[0]
+        dataRepository.setLink(bookView.book.id, testRepo)
+        bookView = dataRepository.getBooks()[0]
+
+        val noteView = dataRepository.getNotes(bookView.book.name)[0]
+        val noteId = noteView.note.id
+        val payload = dataRepository.getNotePayload(noteId)!!
+        val id = "persist-id"
+        payload.properties.put(OrgFormat.PROPERTY_ID, id)
+        dataRepository.updateNote(noteId, payload)
+
+        val repo = bookView.linkRepo!!
+        val repoInstance = dataRepository.getRepoInstance(repo.id, repo.type, repo.url) as com.orgzly.android.repos.DirectoryRepo
+        val attachDir = payload.orgAttachDir(context)!!
+        val file = File(context.cacheDir, "persist.txt")
+        MiscUtils.writeStringToFile("content", file)
+        repoInstance.storeFile(file, attachDir, "persist.txt")
+
+        onNoteInBook(1).perform(click())
+        onView(withText("persist.txt")).check(matches(isDisplayed()))
+
+        // Save
+        onView(withId(R.id.done)).perform(click())
+
+        // Reopen
+        onNoteInBook(1).perform(click())
+        onView(withText("persist.txt")).check(matches(isDisplayed()))
+    }
+
+    private val ATTACHMENT_FILE_NAME = "cat.jpg"
+    private val EXPECTED_ATTACHMENT_FILE_NAME = ATTACHMENT_FILE_NAME
+
+    private fun stubFilePicker(uri: Uri? = null) {
+        val resultData = Intent()
+        val finalUri = if (uri != null) {
+            uri
+        } else {
+            val file = File(context.cacheDir, ATTACHMENT_FILE_NAME)
+            MiscUtils.writeStringToFile("cat image", file)
+            DocumentFile.fromFile(file).uri
+        }
+        resultData.data = finalUri
+        val result = Instrumentation.ActivityResult(Activity.RESULT_OK, resultData)
+        Intents.intending(anyIntent()).respondWith(result)
     }
 }

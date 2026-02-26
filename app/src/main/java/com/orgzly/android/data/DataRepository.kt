@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.text.TextUtils
+import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
@@ -22,6 +23,9 @@ import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.*
 import com.orgzly.android.data.mappers.OrgMapper
+import com.orgzly.android.ui.share.ShareActivity
+import com.orgzly.android.util.LogUtils
+import com.orgzly.android.util.AttachmentUtils
 import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.OrgzlyDatabase
 import com.orgzly.android.db.dao.NoteDao
@@ -41,6 +45,7 @@ import com.orgzly.android.savedsearch.FileSavedSearchStore
 import com.orgzly.android.sync.BookSyncStatus
 import com.orgzly.android.ui.NotePlace
 import com.orgzly.android.ui.Place
+import com.orgzly.android.ui.note.NoteAttachmentData
 import com.orgzly.android.ui.note.NoteBuilder
 import com.orgzly.android.ui.note.NotePayload
 import com.orgzly.android.usecase.RepoCreate
@@ -1736,6 +1741,71 @@ class DataRepository @Inject constructor(
     }
 
     /**
+     * Store the attachment content, in the repo for [bookId].
+     *
+     * @throws IOException
+     */
+    @Throws(IOException::class)
+    fun storeAttachment(bookId: Long, notePayload: NotePayload, attachment: NoteAttachmentData) {
+        val type = attachment.type ?: run {
+            // Fallback to preference if type is missing (e.g. older objects)
+            when (AppPreferences.attachMethod(context)) {
+                ShareActivity.ATTACH_METHOD_COPY_DIR -> NoteAttachmentData.Type.COPY_TO_DIR
+                ShareActivity.ATTACH_METHOD_COPY_ID -> NoteAttachmentData.Type.COPY_TO_ID
+                else -> NoteAttachmentData.Type.LINK
+            }
+        }
+
+        if (type == NoteAttachmentData.Type.LINK) {
+            return
+        }
+
+        // Get the fileName from the provider.
+        // TODO provide a way to customize the fileName
+        val uri = attachment.uri
+        val documentFile: DocumentFile = DocumentFile.fromSingleUri(context, uri)
+                ?: throw IOException("Cannot get the fileName for Uri $uri")
+        val fileName = documentFile.name ?: "attachment_${System.currentTimeMillis()}"
+
+        val attachDir = when (type) {
+            NoteAttachmentData.Type.COPY_TO_DIR -> AppPreferences.attachDirDefaultPath(context)
+            NoteAttachmentData.Type.COPY_TO_ID -> {
+                 notePayload.orgAttachDir(context) ?: throw IOException("Cannot attach file: Note has no ID")
+            }
+            else -> "" // Defaults to LINK, no directory needed
+        }
+
+        val book = getBookView(bookId)
+                ?: throw IOException(resources.getString(R.string.book_does_not_exist_anymore))
+
+        // Not quite sure what repo to use.
+        val repoEntity = book.linkRepo ?: defaultRepoForSavingBook()
+        val repo = getRepoInstance(repoEntity.id, repoEntity.type, repoEntity.url)
+
+        val tempFile: File
+        // Get the InputStream of the content and write it to a File.
+        context.contentResolver.openInputStream(uri).use { inputStream ->
+            tempFile = getTempBookFile()
+            MiscUtils.writeStreamToFile(inputStream, tempFile)
+            LogUtils.d(TAG, "Wrote to file $tempFile")
+        }
+
+        repo.storeFile(tempFile, attachDir, fileName)
+        LogUtils.d(TAG, "Stored file to repo")
+        tempFile.delete()
+    }
+
+    fun listFiles(bookId: Long, notePayload: NotePayload): List<NoteAttachmentData> {
+        val book = getBookView(bookId)
+                ?: throw IOException(resources.getString(R.string.book_does_not_exist_anymore))
+        val repoEntity = book.linkRepo ?: defaultRepoForSavingBook()
+        val repo = getRepoInstance(repoEntity.id, repoEntity.type, repoEntity.url)
+        val attachDir = notePayload.orgAttachDir(context) ?: return emptyList()
+
+        return repo.listFilesInPath(attachDir)
+    }
+
+    /**
      * Loads book from resource.
      */
     @Throws(IOException::class)
@@ -2125,15 +2195,15 @@ class DataRepository @Inject constructor(
 
     fun exportSettingsAndSearchesToNote(note: Note) {
         val notePayload = getNotePayload(note.id) ?: throw RuntimeException(context.getString(R.string.failed_to_get_note_payload))
-        var noteIdPropertyValue = notePayload.properties.get("ID")
+        var noteIdPropertyValue = notePayload.properties.get(OrgFormat.PROPERTY_ID)
         if (noteIdPropertyValue == null) {
             // Note has no "ID" property - let's add one
             noteIdPropertyValue = UUID.randomUUID().toString()
-            notePayload.properties.put("ID", noteIdPropertyValue)
+            notePayload.properties.put(OrgFormat.PROPERTY_ID, noteIdPropertyValue)
             updateNote(note.id, notePayload)
         }
         // Ensure that the note's "ID" property value is unique
-        val targetNote = findUniqueNoteHavingProperty("ID", noteIdPropertyValue)
+        val targetNote = findUniqueNoteHavingProperty(OrgFormat.PROPERTY_ID, noteIdPropertyValue)
         // Get settings as JSON
         val settingsJsonObject = AppPreferences.getDefaultPrefsAsJsonObject(context)
         // Get saved searches as JSON
