@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.PopupWindow
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
@@ -56,6 +57,11 @@ abstract class NotesFragment : CommonFragment(), TimestampDialogFragment.OnDateT
         }?.also {
             // On popup shown
 
+            // Add highlight to popup parent
+            val oldItemViewBackground = itemView.background
+            itemView.background =
+                AppCompatResources.getDrawable(requireContext(), R.drawable.item_head_background_highlighted)
+
             // Enable back handler
             notePopupDismissOnBackPress.isEnabled = true
 
@@ -63,6 +69,9 @@ abstract class NotesFragment : CommonFragment(), TimestampDialogFragment.OnDateT
             it.setOnDismissListener {
                 // Disable back handler
                 notePopupDismissOnBackPress.isEnabled = false
+
+                // Remove highlight from popup parent
+                itemView.background = oldItemViewBackground
 
                 notePopup = null
             }
