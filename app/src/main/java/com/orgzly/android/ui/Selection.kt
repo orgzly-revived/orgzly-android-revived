@@ -2,10 +2,6 @@ package com.orgzly.android.ui
 
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.ColorInt
-import com.orgzly.R
-import com.orgzly.android.ui.util.styledAttributes
-import java.util.LinkedHashSet
 
 class Selection {
     // Preserve insertion order so multi-selection actions can respect the order of user clicks.
@@ -98,22 +94,8 @@ class Selection {
         }
     }
 
-    @ColorInt
-    private var selectionBgColor = 0
-
-    fun setBackgroundIfSelected(view: View, id: Long) {
-        if (contains(id)) {
-            if (selectionBgColor == 0) {
-                selectionBgColor = view.context.styledAttributes(intArrayOf(R.attr.colorSecondaryContainer)) { typedArray ->
-                    typedArray.getColor(0, 0)
-                }
-            }
-
-            view.setBackgroundColor(selectionBgColor)
-
-        } else {
-            view.setBackgroundResource(0)
-        }
+    fun setActivatedIfSelected(view: View, id: Long) {
+        view.isActivated = contains(id)
     }
 
     companion object {
