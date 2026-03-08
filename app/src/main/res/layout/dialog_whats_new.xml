@@ -22,6 +22,32 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.19.0"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Support file tags." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Handle recurring events in exported calendar." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Handle multiple timestamps per note in exported calendar." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix timezone bug with all-day events in exported calendar." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Upgrade dependencies." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.18.0"
             tools:ignore="HardcodedText"
             android:autoLink="web" />
