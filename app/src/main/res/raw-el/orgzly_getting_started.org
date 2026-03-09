@@ -1,0 +1,118 @@
+Welcome to Orgzly!
+
+* Notes
+** Click on the note to open it
+** Click and hold the note to select it
+
+You can select multiple notes.
+
+** Fling the note right to open its popup menu
+
+Fling the note left to open a different menu.
+
+** Fold a note which contains sub-notes by clicking the icon next to it
+
+Long-click the icon to unfold the entire subtree.
+
+*** There is no limit to the number of levels you can have
+**** Use this to better organize your notes
+
+** Note can have tags :tag1:tag2:
+*** Sub-note inherits the tags :tag3:
+
+If you search for notes tagged with “tag1” using “t.tag1” query, this note will be included in the search results.
+
+*** A note that has the =ARCHIVE= tag set is grayed out :ARCHIVE:
+
+** Note can have a state
+
+You can configure any number of states to use: TODO, NEXT, DONE, etc.
+
+*** TODO There are two /types/ of states: to-do and done
+
+*** DONE This is a note with /done/ type of state
+CLOSED: [2018-01-24 Wed 17:00]
+
+** Parent notes can track state of child notes [1/3] [33%]
+
+*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+
+*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+
+*** DONE Both can be used in tandem
+CLOSED: [2025-03-13 Thu 08:37]
+
+The order doesn't matter, and the counts will be updated automatically.
+
+** Note can have a scheduled time
+SCHEDULED: <2015-02-20 Fri 15:15>
+
+*** Times can have a repeater
+SCHEDULED: <2015-02-16 Mon .+2d>
+
+** You can also set a deadline time
+DEADLINE: <2015-02-20 Fri>
+
+** Event times can be used anywhere in the note's content
+
+You can have multiple event times:
+
+- <2015-02-20 Fri>
+- <2015-02-21 Sat>
+
+** Reminders for notes with scheduled, deadline, or event times are supported
+
+Mark the note as done to shift the repeater.
+
+** [#A] Note can have a priority
+
+You can change the number of priorities in Settings. You can also change default priority - assumed priority for notes without one set.
+
+** Note can include links
+
+Dial a phone number (tel:555-0199), send SMS (sms:555-0199), compose email (mailto:support@orgzlyrevived.com) or visit a webpage ([[https://www.orgzlyrevived.com][Orgzlyrevived.com]]).
+
+You can also link to another note or notebook within the app.
+
+See [[https://www.orgzlyrevived.com/docs#links]] for more information.
+
+** Basic typographical emphasis is supported
+
+You can make words *bold*, /italic/, _underlined_, =verbatim=, ~code~ and +strike-through+.
+
+** Checkbox list is available
+
+- [X] Task 1
+- [ ] Task 2
+- [ ] Task 3
+
+Click the checkbox to toggle it. Press the new-line button at the end of the line to create a new item.
+
+** A note's title can also track checkbox list states [66%] [2/3]
+
+- [X] Task 1
+- [ ] Task 2
+- [X] Task 3
+
+* Search
+** There are many search operators supported
+
+You can search notes by state, tag, scheduled, deadline or event times, etc.
+
+See [[https://www.orgzlyrevived.com/docs#search]] to learn more.
+
+** Search queries can be saved for quick access
+
+Try sample searches from the navigation drawer and note the queries they use.
+
+You can create your own saved searches by clicking on “Searches” in the navigation drawer.
+
+* Syncing
+
+** Notebooks can be saved as plain-text files
+
+Files are in the format used by [[https://orgmode.org/][Org mode]].
+
+** Location (repository) type
+
+A repository is a location you can sync your notebooks with. A repository can be a directory on your mobile device, SD card, or Dropbox.
