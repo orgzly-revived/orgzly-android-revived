@@ -1,3 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="sync">Sync</string>
+    <string name="settings">Ρυθμίσεις</string>
+    <string name="sortnote">Ταξινόμηση σημείωσης</string>
+    <string name="insert_timestamp">Εισαγωγή χρονικής σήμανσης</string>
+    <string name="ok">Οκ</string>
+    <string name="yes">Ναι</string>
+    <string name="unlink">Αποσύνδεση</string>
+    <string name="clear">Καθαρισμός</string>
+    <string name="cancel">Ακύρωση</string>
 </resources>
