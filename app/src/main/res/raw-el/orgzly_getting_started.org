@@ -1,26 +1,26 @@
-Welcome to Orgzly!
+Καλώς ορίσατε στο Orgzly!
 
-* Notes
-** Click on the note to open it
-** Click and hold the note to select it
+* Σημειώσεις
+** Κάντε κλικ στη σημείωση για να την ανοίξετε
+** Κάντε κλικ παρατεταμένα στη σημείωση για να την επιλέξετε
 
-You can select multiple notes.
+Μπορείτε να επιλέξετε πολλές σημειώσεις.
 
-** Fling the note right to open its popup menu
+** Πετάξτε τη σημείωση προς τα δεξιά για να ανοίξετε το αναδυόμενο μενού της
 
-Fling the note left to open a different menu.
+Πετάξτε τη σημείωση προς τα αριστερά για να ανοίξετε ένα διαφορετικό μενού.
 
-** Fold a note which contains sub-notes by clicking the icon next to it
+**Διπλώστε μια σημείωση που περιέχει δευτερεύουσες σημειώσεις κάνοντας κλικ στο εικονίδιο δίπλα της
 
-Long-click the icon to unfold the entire subtree.
+Κάντε παρατεταμένο κλικ στο εικονίδιο για να ξεδιπλώσετε ολόκληρο το υποδέντρο.
 
-*** There is no limit to the number of levels you can have
-**** Use this to better organize your notes
+*** Δεν υπάρχει όριο στον αριθμό των επιπέδων που μπορείτε να έχετε
+**** Χρησιμοποιήστε αυτό για να οργανώσετε καλύτερα τις σημειώσεις σας
 
-** Note can have tags :tag1:tag2:
-*** Sub-note inherits the tags :tag3:
+** Η σημείωση μπορεί να έχει ετικέτες :tag1:tag2:
+*** Η δευτερεύουσα σημείωση κληρονομεί τις ετικέτες :tag3:
 
-If you search for notes tagged with “tag1” using “t.tag1” query, this note will be included in the search results.
+Αν αναζητήσετε σημειώσεις με ετικέτα "tag1" χρησιμοποιώντας το ερώτημα "t.tag1", αυτή η σημείωση θα συμπεριληφθεί στα αποτελέσματα αναζήτησης.
 
 *** A note that has the =ARCHIVE= tag set is grayed out :ARCHIVE:
 
