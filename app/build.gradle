@@ -13,8 +13,7 @@ android {
         targetSdkVersion 36
         versionCode 277
         versionName "1.19.0-beta.1"
-        applicationId = "com.orgzlyrevived"
-        resValue "string", "application_id", "com.orgzlyrevived"
+        applicationId "com.orgzlyrevived"
 
         testInstrumentationRunner "com.orgzly.android.OrgzlyTestRunner"
 
@@ -96,6 +95,10 @@ android {
 
             dimension "store"
         }
+    }
+
+    applicationVariants.all { variant ->
+        resValue "string", "application_id", variant.applicationId
     }
 
     androidResources {
