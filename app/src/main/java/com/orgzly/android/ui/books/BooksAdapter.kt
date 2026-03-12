@@ -184,7 +184,7 @@ class BooksAdapter(
             /* If it's a dummy book - change opacity. */
             itemView.alpha = if (item.book.isDummy) 0.4f else 1f
 
-            getSelection().setBackgroundIfSelected(binding.itemBookContainer, item.book.id)
+            getSelection().setActivatedIfSelected(binding.itemBookContainer, item.book.id)
         }
     }
 
