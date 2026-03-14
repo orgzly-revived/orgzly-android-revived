@@ -31,9 +31,6 @@ import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.anyIntent
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.containsString
-import org.hamcrest.Matchers.not
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
 import androidx.test.espresso.matcher.ViewMatchers.hasChildCount
@@ -69,6 +66,7 @@ import com.orgzly.android.ui.share.ShareActivity
 import com.orgzly.android.util.MiscUtils
 import junit.framework.TestCase.assertTrue
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.endsWith
 import org.hamcrest.Matchers.equalTo
@@ -887,6 +885,12 @@ class NoteFragmentTest : OrgzlyTest() {
         }
         resultData.data = finalUri
         val result = Instrumentation.ActivityResult(Activity.RESULT_OK, resultData)
-        Intents.intending(anyIntent()).respondWith(result)
+        Intents.intending(allOf(
+            hasAction(Intent.ACTION_CHOOSER),
+            hasExtra(Intent.EXTRA_INTENT, anyOf(
+                hasAction(Intent.ACTION_GET_CONTENT),
+                hasAction(Intent.ACTION_OPEN_DOCUMENT)
+            ))
+        )).respondWith(result)
     }
 }
