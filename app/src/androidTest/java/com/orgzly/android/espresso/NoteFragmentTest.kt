@@ -46,6 +46,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.orgzly.R
 import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.RetryTestRule
+import com.orgzly.android.db.entity.Repo
 import com.orgzly.android.espresso.util.EspressoUtils
 import com.orgzly.android.espresso.util.EspressoUtils.clickClickableSpan
 import com.orgzly.android.espresso.util.EspressoUtils.clickSetting
@@ -62,6 +63,7 @@ import com.orgzly.android.espresso.util.EspressoUtils.settingsSetTodoKeywords
 import com.orgzly.android.espresso.util.EspressoUtils.waitId
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.repos.RepoType
+import com.orgzly.android.testutil.TestDocumentsProvider
 import com.orgzly.android.ui.main.MainActivity
 import com.orgzly.android.ui.share.ShareActivity
 import com.orgzly.android.util.MiscUtils
@@ -796,8 +798,7 @@ class NoteFragmentTest : OrgzlyTest() {
 
     @Test
     fun testRemoveAttachment_MarkDeleted() {
-        val repoUrl = File(context.cacheDir, "repo").toURI().toString()
-        val testRepo = testUtils.setupRepo(com.orgzly.android.repos.RepoType.DIRECTORY, repoUrl)
+        val testRepo = ensureAttachmentDocumentRepo()
 
         var bookView = dataRepository.getBooks()[0]
         dataRepository.setLink(bookView.book.id, testRepo)
@@ -811,7 +812,7 @@ class NoteFragmentTest : OrgzlyTest() {
         dataRepository.updateNote(noteId, payload)
         
         val repo = bookView.linkRepo!!
-        val repoInstance = dataRepository.getRepoInstance(repo.id, repo.type, repo.url) as com.orgzly.android.repos.DirectoryRepo
+        val repoInstance = dataRepository.getRepoInstance(repo.id, repo.type, repo.url)
         val attachDir = payload.orgAttachDir(context)!!
         val file = File(context.cacheDir, "attached.txt")
         MiscUtils.writeStringToFile("content", file)
@@ -834,8 +835,7 @@ class NoteFragmentTest : OrgzlyTest() {
 
     @Test
     fun testAttachmentsPersistAfterSave() {
-        val repoUrl = File(context.cacheDir, "repo").toURI().toString()
-        val testRepo = testUtils.setupRepo(com.orgzly.android.repos.RepoType.DIRECTORY, repoUrl)
+        val testRepo = ensureAttachmentDocumentRepo()
 
         var bookView = dataRepository.getBooks()[0]
         dataRepository.setLink(bookView.book.id, testRepo)
@@ -849,7 +849,7 @@ class NoteFragmentTest : OrgzlyTest() {
         dataRepository.updateNote(noteId, payload)
 
         val repo = bookView.linkRepo!!
-        val repoInstance = dataRepository.getRepoInstance(repo.id, repo.type, repo.url) as com.orgzly.android.repos.DirectoryRepo
+        val repoInstance = dataRepository.getRepoInstance(repo.id, repo.type, repo.url)
         val attachDir = payload.orgAttachDir(context)!!
         val file = File(context.cacheDir, "persist.txt")
         MiscUtils.writeStringToFile("content", file)
@@ -868,6 +868,13 @@ class NoteFragmentTest : OrgzlyTest() {
 
     private val ATTACHMENT_FILE_NAME = "cat.jpg"
     private val EXPECTED_ATTACHMENT_FILE_NAME = ATTACHMENT_FILE_NAME
+
+    private fun ensureAttachmentDocumentRepo(): Repo {
+        val treeDocumentFileUrl = "content://${TestDocumentsProvider.AUTHORITY}/tree/${TestDocumentsProvider.ROOT_ID}"
+        val repoDirectory = DocumentFile.fromTreeUri(context, Uri.parse(treeDocumentFileUrl))!!
+        Assert.assertTrue("Document tree should exist for tests", repoDirectory.exists())
+        return testUtils.setupRepo(RepoType.DOCUMENT, treeDocumentFileUrl)
+    }
 
     private fun stubFilePicker(uri: Uri? = null) {
         val resultData = Intent()
