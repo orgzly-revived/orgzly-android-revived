@@ -21,6 +21,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
 
 public class DirectoryRepoTest extends OrgzlyTest {
@@ -140,7 +141,6 @@ public class DirectoryRepoTest extends OrgzlyTest {
         assertEquals(repoUriString + "/booky-renamed.org", bookView.getSyncedTo().getUri().toString());
     }
 
-
     @Test
     public void testSyncWithDirectoryContainingPercent() throws FileNotFoundException {
         String localBaseDir = context.getExternalCacheDir().getAbsolutePath();
@@ -163,5 +163,98 @@ public class DirectoryRepoTest extends OrgzlyTest {
         LocalStorage.deleteRecursive(new File(nextcloudDir));
     }
 
-    // TODO: Test saving and loading
+    @Test
+    public void testStoreFileInSubdirectory() throws IOException {
+        testUtils.setupRepo(RepoType.DIRECTORY, repoUriString);
+        DirectoryRepo repo = (DirectoryRepo) testUtils.repoInstance(RepoType.DIRECTORY, repoUriString);
+
+        File tmpFile = localStorage.getCacheDirectory("tmp-test-file");
+        File file = new File(tmpFile, "test.jpg");
+        MiscUtils.writeStringToFile("image content", file);
+
+        try {
+            VersionedRook rook = repo.storeFile(file, "attachments", "test.jpg");
+            assertNotNull(rook);
+            assertEquals("attachments/test.jpg", BookName.getRepoRelativePath(rook.getRepoUri(), rook.getUri()));
+            File storedFile = new File(dirFile, "attachments/test.jpg");
+            assertTrue(storedFile.exists());
+            assertEquals("image content", MiscUtils.readStringFromFile(storedFile));
+        } finally {
+            LocalStorage.deleteRecursive(tmpFile);
+        }
+    }
+
+    @Test
+    public void testStoreFileInNestedPath() throws IOException {
+        testUtils.setupRepo(RepoType.DIRECTORY, repoUriString);
+        DirectoryRepo repo = (DirectoryRepo) testUtils.repoInstance(RepoType.DIRECTORY, repoUriString);
+
+        File tmpFile = localStorage.getCacheDirectory("tmp-test-file-nested");
+        File file = new File(tmpFile, "attachment.pdf");
+        MiscUtils.writeStringToFile("pdf content", file);
+
+        try {
+            repo.storeFile(file, "data/ab/cdef", "attachment.pdf");
+
+            File storedFile = new File(dirFile, "data/ab/cdef/attachment.pdf");
+            assertTrue(storedFile.exists());
+        } finally {
+            LocalStorage.deleteRecursive(tmpFile);
+        }
+    }
+
+    @Test
+    public void testListFilesInPath() throws IOException {
+        testUtils.setupRepo(RepoType.DIRECTORY, repoUriString);
+        DirectoryRepo repo = (DirectoryRepo) testUtils.repoInstance(RepoType.DIRECTORY, repoUriString);
+
+        File attachmentsDir = new File(dirFile, "attachments");
+        attachmentsDir.mkdirs();
+        MiscUtils.writeStringToFile("content a", new File(attachmentsDir, "a.jpg"));
+        MiscUtils.writeStringToFile("content b", new File(attachmentsDir, "b.pdf"));
+
+        List<com.orgzly.android.ui.note.NoteAttachmentData> files = repo.listFilesInPath("attachments");
+
+        assertEquals(2, files.size());
+        // Ordering might depend on filesystem, but let's assume alphabetic if listFiles
+        // returns it or sort it
+        // listFilesInPath in DirectoryRepo doesn't sort.
+        assertTrue(files.stream().anyMatch(f -> f.getFilename().equals("a.jpg")));
+        assertTrue(files.stream().anyMatch(f -> f.getFilename().equals("b.pdf")));
+    }
+
+    @Test
+    public void testListFilesInPathEmptyDir() throws IOException {
+        testUtils.setupRepo(RepoType.DIRECTORY, repoUriString);
+        DirectoryRepo repo = (DirectoryRepo) testUtils.repoInstance(RepoType.DIRECTORY, repoUriString);
+
+        new File(dirFile, "empty").mkdirs();
+
+        List<com.orgzly.android.ui.note.NoteAttachmentData> files = repo.listFilesInPath("empty");
+        assertEquals(0, files.size());
+    }
+
+    @Test
+    public void testGetUriForPath() throws IOException {
+        testUtils.setupRepo(RepoType.DIRECTORY, repoUriString);
+        DirectoryRepo repo = (DirectoryRepo) testUtils.repoInstance(RepoType.DIRECTORY, repoUriString);
+
+        File folder = new File(dirFile, "folder");
+        folder.mkdirs();
+        File file = new File(folder, "file.txt");
+        MiscUtils.writeStringToFile("content", file);
+
+        android.net.Uri uri = repo.getUriForPath("folder/file.txt");
+        assertNotNull(uri);
+        assertEquals(android.net.Uri.fromFile(file), uri);
+    }
+
+    @Test
+    public void testGetUriForPathNonExistent() throws IOException {
+        testUtils.setupRepo(RepoType.DIRECTORY, repoUriString);
+        DirectoryRepo repo = (DirectoryRepo) testUtils.repoInstance(RepoType.DIRECTORY, repoUriString);
+
+        android.net.Uri uri = repo.getUriForPath("nonexistent/path.txt");
+        assertEquals(null, uri);
+    }
 }

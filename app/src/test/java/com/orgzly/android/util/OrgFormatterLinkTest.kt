@@ -1,5 +1,6 @@
 package com.orgzly.android.util
 
+import com.orgzly.android.ui.views.style.AttachmentLinkSpan
 import com.orgzly.android.ui.views.style.FileLinkSpan
 import com.orgzly.android.ui.views.style.FileOrNotLinkSpan
 import com.orgzly.android.ui.views.style.IdLinkSpan
@@ -66,6 +67,10 @@ class OrgFormatterLinkTest(private val param: Parameter) : OrgFormatterTest() {
                 Parameter("[[file:orgzly-tests/document.txt]]", "file:orgzly-tests/document.txt", listOf(Span(0, 30, FileLinkSpan::class.java))),
                 Parameter("[[file:orgzly-tests/document.txt][Document]]", "Document", listOf(Span(0, 8, FileLinkSpan::class.java))),
 
+                Parameter("attachment:orgzly-tests/document.txt", "attachment:orgzly-tests/document.txt", listOf(Span(0, 36, AttachmentLinkSpan::class.java))),
+                Parameter("[[attachment:orgzly-tests/document.txt]]", "attachment:orgzly-tests/document.txt", listOf(Span(0, 36, AttachmentLinkSpan::class.java))),
+                Parameter("[[attachment:orgzly-tests/document.txt][Document]]", "Document", listOf(Span(0, 8, AttachmentLinkSpan::class.java))),
+
                 Parameter("id:45DFE015-255E-4B86-B957-F7FD77364DCA", "id:45DFE015-255E-4B86-B957-F7FD77364DCA", listOf(Span(0, 39, IdLinkSpan::class.java))),
                 Parameter("[[id:45DFE015-255E-4B86-B957-F7FD77364DCA]]", "id:45DFE015-255E-4B86-B957-F7FD77364DCA", listOf(Span(0, 39, IdLinkSpan::class.java))),
                 Parameter("id:foo", "id:foo", listOf(Span(0, 6, IdLinkSpan::class.java))),
@@ -85,7 +90,10 @@ class OrgFormatterLinkTest(private val param: Parameter) : OrgFormatterTest() {
 
                 // Do not linkify
                 Parameter("strhttps://www.orgzlyrevived.com/", "strhttps://www.orgzlyrevived.com/", emptyList()),
-                Parameter("Need activity with <action android:name=\"android.intent.action.VIEW\"/>", "Need activity with <action android:name=\"android.intent.action.VIEW\"/>", emptyList())
+                Parameter("Need activity with <action android:name=\"android.intent.action.VIEW\"/>", "Need activity with <action android:name=\"android.intent.action.VIEW\"/>", emptyList()),
+
+                Parameter("[[content://com.android.providers.media.documents/document/image:1234][Image]]", "Image", listOf(Span(0, 5, FileOrNotLinkSpan::class.java))),
+                Parameter("[[content://foo]]", "content://foo", listOf(Span(0, 13, FileOrNotLinkSpan::class.java)))
             )
         }
     }

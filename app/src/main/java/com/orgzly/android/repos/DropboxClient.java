@@ -23,6 +23,7 @@ import com.dropbox.core.v2.files.WriteMode;
 import com.orgzly.BuildConfig;
 import com.orgzly.android.BookName;
 import com.orgzly.android.prefs.AppPreferences;
+import com.orgzly.android.util.LogUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -202,7 +203,7 @@ public class DropboxClient {
             }
 
         } catch (DbxException e) {
-            e.printStackTrace();
+            LogUtils.d(TAG, e.toString());
 
             /* If we get NOT_FOUND from Dropbox, just return the empty list. */
             if (e instanceof GetMetadataErrorException) {
@@ -252,6 +253,7 @@ public class DropboxClient {
             }
 
         } catch (DbxException e) {
+            LogUtils.d(TAG, e.toString());
             if (e.getMessage() != null) {
                 throw new IOException("Failed downloading Dropbox file " + uri + ": " + e.getMessage());
             } else {
@@ -306,6 +308,7 @@ public class DropboxClient {
                     .uploadAndFinish(in);
 
         } catch (DbxException e) {
+            LogUtils.d(TAG, e.toString());
             if (e.getMessage() != null) {
                 throw new IOException("Failed overwriting " + bookUri.getPath() + " on Dropbox: " + e.getMessage());
             } else {
@@ -330,7 +333,7 @@ public class DropboxClient {
             }
 
         } catch (DbxException e) {
-            e.printStackTrace();
+            LogUtils.d(TAG, e.toString());
 
             if (e.getMessage() != null) {
                 throw new IOException("Failed deleting " + path + " on Dropbox: " + e.getMessage());
@@ -365,7 +368,7 @@ public class DropboxClient {
             return new VersionedRook(repoId, RepoType.DROPBOX, repoUri, to, rev, mtime);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.d(TAG, e.toString());
 
             if (e.getMessage() != null) { // TODO: Move this throwing to utils
                 throw new IOException("Failed moving " + from + " to " + to + ": " + e.getMessage(), e);

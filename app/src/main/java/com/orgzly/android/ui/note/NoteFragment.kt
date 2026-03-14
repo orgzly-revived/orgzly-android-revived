@@ -1,8 +1,10 @@
 package com.orgzly.android.ui.note
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
@@ -20,6 +22,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
@@ -30,8 +33,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
+import com.orgzly.android.BookName
 import com.orgzly.android.BookUtils
 import com.orgzly.android.NotesOrgExporter
+import com.orgzly.android.OrgFormat
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.db.entity.BookView
 import com.orgzly.android.db.entity.Note
@@ -85,6 +90,10 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
     private var listener: Listener? = null
 
+    private var pendingAttachmentType: NoteAttachmentData.Type? = null
+
+    private var requestFocus: Boolean = false
+
     private lateinit var viewModel: NoteViewModel
 
     private lateinit var mUserTimeFormatter: UserTimeFormatter
@@ -106,6 +115,8 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, activity)
 
+
+        
         listener = activity as Listener
 
         mUserTimeFormatter = UserTimeFormatter(context)
@@ -130,8 +141,9 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             // Initial values when sharing
             val title = args.getString(ARG_TITLE)
             val content = args.getString(ARG_CONTENT)
+            val attachmentUri = args.getString(ARG_ATTACHMENT_URI)?.let { Uri.parse(it) }
 
-            return NoteInitialData(bookId, noteId, place, title, content)
+            return NoteInitialData(bookId, noteId, place, title, content, attachmentUri)
         }
     }
 
@@ -149,6 +161,13 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         viewModel = ViewModelProvider(this, factory)[NoteViewModel::class.java]
 
         requireActivity().onBackPressedDispatcher.addCallback(this, userCancelBackPressHandler)
+
+        if (savedInstanceState != null) {
+            val typeName = savedInstanceState.getString(KEY_PENDING_ATTACHMENT_TYPE)
+            if (typeName != null) {
+                pendingAttachmentType = NoteAttachmentData.Type.valueOf(typeName)
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -219,6 +238,8 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         binding.closedButton.setOnClickListener(this)
         binding.closedRemove.setOnClickListener(this)
 
+
+
         if (AppPreferences.isFontMonospaced(context)) {
             binding.content.setTypeface(Typeface.MONOSPACE)
         }
@@ -238,6 +259,16 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         }
 
         setMetadataFoldState(AppPreferences.noteMetadataFolded(context))
+
+        /*
+         * Attachments List folding
+         */
+        binding.attachmentsHeader.setOnClickListener {
+            val isFolded = binding.attachmentsList.visibility != View.VISIBLE
+            setAttachmentsListFoldState(!isFolded)
+        }
+
+        binding.attachmentsHeader.visibility = View.GONE
 
         /*
          * Content folding
@@ -392,6 +423,22 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
                 binding.content.setSourceText(newContent)
             }
 
+            R.id.attach_link -> {
+                pendingAttachmentType = NoteAttachmentData.Type.LINK
+                userAddAttachment()
+                true
+            }
+            R.id.attach_copy -> {
+                pendingAttachmentType = NoteAttachmentData.Type.COPY_TO_DIR
+                userAddAttachment()
+                true
+            }
+            R.id.attach_org -> {
+                pendingAttachmentType = NoteAttachmentData.Type.COPY_TO_ID
+                userAddAttachment()
+                true
+            }
+
             R.id.insert_inline_timestamp -> {
                 // The current view can only be content_edit or title_edit
                 val originViewId = if (binding.content.isBeingEdited()) {
@@ -428,6 +475,12 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         binding.metadataHeaderUpIcon.goneIf(isFolded)
         binding.metadataHeaderDownIcon.goneUnless(isFolded)
         // binding.metadataHeaderText.invisibleIf(isFolded)
+    }
+
+    private fun setAttachmentsListFoldState(isFolded: Boolean) {
+        binding.attachmentsList.goneIf(isFolded)
+        binding.attachmentsHeaderUpIcon.goneIf(isFolded)
+        binding.attachmentsHeaderDownIcon.goneUnless(isFolded)
     }
 
     private fun setupObservers() {
@@ -476,6 +529,23 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         viewModel.snackBarMessage.observeSingle(viewLifecycleOwner) { resId ->
             activity?.showSnackbar(resId)
         }
+
+        viewModel.attachments.observe(viewLifecycleOwner) { attachments ->
+            binding.attachmentsList.removeAllViews()
+            // Org Attachments List is only for Org-attach attachments, not for other two Storage options.
+
+            val filteredAttachments = attachments.filter {
+                it.type == null || it.type == NoteAttachmentData.Type.COPY_TO_ID
+            }
+
+            filteredAttachments.forEach {
+                addAttachmentDataToList(it)
+            }
+
+            val hasId = viewModel.notePayload?.properties?.containsKey(OrgFormat.PROPERTY_ID) ?: false
+            binding.attachmentsHeader.goneUnless(filteredAttachments.isNotEmpty() && hasId)
+            binding.attachmentsDivider.goneUnless(filteredAttachments.isNotEmpty() && hasId)
+        }
     }
 
     private fun updateViewsFromPayload() {
@@ -510,6 +580,8 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         addPropertyToList(null, null)
 
         // Content
+        binding.content.noteId = viewModel.noteId
+        binding.content.bookId = viewModel.bookId
         binding.content.setSourceText(payload.content)
     }
 
@@ -735,6 +807,10 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         }
 
         viewModel.savePayloadToBundle(outState)
+
+        if (pendingAttachmentType != null) {
+            outState.putString(KEY_PENDING_ATTACHMENT_TYPE, pendingAttachmentType!!.name)
+        }
     }
 
     override fun onDetach() {
@@ -892,6 +968,8 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
                 updateTimestampView(TimeType.CLOSED, null)
                 viewModel.updatePayloadClosedTime(null)
             }
+
+
         }
 
         f?.show(childFragmentManager, TimestampDialogFragment.FRAGMENT_TAG)
@@ -1122,6 +1200,85 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         }
     }
 
+    private fun userAddAttachment() {
+        val action = if (pendingAttachmentType == NoteAttachmentData.Type.LINK) {
+            Intent.ACTION_OPEN_DOCUMENT
+        } else {
+            Intent.ACTION_GET_CONTENT
+        }
+        val intent = createFilePickerIntent(action)
+        val chooserIntent = Intent.createChooser(intent, getString(R.string.attachment_add))
+        startActivityForResult(chooserIntent, REQUEST_CODE_ADD_ATTACHMENT)
+    }
+
+    private fun createFilePickerIntent(action: String): Intent {
+        return Intent(action).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*"
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, requestCode, resultCode, data)
+
+        when (requestCode) {
+            REQUEST_CODE_ADD_ATTACHMENT ->
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    val uri = data.data
+                    if (uri != null) {
+                        if (pendingAttachmentType == NoteAttachmentData.Type.LINK) {
+                            try {
+                                val takeFlags: Int = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                                context?.contentResolver?.takePersistableUriPermission(uri, takeFlags)
+                            } catch (e: SecurityException) {
+                                Log.w(TAG, "Failed to take persistable URI permission for $uri", e)
+                            }
+                        }
+
+                        if (pendingAttachmentType != null) {
+                            insertAttachmentLink(uri, pendingAttachmentType!!)
+                        }
+                        updatePayloadFromViews()
+
+                        if (pendingAttachmentType != NoteAttachmentData.Type.LINK) {
+                            viewModel.addAttachment(uri, pendingAttachmentType)
+                        }
+                        updateViewsFromPayload()
+                    }
+                    pendingAttachmentType = null
+                } else {
+                    Toast.makeText(context, "Failed to get attachment Uri", Toast.LENGTH_LONG).show()
+                }
+        }
+    }
+
+    private fun addAttachmentDataToList(attachmentData: NoteAttachmentData) {
+        val view = LayoutInflater.from(context).inflate(R.layout.fragment_note_file, binding.attachmentsList, false)
+        binding.attachmentsList.addView(view)
+
+        val filename = view.findViewById<TextView>(R.id.filename)
+        val delete = view.findViewById<View>(R.id.delete)
+
+        fun updateView() {
+            if (attachmentData.isDeleted) {
+                filename?.text = "deleted: " + attachmentData.filename
+            } else {
+                filename?.text = attachmentData.filename
+            }
+        }
+
+        updateView()
+
+        delete.setOnClickListener {
+            attachmentData.isDeleted = true
+            updateView()
+        }
+
+        setAttachmentsListFoldState(false)
+    }
+
     /**
      * Updates current book for this note. Only makes sense for new notes.
      * TODO: Should be setPosition and allow filing under specific note
@@ -1169,6 +1326,23 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         return BookFragment.getDrawerItemId(viewModel.bookId)
     }
 
+    private fun insertAttachmentLink(uri: Uri, type: NoteAttachmentData.Type) {
+        val filename = BookName.getFileName(context, uri) ?: "unknown"
+        val linkText = when (type) {
+            NoteAttachmentData.Type.LINK -> "[[$uri]]"
+            NoteAttachmentData.Type.COPY_TO_DIR -> "[[${OrgFormat.LINK_PREFIX_FILE}$filename]]"
+            NoteAttachmentData.Type.COPY_TO_ID -> "[[${OrgFormat.LINK_PREFIX_ATTACHMENT}$filename]]"
+        }
+        val editText = binding.root.findViewById<EditText>(R.id.content_edit) ?: return
+        val start = editText.selectionStart
+        val end = editText.selectionEnd
+        if (start >= 0) {
+            editText.text.replace(Math.min(start, end), Math.max(start, end), linkText, 0, linkText.length)
+        } else {
+            editText.append(linkText)
+        }
+    }
+
     fun getNoteId(): Long {
         return viewModel.noteId
     }
@@ -1191,21 +1365,29 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         private const val ARG_PLACE = "place"
         private const val ARG_TITLE = "title"
         private const val ARG_CONTENT = "content"
+        private const val ARG_ATTACHMENT_URI = "attachment_uri"
+        private const val KEY_PENDING_ATTACHMENT_TYPE = "pending_attachment_type"
+
+        // This code will also be received by MainActivity, we need to make sure the code doesn't
+        // conflict the code there. Is there a better way to manage the codes?
+        private const val REQUEST_CODE_ADD_ATTACHMENT = 6
 
         @JvmStatic
         @JvmOverloads
         fun forNewNote(
-            notePlace: NotePlace,
-            initialTitle: String? = null,
-            initialContent: String? = null): NoteFragment? {
+                notePlace: NotePlace,
+                initialTitle: String? = null,
+                initialContent: String? = null,
+                attachmentUri: Uri? = null): NoteFragment? {
 
             return if (notePlace.bookId > 0) {
                 getInstance(
-                    notePlace.bookId,
-                    notePlace.noteId,
-                    notePlace.place,
-                    initialTitle,
-                    initialContent)
+                        notePlace.bookId,
+                        notePlace.noteId,
+                        notePlace.place,
+                        initialTitle,
+                        initialContent,
+                        attachmentUri)
             } else {
                 Log.e(TAG, "Invalid book id ${notePlace.bookId}")
                 null
@@ -1224,11 +1406,12 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
         @JvmStatic
         private fun getInstance(
-            bookId: Long,
-            noteId: Long,
-            place: Place? = null,
-            initialTitle: String? = null,
-            initialContent: String? = null): NoteFragment {
+                bookId: Long,
+                noteId: Long,
+                place: Place? = null,
+                initialTitle: String? = null,
+                initialContent: String? = null,
+                attachmentUri: Uri? = null): NoteFragment {
 
             val fragment = NoteFragment()
 
@@ -1250,6 +1433,10 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
             if (initialContent != null) {
                 args.putString(ARG_CONTENT, initialContent)
+            }
+
+            if (attachmentUri != null) {
+                args.putString(ARG_ATTACHMENT_URI, attachmentUri.toString())
             }
 
             fragment.arguments = args

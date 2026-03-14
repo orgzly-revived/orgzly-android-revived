@@ -1,34 +1,26 @@
 package com.orgzly.android.repos
 
 import android.net.Uri
-import android.os.Build
-import android.os.SystemClock
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
-import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiSelector
-import com.orgzly.R
+import com.orgzly.android.BookName
+import com.orgzly.android.LocalStorage
 import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.RetryTestRule
 import com.orgzly.android.db.entity.Repo
-import com.orgzly.android.espresso.util.EspressoUtils
-import com.orgzly.android.ui.repos.ReposActivity
-import org.hamcrest.core.AllOf
+import com.orgzly.android.testutil.TestDocumentsProvider
+import com.orgzly.android.ui.note.NoteAttachmentData
+import com.orgzly.android.util.MiscUtils
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
 import java.io.IOException
 
 class DocumentRepoTest : SyncRepoTest, OrgzlyTest() {
 
-    private lateinit var documentTreeSegment: String
     private lateinit var repo: Repo
     private lateinit var syncRepo: SyncRepo
     private lateinit var repoDirectory: DocumentFile
@@ -155,74 +147,112 @@ class DocumentRepoTest : SyncRepoTest, OrgzlyTest() {
         SyncRepoTest.testRenameBook_sameSubfolderNewLeafName(syncRepo)
     }
 
+    @Test
+    fun testStoreFileInSubdirectory() {
+        val tmpDir = localStorage.getCacheDirectory("tmp-document-repo-attachment")
+        val file = File(tmpDir, "test.jpg")
+        MiscUtils.writeStringToFile("image content", file)
+
+        try {
+            val rook = syncRepo.storeFile(file, "attachments", "test.jpg")
+            Assert.assertNotNull(rook)
+            Assert.assertTrue(
+                BookName.getRepoRelativePath(rook.repoUri, rook.uri).endsWith("attachments/test.jpg")
+            )
+
+            val storedUri = syncRepo.getUriForPath("attachments/test.jpg")
+            Assert.assertNotNull(storedUri)
+            val storedContent = readTextFromUri(storedUri!!)
+            Assert.assertEquals("image content", storedContent)
+        } finally {
+            LocalStorage.deleteRecursive(tmpDir)
+        }
+    }
+
+    @Test
+    fun testStoreFileInNestedPath() {
+        val tmpDir = localStorage.getCacheDirectory("tmp-document-repo-attachment-nested")
+        val file = File(tmpDir, "attachment.pdf")
+        MiscUtils.writeStringToFile("pdf content", file)
+
+        try {
+            syncRepo.storeFile(file, "data/ab/cdef", "attachment.pdf")
+            val storedUri = syncRepo.getUriForPath("data/ab/cdef/attachment.pdf")
+            Assert.assertNotNull(storedUri)
+        } finally {
+            LocalStorage.deleteRecursive(tmpDir)
+        }
+    }
+
+    @Test
+    fun testListFilesInPath() {
+        val tmpDir = localStorage.getCacheDirectory("tmp-document-repo-list-path")
+        val fileA = File(tmpDir, "a.jpg")
+        val fileB = File(tmpDir, "b.pdf")
+        MiscUtils.writeStringToFile("content a", fileA)
+        MiscUtils.writeStringToFile("content b", fileB)
+
+        try {
+            syncRepo.storeFile(fileA, "attachments", "a.jpg")
+            syncRepo.storeFile(fileB, "attachments", "b.pdf")
+            val files: List<NoteAttachmentData> = syncRepo.listFilesInPath("attachments")
+            Assert.assertEquals(2, files.size)
+            Assert.assertTrue(files.any { it.filename == "a.jpg" })
+            Assert.assertTrue(files.any { it.filename == "b.pdf" })
+        } finally {
+            LocalStorage.deleteRecursive(tmpDir)
+        }
+    }
+
+    @Test
+    fun testListFilesInPathEmptyDir() {
+        val files: List<NoteAttachmentData> = syncRepo.listFilesInPath("empty")
+        Assert.assertEquals(0, files.size)
+    }
+
+    @Test
+    fun testGetUriForPath() {
+        val tmpDir = localStorage.getCacheDirectory("tmp-document-repo-uri-path")
+        val file = File(tmpDir, "file.txt")
+        MiscUtils.writeStringToFile("content", file)
+
+        try {
+            syncRepo.storeFile(file, "folder", "file.txt")
+            val uri = syncRepo.getUriForPath("folder/file.txt")
+            Assert.assertNotNull(uri)
+            val storedContent = readTextFromUri(uri!!)
+            Assert.assertEquals("content", storedContent)
+        } finally {
+            LocalStorage.deleteRecursive(tmpDir)
+        }
+    }
+
+    @Test
+    fun testGetUriForPathNonExistent() {
+        val uri = syncRepo.getUriForPath("nonexistent/path.txt")
+        Assert.assertNull(uri)
+    }
+
     private fun setupDocumentRepo(extraDir: String? = null) {
-        val repoDirName = SyncRepoTest.repoDirName
-        documentTreeSegment = if (Build.VERSION.SDK_INT < 30) {
-            "/document/raw%3A%2Fstorage%2Femulated%2F0%2FDownload%2F$repoDirName%2F"
-        } else {
-            "/document/primary%3A$repoDirName%2F"
-        }
-        var treeDocumentFileUrl = if (Build.VERSION.SDK_INT < 30) {
-            "content://com.android.providers.downloads.documents/tree/raw%3A%2Fstorage%2Femulated%2F0%2FDownload%2F$repoDirName"
-        } else {
-            "content://com.android.externalstorage.documents/tree/primary%3A$repoDirName"
-        }
+        val rootTree = "content://${TestDocumentsProvider.AUTHORITY}/tree/${TestDocumentsProvider.ROOT_ID}"
+        var treeDocumentFileUrl = rootTree
         if (extraDir != null) {
             treeDocumentFileUrl = "$treeDocumentFileUrl%2F" + Uri.encode(extraDir)
         }
         repoDirectory = DocumentFile.fromTreeUri(context, treeDocumentFileUrl.toUri())!!
-        repo = if (!repoDirectory.exists()) {
-            if (extraDir != null) {
-                setupDocumentRepoInUi(extraDir)
-            } else {
-                setupDocumentRepoInUi(repoDirName)
-            }
-            dataRepository.getRepos()[0]
-        } else {
-            testUtils.setupRepo(RepoType.DOCUMENT, treeDocumentFileUrl)
-        }
+        Assert.assertTrue(repoDirectory.exists())
+        // Isolate each test run under a clean root.
+        repoDirectory.listFiles().forEach { it.delete() }
+        repo = testUtils.setupRepo(RepoType.DOCUMENT, treeDocumentFileUrl)
         syncRepo = testUtils.repoInstance(RepoType.DOCUMENT, repo.url, repo.id)
         Assert.assertEquals(treeDocumentFileUrl, repo.url)
     }
 
-    /**
-     * Note that this solution only works the first time the tests are run on any given virtual
-     * device. On the second run, the file picker will start in a different folder, resulting in
-     * a different repo URL, making some tests fail. If you are running locally, you must work
-     * around this by wiping the device's data between test suite runs.
-     */
-    private fun setupDocumentRepoInUi(repoDirName: String) {
-        ActivityScenario.launch(ReposActivity::class.java).use {
-            Espresso.onView(ViewMatchers.withId(R.id.activity_repos_directory))
-                .perform(ViewActions.click())
-            Espresso.onView(ViewMatchers.withId(R.id.activity_repo_directory_browse_button))
-                .perform(ViewActions.click())
-            SystemClock.sleep(500)
-            // In Android file browser (Espresso cannot be used):
-            val mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-            if (Build.VERSION.SDK_INT < 30) {
-                // Older system file picker UI
-                mDevice.findObject(UiSelector().description("More options")).click()
-                SystemClock.sleep(300)
-                mDevice.findObject(UiSelector().text("New folder")).click()
-                SystemClock.sleep(500)
-                mDevice.findObject(UiSelector().text("Folder name")).setText(repoDirName)
-                mDevice.findObject(UiSelector().text("OK")).click()
-                mDevice.findObject(UiSelector().textContains("ALLOW ACCESS TO")).click()
-                mDevice.findObject(UiSelector().text("ALLOW")).click()
-            } else {
-                mDevice.findObject(UiSelector().description("New folder")).click()
-                SystemClock.sleep(500)
-                mDevice.findObject(UiSelector().text("Folder name")).setText(repoDirName)
-                mDevice.findObject(UiSelector().text("OK")).click()
-                mDevice.findObject(UiSelector().text("USE THIS FOLDER")).click()
-                mDevice.findObject(UiSelector().text("ALLOW")).click()
-            }
-            // Back in Orgzly:
-            SystemClock.sleep(500)
-            Espresso.onView(ViewMatchers.isRoot()).perform(EspressoUtils.waitId(R.id.fab, 5000))
-            Espresso.onView(AllOf.allOf(ViewMatchers.withId(R.id.fab), ViewMatchers.isDisplayed()))
-                .perform(ViewActions.click())
+    private fun readTextFromUri(uri: Uri): String {
+        context.contentResolver.openInputStream(uri).use { inputStream ->
+            checkNotNull(inputStream) { "Failed opening input stream for $uri" }
+            return inputStream.bufferedReader().readText()
         }
     }
+
 }
