@@ -87,7 +87,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          key: avd-v2-${{ matrix.api-level }}
 
       - name: create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -100,7 +100,11 @@ jobs:
           disable-animations: true
           disable-spellchecker: true
           profile: Nexus 6
-          script: echo "Generated AVD snapshot for caching."
+          script: |
+            echo "Waiting for system services to stabilize..."
+            adb shell input keyevent 82
+            sleep 10
+            echo "Generated AVD snapshot for caching."
 
       - name: Save AVD to cache
         if: always() && steps.avd-cache.outputs.cache-hit != 'true'
@@ -109,7 +113,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          key: avd-v2-${{ matrix.api-level }}
 
       - name: Add Dropbox API TEST credentials
         shell: bash
