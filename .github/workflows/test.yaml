@@ -54,7 +54,9 @@ jobs:
 
   instrumentedTests:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     strategy:
+      fail-fast: false
       matrix:
         # TODO: Run on lowest and highest supported API
         api-level: [29, 35]

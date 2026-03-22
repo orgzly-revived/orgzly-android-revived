@@ -7,6 +7,7 @@ import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
@@ -15,6 +16,7 @@ import static com.orgzly.android.espresso.util.EspressoUtils.onItemInAgenda;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNotesInAgenda;
 import static com.orgzly.android.espresso.util.EspressoUtils.recyclerViewItemCount;
 import static com.orgzly.android.espresso.util.EspressoUtils.searchForTextCloseKeyboard;
+import static com.orgzly.android.espresso.util.EspressoUtils.waitForExactAdapterCount;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
@@ -74,6 +76,17 @@ public class AgendaFragmentTest extends OrgzlyTest {
         scenario.close();
     }
 
+    /** Wait for agenda adapter to reach expected count, then assert. */
+    private void checkAgendaItemCount(int count) {
+        onNotesInAgenda().perform(waitForExactAdapterCount(count, 5000));
+        onNotesInAgenda().check(matches(recyclerViewItemCount(count)));
+    }
+
+    /** Wait for action mode to appear after longClick. */
+    private void waitForActionMode(int actionButtonId) {
+        onView(isRoot()).perform(EspressoUtils.waitId(actionButtonId, 5000));
+    }
+
     @Test
     public void testAgendaSavedSearch() {
         testUtils.setupBook("book-three",
@@ -92,16 +105,19 @@ public class AgendaFragmentTest extends OrgzlyTest {
          * 7 Note C
          * 7 Note 2
          */
-        onView(withId(R.id.fragment_query_agenda_recycler_view)).check(matches(recyclerViewItemCount(24)));
+        onView(withId(R.id.fragment_query_agenda_recycler_view))
+                .perform(waitForExactAdapterCount(24, 5000));
+        onView(withId(R.id.fragment_query_agenda_recycler_view))
+                .check(matches(recyclerViewItemCount(24)));
     }
 
     @Test
     public void testWithNoBook() {
         scenario = ActivityScenario.launch(MainActivity.class);
         searchForTextCloseKeyboard(".it.done (s.7d or d.7d) ad.7");
-        onNotesInAgenda().check(matches(recyclerViewItemCount(7)));
+        checkAgendaItemCount(7);
         searchForTextCloseKeyboard(".it.done (s.7d or d.7d) ad.3");
-        onNotesInAgenda().check(matches(recyclerViewItemCount(3)));
+        checkAgendaItemCount(3);
     }
 
     @Test
@@ -114,7 +130,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
         scenario = defaultSetUp();
         searchForTextCloseKeyboard(".it.done (s.7d or d.7d) ad.1");
 
-        onNotesInAgenda().check(matches(recyclerViewItemCount(6)));
+        checkAgendaItemCount(6);
         onItemInAgenda(0, R.id.item_agenda_divider_text).check(matches(allOf(withText(R.string.overdue), isDisplayed())));
         onItemInAgenda(1, R.id.item_head_title_view).check(matches(allOf(withText(endsWith("Note 5")), isDisplayed())));
         // Day 1
@@ -129,7 +145,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
         AppPreferences.groupScheduledWithTodayInAgenda(context, false);
         searchForTextCloseKeyboard(".it.done (s.7d or d.7d) ad.1");
 
-        onNotesInAgenda().check(matches(recyclerViewItemCount(7)));
+        checkAgendaItemCount(7);
         onItemInAgenda(0, R.id.item_agenda_divider_text).check(matches(allOf(withText(R.string.overdue), isDisplayed())));
         onItemInAgenda(1, R.id.item_head_title_view).check(matches(allOf(withText(endsWith("Note B")), isDisplayed())));
         onItemInAgenda(2, R.id.item_head_title_view).check(matches(allOf(withText(endsWith("Note C")), isDisplayed())));
@@ -140,7 +156,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
     }
 
     @Test
-    public void testOverdueScheduledNotRepeating() {
+    public void testAgendaRepeatingNote() {
         testUtils.setupBook("book-three",
                 "Sample book used for tests\n" +
 
@@ -149,7 +165,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
         scenario = ActivityScenario.launch(MainActivity.class);
         searchForTextCloseKeyboard("ad.1");
 
-        onNotesInAgenda().check(matches(recyclerViewItemCount(2)));
+        checkAgendaItemCount(2);
         onItemInAgenda(1, R.id.item_head_title_view).check(matches(allOf(withText(endsWith("Repeating note 1")), isDisplayed())));
     }
 
@@ -163,7 +179,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
 
         scenario = ActivityScenario.launch(MainActivity.class);
         searchForTextCloseKeyboard("ad.5");
-        onNotesInAgenda().check(matches(recyclerViewItemCount(10)));
+        checkAgendaItemCount(10);
     }
 
     @Test
@@ -181,8 +197,9 @@ public class AgendaFragmentTest extends OrgzlyTest {
          * 6 Note 2
          */
         onItemInAgenda(3).perform(longClick());
+        waitForActionMode(R.id.toggle_state);
         onView(withId(R.id.toggle_state)).perform(click());
-        onNotesInAgenda().check(matches(recyclerViewItemCount(21)));
+        checkAgendaItemCount(21);
     }
 
     @Test
@@ -200,8 +217,9 @@ public class AgendaFragmentTest extends OrgzlyTest {
          * 6 Note 2
          */
         onItemInAgenda(2).perform(longClick());
+        waitForActionMode(R.id.toggle_state);
         onView(withId(R.id.toggle_state)).perform(click());
-        onNotesInAgenda().check(matches(recyclerViewItemCount(15)));
+        checkAgendaItemCount(15);
     }
 
     @Test
@@ -219,8 +237,9 @@ public class AgendaFragmentTest extends OrgzlyTest {
          * 6 Note 2
          */
         onItemInAgenda(2).perform(longClick());
+        waitForActionMode(R.id.toggle_state);
         onView(withId(R.id.toggle_state)).perform(click());
-        onNotesInAgenda().check(matches(recyclerViewItemCount(15)));
+        checkAgendaItemCount(15);
     }
 
     @Test
@@ -240,6 +259,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
          * 6 Note 2
          */
         onItemInAgenda(1).perform(longClick());
+        waitForActionMode(R.id.schedule);
         onView(withId(R.id.schedule)).perform(click());
         onView(withId(R.id.date_picker_button)).perform(click());
         onView(withClassName(equalTo(DatePicker.class.getName())))
@@ -248,9 +268,8 @@ public class AgendaFragmentTest extends OrgzlyTest {
                         tomorrow.getMonthOfYear(),
                         tomorrow.getDayOfMonth()));
         onView(withText(android.R.string.ok)).perform(click());
-        SystemClock.sleep(500);
         onView(withText(R.string.set)).perform(click());
-        onNotesInAgenda().check(matches(recyclerViewItemCount(21)));
+        checkAgendaItemCount(21);
     }
 
     @Test
@@ -258,13 +277,13 @@ public class AgendaFragmentTest extends OrgzlyTest {
         scenario = defaultSetUp();
 
         searchForTextCloseKeyboard(".it.done ad.7");
-        onNotesInAgenda().check(matches(recyclerViewItemCount(22)));
+        checkAgendaItemCount(22);
 
         SystemClock.sleep(500);
         scenario.onActivity(activity ->
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE));
 
-        onNotesInAgenda().check(matches(recyclerViewItemCount(22)));
+        checkAgendaItemCount(22);
     }
 
     @Test
@@ -278,9 +297,10 @@ public class AgendaFragmentTest extends OrgzlyTest {
 
         searchForTextCloseKeyboard("i.todo ad.3");
 
-        onNotesInAgenda().check(matches(recyclerViewItemCount(9)));
+        checkAgendaItemCount(9);
 
         onItemInAgenda(1).perform(longClick());
+        waitForActionMode(R.id.state);
 
         // Check title for number of selected notes
         onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.top_toolbar))))
@@ -290,7 +310,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
         onView(withId(R.id.state)).perform(click());
         onView(withText(R.string.clear)).perform(click());
 
-        onNotesInAgenda().check(matches(recyclerViewItemCount(6)));
+        checkAgendaItemCount(6);
 
         // Check subtitle for search query
         onView(allOf(instanceOf(TextView.class), not(withText(R.string.agenda)), withParent(withId(R.id.top_toolbar))))
@@ -306,6 +326,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
         searchForTextCloseKeyboard("ad.3");
 
         onItemInAgenda(1).perform(longClick());
+        waitForActionMode(R.id.state);
         onView(withId(R.id.state)).perform(click());
 
         onView(withText("TODO")).check(matches(isChecked()));
@@ -330,7 +351,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
 
         onItemInAgenda(1).perform(click());
 
-        SystemClock.sleep(500);
+        onView(isRoot()).perform(EspressoUtils.waitId(R.id.scroll_view, 5000));
         onView(withId(R.id.scroll_view)).check(matches(isDisplayed()));
         onView(withId(R.id.title_view)).check(matches(withText("Note A")));
     }
@@ -344,6 +365,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
 
         searchForTextCloseKeyboard(".it.done ad.7");
         onItemInAgenda(1).perform(longClick());
+        waitForActionMode(R.id.state);
         onView(withId(R.id.state)).perform(click());
         onView(withText("NEXT")).perform(click());
     }
@@ -355,7 +377,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
         searchForTextCloseKeyboard("ad.1");
 
         // Overdue, note (deadline), today
-        onNotesInAgenda().check(matches(recyclerViewItemCount(3)));
+        checkAgendaItemCount(3);
     }
 
     @Test
@@ -364,8 +386,7 @@ public class AgendaFragmentTest extends OrgzlyTest {
         scenario = ActivityScenario.launch(MainActivity.class);
         searchForTextCloseKeyboard("ad.1");
         // today, note (scheduled)
-        SystemClock.sleep(500);
-        onNotesInAgenda().check(matches(recyclerViewItemCount(2)));
+        checkAgendaItemCount(2);
     }
 
     @Test
@@ -374,6 +395,6 @@ public class AgendaFragmentTest extends OrgzlyTest {
         scenario = ActivityScenario.launch(MainActivity.class);
         searchForTextCloseKeyboard("ad.1");
         // Today
-        onNotesInAgenda().check(matches(recyclerViewItemCount(1)));
+        checkAgendaItemCount(1);
     }
 }

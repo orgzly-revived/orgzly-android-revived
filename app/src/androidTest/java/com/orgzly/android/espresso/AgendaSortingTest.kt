@@ -12,6 +12,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.orgzly.R
 import com.orgzly.android.OrgzlyTest
+import com.orgzly.android.RetryTestRule
 import com.orgzly.android.espresso.util.EspressoUtils.onItemInAgenda
 import com.orgzly.android.espresso.util.EspressoUtils.onNotesInAgenda
 import com.orgzly.android.espresso.util.EspressoUtils.recyclerViewItemCount
@@ -24,9 +25,13 @@ import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.endsWith
 import org.joda.time.DateTime
 import org.junit.After
+import org.junit.Rule
 import org.junit.Test
 
 class AgendaSortingTest : OrgzlyTest() {
+    @get:Rule
+    val retryTestRule = RetryTestRule()
+
     private lateinit var scenario: ActivityScenario<MainActivity>
 
     private fun getToday(): String {

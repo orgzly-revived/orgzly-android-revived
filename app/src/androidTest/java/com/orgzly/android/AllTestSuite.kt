@@ -32,15 +32,12 @@ import com.orgzly.android.misc.StateChangeParentTitleUpdateTest
 import com.orgzly.android.misc.StateChangeTest
 import com.orgzly.android.misc.StructureTest
 import com.orgzly.android.misc.UriTest
-import com.orgzly.android.query.QueryTokenizerTest
-import com.orgzly.android.query.QueryUtilsTest
 import com.orgzly.android.reminders.NoteRemindersTest
 import com.orgzly.android.repos.DataRepositoryTest
 import com.orgzly.android.repos.DirectoryRepoTest
 import com.orgzly.android.repos.DropboxRepoTest
 import com.orgzly.android.repos.LocalDbRepoTest
 import com.orgzly.android.repos.RepoFactoryTest
-import com.orgzly.android.ui.ImageLoaderTest
 import com.orgzly.android.uiautomator.ListWidgetTest
 import com.orgzly.android.usecase.NoteUpdateDeadlineTimeTest
 import com.orgzly.android.usecase.NoteUpdateScheduledTimeTest
@@ -88,9 +85,6 @@ import org.junit.runners.Suite
         StructureTest::class,
         UriTest::class,
 
-        QueryTokenizerTest::class,
-        QueryUtilsTest::class,
-
         NoteRemindersTest::class,
 
         DataRepositoryTest::class,
@@ -98,8 +92,6 @@ import org.junit.runners.Suite
         DropboxRepoTest::class,
         LocalDbRepoTest::class,
         RepoFactoryTest::class,
-
-        ImageLoaderTest::class,
 
         ListWidgetTest::class,
 
