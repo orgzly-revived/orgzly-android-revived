@@ -12,12 +12,14 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.orgzly.R
 import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.espresso.util.EspressoUtils.onSnackbar
+import com.orgzly.android.RetryTestRule
+import com.orgzly.android.repos.RepoType
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matchers.*
-import com.orgzly.android.RetryTestRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
 
 class OrgProtocolTest : OrgzlyTest() {
     @get:Rule
@@ -27,6 +29,11 @@ class OrgProtocolTest : OrgzlyTest() {
     @Throws(Exception::class)
     override fun setUp() {
         super.setUp()
+
+        testUtils.setupRepo(
+            RepoType.DIRECTORY,
+            File(context.cacheDir, "org-protocol-repo").toURI().toString()
+        )
 
         testUtils.setupBook(
             "book-a",
