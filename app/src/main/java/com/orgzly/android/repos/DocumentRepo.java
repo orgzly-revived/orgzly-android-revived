@@ -141,8 +141,18 @@ public class DocumentRepo implements SyncRepo {
     }
 
     private DocumentFile getDocumentFileFromPath(String path) {
-        String fullUri = repoDocumentFile.getUri() + Uri.encode("/" + path);
-        return DocumentFile.fromSingleUri(context, Uri.parse(fullUri));
+        if (path == null || path.isEmpty()) return repoDocumentFile;
+        List<String> levels = new ArrayList<>(Arrays.asList(path.split("/")));
+        DocumentFile currentDir = repoDocumentFile;
+        while (!levels.isEmpty()) {
+            String nextName = levels.remove(0);
+            if (nextName.isEmpty()) continue;
+            currentDir = Objects.requireNonNull(currentDir).findFile(nextName);
+            if (currentDir == null) {
+                return null;
+            }
+        }
+        return currentDir;
     }
 
     @Override
@@ -180,7 +190,7 @@ public class DocumentRepo implements SyncRepo {
     @Override
     public InputStream openRepoFileInputStream(String repoRelativePath) throws IOException {
         DocumentFile sourceFile = getDocumentFileFromPath(repoRelativePath);
-        if (!sourceFile.exists()) throw new FileNotFoundException();
+        if (sourceFile == null || !sourceFile.exists()) throw new FileNotFoundException();
         return context.getContentResolver().openInputStream(sourceFile.getUri());
     }
 
@@ -250,17 +260,28 @@ public class DocumentRepo implements SyncRepo {
      */
     @Override
     public VersionedRook renameBook(Uri oldFullUri, String newName) throws IOException {
-        DocumentFile oldDocFile = Objects.requireNonNull(DocumentFile.fromSingleUri(context, oldFullUri));
+        String oldRepoRelativePath = BookName.getRepoRelativePath(repoUri, oldFullUri);
+        DocumentFile oldDocFile = getDocumentFileFromPath(oldRepoRelativePath);
+        if (oldDocFile == null) {
+            oldDocFile = DocumentFile.fromSingleUri(context, oldFullUri);
+        }
         long mtime = oldDocFile.lastModified();
         String rev = String.valueOf(mtime);
         String oldDocFileName = oldDocFile.getName();
-        Uri oldDirUri = Uri.parse(
-                oldFullUri.toString().replace(
-                        Uri.encode("/" + oldDocFile.getName()),
-                        ""
-                )
-        );
-        BookName oldBookName = BookName.fromRepoRelativePath(BookName.getRepoRelativePath(repoUri, oldFullUri));
+
+        String oldDirPath = "";
+        int lastSlash = oldRepoRelativePath.lastIndexOf('/');
+        if (lastSlash > 0) {
+            oldDirPath = oldRepoRelativePath.substring(0, lastSlash);
+        }
+
+        DocumentFile oldDirFile = getDocumentFileFromPath(oldDirPath);
+        if (oldDirFile == null) {
+            throw new IOException("Cannot find parent directory for " + oldRepoRelativePath);
+        }
+        Uri oldDirUri = oldDirFile.getUri();
+
+        BookName oldBookName = BookName.fromRepoRelativePath(oldRepoRelativePath);
         String newRelativePath = BookName.repoRelativePath(newName, oldBookName.getFormat());
         String newDocFileName = Objects.requireNonNull(Uri.parse(newRelativePath).getLastPathSegment());
         DocumentFile newDir;

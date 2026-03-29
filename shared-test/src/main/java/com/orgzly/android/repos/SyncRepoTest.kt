@@ -42,11 +42,10 @@ interface SyncRepoTest {
 
     companion object {
 
-        const val repoDirName = "orgzly-android-test"
-        private var treeDocumentFileExtraSegment = if (Build.VERSION.SDK_INT < 30) {
-            "/document/raw%3A%2Fstorage%2Femulated%2F0%2FDownload%2F$repoDirName%2F"
-        } else {
-            "/document/primary%3A$repoDirName%2F"
+        private fun getExtraSegment(repoUri: Uri): String {
+            val rootId = repoUri.lastPathSegment ?: ""
+            val separator = if (repoUri.authority == "com.orgzlyrevived.test.documents") "%3A" else "%2F"
+            return "/document/" + Uri.encode(rootId) + separator
         }
 
         fun testGetBooks_singleOrgFile(repoManipulationPoint: Any, syncRepo: SyncRepo) {
@@ -159,7 +158,7 @@ interface SyncRepoTest {
             // Then
             val expectedRookUri = when (syncRepo) {
                 is GitRepo -> "/Book one.org"
-                is DocumentRepo -> syncRepo.uri.toString() + treeDocumentFileExtraSegment + "Book%20one.org"
+                is DocumentRepo -> syncRepo.uri.toString() + getExtraSegment(syncRepo.uri) + "Book%20one.org"
                 else -> syncRepo.uri.toString() + "/Book%20one.org"
             }
             assertEquals(expectedRookUri, vrook.uri.toString())
@@ -295,7 +294,7 @@ interface SyncRepoTest {
             val renamedVrook = syncRepo.books[0]
             val expectedRookUri = when (syncRepo) {
                 is GitRepo -> "/Renamed book.org"
-                is DocumentRepo -> syncRepo.uri.toString() + treeDocumentFileExtraSegment + "Renamed%20book.org"
+                is DocumentRepo -> syncRepo.uri.toString() + getExtraSegment(syncRepo.uri) + "Renamed%20book.org"
                 else -> syncRepo.uri.toString() + "/Renamed%20book.org"
             }
             assertEquals(expectedRookUri, renamedVrook.uri.toString())
@@ -332,7 +331,7 @@ interface SyncRepoTest {
             // Then
             val expectedRookUri = when (syncRepo) {
                 is GitRepo -> "/A folder/Renamed book.org"
-                is DocumentRepo -> syncRepo.uri.toString() + treeDocumentFileExtraSegment + "A%20folder%2FRenamed%20book.org"
+                is DocumentRepo -> syncRepo.uri.toString() + getExtraSegment(syncRepo.uri) + "A%20folder%2FRenamed%20book.org"
                 else -> syncRepo.uri.toString() + "/A%20folder/Renamed%20book.org"
             }
             assertEquals(expectedRookUri, renamedRook.uri.toString())
@@ -367,7 +366,7 @@ interface SyncRepoTest {
             // Then
             val expectedRookUri = when (syncRepo) {
                 is GitRepo -> "/Renamed book.org"
-                is DocumentRepo -> syncRepo.uri.toString() + treeDocumentFileExtraSegment + "Renamed%20book.org"
+                is DocumentRepo -> syncRepo.uri.toString() + getExtraSegment(syncRepo.uri) + "Renamed%20book.org"
                 else -> syncRepo.uri.toString() + "/Renamed%20book.org"
             }
             assertEquals(expectedRookUri, renamedRook.uri.toString())
@@ -385,7 +384,7 @@ interface SyncRepoTest {
             // Then
             val expectedRookUri = when (syncRepo) {
                 is GitRepo -> "/New folder/Original book.org"
-                is DocumentRepo -> syncRepo.uri.toString() + treeDocumentFileExtraSegment + "New%20folder%2FOriginal%20book.org"
+                is DocumentRepo -> syncRepo.uri.toString() + getExtraSegment(syncRepo.uri) + "New%20folder%2FOriginal%20book.org"
                 else -> syncRepo.uri.toString() + "/New%20folder/Original%20book.org"
             }
             assertEquals(expectedRookUri, renamedRook.uri.toString())
@@ -403,7 +402,7 @@ interface SyncRepoTest {
             // Then
             val expectedRookUri = when (syncRepo) {
                 is GitRepo -> "/new folder/New book.org"
-                is DocumentRepo -> syncRepo.uri.toString() + treeDocumentFileExtraSegment + "new%20folder%2FNew%20book.org"
+                is DocumentRepo -> syncRepo.uri.toString() + getExtraSegment(syncRepo.uri) + "new%20folder%2FNew%20book.org"
                 else -> syncRepo.uri.toString() + "/new%20folder/New%20book.org"
             }
             assertEquals(expectedRookUri, renamedRook.uri.toString())
@@ -421,7 +420,7 @@ interface SyncRepoTest {
             // Then
             val expectedRookUri = when (syncRepo) {
                 is GitRepo -> "/old folder/New book.org"
-                is DocumentRepo -> syncRepo.uri.toString() + treeDocumentFileExtraSegment + "old%20folder%2FNew%20book.org"
+                is DocumentRepo -> syncRepo.uri.toString() + getExtraSegment(syncRepo.uri) + "old%20folder%2FNew%20book.org"
                 else -> syncRepo.uri.toString() + "/old%20folder/New%20book.org"
             }
             assertEquals(expectedRookUri, renamedRook.uri.toString())
@@ -461,11 +460,11 @@ interface SyncRepoTest {
                     updateGitRepo(repoManipulationPoint)
                 }
                 is DocumentRepo -> {
-                    expectedRookUri = repo.uri.toString() + treeDocumentFileExtraSegment + Uri.encode(fileName)
+                    expectedRookUri = repo.uri.toString() + getExtraSegment(repo.uri) + Uri.encode(fileName)
                     var targetDir = repoManipulationPoint as DocumentFile
                     if (folderName != null) {
                         targetDir = targetDir.createDirectory(folderName)!!
-                        expectedRookUri = repo.uri.toString() + treeDocumentFileExtraSegment + Uri.encode("$folderName/$fileName")
+                        expectedRookUri = repo.uri.toString() + getExtraSegment(repo.uri) + Uri.encode("$folderName/$fileName")
                     }
                     MiscUtils.writeStringToDocumentFile(content, fileName, targetDir.uri)
                 }
