@@ -41,6 +41,7 @@ interface SyncRepoTest {
     fun testRenameBook_sameSubfolderNewLeafName()
 
     companion object {
+        const val repoDirName = "orgzly-android-test"
 
         private fun getExtraSegment(repoUri: Uri): String {
             val rootId = repoUri.lastPathSegment ?: ""
