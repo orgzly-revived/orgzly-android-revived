@@ -165,6 +165,14 @@ public class DisplayManager {
         }
     }
 
+    public static void displayNewNote(FragmentManager fragmentManager, NotePlace target, String initialTitle, String initialContent) {
+        Fragment fragment = NoteFragment.forNewNote(target, initialTitle, initialContent);
+
+        if (fragment != null) {
+            displayNoteFragment(fragmentManager, fragment);
+        }
+    }
+
     private static void displayNoteFragment(FragmentManager fragmentManager, Fragment fragment) {
         replaceFragment(
                 fragmentManager,

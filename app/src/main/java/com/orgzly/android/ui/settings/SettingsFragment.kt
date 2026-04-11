@@ -158,6 +158,11 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         updateRemindersScreen()
         updateWidgetScreen()
         setupCalendarSyncSearchPreference()
+
+        findPreference<androidx.preference.Preference>("prefs_screen_capture_templates")?.setOnPreferenceClickListener {
+            listener?.onCaptureTemplatesRequest()
+            true
+        }
     }
 
     private fun setupCalendarSyncSearchPreference() {
@@ -569,6 +574,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         fun onWhatsNewDisplayRequest()
         fun onPreferenceScreen(resource: String)
         fun onTitleChange(title: CharSequence?)
+        fun onCaptureTemplatesRequest()
     }
 
     companion object {

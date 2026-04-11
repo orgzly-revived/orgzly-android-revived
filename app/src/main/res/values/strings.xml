@@ -762,4 +762,24 @@
     <string name="is_active_label">Active</string>
 
     <string name="content_description_back_button">Navigate back</string>
+
+    <!-- Capture Templates -->
+    <string name="capture_templates">Capture templates</string>
+    <string name="capture_templates_summary">Define templates for quickly capturing notes</string>
+    <string name="no_capture_templates">No capture templates</string>
+    <string name="capture_template">Capture template</string>
+    <string name="template_description">Description</string>
+    <string name="template_title">Title template</string>
+    <string name="template_content">Content template</string>
+    <string name="template_target_book">Target notebook</string>
+    <string name="template_state">Initial state</string>
+    <string name="template_priority">Initial priority</string>
+    <string name="template_tags">Initial tags</string>
+    <string name="template_scheduled">Schedule for today</string>
+    <string name="select_capture_template">Select template</string>
+    <string name="template_no_target_book">Default (current notebook)</string>
+    <string name="capture_template_saved">Template saved</string>
+    <string name="capture_template_deleted">Template deleted</string>
+    <string name="cannot_be_empty_short">Required</string>
+    <string name="edit_capture_template">Edit template</string>
 </resources>

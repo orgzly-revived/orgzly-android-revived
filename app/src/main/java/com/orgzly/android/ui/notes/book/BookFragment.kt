@@ -279,7 +279,12 @@ class BookFragment :
                                 } else {
                                     NotePlace(mBookId)
                                 }
-                                listener?.onNoteNewRequest(notePlace)
+                                val templates = AppPreferences.captureTemplates(requireContext())
+                                if (templates.isNotEmpty()) {
+                                    showCaptureTemplateChooser(templates, notePlace)
+                                } else {
+                                    listener?.onNoteNewRequest(notePlace)
+                                }
                             }
                             show()
                         } else {
@@ -385,6 +390,22 @@ class BookFragment :
 
     private fun newNoteRelativeToSelection(place: Place, noteId: Long) {
         listener?.onNoteNewRequest(NotePlace(mBookId, noteId, place))
+    }
+
+    private fun showCaptureTemplateChooser(
+        templates: List<com.orgzly.android.ui.capture.CaptureTemplate>,
+        notePlace: NotePlace
+    ) {
+        val items = templates.map {
+            it.description.ifBlank { it.title.ifBlank { getString(R.string.capture_template) } }
+        }.toTypedArray()
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.select_capture_template)
+            .setItems(items) { _, index ->
+                listener?.onNoteNewRequestWithTemplate(notePlace, templates[index])
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
 
     private fun moveNotes(offset: Int) {

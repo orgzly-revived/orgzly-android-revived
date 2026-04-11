@@ -204,6 +204,8 @@ abstract class NotesFragment : CommonFragment(), TimestampDialogFragment.OnDateT
 
         fun onNoteNewRequest(target: NotePlace)
 
+        fun onNoteNewRequestWithTemplate(target: NotePlace, template: com.orgzly.android.ui.capture.CaptureTemplate)
+
         fun onStateChangeRequest(noteIds: Set<Long>, state: String?)
 
         fun onStateToggleRequest(noteIds: Set<Long>)

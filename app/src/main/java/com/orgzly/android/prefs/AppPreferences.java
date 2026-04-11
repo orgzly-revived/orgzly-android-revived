@@ -1364,4 +1364,22 @@ public class AppPreferences {
     private static String repoPropsMapKeyPrefix(long id) {
         return "id-" + id + "-";
     }
+
+    /* Capture templates - stored as JSON array */
+    public static List<com.orgzly.android.ui.capture.CaptureTemplate> captureTemplates(Context context) {
+        String json = getDefaultSharedPreferences(context).getString("pref_key_capture_templates", "[]");
+        com.google.gson.reflect.TypeToken<List<com.orgzly.android.ui.capture.CaptureTemplate>> typeToken =
+            new com.google.gson.reflect.TypeToken<List<com.orgzly.android.ui.capture.CaptureTemplate>>(){};
+        try {
+            List<com.orgzly.android.ui.capture.CaptureTemplate> result = new Gson().fromJson(json, typeToken.getType());
+            return result != null ? result : new ArrayList<>();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public static void setCaptureTemplates(Context context, List<com.orgzly.android.ui.capture.CaptureTemplate> templates) {
+        String json = new Gson().toJson(templates);
+        getDefaultSharedPreferences(context).edit().putString("pref_key_capture_templates", json).apply();
+    }
 }

@@ -649,4 +649,7 @@
         <item>in_note_heading</item>
         <item>in_note_content</item>
     </string-array>
+
+    <!-- Capture templates stored as JSON -->
+    <string name="pref_key_capture_templates" translatable="false">pref_key_capture_templates</string>
 </resources>
