@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.orgzly.R
 import com.orgzly.databinding.ItemCaptureTemplateBinding
 
 class CaptureTemplatesAdapter(
@@ -40,7 +41,7 @@ class CaptureTemplatesAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val template = getItem(position)
-        holder.binding.description.text = template.description.ifBlank { template.title.ifBlank { "Template ${position + 1}" } }
+        holder.binding.description.text = template.description.ifBlank { template.title.ifBlank { holder.itemView.context.getString(R.string.capture_template_numbered, position + 1) } }
         val details = buildString {
             if (template.targetBook.isNotBlank()) append(template.targetBook)
             if (template.state.isNotBlank()) {

@@ -1367,7 +1367,7 @@ public class AppPreferences {
 
     /* Capture templates - stored as JSON array */
     public static List<com.orgzly.android.ui.capture.CaptureTemplate> captureTemplates(Context context) {
-        String json = getDefaultSharedPreferences(context).getString("pref_key_capture_templates", "[]");
+        String json = getDefaultSharedPreferences(context).getString(context.getResources().getString(R.string.pref_key_capture_templates), "[]");
         com.google.gson.reflect.TypeToken<List<com.orgzly.android.ui.capture.CaptureTemplate>> typeToken =
             new com.google.gson.reflect.TypeToken<List<com.orgzly.android.ui.capture.CaptureTemplate>>(){};
         try {
@@ -1380,6 +1380,6 @@ public class AppPreferences {
 
     public static void setCaptureTemplates(Context context, List<com.orgzly.android.ui.capture.CaptureTemplate> templates) {
         String json = new Gson().toJson(templates);
-        getDefaultSharedPreferences(context).edit().putString("pref_key_capture_templates", json).apply();
+        getDefaultSharedPreferences(context).edit().putString(context.getResources().getString(R.string.pref_key_capture_templates), json).apply();
     }
 }
