@@ -40,6 +40,8 @@ import com.orgzly.android.ui.notes.book.BookViewModel.Companion.APP_BAR_DEFAULT_
 import com.orgzly.android.ui.notes.book.BookViewModel.Companion.APP_BAR_SELECTION_MODE
 import com.orgzly.android.ui.notes.book.BookViewModel.Companion.APP_BAR_SELECTION_MOVE_MODE
 import com.orgzly.android.ui.refile.RefileFragment
+import com.orgzly.android.ui.capture.CaptureTemplate
+import com.orgzly.android.ui.capture.getDisplayName
 import com.orgzly.android.ui.settings.SettingsActivity
 import com.orgzly.android.ui.util.ActivityUtils
 import com.orgzly.android.ui.util.setDecorFitsSystemWindowsForBottomToolbar
@@ -393,11 +395,11 @@ class BookFragment :
     }
 
     private fun showCaptureTemplateChooser(
-        templates: List<com.orgzly.android.ui.capture.CaptureTemplate>,
+        templates: List<CaptureTemplate>,
         notePlace: NotePlace
     ) {
         val items = templates.map {
-            it.description.ifBlank { it.title.ifBlank { getString(R.string.capture_template) } }
+            it.getDisplayName(getString(R.string.capture_template))
         }.toTypedArray()
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.select_capture_template)

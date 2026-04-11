@@ -13,3 +13,7 @@ data class CaptureTemplate(
     val tags: String = "",
     val isScheduled: Boolean = false
 )
+
+/** Returns the best available display name, using the numbered fallback if needed. */
+fun CaptureTemplate.getDisplayName(fallback: String): String =
+    description.ifBlank { title.ifBlank { fallback } }

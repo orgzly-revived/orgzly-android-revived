@@ -41,7 +41,9 @@ class CaptureTemplatesAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val template = getItem(position)
-        holder.binding.description.text = template.description.ifBlank { template.title.ifBlank { holder.itemView.context.getString(R.string.capture_template_numbered, position + 1) } }
+        holder.binding.description.text = template.getDisplayName(
+            holder.itemView.context.getString(R.string.capture_template_numbered, position + 1)
+        )
         val details = buildString {
             if (template.targetBook.isNotBlank()) append(template.targetBook)
             if (template.state.isNotBlank()) {
