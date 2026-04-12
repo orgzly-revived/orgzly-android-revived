@@ -300,7 +300,11 @@ class BookFragment :
                                 } else {
                                     NotePlace(mBookId)
                                 }
-                                showCaptureTemplateChooser(templates, notePlace)
+                                if (templates.size == 1) {
+                                    listener?.onNoteNewRequestWithTemplate(notePlace, templates[0])
+                                } else {
+                                    showCaptureTemplateChooser(templates, notePlace)
+                                }
                             }
                             show()
                         } else {
