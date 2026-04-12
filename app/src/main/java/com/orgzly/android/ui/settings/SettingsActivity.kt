@@ -70,12 +70,15 @@ class SettingsActivity : CommonActivity(), Listener, com.orgzly.android.ui.captu
                 .commit()
     }
 
-    override fun onCaptureTemplateClose() {
-        supportFragmentManager.popBackStack()
-    }
+    override fun onCaptureTemplateEdit(templateId: String?) {
+        val fragment = com.orgzly.android.ui.capture.CaptureTemplateEditFragment.getInstance(templateId)
 
-    override fun getCaptureTemplatesContainerId(): Int {
-        return R.id.activity_settings_container
+        supportFragmentManager
+                .beginTransaction()
+                .setCustomAnimations(R.anim.fragment_enter, R.anim.fragment_exit, R.anim.fragment_enter, R.anim.fragment_exit)
+                .addToBackStack(null)
+                .replace(R.id.activity_settings_container, fragment, com.orgzly.android.ui.capture.CaptureTemplateEditFragment.FRAGMENT_TAG)
+                .commit()
     }
 
     override fun onPreferenceScreen(resource: String) {

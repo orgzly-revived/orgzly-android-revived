@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orgzly.R
@@ -18,14 +19,9 @@ class CaptureTemplateEditFragment : Fragment() {
 
     private lateinit var binding: FragmentCaptureTemplateBinding
     private var existingTemplateId: String? = null
-    var listener: Listener? = null
 
     @Inject
     lateinit var dataRepository: DataRepository
-
-    interface Listener {
-        fun onTemplateSaved()
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -161,7 +157,10 @@ class CaptureTemplateEditFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.done, menu)
+        inflater.inflate(R.menu.capture_template_edit, menu)
+        if (existingTemplateId == null) {
+            menu.findItem(R.id.delete)?.isVisible = false
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -170,8 +169,34 @@ class CaptureTemplateEditFragment : Fragment() {
                 saveTemplate(existingTemplateId)
                 true
             }
+            R.id.delete -> {
+                confirmDelete()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun confirmDelete() {
+        val templateId = existingTemplateId ?: return
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.delete)
+            .setMessage(binding.templateDescription.text?.toString()?.ifBlank {
+                getString(R.string.capture_template)
+            } ?: getString(R.string.capture_template))
+            .setPositiveButton(R.string.delete) { _, _ ->
+                deleteTemplate(templateId)
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun deleteTemplate(templateId: String) {
+        val templates = AppPreferences.captureTemplates(requireContext()).toMutableList()
+        templates.removeAll { it.id == templateId }
+        AppPreferences.setCaptureTemplates(requireContext(), templates)
+        Toast.makeText(requireContext(), R.string.capture_template_deleted, Toast.LENGTH_SHORT).show()
+        parentFragmentManager.popBackStack()
     }
 
     private fun saveTemplate(existingId: String?) {
@@ -221,13 +246,7 @@ class CaptureTemplateEditFragment : Fragment() {
         AppPreferences.setCaptureTemplates(requireContext(), templates)
 
         Toast.makeText(requireContext(), R.string.capture_template_saved, Toast.LENGTH_SHORT).show()
-        listener?.onTemplateSaved()
         parentFragmentManager.popBackStack()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
     }
 
     companion object {

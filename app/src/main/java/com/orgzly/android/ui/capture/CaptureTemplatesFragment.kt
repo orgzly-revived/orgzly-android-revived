@@ -2,25 +2,19 @@ package com.orgzly.android.ui.capture
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.core.content.ContextCompat
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import com.orgzly.R
 import com.orgzly.android.prefs.AppPreferences
-import com.orgzly.databinding.FragmentCaptureTemplatesBinding
+import com.orgzly.android.ui.settings.SettingsFragment
 
-class CaptureTemplatesFragment : Fragment() {
+class CaptureTemplatesFragment : PreferenceFragmentCompat() {
 
-    private lateinit var binding: FragmentCaptureTemplatesBinding
-    private lateinit var viewAdapter: CaptureTemplatesAdapter
     private var listener: Listener? = null
 
     interface Listener {
-        fun onCaptureTemplateClose()
-        fun getCaptureTemplatesContainerId(): Int
+        fun onCaptureTemplateEdit(templateId: String?)
     }
 
     override fun onAttach(context: Context) {
@@ -28,85 +22,64 @@ class CaptureTemplatesFragment : Fragment() {
         listener = activity as? Listener
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentCaptureTemplatesBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        (activity as? com.orgzly.android.ui.settings.SettingsFragment.Listener)?.onTitleChange(getString(R.string.capture_templates))
-        setupRecyclerView()
-        setupFab()
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        preferenceScreen = preferenceManager.createPreferenceScreen(requireContext())
         loadTemplates()
     }
 
-    private fun setupRecyclerView() {
-        viewAdapter = CaptureTemplatesAdapter(
-            onItemClick = { template -> openTemplate(template) },
-            onItemLongClick = { template -> showDeleteDialog(template); true }
-        )
-
-        binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = viewAdapter
-        }
-    }
-
-    private fun setupFab() {
-        binding.fab.setOnClickListener {
-            openTemplate(null)
-        }
+    override fun onResume() {
+        super.onResume()
+        (activity as? SettingsFragment.Listener)?.onTitleChange(getString(R.string.capture_templates))
+        loadTemplates()
     }
 
     private fun loadTemplates() {
+        preferenceScreen.removeAll()
+
         val templates = AppPreferences.captureTemplates(requireContext())
-        viewAdapter.submitList(templates)
-        updateViewState(templates)
-    }
 
-    private fun updateViewState(templates: List<CaptureTemplate>) {
-        binding.flipper.displayedChild = when {
-            templates.isEmpty() -> 2
-            else -> 1
+        for ((index, template) in templates.withIndex()) {
+            preferenceScreen.addPreference(Preference(requireContext()).apply {
+                title = template.getDisplayName(
+                    getString(R.string.capture_template_numbered, index + 1)
+                )
+                summary = buildDetailsString(template)
+                setOnPreferenceClickListener {
+                    listener?.onCaptureTemplateEdit(template.id)
+                    true
+                }
+            })
         }
+
+        if (templates.isEmpty()) {
+            preferenceScreen.addPreference(Preference(requireContext()).apply {
+                title = getString(R.string.no_capture_templates)
+                isEnabled = false
+            })
+        }
+
+        preferenceScreen.addPreference(Preference(requireContext()).apply {
+            title = getString(R.string.new_capture_template)
+            icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_add)
+            setOnPreferenceClickListener {
+                listener?.onCaptureTemplateEdit(null)
+                true
+            }
+        })
     }
 
-    private fun openTemplate(template: CaptureTemplate?) {
-        val containerId = listener?.getCaptureTemplatesContainerId() ?: return
-        val fragment = CaptureTemplateEditFragment.getInstance(template?.id)
-        fragment.listener = object : CaptureTemplateEditFragment.Listener {
-            override fun onTemplateSaved() {
-                loadTemplates()
+    private fun buildDetailsString(template: CaptureTemplate): String {
+        return buildString {
+            if (template.targetBook.isNotBlank()) append(template.targetBook)
+            if (template.state.isNotBlank()) {
+                if (isNotEmpty()) append(" · ")
+                append(template.state)
+            }
+            if (template.tags.isNotBlank()) {
+                if (isNotEmpty()) append(" · ")
+                append(template.tags)
             }
         }
-        parentFragmentManager.beginTransaction()
-            .replace(containerId, fragment, CaptureTemplateEditFragment.FRAGMENT_TAG)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    private fun showDeleteDialog(template: CaptureTemplate) {
-        AlertDialog.Builder(requireContext())
-            .setTitle(R.string.delete)
-            .setMessage(template.description.ifBlank { getString(R.string.capture_template) })
-            .setPositiveButton(R.string.delete) { _, _ ->
-                deleteTemplate(template)
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
-    }
-
-    private fun deleteTemplate(template: CaptureTemplate) {
-        val templates = AppPreferences.captureTemplates(requireContext()).toMutableList()
-        templates.removeAll { it.id == template.id }
-        AppPreferences.setCaptureTemplates(requireContext(), templates)
-        loadTemplates()
     }
 
     override fun onDetach() {

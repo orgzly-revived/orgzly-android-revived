@@ -780,6 +780,7 @@
     <string name="template_no_target_book">Default (current notebook)</string>
     <string name="capture_template_saved">Template saved</string>
     <string name="capture_template_deleted">Template deleted</string>
+    <string name="new_capture_template">New template</string>
     <string name="cannot_be_empty_short">Required</string>
     <string name="capture_template_numbered">Template %1$d</string>
     <string name="edit_capture_template">Edit template</string>
