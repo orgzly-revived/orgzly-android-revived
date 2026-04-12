@@ -38,24 +38,6 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true"
-                app:boxBackgroundMode="none">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/template_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/screen_edge"
-                    android:paddingVertical="12dp"
-                    android:background="@null"
-                    android:inputType="text|textCapSentences"
-                    android:hint="@string/template_title"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <View style="@style/HorizontalDivider" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 app:boxBackgroundMode="none">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/template_content"

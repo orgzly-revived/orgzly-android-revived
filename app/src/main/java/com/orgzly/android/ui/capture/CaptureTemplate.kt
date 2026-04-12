@@ -5,7 +5,6 @@ import java.util.UUID
 data class CaptureTemplate(
     val id: String = UUID.randomUUID().toString(),
     val description: String = "",
-    val title: String = "",
     val content: String = "",
     val targetBook: String = "",
     val state: String = "",
@@ -16,4 +15,4 @@ data class CaptureTemplate(
 
 /** Returns the best available display name, using the numbered fallback if needed. */
 fun CaptureTemplate.getDisplayName(fallback: String): String =
-    description.ifBlank { title.ifBlank { fallback } }
+    description.ifBlank { fallback }

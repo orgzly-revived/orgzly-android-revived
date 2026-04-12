@@ -122,7 +122,7 @@ class NoteBuilder {
 
         @JvmStatic
         fun newPayload(context: Context, template: CaptureTemplate): NotePayload {
-            val basePayload = newPayload(context, template.title, template.content.ifEmpty { null })
+            val basePayload = newPayload(context, "", template.content.ifEmpty { null })
 
             return basePayload.copy(
                     state = template.state.ifBlank { basePayload.state },
