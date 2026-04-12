@@ -25,9 +25,16 @@ object CaptureTemplateResolver {
         context: Context,
         dataRepository: DataRepository,
         template: CaptureTemplate
+    ): Result = resolve(context, dataRepository, template, null)
+
+    fun resolve(
+        context: Context,
+        dataRepository: DataRepository,
+        template: CaptureTemplate,
+        fallbackBookName: String?
     ): Result {
-        val bookName = template.targetBook
-        val headline = template.targetHeadline.orEmpty().trim()
+        val bookName = template.targetBook.ifBlank { fallbackBookName.orEmpty() }
+        val headline = normalizeHeadlinePath(template.targetHeadline).orEmpty()
 
         val book = if (bookName.isNotBlank()) {
             dataRepository.getBook(bookName)
@@ -76,7 +83,12 @@ object CaptureTemplateResolver {
         bookName: String,
         headlinePath: String
     ): Long {
-        val components = headlinePath.split("/").filter { it.isNotBlank() }
+        val components = normalizeHeadlinePath(headlinePath)
+            ?.split("/")
+            .orEmpty()
+        require(components.isNotEmpty()) {
+            "Headline path must contain at least one non-blank component"
+        }
         var parentNoteId: Long? = null
 
         for (i in components.indices) {
@@ -99,6 +111,8 @@ object CaptureTemplateResolver {
             }
         }
 
-        return parentNoteId!!
+        return requireNotNull(parentNoteId) {
+            "Headline path resolution did not produce a target note"
+        }
     }
 }

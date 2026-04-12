@@ -44,6 +44,7 @@ import com.orgzly.android.ui.refile.RefileFragment
 import com.orgzly.android.ui.capture.CaptureTemplate
 import com.orgzly.android.ui.capture.CaptureTemplateResolver
 import com.orgzly.android.ui.capture.getDisplayName
+import com.orgzly.android.ui.capture.normalizeHeadlinePath
 import com.orgzly.android.ui.settings.SettingsActivity
 import com.orgzly.android.ui.util.ActivityUtils
 import com.orgzly.android.ui.util.setDecorFitsSystemWindowsForBottomToolbar
@@ -421,7 +422,7 @@ class BookFragment :
     }
 
     private fun applyTemplateInBook(template: CaptureTemplate, contextualPlace: NotePlace) {
-        if (template.targetHeadline.orEmpty().isNotBlank()) {
+        if (normalizeHeadlinePath(template.targetHeadline) != null) {
             // Template has explicit headline — use the resolver (creates heading if missing)
             val result = CaptureTemplateResolver.resolve(requireContext(), dataRepository, template)
             if (result.warning == "notebook_not_found") {

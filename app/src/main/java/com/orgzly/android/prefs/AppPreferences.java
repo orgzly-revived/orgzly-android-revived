@@ -996,6 +996,32 @@ public class AppPreferences {
                 context.getResources().getBoolean(R.bool.pref_default_widget_display_book_name));
     }
 
+    @Nullable
+    public static String widgetCaptureTemplateId(Context context) {
+        String key = context.getResources().getString(R.string.pref_key_widget_capture_template);
+        String id = getDefaultSharedPreferences(context).getString(key, null);
+        if (id == null || id.isEmpty()) {
+            return null;
+        }
+
+        for (com.orgzly.android.ui.capture.CaptureTemplate template : captureTemplates(context)) {
+            if (id.equals(template.getId())) {
+                return id;
+            }
+        }
+
+        return null;
+    }
+
+    public static void widgetCaptureTemplateId(Context context, @Nullable String value) {
+        String key = context.getResources().getString(R.string.pref_key_widget_capture_template);
+        if (value == null || value.isEmpty()) {
+            getDefaultSharedPreferences(context).edit().remove(key).apply();
+        } else {
+            getDefaultSharedPreferences(context).edit().putString(key, value).apply();
+        }
+    }
+
     /*
      * RichTextView
      */

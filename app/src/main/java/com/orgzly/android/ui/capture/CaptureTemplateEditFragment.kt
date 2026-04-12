@@ -94,7 +94,6 @@ class CaptureTemplateEditFragment : Fragment() {
                     if (which == 0) {
                         selectedBookName = ""
                         binding.templateTargetBook.setText(none)
-                        binding.templateTargetHeadline.text?.clear()
                     } else {
                         selectedBookName = bookNames[which]
                         binding.templateTargetBook.setText(selectedBookName)
@@ -108,8 +107,7 @@ class CaptureTemplateEditFragment : Fragment() {
     }
 
     private fun updateHeadlineVisibility() {
-        binding.templateTargetHeadlineGroup.visibility =
-            if (selectedBookName.isNotBlank()) View.VISIBLE else View.GONE
+        binding.templateTargetHeadlineGroup.visibility = View.VISIBLE
     }
 
     private fun setupStateSpinner(selectedState: String?) {
@@ -219,11 +217,7 @@ class CaptureTemplateEditFragment : Fragment() {
         val priorityIndex = priorityEntries.indexOf(priorityText)
         val priority = if (priorityIndex != -1) priorityValues[priorityIndex] else ""
 
-        val headline = if (selectedBookName.isNotBlank()) {
-            binding.templateTargetHeadline.text?.toString()?.trim().orEmpty()
-        } else {
-            ""
-        }
+        val headline = normalizeHeadlinePath(binding.templateTargetHeadline.text?.toString())
 
         val template = CaptureTemplate(
             id = existingId ?: java.util.UUID.randomUUID().toString(),
@@ -231,7 +225,7 @@ class CaptureTemplateEditFragment : Fragment() {
             title = binding.templateTitle.text?.toString()?.trim() ?: "",
             content = binding.templateContent.text?.toString()?.trim() ?: "",
             targetBook = selectedBookName,
-            targetHeadline = headline.ifBlank { null },
+            targetHeadline = headline,
             state = state,
             priority = priority,
             tags = binding.templateTags.text?.toString()?.trim() ?: "",

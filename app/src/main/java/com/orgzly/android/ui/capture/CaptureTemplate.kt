@@ -18,3 +18,11 @@ data class CaptureTemplate(
 /** Returns the best available display name, using the numbered fallback if needed. */
 fun CaptureTemplate.getDisplayName(fallback: String): String =
     description.ifBlank { fallback }
+
+fun normalizeHeadlinePath(path: String?): String? =
+    path
+        ?.split("/")
+        ?.map { it.trim() }
+        ?.filter { it.isNotEmpty() }
+        ?.joinToString("/")
+        ?.ifBlank { null }

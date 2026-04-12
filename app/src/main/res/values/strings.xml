@@ -769,6 +769,7 @@
     <string name="capture_templates_summary">Define templates for quickly capturing notes</string>
     <string name="no_capture_templates">No capture templates</string>
     <string name="capture_template">Capture template</string>
+    <string name="widget_capture_template_default_note">Default note</string>
     <string name="template_description">Description</string>
     <string name="template_title">Title template</string>
     <string name="template_content">Content</string>

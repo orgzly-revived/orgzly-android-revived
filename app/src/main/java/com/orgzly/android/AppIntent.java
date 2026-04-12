@@ -58,6 +58,7 @@ public class AppIntent {
     public static final String EXTRA_SNOOZE_TIMESTAMP = "com.orgzly.intent.extra.SNOOZE_TIMESTAMP";
     public static final String EXTRA_CLICK_TYPE = "com.orgzly.intent.extra.CLICK_TYPE";
     public static final String EXTRA_SAVED_SEARCH_ID = "com.orgzly.intent.extra.SAVED_SEARCH_ID";
+    public static final String EXTRA_CAPTURE_TEMPLATE_ID = "com.orgzly.intent.extra.CAPTURE_TEMPLATE_ID";
     public static final String EXTRA_IS_AUTOMATIC = "com.orgzly.intent.extra.IS_AUTOMATIC";
     public static final String EXTRA_REMINDER_EVENT = "com.orgzly.intent.extra.REMINDER_EVENT";
 }
