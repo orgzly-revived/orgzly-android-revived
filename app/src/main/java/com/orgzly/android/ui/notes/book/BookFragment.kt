@@ -274,21 +274,33 @@ class BookFragment :
                     binding.fab.run {
                         if (currentBook != null) {
                             setOnClickListener {
-                                // If narrowed, add note under the narrowed root
                                 val narrowedId = viewModel.narrowedNoteId.value
                                 val notePlace = if (narrowedId != null) {
                                     NotePlace(mBookId, narrowedId, Place.UNDER)
                                 } else {
                                     NotePlace(mBookId)
                                 }
-                                val bookName = currentBook?.name
-                                val templates = AppPreferences.captureTemplates(requireContext())
-                                    .filter { it.targetBook.isBlank() || it.targetBook == bookName }
-                                if (templates.isNotEmpty()) {
-                                    showCaptureTemplateChooser(templates, notePlace)
+                                listener?.onNoteNewRequest(notePlace)
+                            }
+                            show()
+                        } else {
+                            hide()
+                        }
+                    }
+
+                    binding.captureFab.run {
+                        val bookName = currentBook?.name
+                        val templates = AppPreferences.captureTemplates(requireContext())
+                            .filter { it.targetBook.isBlank() || it.targetBook == bookName }
+                        if (currentBook != null && templates.isNotEmpty()) {
+                            setOnClickListener {
+                                val narrowedId = viewModel.narrowedNoteId.value
+                                val notePlace = if (narrowedId != null) {
+                                    NotePlace(mBookId, narrowedId, Place.UNDER)
                                 } else {
-                                    listener?.onNoteNewRequest(notePlace)
+                                    NotePlace(mBookId)
                                 }
+                                showCaptureTemplateChooser(templates, notePlace)
                             }
                             show()
                         } else {
@@ -306,6 +318,7 @@ class BookFragment :
                     bottomToolbarToMainSelection()
 
                     binding.fab.hide()
+                    binding.captureFab.hide()
 
                     sharedMainActivityViewModel.lockDrawer()
 
@@ -317,6 +330,7 @@ class BookFragment :
                     bottomToolbarToNextSelection()
 
                     binding.fab.hide()
+                    binding.captureFab.hide()
 
                     sharedMainActivityViewModel.lockDrawer()
 

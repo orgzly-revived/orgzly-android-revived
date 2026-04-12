@@ -64,4 +64,5 @@
     <dimen name="horizontal_divider_height">1dp</dimen>
 
     <dimen name="fab_stack_spacing">80dp</dimen>
+    <dimen name="fab_stack_spacing_double">136dp</dimen>
 </resources>
