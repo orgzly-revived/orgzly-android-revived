@@ -15,14 +15,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:showDividers="middle"
-            android:divider="@android:drawable/divider_horizontal_bright">
+            android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="56dp"
+                android:paddingTop="16dp"
                 app:boxBackgroundMode="none">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/template_description"
@@ -35,10 +33,12 @@
                     android:hint="@string/template_description"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <View style="@style/HorizontalDivider" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="56dp"
+                android:paddingTop="16dp"
                 app:boxBackgroundMode="none">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/template_content"
@@ -51,10 +51,12 @@
                     android:hint="@string/template_content"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <View style="@style/HorizontalDivider" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="56dp"
+                android:paddingTop="16dp"
                 app:boxBackgroundMode="none">
                 <AutoCompleteTextView
                     android:id="@+id/template_target_book"
@@ -74,14 +76,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="4dp"
                 android:visibility="gone">
+
+                <View style="@style/HorizontalDivider" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/template_target_headline_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="56dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="8dp"
                     app:boxBackgroundMode="none"
                     app:helperTextEnabled="true"
                     app:helperText="@string/template_target_headline_hint">
@@ -98,10 +102,12 @@
 
             </LinearLayout>
 
+            <View style="@style/HorizontalDivider" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="56dp"
+                android:paddingTop="16dp"
                 app:boxBackgroundMode="none">
                 <AutoCompleteTextView
                     android:id="@+id/template_state"
@@ -116,10 +122,12 @@
                     android:hint="@string/template_state"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <View style="@style/HorizontalDivider" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="56dp"
+                android:paddingTop="16dp"
                 app:boxBackgroundMode="none">
                 <AutoCompleteTextView
                     android:id="@+id/template_priority"
@@ -134,10 +142,12 @@
                     android:hint="@string/template_priority"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <View style="@style/HorizontalDivider" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="56dp"
+                android:paddingTop="16dp"
                 app:boxBackgroundMode="none">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/template_tags"
@@ -150,6 +160,8 @@
                     android:hint="@string/template_tags"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <View style="@style/HorizontalDivider" />
+
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/template_scheduled"
                 android:layout_width="match_parent"
@@ -157,6 +169,8 @@
                 android:paddingHorizontal="@dimen/screen_edge"
                 android:minHeight="56dp"
                 android:text="@string/template_scheduled"/>
+
+            <View style="@style/HorizontalDivider" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
