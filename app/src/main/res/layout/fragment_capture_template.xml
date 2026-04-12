@@ -55,14 +55,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:boxBackgroundMode="none">
-                <com.google.android.material.textfield.TextInputEditText
+                <AutoCompleteTextView
                     android:id="@+id/template_target_book"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="@dimen/screen_edge"
                     android:paddingVertical="12dp"
                     android:background="@null"
-                    android:inputType="text"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:hint="@string/template_target_book"/>
             </com.google.android.material.textfield.TextInputLayout>
 
