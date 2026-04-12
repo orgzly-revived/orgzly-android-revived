@@ -90,7 +90,7 @@ class SettingsActivity : CommonActivity(), Listener, com.orgzly.android.ui.captu
     }
 
     override fun onTitleChange(title: CharSequence?) {
-        binding.topToolbar.title = title ?: getText(R.string.settings)
+        supportActionBar?.title = title ?: getText(R.string.settings)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,6 +101,9 @@ class SettingsActivity : CommonActivity(), Listener, com.orgzly.android.ui.captu
         binding = ActivitySettingsBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
+
+        setSupportActionBar(binding.topToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val container = findViewById<FrameLayout>(R.id.activity_settings_container)
         ViewCompat.setOnApplyWindowInsetsListener(container, { view, insets ->
@@ -128,6 +131,11 @@ class SettingsActivity : CommonActivity(), Listener, com.orgzly.android.ui.captu
                 onBackPressed()
             }
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     override fun recreateActivityForSettingsChange() {

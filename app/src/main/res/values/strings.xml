@@ -412,6 +412,7 @@
 
     <string name="no_notes_deleted">No notes deleted</string>
 
+    <string name="none">None</string>
     <string name="duplicate_keywords_not_allowed">Keyword %s already used</string>
     <string name="no_states_defined">No states defined</string>
     <string name="book_name_in_search">Notebook name in search results</string>

@@ -1,22 +1,30 @@
 package com.orgzly.android.ui.capture
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orgzly.R
 import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.ui.NoteStates
+import com.orgzly.android.ui.settings.SettingsFragment
 import com.orgzly.databinding.FragmentCaptureTemplateBinding
 
 class CaptureTemplateEditFragment : Fragment() {
 
     private lateinit var binding: FragmentCaptureTemplateBinding
+    private var existingTemplateId: String? = null
     var listener: Listener? = null
 
     interface Listener {
         fun onTemplateSaved()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -32,6 +40,7 @@ class CaptureTemplateEditFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val templateId = arguments?.getString(ARG_TEMPLATE_ID)
+        existingTemplateId = templateId
         val existingTemplate = if (templateId != null) {
             AppPreferences.captureTemplates(requireContext()).find { it.id == templateId }
         } else null
@@ -41,24 +50,73 @@ class CaptureTemplateEditFragment : Fragment() {
             binding.templateTitle.setText(existingTemplate.title)
             binding.templateContent.setText(existingTemplate.content)
             binding.templateTargetBook.setText(existingTemplate.targetBook)
-            binding.templateState.setText(existingTemplate.state)
-            binding.templatePriority.setText(existingTemplate.priority)
             binding.templateTags.setText(existingTemplate.tags)
             binding.templateScheduled.isChecked = existingTemplate.isScheduled
         }
 
-        binding.topToolbar.title = getString(if (existingTemplate != null) R.string.edit_capture_template else R.string.capture_template)
-        binding.topToolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack()
-        }
-        binding.topToolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.done -> {
-                    saveTemplate(existingTemplate?.id)
-                    true
+        val title = getString(if (existingTemplate != null) R.string.edit_capture_template else R.string.capture_template)
+        (activity as? SettingsFragment.Listener)?.onTitleChange(title)
+
+        setupStateSpinner(existingTemplate?.state)
+        setupPrioritySpinner(existingTemplate?.priority)
+    }
+
+    private fun setupStateSpinner(selectedState: String?) {
+        val states = mutableListOf<String>()
+        states.add(getString(R.string.none))
+        states.addAll(AppPreferences.todoKeywordsSet(requireContext()))
+        states.addAll(AppPreferences.doneKeywordsSet(requireContext()))
+
+        val currentState = if (selectedState != null && states.contains(selectedState)) selectedState else states[0]
+        binding.templateState.setText(currentState)
+
+        binding.templateState.setOnClickListener {
+            val checkedItem = states.indexOf(binding.templateState.text.toString())
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.template_state)
+                .setSingleChoiceItems(states.toTypedArray(), checkedItem) { dialog, which ->
+                    binding.templateState.setText(states[which])
+                    dialog.dismiss()
                 }
-                else -> false
+                .setNegativeButton(android.R.string.cancel, null)
+                .show()
+        }
+    }
+
+    private fun setupPrioritySpinner(selectedPriority: String?) {
+        val entries = mutableListOf(getString(R.string.none))
+        entries.addAll(resources.getStringArray(R.array.priorities))
+        val values = mutableListOf("")
+        values.addAll(resources.getStringArray(R.array.priority_values))
+
+        val index = values.indexOf(selectedPriority ?: "")
+        val currentEntry = if (index != -1) entries[index] else entries[0]
+        binding.templatePriority.setText(currentEntry)
+
+        binding.templatePriority.setOnClickListener {
+            val checkedItem = entries.indexOf(binding.templatePriority.text.toString())
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.template_priority)
+                .setSingleChoiceItems(entries.toTypedArray(), checkedItem) { dialog, which ->
+                    binding.templatePriority.setText(entries[which])
+                    dialog.dismiss()
+                }
+                .setNegativeButton(android.R.string.cancel, null)
+                .show()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.done, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.done -> {
+                saveTemplate(existingTemplateId)
+                true
             }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -69,14 +127,26 @@ class CaptureTemplateEditFragment : Fragment() {
             return
         }
 
+        val none = getString(R.string.none)
+        val stateText = binding.templateState.text.toString()
+        val state = if (stateText == none) "" else stateText
+
+        val priorityText = binding.templatePriority.text.toString()
+        val priorityEntries = mutableListOf(none)
+        priorityEntries.addAll(resources.getStringArray(R.array.priorities))
+        val priorityValues = mutableListOf("")
+        priorityValues.addAll(resources.getStringArray(R.array.priority_values))
+        val priorityIndex = priorityEntries.indexOf(priorityText)
+        val priority = if (priorityIndex != -1) priorityValues[priorityIndex] else ""
+
         val template = CaptureTemplate(
             id = existingId ?: java.util.UUID.randomUUID().toString(),
             description = description,
             title = binding.templateTitle.text?.toString()?.trim() ?: "",
             content = binding.templateContent.text?.toString()?.trim() ?: "",
             targetBook = binding.templateTargetBook.text?.toString()?.trim() ?: "",
-            state = binding.templateState.text?.toString()?.trim() ?: "",
-            priority = binding.templatePriority.text?.toString()?.trim() ?: "",
+            state = state,
+            priority = priority,
             tags = binding.templateTags.text?.toString()?.trim() ?: "",
             isScheduled = binding.templateScheduled.isChecked
         )

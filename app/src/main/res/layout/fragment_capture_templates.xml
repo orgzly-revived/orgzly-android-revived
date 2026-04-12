@@ -16,7 +16,6 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
             android:paddingBottom="@dimen/padding_bottom_for_fab"
             android:clipToPadding="false" />
 
@@ -29,21 +28,6 @@
         </ScrollView>
 
     </ViewFlipper>
-
-    <!-- Top toolbar -->
-    <com.google.android.material.appbar.AppBarLayout
-        style="@style/AppBarLayoutStyle">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/top_toolbar"
-            style="@style/TopToolbar"
-            app:navigationIcon="@drawable/ic_arrow_back" />
-
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/sync_toolbar_progress"
-            style="@style/SyncProgressIndicator" />
-
-    </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

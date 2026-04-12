@@ -3,9 +3,11 @@ package com.orgzly.android.ui.note
 import android.content.Context
 import com.orgzly.android.db.entity.NoteProperty
 import com.orgzly.android.db.entity.NoteView
+import com.orgzly.android.db.entity.Tags
 import com.orgzly.android.db.entity.toList
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.NoteStates
+import com.orgzly.android.ui.capture.CaptureTemplate
 import com.orgzly.android.util.EventsInNote
 import com.orgzly.android.util.OrgFormatter
 import com.orgzly.org.OrgProperties
@@ -115,6 +117,18 @@ class NoteBuilder {
                     state = state,
                     scheduled = scheduled,
                     properties = properties
+            )
+        }
+
+        @JvmStatic
+        fun newPayload(context: Context, template: CaptureTemplate): NotePayload {
+            val basePayload = newPayload(context, template.title, template.content.ifEmpty { null })
+
+            return basePayload.copy(
+                    state = template.state.ifBlank { basePayload.state },
+                    priority = template.priority.ifBlank { null },
+                    scheduled = if (template.isScheduled) initialScheduledTime(context) else null,
+                    tags = Tags.fromString(template.tags).tags
             )
         }
 

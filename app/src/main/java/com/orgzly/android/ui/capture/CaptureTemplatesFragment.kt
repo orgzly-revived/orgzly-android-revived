@@ -41,17 +41,10 @@ class CaptureTemplatesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupToolbar()
+        (activity as? com.orgzly.android.ui.settings.SettingsFragment.Listener)?.onTitleChange(getString(R.string.capture_templates))
         setupRecyclerView()
         setupFab()
         loadTemplates()
-    }
-
-    private fun setupToolbar() {
-        binding.topToolbar.title = getString(R.string.capture_templates)
-        binding.topToolbar.setNavigationOnClickListener {
-            listener?.onCaptureTemplateClose()
-        }
     }
 
     private fun setupRecyclerView() {
