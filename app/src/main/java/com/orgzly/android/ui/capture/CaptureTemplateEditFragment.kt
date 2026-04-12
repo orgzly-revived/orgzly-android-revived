@@ -53,6 +53,7 @@ class CaptureTemplateEditFragment : Fragment() {
 
         if (existingTemplate != null) {
             binding.templateDescription.setText(existingTemplate.description)
+            binding.templateTitle.setText(existingTemplate.title)
             binding.templateContent.setText(existingTemplate.content)
             binding.templateTargetHeadline.setText(existingTemplate.targetHeadline.orEmpty())
             binding.templateTags.setText(existingTemplate.tags)
@@ -227,6 +228,7 @@ class CaptureTemplateEditFragment : Fragment() {
         val template = CaptureTemplate(
             id = existingId ?: java.util.UUID.randomUUID().toString(),
             description = description,
+            title = binding.templateTitle.text?.toString()?.trim() ?: "",
             content = binding.templateContent.text?.toString()?.trim() ?: "",
             targetBook = selectedBookName,
             targetHeadline = headline.ifBlank { null },

@@ -770,7 +770,9 @@
     <string name="no_capture_templates">No capture templates</string>
     <string name="capture_template">Capture template</string>
     <string name="template_description">Description</string>
+    <string name="template_title">Title template</string>
     <string name="template_content">Content</string>
+    <string name="template_tokens_hint">Tokens: %t %T (date/time) %u %U (inactive) %c (clipboard)</string>
     <string name="template_target_book">Target notebook</string>
     <string name="template_state">Initial state</string>
     <string name="template_priority">Initial priority</string>
