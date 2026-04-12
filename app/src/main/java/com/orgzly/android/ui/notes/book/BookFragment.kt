@@ -281,7 +281,9 @@ class BookFragment :
                                 } else {
                                     NotePlace(mBookId)
                                 }
+                                val bookName = currentBook?.name
                                 val templates = AppPreferences.captureTemplates(requireContext())
+                                    .filter { it.targetBook.isBlank() || it.targetBook == bookName }
                                 if (templates.isNotEmpty()) {
                                     showCaptureTemplateChooser(templates, notePlace)
                                 } else {
