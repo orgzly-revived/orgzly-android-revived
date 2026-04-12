@@ -74,7 +74,7 @@ class CaptureTemplateEditFragment : Fragment() {
 
     private fun setupNotebookSelector(existingTargetBook: String?) {
         val books = dataRepository.getBooks()
-        val none = getString(R.string.none)
+        val none = getString(R.string.default_notebook)
         val bookNames = mutableListOf(none)
         bookNames.addAll(books.map { it.book.name })
 
