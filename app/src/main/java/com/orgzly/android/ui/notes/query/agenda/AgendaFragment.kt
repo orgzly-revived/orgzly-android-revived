@@ -256,6 +256,8 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
                     topToolbarToDefault()
                     bottomToolbarToDefault()
 
+                    setupCaptureFab(binding.captureFab)
+
                     sharedMainActivityViewModel.unlockDrawer()
 
                     appBarBackPressHandler.isEnabled = false
@@ -264,6 +266,8 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
                 APP_BAR_SELECTION_MODE -> {
                     topToolbarToMainSelection()
                     bottomToolbarToMainSelection()
+
+                    hideCaptureFab(binding.captureFab)
 
                     sharedMainActivityViewModel.lockDrawer()
 

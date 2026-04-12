@@ -293,6 +293,10 @@ class BookFragment :
                         val templates = AppPreferences.captureTemplates(requireContext())
                             .filter { it.targetBook.isBlank() || it.targetBook == bookName }
                         if (currentBook != null && templates.isNotEmpty()) {
+                            // Position above the main FAB
+                            val lp = layoutParams as androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams
+                            lp.bottomMargin = resources.getDimensionPixelSize(R.dimen.fab_stack_spacing)
+                            layoutParams = lp
                             setOnClickListener {
                                 val narrowedId = viewModel.narrowedNoteId.value
                                 val notePlace = if (narrowedId != null) {

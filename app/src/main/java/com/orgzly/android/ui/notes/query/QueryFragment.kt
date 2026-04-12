@@ -4,10 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.orgzly.R
 import com.orgzly.android.NotesOrgExporter
+import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.sync.SyncRunner
+import com.orgzly.android.ui.NotePlace
+import com.orgzly.android.ui.capture.CaptureTemplate
+import com.orgzly.android.ui.capture.getDisplayName
 import com.orgzly.android.ui.dialogs.TimestampDialogFragment
 import com.orgzly.android.ui.drawer.DrawerItem
 import com.orgzly.android.ui.main.SharedMainActivityViewModel
@@ -146,6 +153,63 @@ abstract class QueryFragment :
         } catch (e: Exception) {
             Log.e(TAG, "Failed to share notes", e)
         }
+    }
+
+    protected fun setupCaptureFab(captureFab: FloatingActionButton) {
+        val templates = AppPreferences.captureTemplates(requireContext())
+        if (templates.isNotEmpty()) {
+            captureFab.setOnClickListener {
+                if (templates.size == 1) {
+                    applyTemplate(templates[0])
+                } else {
+                    showCaptureTemplateChooser(templates)
+                }
+            }
+            captureFab.show()
+        } else {
+            captureFab.hide()
+        }
+    }
+
+    protected fun hideCaptureFab(captureFab: FloatingActionButton) {
+        captureFab.hide()
+    }
+
+    private fun showCaptureTemplateChooser(templates: List<CaptureTemplate>) {
+        val items = templates.map {
+            it.getDisplayName(getString(R.string.capture_template))
+        }.toTypedArray()
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.select_capture_template)
+            .setItems(items) { _, index ->
+                applyTemplate(templates[index])
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun applyTemplate(template: CaptureTemplate) {
+        val bookId = if (template.targetBook.isNotBlank()) {
+            dataRepository.getBook(template.targetBook)?.id
+        } else {
+            null
+        }
+
+        if (bookId == null && template.targetBook.isNotBlank()) {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.capture_template_target_book_not_found, template.targetBook),
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        val notePlace = if (bookId != null) {
+            NotePlace(bookId)
+        } else {
+            NotePlace(dataRepository.getTargetBook(requireContext()).book.id)
+        }
+        listener?.onNoteNewRequestWithTemplate(notePlace, template)
     }
 
     companion object {

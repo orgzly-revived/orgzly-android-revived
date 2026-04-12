@@ -243,6 +243,8 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
                     topToolbarToDefault()
                     bottomToolbarToDefault()
 
+                    setupCaptureFab(binding.captureFab)
+
                     sharedMainActivityViewModel.unlockDrawer()
 
                     appBarBackPressHandler.isEnabled = false
@@ -251,6 +253,8 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
                 APP_BAR_SELECTION_MODE -> {
                     topToolbarToMainSelection()
                     bottomToolbarToMainSelection()
+
+                    hideCaptureFab(binding.captureFab)
 
                     sharedMainActivityViewModel.lockDrawer()
 
