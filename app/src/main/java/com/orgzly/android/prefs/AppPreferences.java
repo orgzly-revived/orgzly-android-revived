@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 
 import androidx.annotation.StringRes;
 
@@ -1374,6 +1375,7 @@ public class AppPreferences {
             List<com.orgzly.android.ui.capture.CaptureTemplate> result = new Gson().fromJson(json, typeToken.getType());
             return result != null ? result : new ArrayList<>();
         } catch (Exception e) {
+            Log.e("AppPreferences", "Failed to parse capture templates JSON", e);
             return new ArrayList<>();
         }
     }

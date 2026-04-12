@@ -19,13 +19,13 @@ class CaptureTemplatesAdapter(
             binding.root.setOnClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    onItemClick(getItem(position))
+                    try { onItemClick(getItem(position)) } catch (_: IndexOutOfBoundsException) {}
                 }
             }
             binding.root.setOnLongClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    onItemLongClick(getItem(position))
+                    try { onItemLongClick(getItem(position)) } catch (_: IndexOutOfBoundsException) { false }
                 } else {
                     false
                 }

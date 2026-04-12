@@ -95,6 +95,11 @@ class CaptureTemplateEditFragment : Fragment() {
         parentFragmentManager.popBackStack()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
     companion object {
         val FRAGMENT_TAG: String = CaptureTemplateEditFragment::class.java.name
         private const val ARG_TEMPLATE_ID = "template_id"

@@ -659,6 +659,7 @@ public class MainActivity extends CommonActivity
 
     @Override
     public void onNoteNewRequestWithTemplate(NotePlace target, com.orgzly.android.ui.capture.CaptureTemplate template) {
+        if (template == null) return;
         String title = template.getTitle().isEmpty() ? null : template.getTitle();
         String content = template.getContent().isEmpty() ? null : template.getContent();
         DisplayManager.displayNewNote(getSupportFragmentManager(), target, title, content);
