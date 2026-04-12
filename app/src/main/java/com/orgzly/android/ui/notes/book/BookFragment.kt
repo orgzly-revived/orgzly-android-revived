@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -41,6 +42,7 @@ import com.orgzly.android.ui.notes.book.BookViewModel.Companion.APP_BAR_SELECTIO
 import com.orgzly.android.ui.notes.book.BookViewModel.Companion.APP_BAR_SELECTION_MOVE_MODE
 import com.orgzly.android.ui.refile.RefileFragment
 import com.orgzly.android.ui.capture.CaptureTemplate
+import com.orgzly.android.ui.capture.CaptureTemplateResolver
 import com.orgzly.android.ui.capture.getDisplayName
 import com.orgzly.android.ui.settings.SettingsActivity
 import com.orgzly.android.ui.util.ActivityUtils
@@ -305,7 +307,7 @@ class BookFragment :
                                     NotePlace(mBookId)
                                 }
                                 if (templates.size == 1) {
-                                    listener?.onNoteNewRequestWithTemplate(notePlace, templates[0])
+                                    applyTemplateInBook(templates[0], notePlace)
                                 } else {
                                     showCaptureTemplateChooser(templates, notePlace)
                                 }
@@ -418,6 +420,32 @@ class BookFragment :
         listener?.onNoteNewRequest(NotePlace(mBookId, noteId, place))
     }
 
+    private fun applyTemplateInBook(template: CaptureTemplate, contextualPlace: NotePlace) {
+        if (template.targetHeadline.orEmpty().isNotBlank()) {
+            // Template has explicit headline — use the resolver
+            val result = CaptureTemplateResolver.resolve(requireContext(), dataRepository, template)
+            when (result.warning) {
+                "notebook_not_found" -> {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.capture_template_target_book_not_found, template.targetBook),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
+                }
+                "headline_not_found" -> Toast.makeText(
+                    requireContext(),
+                    getString(R.string.capture_template_headline_not_found, template.targetHeadline.orEmpty()),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            listener?.onNoteNewRequestWithTemplate(result.notePlace, template)
+        } else {
+            // No headline — use contextual placement (narrowed view or book root)
+            listener?.onNoteNewRequestWithTemplate(contextualPlace, template)
+        }
+    }
+
     private fun showCaptureTemplateChooser(
         templates: List<CaptureTemplate>,
         notePlace: NotePlace
@@ -428,7 +456,7 @@ class BookFragment :
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.select_capture_template)
             .setItems(items) { _, index ->
-                listener?.onNoteNewRequestWithTemplate(notePlace, templates[index])
+                applyTemplateInBook(templates[index], notePlace)
             }
             .setNegativeButton(R.string.cancel, null)
             .show()

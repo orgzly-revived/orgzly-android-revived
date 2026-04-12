@@ -12,8 +12,8 @@ import com.orgzly.R
 import com.orgzly.android.NotesOrgExporter
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.sync.SyncRunner
-import com.orgzly.android.ui.NotePlace
 import com.orgzly.android.ui.capture.CaptureTemplate
+import com.orgzly.android.ui.capture.CaptureTemplateResolver
 import com.orgzly.android.ui.capture.getDisplayName
 import com.orgzly.android.ui.dialogs.TimestampDialogFragment
 import com.orgzly.android.ui.drawer.DrawerItem
@@ -189,27 +189,24 @@ abstract class QueryFragment :
     }
 
     private fun applyTemplate(template: CaptureTemplate) {
-        val bookId = if (template.targetBook.isNotBlank()) {
-            dataRepository.getBook(template.targetBook)?.id
-        } else {
-            null
-        }
+        val result = CaptureTemplateResolver.resolve(requireContext(), dataRepository, template)
 
-        if (bookId == null && template.targetBook.isNotBlank()) {
-            Toast.makeText(
+        when (result.warning) {
+            "notebook_not_found" -> Toast.makeText(
                 requireContext(),
                 getString(R.string.capture_template_target_book_not_found, template.targetBook),
                 Toast.LENGTH_SHORT
             ).show()
-            return
+            "headline_not_found" -> Toast.makeText(
+                requireContext(),
+                getString(R.string.capture_template_headline_not_found, template.targetHeadline.orEmpty()),
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
-        val notePlace = if (bookId != null) {
-            NotePlace(bookId)
-        } else {
-            NotePlace(dataRepository.getTargetBook(requireContext()).book.id)
-        }
-        listener?.onNoteNewRequestWithTemplate(notePlace, template)
+        if (result.warning == "notebook_not_found") return
+
+        listener?.onNoteNewRequestWithTemplate(result.notePlace, template)
     }
 
     companion object {

@@ -783,6 +783,8 @@
     <string name="cannot_be_empty_short">Required</string>
     <string name="capture_template_numbered">Template %1$d</string>
     <string name="edit_capture_template">Edit template</string>
-    <string name="capture_template_target_book_not_found">Notebook \"%1$s\" not found</string>
-    <string name="default_notebook">Default Notebook</string>
+    <string name="capture_template_target_book_not_found">Notebook \"%1$s\" not found, using default</string>
+    <string name="capture_template_headline_not_found">Headline \"%1$s\" not found, placing at notebook root</string>
+    <string name="template_target_headline">Headline</string>
+    <string name="template_target_headline_hint">e.g. Inbox or Projects/Active</string>
 </resources>

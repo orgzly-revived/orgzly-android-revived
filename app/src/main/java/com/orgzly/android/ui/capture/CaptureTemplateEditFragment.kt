@@ -58,6 +58,7 @@ class CaptureTemplateEditFragment : Fragment() {
         if (existingTemplate != null) {
             binding.templateDescription.setText(existingTemplate.description)
             binding.templateContent.setText(existingTemplate.content)
+            binding.templateTargetHeadline.setText(existingTemplate.targetHeadline.orEmpty())
             binding.templateTags.setText(existingTemplate.tags)
             binding.templateScheduled.isChecked = existingTemplate.isScheduled
         }
@@ -85,6 +86,7 @@ class CaptureTemplateEditFragment : Fragment() {
             none
         }
         binding.templateTargetBook.setText(currentDisplay)
+        updateHeadlineVisibility()
 
         binding.templateTargetBook.setOnClickListener {
             val currentText = binding.templateTargetBook.text.toString()
@@ -95,15 +97,22 @@ class CaptureTemplateEditFragment : Fragment() {
                     if (which == 0) {
                         selectedBookName = ""
                         binding.templateTargetBook.setText(none)
+                        binding.templateTargetHeadline.text?.clear()
                     } else {
                         selectedBookName = bookNames[which]
                         binding.templateTargetBook.setText(selectedBookName)
                     }
+                    updateHeadlineVisibility()
                     dialog.dismiss()
                 }
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()
         }
+    }
+
+    private fun updateHeadlineVisibility() {
+        binding.templateTargetHeadlineLayout.visibility =
+            if (selectedBookName.isNotBlank()) View.VISIBLE else View.GONE
     }
 
     private fun setupStateSpinner(selectedState: String?) {
@@ -184,11 +193,18 @@ class CaptureTemplateEditFragment : Fragment() {
         val priorityIndex = priorityEntries.indexOf(priorityText)
         val priority = if (priorityIndex != -1) priorityValues[priorityIndex] else ""
 
+        val headline = if (selectedBookName.isNotBlank()) {
+            binding.templateTargetHeadline.text?.toString()?.trim().orEmpty()
+        } else {
+            ""
+        }
+
         val template = CaptureTemplate(
             id = existingId ?: java.util.UUID.randomUUID().toString(),
             description = description,
             content = binding.templateContent.text?.toString()?.trim() ?: "",
             targetBook = selectedBookName,
+            targetHeadline = headline.ifBlank { null },
             state = state,
             priority = priority,
             tags = binding.templateTags.text?.toString()?.trim() ?: "",

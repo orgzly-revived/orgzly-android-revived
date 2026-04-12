@@ -7,6 +7,7 @@ data class CaptureTemplate(
     val description: String = "",
     val content: String = "",
     val targetBook: String = "",
+    val targetHeadline: String? = null,
     val state: String = "",
     val priority: String = "",
     val tags: String = "",

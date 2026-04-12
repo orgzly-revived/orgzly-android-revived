@@ -68,6 +68,25 @@
                     android:hint="@string/template_target_book"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/template_target_headline_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxBackgroundMode="none"
+                app:helperTextEnabled="true"
+                app:helperText="@string/template_target_headline_hint"
+                android:visibility="gone">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/template_target_headline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/screen_edge"
+                    android:paddingVertical="12dp"
+                    android:background="@null"
+                    android:inputType="text"
+                    android:hint="@string/template_target_headline"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
             <View style="@style/HorizontalDivider" />
 
             <com.google.android.material.textfield.TextInputLayout
