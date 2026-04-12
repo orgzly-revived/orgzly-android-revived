@@ -111,7 +111,7 @@ class CaptureTemplateEditFragment : Fragment() {
     }
 
     private fun updateHeadlineVisibility() {
-        binding.templateTargetHeadlineLayout.visibility =
+        binding.templateTargetHeadlineGroup.visibility =
             if (selectedBookName.isNotBlank()) View.VISIBLE else View.GONE
     }
 
