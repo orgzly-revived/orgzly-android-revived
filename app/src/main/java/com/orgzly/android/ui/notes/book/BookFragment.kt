@@ -422,22 +422,15 @@ class BookFragment :
 
     private fun applyTemplateInBook(template: CaptureTemplate, contextualPlace: NotePlace) {
         if (template.targetHeadline.orEmpty().isNotBlank()) {
-            // Template has explicit headline — use the resolver
+            // Template has explicit headline — use the resolver (creates heading if missing)
             val result = CaptureTemplateResolver.resolve(requireContext(), dataRepository, template)
-            when (result.warning) {
-                "notebook_not_found" -> {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.capture_template_target_book_not_found, template.targetBook),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return
-                }
-                "headline_not_found" -> Toast.makeText(
+            if (result.warning == "notebook_not_found") {
+                Toast.makeText(
                     requireContext(),
-                    getString(R.string.capture_template_headline_not_found, template.targetHeadline.orEmpty()),
+                    getString(R.string.capture_template_target_book_not_found, template.targetBook),
                     Toast.LENGTH_SHORT
                 ).show()
+                return
             }
             listener?.onNoteNewRequestWithTemplate(result.notePlace, template)
         } else {

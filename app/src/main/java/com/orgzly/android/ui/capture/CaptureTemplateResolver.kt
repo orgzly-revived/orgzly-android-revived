@@ -4,13 +4,15 @@ import android.content.Context
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.ui.NotePlace
 import com.orgzly.android.ui.Place
+import com.orgzly.android.ui.note.NoteBuilder
 
 /**
  * Resolves a [CaptureTemplate] to a [NotePlace] by looking up the target
- * book and optional headline path from the repository.
+ * book and optional headline path from the repository. Creates any
+ * missing headings along the path automatically.
  *
  * @return a [Result] containing the [NotePlace] and an optional warning
- *         message when the configured headline was not found.
+ *         message when the configured notebook was not found.
  */
 object CaptureTemplateResolver {
 
@@ -49,17 +51,54 @@ object CaptureTemplateResolver {
             return Result(NotePlace(bookId))
         }
 
-        // Resolve headline via full path: "bookName/Heading1/Heading2"
+        // Try to find existing headline via full path
         val fullPath = "$resolvedBookName/$headline"
-        val targetNote = dataRepository.getNoteAtPath(fullPath)
+        val existingNote = dataRepository.getNoteAtPath(fullPath)
 
-        return if (targetNote != null) {
-            Result(NotePlace(bookId, targetNote.note.id, Place.UNDER))
-        } else {
-            Result(
-                notePlace = NotePlace(bookId),
-                warning = "headline_not_found"
-            )
+        if (existingNote != null) {
+            return Result(NotePlace(bookId, existingNote.note.id, Place.UNDER))
         }
+
+        // Headline not found — create missing headings along the path
+        val targetNoteId = ensureHeadlinePath(context, dataRepository, bookId, resolvedBookName, headline)
+        return Result(NotePlace(bookId, targetNoteId, Place.UNDER))
+    }
+
+    /**
+     * Walks each component of [headlinePath] (e.g. "Projects/Active"),
+     * creating any headings that don't already exist. Returns the note ID
+     * of the final (deepest) heading.
+     */
+    private fun ensureHeadlinePath(
+        context: Context,
+        dataRepository: DataRepository,
+        bookId: Long,
+        bookName: String,
+        headlinePath: String
+    ): Long {
+        val components = headlinePath.split("/").filter { it.isNotBlank() }
+        var parentNoteId: Long? = null
+
+        for (i in components.indices) {
+            val partialPath = components.subList(0, i + 1).joinToString("/")
+            val fullPath = "$bookName/$partialPath"
+            val existing = dataRepository.getNoteAtPath(fullPath)
+
+            if (existing != null) {
+                parentNoteId = existing.note.id
+            } else {
+                // Create this heading
+                val payload = NoteBuilder.newPayload(context, components[i], null)
+                val place = if (parentNoteId != null) {
+                    NotePlace(bookId, parentNoteId, Place.UNDER)
+                } else {
+                    NotePlace(bookId)
+                }
+                val created = dataRepository.createNote(payload, place)
+                parentNoteId = created.id
+            }
+        }
+
+        return parentNoteId!!
     }
 }

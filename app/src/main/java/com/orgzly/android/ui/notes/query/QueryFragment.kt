@@ -191,20 +191,14 @@ abstract class QueryFragment :
     private fun applyTemplate(template: CaptureTemplate) {
         val result = CaptureTemplateResolver.resolve(requireContext(), dataRepository, template)
 
-        when (result.warning) {
-            "notebook_not_found" -> Toast.makeText(
+        if (result.warning == "notebook_not_found") {
+            Toast.makeText(
                 requireContext(),
                 getString(R.string.capture_template_target_book_not_found, template.targetBook),
                 Toast.LENGTH_SHORT
             ).show()
-            "headline_not_found" -> Toast.makeText(
-                requireContext(),
-                getString(R.string.capture_template_headline_not_found, template.targetHeadline.orEmpty()),
-                Toast.LENGTH_SHORT
-            ).show()
+            return
         }
-
-        if (result.warning == "notebook_not_found") return
 
         listener?.onNoteNewRequestWithTemplate(result.notePlace, template)
     }
