@@ -4,11 +4,9 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import com.orgzly.BuildConfig
-import com.orgzly.android.data.logs.AppLogsRepository
-import com.orgzly.android.reminders.RemindersScheduler
 import com.orgzly.android.reminders.AlarmSoundService
+import com.orgzly.android.reminders.RemindersScheduler
 import com.orgzly.android.ui.notifications.Notifications
 import com.orgzly.android.ui.util.getNotificationManager
 import com.orgzly.android.usecase.NoteUpdateStateDone
@@ -67,17 +65,15 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun cancelRemindersSummary(notificationManager: NotificationManager) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val notifications = notificationManager.activeNotifications
-            var reminders = 0
-            for (notification in notifications) {
-                if (notification.id == Notifications.REMINDER_ID) {
-                    reminders++
-                }
+        val notifications = notificationManager.activeNotifications
+        var reminders = 0
+        for (notification in notifications) {
+            if (notification.id == Notifications.REMINDER_ID) {
+                reminders++
             }
-            if (reminders == 0) {
-                notificationManager.cancel(Notifications.REMINDERS_SUMMARY_ID)
-            }
+        }
+        if (reminders == 0) {
+            notificationManager.cancel(Notifications.REMINDERS_SUMMARY_ID)
         }
     }
 

@@ -1,12 +1,10 @@
 package com.orgzly.android.ui.util
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.TypedArray
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.StyleableRes
@@ -39,14 +37,9 @@ fun <R> Context.styledAttributes(set: AttributeSet, @StyleableRes attrs: IntArra
  * Determines if there is internet connection available.
  */
 fun Context.haveNetworkConnection(): Boolean {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        haveNetworkConnection(getConnectivityManager())
-    } else {
-        haveNetworkConnectionPreM(getConnectivityManager())
-    }
+    return haveNetworkConnection(getConnectivityManager())
 }
 
-@TargetApi(Build.VERSION_CODES.M)
 private fun haveNetworkConnection(cm: ConnectivityManager): Boolean {
     val network = cm.activeNetwork
 

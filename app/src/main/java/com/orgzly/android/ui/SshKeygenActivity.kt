@@ -84,11 +84,7 @@ class SshKeygenActivity : CommonActivity() {
                 }
             }
             val keyguardManager: KeyguardManager = getSystemService(KEYGUARD_SERVICE) as KeyguardManager
-            keyRequireAuthentication.isEnabled = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                false
-            } else {
-                keyguardManager.isDeviceSecure
-            }
+            keyRequireAuthentication.isEnabled = keyguardManager.isDeviceSecure
             keyRequireAuthentication.isChecked = keyRequireAuthentication.isEnabled
         }
     }
