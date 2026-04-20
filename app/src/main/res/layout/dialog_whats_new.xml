@@ -22,7 +22,7 @@
 
         <TextView
             style="@style/WhatsNewVersion"
-            android:text="v1.19.0"
+            android:text="v1.20.0"
             tools:ignore="HardcodedText"
             android:autoLink="web" />
 
@@ -45,6 +45,10 @@
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
             app:text="Upgrade dependencies." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Target Android API 36 (Android 16)." />
 
         <TextView
             style="@style/WhatsNewVersion"
