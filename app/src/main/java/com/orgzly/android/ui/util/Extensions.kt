@@ -48,19 +48,6 @@ private fun haveNetworkConnection(cm: ConnectivityManager): Boolean {
     return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
 }
 
-@Suppress("DEPRECATION")
-private fun haveNetworkConnectionPreM(cm: ConnectivityManager): Boolean {
-    val networkInfo = cm.activeNetworkInfo
-
-    if (networkInfo != null) {
-        val type = networkInfo.type
-
-        return type == ConnectivityManager.TYPE_WIFI || type == ConnectivityManager.TYPE_MOBILE
-    }
-
-    return false
-}
-
 @SuppressLint("ResourceType")
 fun SwipeRefreshLayout.setup() {
     setOnRefreshListener {

@@ -103,11 +103,6 @@ class RemindersScheduler @Inject constructor(val context: Application, val logs:
             // probably a daily reminder. Schedule an inexact alarm.
             scheduleInExact(alarmManager, intent, inMs, origin)
         }
-
-        // Intent received, notifications not displayed by default
-        // Note: Neither setAndAllowWhileIdle() nor setExactAndAllowWhileIdle() can fire
-        // alarms more than once per 9 minutes, per app.
-        // scheduleExactAndAllowWhileIdle(context, intent, inMs)
     }
 
     private fun scheduleAlarmClock(alarmManager: AlarmManager, intent: PendingIntent, inMs: Long, origin: String) {
@@ -115,15 +110,7 @@ class RemindersScheduler @Inject constructor(val context: Application, val logs:
         alarmManager.setAlarmClock(info, intent)
         logScheduled("setAlarmClock", origin, inMs)
     }
-
-    private fun scheduleExact(alarmManager: AlarmManager, intent: PendingIntent, inMs: Long, origin: String) {
-        alarmManager.setExact(
-            AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + inMs,
-            intent)
-        logScheduled("setExact", origin, inMs)
-    }
-
+   
     private fun scheduleInExact(alarmManager: AlarmManager, intent: PendingIntent, inMs: Long, origin: String) {
         alarmManager.set(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,

@@ -33,10 +33,8 @@ class TimePreferenceFragment : PreferenceDialogFragmentCompat() {
 
     override fun onDialogClosed(positiveResult: Boolean) {
         if (positiveResult) {
-            @Suppress("DEPRECATION")
             val hours = timePicker.hour
 
-            @Suppress("DEPRECATION")
             val minutes = timePicker.minute
 
             val minutesAfterMidnight = hours * 60 + minutes
