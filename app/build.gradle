@@ -49,15 +49,17 @@ android {
     buildTypes {
         release {
             shrinkResources = true
-            minifyEnabled true
+            minifyEnabled = true
 
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             buildConfigField "boolean", "LOG_DEBUG", "false"
 
             buildConfigField "String", "GIT_COMMIT", "\"${getCheckedOutGitCommitHash()}\""
 
-            // signingConfig signingConfigs.debug
+            ndk {
+                debugSymbolLevel = "SYMBOL_TABLE"
+            }
         }
 
         debug {
