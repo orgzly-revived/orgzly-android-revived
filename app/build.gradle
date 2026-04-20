@@ -58,7 +58,7 @@ android {
             buildConfigField "String", "GIT_COMMIT", "\"${getCheckedOutGitCommitHash()}\""
 
             ndk {
-                debugSymbolLevel = "FULL"
+                debugSymbolLevel = "SYMBOL_TABLE"
             }
         }
 
