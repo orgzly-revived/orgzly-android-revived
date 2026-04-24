@@ -17,12 +17,19 @@
             android:orderInCategory="2"/>
 
         <item
+            android:id="@+id/calendar"
+            android:icon="@drawable/ic_today"
+            android:title="@string/calendar"
+            android:checkable="true"
+            android:orderInCategory="4"/>
+
+        <item
             android:id="@+id/settings"
             android:icon="@drawable/ic_settings"
             android:title="@string/settings"
-            android:orderInCategory="4"/>
+            android:orderInCategory="6"/>
 
         <!-- FIXME: Space for sync button and progress bar -->
-        <item android:title="" android:enabled="false" android:orderInCategory="6" />
+        <item android:title="" android:enabled="false" android:orderInCategory="8" />
     </group>
 </menu>

@@ -356,6 +356,33 @@
     <string name="pref_key_group_scheduled_with_today" translatable="false">pref_key_group_scheduled_with_today</string>
     <bool name="pref_default_group_scheduled_with_today" translatable="false">true</bool>
 
+    <string name="pref_key_calendar_month_text_size" translatable="false">pref_key_calendar_month_text_size</string>
+    <string name="pref_default_calendar_month_text_size" translatable="false">14</string>
+    <string-array name="calendar_text_sizes">
+        <item>@string/font_size_small</item>
+        <item>@string/font_size_default</item>
+        <item>@string/font_size_large</item>
+    </string-array>
+    <string-array name="calendar_text_sizes_values">
+        <item>12</item>
+        <item>14</item>
+        <item>16</item>
+    </string-array>
+
+    <string name="pref_key_calendar_show_book_name" translatable="false">pref_key_calendar_show_book_name</string>
+    <bool name="pref_default_calendar_show_book_name" translatable="false">true</bool>
+
+    <string name="pref_key_calendar_first_day_of_week" translatable="false">pref_key_calendar_first_day_of_week</string>
+    <string name="pref_default_calendar_first_day_of_week" translatable="false">monday</string>
+    <string-array name="calendar_first_day_of_week_entries">
+        <item>@string/monday</item>
+        <item>@string/sunday</item>
+    </string-array>
+    <string-array name="calendar_first_day_of_week_values">
+        <item>monday</item>
+        <item>sunday</item>
+    </string-array>
+
     <string name="pref_key_selected_note_metadata" translatable="false">pref_key_selected_note_metadata</string>
     <string-array name="note_metadata">
         <item>@string/tags</item>

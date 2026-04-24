@@ -32,6 +32,7 @@ public class AppIntent {
     public static final String ACTION_FOLLOW_LINK_TO_FILE = "com.orgzly.intent.action.FOLLOW_LINK_TO_FILE";
     public static final String ACTION_OPEN_SAVED_SEARCHES = "com.orgzly.intent.action.OPEN_SAVED_SEARCHES";
     public static final String ACTION_OPEN_QUERY = "com.orgzly.intent.action.OPEN_QUERY";
+    public static final String ACTION_OPEN_CALENDAR = "com.orgzly.intent.action.OPEN_CALENDAR";
     public static final String ACTION_OPEN_BOOKS = "com.orgzly.intent.action.OPEN_BOOKS";
     public static final String ACTION_OPEN_BOOK = "com.orgzly.intent.action.OPEN_BOOK";
     public static final String ACTION_OPEN_SETTINGS = "com.orgzly.intent.action.OPEN_SETTINGS";

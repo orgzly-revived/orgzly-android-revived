@@ -632,6 +632,7 @@ public class MainActivity extends CommonActivity
         bm.registerReceiver(receiver, new IntentFilter(AppIntent.ACTION_FOLLOW_LINK_TO_FILE));
         bm.registerReceiver(receiver, new IntentFilter(AppIntent.ACTION_OPEN_SAVED_SEARCHES));
         bm.registerReceiver(receiver, new IntentFilter(AppIntent.ACTION_OPEN_QUERY));
+        bm.registerReceiver(receiver, new IntentFilter(AppIntent.ACTION_OPEN_CALENDAR));
         bm.registerReceiver(receiver, new IntentFilter(AppIntent.ACTION_OPEN_BOOKS));
         bm.registerReceiver(receiver, new IntentFilter(AppIntent.ACTION_OPEN_BOOK));
         bm.registerReceiver(receiver, new IntentFilter(AppIntent.ACTION_OPEN_SETTINGS));
@@ -999,6 +1000,11 @@ public class MainActivity extends CommonActivity
                     String query = intent.getStringExtra(AppIntent.EXTRA_QUERY_STRING);
                     String searchName = intent.getStringExtra(AppIntent.EXTRA_SEARCH_NAME);
                     DisplayManager.displayQuery(getSupportFragmentManager(), query, searchName);
+                    break;
+                }
+
+                case AppIntent.ACTION_OPEN_CALENDAR: {
+                    DisplayManager.displayCalendar(getSupportFragmentManager());
                     break;
                 }
 

@@ -221,6 +221,17 @@ public class DisplayManager {
                 true);
     }
 
+    public static void displayCalendar(FragmentManager fragmentManager) {
+        Fragment fragment = AgendaFragment.getCalendarInstance();
+
+        replaceFragment(
+                fragmentManager,
+                R.id.single_pane_container,
+                fragment,
+                AgendaFragment.FRAGMENT_TAG,
+                true);
+    }
+
     public static void displayEditor(FragmentManager fragmentManager, Book book) {
         Fragment fragment = BookPrefaceFragment.Companion.getInstance(book.getId(), book.getPreface());
 

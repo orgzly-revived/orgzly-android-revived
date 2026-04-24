@@ -17,14 +17,149 @@
 
             <ProgressBar style="@style/LoadingProgressBar" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/fragment_query_agenda_recycler_view"
-                style="@style/FastScroll"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="?attr/actionBarSize"
-                android:paddingBottom="?attr/actionBarSize"
-                android:clipToPadding="false" />
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/calendar_controls_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/view_mode_agenda_button"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:text="@string/agenda"
+                        app:cornerRadius="4dp"
+                        android:insetLeft="2dp"
+                        android:insetRight="2dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/view_mode_week_button"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:text="@string/week"
+                        app:cornerRadius="4dp"
+                        android:insetLeft="2dp"
+                        android:insetRight="2dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/view_mode_month_button"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:text="@string/month"
+                        app:cornerRadius="4dp"
+                        android:insetLeft="2dp"
+                        android:insetRight="2dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/view_mode_today_button"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="0.4"
+                        app:icon="@drawable/ic_today"
+                        app:iconPadding="2dp"
+                        app:iconGravity="textStart"
+                        android:gravity="center"
+                        app:cornerRadius="4dp"
+                        android:insetLeft="4dp"
+                        android:insetRight="4dp" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/fragment_query_agenda_recycler_view"
+                    style="@style/FastScroll"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:paddingBottom="?attr/actionBarSize"
+                    android:clipToPadding="false" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fragment_query_agenda_month_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp">
+
+                    <ImageButton
+                        android:id="@+id/month_prev_button"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/previous_month"
+                        android:src="@drawable/ic_arrow_back" />
+
+                    <TextView
+                        android:id="@+id/month_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textAppearance="?attr/textAppearanceTitleMedium" />
+
+                    <ImageButton
+                        android:id="@+id/month_next_button"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/next_month"
+                        android:src="@drawable/ic_arrow_forward" />
+                </LinearLayout>
+
+                <GridLayout
+                    android:id="@+id/month_grid"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:columnCount="7"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="8dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/month_day_events_recycler_view"
+                    style="@style/FastScroll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="?attr/actionBarSize"
+                    android:clipToPadding="false"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/week_columns_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="?attr/actionBarSize"
+                    android:visibility="gone" />
+            </LinearLayout>
 
         </ViewFlipper>
 
