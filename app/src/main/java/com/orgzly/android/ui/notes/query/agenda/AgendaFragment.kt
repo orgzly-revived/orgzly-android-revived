@@ -45,6 +45,7 @@ import com.orgzly.android.ui.util.setup
 import com.orgzly.android.util.LogUtils
 import com.orgzly.databinding.FragmentQueryAgendaBinding
 import kotlin.getValue
+import org.joda.time.DateTime
 
 
 /**
@@ -67,6 +68,15 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
         )
     }
 
+    private var displayMode: CalendarDisplayMode = CalendarDisplayMode.AGENDA
+    private var currentMonth: DateTime = DateTime.now().withTimeAtStartOfDay().withDayOfMonth(1)
+    private var selectedMonthDay: DateTime = DateTime.now().withTimeAtStartOfDay()
+    private var currentItems: List<AgendaItem> = emptyList()
+
+    private lateinit var monthView: AgendaMonthView
+    private lateinit var weekView: AgendaWeekView
+    private var currentWeekStart: DateTime = weekStartForDay(DateTime.now().withTimeAtStartOfDay())
+
     private val appBarBackPressHandler = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             viewModel.appBar.handleOnBackPressed()
@@ -82,6 +92,12 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
         requireActivity().onBackPressedDispatcher.addCallback(this, appBarBackPressHandler)
         requireActivity().onBackPressedDispatcher.addCallback(this, notePopupDismissOnBackPress)
+
+        displayMode = when (AppPreferences.calendarDefaultView(requireContext())) {
+            "month" -> CalendarDisplayMode.MONTH
+            "week"  -> CalendarDisplayMode.WEEK
+            else    -> CalendarDisplayMode.AGENDA
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -117,6 +133,34 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
         // Restores selection, requires adapter
         super.onViewCreated(view, savedInstanceState)
 
+        monthView = AgendaMonthView(
+            fragment          = this,
+            binding           = binding,
+            getItems          = { currentItems },
+            onDaySelected     = { day -> selectedMonthDay = day; currentMonth = day.withDayOfMonth(1); monthView.render(currentMonth, selectedMonthDay) },
+            openNote          = { openNote(it) },
+            onSelectionToggle = { item ->
+                viewAdapter.getSelection().toggle(item.id)
+                viewModel.appBar.toModeFromSelectionCount(viewAdapter.getSelection().count)
+            }
+        )
+
+        weekView = AgendaWeekView(
+            fragment          = this,
+            binding           = binding,
+            getItems          = { currentItems },
+            onDaySelected     = { day ->
+                selectedMonthDay = day
+                currentWeekStart = weekStartForDay(day)
+                weekView.render(currentWeekStart, selectedMonthDay)
+            },
+            openNote          = { openNote(it) },
+            onSelectionToggle = { item: AgendaItem.Note ->
+                viewAdapter.getSelection().toggle(item.id)
+                viewModel.appBar.toModeFromSelectionCount(viewAdapter.getSelection().count)
+            }
+        )
+
         val layoutManager = StickyHeadersLinearLayoutManager<AgendaAdapter>(
                 context, LinearLayoutManager.VERTICAL, false)
 
@@ -142,6 +186,20 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
                     }
                 }
             }))
+        }
+
+        when (displayMode) {
+            CalendarDisplayMode.MONTH -> {
+                binding.fragmentQueryAgendaRecyclerView.visibility = View.GONE
+                binding.fragmentQueryAgendaMonthContainer.visibility = View.VISIBLE
+                setupMonthNavigation()
+            }
+            CalendarDisplayMode.WEEK -> {
+                binding.fragmentQueryAgendaRecyclerView.visibility = View.GONE
+                binding.fragmentQueryAgendaMonthContainer.visibility = View.VISIBLE
+                setupWeekNavigation()
+            }
+            else -> {}
         }
 
         binding.swipeContainer.setup()
@@ -175,6 +233,33 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
         sharedMainActivityViewModel.setCurrentFragment(FRAGMENT_TAG)
     }
 
+    private fun toggleTitleForMode(mode: CalendarDisplayMode): String = when (mode) {
+        CalendarDisplayMode.AGENDA -> getString(R.string.toggle_week_view)
+        CalendarDisplayMode.WEEK   -> getString(R.string.toggle_calendar_view)
+        CalendarDisplayMode.MONTH  -> getString(R.string.toggle_agenda_view)
+    }
+
+    private fun applyDisplayMode(mode: CalendarDisplayMode) {
+        when (mode) {
+            CalendarDisplayMode.MONTH -> {
+                binding.fragmentQueryAgendaRecyclerView.visibility = View.GONE
+                binding.fragmentQueryAgendaMonthContainer.visibility = View.VISIBLE
+                setupMonthNavigation()
+                monthView.render(currentMonth, selectedMonthDay)
+            }
+            CalendarDisplayMode.WEEK -> {
+                binding.fragmentQueryAgendaRecyclerView.visibility = View.GONE
+                binding.fragmentQueryAgendaMonthContainer.visibility = View.VISIBLE
+                setupWeekNavigation()
+                weekView.render(currentWeekStart, selectedMonthDay)
+            }
+            CalendarDisplayMode.AGENDA -> {
+                binding.fragmentQueryAgendaRecyclerView.visibility = View.VISIBLE
+                binding.fragmentQueryAgendaMonthContainer.visibility = View.GONE
+            }
+        }
+    }
+
     private fun topToolbarToDefault() {
         viewAdapter.clearSelection()
 
@@ -190,8 +275,20 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
                 sharedMainActivityViewModel.openDrawer()
             }
 
+            menu.findItem(R.id.toggle_calendar_view)?.title = toggleTitleForMode(displayMode)
+
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
+                    R.id.toggle_calendar_view -> {
+                        displayMode = when (displayMode) {
+                            CalendarDisplayMode.AGENDA -> CalendarDisplayMode.WEEK
+                            CalendarDisplayMode.WEEK   -> CalendarDisplayMode.MONTH
+                            CalendarDisplayMode.MONTH  -> CalendarDisplayMode.AGENDA
+                        }
+                        applyDisplayMode(displayMode)
+                        menu.findItem(R.id.toggle_calendar_view)?.title = toggleTitleForMode(displayMode)
+                    }
+
                     R.id.sync -> {
                         SyncRunner.startSync()
                     }
@@ -297,7 +394,15 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             if (BuildConfig.LOG_DEBUG)
                 LogUtils.d(TAG, "Replacing data with ${list.items.size} agenda items")
 
+            currentItems = list.items
             viewAdapter.submitList(list.items)
+
+            if (::monthView.isInitialized && displayMode == CalendarDisplayMode.MONTH) {
+                monthView.render(currentMonth, selectedMonthDay)
+            }
+            if (::weekView.isInitialized && displayMode == CalendarDisplayMode.WEEK) {
+                weekView.render(currentWeekStart, selectedMonthDay)
+            }
 
             val ids = notes.mapTo(hashSetOf()) { it.note.id }
 
@@ -365,6 +470,30 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             viewAdapter.notifyItemChanged(position)
 
             viewModel.appBar.toModeFromSelectionCount(viewAdapter.getSelection().count)
+        }
+    }
+
+    private fun setupMonthNavigation() {
+        binding.monthPrevButton.setOnClickListener {
+            currentMonth = currentMonth.minusMonths(1)
+            if (!isSameMonth(selectedMonthDay, currentMonth)) selectedMonthDay = currentMonth
+            monthView.render(currentMonth, selectedMonthDay)
+        }
+        binding.monthNextButton.setOnClickListener {
+            currentMonth = currentMonth.plusMonths(1)
+            if (!isSameMonth(selectedMonthDay, currentMonth)) selectedMonthDay = currentMonth
+            monthView.render(currentMonth, selectedMonthDay)
+        }
+    }
+
+    private fun setupWeekNavigation() {
+        binding.monthPrevButton.setOnClickListener {
+            currentWeekStart = currentWeekStart.minusWeeks(1)
+            weekView.render(currentWeekStart, selectedMonthDay)
+        }
+        binding.monthNextButton.setOnClickListener {
+            currentWeekStart = currentWeekStart.plusWeeks(1)
+            weekView.render(currentWeekStart, selectedMonthDay)
         }
     }
 
