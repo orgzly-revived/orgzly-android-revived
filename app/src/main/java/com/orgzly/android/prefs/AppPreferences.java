@@ -938,6 +938,18 @@ public class AppPreferences {
                 context.getResources().getBoolean(R.bool.pref_default_group_scheduled_with_today));
     }
 
+    public static int calendarTextSize(Context context) {
+        return Integer.parseInt(getDefaultSharedPreferences(context).getString(
+                context.getResources().getString(R.string.pref_key_calendar_month_text_size),
+                context.getResources().getString(R.string.pref_default_calendar_month_text_size)));
+    }
+
+    public static boolean calendarShowBookName(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_calendar_show_book_name),
+                context.getResources().getBoolean(R.bool.pref_default_calendar_show_book_name));
+    }
+
     public static void groupScheduledWithTodayInAgenda(Context context, boolean value) {
         getDefaultSharedPreferences(context).edit().putBoolean(
                 context.getResources().getString(R.string.pref_key_group_scheduled_with_today),

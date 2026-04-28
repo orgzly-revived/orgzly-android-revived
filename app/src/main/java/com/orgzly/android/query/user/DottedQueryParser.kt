@@ -111,9 +111,12 @@ open class DottedQueryParser : QueryParser() {
     )
 
     override val supportedOptions = listOf(
-            OptionMatch("""^ad\.(\d+)$""") { match, options ->
-                val days = match.groupValues[1].toInt()
-                if (days > 0) options.copy(agendaDays = days) else null
-            }
+        OptionMatch("""^ad\.(\d+)(?::(month))?$""") { match, options ->
+            val days = match.groupValues[1].toInt()
+            if (days > 0) options.copy(
+                agendaDays = days,
+                agendaViewMode = match.groupValues[2]
+            ) else null
+        }
     )
 }

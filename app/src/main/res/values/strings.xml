@@ -348,6 +348,20 @@
     <string name="day">Day</string>
     <string name="week">Week</string>
     <string name="month">Month</string>
+    <string name="month_view">Month view</string>
+    <string name="agenda_view">Agenda view</string>
+    <string name="week_view">Week view</string>
+    <string name="previous_month">Previous month</string>
+    <string name="next_month">Next month</string>
+    <string name="calendar_views">Calendar views</string>
+    <string name="calendar_text_size">Calendar text size</string>
+    <string name="agenda_mode_agenda">Agenda</string>
+    <string name="agenda_mode_week">Week</string>
+    <string name="agenda_mode_month">Month</string>
+    <string name="calendar_show_book_name">Show notebook name in calendar</string>
+    <string name="monday">Monday</string>
+    <string name="sunday">Sunday</string>
+    <string name="calendar">Calendar</string>
     <string name="year">Year</string>
 
     <string name="repeater_dialog_title">Repeat</string>

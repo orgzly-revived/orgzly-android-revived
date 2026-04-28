@@ -107,6 +107,19 @@
             android:title="@string/group_scheduled_with_today"
             android:summary="@string/group_scheduled_with_today_summary"
             android:defaultValue="@bool/pref_default_group_scheduled_with_today" />
+
+        <ListPreference
+            android:key="@string/pref_key_calendar_month_text_size"
+            android:title="@string/calendar_text_size"
+            android:entries="@array/calendar_text_sizes"
+            android:entryValues="@array/calendar_text_sizes_values"
+            android:defaultValue="@string/pref_default_calendar_month_text_size"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreference
+            android:key="@string/pref_key_calendar_show_book_name"
+            android:title="@string/calendar_show_book_name"
+            android:defaultValue="@bool/pref_default_calendar_show_book_name" />
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

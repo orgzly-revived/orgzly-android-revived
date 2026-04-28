@@ -3,10 +3,15 @@ package com.orgzly.android.ui.notes.query.agenda
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.getValue
@@ -45,6 +50,7 @@ import com.orgzly.android.ui.util.setup
 import com.orgzly.android.util.LogUtils
 import com.orgzly.databinding.FragmentQueryAgendaBinding
 import kotlin.getValue
+import org.joda.time.DateTime
 
 
 /**
@@ -57,7 +63,7 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
     lateinit var viewAdapter: AgendaAdapter
 
-    override val viewModel: QueryViewModel  by viewModels {
+    override val viewModel: QueryViewModel by viewModels {
         QueryViewModelFactory.provideFactory(
             viewModelFactory,
             requireArguments().getString(ARG_QUERY) ?: "",
@@ -66,6 +72,14 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             requireContext()
         )
     }
+
+    private var displayMode: CalendarDisplayMode = CalendarDisplayMode.AGENDA
+    private var currentMonth: DateTime = DateTime.now().withTimeAtStartOfDay().withDayOfMonth(1)
+    private var selectedMonthDay: DateTime = DateTime.now().withTimeAtStartOfDay()
+    private var currentItems: List<AgendaItem> = emptyList()
+    private var internalTodayButton: ImageButton? = null
+
+    private lateinit var monthView: AgendaMonthView
 
     private val appBarBackPressHandler = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
@@ -82,6 +96,7 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
         requireActivity().onBackPressedDispatcher.addCallback(this, appBarBackPressHandler)
         requireActivity().onBackPressedDispatcher.addCallback(this, notePopupDismissOnBackPress)
+        displayMode = extractDisplayModeFromQuery(arguments?.getString(ARG_QUERY) ?: "")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -117,8 +132,22 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
         // Restores selection, requires adapter
         super.onViewCreated(view, savedInstanceState)
 
+        monthView = AgendaMonthView(
+            fragment          = this,
+            binding           = binding,
+            getItems          = { currentItems },
+            getCurrentMonth   = { currentMonth },
+            getSelectedDay    = { selectedMonthDay },
+            onDaySelected     = { day -> selectedMonthDay = day; renderMonthView() },
+            openNote          = { openNote(it) },
+            onSelectionToggle = { item ->
+                viewAdapter.getSelection().toggle(item.id)
+                viewModel.appBar.toModeFromSelectionCount(viewAdapter.getSelection().count)
+            }
+        )
+
         val layoutManager = StickyHeadersLinearLayoutManager<AgendaAdapter>(
-                context, LinearLayoutManager.VERTICAL, false)
+            context, LinearLayoutManager.VERTICAL, false)
 
         val dividerItemDecoration = DividerItemDecoration(context, layoutManager.orientation)
 
@@ -143,6 +172,11 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
                 }
             }))
         }
+
+        binding.fragmentQueryAgendaRecyclerView.visibility = View.GONE
+        binding.fragmentQueryAgendaMonthContainer.visibility = View.GONE
+        setupCalendarControls()
+        updateDisplayMode()
 
         binding.swipeContainer.setup()
 
@@ -297,7 +331,12 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             if (BuildConfig.LOG_DEBUG)
                 LogUtils.d(TAG, "Replacing data with ${list.items.size} agenda items")
 
+            currentItems = list.items
             viewAdapter.submitList(list.items)
+
+            if (::binding.isInitialized && displayMode == CalendarDisplayMode.MONTH) {
+                renderMonthView()
+            }
 
             val ids = notes.mapTo(hashSetOf()) { it.note.id }
 
@@ -313,6 +352,7 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
                 APP_BAR_DEFAULT_MODE -> {
                     topToolbarToDefault()
                     bottomToolbarToDefault()
+                    updateDisplayMode()
 
                     sharedMainActivityViewModel.unlockDrawer()
 
@@ -366,6 +406,69 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
             viewModel.appBar.toModeFromSelectionCount(viewAdapter.getSelection().count)
         }
+    }
+
+    private fun setupCalendarControls() {
+        binding.monthPrevButton.setOnClickListener {
+            if (displayMode == CalendarDisplayMode.MONTH) {
+                currentMonth = currentMonth.minusMonths(1)
+                if (!isSameMonth(selectedMonthDay, currentMonth)) selectedMonthDay = currentMonth
+                renderMonthView()
+            }
+        }
+        binding.monthNextButton.setOnClickListener {
+            if (displayMode == CalendarDisplayMode.MONTH) {
+                currentMonth = currentMonth.plusMonths(1)
+                if (!isSameMonth(selectedMonthDay, currentMonth)) selectedMonthDay = currentMonth
+                renderMonthView()
+            }
+        }
+    }
+
+    private fun updateDisplayMode() {
+        if (!::binding.isInitialized) return
+        binding.fragmentQueryAgendaMonthContainer.setPadding(0, 0, 0, 0)
+        binding.fragmentQueryAgendaRecyclerView.itemAnimator = null
+        binding.fragmentQueryAgendaRecyclerView.visibility =
+            if (displayMode == CalendarDisplayMode.AGENDA) View.VISIBLE else View.GONE
+        binding.fragmentQueryAgendaMonthContainer.visibility =
+            if (displayMode == CalendarDisplayMode.AGENDA) View.GONE else View.VISIBLE
+    }
+
+    private fun buildTodayButton(goToToday: () -> Unit): ImageButton {
+        val dp36 = (36 * resources.displayMetrics.density).toInt()
+        return ImageButton(requireContext()).apply {
+            setImageResource(R.drawable.ic_today)
+            setBackgroundColor(Color.TRANSPARENT)
+            setPadding(12, 6, 12, 6)
+            scaleType = ImageView.ScaleType.CENTER_INSIDE
+            layoutParams = LinearLayout.LayoutParams(dp36, WRAP_CONTENT)
+            setOnClickListener { goToToday() }
+        }
+    }
+
+    private fun attachTodayButton(container: LinearLayout, goToToday: () -> Unit) {
+        internalTodayButton = buildTodayButton(goToToday)
+        container.addView(internalTodayButton)
+        updateTodayButtonState()
+    }
+
+    private fun updateTodayButtonState() {
+        val today = DateTime.now().withTimeAtStartOfDay()
+        val isAtToday = displayMode == CalendarDisplayMode.MONTH &&
+            currentMonth == today.withDayOfMonth(1)
+        internalTodayButton?.setColorFilter(if (isAtToday) Color.GRAY else Color.WHITE)
+    }
+
+    private fun goToToday() {
+        val today = DateTime.now().withTimeAtStartOfDay()
+        selectedMonthDay = today
+        currentMonth = today.withDayOfMonth(1)
+        renderMonthView()
+    }
+
+    private fun renderMonthView() {
+        monthView.render(currentMonth, selectedMonthDay, ::attachTodayButton, ::goToToday)
     }
 
     companion object {

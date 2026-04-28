@@ -17,38 +17,118 @@
 
             <ProgressBar style="@style/LoadingProgressBar" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/fragment_query_agenda_recycler_view"
-                style="@style/FastScroll"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="?attr/actionBarSize"
+                android:orientation="vertical"
                 android:paddingBottom="@dimen/fragment_query_bottom_padding"
-                android:clipToPadding="false" />
+                android:clipToPadding="false">
 
-        </ViewFlipper>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/fragment_query_agenda_recycler_view"
+                    style="@style/FastScroll"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:paddingBottom="?attr/actionBarSize"
+                    android:clipToPadding="false" />
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                <LinearLayout
+                    android:id="@+id/fragment_query_agenda_month_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="?attr/actionBarSize"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-    <!-- Top toolbar -->
-    <!-- TODO: DRY -->
-    <com.google.android.material.appbar.AppBarLayout
-        style="@style/AppBarLayoutStyle">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingTop="12dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/top_toolbar"
-            style="@style/TopToolbar"
-            app:navigationIcon="@drawable/ic_menu" />
+                        <ImageButton
+                            android:id="@+id/month_prev_button"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/previous_month"
+                            android:src="@drawable/ic_arrow_back" />
 
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/sync_toolbar_progress"
-            style="@style/SyncProgressIndicator" />
+                        <LinearLayout
+                            android:id="@+id/month_label_container"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
 
-    </com.google.android.material.appbar.AppBarLayout>
+                            <TextView
+                                android:id="@+id/month_label"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:textAppearance="?attr/textAppearanceTitleMedium" />
+                            </LinearLayout>
 
-    <!-- Bottom toolbar -->
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottom_toolbar"
-        style="@style/BottomToolbar" />
+                            <ImageButton
+                                android:id="@+id/month_next_button"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:contentDescription="@string/next_month"
+                                android:src="@drawable/ic_arrow_forward" />
+                            </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+                            <GridLayout
+                                android:id="@+id/month_grid"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:columnCount="7"
+                                android:paddingStart="8dp"
+                                android:paddingEnd="8dp"
+                                android:paddingBottom="8dp" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/month_day_events_recycler_view"
+                                style="@style/FastScroll"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:paddingBottom="?attr/actionBarSize"
+                                android:clipToPadding="false"
+                                android:visibility="gone" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </ViewFlipper>
+
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+                <com.google.android.material.appbar.AppBarLayout
+                    style="@style/AppBarLayoutStyle">
+
+                    <com.google.android.material.appbar.MaterialToolbar
+                        android:id="@+id/top_toolbar"
+                        style="@style/TopToolbar"
+                        app:navigationIcon="@drawable/ic_menu" />
+
+                    <com.google.android.material.progressindicator.LinearProgressIndicator
+                        android:id="@+id/sync_toolbar_progress"
+                        style="@style/SyncProgressIndicator" />
+
+                    </com.google.android.material.appbar.AppBarLayout>
+
+                    <com.google.android.material.bottomappbar.BottomAppBar
+                        android:id="@+id/bottom_toolbar"
+                        style="@style/BottomToolbar" />
+
+                    </androidx.coordinatorlayout.widget.CoordinatorLayout>
