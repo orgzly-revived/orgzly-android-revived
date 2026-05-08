@@ -7,10 +7,14 @@ import android.view.View
 import com.orgzly.android.ui.views.richtext.ActionableRichTextView
 
 /**
- * @param content is `[ ]` or `[X]`
- * @param rawStart is a position of dash
+ * @param content is `[ ]`, `[-]`, or `[X]`
+ * @param rawStart is the position of `[`.
  */
 class CheckboxSpan(val content: CharSequence, val rawStart: Int, val rawEnd: Int) : ClickableSpan() {
+
+    enum class State {
+        UNCHECKED, PARTIAL, CHECKED
+    }
 
     override fun onClick(view: View) {
         Log.d("CheckboxSpan", "Checkbox clicked on $view")
@@ -22,7 +26,11 @@ class CheckboxSpan(val content: CharSequence, val rawStart: Int, val rawEnd: Int
     override fun updateDrawState(tp: TextPaint) {
     }
 
-    fun isChecked(): Boolean {
-        return content[1] != ' '
+    fun getState(): State {
+        when (content[1]) {
+            '-' -> return State.PARTIAL
+            'X' -> return State.CHECKED
+            else -> return State.UNCHECKED
+        }
     }
 }
