@@ -35,14 +35,14 @@ CLOSED: [2018-01-24 Mer 17:00]
 
 ** Les notes parents peuvent suivre l'état des notes enfants [1/3] [33%]
 
-*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+*** TODO Pour suivre la proportion d'éléments avec TODO ou DONE, ajouter [/] dans le titre de la note
 
-*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+*** TODO Pour suivre le pourcentage d'éléments avec TODO ou DONE, ajouter [%] dans le titre de la note
 
-*** DONE Both can be used in tandem
+*** DONE Les deux peuvent être utilisés ensemble
 CLOSED: [2025-03-13 Thu 08:37]
 
-The order doesn't matter, and the counts will be updated automatically.
+L'ordre n'a pas d'importance et les compteurs se mettront à jour automatiquement.
 
 ** Une note peut avoir une date de début programmée
 SCHEDULED: <2015-02-20 Ven 15:15>
@@ -53,9 +53,9 @@ SCHEDULED: <2015-02-16 Mon .+2d>
 ** Vous pouvez également définir une échéance
 DEADLINE: <2015-02-20 Fri>
 
-** Event times can be used anywhere in the note's content
+** Les dates d'événements peuvent être utilisées n'importe où dans le contenu de la note
 
-You can have multiple event times:
+Il peut y avoir plusieurs heures d'événements :
 
 - <2015-02-20 Fri>
 - <2015-02-21 Sat>
@@ -88,11 +88,11 @@ Vous pouvez mettre les mots en *gras*, /italique/, _souligné_, =verbatim=, ~en 
 
 Un appui sur la case à cocher change son état. Un retour à la ligne crée une nouvelle case à cocher.
 
-** A note's title can also track checkbox list states [66%] [2/3]
+** Un titre de note peut aussi suivre l'état des cases à cocher [66%] [2/3]
 
-- [X] Task 1
-- [ ] Task 2
-- [X] Task 3
+- [X] Tâche 1
+- [ ] Tâche 2
+- [X] Tâche 3
 
 * Recherche
 ** Il y a beaucoup d’opérateurs de recherche
