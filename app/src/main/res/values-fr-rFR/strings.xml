@@ -533,7 +533,7 @@
     <string name="delete_amount_of_books">Supprimer %d bloc-notes</string>
     <string name="moving_between_subdirectories_requires_api_24">Renommer le bloc-notes vers un autre sous-répertoire nécessite Android 7 ou une version supérieure</string>
     <string name="sync_status_no_change">Pas de changement</string>
-    <string name="ssh_keygen_preference_title">Génération de clé SSH</string>
+    <string name="ssh_keygen_preference_title">Génération de la clé SSH</string>
     <string name="git_ssh_on_missing_key_dialog_title">Aucune clé SSH trouvée</string>
     <string name="insert_timestamp">Insérer la date et l\'heure</string>
     <string name="ssh_keygen_preference_summary">Générer une paire de clés pour la synchronisation avec un dépôt Git</string>
