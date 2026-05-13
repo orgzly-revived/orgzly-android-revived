@@ -52,10 +52,12 @@
     <string name="no_notes_cut">Aucune note coupée</string>
     <plurals name="notes_copied">
         <item quantity="one">Note copiée</item>
+        <item quantity="many"><b>%d</b> notes copiées</item>
         <item quantity="other"><b>%d</b> notes copiées</item>
     </plurals>
     <plurals name="notes_pasted">
         <item quantity="one">Note collée</item>
+        <item quantity="many"><b>%d</b> notes collées</item>
         <item quantity="other"><b>%d</b> notes collées</item>
     </plurals>
     <string name="no_notes_pasted">Rien à coller</string>
@@ -98,7 +100,7 @@
     <string name="tap_to_create_new_note">Touchez pour créer une nouvelle note</string>
     <string name="options_menu_item_search">Rechercher</string>
     <string name="repos_options_menu_new_repo">Nouveau dépôt</string>
-    <string name="book_name_already_exists">Le bloc-notes %s existe déjà.</string>
+    <string name="book_name_already_exists">Le bloc-notes %s existe déjà</string>
     <string name="filter_name_already_exists">Une recherche avec le même nom existe déjà</string>
     <string name="failed_creating_directory">Impossible de créer le répertoire %s</string>
     <string name="version">Nouveautés</string>
@@ -118,7 +120,7 @@
     <string name="repo_dropbox_button_linked">Dissocier de Dropbox</string>
     <string name="notes_update_needed_dialog_title">La préférence influence les notes</string>
     <string name="notes_update_needed_dialog_message">Actualiser les notes pour prendre en compte les changements ?</string>
-    <string name="updating_notes">Mise à jour des notes...</string>
+    <string name="updating_notes">Mise à jour des notes…</string>
     <string name="no_notes_found_after_search">Votre recherche ne correspond à aucune note</string>
     <string name="today">Aujourd\'hui</string>
     <string name="tomorrow">Demain</string>
@@ -162,7 +164,7 @@
     <string name="git_clone_error_invalid_target_dir">Le répertoire cible n\'existe pas</string>
     <string name="git_clone_error_target_not_empty">Le répertoire cible n\'est pas vide</string>
     <string name="git_clone_error_uri_not_supported">L\'adresse distante n\'est pas supportée</string>
-    <string name="webdav_url_hint">URL (ex: webdavs://exemple.com/mes-fichiers-org/)</string>
+    <string name="webdav_url_hint">URL (ex : webdavs://exemple.com/mes-fichiers-org/)</string>
     <string name="webdav_auth_username_hint">Nom d\'utilisateur</string>
     <string name="webdav_auth_password_hint">Mot de passe</string>
     <string name="webdav_test_error_auth">Le nom d´utilisateur ou le mot de passe est incorrect</string>
@@ -201,10 +203,10 @@
     <string name="rename">Renommer</string>
     <string name="rename_book">Renommer %s</string>
     <string name="failed_renaming_book">Le bloc-notes n\'a pas pu être renommé</string>
-    <string name="failed_renaming_book_with_reason">Échec du renommage: %s</string>
+    <string name="failed_renaming_book_with_reason">Échec du renommage : %s</string>
     <string name="renamed_book_from">Renommé à partir de « %s »</string>
     <string name="also_delete_linked_book">Supprimer le bloc-notes distant associé</string>
-    <string name="message_deleting_book_failed">La suppression du bloc-notes a échoué: %s</string>
+    <string name="message_deleting_book_failed">La suppression du bloc-notes a échoué : %s</string>
     <string name="message_book_deleted">Bloc-notes supprimé</string>
     <string name="default_priority">Priorité par défaut</string>
     <string name="lowest_priority">Priorité la plus basse</string>
@@ -258,8 +260,8 @@
     <string name="force_loaded_from_uri">%s chargé de manière forcée</string>
     <string name="force_saving_to_uri">Sauvegarde forcée de %s…</string>
     <string name="force_saved_to_uri">%s sauvegardé de manière forcée</string>
-    <string name="force_saving_failed">La sauvegarde forcée a échoué: %s</string>
-    <string name="force_loading_failed">Le chargement forcé a échoué: %s</string>
+    <string name="force_saving_failed">La sauvegarde forcée a échoué : %s</string>
+    <string name="force_loading_failed">Le chargement forcé a échoué : %s</string>
     <string name="loaded_from_resource">Chargement de la ressource %s</string>
     <string name="notebook_files">Fichiers du bloc-notes</string>
     <string name="org_file_format">Composition du fichier Org</string>
@@ -324,11 +326,13 @@
     <string name="notebooks_sort_order_modification_time">Date de modification</string>
     <plurals name="delete_note_or_notes_with_count_question">
         <item quantity="one">Supprimer la note ?</item>
+        <item quantity="many">Supprimer les <b>%d</b> notes ?</item>
         <item quantity="other">Supprimer les <b>%d</b> notes ?</item>
     </plurals>
     <!-- Unused -->
     <plurals name="notes_deleted">
         <item quantity="one">Note supprimée</item>
+        <item quantity="many">Supprimé <b>%d</b> notes</item>
         <item quantity="other">Supprimé <b>%d</b> notes</item>
     </plurals>
     <string name="no_notes_deleted">Aucune note suprimée</string>
