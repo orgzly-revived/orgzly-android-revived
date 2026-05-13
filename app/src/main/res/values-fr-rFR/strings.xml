@@ -47,6 +47,7 @@
     <string name="event">Événement</string>
     <plurals name="notes_cut">
         <item quantity="one">Note coupée</item>
+        <item quantity="many"><b>%d</b> notes coupées</item>
         <item quantity="other"><b>%d</b> notes coupées</item>
     </plurals>
     <string name="no_notes_cut">Aucune note coupée</string>
@@ -306,7 +307,7 @@
     <string name="displayed_book_details_used_encoding">Encodage utilisé</string>
     <string name="displayed_book_details_last_action">Dernière action</string>
     <string name="displayed_book_details_notes_count">Nombre de notes</string>
-    <string name="color_theme_system_default">Système par défaut</string>
+    <string name="color_theme_system_default">Thème du système</string>
     <string name="color_theme_light">Clair</string>
     <string name="color_theme_dark">Sombre</string>
     <string name="color_scheme_dynamic">Couleurs dynamiques</string>
@@ -417,15 +418,17 @@
     <string name="styled_text_with_marks_summary">Conserver l\'affichage des marques (par exemple : *gras*)</string>
     <string name="no_such_link_target">La note avec la propriété “%1$s” fixée à “%2$s” n\'a pas été trouvée</string>
     <plurals name="imported_searches">
-        <item quantity="one">Importée une seule recherche</item>
-        <item quantity="other">Importées <b>%d</b> recherches</item>
+        <item quantity="one">Une recherche importée</item>
+        <item quantity="many"><b>%d</b> recherches importées</item>
+        <item quantity="other"><b>%d</b> recherches importées</item>
     </plurals>
     <plurals name="exported_searches">
         <item quantity="one">Une recherche exportée</item>
+        <item quantity="many"><b>%d</b> recherches exportées</item>
         <item quantity="other"><b>%d</b> recherches exportées</item>
     </plurals>
     <string name="storage_permissions_missing">Autorisation d\'accès au stockage non accordée</string>
-    <string name="file_does_not_exist">Fichier inexistant: %s</string>
+    <string name="file_does_not_exist">Fichier inexistant : %s</string>
     <string name="import_from">Importer depuis « %1$s » ?</string>
     <string name="export_to">Exporter vers « %1$s » ?</string>
     <string name="primary_storage_not_available">Le stockage principal n’est pas disponible</string>
@@ -486,6 +489,7 @@
     <string name="notebook_and_focus_on_note">Bloc-note (activer la note)</string>
     <plurals name="refile_notes">
         <item quantity="one"><b>%d</b> note reclassée</item>
+        <item quantity="many"><b>%d</b> notes reclassées</item>
         <item quantity="other"><b>%d</b> notes reclassées</item>
     </plurals>
     <string name="display_checkmarks">Afficher les marques</string>
@@ -498,6 +502,7 @@
     <string name="edit_trusted_certificates">Modifier les certificats de confiance</string>
     <plurals name="paste_note_or_notes_with_count">
         <item quantity="one">Coller la note</item>
+        <item quantity="many">Coller <b>%d</b> notes</item>
         <item quantity="other">Coller <b>%d</b> notes</item>
     </plurals>
     <string name="timestamp_dialog_day">Jour</string>
@@ -529,4 +534,25 @@
     <string name="moving_between_subdirectories_requires_api_24">Renommer le bloc-notes vers un autre sous-répertoire nécessite Android 7 ou une version supérieure</string>
     <string name="sync_status_no_change">Pas de changement</string>
     <string name="ssh_keygen_preference_title">Génération de clé SSH</string>
+    <string name="git_ssh_on_missing_key_dialog_title">Aucune clé SSH trouvée</string>
+    <string name="insert_timestamp">Insérer la date et l\'heure</string>
+    <string name="ssh_keygen_preference_summary">Générer une paire de clés pour la synchronisation avec un dépôt Git</string>
+    <string name="git_ssh_on_missing_key_dialog_text">Aucune paire de clés SSH trouvée. Voulez-vous en générer une ?</string>
+    <string name="permissions_rationale_for_schedule_exact_alarms">Autorisation nécessaire pour créer des rappels à une heure exacte</string>
+    <string name="also_delete_linked_books">Supprimer tous les blocs-notes distants associés</string>
+    <string name="fold_search">Replier le contenu dans la recherche</string>
+    <string name="hide_empty_days_in_agenda">Cacher les jours vides dans l\'agenda</string>
+    <string name="pref_title_reminders_alarm">Activer le son de l\'alarme</string>
+    <string name="pref_summary_reminders_alarm">Pour les notes qui ont une étiquette d\'alarme (voir plus bas)</string>
+    <string name="pref_title_reminders_alarm_tags">Étiquettes d\'alarme</string>
+    <string name="pref_summary_reminders_alarm_tags">Liste d\'étiquettes, séparées par un espace, qui activent le son de l\'alarme. Laisser vide pour activer l\'alarme pour tous les rappels.</string>
+    <string name="file_tags">Étiquettes</string>
+    <string name="pref_title_on_suspend_sync">Application en veille</string>
+    <string name="pref_summary_on_suspend_sync">Synchroniser quand l\'application passe en tâche de fond</string>
+    <string name="pref_title_sync_at_interval">À intervalles réguliers</string>
+    <string name="pref_key_auto_sync_interval_title">Intervalle en minutes (minimum : 15)</string>
+    <string name="error_multiple_notes_with_matching_property_value">Plusieurs notes trouvées avec la propriété \"%1$s\" fixée à \"%2$s\"</string>
+    <string name="alarms_permissions_missing">Autorisation d\'activer des rappels non accordée</string>
+    <string name="search_results">Résultats de recherche</string>
+    <string name="popup_menu_buttons">Boutons du menu pop-up</string>
 </resources>
