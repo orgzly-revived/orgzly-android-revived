@@ -1,4 +1,4 @@
-Bienvenue dans Orgzly!
+Bienvenue dans Orgzly !
 
 * Notes
 ** Cliquez sur la note pour l’ouvrir
@@ -26,9 +26,9 @@ Si vous recherchez des notes avec le tag “tag1” en utilisant la requête “
 
 ** TODO Les notes peuvent avoir un état
 
-Vous pouvez configurer tous les états que vous souhaitez: TODO, NEXT, DONE, etc.
+Vous pouvez configurer tous les états que vous souhaitez : TODO, NEXT, DONE, etc.
 
-*** Il y a deux /types/ d'état: à faire et terminé
+*** Il y a deux /types/ d'état : à faire et terminé
 
 *** DONE C'est une note avec un type d'état /fait/
 CLOSED: [2018-01-24 Mer 17:00]
