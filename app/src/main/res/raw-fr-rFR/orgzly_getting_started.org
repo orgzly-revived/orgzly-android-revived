@@ -14,7 +14,7 @@ Vous pouvez sélectionner plusieurs notes.
 
 Appuyez longuement pour ouvrir toute la sous-arborescence.
 
-*** Il n’y a pas de limite au nombre de niveaux que vous pouvez avoir
+*** Il n’y a pas de limite au nombre de niveaux que vous pouvez créer
 **** Utilisez ceci pour mieux organiser vos notes
 
 ** Les notes peuvent avoir des étiquettes :tag1:tag2:
@@ -22,7 +22,7 @@ Appuyez longuement pour ouvrir toute la sous-arborescence.
 
 Si vous recherchez des notes avec le tag “tag1” en utilisant la requête “t.tag1”, cette note sera incluse dans les résultats de recherche.
 
-*** Une note qui a la balise =ARCHIVE= est grisée :ARCHIVE:
+*** Une note avec la balise =ARCHIVE= est grisée :ARCHIVE:
 
 ** TODO Les notes peuvent avoir un état
 
@@ -30,7 +30,7 @@ Vous pouvez configurer tous les états que vous souhaitez : TODO, NEXT, DONE, e
 
 *** Il y a deux /types/ d'état : à faire et terminé
 
-*** DONE C'est une note avec un type d'état /fait/
+*** DONE Ceci est une note avec un état de type /fait/
 CLOSED: [2018-01-24 Mer 17:00]
 
 ** Les notes parents peuvent suivre l'état des notes enfants [1/3] [33%]
