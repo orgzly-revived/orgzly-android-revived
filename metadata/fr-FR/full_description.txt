@@ -1,0 +1,20 @@
+Orgzly Revived est une application de prise de note et de gestion de to-do lists.
+
+Vous pouvez enregistrer vos blocs-notes en texte brut et les synchroniser avec un dossier de votre téléphone, une carte SD ou via WebDAV.
+
+Les blocs-notes sont sauvegardés dans le format d'Org mode :
+"Org mode sert à prendre des notes, gérer des to-do lists, planifier des projets et rédiger des documents dans un système rapide et efficace, en texte simple."
+Consulter <a href='https://orgmode.org/'>orgmode.org</a> pour plus d'informations.
+
+<b>Fonctionnalités :</b>
+
+* Créer, éditer et supprimer des notes et des tâches
+* Plier et déplier des notes secondaires
+* Planifier des tâches et leur attribuer des échéances
+* Attribuer des priorités et des étiquettes aux notes
+* Faire glisser les notes vers la gauche ou la droite pour ouvrir des raccourcis
+* Rechercher dans les notes selon différentes propriétés
+* Créer et sauvegarder des recherches pour y accéder rapidement
+* Synchroniser des blocs-notes avec un ou plusieurs dossiers
+
+Orgzly Revived est un fork communautaire de l'application Orgzly.
