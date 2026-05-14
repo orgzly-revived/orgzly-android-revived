@@ -92,10 +92,10 @@
     <string name="heads_action_menu_item_paste_above">Coller avant</string>
     <string name="heads_action_menu_item_paste_under">Coller en dessous</string>
     <string name="heads_action_menu_item_paste_below">Coller après</string>
-    <string name="heads_moving_action_menu_item_promote">Promouvoir</string>
+    <string name="heads_moving_action_menu_item_promote">Monter d\'un niveau</string>
     <string name="heads_moving_action_menu_item_down">Descendre</string>
     <string name="heads_moving_action_menu_item_up">Monter</string>
-    <string name="heads_moving_action_menu_item_demote">Rétrograder</string>
+    <string name="heads_moving_action_menu_item_demote">Descendre d\'un niveau</string>
     <string name="new_note">Nouvelle note</string>
     <string name="quick_note">Note rapide</string>
     <string name="tap_to_create_new_note">Touchez pour créer une nouvelle note</string>
@@ -119,7 +119,7 @@
     <string name="search_does_not_exist_anymore">Cette recherche n’existe plus.</string>
     <string name="repo_dropbox_button_not_linked">Associer à Dropbox</string>
     <string name="repo_dropbox_button_linked">Dissocier de Dropbox</string>
-    <string name="notes_update_needed_dialog_title">La préférence influence les notes</string>
+    <string name="notes_update_needed_dialog_title">La préférence s\'appliquera aux notes</string>
     <string name="notes_update_needed_dialog_message">Actualiser les notes pour prendre en compte les changements ?</string>
     <string name="updating_notes">Mise à jour des notes…</string>
     <string name="no_notes_found_after_search">Votre recherche ne correspond à aucune note</string>
@@ -174,13 +174,13 @@
     <string name="share_action_not_supported">L\'action de partage %s n\'est pas supportée</string>
     <string name="share_type_not_supported">Le type de partage %s n\'est pas supporté</string>
     <string name="repositories">Dépôts</string>
-    <string name="repository_not_valid_with_reason">Dépôt invalide : %s</string>
+    <string name="repository_not_valid_with_reason">Dépôt invalide : %s</string>
     <string name="invalid_repo_url">URL du dépôt invalide « %s »</string>
     <string name="repository_url_already_exists">Un dépôt avec cette URL existe déjà</string>
     <string name="new_above">Avant</string>
     <string name="new_under">En dessous</string>
     <string name="new_below">Après</string>
-    <string name="confirm_unlinking_from_dropbox_title">Dissocier de Dropbox ?</string>
+    <string name="confirm_unlinking_from_dropbox_title">Dissocier de Dropbox ?</string>
     <string name="confirm_unlinking_from_dropbox_message">Vous ne serez plus en mesure de synchroniser avec Dropbox tant que vous ne l\'aurez pas associé à nouveau.</string>
     <string name="note_book_not_set">Bloc-notes non configuré</string>
     <string name="title_can_not_be_empty">Le champ \"Titre\" ne peut pas être vide</string>
@@ -214,14 +214,14 @@
     <string name="todo_states">Mots clés pour les tâches actives (todo)</string>
     <string name="done_states">Mots clés pour les tâches terminées (done)</string>
     <string name="use_created_at_property">Date de création dans une propriété</string>
-    <string name="use_created_at_property_summary">Synchronise la date de création via une propriété</string>
+    <string name="use_created_at_property_summary">Synchroniser la date de création via une propriété</string>
     <string name="created_at_property">Propriété pour la date de création</string>
     <string name="properties">Propriétés</string>
     <string name="property_name">Nom de la propriété</string>
     <string name="property_value">Valeur de la propriété</string>
-    <string name="reminder_for_scheduled">Planifiée : %s</string>
-    <string name="reminder_for_deadline">Échéance : %s</string>
-    <string name="reminder_for_event">Événement : %s</string>
+    <string name="reminder_for_scheduled">Planifiée : %s</string>
+    <string name="reminder_for_deadline">Échéance : %s</string>
+    <string name="reminder_for_event">Événement : %s</string>
     <string name="scheduled_new_notes_for_today">Planifier les nouvelles notes pour aujourd\'hui</string>
     <string name="fold_content">Replier le contenu</string>
     <string name="allow_folding_of_content">Autoriser le repli du contenu</string>
@@ -251,12 +251,12 @@
     <string name="notes_list">Liste des notes</string>
     <string name="prefs_title_new_note">Nouvelle note</string>
     <string name="prefs_title_notifications">Notifications</string>
-    <string name="app">App</string>
+    <string name="app">Application</string>
     <string name="test_connection">Tester la connexion</string>
     <string name="connecting">Connexion en cours…</string>
     <string name="no_connection">Aucune connexion</string>
     <string name="connection_successful">Connexion réussie</string>
-    <string name="last_sync_with_argument">Dernière synchro. : %s</string>
+    <string name="last_sync_with_argument">Dernière synchro. : %s</string>
     <string name="force_loading_from_uri">Chargement forcé de %s…</string>
     <string name="force_loaded_from_uri">%s chargé de manière forcée</string>
     <string name="force_saving_to_uri">Sauvegarde forcée de %s…</string>
@@ -594,4 +594,5 @@
     <string name="book_names_cannot_contain">Le nom des blocs-notes ne peut pas contenir \'../\'</string>
     <string name="is_active_label">Actif</string>
     <string name="content_description_back_button">Revenir en arrière</string>
+    <string name="allow_folding_in_search">Permettre de replier les résultats de recherche</string>
 </resources>
