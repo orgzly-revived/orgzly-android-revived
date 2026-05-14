@@ -55,18 +55,18 @@ DEADLINE: <2015-02-20 Fri>
 
 ** Les dates d'événements peuvent être utilisées n'importe où dans le contenu de la note
 
-Il peut y avoir plusieurs heures d'événements :
+Il peut y avoir plusieurs dates d'événements :
 
 - <2015-02-20 Fri>
 - <2015-02-21 Sat>
 
-** Les rappels pour les dates planifiées ou d'échéances sont supportés
+** Il est possible de mettre des rappels pour les dates planifiées, d'échéance ou d'événements
 
 Ils sont désactivés par défaut et doivent être activés dans les paramètres.
 
 ** [#A] Les notes peuvent avoir une priorité
 
-Vous pouvez modifier le nombre de priorités dans les paramètres. Vous pouvez également changer la priorité par défaut - la priorité assumée lorsqu'elle n'est pas définie.
+Vous pouvez modifier le nombre de priorités dans les paramètres. Vous pouvez également changer la priorité par défaut - la priorité appliquée lorsqu'elle n'est pas définie.
 
 ** Les notes peuvent inclure des liens
 
@@ -80,7 +80,7 @@ Voir [[https://www.orgzlyrevived.com/docs#links]] pour de plus amples informatio
 
 Vous pouvez mettre les mots en *gras*, /italique/, _souligné_, =verbatim=, ~en code~ ou les +biffer+.
 
-** Les liste de cases à cocher sont utilsables
+** Vous pouvez créer des liste de cases à cocher
 
 - [X] Tâche 1
 - [X] Tâche 2
@@ -88,7 +88,7 @@ Vous pouvez mettre les mots en *gras*, /italique/, _souligné_, =verbatim=, ~en 
 
 Un appui sur la case à cocher change son état. Un retour à la ligne crée une nouvelle case à cocher.
 
-** Un titre de note peut aussi suivre l'état des cases à cocher [66%] [2/3]
+** On peut aussi suivre l'état des cases à cocher depuis le titre de la note [66%] [2/3]
 
 - [X] Tâche 1
 - [ ] Tâche 2
@@ -105,7 +105,7 @@ Voir [[https://www.orgzlyrevived.com/docs#search]] pour en savoir plus.
 
 Essayez les exemples de recherche du menu et notez les requêtes qu’elles utilisent.
 
-Vous pouvez créer vos propres recherches enregistrées en cliquant sur «Recherche» dans le menu de navigation.
+Vous pouvez créer vos propres recherches enregistrées en cliquant sur « Recherche » dans le menu de navigation.
 
 * Synchronisation
 
