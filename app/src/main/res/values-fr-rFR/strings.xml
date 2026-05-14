@@ -541,7 +541,7 @@
     <string name="permissions_rationale_for_schedule_exact_alarms">Autorisation nécessaire pour créer des rappels à une heure exacte</string>
     <string name="also_delete_linked_books">Supprimer tous les blocs-notes distants associés</string>
     <string name="fold_search">Replier le contenu dans la recherche</string>
-    <string name="hide_empty_days_in_agenda">Cacher les jours vides dans l\'agenda</string>
+    <string name="hide_empty_days_in_agenda">Masquer les jours vides dans l\'agenda</string>
     <string name="pref_title_reminders_alarm">Activer le son de l\'alarme</string>
     <string name="pref_summary_reminders_alarm">Pour les notes qui ont une étiquette d\'alarme (voir plus bas)</string>
     <string name="pref_title_reminders_alarm_tags">Étiquettes d\'alarme</string>
@@ -556,4 +556,6 @@
     <string name="search_results">Résultats de recherche</string>
     <string name="popup_menu_buttons">Boutons du menu pop-up</string>
     <string name="sync_status_loaded">Chargé depuis %s</string>
+    <string name="widen_view">Déplier la vue</string>
+    <string name="group_scheduled_with_today_summary">Activer pour regrouper les tâches dont l\'échéance est dépassée avec celles pour aujourd\'hui</string>
 </resources>
