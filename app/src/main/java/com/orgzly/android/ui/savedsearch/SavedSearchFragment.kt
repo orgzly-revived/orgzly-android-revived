@@ -6,6 +6,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -226,6 +227,8 @@ class SavedSearchFragment: ComposeFragment(), DrawerItem {
                         enabled = state.editable
                     )
                 }
+
+                Spacer(Modifier.weight(1f))
 
                 OrgzlyButton(
                     onClick = viewModel::save,
