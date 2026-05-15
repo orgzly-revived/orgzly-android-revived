@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -108,6 +109,8 @@ class SavedSearchFragment: ComposeFragment(), DrawerItem {
             }
         }
 
+        val state by viewModel.state.collectAsStateWithLifecycle()
+
         Scaffold(
             topBar = {
                 OrgzlyTopAppBar(
@@ -116,6 +119,19 @@ class SavedSearchFragment: ComposeFragment(), DrawerItem {
                         BackButton()
                     },
                     actions = {
+                        val localUriHandler = LocalUriHandler.current
+                        if (state.mode is SavedSearchModel.Mode.Advanced) {
+                            IconButton(
+                                onClick = {
+                                    localUriHandler.openUri(SavedSearchesFragment.SEARCH_DOCUMENTATION_URL)
+                                }
+                            ) {
+                                Icon(
+                                    painterIcon(Icons.HELP),
+                                    contentDescription = stringResource(R.string.help)
+                                )
+                            }
+                        }
                         IconButton(
                             onClick = {
                                 viewModel.save()
@@ -136,7 +152,6 @@ class SavedSearchFragment: ComposeFragment(), DrawerItem {
                 )
             }
         ) { contentPadding ->
-            val state by viewModel.state.collectAsStateWithLifecycle()
             if (state.mode == SavedSearchModel.Mode.None) return@Scaffold
 
             Column(

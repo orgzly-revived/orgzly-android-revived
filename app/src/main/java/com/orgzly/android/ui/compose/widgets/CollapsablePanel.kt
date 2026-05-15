@@ -104,7 +104,7 @@ fun CollapseHeaderScaffold(
         )
         Icon(
             painterIcon(
-                Icons.ARROW_DOWNWARD
+                Icons.COLLAPSE_INDICATOR
             ),
             modifier = Modifier
                 .padding(
