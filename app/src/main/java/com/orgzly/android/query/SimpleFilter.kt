@@ -75,8 +75,8 @@ enum class RelativeDateOption {
     TODAY,
     TOMORROW,
 
-    NEXT_7_DAYS,
-    NEXT_30_DAYS
+    THIS_WEEK,
+    THIS_MONTH
 }
 
 enum class SimpleSortOrder {

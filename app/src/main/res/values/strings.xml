@@ -780,8 +780,8 @@
     <string name="search_filter_date_tomorrow">Tomorrow</string>
     <string name="search_filter_date_future">Future</string>
     <string name="search_filter_date_past">Past</string>
-    <string name="search_filter_date_next_seven_days">Next 7 Days</string>
-    <string name="search_filter_date_next_thirty_days">Next 30 Days</string>
+    <string name="search_filter_date_this_week">This Week</string>
+    <string name="search_filter_date_this_month">This Month</string>
     <string name="search_filter_unable_to_switch_to_simple">Query cannot be modified in simple editor</string>
     <string name="search_filter_swap_to_simple">Swap to simple query editor</string>
     <string name="search_filter_swap_to_advanced">Swap to advanced query editor</string>

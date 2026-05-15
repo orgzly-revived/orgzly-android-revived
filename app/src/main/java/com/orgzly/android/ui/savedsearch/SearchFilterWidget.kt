@@ -675,10 +675,10 @@ private fun BookFilter(
 private val relativeDateOptionLabels = listOf(
     RelativeDateOption.TODAY to R.string.search_filter_date_today,
     RelativeDateOption.TOMORROW to R.string.search_filter_date_tomorrow,
+    RelativeDateOption.THIS_WEEK to R.string.search_filter_date_this_week,
+    RelativeDateOption.THIS_MONTH to R.string.search_filter_date_this_month,
     RelativeDateOption.FUTURE to R.string.search_filter_date_future,
     RelativeDateOption.PAST to R.string.search_filter_date_past,
-    RelativeDateOption.NEXT_7_DAYS to R.string.search_filter_date_next_seven_days,
-    RelativeDateOption.NEXT_30_DAYS to R.string.search_filter_date_next_thirty_days,
 )
 
 @Composable

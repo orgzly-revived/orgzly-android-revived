@@ -1,7 +1,6 @@
 package com.orgzly.android.query.user
 
 import com.orgzly.android.query.Condition
-import com.orgzly.android.query.Options
 import com.orgzly.android.query.Query
 import com.orgzly.android.query.QueryInterval
 import com.orgzly.android.query.Relation
@@ -79,7 +78,7 @@ class SimpleFilterMapperTest {
             Condition.Deadline(QueryInterval(QueryInterval.Unit.DAY, 1), Relation.EQ),
             Condition.Event(QueryInterval(QueryInterval.Unit.DAY), Relation.GE),
             Condition.Closed(QueryInterval(QueryInterval.Unit.DAY), Relation.LT),
-            Condition.Created(QueryInterval(QueryInterval.Unit.WEEK, 7), Relation.GE)
+            Condition.Created(QueryInterval(QueryInterval.Unit.WEEK, 0), Relation.EQ)
         )))
 
         val simpleQuery = mapper.fromQuery(query)
@@ -93,7 +92,7 @@ class SimpleFilterMapperTest {
         assertEquals(RelativeDateOption.TOMORROW, simpleQuery.filter.deadline)
         assertEquals(RelativeDateOption.FUTURE, simpleQuery.filter.event)
         assertEquals(RelativeDateOption.PAST, simpleQuery.filter.closed)
-        assertEquals(RelativeDateOption.NEXT_7_DAYS, simpleQuery.filter.created)
+        assertEquals(RelativeDateOption.THIS_WEEK, simpleQuery.filter.created)
     }
 
     @Test
@@ -125,14 +124,14 @@ class SimpleFilterMapperTest {
     @Test
     fun `fromQuery - dates - next 7 and 30 days`() {
         val next7 = Query(Condition.And(listOf(
-            Condition.Scheduled(QueryInterval(QueryInterval.Unit.WEEK, 7), Relation.GE)
+            Condition.Scheduled(QueryInterval(QueryInterval.Unit.WEEK, 0), Relation.EQ)
         )))
-        assertEquals(RelativeDateOption.NEXT_7_DAYS, mapper.fromQuery(next7).filter.scheduled)
+        assertEquals(RelativeDateOption.THIS_WEEK, mapper.fromQuery(next7).filter.scheduled)
 
         val next30 = Query(Condition.And(listOf(
-            Condition.Deadline(QueryInterval(QueryInterval.Unit.MONTH, 1), Relation.GE)
+            Condition.Deadline(QueryInterval(QueryInterval.Unit.MONTH, 0), Relation.EQ)
         )))
-        assertEquals(RelativeDateOption.NEXT_30_DAYS, mapper.fromQuery(next30).filter.deadline)
+        assertEquals(RelativeDateOption.THIS_MONTH, mapper.fromQuery(next30).filter.deadline)
     }
 
     @Test
@@ -244,7 +243,7 @@ class SimpleFilterMapperTest {
             scheduled = RelativeDateOption.TOMORROW,
             deadline = RelativeDateOption.FUTURE,
             closed = RelativeDateOption.PAST,
-            created = RelativeDateOption.NEXT_7_DAYS
+            created = RelativeDateOption.THIS_WEEK
         )
         val query = mapper.toQuery("", filter)
         val conditions = (query.condition as Condition.And).operands
@@ -253,7 +252,7 @@ class SimpleFilterMapperTest {
         assertTrue(conditions.any { it is Condition.Scheduled && it.relation == Relation.EQ })
         assertTrue(conditions.any { it is Condition.Deadline && it.relation == Relation.GE })
         assertTrue(conditions.any { it is Condition.Closed && it.relation == Relation.LT })
-        assertTrue(conditions.any { it is Condition.Created && it.relation == Relation.LE })
+        assertTrue(conditions.any { it is Condition.Created && it.relation == Relation.EQ })
     }
 }
 

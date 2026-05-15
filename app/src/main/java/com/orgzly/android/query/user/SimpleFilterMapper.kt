@@ -303,16 +303,16 @@ private fun RelativeDateOption.toIntervalAndRelation(
             QueryInterval(QueryInterval.Unit.DAY) to Relation.LT
 
         RelativeDateOption.TODAY ->
-            QueryInterval(QueryInterval.Unit.DAY, 0) to getDefaultEQForType(type)
+            QueryInterval(QueryInterval.Unit.DAY) to getDefaultEQForType(type)
 
         RelativeDateOption.TOMORROW ->
             QueryInterval(QueryInterval.Unit.DAY, 1) to Relation.EQ
 
-        RelativeDateOption.NEXT_7_DAYS ->
-            QueryInterval(QueryInterval.Unit.DAY, 7) to Relation.LE
+        RelativeDateOption.THIS_WEEK ->
+            QueryInterval(QueryInterval.Unit.WEEK) to Relation.EQ
 
-        RelativeDateOption.NEXT_30_DAYS ->
-            QueryInterval(QueryInterval.Unit.DAY, 30) to Relation.LE
+        RelativeDateOption.THIS_MONTH ->
+            QueryInterval(QueryInterval.Unit.MONTH) to Relation.EQ
     }
 
 private fun mapDate(
@@ -333,22 +333,24 @@ private fun mapDate(
             RelativeDateOption.TOMORROW
 
         interval.unit == QueryInterval.Unit.DAY &&
+                interval.value == 0 &&
                 relation == Relation.GE ->
             RelativeDateOption.FUTURE
 
         interval.unit == QueryInterval.Unit.DAY &&
+                interval.value == 0 &&
                 relation == Relation.LT ->
             RelativeDateOption.PAST
 
-        relation == Relation.GE &&
-                interval.value == 7 &&
+        relation == Relation.EQ &&
+                interval.value == 0 &&
                 interval.unit == QueryInterval.Unit.WEEK ->
-            RelativeDateOption.NEXT_7_DAYS
+            RelativeDateOption.THIS_WEEK
 
-        relation == Relation.GE &&
-                interval.value == 1 &&
+        relation == Relation.EQ &&
+                interval.value == 0 &&
                 interval.unit == QueryInterval.Unit.MONTH ->
-            RelativeDateOption.NEXT_30_DAYS
+            RelativeDateOption.THIS_MONTH
 
         else ->
             throw UnsupportedSimpleFilterException(
