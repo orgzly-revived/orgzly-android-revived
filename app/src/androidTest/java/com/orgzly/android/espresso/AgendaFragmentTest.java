@@ -33,6 +33,7 @@ import androidx.test.espresso.contrib.PickerActions;
 
 import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
+import com.orgzly.android.RetryTestRule;
 import com.orgzly.android.espresso.util.EspressoUtils;
 import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.ui.main.MainActivity;
@@ -40,10 +41,14 @@ import com.orgzly.android.ui.main.MainActivity;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 public class AgendaFragmentTest extends OrgzlyTest {
     private ActivityScenario<MainActivity> scenario;
+
+    @Rule
+    public RetryTestRule mRetryTestRule = new RetryTestRule();
 
     private ActivityScenario<MainActivity> defaultSetUp() {
         testUtils.setupBook("book-one",

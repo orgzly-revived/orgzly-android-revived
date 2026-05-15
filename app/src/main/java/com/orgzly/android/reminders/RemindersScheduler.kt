@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.SystemClock
 import android.util.Log
-import androidx.annotation.RequiresApi
 import com.orgzly.android.App
 import com.orgzly.android.AppIntent
 import com.orgzly.android.data.logs.AppLogsRepository
@@ -97,22 +96,13 @@ class RemindersScheduler @Inject constructor(val context: Application, val logs:
             if (AppPreferences.remindersUseAlarmClockForTodReminders(context)) {
                 scheduleAlarmClock(alarmManager, intent, inMs, origin)
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    scheduleExactAndAllowWhileIdle(alarmManager, intent, inMs, origin)
-                } else {
-                    scheduleExact(alarmManager, intent, inMs, origin)
-                }
+                scheduleExactAndAllowWhileIdle(alarmManager, intent, inMs, origin)
             }
         } else {
             // This reminder does not contain clock time information; it's
             // probably a daily reminder. Schedule an inexact alarm.
             scheduleInExact(alarmManager, intent, inMs, origin)
         }
-
-        // Intent received, notifications not displayed by default
-        // Note: Neither setAndAllowWhileIdle() nor setExactAndAllowWhileIdle() can fire
-        // alarms more than once per 9 minutes, per app.
-        // scheduleExactAndAllowWhileIdle(context, intent, inMs)
     }
 
     private fun scheduleAlarmClock(alarmManager: AlarmManager, intent: PendingIntent, inMs: Long, origin: String) {
@@ -120,15 +110,7 @@ class RemindersScheduler @Inject constructor(val context: Application, val logs:
         alarmManager.setAlarmClock(info, intent)
         logScheduled("setAlarmClock", origin, inMs)
     }
-
-    private fun scheduleExact(alarmManager: AlarmManager, intent: PendingIntent, inMs: Long, origin: String) {
-        alarmManager.setExact(
-            AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + inMs,
-            intent)
-        logScheduled("setExact", origin, inMs)
-    }
-
+   
     private fun scheduleInExact(alarmManager: AlarmManager, intent: PendingIntent, inMs: Long, origin: String) {
         alarmManager.set(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
@@ -137,7 +119,6 @@ class RemindersScheduler @Inject constructor(val context: Application, val logs:
         logScheduled("set", origin, inMs)
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun scheduleExactAndAllowWhileIdle(alarmManager: AlarmManager, intent: PendingIntent, inMs: Long, origin: String) {
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
