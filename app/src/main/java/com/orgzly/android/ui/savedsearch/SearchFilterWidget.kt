@@ -61,6 +61,7 @@ import com.orgzly.android.ui.compose.widgets.OrgzlyTonalButton
 import com.orgzly.android.ui.compose.widgets.RadioButtonFormLockup
 import com.orgzly.android.ui.compose.widgets.TextFieldHoistEffect
 import com.orgzly.android.ui.compose.widgets.painterIcon
+import androidx.compose.runtime.rememberUpdatedState
 
 @Composable
 fun SearchFilterWidget(
@@ -71,6 +72,7 @@ fun SearchFilterWidget(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ) {
+    val filterUpdatedState by rememberUpdatedState(filter)
     Column(
         modifier = Modifier.then(modifier),
         verticalArrangement = Arrangement.spacedBy(1.rdp)
@@ -94,7 +96,7 @@ fun SearchFilterWidget(
                 filter.agendaDays,
                 {
                     onChange(
-                        filter.copy(
+                        filterUpdatedState.copy(
                             agendaDays = it
                         )
                     )
