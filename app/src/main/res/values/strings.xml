@@ -470,6 +470,8 @@
     <string name="keep_screen_on_title">Enable option to keep the screen on</string>
     <string name="keep_screen_on_summary">Display menu item for toggling the option</string>
 
+    <string name="default_to_advanced_query">Default to advanced query editor</string>
+
     <string name="keep_screen_on">Keep screen on</string>
     <string name="keep_screen_on_desc">Your screen will not turn off until you leave it or disable this option</string>
 
