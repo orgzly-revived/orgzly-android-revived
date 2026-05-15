@@ -14,6 +14,10 @@ enum class Icons {
     ARROW_DOWNWARD,
     ARROW_FORWARD,
     ARROW_UPWARD,
+    SWAP,
+    ADD,
+    SUBTRACT,
+    SAVE,
 }
 
 private val Icons.resource: Int
@@ -23,6 +27,10 @@ private val Icons.resource: Int
         Icons.ARROW_FORWARD -> R.drawable.ic_arrow_forward
         Icons.ARROW_DOWNWARD -> R.drawable.ic_arrow_downward
         Icons.ARROW_UPWARD -> R.drawable.ic_arrow_upward
+        Icons.SWAP -> R.drawable.ic_swap_vert
+        Icons.ADD -> R.drawable.ic_add
+        Icons.SUBTRACT -> R.drawable.ic_subtract
+        Icons.SAVE -> R.drawable.ic_check_white_24dp
     }
 
 /**

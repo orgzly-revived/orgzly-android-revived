@@ -13,7 +13,7 @@ fun BackButton(
     modifier: Modifier = Modifier,
 ) {
     val navigator = LocalNavigator.current
-    if (navigator.canPop()) return
+    if (!navigator.canPop()) return
     BaseBackButton(
         onClick = {
             navigator.pop()

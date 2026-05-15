@@ -1,5 +1,7 @@
 package com.orgzly.android.ui.compose.base
 
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
@@ -19,7 +21,8 @@ fun OrgzlyBootstrap(
         val navigator = createNavigator()
         CompositionLocalProvider(
             LocalBaseDp provides 16.dp,
-            LocalNavigator provides navigator!!
+            LocalNavigator provides navigator!!,
+            LocalTextStyle provides MaterialTheme.typography.bodyMedium
         ) {
             content()
         }
