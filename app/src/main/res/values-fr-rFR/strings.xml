@@ -284,12 +284,12 @@
     <string name="month">Mois</string>
     <string name="year">Année</string>
     <string name="repeater_dialog_title">Répéter</string>
-    <string name="repeater_description">Après que la tâche est marquée terminée, le répéteur déplacerait l\'horaire</string>
-    <string name="repeater_description_cumulate">Ajoute une période au temps</string>
+    <string name="repeater_description">Quand la tâche est terminée, la date et l’heure sont reportées</string>
+    <string name="repeater_description_cumulate">Ajoute la durée à la date et heure précédente</string>
     <!-- + -->
-    <string name="repeater_description_catch_up">Continue à ajouter du temps jusqu\'à l\'horaire ne soit pas atteint</string>
+    <string name="repeater_description_catch_up">Ajoute la durée jusqu’à ce que la date et heure soit dans le futur</string>
     <!-- ++ -->
-    <string name="repeater_description_restart">Ajoute la période à l\'heure courante</string>
+    <string name="repeater_description_restart">Ajoute la durée à la date et heure actuelle</string>
     <!-- .+ -->
     <string name="delay_dialog_title">En attente</string>
     <string name="delay_description">En attente d\'afficher la tâche de l\'agenda</string>
@@ -364,7 +364,7 @@
     <string name="primary_storage">Stockage principal</string>
     <string name="book_exported">Bloc-notes exporté vers %s</string>
     <string name="failed_exporting_book">Échec de l’export du bloc-notes : %s</string>
-    <string name="failed_importing_book">Échec de l\'importation du bloc-note : %s</string>
+    <string name="failed_importing_book">Échec de l\'importation du bloc-note : %s</string>
     <string name="edit_book_preface">Modifier la préface</string>
     <string name="book_preface_hint">Texte affiché avant la première note</string>
     <string name="keep_screen_on_title">Activer l\'option pour garder l\'écran allumé</string>
@@ -394,7 +394,7 @@
     <string name="pref_summary_sync_after_note_create">Synchronisation après la création d\'une nouvelle note</string>
     <string name="pref_title_sync_after_note_update">Note mise à jour ou supprimée</string>
     <string name="pref_summary_sync_after_note_update">Synchroniser après la mise à jour ou la suppression d\'une note</string>
-    <string name="pref_title_on_resume_sync">App démarrée ou reprise</string>
+    <string name="pref_title_on_resume_sync">Application démarrée ou reprise</string>
     <string name="pref_summary_on_resume_sync">Synchroniser chaque fois que l’application passe au premier plan</string>
     <string name="pref_title_repo_update_sync">Dépôts modifiés (pas encore implémenté)</string>
     <string name="pref_summary_repo_update_sync">Synchroniser chaque fois qu’une mise à jour dans les dépôts est détectée</string>
@@ -412,8 +412,8 @@
     </plurals>
     <string name="content_line_count_displayed">Afficher le nombre de lignes</string>
     <string name="content_line_count_displayed_summary">Afficher le nombre de lignes lorsque le contenu n\'est pas affiché</string>
-    <string name="style_text_title">Composition du texte</string>
-    <string name="style_text_summary">Suivre les marques du texte pour les passages à mettre en exergue ou à afficher avec une police à chasse fixe</string>
+    <string name="style_text_title">Mise en forme du texte</string>
+    <string name="style_text_summary">Utiliser des marques dans le texte pour le mettre en forme</string>
     <string name="styled_text_with_marks_title">Affichage des marques dans le texte</string>
     <string name="styled_text_with_marks_summary">Conserver l\'affichage des marques (par exemple : *gras*)</string>
     <string name="no_such_link_target">La note avec la propriété “%1$s” fixée à “%2$s” n\'a pas été trouvée</string>
@@ -429,38 +429,38 @@
     </plurals>
     <string name="storage_permissions_missing">Autorisation d\'accès au stockage non accordée</string>
     <string name="file_does_not_exist">Fichier inexistant : %s</string>
-    <string name="import_from">Importer depuis « %1$s » ?</string>
-    <string name="export_to">Exporter vers « %1$s » ?</string>
+    <string name="import_from">Importer depuis « %1$s » ?</string>
+    <string name="export_to">Exporter vers « %1$s » ?</string>
     <string name="primary_storage_not_available">Le stockage principal n’est pas disponible</string>
     <!-- Notification channels -->
     <string name="reminders_channel_name">Rappels</string>
-    <string name="reminders_channel_description">Afficher pour les tâches prévues ou dues</string>
+    <string name="reminders_channel_description">Afficher pour les tâches prévues ou en attente</string>
     <string name="ongoing_channel_name">En cours (note nouvelle)</string>
     <string name="ongoing_channel_description">Crée rapidement une note nouvelle ou lance la synchronisation</string>
     <string name="sync_progress_channel_name">Progression de la synchronisation</string>
     <string name="sync_progress_channel_description">Afficher la progression de la synchronisation</string>
-    <string name="sync_failed_channel_name">Synchronisation échouée</string>
+    <string name="sync_failed_channel_name">Échec de la synchronisation</string>
     <string name="sync_failed_channel_description">Afficher quand la synchronisation échoue</string>
     <string name="notification_channel_settings">Notifications</string>
-    <string name="notification_channel_settings_summary">Son, vibreur, point de notification</string>
+    <string name="notification_channel_settings_summary">Son, vibreur, pastille de notification</string>
     <string name="overwrite_local_notebook_question">Écraser le bloc-note local ?</string>
     <string name="overwrite_remote_notebook_question">Écraser le bloc-note distant ?</string>
     <string name="drawers_folded_by_default">Panneaux repliés</string>
     <string name="drawers_folded_by_default_summary">Replier les panneaux par défaut</string>
-    <string name="log_on_time_shift">Ajouter une entrée au panneau lors d\'un changement de temps</string>
-    <string name="log_on_time_shift_summary">Journaliser l\'heure lorsqu\'une note avec une répétition est marquée comme terminée</string>
-    <string name="set_last_repeat_on_time_shift">Définir une propriété lors d\'un décalage de date</string>
-    <string name="set_last_repeat_on_time_shift_summary">Définir la date quand une note répétée est marquée comme faite</string>
+    <string name="log_on_time_shift">Ajouter une entrée au panneau lors d\'un changement de date ou heure</string>
+    <string name="log_on_time_shift_summary">Noter la date et l\'heure lorsqu\'une note avec une répétition est marquée comme terminée</string>
+    <string name="set_last_repeat_on_time_shift">Ajouter une propriété lors du report de date ou heure</string>
+    <string name="set_last_repeat_on_time_shift_summary">Ajouter une propriété avec la date et l\'heure quand une note avec répétition est marquée comme faite</string>
     <string name="background_opacity">Opacité de l\'arrière-plan</string>
     <string name="update_frequency">Fréquence de mise à jour</string>
     <string name="git">Git</string>
-    <string name="metadata">Métadonnée</string>
+    <string name="metadata">Métadonnées</string>
     <string name="selected_metadata_summary">Métadonnées que vous pouvez choisir de toujours afficher dans les notes</string>
     <string name="show_all">Afficher tout</string>
-    <string name="always_show_set">Définir sur \"Toujours afficher\"</string>
+    <string name="always_show_set">Toujours afficher celles utilisées</string>
     <string name="show_selected">Afficher la sélection</string>
     <string name="external_file_no_app_found">Aucune application disponible pour ouvrir ce fichier</string>
-    <string name="failed_to_open_linked_file_with_reason">Échec de l\'ouverture du fichier : %s</string>
+    <string name="failed_to_open_linked_file_with_reason">Échec de l\'ouverture du fichier : %s</string>
     <string name="images">Images</string>
     <string name="display_inline_images">Activer les images</string>
     <string name="display_inline_images_summary">Afficher les images dans les notes</string>
@@ -495,7 +495,7 @@
     <string name="display_checkmarks">Afficher les marques</string>
     <string name="display_checkmarks_summary">Permet de marquer les notes comme terminées</string>
     <string name="cleartext_traffic">Communication non-cryptée</string>
-    <string name="cleartext_traffic_message">Êtes-vous sûr de vouloir utiliser cette URL ?</string>
+    <string name="cleartext_traffic_message">Êtes-vous sûr de vouloir utiliser cette URL ?</string>
     <string name="credentials_in_url_not_supported">La transmission des identifiants par URL n\'est pas pris en charge</string>
     <string name="trusted_certificates">Certificats de confiance</string>
     <string name="add_trusted_certificates_optional">Ajouter des certificats de confiance (facultatif)</string>
@@ -522,7 +522,7 @@
     <string name="select_notebook">Choisir le bloc-notes</string>
     <string name="highlight_rich_text_being_edited">Mettre en valeur le texte enrichi en cours d\'édition</string>
     <string name="use_alarm_clock_for_tod_reminders">Utiliser un réveil</string>
-    <string name="use_alarm_clock_for_tod_reminders_summary">Pour les rappels ayant une heure de définie</string>
+    <string name="use_alarm_clock_for_tod_reminders_summary">Pour les rappels ayant une heure définie</string>
     <string name="log_major_events">Journaliser les événements importants</string>
     <string name="logs">Journaux</string>
     <string name="share">Partager</string>
@@ -547,7 +547,7 @@
     <string name="pref_title_reminders_alarm_tags">Étiquettes d\'alarme</string>
     <string name="pref_summary_reminders_alarm_tags">Liste d\'étiquettes, séparées par un espace, qui activent le son de l\'alarme. Laisser vide pour activer l\'alarme pour tous les rappels.</string>
     <string name="file_tags">Étiquettes</string>
-    <string name="pref_title_on_suspend_sync">Application en veille</string>
+    <string name="pref_title_on_suspend_sync">Application mise en veille</string>
     <string name="pref_summary_on_suspend_sync">Synchroniser quand l\'application passe en tâche de fond</string>
     <string name="pref_title_sync_at_interval">À intervalles réguliers</string>
     <string name="pref_key_auto_sync_interval_title">Intervalle en minutes (minimum : 15)</string>
@@ -595,4 +595,34 @@
     <string name="is_active_label">Actif</string>
     <string name="content_description_back_button">Revenir en arrière</string>
     <string name="allow_folding_in_search">Permettre de replier les résultats de recherche</string>
+    <string name="enable_repo_subfolders_preferences_title">Activer l\'utilisation de sous-dossiers dans le dépôt</string>
+    <string name="enable_repo_subfolders_preferences_summary">Synchroniser les sous-dossiers</string>
+    <string name="group_scheduled_with_today">Ne pas indiquer les tâches comme en retard dans l\'agenda</string>
+    <string name="clock">Chronomètre</string>
+    <string name="clock_in">Démarrer</string>
+    <string name="clock_out">Arrêter</string>
+    <string name="clock_cancel">Annuler</string>
+    <string name="error_file_matches_repo_ignore_rule">Erreur : le nom du fichier de dépôt correspond à une règle dans %s</string>
+    <string name="sync_status_no_book_multiple_rooks">Pas de bloc-notes et il existe plusieurs bloc-notes avec le même nom</string>
+    <string name="sync_status_no_link_and_previous_error">Le bloc-notes n\'a pas de lien de dépôt</string>
+    <string name="sync_status_saved">Sauvegardé dans %s</string>
+    <string name="subfolder_support_disabled">Le support des sous-dossiers est désactivé</string>
+    <string name="export_settings_to_note">Exporter les paramètres dans une note</string>
+    <string name="import_settings_from_note">Importer les paramètres depuis une note</string>
+    <string name="settings_exported_to">Paramètres et recherches exportés dans la note \"%1$s\"</string>
+    <string name="settings_imported_from">Paramètres et recherches importés depuis la note \"%1$s\"</string>
+    <string name="failed_to_get_note_payload">Impossible de récupérer les données de la note</string>
+    <string name="failed_sharing_note">Impossible de partager la note</string>
+    <string name="export_settings">Exporter les paramètres de l\'application</string>
+    <string name="export_settings_summary">Écrire en JSON une description de tous les paramètres et recherches enregistrées dans une note de votre choix</string>
+    <string name="import_settings">Importer les paramètres de l\'application</string>
+    <string name="import_settings_summary">Importer les paramètres et recherches enregistrées en JSON depuis la note de votre choix</string>
+    <string name="export_settings_warning_text">ATTENTION ! La note sélectionnée sera totalement écrasée !</string>
+    <string name="error">Erreur</string>
+    <string name="note_does_not_contain_valid_json">La note de contient pas de données en JSON valides.</string>
+    <string name="imported_json_is_missing_mandatory_fields">Champs obligatoires absents des données JSON importées.</string>
+    <string name="note_has_no_content">Note sans contenu.</string>
+    <string name="orgzlyignore_file">Fichier indiquant les éléments à ignorer</string>
+    <string name="orgzlyignore_file_desc">Chemin du fichier indiquant les éléments à ne pas synchroniser, par rapport à la racine du dépôt.</string>
+    <string name="create_org_links_from_shared_links">Créer des liens org à partir de liens partagés</string>
 </resources>
