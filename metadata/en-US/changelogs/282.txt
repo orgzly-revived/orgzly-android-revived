@@ -1,0 +1,6 @@
+• Support file tags.
+• Handle recurring events in exported calendar.
+• Handle multiple timestamps per note in exported calendar.
+• Fix timezone bug with all-day events in exported calendar.
+• Upgrade dependencies.
+• Target Android API 36 (Android 16).

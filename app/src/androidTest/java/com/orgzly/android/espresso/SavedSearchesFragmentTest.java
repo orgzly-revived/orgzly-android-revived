@@ -35,14 +35,19 @@ import androidx.test.espresso.intent.Intents;
 import com.orgzly.R;
 import com.orgzly.android.LocalStorage;
 import com.orgzly.android.OrgzlyTest;
+import com.orgzly.android.RetryTestRule;
 import com.orgzly.android.ui.main.MainActivity;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
 
 public class SavedSearchesFragmentTest extends OrgzlyTest {
+    @Rule
+    public RetryTestRule mRetryTestRule = new RetryTestRule();
+
     @Before
     public void setUp() throws Exception {
         super.setUp();

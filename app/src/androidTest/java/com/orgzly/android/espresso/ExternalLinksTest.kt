@@ -2,7 +2,6 @@ package com.orgzly.android.espresso
 
 import android.os.Build
 import android.os.Environment
-import android.os.SystemClock
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -11,10 +10,14 @@ import androidx.test.rule.GrantPermissionRule
 import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.OrgzlyTest
+import com.orgzly.android.RetryTestRule
 import com.orgzly.android.espresso.util.EspressoUtils.clickClickableSpan
 import com.orgzly.android.espresso.util.EspressoUtils.onBook
 import com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook
 import com.orgzly.android.espresso.util.EspressoUtils.onSnackbar
+import com.orgzly.android.espresso.util.EspressoUtils.waitId
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import com.orgzly.android.ui.main.MainActivity
 import org.hamcrest.Matchers.startsWith
 import org.junit.Rule
@@ -27,6 +30,9 @@ import org.junit.runners.Parameterized
 class ExternalLinksTest(private val param: Parameter) : OrgzlyTest() {
 
     data class Parameter(val link: String, val check: () -> Any)
+
+    @get:Rule
+    val retryTestRule = RetryTestRule()
 
     @get:Rule
     val grantPermissionRule: GrantPermissionRule = if (Build.VERSION.SDK_INT >= 33) {
@@ -74,7 +80,7 @@ class ExternalLinksTest(private val param: Parameter) : OrgzlyTest() {
             // Click on link
             onNoteInBook(1, R.id.item_head_content_view).perform(clickClickableSpan(param.link))
 
-            SystemClock.sleep(500)
+            onView(isRoot()).perform(waitId(com.google.android.material.R.id.snackbar_text, 5000))
 
             param.check()
         }

@@ -14,14 +14,19 @@ import com.orgzly.BuildConfig
 import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.espresso.util.EspressoUtils
 import com.orgzly.android.ui.main.MainActivity
+import com.orgzly.android.RetryTestRule
+import org.junit.Assume
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import org.junit.Assume
 
 
 @RunWith(value = Parameterized::class)
 class SshKeyCreationTest(private val param: Parameter) : OrgzlyTest() {
+    @get:Rule
+    val retryTestRule = RetryTestRule()
+
     data class Parameter(val keyType: Int)
     companion object {
         @JvmStatic

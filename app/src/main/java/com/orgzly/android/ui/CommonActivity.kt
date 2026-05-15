@@ -117,17 +117,15 @@ abstract class CommonActivity : AppCompatActivity() {
     private fun baseContext(newBase: Context): Context {
         var context = newBase
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            val config = Configuration(newBase.resources.configuration)
+        val config = Configuration(newBase.resources.configuration)
 
-            if (AppPreferences.ignoreSystemLocale(context)) {
-                config.setLocale(Locale.US)
-            } else {
-                config.setLocale(Locale.getDefault())
-            }
-
-            context = context.createConfigurationContext(config)
+        if (AppPreferences.ignoreSystemLocale(context)) {
+            config.setLocale(Locale.US)
+        } else {
+            config.setLocale(Locale.getDefault())
         }
+
+        context = context.createConfigurationContext(config)
 
         return context
     }

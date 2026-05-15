@@ -11,6 +11,8 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import java.util.*
 
+// Cannot move to JVM: AgendaItems transitively loads NoteView (Room entity),
+// which causes SIGSEGV on Temurin 17 JVM.
 @RunWith(value = Parameterized::class)
 class AgendaUtilsTest(private val param: Parameter) {
 

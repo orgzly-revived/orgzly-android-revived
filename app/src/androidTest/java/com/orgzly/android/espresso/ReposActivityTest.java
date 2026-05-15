@@ -20,15 +20,20 @@ import android.os.SystemClock;
 import com.orgzly.BuildConfig;
 import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
+import com.orgzly.android.RetryTestRule;
 import com.orgzly.android.ui.repos.ReposActivity;
 
 import org.junit.Assume;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import java.io.File;
 
 public class ReposActivityTest extends OrgzlyTest {
+    @Rule
+    public RetryTestRule mRetryTestRule = new RetryTestRule();
+
     @Test
     public void testSavingWithBogusDirectoryUri() {
         ActivityScenario.launch(ReposActivity.class);

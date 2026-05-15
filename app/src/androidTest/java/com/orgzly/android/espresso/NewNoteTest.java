@@ -4,8 +4,10 @@ import androidx.test.core.app.ActivityScenario;
 
 import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
+import com.orgzly.android.RetryTestRule;
 import com.orgzly.android.ui.main.MainActivity;
 
+import org.junit.Rule;
 import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -24,6 +26,9 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.endsWith;
 
 public class NewNoteTest extends OrgzlyTest {
+    @Rule
+    public RetryTestRule mRetryTestRule = new RetryTestRule();
+
     @Test
     public void testNewNoteInEmptyNotebook() {
         testUtils.setupBook("notebook", "");

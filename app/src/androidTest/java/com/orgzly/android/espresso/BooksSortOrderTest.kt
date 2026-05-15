@@ -13,11 +13,16 @@ import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.espresso.util.EspressoUtils.*
 import com.orgzly.android.ui.main.MainActivity
 import org.hamcrest.Matchers.hasToString
+import com.orgzly.android.RetryTestRule
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 
 class BooksSortOrderTest : OrgzlyTest() {
+    @get:Rule
+    val retryTestRule = RetryTestRule()
+
     @Before
     @Throws(Exception::class)
     override fun setUp() {

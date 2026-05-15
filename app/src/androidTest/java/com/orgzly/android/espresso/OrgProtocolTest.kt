@@ -14,10 +14,15 @@ import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.espresso.util.EspressoUtils.onSnackbar
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matchers.*
+import com.orgzly.android.RetryTestRule
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class OrgProtocolTest : OrgzlyTest() {
+    @get:Rule
+    val retryTestRule = RetryTestRule()
+
     @Before
     @Throws(Exception::class)
     override fun setUp() {

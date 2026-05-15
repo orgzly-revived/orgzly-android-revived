@@ -74,6 +74,15 @@ import java.util.concurrent.TimeoutException;
  */
 public class EspressoUtils {
 
+    private static String resolveIdName(int viewId) {
+        try {
+            return getInstrumentation().getTargetContext()
+                    .getResources().getResourceEntryName(viewId);
+        } catch (Resources.NotFoundException e) {
+            return "<" + viewId + ">";
+        }
+    }
+
 
     public static ViewInteraction onListView() {
         return onView(allOf(isAssignableFrom(ListView.class), isDisplayed()));
@@ -111,6 +120,52 @@ public class EspressoUtils {
             public void describeTo(Description description) {
                 description.appendText(
                         "a RecyclerView adapter which contains " + count + " item(s)");
+            }
+        };
+    }
+
+    /**
+     * Wait until a RecyclerView's adapter has exactly {@code count} items.
+     * Uses UiController to pump the main looper while polling.
+     */
+    public static ViewAction waitForExactAdapterCount(final int count, final long millis) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isAssignableFrom(RecyclerView.class);
+            }
+
+            @Override
+            public String getDescription() {
+                return "wait for adapter to have exactly " + count + " item(s) during " + millis + " millis.";
+            }
+
+            @Override
+            public void perform(final UiController uiController, final View view) {
+                uiController.loopMainThreadUntilIdle();
+                final long startTime = System.currentTimeMillis();
+                final long endTime = startTime + millis;
+                final RecyclerView rv = (RecyclerView) view;
+
+                do {
+                    RecyclerView.Adapter<?> adapter = rv.getAdapter();
+                    if (adapter != null && adapter.getItemCount() == count) {
+                        return;
+                    }
+                    uiController.loopMainThreadForAtLeast(50);
+                }
+                while (System.currentTimeMillis() < endTime);
+
+                long elapsed = System.currentTimeMillis() - startTime;
+                RecyclerView.Adapter<?> adapter = rv.getAdapter();
+                int actual = adapter != null ? adapter.getItemCount() : 0;
+                throw new PerformException.Builder()
+                        .withActionDescription(this.getDescription())
+                        .withViewDescription(HumanReadables.describe(view))
+                        .withCause(new TimeoutException(
+                                "Expected exactly " + count + " item(s) but adapter had "
+                                        + actual + " after " + elapsed + "ms"))
+                        .build();
             }
         };
     }
@@ -196,11 +251,56 @@ public class EspressoUtils {
     }
 
     public static ViewInteraction onRecyclerViewItem(@IdRes int recyclerView, int position, @IdRes int childView) {
-        SystemClock.sleep(200);
         onView(isRoot()).perform(waitId(recyclerView, 5000));
+        onView(withId(recyclerView)).perform(waitForAdapterItems(position + 1, 5000));
         onView(withId(recyclerView)).perform(RecyclerViewActions.scrollToPosition(position));
         return onView(new EspressoRecyclerViewMatcher(recyclerView)
                 .atPositionOnView(position, childView));
+    }
+
+    /**
+     * Wait until a RecyclerView's adapter has at least {@code minItems} items.
+     */
+    public static ViewAction waitForAdapterItems(final int minItems, final long millis) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isAssignableFrom(RecyclerView.class);
+            }
+
+            @Override
+            public String getDescription() {
+                return "wait for adapter to have at least " + minItems + " item(s) during " + millis + " millis.";
+            }
+
+            @Override
+            public void perform(final UiController uiController, final View view) {
+                uiController.loopMainThreadUntilIdle();
+                final long startTime = System.currentTimeMillis();
+                final long endTime = startTime + millis;
+                final RecyclerView rv = (RecyclerView) view;
+
+                do {
+                    RecyclerView.Adapter<?> adapter = rv.getAdapter();
+                    if (adapter != null && adapter.getItemCount() >= minItems) {
+                        return;
+                    }
+                    uiController.loopMainThreadForAtLeast(50);
+                }
+                while (System.currentTimeMillis() < endTime);
+
+                long elapsed = System.currentTimeMillis() - startTime;
+                RecyclerView.Adapter<?> adapter = rv.getAdapter();
+                int actual = adapter != null ? adapter.getItemCount() : 0;
+                throw new PerformException.Builder()
+                        .withActionDescription(this.getDescription())
+                        .withViewDescription(HumanReadables.describe(view))
+                        .withCause(new TimeoutException(
+                                "Expected at least " + minItems + " item(s) but adapter had "
+                                        + actual + " after " + elapsed + "ms"))
+                        .build();
+            }
+        };
     }
 
     private static class EspressoRecyclerViewMatcher {
@@ -347,14 +447,11 @@ public class EspressoUtils {
     }
 
     public static void searchForTextCloseKeyboard(String str) {
-        SystemClock.sleep(300);
         onView(isRoot()).perform(waitId(R.id.search_view, 5000));
         onView(allOf(withId(R.id.search_view), isDisplayed())).perform(click());
-        SystemClock.sleep(300);
         onView(isRoot()).perform(waitId(R.id.search_src_text, 5000));
         onView(withId(R.id.search_src_text)).perform(replaceText(str), pressKey(KeyEvent.KEYCODE_ENTER));
         closeSoftKeyboardWithDelay();
-        SystemClock.sleep(300);
     }
 
     public static ViewAction[] replaceTextCloseKeyboard(String str) {
@@ -485,7 +582,7 @@ public class EspressoUtils {
 
             @Override
             public String getDescription() {
-                return "wait for a specific view with id <" + viewId + "> during " + millis + " millis.";
+                return "wait for view " + resolveIdName(viewId) + " during " + millis + " millis.";
             }
 
             @Override
@@ -507,11 +604,13 @@ public class EspressoUtils {
                 }
                 while (System.currentTimeMillis() < endTime);
 
-                // timeout happens
+                long elapsed = System.currentTimeMillis() - startTime;
                 throw new PerformException.Builder()
                         .withActionDescription(this.getDescription())
                         .withViewDescription(HumanReadables.describe(view))
-                        .withCause(new TimeoutException())
+                        .withCause(new TimeoutException(
+                                "View " + resolveIdName(viewId)
+                                        + " not found after " + elapsed + "ms"))
                         .build();
             }
         };

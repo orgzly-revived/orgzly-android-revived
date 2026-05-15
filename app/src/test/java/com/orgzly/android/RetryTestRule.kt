@@ -9,7 +9,7 @@ import org.junit.runners.model.Statement
 /**
  * Used for retrying flaky tests.
  */
-class RetryTestRule(val retryCount: Int = 10) : TestRule {
+class RetryTestRule(val retryCount: Int = 3) : TestRule {
 
     private val TAG = RetryTestRule::class.java.simpleName
 

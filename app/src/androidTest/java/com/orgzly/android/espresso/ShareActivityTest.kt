@@ -162,8 +162,8 @@ class ShareActivityTest : OrgzlyTest() {
         onView(withId(R.id.content_edit)).check(matches(not(isDisplayed())))
         // Scroll to content_view before isDisplayed() check - keyboard may push it off-screen
         onView(withId(R.id.content_view)).perform(scroll()).check(matches(isDisplayed()))
-        // Title should be in "edit mode"
-        onView(withId(R.id.title_edit)).check(matches(isDisplayed()))
+        // Title should be in "edit mode" — scroll back up after content_view scroll
+        onView(withId(R.id.title_edit)).perform(scroll()).check(matches(isDisplayed()))
         onView(withId(R.id.title_view)).check(matches(not(isDisplayed())))
     }
 

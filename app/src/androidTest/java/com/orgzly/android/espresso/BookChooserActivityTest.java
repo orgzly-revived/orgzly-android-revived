@@ -6,10 +6,12 @@ import android.content.Intent;
 import androidx.test.core.app.ActivityScenario;
 
 import com.orgzly.android.OrgzlyTest;
+import com.orgzly.android.RetryTestRule;
 import com.orgzly.android.ui.BookChooserActivity;
 
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 import static android.app.Activity.RESULT_OK;
@@ -25,6 +27,9 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
 
 public class BookChooserActivityTest extends OrgzlyTest {
+    @Rule
+    public RetryTestRule mRetryTestRule = new RetryTestRule();
+
     private ActivityScenario<BookChooserActivity> startActivityWithCreateShortcutAction() {
         Intent intent = new Intent(context, BookChooserActivity.class);
         intent.setAction(Intent.ACTION_CREATE_SHORTCUT);

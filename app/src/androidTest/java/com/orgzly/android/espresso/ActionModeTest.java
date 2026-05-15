@@ -7,10 +7,12 @@ import androidx.test.core.app.ActivityScenario;
 
 import com.orgzly.R;
 import com.orgzly.android.OrgzlyTest;
+import com.orgzly.android.RetryTestRule;
 import com.orgzly.android.ui.main.MainActivity;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -21,14 +23,19 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerActions.open;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook;
 import static com.orgzly.android.espresso.util.EspressoUtils.onNoteInSearch;
+import static com.orgzly.android.espresso.util.EspressoUtils.waitId;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 
 public class ActionModeTest extends OrgzlyTest {
+    @Rule
+    public RetryTestRule mRetryTestRule = new RetryTestRule();
+
     private ActivityScenario<MainActivity> scenario;
 
     @Before
@@ -65,6 +72,7 @@ public class ActionModeTest extends OrgzlyTest {
         scenario = ActivityScenario.launch(MainActivity.class);
 
         onView(allOf(withText("book-one"), isDisplayed())).perform(click());
+        onView(isRoot()).perform(waitId(R.id.fragment_book_recycler_view, 5000));
     }
 
     @After

@@ -1054,7 +1054,10 @@ public class AppPreferences {
     }
     
     public static String defaultRepositoryStorageDirectory(Context context) {
-        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        // Use app-specific external storage to avoid EPERM from FUSE on public external storage
+        // (Android 11+ FUSE layer for public dirs doesn't support O_EXCL used by JGit)
+        File externalFilesDir = context.getExternalFilesDir(null);
+        File path = externalFilesDir != null ? externalFilesDir : context.getFilesDir();
         return getStringFromSelector(
                 context, R.string.pref_key_git_default_repository_directory, path.toString());
     }
