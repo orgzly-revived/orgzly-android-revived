@@ -1,7 +1,6 @@
 package com.orgzly.android.prefs
 
 
-import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.View
@@ -27,32 +26,16 @@ class TimePreferenceFragment : PreferenceDialogFragmentCompat() {
 
             setIs24HourView(is24hour)
 
-            @Suppress("DEPRECATION")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                hour = hours
-                minute = minutes
-            } else {
-                currentHour = hours
-                currentMinute = minutes
-            }
+            hour = hours
+            minute = minutes
         }
     }
 
     override fun onDialogClosed(positiveResult: Boolean) {
         if (positiveResult) {
-            @Suppress("DEPRECATION")
-            val hours = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                timePicker.hour
-            } else {
-                timePicker.currentHour
-            }
+            val hours = timePicker.hour
 
-            @Suppress("DEPRECATION")
-            val minutes = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                timePicker.minute
-            } else {
-                timePicker.currentMinute
-            }
+            val minutes = timePicker.minute
 
             val minutesAfterMidnight = hours * 60 + minutes
 

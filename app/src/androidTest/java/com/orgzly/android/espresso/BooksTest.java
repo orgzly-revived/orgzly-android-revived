@@ -152,9 +152,6 @@ public class BooksTest extends OrgzlyTest {
 
     @Test
     public void testExportWithFakeResponse() {
-        // Only if DocumentsProvider is supported
-        assumeTrue(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT);
-
         onBook(0).perform(longClick());
         contextualToolbarOverflowMenu().perform(click());
 
@@ -180,18 +177,6 @@ public class BooksTest extends OrgzlyTest {
         file.delete();
 
         Intents.release();
-    }
-
-    @Test
-    public void testExport() throws IOException {
-        // Older API versions, when file is saved in Download/
-        assumeTrue(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT);
-
-        onBook(0).perform(longClick());
-        contextualToolbarOverflowMenu().perform(click());
-        onView(withText(R.string.export)).perform(click());
-        onSnackbar().check(matches(withText(startsWith(context.getString(R.string.book_exported, "")))));
-        localStorage.getExportFile("book-1", BookFormat.ORG).delete();
     }
 
     @Test
