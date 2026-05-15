@@ -20,6 +20,7 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.insert
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -264,7 +265,7 @@ private fun FilterCollapsePanel(
 }
 
 @Composable
-fun AgendaOptions(
+private fun AgendaOptions(
     agendaDays: Int?,
     onChange: (Int?) -> Unit,
     enabled: Boolean = true
@@ -364,7 +365,8 @@ fun AgendaOptions(
                         insert(length, markup.last())
                     },
                     textStyle = LocalTextStyle.current.copy(
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = LocalContentColor.current
                     ),
                     enabled = enabled
                 )
