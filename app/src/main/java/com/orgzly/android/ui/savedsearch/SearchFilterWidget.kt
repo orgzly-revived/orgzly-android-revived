@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -327,7 +328,9 @@ private fun AgendaOptions(
                             onChange(it)
                         }
                     },
-                    enabled = agendaDays > 0 && enabled
+                    enabled = agendaDays > 0 && enabled,
+                    modifier = Modifier
+                        .testTag("search_filter_agenda_options_subtract_button")
                 ) {
                     Icon(
                         painterIcon(Icons.SUBTRACT),
@@ -339,7 +342,9 @@ private fun AgendaOptions(
                 val focusManager = LocalFocusManager.current
                 OrgzlyBasicTextField(
                     textFieldState,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .testTag("search_filter_agenda_days_input"),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Done
@@ -380,7 +385,9 @@ private fun AgendaOptions(
                             onChange(it)
                         }
                     },
-                    enabled = agendaDays < 100 && enabled
+                    enabled = agendaDays < 100 && enabled,
+                    modifier = Modifier
+                        .testTag("search_filter_agenda_options_add_button")
                 ) {
                     Icon(
                         painterIcon(Icons.ADD),
