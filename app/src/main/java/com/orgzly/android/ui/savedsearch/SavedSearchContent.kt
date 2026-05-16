@@ -37,7 +37,6 @@ import com.orgzly.android.query.SimpleFilter
 import com.orgzly.android.ui.compose.base.PreviewOrgzlyBootstrap
 import com.orgzly.android.ui.compose.modifiers.scaffoldPadding
 import com.orgzly.android.ui.compose.providers.LaunchedEventEffect
-import com.orgzly.android.ui.compose.theme.OrgzlyTheme
 import com.orgzly.android.ui.compose.widgets.BackButton
 import com.orgzly.android.ui.compose.widgets.Icons
 import com.orgzly.android.ui.compose.widgets.OrgzlyButton
@@ -91,7 +90,8 @@ fun SavedSearchContent(
                         IconButton(
                             onClick = {
                                 localUriHandler.openUri(SavedSearchesFragment.SEARCH_DOCUMENTATION_URL)
-                            }
+                            },
+                            modifier = Modifier.testTag("help_button")
                         ) {
                             Icon(
                                 painterIcon(Icons.HELP),
@@ -128,10 +128,7 @@ fun SavedSearchContent(
                 .verticalScroll(rememberScrollState())
                 .scaffoldPadding(contentPadding)
                 .padding(1.rdp)
-                .testTag("main_content")
-                .semantics {
-                    testTagsAsResourceId = true
-                },
+                .testTag("main_content"),
             verticalArrangement = Arrangement.spacedBy(
                 1.rdp
             )
@@ -140,9 +137,6 @@ fun SavedSearchContent(
                 nameField,
                 Modifier
                     .fillMaxWidth()
-                    .semantics {
-                        testTagsAsResourceId = true
-                    }
                     .testTag("fragment_saved_search_name"),
                 label = {
                     Text(
@@ -172,7 +166,9 @@ fun SavedSearchContent(
                 is SavedSearchModel.Mode.Simple -> {
                     OrgzlyTextField(
                         simpleSearchField,
-                        Modifier.fillMaxWidth(),
+                        Modifier
+                            .fillMaxWidth()
+                            .testTag("fragment_saved_search_simple_search"),
                         label = {
                             Text(
                                 stringResource(R.string.options_menu_item_search)
@@ -190,10 +186,6 @@ fun SavedSearchContent(
                 modifier = Modifier
                     .animateContentSize()
                     .align(Alignment.End)
-                    .semantics {
-                        testTagsAsResourceId = true
-                        testTag = "swap_editor_mode"
-                    }
                     .testTag("swap_editor_mode"),
                 enabled = state.editable
             ) {

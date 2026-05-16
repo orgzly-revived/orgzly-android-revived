@@ -51,7 +51,7 @@ fun PreviewOrgzlyBootstrap(
 }
 
 @Composable
-private fun BaseOrgzlyBootstrap(
+fun BaseOrgzlyBootstrap(
     navigator: Navigator,
     content: @Composable () -> Unit
 ) {
