@@ -64,8 +64,8 @@ import org.junit.Test;
 
 public class MiscTest extends OrgzlyTest {
 
-    @Rule
-    public RetryTestRule mRetryTestRule = new RetryTestRule();
+//    @Rule
+//    public RetryTestRule mRetryTestRule = new RetryTestRule();
 
     @Test
     public void testLftRgt() {
@@ -463,6 +463,10 @@ public class MiscTest extends OrgzlyTest {
             onView(withText(R.string.searches)).perform(click());
             fragmentTest(activity, true, withId(R.id.fragment_saved_searches_flipper));
 
+            // Search
+            onSavedSearch(0).perform(click());
+            composeFragmentTest(activity, false);
+
             // Search results
             onView(withId(R.id.drawer_layout)).perform(open());
             SystemClock.sleep(500);
@@ -497,6 +501,29 @@ public class MiscTest extends OrgzlyTest {
             // Dropbox repo
             onListItem(0).perform(click());
             fragmentTest(activity, false, withId(R.id.activity_repo_dropbox_container));
+        }
+    }
+
+    // We can't use espresso, nor can we use compose until this test is converted to Kotlin
+    // This at least ensures the app doesn't crash
+    private void composeFragmentTest(Activity activity, boolean hasSearchMenuItem) {
+        SystemClock.sleep(500);
+
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        SystemClock.sleep(500);
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        SystemClock.sleep(500);
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        SystemClock.sleep(500);
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        SystemClock.sleep(500);
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        SystemClock.sleep(500);
+
+        if (hasSearchMenuItem) {
+            onView(withId(R.id.search_view)).check(matches(isDisplayed()));
+        } else {
+            onView(withId(R.id.search_view)).check(doesNotExist());
         }
     }
 

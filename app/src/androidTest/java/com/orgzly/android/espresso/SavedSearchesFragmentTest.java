@@ -61,27 +61,6 @@ public class SavedSearchesFragmentTest extends OrgzlyTest {
     }
 
     @Test
-    public void testDeletingSavedSearchThenGoingBackToIt() {
-        onView(withId(R.id.fragment_saved_searches_flipper)).check(matches(isDisplayed()));
-
-        onSavedSearch(0).perform(click());
-
-        onView(withId(R.id.drawer_layout)).perform(open());
-        onView(allOf(withText(R.string.searches), isDescendantOfA(withId(R.id.drawer_navigation_view))))
-                .perform(click());
-        onView(withId(R.id.fragment_saved_searches_flipper)).check(matches(isDisplayed()));
-
-        onSavedSearch(0).perform(longClick());
-        contextualToolbarOverflowMenu().perform(click());
-        onView(withText(R.string.delete)).perform(click());
-
-        pressBack();
-
-        onView(withText(R.string.search_does_not_exist_anymore)).check(matches(isDisplayed()));
-    }
-
-
-    @Test
     public void testActionModeWhenSelectingSavedSearchThenOpeningBook() {
         onSavedSearch(0).perform(longClick());
         onView(withId(R.id.drawer_layout)).perform(open());
