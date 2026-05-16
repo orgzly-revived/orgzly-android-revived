@@ -64,8 +64,8 @@ import org.junit.Test;
 
 public class MiscTest extends OrgzlyTest {
 
-//    @Rule
-//    public RetryTestRule mRetryTestRule = new RetryTestRule();
+    @Rule
+    public RetryTestRule mRetryTestRule = new RetryTestRule();
 
     @Test
     public void testLftRgt() {
