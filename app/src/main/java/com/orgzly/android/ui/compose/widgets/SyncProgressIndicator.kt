@@ -5,6 +5,7 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -17,6 +18,8 @@ import com.orgzly.R
 fun SyncProgressIndicator(
     modifier: Modifier = Modifier
 ) {
+    if(LocalInspectionMode.current) return
+
     val density = LocalDensity.current
     AndroidView(
         factory = { context ->

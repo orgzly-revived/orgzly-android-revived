@@ -93,6 +93,14 @@ private class DefaultNavigator(
 
 }
 
+object DummyNavigator: Navigator {
+    override fun canPop() = false
+
+    override fun pop() {}
+
+    override fun navigate(destination: NavigationDestination) {}
+}
+
 val LocalNavigator = staticCompositionLocalOf<Navigator> { error("No navigator provided") }
 
 @OptIn(DirectFragmentManagerAccess::class)

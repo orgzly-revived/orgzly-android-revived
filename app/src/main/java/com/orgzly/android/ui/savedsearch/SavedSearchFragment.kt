@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -96,171 +97,17 @@ class SavedSearchFragment: ComposeFragment(), DrawerItem {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val snackbarHostState = remember { SnackbarHostState() }
-
-        val switchToSimpleFailedMessage =
-            stringResource(R.string.search_filter_unable_to_switch_to_simple)
-        LaunchedEventEffect(viewModel.events) {
-            when (it) {
-                is SavedSearchEvent.Snackbar -> when (it.snackbar) {
-                    SavedSearchSnackbar.SWITCH_TO_SIMPLE_FAILED -> snackbarHostState.showSnackbar(
-                        switchToSimpleFailedMessage
-                    )
-                }
-                is SavedSearchEvent.SaveNew -> mListener?.onSavedSearchCreateRequest(it.search)
-                is SavedSearchEvent.SaveUpdate -> mListener?.onSavedSearchUpdateRequest(it.search)
-            }
-        }
-
-        val state by viewModel.state.collectAsStateWithLifecycle()
-
-        Scaffold(
-            topBar = {
-                OrgzlyTopAppBar(
-                    stringResource(R.string.search),
-                    navigationIcon = {
-                        BackButton()
-                    },
-                    actions = {
-                        val localUriHandler = LocalUriHandler.current
-                        if (state.mode is SavedSearchModel.Mode.Advanced) {
-                            IconButton(
-                                onClick = {
-                                    localUriHandler.openUri(SavedSearchesFragment.SEARCH_DOCUMENTATION_URL)
-                                }
-                            ) {
-                                Icon(
-                                    painterIcon(Icons.HELP),
-                                    contentDescription = stringResource(R.string.help)
-                                )
-                            }
-                        }
-                        IconButton(
-                            onClick = {
-                                viewModel.save()
-                            }
-                        ) {
-                            Icon(
-                                painterIcon(Icons.SAVE),
-                                contentDescription = stringResource(R.string.save)
-                            )
-                        }
-                    }
-                )
-            },
-            snackbarHost = {
-                SnackbarHost(
-                    snackbarHostState,
-                    modifier = Modifier.imePadding()
-                )
-            },
-            modifier = Modifier.semantics {
-                testTagsAsResourceId = true
-            }
-        ) { contentPadding ->
-            if (state.mode == SavedSearchModel.Mode.None) return@Scaffold
-
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .scaffoldPadding(contentPadding)
-                    .padding(1.rdp)
-                    .testTag("main_content"),
-                verticalArrangement = Arrangement.spacedBy(
-                    1.rdp
-                )
-            ) {
-                OrgzlyTextField(
-                    viewModel.nameField,
-                    Modifier.fillMaxWidth(),
-                    label = {
-                        Text(
-                            stringResource(R.string.name)
-                        )
-                    },
-                    enabled = state.editable,
-                    isError = !state.isNameValid
-                )
-
-                when (state.mode) {
-                    is SavedSearchModel.Mode.Advanced -> {
-                        OrgzlyTextField(
-                            viewModel.advancedQueryField,
-                            Modifier.fillMaxWidth(),
-                            label = {
-                                Text(
-                                    stringResource(R.string.query)
-                                )
-                            },
-                            enabled = state.editable,
-                            isError = !state.isQueryValid
-                        )
-                    }
-                    is SavedSearchModel.Mode.Simple -> {
-                        OrgzlyTextField(
-                            viewModel.simpleSearchField,
-                            Modifier.fillMaxWidth(),
-                            label = {
-                                Text(
-                                    stringResource(R.string.options_menu_item_search)
-                                )
-                            },
-                            enabled = state.editable,
-                            isError = !state.isQueryValid
-                        )
-                    }
-                    else -> {}
-                }
-
-                OrgzlyTextButton(
-                    onClick = {
-                        viewModel.switchSearchStyle()
-                    },
-                    modifier = Modifier
-                        .animateContentSize()
-                        .align(Alignment.End),
-                    enabled = state.editable
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(1.rdp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            painterIcon(Icons.SWAP),
-                            contentDescription = null
-                        )
-                        Text(stringResource(
-                            when (state.mode) {
-                                is SavedSearchModel.Mode.Advanced -> R.string.search_filter_swap_to_simple
-                                is SavedSearchModel.Mode.Simple -> R.string.search_filter_swap_to_advanced
-                                else -> R.string.search_filter_swap_to_simple
-                            }
-                        ))
-                    }
-                }
-
-                (state.mode as? SavedSearchModel.Mode.Simple)?.let { mode ->
-                    SearchFilterWidget(
-                        mode.filter,
-                        viewModel::updateFilter,
-                        state.allTags,
-                        state.allBooks,
-                        enabled = state.editable
-                    )
-                }
-
-                Spacer(Modifier.weight(1f))
-
-                OrgzlyButton(
-                    onClick = viewModel::save,
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = state.editable
-                ) {
-                    Text(stringResource(R.string.save))
-                }
-            }
-        }
+        SavedSearchContent(
+            viewModel.state.collectAsStateWithLifecycle().value,
+            viewModel.events,
+            mListener,
+            viewModel::updateFilter,
+            viewModel::save,
+            viewModel::switchSearchStyle,
+            viewModel.nameField,
+            viewModel.advancedQueryField,
+            viewModel.simpleSearchField
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import cl.emilym.compose.units.LocalBaseDp
 import com.orgzly.android.ui.compose.theme.OrgzlyTheme
+import com.orgzly.android.ui.compose.theme.typography
 
 
 /**
@@ -18,14 +19,10 @@ fun OrgzlyBootstrap(
     content: @Composable () -> Unit
 ) {
     OrgzlyTheme {
-        val navigator = createNavigator()
-        CompositionLocalProvider(
-            LocalBaseDp provides 16.dp,
-            LocalNavigator provides navigator!!,
-            LocalTextStyle provides MaterialTheme.typography.bodyMedium
-        ) {
-            content()
-        }
+        BaseOrgzlyBootstrap(
+            createNavigator() ?: DummyNavigator,
+            content
+        )
     }
 }
 
@@ -36,5 +33,33 @@ fun OrgzlyBootstrap(
 fun ComposeView.bootstrapContent(content: @Composable () -> Unit) {
     setContent {
         OrgzlyBootstrap(content)
+    }
+}
+
+@Composable
+fun PreviewOrgzlyBootstrap(
+    content: @Composable () -> Unit
+) {
+    MaterialTheme(
+        typography = typography
+    ) {
+        BaseOrgzlyBootstrap(
+            DummyNavigator,
+            content
+        )
+    }
+}
+
+@Composable
+private fun BaseOrgzlyBootstrap(
+    navigator: Navigator,
+    content: @Composable () -> Unit
+) {
+    CompositionLocalProvider(
+        LocalBaseDp provides 16.dp,
+        LocalNavigator provides navigator,
+        LocalTextStyle provides MaterialTheme.typography.bodyMedium
+    ) {
+        content()
     }
 }

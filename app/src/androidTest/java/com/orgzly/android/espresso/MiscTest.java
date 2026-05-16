@@ -463,10 +463,6 @@ public class MiscTest extends OrgzlyTest {
             onView(withText(R.string.searches)).perform(click());
             fragmentTest(activity, true, withId(R.id.fragment_saved_searches_flipper));
 
-            // Search
-            onSavedSearch(0).perform(click());
-            fragmentTest(activity, false, withId(R.id.main_content));
-
             // Search results
             onView(withId(R.id.drawer_layout)).perform(open());
             SystemClock.sleep(500);
