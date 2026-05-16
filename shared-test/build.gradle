@@ -11,7 +11,7 @@ android {
     }
 
     defaultConfig {
-        minSdk 21
+        minSdk 23
         buildConfigField "String", "DROPBOX_APP_KEY", gradle.ext.appProperties.getProperty("dropbox.app_key", '""')
     }
 
