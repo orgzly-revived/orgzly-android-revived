@@ -465,7 +465,7 @@ public class MiscTest extends OrgzlyTest {
 
             // Search
             onSavedSearch(0).perform(click());
-            fragmentTest(activity, false, withId(R.id.fragment_saved_search_flipper));
+            fragmentTest(activity, false, withId(R.id.main_content));
 
             // Search results
             onView(withId(R.id.drawer_layout)).perform(open());

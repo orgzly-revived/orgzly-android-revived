@@ -27,7 +27,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -150,6 +153,9 @@ class SavedSearchFragment: ComposeFragment(), DrawerItem {
                     snackbarHostState,
                     modifier = Modifier.imePadding()
                 )
+            },
+            modifier = Modifier.semantics {
+                testTagsAsResourceId = true
             }
         ) { contentPadding ->
             if (state.mode == SavedSearchModel.Mode.None) return@Scaffold
@@ -159,7 +165,8 @@ class SavedSearchFragment: ComposeFragment(), DrawerItem {
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
                     .scaffoldPadding(contentPadding)
-                    .padding(1.rdp),
+                    .padding(1.rdp)
+                    .testTag("main_content"),
                 verticalArrangement = Arrangement.spacedBy(
                     1.rdp
                 )
