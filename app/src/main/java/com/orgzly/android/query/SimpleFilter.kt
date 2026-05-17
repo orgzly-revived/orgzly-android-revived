@@ -1,6 +1,7 @@
 package com.orgzly.android.query
 
 import androidx.compose.runtime.Immutable
+import kotlin.reflect.KClass
 
 data class SimpleQuery(
     val search: String,
@@ -91,3 +92,117 @@ enum class SimpleSortOrder {
     PRIORITY,
     STATE
 }
+
+val relativeDateOptionRelations = listOf(
+    DateConditionRelationship(
+        hashSetOf(
+            GenericDateCondition(
+                QueryInterval(
+                    QueryInterval.Unit.DAY,
+                    1
+                ),
+                Relation.EQ
+            )
+        ),
+        RelativeDateOption.TOMORROW
+    ),
+    DateConditionRelationship(
+        hashSetOf(
+            GenericDateCondition(
+                QueryInterval(
+                    QueryInterval.Unit.DAY,
+                    0
+                ),
+                Relation.GE
+            )
+        ),
+        RelativeDateOption.FUTURE
+    ),
+    DateConditionRelationship(
+        hashSetOf(
+            GenericDateCondition(
+                QueryInterval(
+                    QueryInterval.Unit.DAY,
+                    0
+                ),
+                Relation.LT
+            )
+        ),
+        RelativeDateOption.PAST
+    ),
+    DateConditionRelationship(
+        hashSetOf(
+            GenericDateCondition(
+                QueryInterval(
+                    QueryInterval.Unit.WEEK,
+                    0
+                ),
+                Relation.GE
+            ),
+            GenericDateCondition(
+                QueryInterval(
+                    QueryInterval.Unit.WEEK,
+                    1
+                ),
+                Relation.LT
+            )
+        ),
+        RelativeDateOption.THIS_WEEK
+    ),
+    DateConditionRelationship(
+        hashSetOf(
+            GenericDateCondition(
+                QueryInterval(
+                    QueryInterval.Unit.MONTH,
+                    0
+                ),
+                Relation.GE
+            ),
+            GenericDateCondition(
+                QueryInterval(
+                    QueryInterval.Unit.MONTH,
+                    1
+                ),
+                Relation.LT
+            )
+        ),
+        RelativeDateOption.THIS_MONTH
+    ),
+)
+
+data class GenericDateCondition(
+    override val interval: QueryInterval,
+    override val relation: Relation
+): DateCondition {
+
+    companion object {
+        fun fromDateCondition(condition: DateCondition) = GenericDateCondition(
+            condition.interval,
+            condition.relation
+        )
+    }
+
+}
+
+data class DateConditionRelationship(
+    val conditions: HashSet<GenericDateCondition>,
+    val relative: RelativeDateOption
+)
+
+fun getTodayDateConditionRelationshipForType(type: KClass<*>): DateConditionRelationship =
+    DateConditionRelationship(
+        hashSetOf(
+            GenericDateCondition(
+                QueryInterval(
+                    QueryInterval.Unit.DAY,
+                    0
+                ),
+                when (type) {
+                    Condition.Closed::class -> Relation.EQ
+                    Condition.Event::class -> Relation.EQ
+                    else -> Relation.LE
+                }
+            )
+        ),
+        RelativeDateOption.TODAY
+    )
