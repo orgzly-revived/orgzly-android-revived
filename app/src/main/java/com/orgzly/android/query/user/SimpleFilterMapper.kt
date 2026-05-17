@@ -63,7 +63,14 @@ private val relationMap = listOf(
                     QueryInterval.Unit.WEEK,
                     0
                 ),
-                Relation.EQ
+                Relation.GE
+            ),
+            GenericDateCondition(
+                QueryInterval(
+                    QueryInterval.Unit.WEEK,
+                    1
+                ),
+                Relation.LT
             )
         ),
         RelativeDateOption.THIS_WEEK
@@ -75,7 +82,14 @@ private val relationMap = listOf(
                     QueryInterval.Unit.MONTH,
                     0
                 ),
-                Relation.EQ
+                Relation.GE
+            ),
+            GenericDateCondition(
+                QueryInterval(
+                    QueryInterval.Unit.MONTH,
+                    1
+                ),
+                Relation.LT
             )
         ),
         RelativeDateOption.THIS_MONTH
