@@ -3,7 +3,6 @@ package com.orgzly.android.query.user
 import android.util.Log
 import com.orgzly.android.query.Condition
 import com.orgzly.android.query.DateCondition
-import com.orgzly.android.query.GenericDateCondition
 import com.orgzly.android.query.Options
 import com.orgzly.android.query.Query
 import com.orgzly.android.query.QueryInterval
@@ -178,12 +177,12 @@ class SimpleFilterMapper @Inject constructor() {
 
         val tokens = generateSequence {
             if (reader.hasNextConditionOfType<T>()) reader.nextConditionOfType<T>() else null
-        }.map { GenericDateCondition.fromDateCondition(it) }.toHashSet()
+        }.toList()
 
         val today = getTodayDateConditionRelationshipForType(T::class)
 
         return (relativeDateOptionRelations + today)
-            .firstOrNull { it.conditions == tokens }
+            .firstOrNull { it.matches(tokens) }
             ?.relative
             ?: throw UnsupportedSimpleFilterException("Unsupported date condition configuration")
     }

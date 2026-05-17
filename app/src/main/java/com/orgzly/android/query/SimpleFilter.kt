@@ -95,7 +95,7 @@ enum class SimpleSortOrder {
 
 val relativeDateOptionRelations = listOf(
     DateConditionRelationship(
-        hashSetOf(
+        listOf(
             GenericDateCondition(
                 QueryInterval(
                     QueryInterval.Unit.DAY,
@@ -107,7 +107,7 @@ val relativeDateOptionRelations = listOf(
         RelativeDateOption.TOMORROW
     ),
     DateConditionRelationship(
-        hashSetOf(
+        listOf(
             GenericDateCondition(
                 QueryInterval(
                     QueryInterval.Unit.DAY,
@@ -119,7 +119,7 @@ val relativeDateOptionRelations = listOf(
         RelativeDateOption.FUTURE
     ),
     DateConditionRelationship(
-        hashSetOf(
+        listOf(
             GenericDateCondition(
                 QueryInterval(
                     QueryInterval.Unit.DAY,
@@ -131,7 +131,7 @@ val relativeDateOptionRelations = listOf(
         RelativeDateOption.PAST
     ),
     DateConditionRelationship(
-        hashSetOf(
+        listOf(
             GenericDateCondition(
                 QueryInterval(
                     QueryInterval.Unit.WEEK,
@@ -150,7 +150,7 @@ val relativeDateOptionRelations = listOf(
         RelativeDateOption.THIS_WEEK
     ),
     DateConditionRelationship(
-        hashSetOf(
+        listOf(
             GenericDateCondition(
                 QueryInterval(
                     QueryInterval.Unit.MONTH,
@@ -170,7 +170,7 @@ val relativeDateOptionRelations = listOf(
     ),
 )
 
-data class GenericDateCondition(
+private data class GenericDateCondition(
     override val interval: QueryInterval,
     override val relation: Relation
 ): DateCondition {
@@ -185,13 +185,21 @@ data class GenericDateCondition(
 }
 
 data class DateConditionRelationship(
-    val conditions: HashSet<GenericDateCondition>,
+    val conditions: List<DateCondition>,
     val relative: RelativeDateOption
-)
+) {
+
+    fun matches(conditions: List<DateCondition>): Boolean {
+        val generic = conditions.map { GenericDateCondition.fromDateCondition(it) }.distinct()
+        return this.conditions.containsAll(generic) &&
+                this.conditions.size == generic.size
+    }
+
+}
 
 fun getTodayDateConditionRelationshipForType(type: KClass<*>): DateConditionRelationship =
     DateConditionRelationship(
-        hashSetOf(
+        listOf(
             GenericDateCondition(
                 QueryInterval(
                     QueryInterval.Unit.DAY,
