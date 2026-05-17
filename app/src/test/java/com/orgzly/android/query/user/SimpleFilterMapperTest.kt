@@ -78,7 +78,8 @@ class SimpleFilterMapperTest {
             Condition.Deadline(QueryInterval(QueryInterval.Unit.DAY, 1), Relation.EQ),
             Condition.Event(QueryInterval(QueryInterval.Unit.DAY), Relation.GE),
             Condition.Closed(QueryInterval(QueryInterval.Unit.DAY), Relation.LT),
-            Condition.Created(QueryInterval(QueryInterval.Unit.WEEK, 0), Relation.EQ)
+            Condition.Created(QueryInterval(QueryInterval.Unit.WEEK, 0), Relation.GE),
+            Condition.Created(QueryInterval(QueryInterval.Unit.WEEK, 1), Relation.LT),
         )))
 
         val simpleQuery = mapper.fromQuery(query)
@@ -124,12 +125,14 @@ class SimpleFilterMapperTest {
     @Test
     fun `fromQuery - dates - next 7 and 30 days`() {
         val next7 = Query(Condition.And(listOf(
-            Condition.Scheduled(QueryInterval(QueryInterval.Unit.WEEK, 0), Relation.EQ)
+            Condition.Scheduled(QueryInterval(QueryInterval.Unit.WEEK, 0), Relation.GE),
+            Condition.Scheduled(QueryInterval(QueryInterval.Unit.WEEK, 1), Relation.LT),
         )))
         assertEquals(RelativeDateOption.THIS_WEEK, mapper.fromQuery(next7).filter.scheduled)
 
         val next30 = Query(Condition.And(listOf(
-            Condition.Deadline(QueryInterval(QueryInterval.Unit.MONTH, 0), Relation.EQ)
+            Condition.Deadline(QueryInterval(QueryInterval.Unit.MONTH, 0), Relation.GE),
+            Condition.Deadline(QueryInterval(QueryInterval.Unit.MONTH, 1), Relation.LT),
         )))
         assertEquals(RelativeDateOption.THIS_MONTH, mapper.fromQuery(next30).filter.deadline)
     }
@@ -177,6 +180,12 @@ class SimpleFilterMapperTest {
     @Test(expected = UnsupportedSimpleFilterException::class)
     fun `fromQuery - multiple state conditions throws`() {
         val query = Query(Condition.And(listOf(Condition.HasState("TODO"), Condition.HasState("NEXT"))))
+        mapper.fromQuery(query)
+    }
+
+    @Test(expected = UnsupportedSimpleFilterException::class)
+    fun `fromQuery - multiple priority conditions throws`() {
+        val query = Query(Condition.And(listOf(Condition.HasPriority("A"), Condition.HasPriority("B"))))
         mapper.fromQuery(query)
     }
 
@@ -252,7 +261,8 @@ class SimpleFilterMapperTest {
         assertTrue(conditions.any { it is Condition.Scheduled && it.relation == Relation.EQ })
         assertTrue(conditions.any { it is Condition.Deadline && it.relation == Relation.GE })
         assertTrue(conditions.any { it is Condition.Closed && it.relation == Relation.LT })
-        assertTrue(conditions.any { it is Condition.Created && it.relation == Relation.EQ })
+        assertTrue(conditions.any { it is Condition.Created && it.relation == Relation.GE })
+        assertTrue(conditions.any { it is Condition.Created && it.relation == Relation.LT })
     }
 }
 
