@@ -185,7 +185,6 @@ class SavedSearchViewModel @AssistedInject constructor(
         val shouldDefaultToSimple = !AppPreferences.isDefaultToAdvancedQueryEnabled(context)
 
         existingSearchId?.let { existingSearchId ->
-            shouldShowValidationErrors.value = true
             viewModelScope.launch {
                 val existing = withContext(Dispatchers.IO) {
                     dataRepository.getSavedSearch(existingSearchId)
@@ -204,6 +203,8 @@ class SavedSearchViewModel @AssistedInject constructor(
                 } catch (e: Exception) {
                     isSimpleSearch.value = false
                 }
+                
+                shouldShowValidationErrors.value = true
             }
         } ?: run {
             isSimpleSearch.value = shouldDefaultToSimple
