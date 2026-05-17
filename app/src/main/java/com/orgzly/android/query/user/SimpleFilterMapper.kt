@@ -2,6 +2,7 @@ package com.orgzly.android.query.user
 
 import android.util.Log
 import com.orgzly.android.query.Condition
+import com.orgzly.android.query.DateCondition
 import com.orgzly.android.query.Options
 import com.orgzly.android.query.Query
 import com.orgzly.android.query.QueryInterval
@@ -28,54 +29,46 @@ class SimpleFilterMapper @Inject constructor() {
         Log.d(TAG, "Mapping $query")
 
         val result = SimpleFilterBuilder()
-        val flattenedConditions = query.condition?.let { flattenCondition(it) }
-        val search = flattenedConditions?.filterIsInstance<Condition.HasText>()
-            ?.joinToString(" ") {
-                when (it.isQuoted) {
-                    true -> "\"${it.text}\""
-                    else -> it.text
-                }
-            } ?: ""
+        val reader = QueryPullReader(query)
 
-        flattenedConditions?.let {
-            rejectIf(
-                it.count { it is Condition.Event } > 1,
-                "Cannot have greater than 1 Condition.Event"
-            )
-            rejectIf(
-                it.count { it is Condition.Scheduled } > 1,
-                "Cannot have greater than 1 Condition.Scheduled"
-            )
-            rejectIf(
-                it.count { it is Condition.Deadline } > 1,
-                "Cannot have greater than 1 Condition.Deadline"
-            )
-            rejectIf(
-                it.count { it is Condition.Closed } > 1,
-                "Cannot have greater than 1 Condition.Closed"
-            )
-            rejectIf(
-                it.count { it is Condition.Created } > 1,
-                "Cannot have greater than 1 Condition.Created"
-            )
-            rejectIf(
-                it.count { it is Condition.HasPriority } > 1,
-                "Cannot have greater than 1 Condition.HasPriority"
-            )
-            rejectIf(
-                it.count { it is Condition.HasState } > 1,
-                "Cannot have greater than 1 Condition.HasState"
-            )
+        val search = generateSequence {
+            if (reader.hasNextConditionOfType<Condition.HasText>())
+                reader.nextConditionOfType<Condition.HasText>()
+            else null
+        }.joinToString(" ") {
+            when (it.isQuoted) {
+                true -> "\"${it.text}\""
+                else -> it.text
+            }
         }
 
-        flattenedConditions?.forEach { c ->
-            when (c) {
+        result.event = mapDateConditions<Condition.Event>(reader)
+        result.scheduled = mapDateConditions<Condition.Scheduled>(reader)
+        result.deadline = mapDateConditions<Condition.Deadline>(reader)
+        result.closed = mapDateConditions<Condition.Closed>(reader)
+        result.created = mapDateConditions<Condition.Created>(reader)
+
+        if (reader.hasNextConditionOfType<Condition.HasOwnTag>())
+            throw UnsupportedSimpleFilterException(
+                "Unsupported condition: ${Condition.HasOwnTag::class}"
+            )
+
+        if (reader.hasNextConditionOfType<Condition.HasSetPriority>())
+            throw UnsupportedSimpleFilterException(
+                "Unsupported condition: ${Condition.HasSetPriority::class}"
+            )
+
+        while (reader.hasNextCondition()) {
+            when (val c = reader.nextCondition()) {
                 is Condition.InBook -> {
                     rejectIf(c.not)
                     result.books += c.name
                 }
 
                 is Condition.HasState -> {
+                    if (reader.hasNextConditionOfType<Condition.HasState>())
+                        throw UnsupportedSimpleFilterException("Cannot represent multiple HasState")
+
                     rejectIf(c.not)
                     result.state = c.state
                 }
@@ -89,44 +82,17 @@ class SimpleFilterMapper @Inject constructor() {
                 }
 
                 is Condition.HasPriority -> {
+                    if (reader.hasNextConditionOfType<Condition.HasPriority>())
+                        throw UnsupportedSimpleFilterException("Cannot represent multiple HasPriority")
+
                     rejectIf(c.not)
                     result.priority = c.priority
-                }
-
-                is Condition.HasSetPriority -> {
-                    rejectIf(true, "Cannot have set priorities")
                 }
 
                 is Condition.HasTag -> {
                     rejectIf(c.not)
                     result.tags += c.tag
                 }
-
-                is Condition.HasOwnTag -> {
-                    rejectIf(true, "Cannot have own tags")
-                }
-
-                is Condition.Event -> {
-                    result.event = mapDate(c.interval, c.relation, Condition.Event::class)
-                }
-
-                is Condition.Scheduled -> {
-                    result.scheduled = mapDate(c.interval, c.relation, Condition.Scheduled::class)
-                }
-
-                is Condition.Deadline -> {
-                    result.deadline = mapDate(c.interval, c.relation, Condition.Deadline::class)
-                }
-
-                is Condition.Closed -> {
-                    result.closed = mapDate(c.interval, c.relation, Condition.Closed::class)
-                }
-
-                is Condition.Created -> {
-                    result.created = mapDate(c.interval, c.relation, Condition.Created::class)
-                }
-
-                is Condition.HasText -> {}
 
                 else -> {
                     throw UnsupportedSimpleFilterException(
@@ -136,18 +102,17 @@ class SimpleFilterMapper @Inject constructor() {
             }
         }
 
-        when (query.sortOrders.size) {
-            0 -> {}
-            1 -> {
-                result.sortOrder = mapSortOrder(query.sortOrders.first())
-                result.sortDescending = query.sortOrders.first().desc
-            }
-            else -> throw UnsupportedSimpleFilterException(
+        if (reader.hasNextSortOrder()) {
+            val sortOrder = reader.nextSortOrder()
+            if (reader.hasNextSortOrder()) throw UnsupportedSimpleFilterException(
                 "Cannot represent more than one sort order"
             )
+
+            result.sortOrder = mapSortOrder(sortOrder)
+            result.sortDescending = sortOrder.desc
         }
 
-        result.agendaDays = query.options.agendaDays.takeIf { it > 0 }
+        result.agendaDays = reader.agendaDays()
 
         return SimpleQuery(
             search,
@@ -263,6 +228,57 @@ class SimpleFilterMapper @Inject constructor() {
         )
     )
 
+    private inline fun <reified T: DateCondition> mapDateConditions(
+        reader: QueryPullReader
+    ): RelativeDateOption? {
+        if (!reader.hasNextConditionOfType<T>()) return null
+
+        val option = reader.nextConditionOfType<T>().run {
+            when {
+                interval.unit == QueryInterval.Unit.DAY &&
+                        interval.value == 0 &&
+                        relation == getDefaultEQForType(T::class) ->
+                    RelativeDateOption.TODAY
+
+                interval.unit == QueryInterval.Unit.DAY &&
+                        interval.value == 1 &&
+                        relation == Relation.EQ ->
+                    RelativeDateOption.TOMORROW
+
+                interval.unit == QueryInterval.Unit.DAY &&
+                        interval.value == 0 &&
+                        relation == Relation.GE ->
+                    RelativeDateOption.FUTURE
+
+                interval.unit == QueryInterval.Unit.DAY &&
+                        interval.value == 0 &&
+                        relation == Relation.LT ->
+                    RelativeDateOption.PAST
+
+                relation == Relation.EQ &&
+                        interval.value == 0 &&
+                        interval.unit == QueryInterval.Unit.WEEK ->
+                    RelativeDateOption.THIS_WEEK
+
+                relation == Relation.EQ &&
+                        interval.value == 0 &&
+                        interval.unit == QueryInterval.Unit.MONTH ->
+                    RelativeDateOption.THIS_MONTH
+
+                else ->
+                    throw UnsupportedSimpleFilterException(
+                        "Unsupported date filter: $relation $interval"
+                    )
+            }
+        }
+
+        if (reader.hasNextConditionOfType<T>()) throw UnsupportedSimpleFilterException(
+            "Unsupported date filter on ${T::class}"
+        )
+
+        return option
+    }
+
     private fun rejectIf(value: Boolean, explanation: String? = null) {
         if (value) {
             throw UnsupportedSimpleFilterException(
@@ -271,20 +287,6 @@ class SimpleFilterMapper @Inject constructor() {
         }
     }
 }
-
-private fun flattenCondition(condition: Condition): List<Condition> =
-    when (condition) {
-        is Condition.And ->
-            condition.operands.flatMap(::flattenCondition)
-
-        is Condition.Or ->
-            throw UnsupportedSimpleFilterException(
-                "OR conditions are unsupported"
-            )
-
-        else ->
-            listOf(condition)
-    }
 
 private fun getDefaultEQForType(type: KClass<*>): Relation = when (type) {
     Condition.Closed::class -> Relation.EQ
@@ -314,50 +316,6 @@ private fun RelativeDateOption.toIntervalAndRelation(
         RelativeDateOption.THIS_MONTH ->
             QueryInterval(QueryInterval.Unit.MONTH) to Relation.EQ
     }
-
-private fun mapDate(
-    interval: QueryInterval,
-    relation: Relation,
-    type: KClass<*>
-): RelativeDateOption {
-
-    return when {
-        interval.unit == QueryInterval.Unit.DAY &&
-                interval.value == 0 &&
-                relation == getDefaultEQForType(type) ->
-            RelativeDateOption.TODAY
-
-        interval.unit == QueryInterval.Unit.DAY &&
-                interval.value == 1 &&
-                relation == Relation.EQ ->
-            RelativeDateOption.TOMORROW
-
-        interval.unit == QueryInterval.Unit.DAY &&
-                interval.value == 0 &&
-                relation == Relation.GE ->
-            RelativeDateOption.FUTURE
-
-        interval.unit == QueryInterval.Unit.DAY &&
-                interval.value == 0 &&
-                relation == Relation.LT ->
-            RelativeDateOption.PAST
-
-        relation == Relation.EQ &&
-                interval.value == 0 &&
-                interval.unit == QueryInterval.Unit.WEEK ->
-            RelativeDateOption.THIS_WEEK
-
-        relation == Relation.EQ &&
-                interval.value == 0 &&
-                interval.unit == QueryInterval.Unit.MONTH ->
-            RelativeDateOption.THIS_MONTH
-
-        else ->
-            throw UnsupportedSimpleFilterException(
-                "Unsupported date filter: $relation $interval"
-            )
-    }
-}
 
 private fun mapSortOrder(sortOrder: SortOrder) = when (sortOrder) {
     is SortOrder.Book -> SimpleSortOrder.BOOK

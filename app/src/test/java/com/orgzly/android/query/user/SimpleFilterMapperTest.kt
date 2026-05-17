@@ -181,6 +181,12 @@ class SimpleFilterMapperTest {
     }
 
     @Test(expected = UnsupportedSimpleFilterException::class)
+    fun `fromQuery - multiple priority conditions throws`() {
+        val query = Query(Condition.And(listOf(Condition.HasPriority("A"), Condition.HasPriority("B"))))
+        mapper.fromQuery(query)
+    }
+
+    @Test(expected = UnsupportedSimpleFilterException::class)
     fun `fromQuery - unsupported condition throws`() {
         val query = Query(Condition.HasSetPriority("A"))
         mapper.fromQuery(query)
