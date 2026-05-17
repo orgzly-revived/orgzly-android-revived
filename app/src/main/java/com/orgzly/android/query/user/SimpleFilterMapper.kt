@@ -114,6 +114,14 @@ class SimpleFilterMapper @Inject constructor() {
 
         result.agendaDays = reader.agendaDays()
 
+        if (reader.hasNextCondition()) throw UnsupportedSimpleFilterException(
+            "Unconsumed conditions remain ${reader.nextCondition()}"
+        )
+
+        if (reader.hasNextSortOrder()) throw UnsupportedSimpleFilterException(
+            "Unconsumed sort orders remain ${reader.nextSortOrder()}"
+        )
+
         return SimpleQuery(
             search,
             result.build()

@@ -3,7 +3,6 @@ package com.orgzly.android.query.user
 import com.orgzly.android.query.Condition
 import com.orgzly.android.query.Query
 import com.orgzly.android.query.SortOrder
-import kotlin.reflect.KClass
 
 internal class QueryPullReader(
     private val query: Query
