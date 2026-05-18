@@ -275,6 +275,35 @@ class SimpleFilterMapperTest {
     }
 
     @Test
+    fun `toQuery - sanitises search field agenda`() {
+        val filter = SimpleFilter()
+
+        val query = mapper.toQuery("ad.3", filter)
+        val conditions = (query.condition as Condition.And).operands
+        assertTrue(conditions.contains(Condition.HasText("ad.3", true)))
+    }
+
+    @Test
+    fun `toQuery - sanitises search field AND`() {
+        val filter = SimpleFilter()
+
+        val query = mapper.toQuery("AND", filter)
+        val conditions = (query.condition as Condition.And).operands
+        assertTrue(conditions.contains(Condition.HasText("AND", true)))
+    }
+
+    @Test
+    fun `toQuery - sanitises search field multiple unsafe`() {
+        val filter = SimpleFilter()
+
+        val query = mapper.toQuery("ad.3 AND test", filter)
+        val conditions = (query.condition as Condition.And).operands
+        assertTrue(conditions.contains(Condition.HasText("AND", true)))
+        assertTrue(conditions.contains(Condition.HasText("ad.3", true)))
+        assertTrue(conditions.contains(Condition.HasText("test", false)))
+    }
+
+    @Test
     fun `toQuery - maintains unquoted when safe`() {
         val filter = SimpleFilter()
 
