@@ -22,7 +22,7 @@ import org.robolectric.annotation.Config
 @Config(sdk = [36])
 class SimpleFilterMapperTest {
 
-    private val mapper = SimpleFilterMapper()
+    private val mapper = SimpleFilterMapper(InternalQueryParser())
 
     @Test
     fun `fromQuery - empty query`() {
@@ -263,6 +263,42 @@ class SimpleFilterMapperTest {
         assertTrue(conditions.any { it is Condition.Closed && it.relation == Relation.LT })
         assertTrue(conditions.any { it is Condition.Created && it.relation == Relation.GE })
         assertTrue(conditions.any { it is Condition.Created && it.relation == Relation.LT })
+    }
+
+    @Test
+    fun `toQuery - sanitises search field`() {
+        val filter = SimpleFilter()
+
+        val query = mapper.toQuery(".it.done", filter)
+        val conditions = (query.condition as Condition.And).operands
+        assertTrue(conditions.contains(Condition.HasText(".it.done", true)))
+    }
+
+    @Test
+    fun `toQuery - maintains unquoted when safe`() {
+        val filter = SimpleFilter()
+
+        val query = mapper.toQuery("test", filter)
+        val conditions = (query.condition as Condition.And).operands
+        assertTrue(conditions.contains(Condition.HasText("test", false)))
+    }
+
+    @Test
+    fun `toQuery - maintains quoted when safe`() {
+        val filter = SimpleFilter()
+
+        val query = mapper.toQuery("\"test\"", filter)
+        val conditions = (query.condition as Condition.And).operands
+        assertTrue(conditions.contains(Condition.HasText("test", true)))
+    }
+
+    @Test
+    fun `toQuery - maintains quoted when unsafe`() {
+        val filter = SimpleFilter()
+
+        val query = mapper.toQuery("\".it.done\"", filter)
+        val conditions = (query.condition as Condition.And).operands
+        assertTrue(conditions.contains(Condition.HasText(".it.done", true)))
     }
 }
 

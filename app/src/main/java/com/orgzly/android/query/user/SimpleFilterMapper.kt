@@ -6,6 +6,7 @@ import com.orgzly.android.query.DateCondition
 import com.orgzly.android.query.Options
 import com.orgzly.android.query.Query
 import com.orgzly.android.query.QueryInterval
+import com.orgzly.android.query.QueryParser
 import com.orgzly.android.query.QueryTokenizer
 import com.orgzly.android.query.Relation
 import com.orgzly.android.query.RelativeDateOption
@@ -19,7 +20,9 @@ import com.orgzly.android.query.getTodayDateConditionRelationshipForType
 import com.orgzly.android.query.relativeDateOptionRelations
 import javax.inject.Inject
 
-class SimpleFilterMapper @Inject constructor() {
+class SimpleFilterMapper @Inject constructor(
+    private val queryParser: InternalQueryParser
+) {
 
     companion object {
         private val TAG = SimpleFilterMapper::class.java.name
@@ -149,7 +152,15 @@ class SimpleFilterMapper @Inject constructor() {
                 val tokenizer = QueryTokenizer(search, "(", ")")
                 addAll(tokenizer.tokens.map { token ->
                     val unquoted = QueryTokenizer.unquote(token)
-                    Condition.HasText(unquoted, unquoted != token)
+                    val parsed = queryParser.parse(unquoted).condition
+                    Condition.HasText(
+                        unquoted,
+                        unquoted != token || // Check if was originally quoted
+                                parsed == null ||
+                                // Check whether plaintext search can be interpreted as a query when
+                                // serialized
+                                ((parsed as Condition.And).operands.first() !is Condition.HasText)
+                    )
                 })
             }
         }
