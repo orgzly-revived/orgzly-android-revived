@@ -1,6 +1,8 @@
 package com.orgzly.android.ui.notes.query
 
 import android.content.Context
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
@@ -88,6 +90,8 @@ class QueryViewModel @AssistedInject constructor(
 
     private val paramUpdateMutex = Mutex()
 
+    val searchTextField = TextFieldState()
+
     private var shouldStayInAdvancedMode = AppPreferences.isDefaultToAdvancedQueryEnabled(context)
     private val isSimpleMode = MutableStateFlow(!shouldStayInAdvancedMode)
     private val query = MutableStateFlow("")
@@ -157,8 +161,10 @@ class QueryViewModel @AssistedInject constructor(
         isSimpleMode.value = if (parsed != null && !shouldStayInAdvancedMode) {
             search.value = parsed.search
             filter.value = parsed.filter
+            searchTextField.setTextAndPlaceCursorAtEnd(parsed.search)
             true
         } else {
+            searchTextField.setTextAndPlaceCursorAtEnd(initialQuery)
             false
         }
     }
@@ -190,6 +196,7 @@ class QueryViewModel @AssistedInject constructor(
 
                         if (asSimple != null && !shouldStayInAdvancedMode) {
                             isSimpleMode.value = true
+                            searchTextField.setTextAndPlaceCursorAtEnd(asSimple.search)
                         }
                     }
                 }
@@ -203,13 +210,16 @@ class QueryViewModel @AssistedInject constructor(
                 when (isSimpleMode.value) {
                     true -> {
                         shouldStayInAdvancedMode = true
-                        query.value = queryBuilder.build(
+                        val advanced = queryBuilder.build(
                             filterMapper.toQuery(
                                 search.value,
                                 filter.value
                             )
                         )
+
+                        query.value = advanced
                         isSimpleMode.value = false
+                        searchTextField.setTextAndPlaceCursorAtEnd(advanced)
                     }
                     else -> {
                         shouldStayInAdvancedMode = false
@@ -220,6 +230,7 @@ class QueryViewModel @AssistedInject constructor(
                             filter.value = simple.filter
 
                             isSimpleMode.value = true
+                            searchTextField.setTextAndPlaceCursorAtEnd(simple.search)
                         } catch (e: UnsupportedSimpleFilterException) {
                             _events.send(QueryEvent.Snackbar(QuerySnackbar.SWITCH_TO_SIMPLE_FAILED))
                         }

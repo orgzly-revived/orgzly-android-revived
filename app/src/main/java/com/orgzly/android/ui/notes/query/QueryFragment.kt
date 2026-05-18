@@ -5,10 +5,31 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.appcompat.widget.SearchView
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import cl.emilym.compose.units.rdp
 import com.orgzly.R
 import com.orgzly.android.NotesOrgExporter
 import com.orgzly.android.query.Condition
@@ -16,6 +37,13 @@ import com.orgzly.android.query.Query
 import com.orgzly.android.query.user.DottedQueryBuilder
 import com.orgzly.android.sync.SyncRunner
 import com.orgzly.android.ui.DisplayManager
+import com.orgzly.android.ui.compose.base.bootstrapContent
+import com.orgzly.android.ui.compose.widgets.Icons
+import com.orgzly.android.ui.compose.widgets.OrgzlyBasicTextField
+import com.orgzly.android.ui.compose.widgets.OrgzlyOutlinedTextField
+import com.orgzly.android.ui.compose.widgets.OrgzlySearchTextField
+import com.orgzly.android.ui.compose.widgets.OrgzlyTextField
+import com.orgzly.android.ui.compose.widgets.painterIcon
 import com.orgzly.android.ui.dialogs.TimestampDialogFragment
 import com.orgzly.android.ui.drawer.DrawerItem
 import com.orgzly.android.ui.main.SharedMainActivityViewModel
@@ -179,28 +207,50 @@ abstract class QueryFragment :
 
     protected fun setupSearch(menu: Menu) {
         val searchItem = menu.findItem(R.id.search_view)
-
-        val searchView = searchItem.actionView as SearchView
-
-        searchView.queryHint = getString(R.string.search_hint)
-
-        searchView.setOnSearchClickListener {
-            searchView.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-            searchView.setQuery("${viewModel.state.value.query} ", false)
+        searchItem.actionView = ComposeView(requireContext()).apply {
+            bootstrapContent {
+                OrgzlySearchTextField(
+                    viewModel.searchTextField,
+                    Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 1.rdp),
+                    placeholder = {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(0.5.rdp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painterIcon(Icons.SEARCH),
+                                contentDescription = null
+                            )
+                            Text(stringResource(R.string.search_hint))
+                        }
+                    },
+                    trailingIcon = {
+                        if (viewModel.searchTextField.text.isNotEmpty()) {
+                            IconButton(
+                                onClick = {
+                                    viewModel.searchTextField.clearText()
+                                    viewModel.onSearch(viewModel.searchTextField.text.toString())
+                                }
+                            ) {
+                                Icon(
+                                    painterIcon(Icons.CLEAR_SEARCH),
+                                    contentDescription = stringResource(R.string.clear)
+                                )
+                            }
+                        }
+                    },
+                    lineLimits = TextFieldLineLimits.SingleLine,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Search
+                    ),
+                    onKeyboardAction = {
+                        viewModel.onSearch(viewModel.searchTextField.text.toString())
+                    }
+                )
+            }
         }
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(str: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextSubmit(str: String): Boolean {
-                // Close search
-                searchItem.collapseActionView()
-                viewModel.onSearch(str)
-                return true
-            }
-        })
     }
 
     companion object {
