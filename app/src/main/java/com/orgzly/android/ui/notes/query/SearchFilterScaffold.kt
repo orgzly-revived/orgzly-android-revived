@@ -6,6 +6,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,9 +16,11 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -39,7 +42,10 @@ import com.orgzly.android.query.SimpleFilter
 import com.orgzly.android.ui.compose.base.PreviewOrgzlyBootstrap
 import com.orgzly.android.ui.compose.modifiers.scaffoldPadding
 import com.orgzly.android.ui.compose.providers.LaunchedEventEffect
+import com.orgzly.android.ui.compose.widgets.Icons
 import com.orgzly.android.ui.compose.widgets.OrgzlyButton
+import com.orgzly.android.ui.compose.widgets.OrgzlyExtendedFloatingActionButton
+import com.orgzly.android.ui.compose.widgets.painterIcon
 import com.orgzly.android.ui.savedsearch.SavedSearchEvent
 import com.orgzly.android.ui.savedsearch.SavedSearchSnackbar
 import com.orgzly.android.ui.savedsearch.SearchFilterWidget
@@ -89,7 +95,7 @@ fun SearchFilterScaffold(
                     targetOffsetY = { it }
                 )
             ) {
-                OrgzlyButton(
+                OrgzlyExtendedFloatingActionButton(
                     onClick = {
                         sheetVisible = true
                     },
@@ -98,6 +104,11 @@ fun SearchFilterScaffold(
                         .padding(bottom = 1.rdp)
                         .scaffoldPadding(contentPadding)
                 ) {
+                    Icon(
+                        painterIcon(Icons.FILTER),
+                        contentDescription = null
+                    )
+                    Spacer(Modifier.width(0.5.rdp))
                     Text(
                         stringResource(R.string.query_filter_search)
                     )

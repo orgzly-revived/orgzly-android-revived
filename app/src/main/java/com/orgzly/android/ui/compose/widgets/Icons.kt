@@ -22,6 +22,7 @@ enum class Icons {
     HELP,
     SEARCH,
     CLEAR_SEARCH,
+    FILTER,
 }
 
 private val Icons.resource: Int
@@ -39,6 +40,7 @@ private val Icons.resource: Int
         Icons.HELP -> R.drawable.ic_help_outline
         Icons.SEARCH -> R.drawable.ic_search
         Icons.CLEAR_SEARCH -> R.drawable.ic_close
+        Icons.FILTER -> R.drawable.ic_filter
     }
 
 /**
