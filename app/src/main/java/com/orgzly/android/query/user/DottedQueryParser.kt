@@ -54,6 +54,7 @@ open class DottedQueryParser : QueryParser() {
                     "ge" -> Relation.GE
                     else ->
                         // Default if there is no relation
+                        // This logic is duplicated in SimpleFilterMapper
                         when (timeTypeMatch) {
                             "c", "e" -> Relation.EQ
                             else -> Relation.LE

@@ -471,6 +471,8 @@
     <string name="keep_screen_on_title">Enable option to keep the screen on</string>
     <string name="keep_screen_on_summary">Display menu item for toggling the option</string>
 
+    <string name="default_to_advanced_query">Default to advanced query editor</string>
+
     <string name="keep_screen_on">Keep screen on</string>
     <string name="keep_screen_on_desc">Your screen will not turn off until you leave it or disable this option</string>
 
@@ -762,5 +764,36 @@
     <string name="book_names_cannot_contain">Book names cannot contain \'../\'</string>
     <string name="is_active_label">Active</string>
 
+    <string name="search_filter_exclude_done">Exclude done items</string>
+    <string name="search_filter_show_as_agenda">Show as agenda</string>
+    <string name="search_filter_default_sort_order">Default</string>
+    <string name="search_filter_book_sort_order">Book</string>
+    <string name="search_filter_title_sort_order">Title</string>
+    <string name="search_filter_scheduled_sort_order">Scheduled date</string>
+    <string name="search_filter_deadline_sort_order">Deadline date</string>
+    <string name="search_filter_event_sort_order">Event date</string>
+    <string name="search_filter_closed_sort_order">Closed date</string>
+    <string name="search_filter_created_sort_order">Created date</string>
+    <string name="search_filter_priority_sort_order">Priority</string>
+    <string name="search_filter_state_sort_order">State</string>
+    <string name="search_filter_state_none">None</string>
+    <string name="search_filter_date_today">Today</string>
+    <string name="search_filter_date_tomorrow">Tomorrow</string>
+    <string name="search_filter_date_future">Future</string>
+    <string name="search_filter_date_past">Past</string>
+    <string name="search_filter_date_this_week">This Week</string>
+    <string name="search_filter_date_this_month">This Month</string>
+    <string name="search_filter_unable_to_switch_to_simple">Query cannot be modified in simple editor</string>
+    <string name="search_filter_swap_to_simple">Swap to simple query editor</string>
+    <string name="search_filter_swap_to_advanced">Swap to advanced query editor</string>
+    <plurals name="search_filter_agenda_days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+
     <string name="content_description_back_button">Navigate back</string>
+    <string name="content_description_sort_order_ascending">Sort ascending</string>
+    <string name="content_description_sort_order_descending">Sort descending</string>
+    <string name="content_description_subtract">Subtract</string>
+    <string name="content_description_add">Add</string>
 </resources>

@@ -88,6 +88,11 @@
             android:title="Use English language"
             android:summary="Ignore default locale"
             android:defaultValue="@bool/pref_default_ignore_system_locale"/>
+
+        <SwitchPreference
+            android:key="@string/pref_key_default_advanced_search"
+            android:title="@string/default_to_advanced_query"
+            android:defaultValue="@bool/pref_default_default_advanced_search"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/agenda">

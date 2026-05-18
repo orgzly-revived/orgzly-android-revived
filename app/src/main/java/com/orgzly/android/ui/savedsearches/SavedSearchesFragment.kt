@@ -39,6 +39,7 @@ import javax.inject.Inject
  * Displays and allows modifying saved searches.
  */
 class SavedSearchesFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<SavedSearch> {
+
     private lateinit var binding: FragmentSavedSearchesBinding
 
     private var listener: Listener? = null
@@ -131,7 +132,7 @@ class SavedSearchesFragment : CommonFragment(), DrawerItem, OnViewHolderClickLis
                     }
 
                     R.id.saved_searches_help -> {
-                        val uri = Uri.parse("https://www.orgzlyrevived.com/docs#search")
+                        val uri = Uri.parse(SEARCH_DOCUMENTATION_URL)
                         val intent = Intent(Intent.ACTION_VIEW, uri)
                         startActivity(intent)
                     }
@@ -331,6 +332,9 @@ class SavedSearchesFragment : CommonFragment(), DrawerItem, OnViewHolderClickLis
     }
 
     companion object {
+
+        const val SEARCH_DOCUMENTATION_URL = "https://www.orgzlyrevived.com/docs#search"
+
         private val TAG = SavedSearchesFragment::class.java.name
 
         /** Name used for [android.app.FragmentManager].  */

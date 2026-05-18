@@ -44,7 +44,8 @@ open class CommonFragment : Fragment() {
     }
 
     private fun updateSyncProgressIndicator(view: View, state: SyncState) {
-        val progressIndicator = view.findViewById<LinearProgressIndicator>(R.id.sync_toolbar_progress)
+        val progressIndicator = view
+            .findViewById<LinearProgressIndicator?>(R.id.sync_toolbar_progress) ?: return
 
         when (state.type) {
             CANCELING,

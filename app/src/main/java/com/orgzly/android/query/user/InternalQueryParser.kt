@@ -1,3 +1,5 @@
 package com.orgzly.android.query.user
 
-class InternalQueryParser : DottedQueryParser()
+import javax.inject.Inject
+
+class InternalQueryParser @Inject constructor(): DottedQueryParser()

@@ -4,6 +4,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.orgzly.R
 import com.orgzly.android.ui.compose.base.LocalNavigator
@@ -13,7 +14,7 @@ fun BackButton(
     modifier: Modifier = Modifier,
 ) {
     val navigator = LocalNavigator.current
-    if (navigator.canPop()) return
+    if (!navigator.canPop()) return
     BaseBackButton(
         onClick = {
             navigator.pop()
@@ -29,7 +30,9 @@ fun BaseBackButton(
 ) {
     IconButton(
         onClick = onClick,
-        modifier = Modifier.then(modifier),
+        modifier = Modifier
+            .testTag("back_button")
+            .then(modifier),
     ) {
         Icon(
             painterIcon(Icons.ARROW_BACK),

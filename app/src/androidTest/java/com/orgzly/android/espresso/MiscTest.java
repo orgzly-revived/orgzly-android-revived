@@ -465,7 +465,7 @@ public class MiscTest extends OrgzlyTest {
 
             // Search
             onSavedSearch(0).perform(click());
-            fragmentTest(activity, false, withId(R.id.fragment_saved_search_flipper));
+            composeFragmentTest(activity, false);
 
             // Search results
             onView(withId(R.id.drawer_layout)).perform(open());
@@ -501,6 +501,29 @@ public class MiscTest extends OrgzlyTest {
             // Dropbox repo
             onListItem(0).perform(click());
             fragmentTest(activity, false, withId(R.id.activity_repo_dropbox_container));
+        }
+    }
+
+    // We can't use espresso, nor can we use compose until this test is converted to Kotlin
+    // This at least ensures the app doesn't crash
+    private void composeFragmentTest(Activity activity, boolean hasSearchMenuItem) {
+        SystemClock.sleep(500);
+
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        SystemClock.sleep(500);
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        SystemClock.sleep(500);
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        SystemClock.sleep(500);
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        SystemClock.sleep(500);
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        SystemClock.sleep(500);
+
+        if (hasSearchMenuItem) {
+            onView(withId(R.id.search_view)).check(matches(isDisplayed()));
+        } else {
+            onView(withId(R.id.search_view)).check(doesNotExist());
         }
     }
 
