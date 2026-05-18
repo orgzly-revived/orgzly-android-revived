@@ -190,6 +190,10 @@ public class DisplayManager {
     }
 
     public static void displayQuery(FragmentManager fragmentManager, @NonNull String queryString, @Nullable String searchName) {
+        displayQuery(fragmentManager, queryString, searchName, true);
+    }
+
+    public static void displayQuery(FragmentManager fragmentManager, @NonNull String queryString, @Nullable String searchName, @NonNull boolean addToBackStack) {
         // If the same query is already displayed, don't do anything.
         String displayedQuery = getDisplayedQuery(fragmentManager);
         if (displayedQuery != null && displayedQuery.equals(queryString)) {
@@ -218,7 +222,7 @@ public class DisplayManager {
                 R.id.single_pane_container,
                 fragment,
                 tag,
-                true);
+                addToBackStack);
     }
 
     public static void displayEditor(FragmentManager fragmentManager, Book book) {
