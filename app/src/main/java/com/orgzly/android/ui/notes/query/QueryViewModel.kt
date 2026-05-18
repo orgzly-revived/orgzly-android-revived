@@ -1,16 +1,84 @@
 package com.orgzly.android.ui.notes.query
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
+import android.content.Context
+import androidx.compose.runtime.Immutable
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.orgzly.BuildConfig
 import com.orgzly.android.data.DataRepository
+import com.orgzly.android.db.entity.NoteView
+import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.query.SimpleFilter
+import com.orgzly.android.query.user.InternalQueryBuilder
+import com.orgzly.android.query.user.InternalQueryParser
+import com.orgzly.android.query.user.SimpleFilterMapper
+import com.orgzly.android.query.user.UnsupportedSimpleFilterException
 import com.orgzly.android.ui.AppBar
 import com.orgzly.android.ui.CommonViewModel
+import com.orgzly.android.ui.compose.base.EventFlow
+import com.orgzly.android.ui.util.combine
 import com.orgzly.android.util.LogUtils
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
+enum class QueryViewModelOwner {
+    AGENDA, SEARCH
+}
 
-class QueryViewModel(private val dataRepository: DataRepository) : CommonViewModel() {
+@Immutable
+data class QueryState(
+    val query: String,
+    val filter: SimpleFilter?,
+    val notes: List<NoteView>,
+    val allBooks: List<String>,
+    val allTags: List<String>,
+    val loading: QueryViewModel.ViewState,
+    val showRefineButton: Boolean,
+    val isSimpleMode: Boolean,
+) {
+
+    companion object {
+        val default = QueryState(
+            "",
+            null,
+            emptyList(),
+            emptyList(),
+            emptyList(),
+            QueryViewModel.ViewState.LOADING,
+            showRefineButton = false,
+            isSimpleMode = true,
+        )
+    }
+
+}
+
+enum class QuerySnackbar {
+    SWITCH_TO_SIMPLE_FAILED
+}
+
+sealed interface QueryEvent {
+    data class ChangeQueryView(val query: String): QueryEvent
+
+    data class Snackbar(val snackbar: QuerySnackbar): QueryEvent
+}
+
+class QueryViewModel @AssistedInject constructor(
+    private val dataRepository: DataRepository,
+    private val queryParser: InternalQueryParser,
+    private val queryBuilder: InternalQueryBuilder,
+    private val filterMapper: SimpleFilterMapper,
+    @Assisted private val initialQuery: String,
+    @Assisted private val owner: QueryViewModelOwner,
+    @Assisted context: Context
+) : CommonViewModel() {
 
     enum class ViewState {
         LOADING,
@@ -18,37 +86,180 @@ class QueryViewModel(private val dataRepository: DataRepository) : CommonViewMod
         EMPTY
     }
 
-    val viewState = MutableLiveData(ViewState.LOADING)
+    private val paramUpdateMutex = Mutex()
 
-    data class Params(val query: String?, val defaultPriority: String)
+    private var shouldStayInAdvancedMode = AppPreferences.isDefaultToAdvancedQueryEnabled(context)
+    private val isSimpleMode = MutableStateFlow(!shouldStayInAdvancedMode)
+    private val query = MutableStateFlow("")
+    private val search = MutableStateFlow("")
+    private val filter = MutableStateFlow(SimpleFilter())
 
-    private val notesParams = MutableLiveData<Params>()
-
-    val data = notesParams.switchMap { params ->
-        if (params.query != null) {
-            dataRepository.selectNotesFromQueryLiveData(params.query).map {
-                viewState.value = if (it.isNotEmpty()) {
-                    ViewState.LOADED
-                } else {
-                    ViewState.EMPTY
-                }
-
-                it
-            }
-        } else {
-            MutableLiveData()
-        }
+    private val allTags = dataRepository.selectAllTagsLiveData().asFlow()
+    private val allBooks = dataRepository.getBooksLiveData().asFlow().mapLatest {
+        it.map { it.book.name }
+    }
+    private val queryResult = query.filterNotNull().flatMapLatest { query ->
+        dataRepository.selectNotesFromQueryFlow(query)
     }
 
     val appBar: AppBar = AppBar(mapOf(
         APP_BAR_DEFAULT_MODE to null,
         APP_BAR_SELECTION_MODE to APP_BAR_DEFAULT_MODE))
 
+    val state = combine(
+        query,
+        search,
+        queryResult,
+        allTags,
+        allBooks,
+        filter,
+        appBar.currentMode,
+        isSimpleMode
+    ) { query, search, queryResult, allTags, allBooks, filter, appBarMode, isSimpleMode ->
+        QueryState(
+            when (isSimpleMode) {
+                true -> search
+                else -> query
+            },
+            filter,
+            queryResult,
+            allBooks,
+            allTags,
+            when (queryResult.isEmpty()) {
+                true -> ViewState.EMPTY
+                else -> ViewState.LOADED
+            },
+            isSimpleMode &&
+                    appBarMode == APP_BAR_DEFAULT_MODE,
+            isSimpleMode
+        )
+    }.state(QueryState.default)
+
+    private val _events = EventFlow<QueryEvent>()
+    val events = _events.asFlow(viewModelScope)
+
+    @Deprecated("Use state")
+    val viewState = state.mapLatest {
+        it.loading
+    }.asLiveData()
+
+    @Deprecated("Use state")
+    val data = state.mapLatest {
+        it.notes
+    }.asLiveData()
+
+    init {
+        val parsed = runCatching { filterMapper.fromQuery(
+            queryParser.parse(initialQuery)
+        ) }.getOrNull()
+
+        query.value = initialQuery
+        isSimpleMode.value = if (parsed != null && !shouldStayInAdvancedMode) {
+            search.value = parsed.search
+            filter.value = parsed.filter
+            true
+        } else {
+            false
+        }
+    }
+
     /* Triggers querying only if parameters changed. */
-    fun refresh(query: String?, defaultPriority: String) {
-        Params(query, defaultPriority).let {
-            if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, it)
-            notesParams.value = it
+    fun onSearch(field: String) {
+        viewModelScope.launch {
+            paramUpdateMutex.withLock {
+                if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, field)
+                when (state.value.isSimpleMode) {
+                    true -> {
+                        search.value = field
+                        query.value = queryBuilder.build(
+                            filterMapper.toQuery(
+                                field,
+                                filter.value
+                            )
+                        )
+                    }
+                    else -> {
+                        query.value = field
+
+                        val asSimple = field.runCatching {
+                            filterMapper.fromQuery(queryParser.parse(this))
+                        }.getOrNull()
+
+                        filter.value = asSimple?.filter ?: SimpleFilter()
+                        search.value = asSimple?.search ?: ""
+
+                        if (asSimple != null && !shouldStayInAdvancedMode) {
+                            isSimpleMode.value = true
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun swapQueryMode() {
+        viewModelScope.launch {
+            paramUpdateMutex.withLock {
+                when (isSimpleMode.value) {
+                    true -> {
+                        shouldStayInAdvancedMode = true
+                        query.value = queryBuilder.build(
+                            filterMapper.toQuery(
+                                search.value,
+                                filter.value
+                            )
+                        )
+                        isSimpleMode.value = false
+                    }
+                    else -> {
+                        shouldStayInAdvancedMode = false
+                        try {
+                            val simple = filterMapper.fromQuery(queryParser.parse(query.value))
+
+                            search.value = simple.search
+                            filter.value = simple.filter
+
+                            isSimpleMode.value = true
+                        } catch (e: UnsupportedSimpleFilterException) {
+                            _events.send(QueryEvent.Snackbar(QuerySnackbar.SWITCH_TO_SIMPLE_FAILED))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun updateFilter(update: SimpleFilter) {
+        viewModelScope.launch {
+            paramUpdateMutex.withLock {
+                filter.value = update
+            }
+        }
+    }
+
+    fun commitFilter() {
+        viewModelScope.launch {
+            paramUpdateMutex.withLock {
+                val update = queryBuilder.build(
+                    filterMapper.toQuery(
+                        search.value,
+                        filter.value
+                    )
+                )
+
+                val hasAgenda = filter.value.agendaDays != null
+                when (owner) {
+                    QueryViewModelOwner.SEARCH if hasAgenda -> {
+                        _events.send(QueryEvent.ChangeQueryView(update))
+                    }
+                    QueryViewModelOwner.AGENDA if !hasAgenda -> {
+                        _events.send(QueryEvent.ChangeQueryView(update))
+                    }
+                    else -> {
+                        query.value = update
+                    }
+                }
+            }
         }
     }
 

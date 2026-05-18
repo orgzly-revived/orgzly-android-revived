@@ -203,7 +203,7 @@ class SavedSearchViewModel @AssistedInject constructor(
                 } catch (e: Exception) {
                     isSimpleSearch.value = false
                 }
-                
+
                 shouldShowValidationErrors.value = true
             }
         } ?: run {

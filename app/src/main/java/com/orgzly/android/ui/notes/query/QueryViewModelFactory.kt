@@ -1,19 +1,30 @@
 package com.orgzly.android.ui.notes.query
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.orgzly.android.data.DataRepository
+import dagger.assisted.AssistedFactory
 
-class QueryViewModelFactory(private val dataRepository: DataRepository) : ViewModelProvider.Factory {
+@AssistedFactory
+interface QueryViewModelFactory : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        @Suppress("UNCHECKED_CAST")
-        return QueryViewModel(dataRepository) as T
-    }
+    fun create(
+        initialQuery: String,
+        owner: QueryViewModelOwner,
+        context: Context
+    ): QueryViewModel
 
     companion object {
-        fun forQuery(dataRepository: DataRepository): ViewModelProvider.Factory {
-            return QueryViewModelFactory(dataRepository)
+        fun provideFactory(
+            assistedFactory: QueryViewModelFactory,
+            initialQuery: String,
+            owner: QueryViewModelOwner,
+            context: Context
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                @Suppress("UNCHECKED_CAST")
+                return assistedFactory.create(initialQuery, owner, context) as T
+            }
         }
     }
 }
