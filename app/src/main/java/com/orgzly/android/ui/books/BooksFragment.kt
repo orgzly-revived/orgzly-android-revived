@@ -50,8 +50,9 @@ import com.orgzly.android.ui.CommonFragment
 import com.orgzly.android.ui.OnViewHolderClickListener
 import com.orgzly.android.ui.books.BooksViewModel.Companion.APP_BAR_DEFAULT_MODE
 import com.orgzly.android.ui.books.BooksViewModel.Companion.APP_BAR_SELECTION_MODE
+import com.orgzly.android.ui.compose.base.LocalNavigator
+import com.orgzly.android.ui.compose.base.NavigationDestination
 import com.orgzly.android.ui.compose.base.bootstrapContent
-import com.orgzly.android.ui.compose.modifiers.scaffoldPadding
 import com.orgzly.android.ui.compose.widgets.Icons
 import com.orgzly.android.ui.compose.widgets.OrgzlyExtendedFloatingActionButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyFloatingActionButton
@@ -171,6 +172,7 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
 
         binding.fabContainer.bootstrapContent {
             val appBarState by viewModel.appBar.currentMode.collectAsStateWithLifecycle()
+            val navigator = LocalNavigator.current
 
             PushableCenteredLayout(
                 modifier = Modifier
@@ -184,7 +186,11 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
                         exit = scaleOut()
                     ) {
                         OrgzlyExtendedFloatingActionButton(
-                            onClick = {}
+                            onClick = {
+                                navigator.navigate(
+                                    NavigationDestination.EnterSearch
+                                )
+                            }
                         ) {
                             Icon(
                                 painterIcon(Icons.SEARCH),

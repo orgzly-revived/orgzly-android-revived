@@ -37,6 +37,8 @@ sealed interface NavigationDestination {
         val book: com.orgzly.android.db.entity.Book
     ): NavigationDestination
 
+    data object EnterSearch: NavigationDestination
+
 }
 
 // Acts as a more "compose-y" abstraction on top of DisplayManager & with a view towards a possible
@@ -87,6 +89,9 @@ private class DefaultNavigator(
             is NavigationDestination.Editor -> DisplayManager.displayEditor(
                 fragmentManager,
                 destination.book
+            )
+            is NavigationDestination.EnterSearch -> DisplayManager.displayEnterSearch(
+                fragmentManager
             )
         }
     }

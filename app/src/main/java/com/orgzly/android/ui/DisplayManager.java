@@ -22,6 +22,7 @@ import com.orgzly.android.ui.note.NoteFragment;
 import com.orgzly.android.ui.notes.book.BookFragment;
 import com.orgzly.android.ui.notes.book.BookPrefaceFragment;
 import com.orgzly.android.ui.notes.query.agenda.AgendaFragment;
+import com.orgzly.android.ui.notes.query.enter.EnterSearchFragment;
 import com.orgzly.android.ui.notes.query.search.SearchFragment;
 import com.orgzly.android.ui.savedsearch.SavedSearchFragment;
 import com.orgzly.android.ui.savedsearches.SavedSearchesFragment;
@@ -182,6 +183,17 @@ public class DisplayManager {
                 R.id.single_pane_container,
                 fragment,
                 TestComposeFragment.getFRAGMENT_TAG(),
+                true);
+    }
+
+    public static void displayEnterSearch(FragmentManager fragmentManager) {
+        Fragment fragment = EnterSearchFragment.getInstance();
+
+        replaceFragment(
+                fragmentManager,
+                R.id.single_pane_container,
+                fragment,
+                EnterSearchFragment.getFRAGMENT_TAG(),
                 true);
     }
 

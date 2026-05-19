@@ -1,0 +1,256 @@
+package com.orgzly.android.ui.notes.query
+
+import android.util.Log
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.viewModelScope
+import cl.emilym.compose.units.rdp
+import com.orgzly.R
+import com.orgzly.android.data.DataRepository
+import com.orgzly.android.query.SimpleFilter
+import com.orgzly.android.query.user.InternalQueryBuilder
+import com.orgzly.android.query.user.InternalQueryParser
+import com.orgzly.android.query.user.SimpleFilterMapper
+import com.orgzly.android.ui.CommonViewModel
+import com.orgzly.android.ui.compose.base.PreviewOrgzlyBootstrap
+import com.orgzly.android.ui.compose.widgets.Icons
+import com.orgzly.android.ui.compose.widgets.OrgzlyTextButton
+import com.orgzly.android.ui.compose.widgets.OrgzlyTextField
+import com.orgzly.android.ui.compose.widgets.painterIcon
+import com.orgzly.android.ui.savedsearch.SavedSearchModel
+import com.orgzly.android.ui.savedsearch.SavedSearchViewModel
+import com.orgzly.android.ui.savedsearch.SearchFilterWidget
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.launch
+
+abstract class BaseSearchViewModel : CommonViewModel() {
+
+    protected abstract val dataRepository: DataRepository
+    protected abstract val simpleFilterMapper: SimpleFilterMapper
+    protected abstract val queryParser: InternalQueryParser
+    protected abstract val queryBuilder: InternalQueryBuilder
+
+    protected val isSimpleSearch = MutableStateFlow<Boolean?>(null)
+    protected var currentSimpleFilter = MutableStateFlow(SimpleFilter())
+
+    val advancedQueryField = TextFieldState()
+    val simpleSearchField = TextFieldState()
+
+    protected val tags by lazy { dataRepository.selectAllTagsLiveData().asFlow() }
+    protected val books by lazy {
+        dataRepository.getBooksLiveData().asFlow().mapLatest {
+            it.map { it.book.name }
+        }
+    }
+    protected val shouldShowValidationErrors = MutableStateFlow(false)
+    protected val editable = MutableStateFlow(true)
+    protected val isQueryValid by lazy {
+        combine(
+            snapshotFlow { advancedQueryField.text.toString() },
+            snapshotFlow { simpleSearchField.text.toString() },
+            isSimpleSearch,
+            currentSimpleFilter
+        ) { advancedQueryField, simpleSearchField, isSimpleSearch, currentSimpleFilter ->
+            getQueryString(
+                advancedQueryField,
+                simpleSearchField,
+                isSimpleSearch,
+                currentSimpleFilter
+            ).isNotBlank()
+        }.share(replay = 1)
+    }
+
+    protected fun getQueryString(): String = getQueryString(
+        advancedQueryField.text.toString(),
+        simpleSearchField.text.toString(),
+        isSimpleSearch.value,
+        currentSimpleFilter.value
+    )
+
+    private fun getQueryString(
+        advancedQueryField: String,
+        simpleSearchField: String,
+        isSimpleSearch: Boolean?,
+        currentSimpleFilter: SimpleFilter
+    ): String = when (isSimpleSearch) {
+        null -> ""
+        true -> queryBuilder.build(
+            simpleFilterMapper.toQuery(
+                simpleSearchField,
+                currentSimpleFilter
+            )
+        )
+
+        else -> advancedQueryField
+    }
+
+    fun switchSearchStyle() {
+        when (isSimpleSearch.value) {
+            true -> {
+                advancedQueryField.setTextAndPlaceCursorAtEnd(
+                    queryBuilder.build(
+                        simpleFilterMapper.toQuery(
+                            simpleSearchField.text.toString(),
+                            currentSimpleFilter.value
+                        )
+                    )
+                )
+                isSimpleSearch.value = false
+            }
+
+            else -> {
+                try {
+                    val parsed = simpleFilterMapper.fromQuery(
+                        queryParser.parse(advancedQueryField.text.toString())
+                    )
+                    currentSimpleFilter.value = parsed.filter
+                    simpleSearchField.setTextAndPlaceCursorAtEnd(parsed.search)
+                    isSimpleSearch.value = true
+                } catch (e: Exception) {
+                    Log.e(SavedSearchViewModel.TAG, "Cannot swap to simple search", e)
+                    viewModelScope.launch {
+                        showSwitchErrorSnackbar()
+                    }
+                }
+            }
+        }
+    }
+
+    fun updateFilter(filter: SimpleFilter) {
+        currentSimpleFilter.value = filter
+    }
+
+    protected abstract suspend fun showSwitchErrorSnackbar()
+
+}
+
+interface BaseSearchState {
+    val isQueryValid: Boolean
+    val editable: Boolean
+    val allTags: List<String>
+    val allBooks: List<String>
+    val filter: SimpleFilter
+    val isSimpleMode: Boolean
+}
+
+@Composable
+fun BaseSearchContent(
+    state: BaseSearchState,
+    simpleSearchField: TextFieldState,
+    advancedQueryField: TextFieldState,
+    onSwitchSearchStyle: () -> Unit,
+    updateFilter: (SimpleFilter) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = Modifier.then(modifier),
+        verticalArrangement = Arrangement.spacedBy(1.rdp)
+    ) {
+        when (state.isSimpleMode) {
+            true -> {
+                OrgzlyTextField(
+                    simpleSearchField,
+                    Modifier
+                        .fillMaxWidth()
+                        .testTag("fragment_saved_search_simple_search"),
+                    label = {
+                        Text(
+                            stringResource(R.string.options_menu_item_search)
+                        )
+                    },
+                    enabled = state.editable,
+                    isError = !state.isQueryValid
+                )
+            }
+            else -> {
+                OrgzlyTextField(
+                    advancedQueryField,
+                    Modifier
+                        .fillMaxWidth()
+                        .testTag("fragment_saved_search_query"),
+                    label = {
+                        Text(
+                            stringResource(R.string.query)
+                        )
+                    },
+                    enabled = state.editable,
+                    isError = !state.isQueryValid
+                )
+            }
+        }
+
+        OrgzlyTextButton(
+            onClick = onSwitchSearchStyle,
+            modifier = Modifier
+                .animateContentSize()
+                .align(Alignment.End)
+                .testTag("swap_editor_mode"),
+            enabled = state.editable
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(1.rdp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painterIcon(Icons.SWAP),
+                    contentDescription = null
+                )
+                Text(stringResource(
+                    when (state.isSimpleMode) {
+                        true -> R.string.search_filter_swap_to_advanced
+                        else -> R.string.search_filter_swap_to_simple
+                    }
+                ))
+            }
+        }
+
+        if (state.isSimpleMode) {
+            SearchFilterWidget(
+                state.filter,
+                updateFilter,
+                state.allTags,
+                state.allBooks,
+                enabled = state.editable
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewBaseSearchContent() {
+    PreviewOrgzlyBootstrap {
+        BaseSearchContent(
+            state = SavedSearchModel(
+                filter = SimpleFilter(
+                    books = setOf("Work", "Personal"),
+                    tags = setOf("urgent"),
+                    agendaDays = 7
+                ),
+                isNameValid = true,
+                isQueryValid = true
+            ),
+            TextFieldState(),
+            TextFieldState(),
+            {},
+            {}
+        )
+    }
+}

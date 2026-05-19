@@ -44,6 +44,7 @@ import com.orgzly.android.ui.compose.widgets.OrgzlyTextButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyTextField
 import com.orgzly.android.ui.compose.widgets.OrgzlyTopAppBar
 import com.orgzly.android.ui.compose.widgets.painterIcon
+import com.orgzly.android.ui.notes.query.BaseSearchContent
 import com.orgzly.android.ui.savedsearches.SavedSearchesFragment
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -86,7 +87,7 @@ fun SavedSearchContent(
                 },
                 actions = {
                     val localUriHandler = LocalUriHandler.current
-                    if (state.mode is SavedSearchModel.Mode.Advanced) {
+                    if (!state.isSimpleMode) {
                         IconButton(
                             onClick = {
                                 localUriHandler.openUri(SavedSearchesFragment.SEARCH_DOCUMENTATION_URL)
@@ -120,7 +121,7 @@ fun SavedSearchContent(
             testTagsAsResourceId = true
         }
     ) { contentPadding ->
-        if (state.mode == SavedSearchModel.Mode.None) return@Scaffold
+        if (!state.loaded) return@Scaffold
 
         Column(
             Modifier
@@ -147,75 +148,14 @@ fun SavedSearchContent(
                 isError = !state.isNameValid,
             )
 
-            when (state.mode) {
-                is SavedSearchModel.Mode.Advanced -> {
-                    OrgzlyTextField(
-                        advancedQueryField,
-                        Modifier
-                            .fillMaxWidth()
-                            .testTag("fragment_saved_search_query"),
-                        label = {
-                            Text(
-                                stringResource(R.string.query)
-                            )
-                        },
-                        enabled = state.editable,
-                        isError = !state.isQueryValid
-                    )
-                }
-                is SavedSearchModel.Mode.Simple -> {
-                    OrgzlyTextField(
-                        simpleSearchField,
-                        Modifier
-                            .fillMaxWidth()
-                            .testTag("fragment_saved_search_simple_search"),
-                        label = {
-                            Text(
-                                stringResource(R.string.options_menu_item_search)
-                            )
-                        },
-                        enabled = state.editable,
-                        isError = !state.isQueryValid
-                    )
-                }
-                else -> {}
-            }
-
-            OrgzlyTextButton(
-                onClick = onSwitchSearchStyle,
-                modifier = Modifier
-                    .animateContentSize()
-                    .align(Alignment.End)
-                    .testTag("swap_editor_mode"),
-                enabled = state.editable
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(1.rdp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painterIcon(Icons.SWAP),
-                        contentDescription = null
-                    )
-                    Text(stringResource(
-                        when (state.mode) {
-                            is SavedSearchModel.Mode.Advanced -> R.string.search_filter_swap_to_simple
-                            is SavedSearchModel.Mode.Simple -> R.string.search_filter_swap_to_advanced
-                            else -> R.string.search_filter_swap_to_simple
-                        }
-                    ))
-                }
-            }
-
-            (state.mode as? SavedSearchModel.Mode.Simple)?.let { mode ->
-                SearchFilterWidget(
-                    mode.filter,
-                    updateFilter,
-                    state.allTags,
-                    state.allBooks,
-                    enabled = state.editable
-                )
-            }
+            BaseSearchContent(
+                state,
+                simpleSearchField,
+                advancedQueryField,
+                onSwitchSearchStyle,
+                updateFilter,
+                Modifier.fillMaxWidth()
+            )
 
             Spacer(Modifier.weight(1f))
 
@@ -238,7 +178,7 @@ fun SavedSearchContentAdvancedPreview() {
     PreviewOrgzlyBootstrap {
         SavedSearchContent(
             state = SavedSearchModel(
-                mode = SavedSearchModel.Mode.Advanced,
+                isSimpleMode = false,
                 isNameValid = true,
                 isQueryValid = true
             ),
@@ -260,12 +200,10 @@ fun SavedSearchContentSimplePreview() {
     PreviewOrgzlyBootstrap {
         SavedSearchContent(
             state = SavedSearchModel(
-                mode = SavedSearchModel.Mode.Simple(
-                    filter = SimpleFilter(
-                        books = setOf("Work", "Personal"),
-                        tags = setOf("urgent"),
-                        agendaDays = 7
-                    )
+                filter = SimpleFilter(
+                    books = setOf("Work", "Personal"),
+                    tags = setOf("urgent"),
+                    agendaDays = 7
                 ),
                 isNameValid = true,
                 isQueryValid = true

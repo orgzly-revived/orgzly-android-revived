@@ -19,6 +19,8 @@ import com.orgzly.android.query.user.InternalQueryBuilder
 import com.orgzly.android.query.user.InternalQueryParser
 import com.orgzly.android.ui.CommonViewModel
 import com.orgzly.android.ui.compose.base.EventFlow
+import com.orgzly.android.ui.notes.query.BaseSearchState
+import com.orgzly.android.ui.notes.query.BaseSearchViewModel
 import com.orgzly.android.ui.util.combine
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -36,27 +38,15 @@ import kotlinx.coroutines.withContext
 
 @Immutable
 data class SavedSearchModel(
-    val mode: Mode = Mode.None,
+    val loaded: Boolean = false,
+    override val filter: SimpleFilter = SimpleFilter(),
+    override val isSimpleMode: Boolean = true,
     val isNameValid: Boolean = true,
-    val isQueryValid: Boolean = true,
-    val editable: Boolean = true,
-    val allTags: List<String> = emptyList(),
-    val allBooks: List<String> = emptyList()
-) {
-
-    sealed interface Mode {
-
-        data object None: Mode
-
-        data object Advanced: Mode
-
-        data class Simple(
-            val filter: SimpleFilter,
-        ): Mode
-
-    }
-
-}
+    override val isQueryValid: Boolean = true,
+    override val editable: Boolean = true,
+    override val allTags: List<String> = emptyList(),
+    override val allBooks: List<String> = emptyList()
+): BaseSearchState
 
 enum class SavedSearchSnackbar {
     SWITCH_TO_SIMPLE_FAILED
@@ -75,13 +65,13 @@ sealed interface SavedSearchEvent {
 }
 
 class SavedSearchViewModel @AssistedInject constructor(
-    private val dataRepository: DataRepository,
-    private val simpleFilterMapper: SimpleFilterMapper,
-    private val queryParser: InternalQueryParser,
-    private val queryBuilder: InternalQueryBuilder,
+    override val dataRepository: DataRepository,
+    override val queryBuilder: InternalQueryBuilder,
+    override val queryParser: InternalQueryParser,
+    override val simpleFilterMapper: SimpleFilterMapper,
     private val context: Context,
     @Assisted private var existingSearchId: Long?
-): CommonViewModel() {
+): BaseSearchViewModel() {
 
     companion object {
         val TAG = SavedSearchViewModel::class.java.name
@@ -99,21 +89,7 @@ class SavedSearchViewModel @AssistedInject constructor(
 
     private var existingSearchPosition: Int? = null
 
-    private val isSimpleSearch = MutableStateFlow<Boolean?>(null)
-
-    private var currentSimpleFilter = MutableStateFlow(SimpleFilter())
-
     val nameField = TextFieldState()
-    val advancedQueryField = TextFieldState()
-    val simpleSearchField = TextFieldState()
-
-    private val tags = dataRepository.selectAllTagsLiveData().asFlow()
-    private val books = dataRepository.getBooksLiveData().asFlow().mapLatest {
-        it.map { it.book.name }
-    }
-
-    private val shouldShowValidationErrors = MutableStateFlow(false)
-    private val editable = MutableStateFlow(true)
 
     private val isNameValid = snapshotFlow { nameField.text.toString() }.mapLatest {
         if (it.isBlank()) return@mapLatest false
@@ -123,20 +99,6 @@ class SavedSearchViewModel @AssistedInject constructor(
         if (existing.isNotEmpty() && existing.first().id != existingSearchId) return@mapLatest false
 
         true
-    }.shareIn(viewModelScope, SharingStarted.WhileSubscribed(), replay = 1)
-
-    private val isQueryValid = combine(
-        snapshotFlow { advancedQueryField.text.toString() },
-        snapshotFlow { simpleSearchField.text.toString() },
-        isSimpleSearch,
-        currentSimpleFilter
-    ) { advancedQueryField, simpleSearchField, isSimpleSearch, currentSimpleFilter ->
-        getQueryString(
-            advancedQueryField,
-            simpleSearchField,
-            isSimpleSearch,
-            currentSimpleFilter
-        ).isNotBlank()
     }.shareIn(viewModelScope, SharingStarted.WhileSubscribed(), replay = 1)
 
     val state = combine(
@@ -159,13 +121,9 @@ class SavedSearchViewModel @AssistedInject constructor(
         books ->
 
         SavedSearchModel(
-            when (isSimpleSearch) {
-                null -> SavedSearchModel.Mode.None
-                true -> SavedSearchModel.Mode.Simple(
-                    currentSimpleFilter
-                )
-                else -> SavedSearchModel.Mode.Advanced
-            },
+            isSimpleSearch != null,
+            currentSimpleFilter,
+            isSimpleSearch ?: true,
             !shouldShowValidationErrors || isNameValid,
             !shouldShowValidationErrors || isQueryValid,
             editable,
@@ -211,62 +169,6 @@ class SavedSearchViewModel @AssistedInject constructor(
         }
     }
 
-    private fun getQueryString(): String = getQueryString(
-        advancedQueryField.text.toString(),
-        simpleSearchField.text.toString(),
-        isSimpleSearch.value,
-        currentSimpleFilter.value
-    )
-
-    private fun getQueryString(
-        advancedQueryField: String,
-        simpleSearchField: String,
-        isSimpleSearch: Boolean?,
-        currentSimpleFilter: SimpleFilter
-    ): String = when (isSimpleSearch) {
-        null -> ""
-        true -> queryBuilder.build(simpleFilterMapper.toQuery(
-            simpleSearchField,
-            currentSimpleFilter
-        ))
-        else -> advancedQueryField
-    }
-
-    fun switchSearchStyle() {
-        when (isSimpleSearch.value) {
-            true -> {
-                advancedQueryField.setTextAndPlaceCursorAtEnd(
-                    queryBuilder.build(simpleFilterMapper.toQuery(
-                        simpleSearchField.text.toString(),
-                        currentSimpleFilter.value
-                    ))
-                )
-                isSimpleSearch.value = false
-            }
-            else -> {
-                try {
-                    val parsed = simpleFilterMapper.fromQuery(
-                        queryParser.parse(advancedQueryField.text.toString())
-                    )
-                    currentSimpleFilter.value = parsed.filter
-                    simpleSearchField.setTextAndPlaceCursorAtEnd(parsed.search)
-                    isSimpleSearch.value = true
-                } catch (e: Exception) {
-                    Log.e(TAG, "Cannot swap to simple search", e)
-                    viewModelScope.launch {
-                        _events.send(SavedSearchEvent.Snackbar(
-                            SavedSearchSnackbar.SWITCH_TO_SIMPLE_FAILED
-                        ))
-                    }
-                }
-            }
-        }
-    }
-
-    fun updateFilter(filter: SimpleFilter) {
-        this.currentSimpleFilter.value = filter
-    }
-
     fun save() {
         editable.value = false
         shouldShowValidationErrors.value = true
@@ -290,6 +192,14 @@ class SavedSearchViewModel @AssistedInject constructor(
                 }
             )
         }
+    }
+
+    override suspend fun showSwitchErrorSnackbar() {
+        _events.send(
+            SavedSearchEvent.Snackbar(
+                SavedSearchSnackbar.SWITCH_TO_SIMPLE_FAILED
+            )
+        )
     }
 
     @AssistedFactory
