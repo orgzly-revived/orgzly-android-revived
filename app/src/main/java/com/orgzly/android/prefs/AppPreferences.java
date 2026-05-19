@@ -1268,6 +1268,13 @@ public class AppPreferences {
         );
     }
 
+    public static void setDefaultToAdvancedQueryEnabled(Context context, boolean value) {
+        getDefaultSharedPreferences(context).edit().putBoolean(
+                context.getResources().getString(R.string.pref_key_default_advanced_search),
+                value
+        ).apply();
+    }
+
     /*
      * Where to put incoming shared text in new note
      */
