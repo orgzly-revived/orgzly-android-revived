@@ -16,11 +16,25 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import cl.emilym.compose.units.rdp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orgzly.BuildConfig
 import com.orgzly.R
@@ -36,6 +50,13 @@ import com.orgzly.android.ui.CommonFragment
 import com.orgzly.android.ui.OnViewHolderClickListener
 import com.orgzly.android.ui.books.BooksViewModel.Companion.APP_BAR_DEFAULT_MODE
 import com.orgzly.android.ui.books.BooksViewModel.Companion.APP_BAR_SELECTION_MODE
+import com.orgzly.android.ui.compose.base.bootstrapContent
+import com.orgzly.android.ui.compose.modifiers.scaffoldPadding
+import com.orgzly.android.ui.compose.widgets.Icons
+import com.orgzly.android.ui.compose.widgets.OrgzlyExtendedFloatingActionButton
+import com.orgzly.android.ui.compose.widgets.OrgzlyFloatingActionButton
+import com.orgzly.android.ui.compose.widgets.PushableCenteredLayout
+import com.orgzly.android.ui.compose.widgets.painterIcon
 import com.orgzly.android.ui.dialogs.SimpleOneLinerDialog
 import com.orgzly.android.ui.drawer.DrawerItem
 import com.orgzly.android.ui.main.SharedMainActivityViewModel
@@ -147,6 +168,56 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
         }
 
         binding.swipeContainer.setup()
+
+        binding.fabContainer.bootstrapContent {
+            val appBarState by viewModel.appBar.currentMode.collectAsStateWithLifecycle()
+
+            PushableCenteredLayout(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 1.rdp)
+                    .padding(bottom = 1.rdp),
+                centerContent = {
+                    AnimatedVisibility(
+                        appBarState == APP_BAR_DEFAULT_MODE && withActionBar,
+                        enter = scaleIn(),
+                        exit = scaleOut()
+                    ) {
+                        OrgzlyExtendedFloatingActionButton(
+                            onClick = {}
+                        ) {
+                            Icon(
+                                painterIcon(Icons.SEARCH),
+                                contentDescription = null
+                            )
+                            Spacer(Modifier.width(0.5.rdp))
+                            Text(
+                                stringResource(R.string.search)
+                            )
+                        }
+                    }
+                }
+            ) {
+                AnimatedVisibility(
+                    appBarState == APP_BAR_DEFAULT_MODE && withActionBar,
+                    enter = scaleIn(),
+                    exit = scaleOut()
+                ) {
+                    OrgzlyFloatingActionButton(
+                        onClick = {
+                            SimpleOneLinerDialog
+                                .getInstance("name-new-book", R.string.new_notebook, R.string.create, null)
+                                .show(childFragmentManager, SimpleOneLinerDialog.FRAGMENT_TAG);
+                        }
+                    ) {
+                        Icon(
+                            painterIcon(Icons.ADD),
+                            contentDescription = null
+                        )
+                    }
+                }
+            }
+        }
     }
 
     override fun onClick(view: View, position: Int, item: BookView) {
@@ -512,20 +583,6 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
 
                     topToolbarToDefault()
 
-                    if (withActionBar) {
-                        binding.fab.run {
-                            setOnClickListener {
-                                SimpleOneLinerDialog
-                                    .getInstance("name-new-book", R.string.new_notebook, R.string.create, null)
-                                    .show(childFragmentManager, SimpleOneLinerDialog.FRAGMENT_TAG);
-                            }
-
-                            show()
-                        }
-                    } else {
-                        binding.fab.visibility = View.GONE
-                    }
-
                     sharedMainActivityViewModel.unlockDrawer()
 
                     appBarBackPressHandler.isEnabled = false
@@ -533,10 +590,6 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
 
                 APP_BAR_SELECTION_MODE -> {
                     topToolbarToMainSelection()
-
-                    binding.fab.run {
-                        hide()
-                    }
 
                     sharedMainActivityViewModel.lockDrawer()
 
