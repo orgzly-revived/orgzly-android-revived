@@ -45,6 +45,7 @@ import com.orgzly.android.ui.compose.widgets.OrgzlyTextField
 import com.orgzly.android.ui.compose.widgets.OrgzlyTopAppBar
 import com.orgzly.android.ui.compose.widgets.painterIcon
 import com.orgzly.android.ui.notes.query.BaseSearchContent
+import com.orgzly.android.ui.notes.query.QueryHelpButton
 import com.orgzly.android.ui.savedsearches.SavedSearchesFragment
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -86,19 +87,8 @@ fun SavedSearchContent(
                     BackButton()
                 },
                 actions = {
-                    val localUriHandler = LocalUriHandler.current
                     if (!state.isSimpleMode) {
-                        IconButton(
-                            onClick = {
-                                localUriHandler.openUri(SavedSearchesFragment.SEARCH_DOCUMENTATION_URL)
-                            },
-                            modifier = Modifier.testTag("help_button")
-                        ) {
-                            Icon(
-                                painterIcon(Icons.HELP),
-                                contentDescription = stringResource(R.string.help)
-                            )
-                        }
+                        QueryHelpButton()
                     }
                     IconButton(
                         onClick = onSave

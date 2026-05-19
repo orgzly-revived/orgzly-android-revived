@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +37,7 @@ import com.orgzly.android.ui.compose.widgets.painterIcon
 import com.orgzly.android.ui.savedsearch.SavedSearchModel
 import com.orgzly.android.ui.savedsearch.SavedSearchViewModel
 import com.orgzly.android.ui.savedsearch.SearchFilterWidget
+import com.orgzly.android.ui.savedsearches.SavedSearchesFragment
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.mapLatest
@@ -233,6 +236,22 @@ fun BaseSearchContent(
                 enabled = state.editable
             )
         }
+    }
+}
+
+@Composable
+fun QueryHelpButton() {
+    val localUriHandler = LocalUriHandler.current
+    IconButton(
+        onClick = {
+            localUriHandler.openUri(SavedSearchesFragment.SEARCH_DOCUMENTATION_URL)
+        },
+        modifier = Modifier.testTag("help_button")
+    ) {
+        Icon(
+            painterIcon(Icons.HELP),
+            contentDescription = stringResource(R.string.help)
+        )
     }
 }
 

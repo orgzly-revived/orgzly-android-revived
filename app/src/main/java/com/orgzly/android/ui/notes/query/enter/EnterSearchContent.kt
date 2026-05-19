@@ -12,6 +12,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -22,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -31,12 +34,16 @@ import com.orgzly.android.query.SimpleFilter
 import com.orgzly.android.ui.compose.modifiers.scaffoldPadding
 import com.orgzly.android.ui.compose.providers.LaunchedEventEffect
 import com.orgzly.android.ui.compose.widgets.BackButton
+import com.orgzly.android.ui.compose.widgets.Icons
 import com.orgzly.android.ui.compose.widgets.OrgzlyButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyTextField
 import com.orgzly.android.ui.compose.widgets.OrgzlyTopAppBar
+import com.orgzly.android.ui.compose.widgets.painterIcon
 import com.orgzly.android.ui.notes.query.BaseSearchContent
+import com.orgzly.android.ui.notes.query.QueryHelpButton
 import com.orgzly.android.ui.savedsearch.SavedSearchEvent
 import com.orgzly.android.ui.savedsearch.SavedSearchSnackbar
+import com.orgzly.android.ui.savedsearches.SavedSearchesFragment
 import kotlinx.coroutines.flow.Flow
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,6 +80,11 @@ fun EnterSearchContent(
                 stringResource(R.string.search),
                 navigationIcon = {
                     BackButton()
+                },
+                actions = {
+                    if (!state.isSimpleMode) {
+                        QueryHelpButton()
+                    }
                 }
             )
         },
