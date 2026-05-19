@@ -9,6 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.orgzly.android.App
 import com.orgzly.android.ui.compose.base.ComposeFragment
+import com.orgzly.android.ui.compose.base.LocalNavigator
+import com.orgzly.android.ui.compose.base.NavigationDestination
+import com.orgzly.android.ui.compose.providers.LaunchedEventEffect
 import javax.inject.Inject
 import kotlin.getValue
 
@@ -22,12 +25,26 @@ class EnterSearchFragment: ComposeFragment() {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
+        val navigator = LocalNavigator.current
         val state by viewModel.state.collectAsStateWithLifecycle()
+
+        LaunchedEventEffect(viewModel.events) { event ->
+            when (event) {
+                is EnterSearchEvent.Search -> {
+                    navigator.pop()
+                    navigator.navigate(
+                        NavigationDestination.Query(event.query, null)
+                    )
+                }
+                is EnterSearchEvent.Snackbar -> {}
+            }
+        }
 
         EnterSearchContent(
             state,
+            viewModel.events,
             viewModel::updateFilter,
-            {},
+            viewModel::search,
             viewModel::switchSearchStyle,
             viewModel.advancedQueryField,
             viewModel.simpleSearchField

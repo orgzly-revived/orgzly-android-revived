@@ -158,6 +158,21 @@ fun BaseSearchContent(
     onSwitchSearchStyle: () -> Unit,
     updateFilter: (SimpleFilter) -> Unit,
     modifier: Modifier = Modifier,
+    searchField: @Composable () -> Unit = {
+        OrgzlyTextField(
+            simpleSearchField,
+            Modifier
+                .fillMaxWidth()
+                .testTag("fragment_saved_search_simple_search"),
+            label = {
+                Text(
+                    stringResource(R.string.options_menu_item_search)
+                )
+            },
+            enabled = state.editable,
+            isError = !state.isQueryValid
+        )
+    }
 ) {
     Column(
         modifier = Modifier.then(modifier),
@@ -165,19 +180,7 @@ fun BaseSearchContent(
     ) {
         when (state.isSimpleMode) {
             true -> {
-                OrgzlyTextField(
-                    simpleSearchField,
-                    Modifier
-                        .fillMaxWidth()
-                        .testTag("fragment_saved_search_simple_search"),
-                    label = {
-                        Text(
-                            stringResource(R.string.options_menu_item_search)
-                        )
-                    },
-                    enabled = state.editable,
-                    isError = !state.isQueryValid
-                )
+                searchField()
             }
             else -> {
                 OrgzlyTextField(
