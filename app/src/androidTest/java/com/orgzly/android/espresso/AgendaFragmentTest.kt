@@ -21,6 +21,7 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.orgzly.R
 import com.orgzly.android.OrgzlyTest
+import com.orgzly.android.RetryTestRule
 import com.orgzly.android.espresso.util.EspressoUtils
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.main.MainActivity
@@ -34,6 +35,9 @@ import org.junit.Test
 
 class AgendaFragmentTest : OrgzlyTest() {
     private var scenario: ActivityScenario<MainActivity?>? = null
+
+    @get:Rule
+    var mRetryTestRule: RetryTestRule = RetryTestRule()
 
     @get:Rule
     val mainActivityComposeRule = createAndroidComposeRule<MainActivity>()
