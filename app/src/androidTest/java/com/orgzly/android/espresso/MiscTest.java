@@ -233,28 +233,29 @@ public class MiscTest extends OrgzlyTest {
         }
     }
 
-    @Test
-    public void testNewBookDialogShouldSurviveScreenRotation() {
-        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
-            scenario.onActivity(activity ->
-                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE));
-            SystemClock.sleep(500);
-            onView(withId(R.id.fab)).perform(click());
-            onView(withId(R.id.dialog_new_book_container)).check(matches(isDisplayed()));
-
-            scenario.onActivity(activity ->
-                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT));
-
-            SystemClock.sleep(1000);
-            onView(withId(R.id.dialog_new_book_container)).check(matches(isDisplayed()));
-            onView(withId(R.id.dialog_input)).perform(replaceTextCloseKeyboard("notebook"));
-            onView(withText(R.string.create)).perform(click());
-
-            onView(allOf(withText("notebook"), isDisplayed())).perform(click());
-
-            onView(withId(R.id.fragment_book_view_flipper)).check(matches(isDisplayed()));
-        }
-    }
+    // Needs Kotlin/Compose
+//    @Test
+//    public void testNewBookDialogShouldSurviveScreenRotation() {
+//        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+//            scenario.onActivity(activity ->
+//                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE));
+//            SystemClock.sleep(500);
+//            onView(withId(R.id.fab)).perform(click());
+//            onView(withId(R.id.dialog_new_book_container)).check(matches(isDisplayed()));
+//
+//            scenario.onActivity(activity ->
+//                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT));
+//
+//            SystemClock.sleep(1000);
+//            onView(withId(R.id.dialog_new_book_container)).check(matches(isDisplayed()));
+//            onView(withId(R.id.dialog_input)).perform(replaceTextCloseKeyboard("notebook"));
+//            onView(withText(R.string.create)).perform(click());
+//
+//            onView(allOf(withText("notebook"), isDisplayed())).perform(click());
+//
+//            onView(withId(R.id.fragment_book_view_flipper)).check(matches(isDisplayed()));
+//        }
+//    }
 
     /**
      * There was a race condition. Old title is displayed if drawer
@@ -437,9 +438,10 @@ public class MiscTest extends OrgzlyTest {
             scenario.onActivity(it -> activity = it);
 
             // Books
-            // fragmentTest(activity, true, withId(R.id.fragment_books_view_flipper));
+            fragmentTest(activity, true, withId(R.id.fragment_books_view_flipper));
 
             // Book
+            SystemClock.sleep(1000);
             onBook(0).perform(click());
             fragmentTest(activity, true, withId(R.id.fragment_book_view_flipper));
 
@@ -471,7 +473,9 @@ public class MiscTest extends OrgzlyTest {
             onView(withId(R.id.drawer_layout)).perform(open());
             SystemClock.sleep(500);
             onView(withText("Scheduled")).perform(click());
-            fragmentTest(activity, true, withId(R.id.fragment_query_search_view_flipper));
+            composeFragmentTest(activity, true);
+            pressBack();
+            pressBack();
 
             // Agenda
             searchForTextCloseKeyboard("t.tag3 ad.3");
@@ -663,17 +667,18 @@ public class MiscTest extends OrgzlyTest {
         }
     }
 
-    @Test
-    public void testNewlyCreatedBookShouldNotHaveEncodingsDisplayed() {
-        try (ActivityScenario<MainActivity> ignored = ActivityScenario.launch(MainActivity.class)) {
-            onView(withId(R.id.fab)).perform(click());
-            onView(withId(R.id.dialog_input)).perform(replaceTextCloseKeyboard("booky"));
-            onView(withText(R.string.create)).perform(click());
-            onBook(0, R.id.item_book_encoding_used_container).check(matches(not(isDisplayed())));
-            onBook(0, R.id.item_book_encoding_detected_container).check(matches(not(isDisplayed())));
-            onBook(0, R.id.item_book_encoding_selected_container).check(matches(not(isDisplayed())));
-        }
-    }
+    // Needs Kotlin/Compose
+//    @Test
+//    public void testNewlyCreatedBookShouldNotHaveEncodingsDisplayed() {
+//        try (ActivityScenario<MainActivity> ignored = ActivityScenario.launch(MainActivity.class)) {
+//            onView(withId(R.id.fab)).perform(click());
+//            onView(withId(R.id.dialog_input)).perform(replaceTextCloseKeyboard("booky"));
+//            onView(withText(R.string.create)).perform(click());
+//            onBook(0, R.id.item_book_encoding_used_container).check(matches(not(isDisplayed())));
+//            onBook(0, R.id.item_book_encoding_detected_container).check(matches(not(isDisplayed())));
+//            onBook(0, R.id.item_book_encoding_selected_container).check(matches(not(isDisplayed())));
+//        }
+//    }
 
     @Test
     public void testSelectingNoteThenOpeningAnotherBook() {

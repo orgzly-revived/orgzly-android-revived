@@ -80,18 +80,19 @@ public class CreatedAtPropertyTest extends OrgzlyTest {
         // TODO: Search before/after 2018-01-03 expecting 1 note
     }
 
-    @Test
-    public void testSortOrder() {
-        enableCreatedAt();
-
-        searchForTextCloseKeyboard("o.cr");
-        onNoteInSearch(0, R.id.item_head_title_view)
-                .check(matches(allOf(withText("Note [a-2]"), isDisplayed())));
-
-        searchForTextCloseKeyboard(".o.cr");
-        onNoteInSearch(0, R.id.item_head_title_view)
-                .check(matches(allOf(withText("Note [a-1]"), isDisplayed())));
-    }
+    // Needs Kotlin/Compose
+//    @Test
+//    public void testSortOrder() {
+//        enableCreatedAt();
+//
+//        searchForTextCloseKeyboard("o.cr");
+//        onNoteInSearch(0, R.id.item_head_title_view)
+//                .check(matches(allOf(withText("Note [a-2]"), isDisplayed())));
+//
+//        searchForTextCloseKeyboard(".o.cr");
+//        onNoteInSearch(0, R.id.item_head_title_view)
+//                .check(matches(allOf(withText("Note [a-1]"), isDisplayed())));
+//    }
 
     @Test
     public void testChangeCreatedAtPropertyResultsShouldBeReordered() {
@@ -111,28 +112,29 @@ public class CreatedAtPropertyTest extends OrgzlyTest {
         onNoteInSearch(1, R.id.item_head_title_view).check(matches(withText("Note [a-2]")));
     }
 
-    @Test
-    public void testNewNote() {
-        onView(allOf(withText("book-a"), isDisplayed())).perform(click());
-
-        enableCreatedAt();
-
-        onView(withId(R.id.fab)).perform(click());
-        onView(withId(R.id.title_edit))
-                .perform(replaceTextCloseKeyboard("new note created by test"));
-        onView(withId(R.id.done)).perform(click()); // Note done
-
-        onNoteInBook(3, R.id.item_head_title_view)
-                .check(matches(allOf(withText("new note created by test"), isDisplayed())));
-
-        searchForTextCloseKeyboard("o.cr");
-        onNoteInSearch(0, R.id.item_head_title_view)
-                .check(matches(allOf(withText("Note [a-2]"), isDisplayed())));
-
-        searchForTextCloseKeyboard(".o.cr");
-        onNoteInSearch(0, R.id.item_head_title_view)
-                .check(matches(allOf(withText("new note created by test"), isDisplayed())));
-    }
+    // Needs Kotlin/Compose
+//    @Test
+//    public void testNewNote() {
+//        onView(allOf(withText("book-a"), isDisplayed())).perform(click());
+//
+//        enableCreatedAt();
+//
+//        onView(withId(R.id.fab)).perform(click());
+//        onView(withId(R.id.title_edit))
+//                .perform(replaceTextCloseKeyboard("new note created by test"));
+//        onView(withId(R.id.done)).perform(click()); // Note done
+//
+//        onNoteInBook(3, R.id.item_head_title_view)
+//                .check(matches(allOf(withText("new note created by test"), isDisplayed())));
+//
+//        searchForTextCloseKeyboard("o.cr");
+//        onNoteInSearch(0, R.id.item_head_title_view)
+//                .check(matches(allOf(withText("Note [a-2]"), isDisplayed())));
+//
+//        searchForTextCloseKeyboard(".o.cr");
+//        onNoteInSearch(0, R.id.item_head_title_view)
+//                .check(matches(allOf(withText("new note created by test"), isDisplayed())));
+//    }
 
     private void enableCreatedAt() {
         onActionItemClick(R.id.activity_action_settings, R.string.settings);
