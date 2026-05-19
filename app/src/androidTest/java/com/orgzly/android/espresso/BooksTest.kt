@@ -6,6 +6,9 @@ import android.content.Intent
 import android.os.Build
 import android.os.SystemClock
 import android.view.View
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.documentfile.provider.DocumentFile
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
@@ -34,8 +37,11 @@ import java.io.File
 import java.io.IOException
 
 class BooksTest : OrgzlyTest() {
-    @Rule
+    @get:Rule
     var mRetryTestRule: RetryTestRule = RetryTestRule()
+
+    @get:Rule
+    val mainActivityComposeRule = createAndroidComposeRule<MainActivity>()
 
     @Before
     @Throws(Exception::class)
@@ -113,8 +119,6 @@ class BooksTest : OrgzlyTest() {
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withText(R.string.book_does_not_exist_anymore))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-        Espresso.onView(ViewMatchers.withId(R.id.fab))
-            .check(ViewAssertions.matches(Matchers.not<View?>(ViewMatchers.isDisplayed())))
         Espresso.pressBack()
 
         SystemClock.sleep(500)
@@ -226,7 +230,11 @@ class BooksTest : OrgzlyTest() {
 
     @Test
     fun testCreateNewBookWithoutExtension() {
-        Espresso.onView(ViewMatchers.withId(R.id.fab)).perform(ViewActions.click())
+        mainActivityComposeRule.waitForIdle()
+        mainActivityComposeRule
+            .onNodeWithTag("fragment_books_new_notebook")
+            .performClick()
+
         Espresso.onView(ViewMatchers.withId(R.id.dialog_input))
             .perform(*EspressoUtils.replaceTextCloseKeyboard("book-created-from-scratch"))
         Espresso.onView(ViewMatchers.withText(R.string.create)).perform(ViewActions.click())
@@ -242,7 +250,11 @@ class BooksTest : OrgzlyTest() {
 
     @Test
     fun testCreateNewBookWithExtension() {
-        Espresso.onView(ViewMatchers.withId(R.id.fab)).perform(ViewActions.click())
+        mainActivityComposeRule.waitForIdle()
+        mainActivityComposeRule
+            .onNodeWithTag("fragment_books_new_notebook")
+            .performClick()
+
         Espresso.onView(ViewMatchers.withId(R.id.dialog_input))
             .perform(*EspressoUtils.replaceTextCloseKeyboard("book-created-from-scratch.org"))
         Espresso.onView(ViewMatchers.withText(R.string.create)).perform(ViewActions.click())
@@ -258,7 +270,11 @@ class BooksTest : OrgzlyTest() {
 
     @Test
     fun testCreateAndDeleteBook() {
-        Espresso.onView(ViewMatchers.withId(R.id.fab)).perform(ViewActions.click())
+        mainActivityComposeRule.waitForIdle()
+        mainActivityComposeRule
+            .onNodeWithTag("fragment_books_new_notebook")
+            .performClick()
+
         Espresso.onView(ViewMatchers.withId(R.id.dialog_input))
             .perform(*EspressoUtils.replaceTextCloseKeyboard("book-created-from-scratch"))
         Espresso.onView(ViewMatchers.withText(R.string.create)).perform(ViewActions.click())
@@ -320,12 +336,20 @@ class BooksTest : OrgzlyTest() {
 
     @Test
     fun testCreateNewBookWithExistingName() {
-        Espresso.onView(ViewMatchers.withId(R.id.fab)).perform(ViewActions.click())
+        mainActivityComposeRule.waitForIdle()
+        mainActivityComposeRule
+            .onNodeWithTag("fragment_books_new_notebook")
+            .performClick()
+
         Espresso.onView(ViewMatchers.withId(R.id.dialog_input))
             .perform(*EspressoUtils.replaceTextCloseKeyboard("new-book"))
         Espresso.onView(ViewMatchers.withText(R.string.create)).perform(ViewActions.click())
 
-        Espresso.onView(ViewMatchers.withId(R.id.fab)).perform(ViewActions.click())
+        mainActivityComposeRule.waitForIdle()
+        mainActivityComposeRule
+            .onNodeWithTag("fragment_books_new_notebook")
+            .performClick()
+
         Espresso.onView(ViewMatchers.withId(R.id.dialog_input))
             .perform(*EspressoUtils.replaceTextCloseKeyboard("new-book"))
         Espresso.onView(ViewMatchers.withText(R.string.create)).perform(ViewActions.click())
@@ -344,7 +368,11 @@ class BooksTest : OrgzlyTest() {
 
     @Test
     fun testCreateNewBookWithWhiteSpace() {
-        Espresso.onView(ViewMatchers.withId(R.id.fab)).perform(ViewActions.click())
+        mainActivityComposeRule.waitForIdle()
+        mainActivityComposeRule
+            .onNodeWithTag("fragment_books_new_notebook")
+            .performClick()
+
         Espresso.onView(ViewMatchers.withId(R.id.dialog_input))
             .perform(*EspressoUtils.replaceTextCloseKeyboard(" new-book  "))
         Espresso.onView(ViewMatchers.withText(R.string.create)).perform(ViewActions.click())

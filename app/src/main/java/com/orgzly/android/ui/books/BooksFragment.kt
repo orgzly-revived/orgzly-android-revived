@@ -27,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -190,7 +191,8 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
                                 navigator.navigate(
                                     NavigationDestination.EnterSearch
                                 )
-                            }
+                            },
+                            modifier = Modifier.testTag("fragment_books_search")
                         ) {
                             Icon(
                                 painterIcon(Icons.SEARCH),
@@ -214,7 +216,8 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
                             SimpleOneLinerDialog
                                 .getInstance("name-new-book", R.string.new_notebook, R.string.create, null)
                                 .show(childFragmentManager, SimpleOneLinerDialog.FRAGMENT_TAG);
-                        }
+                        },
+                        modifier = Modifier.testTag("fragment_books_new_notebook")
                     ) {
                         Icon(
                             painterIcon(Icons.ADD),
