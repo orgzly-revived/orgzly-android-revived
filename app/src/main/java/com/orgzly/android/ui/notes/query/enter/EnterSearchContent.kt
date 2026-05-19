@@ -17,8 +17,11 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -61,6 +64,8 @@ fun EnterSearchContent(
         }
     }
 
+    val focusRequester = remember { FocusRequester() }
+
     Scaffold(
         Modifier.fillMaxSize(),
         topBar = {
@@ -97,6 +102,7 @@ fun EnterSearchContent(
                         simpleSearchField,
                         Modifier
                             .fillMaxWidth()
+                            .focusRequester(focusRequester)
                             .testTag("fragment_saved_search_simple_search"),
                         label = {
                             Text(
@@ -110,7 +116,7 @@ fun EnterSearchContent(
                         ),
                         onKeyboardAction = {
                             onSearch()
-                        }
+                        },
                     )
                 }
             )
@@ -126,6 +132,10 @@ fun EnterSearchContent(
                 enabled = state.editable
             ) {
                 Text(stringResource(R.string.search))
+            }
+
+            LaunchedEffect(Unit) {
+                focusRequester.requestFocus()
             }
         }
     }
