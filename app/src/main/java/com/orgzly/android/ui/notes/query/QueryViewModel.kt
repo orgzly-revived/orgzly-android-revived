@@ -45,6 +45,7 @@ data class QueryState(
     val loading: QueryViewModel.ViewState,
     val showRefineButton: Boolean,
     val isSimpleMode: Boolean,
+    val agendaDays: Int,
 ) {
 
     companion object {
@@ -57,6 +58,7 @@ data class QueryState(
             QueryViewModel.ViewState.LOADING,
             showRefineButton = false,
             isSimpleMode = true,
+            agendaDays = 0
         )
     }
 
@@ -135,7 +137,8 @@ class QueryViewModel @AssistedInject constructor(
             },
             isSimpleMode &&
                     appBarMode == APP_BAR_DEFAULT_MODE,
-            isSimpleMode
+            isSimpleMode,
+            queryParser.parse(query).options.agendaDays
         )
     }.state(QueryState.default)
 

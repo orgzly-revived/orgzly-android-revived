@@ -61,7 +61,7 @@ class AgendaItems(
         return getList(notes, item2databaseIds, query.options.agendaDays)
     }
 
-    private fun getList(
+    fun getList(
             notes: List<NoteView>,
             item2databaseIds: MutableMap<Long, Long>,
             agendaDays: Int

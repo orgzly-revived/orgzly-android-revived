@@ -286,7 +286,8 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             }
         })
 
-        viewModel.data.observe(viewLifecycleOwner, Observer { notes ->
+        viewModel.state.collectWithLifecycle { state ->
+            val notes = state.notes
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Observed notes: ${notes.size}")
 
             val hideEmptyDaysInAgenda = AppPreferences.hideEmptyDaysInAgenda(context)
@@ -294,7 +295,11 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             val items = AgendaItems(
                 hideEmptyDaysInAgenda,
                 groupScheduledWithToday
-            ).getList(notes, currentQuery, item2databaseIds)
+            ).getList(
+                notes,
+                item2databaseIds,
+                state.agendaDays
+            )
 
             if (BuildConfig.LOG_DEBUG)
                 LogUtils.d(TAG, "Replacing data with ${items.size} agenda items")
@@ -308,7 +313,7 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             viewAdapter.getSelection().setMap(item2databaseIds)
 
             viewModel.appBar.toModeFromSelectionCount(viewAdapter.getSelection().count)
-        })
+        }
 
         viewModel.appBar.mode.observeSingle(viewLifecycleOwner) { mode ->
             when (mode) {
