@@ -20,6 +20,7 @@ import com.orgzly.R
 import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.RetryTestRule
 import com.orgzly.android.performScrollAndClick
+import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.main.MainActivity
 import org.hamcrest.Matchers.allOf
 import org.junit.After
@@ -46,6 +47,11 @@ class SavedSearchFragmentTest : OrgzlyTest() {
         // Navigate to Saved Searches
         onView(withId(R.id.drawer_layout)).perform(open())
         onView(withText(R.string.searches)).perform(click())
+
+        AppPreferences.setDefaultToAdvancedQueryEnabled(
+            context,
+            false
+        )
     }
 
     @After

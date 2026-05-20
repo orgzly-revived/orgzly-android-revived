@@ -65,15 +65,6 @@ class AgendaFragmentTest : OrgzlyTest() {
         return ActivityScenario.launch<MainActivity?>(MainActivity::class.java)
     }
 
-    @Before
-    override fun setUp() {
-        super.setUp()
-        AppPreferences.setDefaultToAdvancedQueryEnabled(
-            context,
-            true
-        )
-    }
-
     @After
     @Throws(Exception::class)
     override fun tearDown() {
