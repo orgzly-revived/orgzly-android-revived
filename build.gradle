@@ -56,7 +56,7 @@ buildscript {
 
     versions.loremipsum = '1.0'
 
-    versions.dagger = '2.57.2'
+    versions.dagger = '2.59.2'
 
     versions.gson = '2.13.2'
 
