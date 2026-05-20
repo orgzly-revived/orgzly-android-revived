@@ -998,7 +998,14 @@ public class MainActivity extends CommonActivity
                 case AppIntent.ACTION_OPEN_QUERY: {
                     String query = intent.getStringExtra(AppIntent.EXTRA_QUERY_STRING);
                     String searchName = intent.getStringExtra(AppIntent.EXTRA_SEARCH_NAME);
-                    DisplayManager.displayQuery(getSupportFragmentManager(), query, searchName);
+                    Boolean isRawQuery = intent.getBooleanExtra(AppIntent.EXTRA_IS_RAW_QUERY, false);
+                    DisplayManager.displayQuery(
+                            getSupportFragmentManager(),
+                            query,
+                            searchName,
+                            true,
+                            isRawQuery
+                    );
                     break;
                 }
 

@@ -30,7 +30,8 @@ sealed interface NavigationDestination {
 
     data class Query(
         val query: String,
-        val searchName: String?
+        val searchName: String?,
+        val isRawQuery: Boolean = false,
     ): NavigationDestination
 
     data class Editor(
@@ -84,7 +85,9 @@ private class DefaultNavigator(
             is NavigationDestination.Query -> DisplayManager.displayQuery(
                 fragmentManager,
                 destination.query,
-                destination.searchName
+                destination.searchName,
+                destination.isRawQuery,
+                true
             )
             is NavigationDestination.Editor -> DisplayManager.displayEditor(
                 fragmentManager,

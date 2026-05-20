@@ -33,7 +33,11 @@ class EnterSearchFragment: ComposeFragment() {
                 is EnterSearchEvent.Search -> {
                     navigator.pop()
                     navigator.navigate(
-                        NavigationDestination.Query(event.query, null)
+                        NavigationDestination.Query(
+                            event.query,
+                            null,
+                            true
+                        )
                     )
                 }
                 is EnterSearchEvent.Snackbar -> {}
