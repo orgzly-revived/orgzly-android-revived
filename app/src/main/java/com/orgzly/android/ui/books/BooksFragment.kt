@@ -19,6 +19,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -175,17 +177,21 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
             val appBarState by viewModel.appBar.currentMode.collectAsStateWithLifecycle()
             val navigator = LocalNavigator.current
 
-            PushableCenteredLayout(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 1.rdp)
-                    .padding(bottom = 1.rdp),
-                centerContent = {
-                    AnimatedVisibility(
-                        appBarState == APP_BAR_DEFAULT_MODE && withActionBar,
-                        enter = scaleIn(),
-                        exit = scaleOut()
-                    ) {
+            AnimatedVisibility(
+                appBarState == APP_BAR_DEFAULT_MODE && withActionBar,
+                enter = slideInVertically(
+                    initialOffsetY = { it }
+                ),
+                exit = slideOutVertically(
+                    targetOffsetY = { it }
+                )
+            ) {
+                PushableCenteredLayout(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 1.rdp)
+                        .padding(bottom = 1.rdp),
+                    centerContent = {
                         OrgzlyExtendedFloatingActionButton(
                             onClick = {
                                 navigator.navigate(
@@ -204,12 +210,6 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
                             )
                         }
                     }
-                }
-            ) {
-                AnimatedVisibility(
-                    appBarState == APP_BAR_DEFAULT_MODE && withActionBar,
-                    enter = scaleIn(),
-                    exit = scaleOut()
                 ) {
                     OrgzlyFloatingActionButton(
                         onClick = {
