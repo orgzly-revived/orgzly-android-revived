@@ -58,6 +58,7 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
         QueryViewModelFactory.provideFactory(
             viewModelFactory,
             requireArguments().getString(ARG_QUERY) ?: "",
+            requireArguments().getBoolean(ARG_IS_RAW_QUERY, false),
             QueryViewModelOwner.SEARCH,
             requireContext()
         )
@@ -152,6 +153,7 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
                     requireActivity().supportFragmentManager,
                     event.query,
                     currentQueryName,
+                    true,
                     false
                 )
                 else -> {}
@@ -364,15 +366,16 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
 
         @JvmStatic
         fun getInstance(query: String): SearchFragment {
-            return getInstance(query, null)
+            return getInstance(query, null, false)
         }
 
         @JvmStatic
-        fun getInstance(query: String, queryName: String? = null): SearchFragment {
+        fun getInstance(query: String, queryName: String? = null, isRawQuery: Boolean = false): SearchFragment {
             val fragment = SearchFragment()
 
             val args = Bundle()
             args.putString(ARG_QUERY, query)
+            args.putBoolean(ARG_IS_RAW_QUERY, isRawQuery)
             if (queryName != null) {
                 args.putString(ARG_QUERY_NAME, queryName)
             }

@@ -80,6 +80,7 @@ class QueryViewModel @AssistedInject constructor(
     private val queryBuilder: InternalQueryBuilder,
     private val filterMapper: SimpleFilterMapper,
     @Assisted private val initialQuery: String,
+    @Assisted private val isRawQuery: Boolean,
     @Assisted private val owner: QueryViewModelOwner,
     @Assisted context: Context
 ) : CommonViewModel() {
@@ -156,18 +157,31 @@ class QueryViewModel @AssistedInject constructor(
     }.asLiveData()
 
     init {
+        val rawQuery = when (isRawQuery) {
+            true -> initialQuery
+            else -> when (AppPreferences.isDefaultToAdvancedQueryEnabled(context)) {
+                true -> initialQuery
+                else -> queryBuilder.build(
+                    filterMapper.toQuery(
+                        initialQuery,
+                        SimpleFilter()
+                    )
+                )
+            }
+        }
+
         val parsed = runCatching { filterMapper.fromQuery(
-            queryParser.parse(initialQuery)
+            queryParser.parse(rawQuery)
         ) }.getOrNull()
 
-        query.value = initialQuery
+        query.value = rawQuery
         isSimpleMode.value = if (parsed != null && !shouldStayInAdvancedMode) {
             search.value = parsed.search
             filter.value = parsed.filter
             searchTextField.setTextAndPlaceCursorAtEnd(parsed.search)
             true
         } else {
-            searchTextField.setTextAndPlaceCursorAtEnd(initialQuery)
+            searchTextField.setTextAndPlaceCursorAtEnd(rawQuery)
             false
         }
     }

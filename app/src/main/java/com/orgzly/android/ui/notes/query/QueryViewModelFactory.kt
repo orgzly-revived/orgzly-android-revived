@@ -10,6 +10,7 @@ interface QueryViewModelFactory : ViewModelProvider.Factory {
 
     fun create(
         initialQuery: String,
+        isRawQuery: Boolean,
         owner: QueryViewModelOwner,
         context: Context
     ): QueryViewModel
@@ -18,12 +19,13 @@ interface QueryViewModelFactory : ViewModelProvider.Factory {
         fun provideFactory(
             assistedFactory: QueryViewModelFactory,
             initialQuery: String,
+            isRawQuery: Boolean,
             owner: QueryViewModelOwner,
             context: Context
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
-                return assistedFactory.create(initialQuery, owner, context) as T
+                return assistedFactory.create(initialQuery, isRawQuery, owner, context) as T
             }
         }
     }

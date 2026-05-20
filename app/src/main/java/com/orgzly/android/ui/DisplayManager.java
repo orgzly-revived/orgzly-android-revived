@@ -202,10 +202,10 @@ public class DisplayManager {
     }
 
     public static void displayQuery(FragmentManager fragmentManager, @NonNull String queryString, @Nullable String searchName) {
-        displayQuery(fragmentManager, queryString, searchName, true);
+        displayQuery(fragmentManager, queryString, searchName, false, true);
     }
 
-    public static void displayQuery(FragmentManager fragmentManager, @NonNull String queryString, @Nullable String searchName, @NonNull boolean addToBackStack) {
+    public static void displayQuery(FragmentManager fragmentManager, @NonNull String queryString, @Nullable String searchName, @NonNull boolean isRawQuery, @NonNull boolean addToBackStack) {
         // If the same query is already displayed, don't do anything.
         String displayedQuery = getDisplayedQuery(fragmentManager);
         if (displayedQuery != null && displayedQuery.equals(queryString)) {
@@ -221,11 +221,11 @@ public class DisplayManager {
 
         // Display agenda or query fragment
         if (query.getOptions().getAgendaDays() > 0) {
-            fragment = AgendaFragment.getInstance(queryString, searchName);
+            fragment = AgendaFragment.getInstance(queryString, searchName, isRawQuery);
             tag = AgendaFragment.FRAGMENT_TAG;
 
         } else {
-            fragment = SearchFragment.getInstance(queryString, searchName);
+            fragment = SearchFragment.getInstance(queryString, searchName, isRawQuery);
             tag = SearchFragment.FRAGMENT_TAG;
         }
 

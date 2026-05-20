@@ -5,45 +5,30 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.MenuItem
-import android.view.ViewGroup
-import android.widget.EditText
-import androidx.appcompat.widget.SearchView
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldLineLimits
-import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import cl.emilym.compose.units.rdp
 import com.orgzly.R
 import com.orgzly.android.NotesOrgExporter
-import com.orgzly.android.query.Condition
-import com.orgzly.android.query.Query
-import com.orgzly.android.query.user.DottedQueryBuilder
 import com.orgzly.android.sync.SyncRunner
-import com.orgzly.android.ui.DisplayManager
 import com.orgzly.android.ui.compose.base.bootstrapContent
 import com.orgzly.android.ui.compose.widgets.Icons
-import com.orgzly.android.ui.compose.widgets.OrgzlyBasicTextField
-import com.orgzly.android.ui.compose.widgets.OrgzlyOutlinedTextField
 import com.orgzly.android.ui.compose.widgets.OrgzlySearchTextField
-import com.orgzly.android.ui.compose.widgets.OrgzlyTextField
 import com.orgzly.android.ui.compose.widgets.painterIcon
 import com.orgzly.android.ui.dialogs.TimestampDialogFragment
 import com.orgzly.android.ui.drawer.DrawerItem
@@ -259,6 +244,7 @@ abstract class QueryFragment :
         private val TAG = QueryFragment::class.java.name
 
         const val ARG_QUERY = "query"
+        const val ARG_IS_RAW_QUERY = "is_raw_query"
         const val ARG_QUERY_NAME = "query_name"
 
         fun getDrawerItemId(query: String?): String {

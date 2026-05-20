@@ -61,6 +61,7 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
         QueryViewModelFactory.provideFactory(
             viewModelFactory,
             requireArguments().getString(ARG_QUERY) ?: "",
+            requireArguments().getBoolean(ARG_IS_RAW_QUERY, false),
             QueryViewModelOwner.AGENDA,
             requireContext()
         )
@@ -157,6 +158,7 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
                     requireActivity().supportFragmentManager,
                     event.query,
                     currentQueryName,
+                    true,
                     false
                 )
                 else -> {}
@@ -384,15 +386,16 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
         @JvmStatic
         fun getInstance(query: String): AgendaFragment {
-            return getInstance(query, null)
+            return getInstance(query, null, false)
         }
 
         @JvmStatic
-        fun getInstance(query: String, queryName: String? = null): AgendaFragment {
+        fun getInstance(query: String, queryName: String? = null, isRawQuery: Boolean = false): AgendaFragment {
             val fragment = AgendaFragment()
 
             val args = Bundle()
             args.putString(ARG_QUERY, query)
+            args.putBoolean(ARG_IS_RAW_QUERY, isRawQuery)
             if (queryName != null) {
                 args.putString(ARG_QUERY_NAME, queryName)
             }
