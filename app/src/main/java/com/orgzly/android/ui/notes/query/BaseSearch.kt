@@ -6,15 +6,20 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -161,21 +166,9 @@ fun BaseSearchContent(
     onSwitchSearchStyle: () -> Unit,
     updateFilter: (SimpleFilter) -> Unit,
     modifier: Modifier = Modifier,
-    searchField: @Composable () -> Unit = {
-        OrgzlyTextField(
-            simpleSearchField,
-            Modifier
-                .fillMaxWidth()
-                .testTag("fragment_saved_search_simple_search"),
-            label = {
-                Text(
-                    stringResource(R.string.options_menu_item_search)
-                )
-            },
-            enabled = state.editable,
-            isError = !state.isQueryValid
-        )
-    }
+    fieldKeyboardOption: KeyboardOptions = KeyboardOptions.Default,
+    fieldKeyboardAction: KeyboardActionHandler? = null,
+    fieldFocusRequester: FocusRequester = remember { FocusRequester() },
 ) {
     Column(
         modifier = Modifier.then(modifier),
@@ -183,21 +176,39 @@ fun BaseSearchContent(
     ) {
         when (state.isSimpleMode) {
             true -> {
-                searchField()
+                OrgzlyTextField(
+                    simpleSearchField,
+                    Modifier
+                        .fillMaxWidth()
+                        .testTag("fragment_saved_search_simple_search")
+                        .focusRequester(fieldFocusRequester),
+                    label = {
+                        Text(
+                            stringResource(R.string.options_menu_item_search)
+                        )
+                    },
+                    enabled = state.editable,
+                    isError = !state.isQueryValid,
+                    keyboardOptions = fieldKeyboardOption,
+                    onKeyboardAction = fieldKeyboardAction
+                )
             }
             else -> {
                 OrgzlyTextField(
                     advancedQueryField,
                     Modifier
                         .fillMaxWidth()
-                        .testTag("fragment_saved_search_query"),
+                        .testTag("fragment_saved_search_query")
+                        .focusRequester(fieldFocusRequester),
                     label = {
                         Text(
                             stringResource(R.string.query)
                         )
                     },
                     enabled = state.editable,
-                    isError = !state.isQueryValid
+                    isError = !state.isQueryValid,
+                    keyboardOptions = fieldKeyboardOption,
+                    onKeyboardAction = fieldKeyboardAction
                 )
             }
         }

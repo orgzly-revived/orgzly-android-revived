@@ -109,28 +109,13 @@ fun EnterSearchContent(
                 onSwitchSearchStyle,
                 updateFilter,
                 Modifier.fillMaxWidth(),
-                searchField = {
-                    OrgzlyTextField(
-                        simpleSearchField,
-                        Modifier
-                            .fillMaxWidth()
-                            .focusRequester(focusRequester)
-                            .testTag("fragment_saved_search_simple_search"),
-                        label = {
-                            Text(
-                                stringResource(R.string.options_menu_item_search)
-                            )
-                        },
-                        enabled = state.editable,
-                        isError = !state.isQueryValid,
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Search
-                        ),
-                        onKeyboardAction = {
-                            onSearch()
-                        },
-                    )
-                }
+                fieldKeyboardOption = KeyboardOptions(
+                    imeAction = ImeAction.Search
+                ),
+                fieldKeyboardAction = {
+                    onSearch()
+                },
+                fieldFocusRequester = focusRequester
             )
 
             Spacer(Modifier.weight(1f))

@@ -1,15 +1,14 @@
 package com.orgzly.android.ui.savedsearch
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
@@ -21,15 +20,17 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import cl.emilym.compose.units.rdp
 import com.orgzly.R
@@ -40,13 +41,11 @@ import com.orgzly.android.ui.compose.providers.LaunchedEventEffect
 import com.orgzly.android.ui.compose.widgets.BackButton
 import com.orgzly.android.ui.compose.widgets.Icons
 import com.orgzly.android.ui.compose.widgets.OrgzlyButton
-import com.orgzly.android.ui.compose.widgets.OrgzlyTextButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyTextField
 import com.orgzly.android.ui.compose.widgets.OrgzlyTopAppBar
 import com.orgzly.android.ui.compose.widgets.painterIcon
 import com.orgzly.android.ui.notes.query.BaseSearchContent
 import com.orgzly.android.ui.notes.query.QueryHelpButton
-import com.orgzly.android.ui.savedsearches.SavedSearchesFragment
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -124,11 +123,16 @@ fun SavedSearchContent(
                 1.rdp
             )
         ) {
+            val nameFocusRequester = remember { FocusRequester() }
+            val queryFocusRequester = remember { FocusRequester() }
+            val focusManager = LocalFocusManager.current
+
             OrgzlyTextField(
                 nameField,
                 Modifier
                     .fillMaxWidth()
-                    .testTag("fragment_saved_search_name"),
+                    .testTag("fragment_saved_search_name")
+                    .focusRequester(nameFocusRequester),
                 label = {
                     Text(
                         stringResource(R.string.name)
@@ -136,6 +140,12 @@ fun SavedSearchContent(
                 },
                 enabled = state.editable,
                 isError = !state.isNameValid,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next
+                ),
+                onKeyboardAction = {
+                    queryFocusRequester.requestFocus()
+                }
             )
 
             BaseSearchContent(
@@ -144,7 +154,14 @@ fun SavedSearchContent(
                 advancedQueryField,
                 onSwitchSearchStyle,
                 updateFilter,
-                Modifier.fillMaxWidth()
+                Modifier.fillMaxWidth(),
+                fieldKeyboardOption = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                fieldKeyboardAction = {
+                    focusManager.clearFocus()
+                },
+                fieldFocusRequester = queryFocusRequester
             )
 
             Spacer(Modifier.weight(1f))
@@ -157,6 +174,10 @@ fun SavedSearchContent(
                 enabled = state.editable
             ) {
                 Text(stringResource(R.string.save))
+            }
+
+            LaunchedEffect(Unit) {
+                nameFocusRequester.requestFocus()
             }
         }
     }
