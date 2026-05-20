@@ -260,6 +260,7 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
             binding.topToolbar.run {
                 menu.clear()
                 inflateMenu(R.menu.books_actions)
+                menu.findItem(R.id.search_view).isVisible = AppPreferences.showSearchActionBooks(requireContext())
 
                 setNavigationIcon(R.drawable.ic_menu)
 

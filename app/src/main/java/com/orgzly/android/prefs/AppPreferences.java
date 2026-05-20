@@ -1297,6 +1297,17 @@ public class AppPreferences {
                 context.getResources().getBoolean(R.bool.pref_default_create_org_links_from_shared_links));
     }
 
+    public static void showSearchActionBooks(Context context, Boolean value) {
+        String key = context.getResources().getString(R.string.pref_key_show_search_action_books);
+        getDefaultSharedPreferences(context).edit().putBoolean(key, value).apply();
+    }
+
+    public static Boolean showSearchActionBooks(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_show_search_action_books),
+                context.getResources().getBoolean(R.bool.pref_default_show_search_action_books));
+    }
+
     // Added for test purposes
     public static void createOrgLinksFromSharedLinks(Context context, Boolean value) {
         String key = context.getResources().getString(R.string.pref_key_create_org_links_from_shared_links);

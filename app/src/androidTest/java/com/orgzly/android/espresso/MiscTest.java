@@ -765,7 +765,7 @@ public class MiscTest extends OrgzlyTest {
     public void testActiveDrawerItemForSearchQuery() {
         testUtils.setupBook("booky-one", "* TODO Note 1\n* Note 2\n* Note 3\n* Note 4\n* TODO Note 5");
         try (ActivityScenario<MainActivity> ignored = ActivityScenario.launch(MainActivity.class)) {
-            onBook(0).perform(click());
+//            onBook(0).perform(click());
 
             searchForTextCloseKeyboard("note");
 

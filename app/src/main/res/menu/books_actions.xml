@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="AlwaysShowAction">
 
+    <!-- Kept for testing purposes -->
     <item
         android:id="@+id/search_view"
         android:title="@string/options_menu_item_search"
         android:icon="@drawable/ic_search"
+        android:visible="false"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="collapseActionView|always" tools:ignore="AlwaysShowAction"/>
 
