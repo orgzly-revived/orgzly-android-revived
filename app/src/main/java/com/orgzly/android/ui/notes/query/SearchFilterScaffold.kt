@@ -83,23 +83,33 @@ fun SearchFilterScaffold(
         Box(Modifier.fillMaxSize()) {
             content()
 
-            OrgzlyExtendedFloatingActionButton(
-                onClick = {
-                    sheetVisible = true
-                },
-                Modifier
-                    .padding(horizontal = 1.rdp)
-                    .padding(bottom = 1.rdp)
-                    .scaffoldPadding(contentPadding)
-                    .align(Alignment.BottomCenter)
-                    .testTag("search_filter_refine_search")
-            ) {
-                Icon(
-                    painterIcon(Icons.FILTER),
-                    contentDescription = null
+            AnimatedVisibility(
+                state.showRefineButton,
+                modifier = Modifier.align(Alignment.BottomCenter),
+                enter = slideInVertically(
+                    initialOffsetY = { it }
+                ),
+                exit = slideOutVertically(
+                    targetOffsetY = { it }
                 )
-                Spacer(Modifier.width(0.5.rdp))
-                Text(stringResource(R.string.query_filter_search))
+            ) {
+                OrgzlyExtendedFloatingActionButton(
+                    onClick = {
+                        sheetVisible = true
+                    },
+                    Modifier
+                        .padding(horizontal = 1.rdp)
+                        .padding(bottom = 1.rdp)
+                        .scaffoldPadding(contentPadding)
+                        .testTag("search_filter_refine_search")
+                ) {
+                    Icon(
+                        painterIcon(Icons.FILTER),
+                        contentDescription = null
+                    )
+                    Spacer(Modifier.width(0.5.rdp))
+                    Text(stringResource(R.string.query_filter_search))
+                }
             }
 
             Box(

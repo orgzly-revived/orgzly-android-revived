@@ -44,6 +44,7 @@ data class QueryState(
     val allTags: List<String>,
     val loading: QueryViewModel.ViewState,
     val isSimpleMode: Boolean,
+    val showRefineButton: Boolean,
     val agendaDays: Int,
 ) {
 
@@ -56,6 +57,7 @@ data class QueryState(
             emptyList(),
             QueryViewModel.ViewState.LOADING,
             isSimpleMode = true,
+            showRefineButton = true,
             agendaDays = 0
         )
     }
@@ -134,6 +136,7 @@ class QueryViewModel @AssistedInject constructor(
                 true -> ViewState.EMPTY
                 else -> ViewState.LOADED
             },
+            isSimpleMode,
             isSimpleMode &&
                     appBarMode == APP_BAR_DEFAULT_MODE,
             queryParser.parse(query).options.agendaDays
