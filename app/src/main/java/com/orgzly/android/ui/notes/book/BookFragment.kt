@@ -15,17 +15,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.ArrayAdapter
 import android.widget.MultiAutoCompleteTextView
+import androidx.appcompat.widget.SearchView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orgzly.BuildConfig
 import com.orgzly.R
+import com.orgzly.android.App
 import com.orgzly.android.BookUtils
 import com.orgzly.android.NotesOrgExporter
 import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.query.SimpleFilter
+import com.orgzly.android.query.user.InternalQueryBuilder
+import com.orgzly.android.query.user.SimpleFilterMapper
 import com.orgzly.android.sync.SyncRunner
 import com.orgzly.android.ui.CommonActivity
+import com.orgzly.android.ui.DisplayManager
 import com.orgzly.android.ui.NotePlace
 import com.orgzly.android.ui.Place
 import com.orgzly.android.ui.dialogs.TimestampDialogFragment
@@ -51,6 +57,7 @@ import com.orgzly.databinding.FragmentBookBinding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.math.abs
 
 enum class ScrollDirection {
@@ -79,6 +86,9 @@ class BookFragment :
     private lateinit var sharedMainActivityViewModel: SharedMainActivityViewModel
 
     private lateinit var viewModel: BookViewModel
+
+    @Inject lateinit var simpleFilterMapper: SimpleFilterMapper
+    @Inject lateinit var queryBuilder: InternalQueryBuilder
 
     private var hideButtonJob: Job? = null
 
@@ -119,6 +129,7 @@ class BookFragment :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        App.appComponent.inject(this)
 
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, context)
 
@@ -669,7 +680,35 @@ class BookFragment :
                 true
             }
 
-            requireActivity().setupSearchView(menu)
+            val activity = requireActivity()
+            activity.setupSearchView(menu)
+            val searchItem = menu.findItem(R.id.search_view)
+            (searchItem.actionView as SearchView)
+                .setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextChange(str: String?): Boolean {
+                        return false
+                    }
+
+                    override fun onQueryTextSubmit(str: String): Boolean {
+                        // Close search
+                        searchItem.collapseActionView()
+                        DisplayManager.displayQuery(
+                            activity.supportFragmentManager,
+                            queryBuilder.build(
+                                simpleFilterMapper.toQuery(
+                                    str,
+                                    SimpleFilter(
+                                        books = setOfNotNull(currentBook?.name)
+                                    )
+                                )
+                            ),
+                            null,
+                            true,
+                            true
+                        )
+                        return true
+                    }
+                })
 
             setOnClickListener {
                 scrollToPosition(0)

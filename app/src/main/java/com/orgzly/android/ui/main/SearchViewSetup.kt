@@ -19,16 +19,6 @@ import com.orgzly.android.ui.notes.book.BookFragment
  * TODO: http://developer.android.com/training/search/setup.html
  */
 fun FragmentActivity.setupSearchView(menu: Menu) {
-
-    fun getActiveFragmentBook(): Book? {
-        supportFragmentManager.findFragmentByTag(BookFragment.FRAGMENT_TAG)?.let { bookFragment ->
-            if (bookFragment is BookFragment && bookFragment.isVisible) {
-                return bookFragment.currentBook
-            }
-        }
-        return null
-    }
-
     val activity = this
 
     val searchItem = menu.findItem(R.id.search_view)
@@ -53,25 +43,6 @@ fun FragmentActivity.setupSearchView(menu: Menu) {
     searchView.setOnSearchClickListener {
         // Make search as wide as possible
         searchView.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-
-        /*
-         * When user starts the search, fill the search box with text
-         * depending on the current fragment.
-         */
-
-        // For Query fragment, fill the box with full query
-        DisplayManager.getDisplayedQuery(supportFragmentManager)?.let { query ->
-            searchView.setQuery("$query ", false)
-            return@setOnSearchClickListener
-        }
-
-        // If searching from book, add book name to query
-        getActiveFragmentBook()?.let { book ->
-            val builder = DottedQueryBuilder()
-            val query = builder.build(Query(Condition.InBook(book.name)))
-            searchView.setQuery("$query ", false)
-            return@setOnSearchClickListener
-        }
     }
 
     searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
