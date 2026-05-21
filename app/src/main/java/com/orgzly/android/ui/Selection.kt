@@ -61,7 +61,9 @@ class Selection {
     }
 
     fun removeNonExistent(dataIds: Set<Long>) {
-        idSet.removeAll { it !in dataIds }
+        idMap?.let { idMap ->
+            idSet.removeAll { idMap[it] !in dataIds }
+        } ?: idSet.removeAll { it !in dataIds }
     }
 
     /**
