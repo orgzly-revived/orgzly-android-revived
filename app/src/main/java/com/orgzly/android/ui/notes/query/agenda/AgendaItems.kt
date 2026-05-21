@@ -9,6 +9,12 @@ import com.orgzly.org.datetime.OrgInterval
 import com.orgzly.org.datetime.OrgRange
 import org.joda.time.DateTime
 
+data class AgendaList(
+    val items: List<AgendaItem>,
+    // Maps agendaItemId to ID
+    val mapping: Map<Long, Long>
+)
+
 class AgendaItems(
     private val hideEmptyDaysInAgenda : Boolean,
     private val groupScheduledWithToday: Boolean) {
@@ -39,35 +45,20 @@ class AgendaItems(
     }
 
     fun getList(
-            notes: List<NoteView>, queryString: String?, idMap: MutableMap<Long, Long>
-    ): List<AgendaItem> {
-
-        return if (queryString != null) {
-            val parser = InternalQueryParser()
-
-            val query = parser.parse(queryString)
-
-            getList(notes, query, idMap)
-
-        } else {
-            listOf()
-        }
-    }
-
-    fun getList(
-            notes: List<NoteView>, query: Query, item2databaseIds: MutableMap<Long, Long>
-    ): List<AgendaItem> {
-
-        return getList(notes, item2databaseIds, query.options.agendaDays)
+        notes: List<NoteView>,
+        query: Query
+    ): AgendaList {
+        return getList(
+            notes,
+            query.options.agendaDays
+        )
     }
 
     fun getList(
             notes: List<NoteView>,
-            item2databaseIds: MutableMap<Long, Long>,
             agendaDays: Int
-    ): List<AgendaItem> {
-
-        item2databaseIds.clear()
+    ): AgendaList {
+        val item2databaseIds = mutableMapOf<Long, Long>()
 
         var agendaItemId = 1L
 
@@ -184,6 +175,9 @@ class AgendaItems(
             }
         }
 
-        return result
+        return AgendaList(
+            result,
+            item2databaseIds
+        )
     }
 }

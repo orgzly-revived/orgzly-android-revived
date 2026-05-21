@@ -53,7 +53,7 @@ import kotlin.getValue
 class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
     private lateinit var binding: FragmentQueryAgendaBinding
 
-    private val item2databaseIds = hashMapOf<Long, Long>()
+    private var item2databaseIds = mapOf<Long, Long>()
 
     lateinit var viewAdapter: AgendaAdapter
 
@@ -285,25 +285,25 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
             val hideEmptyDaysInAgenda = AppPreferences.hideEmptyDaysInAgenda(context)
             val groupScheduledWithToday = AppPreferences.groupScheduledWithTodayInAgenda(context)
-            val items = AgendaItems(
+            val list = AgendaItems(
                 hideEmptyDaysInAgenda,
                 groupScheduledWithToday
             ).getList(
                 notes,
-                item2databaseIds,
                 state.agendaDays
             )
+            item2databaseIds = list.mapping
 
             if (BuildConfig.LOG_DEBUG)
-                LogUtils.d(TAG, "Replacing data with ${items.size} agenda items")
+                LogUtils.d(TAG, "Replacing data with ${list.items.size} agenda items")
 
-            viewAdapter.submitList(items)
+            viewAdapter.submitList(list.items)
 
             val ids = notes.mapTo(hashSetOf()) { it.note.id }
 
             viewAdapter.getSelection().removeNonExistent(ids)
 
-            viewAdapter.getSelection().setMap(item2databaseIds)
+            viewAdapter.getSelection().setMap(list.mapping)
 
             viewModel.appBar.toModeFromSelectionCount(viewAdapter.getSelection().count)
         }
