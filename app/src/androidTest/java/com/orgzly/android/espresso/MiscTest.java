@@ -480,7 +480,7 @@ public class MiscTest extends OrgzlyTest {
 
             // Agenda
             searchForTextCloseKeyboard("t.tag3 ad.3");
-            fragmentTest(activity, true, withId(R.id.fragment_query_agenda_view_flipper));
+            fragmentTest(activity, false, withId(R.id.fragment_query_agenda_view_flipper));
         }
     }
 
