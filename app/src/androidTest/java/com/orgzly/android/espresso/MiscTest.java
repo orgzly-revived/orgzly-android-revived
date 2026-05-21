@@ -1,5 +1,6 @@
 package com.orgzly.android.espresso;
 
+import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -473,9 +474,9 @@ public class MiscTest extends OrgzlyTest {
             onView(withId(R.id.drawer_layout)).perform(open());
             SystemClock.sleep(500);
             onView(withText("Scheduled")).perform(click());
-            composeFragmentTest(activity, true);
+            composeFragmentTest(activity, false);
             pressBack();
-            pressBack();
+            closeSoftKeyboard();
 
             // Agenda
             searchForTextCloseKeyboard("t.tag3 ad.3");
