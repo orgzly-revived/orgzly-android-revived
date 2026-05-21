@@ -290,7 +290,12 @@ class RichText(context: Context, attrs: AttributeSet?) :
     override fun toggleCheckbox(checkboxSpan: CheckboxSpan) {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, checkboxSpan)
 
-        val content = if (checkboxSpan.isChecked()) "[ ]" else "[X]"
+        // The normal toggle action only switches between [ ] and [X] as org-toggle-checkbox does.
+        val currentState = checkboxSpan.getState();
+        val content = when (currentState) {
+            CheckboxSpan.State.CHECKED -> "[ ]"
+            else -> "[X]"
+        }
 
         val replacement = OrgFormatter.checkboxSpanned(
             content, checkboxSpan.rawStart, checkboxSpan.rawEnd)

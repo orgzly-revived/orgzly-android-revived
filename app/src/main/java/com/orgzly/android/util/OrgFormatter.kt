@@ -55,7 +55,7 @@ object OrgFormatter {
     private val LOGBOOK_DRAWER_PATTERN = drawerPattern(LOGBOOK_DRAWER_NAME)
 
     private const val PLAIN_LIST_CHARS = "-\\+"
-    private val CHECKBOXES_PATTERN = Pattern.compile("""^\s*[$PLAIN_LIST_CHARS]\s+(\[[ X]])""", Pattern.MULTILINE)
+    private val CHECKBOXES_PATTERN = Pattern.compile("""^\s*[$PLAIN_LIST_CHARS]\s+(\[[ -X]])""", Pattern.MULTILINE)
 
     private const val INACTIVE_DATETIME = "(\\[[0-9]{4,}-[0-9]{2}-[0-9]{2} ?[^\\]\\r\\n>]*?[0-9]{1,2}:[0-9]{2}\\])"
     private val CLOCKED_TIMES_P = Pattern.compile("(CLOCK: *$INACTIVE_DATETIME) *(-- *$INACTIVE_DATETIME)?( *=> *[0-9]{1,4}:[0-9]{2})?[\\r\\n]*")
