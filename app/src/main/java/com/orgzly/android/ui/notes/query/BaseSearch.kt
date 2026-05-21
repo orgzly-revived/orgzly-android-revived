@@ -41,7 +41,8 @@ import com.orgzly.android.ui.compose.widgets.OrgzlyTextField
 import com.orgzly.android.ui.compose.widgets.painterIcon
 import com.orgzly.android.ui.savedsearch.SavedSearchModel
 import com.orgzly.android.ui.savedsearch.SavedSearchViewModel
-import com.orgzly.android.ui.savedsearch.SearchFilterWidget
+import com.orgzly.android.ui.compose.widgets.search.SearchFilterWidget
+import com.orgzly.android.ui.compose.widgets.search.SearchWidget
 import com.orgzly.android.ui.savedsearches.SavedSearchesFragment
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -170,84 +171,24 @@ fun BaseSearchContent(
     fieldKeyboardAction: KeyboardActionHandler? = null,
     fieldFocusRequester: FocusRequester = remember { FocusRequester() },
 ) {
-    Column(
-        modifier = Modifier.then(modifier),
-        verticalArrangement = Arrangement.spacedBy(1.rdp)
-    ) {
+    SearchWidget(
         when (state.isSimpleMode) {
-            true -> {
-                OrgzlyTextField(
-                    simpleSearchField,
-                    Modifier
-                        .fillMaxWidth()
-                        .testTag("fragment_saved_search_simple_search")
-                        .focusRequester(fieldFocusRequester),
-                    label = {
-                        Text(
-                            stringResource(R.string.options_menu_item_search)
-                        )
-                    },
-                    enabled = state.editable,
-                    isError = !state.isQueryValid,
-                    keyboardOptions = fieldKeyboardOption,
-                    onKeyboardAction = fieldKeyboardAction
-                )
-            }
-            else -> {
-                OrgzlyTextField(
-                    advancedQueryField,
-                    Modifier
-                        .fillMaxWidth()
-                        .testTag("fragment_saved_search_query")
-                        .focusRequester(fieldFocusRequester),
-                    label = {
-                        Text(
-                            stringResource(R.string.query)
-                        )
-                    },
-                    enabled = state.editable,
-                    isError = !state.isQueryValid,
-                    keyboardOptions = fieldKeyboardOption,
-                    onKeyboardAction = fieldKeyboardAction
-                )
-            }
-        }
-
-        OrgzlyTextButton(
-            onClick = onSwitchSearchStyle,
-            modifier = Modifier
-                .animateContentSize()
-                .align(Alignment.End)
-                .testTag("swap_editor_mode"),
-            enabled = state.editable
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(1.rdp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painterIcon(Icons.SWAP),
-                    contentDescription = null
-                )
-                Text(stringResource(
-                    when (state.isSimpleMode) {
-                        true -> R.string.search_filter_swap_to_advanced
-                        else -> R.string.search_filter_swap_to_simple
-                    }
-                ))
-            }
-        }
-
-        if (state.isSimpleMode) {
-            SearchFilterWidget(
-                state.filter,
-                updateFilter,
-                state.allTags,
-                state.allBooks,
-                enabled = state.editable
-            )
-        }
-    }
+            true -> simpleSearchField
+            else -> advancedQueryField
+        },
+        state.filter,
+        state.isSimpleMode,
+        onSwitchSearchStyle,
+        updateFilter,
+        state.allTags,
+        state.allBooks,
+        modifier = modifier,
+        fieldKeyboardOption = fieldKeyboardOption,
+        fieldKeyboardAction = fieldKeyboardAction,
+        fieldFocusRequester = fieldFocusRequester,
+        enabled = state.editable,
+        isError = !state.isQueryValid
+    )
 }
 
 @Composable

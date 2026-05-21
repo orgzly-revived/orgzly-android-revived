@@ -94,6 +94,8 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
             SearchFilterScaffold(
                 state,
                 viewModel.events,
+                viewModel.searchTextField,
+                viewModel::swapQueryMode,
                 viewModel::updateFilter,
                 viewModel::commitFilter,
             ) {
@@ -140,11 +142,6 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
 
         viewModel.state.collectWithLifecycle { state ->
             binding.topToolbar.subtitle = state.query
-
-            setupSwapButton(
-                binding.topToolbar.menu,
-                state
-            )
         }
 
         viewModel.events.collectWithLifecycle { event ->
@@ -181,11 +178,6 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
             menu.clear()
             inflateMenu(R.menu.query_actions)
 
-            setupSwapButton(
-                menu,
-                viewModel.state.value
-            )
-
             ActivityUtils.keepScreenOnUpdateMenuItem(activity, menu)
 
             setNavigationIcon(R.drawable.ic_menu)
@@ -214,8 +206,6 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
             setOnClickListener {
                 binding.topToolbar.menu.findItem(R.id.search_view)?.expandActionView()
             }
-
-            setupSearch(menu)
 
             title = currentQueryName ?: getString(R.string.search)
         }

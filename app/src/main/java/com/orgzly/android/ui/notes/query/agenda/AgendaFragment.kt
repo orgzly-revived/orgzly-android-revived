@@ -95,8 +95,10 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             SearchFilterScaffold(
                 state,
                 viewModel.events,
+                viewModel.searchTextField,
+                viewModel::swapQueryMode,
                 viewModel::updateFilter,
-                viewModel::commitFilter
+                viewModel::commitFilter,
             ) {
                 AndroidView(
                     factory = { binding.root },
@@ -146,10 +148,6 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
         viewModel.state.collectWithLifecycle { state ->
             binding.topToolbar.subtitle = state.query
-            setupSwapButton(
-                binding.topToolbar.menu,
-                state
-            )
         }
 
         viewModel.events.collectWithLifecycle { event ->
@@ -184,11 +182,6 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             menu.clear()
             inflateMenu(R.menu.query_actions)
 
-            setupSwapButton(
-                menu,
-                viewModel.state.value
-            )
-
             ActivityUtils.keepScreenOnUpdateMenuItem(activity, menu)
 
             setNavigationIcon(R.drawable.ic_menu)
@@ -217,8 +210,6 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             setOnClickListener {
                 binding.topToolbar.menu.findItem(R.id.search_view)?.expandActionView()
             }
-
-            setupSearch(menu)
 
             title = currentQueryName ?: getString(R.string.agenda)
         }

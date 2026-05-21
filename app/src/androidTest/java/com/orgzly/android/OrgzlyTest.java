@@ -156,6 +156,9 @@ public class OrgzlyTest {
 
         /* Historical: Default to advanced queries in search box */
         AppPreferences.setDefaultToAdvancedQueryEnabled(context, true);
+
+        /* Historical: Enable query button in ActionBar */
+        AppPreferences.showSearchAction(context, true);
     }
 
     /**

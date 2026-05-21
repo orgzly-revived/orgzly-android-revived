@@ -43,7 +43,6 @@ data class QueryState(
     val allBooks: List<String>,
     val allTags: List<String>,
     val loading: QueryViewModel.ViewState,
-    val showRefineButton: Boolean,
     val isSimpleMode: Boolean,
     val agendaDays: Int,
 ) {
@@ -56,7 +55,6 @@ data class QueryState(
             emptyList(),
             emptyList(),
             QueryViewModel.ViewState.LOADING,
-            showRefineButton = false,
             isSimpleMode = true,
             agendaDays = 0
         )
@@ -138,7 +136,6 @@ class QueryViewModel @AssistedInject constructor(
             },
             isSimpleMode &&
                     appBarMode == APP_BAR_DEFAULT_MODE,
-            isSimpleMode,
             queryParser.parse(query).options.agendaDays
         )
     }.state(QueryState.default)
@@ -183,41 +180,6 @@ class QueryViewModel @AssistedInject constructor(
         } else {
             searchTextField.setTextAndPlaceCursorAtEnd(rawQuery)
             false
-        }
-    }
-
-    /* Triggers querying only if parameters changed. */
-    fun onSearch(field: String) {
-        viewModelScope.launch {
-            paramUpdateMutex.withLock {
-                if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, field)
-                when (state.value.isSimpleMode) {
-                    true -> {
-                        search.value = field
-                        query.value = queryBuilder.build(
-                            filterMapper.toQuery(
-                                field,
-                                filter.value
-                            )
-                        )
-                    }
-                    else -> {
-                        query.value = field
-
-                        val asSimple = field.runCatching {
-                            filterMapper.fromQuery(queryParser.parse(this))
-                        }.getOrNull()
-
-                        filter.value = asSimple?.filter ?: SimpleFilter()
-                        search.value = asSimple?.search ?: ""
-
-                        if (asSimple != null && !shouldStayInAdvancedMode) {
-                            isSimpleMode.value = true
-                            searchTextField.setTextAndPlaceCursorAtEnd(asSimple.search)
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -268,23 +230,46 @@ class QueryViewModel @AssistedInject constructor(
     fun commitFilter() {
         viewModelScope.launch {
             paramUpdateMutex.withLock {
-                val update = queryBuilder.build(
-                    filterMapper.toQuery(
-                        search.value,
-                        filter.value
-                    )
-                )
+                val currentSearchField = searchTextField.text.toString()
+                val currentFilter = filter.value
+                val currentSimpleMode = state.value.isSimpleMode
 
-                val hasAgenda = filter.value.agendaDays != null
+                val hasAgenda = when (currentSimpleMode) {
+                    true -> currentFilter.agendaDays?.takeIf { it > 0 } != null
+                    else -> queryParser.parse(currentSearchField).isAgenda()
+                }
+
+                val queryUpdate = when (currentSimpleMode) {
+                    true -> queryBuilder.build(
+                        filterMapper.toQuery(
+                            currentSearchField,
+                            currentFilter
+                        )
+                    )
+                    else -> currentSearchField
+                }
+
                 when (owner) {
                     QueryViewModelOwner.SEARCH if hasAgenda -> {
-                        _events.send(QueryEvent.ChangeQueryView(update))
+                        _events.send(QueryEvent.ChangeQueryView(queryUpdate))
                     }
                     QueryViewModelOwner.AGENDA if !hasAgenda -> {
-                        _events.send(QueryEvent.ChangeQueryView(update))
+                        _events.send(QueryEvent.ChangeQueryView(queryUpdate))
                     }
                     else -> {
-                        query.value = update
+                        query.value = queryUpdate
+
+                        when {
+                            currentSimpleMode -> search.value = currentSearchField
+                            !shouldStayInAdvancedMode -> queryUpdate.runCatching {
+                                filterMapper.fromQuery(queryParser.parse(this))
+                            }.getOrNull()?.let { asSimple ->
+                                filter.value = asSimple.filter
+                                search.value = asSimple.search
+                                searchTextField.setTextAndPlaceCursorAtEnd(asSimple.search)
+                                isSimpleMode.value = true
+                            }
+                        }
                     }
                 }
             }

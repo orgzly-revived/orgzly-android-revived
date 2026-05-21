@@ -5,7 +5,6 @@ import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Environment;
 
 import androidx.annotation.StringRes;
 
@@ -1297,12 +1296,12 @@ public class AppPreferences {
                 context.getResources().getBoolean(R.bool.pref_default_create_org_links_from_shared_links));
     }
 
-    public static void showSearchActionBooks(Context context, Boolean value) {
+    public static void showSearchAction(Context context, Boolean value) {
         String key = context.getResources().getString(R.string.pref_key_show_search_action_books);
         getDefaultSharedPreferences(context).edit().putBoolean(key, value).apply();
     }
 
-    public static Boolean showSearchActionBooks(Context context) {
+    public static Boolean showSearchAction(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(
                 context.getResources().getString(R.string.pref_key_show_search_action_books),
                 context.getResources().getBoolean(R.bool.pref_default_show_search_action_books));

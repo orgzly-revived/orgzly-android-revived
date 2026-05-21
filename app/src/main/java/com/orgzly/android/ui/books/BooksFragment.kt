@@ -17,8 +17,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Spacer
@@ -260,7 +258,7 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
             binding.topToolbar.run {
                 menu.clear()
                 inflateMenu(R.menu.books_actions)
-                menu.findItem(R.id.search_view).isVisible = AppPreferences.showSearchActionBooks(requireContext())
+                menu.findItem(R.id.search_view).isVisible = AppPreferences.showSearchAction(requireContext())
 
                 setNavigationIcon(R.drawable.ic_menu)
 

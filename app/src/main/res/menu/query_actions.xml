@@ -1,24 +1,11 @@
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <item
-        android:id="@+id/search_view"
-        android:title="@string/options_menu_item_search"
-        android:icon="@drawable/ic_search"
-        app:showAsAction="collapseActionView|always" tools:ignore="AlwaysShowAction"/>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/keep_screen_on"
         app:showAsAction="never"
         android:checkable="true"
         android:title="@string/keep_screen_on"/>
-
-    <item
-        android:id="@+id/swap_search_mode"
-        app:showAsAction="never"
-        android:title=""/>
 
     <item
         android:id="@+id/sync"
