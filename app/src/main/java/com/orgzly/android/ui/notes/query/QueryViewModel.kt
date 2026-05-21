@@ -137,8 +137,7 @@ class QueryViewModel @AssistedInject constructor(
                 else -> ViewState.LOADED
             },
             isSimpleMode,
-            isSimpleMode &&
-                    appBarMode == APP_BAR_DEFAULT_MODE,
+            appBarMode == APP_BAR_DEFAULT_MODE,
             queryParser.parse(query).options.agendaDays
         )
     }.state(QueryState.default)

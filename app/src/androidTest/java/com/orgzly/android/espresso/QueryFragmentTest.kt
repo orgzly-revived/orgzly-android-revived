@@ -38,8 +38,8 @@ import org.junit.Test
 class QueryFragmentTest : OrgzlyTest() {
     private var scenario: ActivityScenario<MainActivity?>? = null
 
-//    @get:Rule
-//    var mRetryTestRule: RetryTestRule = RetryTestRule()
+    @get:Rule
+    var mRetryTestRule: RetryTestRule = RetryTestRule()
 
     @get:Rule
     val mainActivityComposeRule = createAndroidComposeRule<MainActivity>()

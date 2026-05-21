@@ -5,6 +5,7 @@ import android.os.SystemClock
 import android.view.View
 import android.widget.DatePicker
 import android.widget.TextView
+import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -13,6 +14,7 @@ import androidx.compose.ui.test.performTextReplacement
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.ActivityAction
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
@@ -114,8 +116,22 @@ class AgendaFragmentTest : OrgzlyTest() {
     fun testWithNoBook() {
         scenario = ActivityScenario.launch<MainActivity?>(MainActivity::class.java)
 
-        EspressoUtils.searchForTextCloseKeyboard(".it.done (s.7d or d.7d) ad.7")
+        mainActivityComposeRule.waitForIdle()
+        mainActivityComposeRule
+            .onNodeWithTag("fragment_books_search")
+            .performClick()
+        mainActivityComposeRule.waitForIdle()
+        mainActivityComposeRule
+            .onNodeWithTag("search_widget_search_field")
+            .apply {
+                performTextReplacement(".it.done (s.7d or d.7d) ad.7")
+                performImeAction()
+            }
+        mainActivityComposeRule.waitForIdle()
         checkAgendaItemCount(7)
+
+        closeSoftKeyboard()
+        SystemClock.sleep(1000)
 
         searchInFragment(".it.done (s.7d or d.7d) ad.3")
         checkAgendaItemCount(3)
