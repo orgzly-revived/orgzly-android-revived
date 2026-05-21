@@ -26,6 +26,8 @@ import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.query.Condition
+import com.orgzly.android.query.Query
 import com.orgzly.android.query.SimpleFilter
 import com.orgzly.android.query.user.InternalQueryBuilder
 import com.orgzly.android.query.user.SimpleFilterMapper
@@ -680,35 +682,49 @@ class BookFragment :
                 true
             }
 
+            val isAdvanced = AppPreferences.isDefaultToAdvancedQueryEnabled(requireContext())
             val activity = requireActivity()
             activity.setupSearchView(menu)
             val searchItem = menu.findItem(R.id.search_view)
-            (searchItem.actionView as SearchView)
-                .setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextChange(str: String?): Boolean {
-                        return false
-                    }
+            val searchView = searchItem.actionView as SearchView
 
-                    override fun onQueryTextSubmit(str: String): Boolean {
-                        // Close search
-                        searchItem.collapseActionView()
-                        DisplayManager.displayQuery(
-                            activity.supportFragmentManager,
-                            queryBuilder.build(
+            searchView.setOnSearchClickListener {
+                searchView.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                if (isAdvanced) {
+                    val query = queryBuilder.build(Query(Condition.InBook(currentBook?.name ?: "")))
+                    searchView.setQuery("$query ", false)
+                }
+            }
+
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(str: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextSubmit(str: String): Boolean {
+                    // Close search
+                    searchItem.collapseActionView()
+                    DisplayManager.displayQuery(
+                        activity.supportFragmentManager,
+                        when (isAdvanced) {
+                            true -> str
+                            else -> queryBuilder.build(
                                 simpleFilterMapper.toQuery(
                                     str,
                                     SimpleFilter(
                                         books = setOfNotNull(currentBook?.name)
                                     )
                                 )
-                            ),
-                            null,
-                            true,
-                            true
-                        )
-                        return true
-                    }
-                })
+                            )
+                        },
+                        null,
+                        true,
+                        true
+                    )
+
+                    return true
+                }
+            })
 
             setOnClickListener {
                 scrollToPosition(0)
