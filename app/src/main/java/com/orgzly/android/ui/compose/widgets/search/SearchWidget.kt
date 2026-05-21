@@ -50,12 +50,7 @@ fun SearchWidget(
             searchField,
             Modifier
                 .fillMaxWidth()
-                .testTag(
-                    when (isSimpleMode) {
-                        true -> "fragment_saved_search_simple_search"
-                        else -> "fragment_saved_search_query"
-                    }
-                )
+                .testTag("search_widget_search_field")
                 .focusRequester(fieldFocusRequester),
             label = {
                 Text(

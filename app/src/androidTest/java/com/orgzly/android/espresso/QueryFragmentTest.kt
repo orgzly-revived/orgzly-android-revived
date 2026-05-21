@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.TimePicker
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextReplacement
 import androidx.test.core.app.ActivityScenario
@@ -37,8 +38,8 @@ import org.junit.Test
 class QueryFragmentTest : OrgzlyTest() {
     private var scenario: ActivityScenario<MainActivity?>? = null
 
-    @get:Rule
-    var mRetryTestRule: RetryTestRule = RetryTestRule()
+//    @get:Rule
+//    var mRetryTestRule: RetryTestRule = RetryTestRule()
 
     @get:Rule
     val mainActivityComposeRule = createAndroidComposeRule<MainActivity>()
@@ -161,15 +162,9 @@ class QueryFragmentTest : OrgzlyTest() {
         EspressoUtils.onNotesInSearch()
             .check(ViewAssertions.matches(EspressoUtils.recyclerViewItemCount(2)))
 
-        onView(withId(R.id.search_view)).perform(click())
-        mainActivityComposeRule.waitForIdle()
-        mainActivityComposeRule
-            .onNodeWithTag("query_fragment_search")
-            .apply {
-                performTextReplacement("another")
-                performImeAction()
-            }
-        mainActivityComposeRule.waitForIdle()
+        searchInFragment("another")
+
+        SystemClock.sleep(1000)
 
         Espresso.onView(ViewMatchers.withId(R.id.fragment_query_search_view_flipper))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
@@ -680,5 +675,20 @@ class QueryFragmentTest : OrgzlyTest() {
                 ViewMatchers.withText("My Search")
             )
         ).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+    }
+
+    private fun searchInFragment(query: String) {
+        mainActivityComposeRule.waitForIdle()
+        mainActivityComposeRule
+            .onNodeWithTag("search_filter_refine_search")
+            .performClick()
+        mainActivityComposeRule.waitForIdle()
+        mainActivityComposeRule
+            .onNodeWithTag("search_widget_search_field")
+            .apply {
+                performTextReplacement(query)
+                performImeAction()
+            }
+        mainActivityComposeRule.waitForIdle()
     }
 }

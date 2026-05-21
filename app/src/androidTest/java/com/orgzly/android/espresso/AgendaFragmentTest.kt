@@ -7,6 +7,7 @@ import android.widget.DatePicker
 import android.widget.TextView
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextReplacement
 import androidx.test.core.app.ActivityScenario
@@ -116,15 +117,7 @@ class AgendaFragmentTest : OrgzlyTest() {
         EspressoUtils.searchForTextCloseKeyboard(".it.done (s.7d or d.7d) ad.7")
         checkAgendaItemCount(7)
 
-        onView(withId(R.id.search_view)).perform(click())
-        mainActivityComposeRule.waitForIdle()
-        mainActivityComposeRule
-            .onNodeWithTag("query_fragment_search")
-            .apply {
-                performTextReplacement(".it.done (s.7d or d.7d) ad.3")
-                performImeAction()
-            }
-        mainActivityComposeRule.waitForIdle()
+        searchInFragment(".it.done (s.7d or d.7d) ad.3")
         checkAgendaItemCount(3)
     }
 
@@ -537,5 +530,20 @@ class AgendaFragmentTest : OrgzlyTest() {
         EspressoUtils.searchForTextCloseKeyboard("ad.1")
         // Today
         checkAgendaItemCount(1)
+    }
+
+    private fun searchInFragment(query: String) {
+        mainActivityComposeRule.waitForIdle()
+        mainActivityComposeRule
+            .onNodeWithTag("search_filter_refine_search")
+            .performClick()
+        mainActivityComposeRule.waitForIdle()
+        mainActivityComposeRule
+            .onNodeWithTag("search_widget_search_field")
+            .apply {
+                performTextReplacement(query)
+                performImeAction()
+            }
+        mainActivityComposeRule.waitForIdle()
     }
 }

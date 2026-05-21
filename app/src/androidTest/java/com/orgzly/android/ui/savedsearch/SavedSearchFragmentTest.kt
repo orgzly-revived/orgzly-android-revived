@@ -75,7 +75,7 @@ class SavedSearchFragmentTest : OrgzlyTest() {
             .performScrollAndClick()
 
         mainActivityComposeRule
-            .onNodeWithTag("fragment_saved_search_query")
+            .onNodeWithTag("search_widget_search_field")
             .performTextInput("b.work AND s.todo")
 
         mainActivityComposeRule
@@ -105,7 +105,7 @@ class SavedSearchFragmentTest : OrgzlyTest() {
 
         // Enter Search in Simple mode
         mainActivityComposeRule
-            .onNodeWithTag("fragment_saved_search_simple_search")
+            .onNodeWithTag("search_widget_search_field")
             .performTextInput("urgent")
 
         // Save
@@ -134,7 +134,7 @@ class SavedSearchFragmentTest : OrgzlyTest() {
             .onNodeWithTag("swap_editor_mode")
             .performScrollAndClick()
         mainActivityComposeRule
-            .onNodeWithTag("fragment_saved_search_query")
+            .onNodeWithTag("search_widget_search_field")
             .performTextInput("b.work AND s.todo")
         mainActivityComposeRule
             .onNodeWithTag("done")
@@ -228,7 +228,7 @@ class SavedSearchFragmentTest : OrgzlyTest() {
 
         // Leave Name empty and enter some query
         mainActivityComposeRule
-            .onNodeWithTag("fragment_saved_search_query")
+            .onNodeWithTag("search_widget_search_field")
             .performTextReplacement("b.work")
 
         // Try to Save
@@ -258,7 +258,7 @@ class SavedSearchFragmentTest : OrgzlyTest() {
 
         // Enter Simple Query
         mainActivityComposeRule
-            .onNodeWithTag("fragment_saved_search_simple_search")
+            .onNodeWithTag("search_widget_search_field")
             .performTextReplacement("urgent")
 
         // Switch to Advanced
@@ -268,7 +268,7 @@ class SavedSearchFragmentTest : OrgzlyTest() {
 
         // Verify Advanced Query contains "urgent"
         mainActivityComposeRule
-            .onNodeWithTag("fragment_saved_search_query")
+            .onNodeWithTag("search_widget_search_field")
             .assertTextContains("urgent")
 
         // Switch back to Simple
@@ -278,7 +278,7 @@ class SavedSearchFragmentTest : OrgzlyTest() {
 
         // Verify Simple Query still "urgent"
         mainActivityComposeRule
-            .onNodeWithTag("fragment_saved_search_simple_search")
+            .onNodeWithTag("search_widget_search_field")
             .assertTextContains("urgent")
     }
 }
