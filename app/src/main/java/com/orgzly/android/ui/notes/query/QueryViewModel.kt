@@ -186,6 +186,7 @@ class QueryViewModel @AssistedInject constructor(
     fun swapQueryMode() {
         viewModelScope.launch {
             paramUpdateMutex.withLock {
+                commitFilterInternal()
                 when (isSimpleMode.value) {
                     true -> {
                         shouldStayInAdvancedMode = true
@@ -230,46 +231,50 @@ class QueryViewModel @AssistedInject constructor(
     fun commitFilter() {
         viewModelScope.launch {
             paramUpdateMutex.withLock {
-                val currentSearchField = searchTextField.text.toString()
-                val currentFilter = filter.value
-                val currentSimpleMode = state.value.isSimpleMode
+                commitFilterInternal()
+            }
+        }
+    }
 
-                val hasAgenda = when (currentSimpleMode) {
-                    true -> currentFilter.agendaDays?.takeIf { it > 0 } != null
-                    else -> queryParser.parse(currentSearchField).isAgenda()
-                }
+    private suspend fun commitFilterInternal() {
+        val currentSearchField = searchTextField.text.toString()
+        val currentFilter = filter.value
+        val currentSimpleMode = state.value.isSimpleMode
 
-                val queryUpdate = when (currentSimpleMode) {
-                    true -> queryBuilder.build(
-                        filterMapper.toQuery(
-                            currentSearchField,
-                            currentFilter
-                        )
-                    )
-                    else -> currentSearchField
-                }
+        val hasAgenda = when (currentSimpleMode) {
+            true -> currentFilter.agendaDays?.takeIf { it > 0 } != null
+            else -> queryParser.parse(currentSearchField).isAgenda()
+        }
 
-                when (owner) {
-                    QueryViewModelOwner.SEARCH if hasAgenda -> {
-                        _events.send(QueryEvent.ChangeQueryView(queryUpdate))
-                    }
-                    QueryViewModelOwner.AGENDA if !hasAgenda -> {
-                        _events.send(QueryEvent.ChangeQueryView(queryUpdate))
-                    }
-                    else -> {
-                        query.value = queryUpdate
+        val queryUpdate = when (currentSimpleMode) {
+            true -> queryBuilder.build(
+                filterMapper.toQuery(
+                    currentSearchField,
+                    currentFilter
+                )
+            )
+            else -> currentSearchField
+        }
 
-                        when {
-                            currentSimpleMode -> search.value = currentSearchField
-                            !shouldStayInAdvancedMode -> queryUpdate.runCatching {
-                                filterMapper.fromQuery(queryParser.parse(this))
-                            }.getOrNull()?.let { asSimple ->
-                                filter.value = asSimple.filter
-                                search.value = asSimple.search
-                                searchTextField.setTextAndPlaceCursorAtEnd(asSimple.search)
-                                isSimpleMode.value = true
-                            }
-                        }
+        when (owner) {
+            QueryViewModelOwner.SEARCH if hasAgenda -> {
+                _events.send(QueryEvent.ChangeQueryView(queryUpdate))
+            }
+            QueryViewModelOwner.AGENDA if !hasAgenda -> {
+                _events.send(QueryEvent.ChangeQueryView(queryUpdate))
+            }
+            else -> {
+                query.value = queryUpdate
+
+                when {
+                    currentSimpleMode -> search.value = currentSearchField
+                    !shouldStayInAdvancedMode -> queryUpdate.runCatching {
+                        filterMapper.fromQuery(queryParser.parse(this))
+                    }.getOrNull()?.let { asSimple ->
+                        filter.value = asSimple.filter
+                        search.value = asSimple.search
+                        searchTextField.setTextAndPlaceCursorAtEnd(asSimple.search)
+                        isSimpleMode.value = true
                     }
                 }
             }
