@@ -32,7 +32,7 @@ class SimpleFilterMapperTest {
         assertEquals("", simpleQuery.search)
         assertTrue(simpleQuery.filter.books.isEmpty())
         assertFalse(simpleQuery.filter.excludeDone)
-        assertNull(simpleQuery.filter.state)
+        assertTrue(simpleQuery.filter.state.isEmpty())
         assertNull(simpleQuery.filter.priority)
         assertTrue(simpleQuery.filter.tags.isEmpty())
         assertNull(simpleQuery.filter.event)
@@ -62,7 +62,7 @@ class SimpleFilterMapperTest {
         val simpleQuery = mapper.fromQuery(query)
 
         assertEquals(setOf("work"), simpleQuery.filter.books)
-        assertEquals("TODO", simpleQuery.filter.state)
+        assertEquals(setOf("TODO"), simpleQuery.filter.state)
         assertEquals("A", simpleQuery.filter.priority)
     }
 
@@ -85,7 +85,7 @@ class SimpleFilterMapperTest {
         val simpleQuery = mapper.fromQuery(query)
 
         assertEquals(setOf("work"), simpleQuery.filter.books)
-        assertEquals("TODO", simpleQuery.filter.state)
+        assertEquals(setOf("TODO"), simpleQuery.filter.state)
         assertEquals("A", simpleQuery.filter.priority)
         assertEquals(setOf("urgent"), simpleQuery.filter.tags)
         assertTrue(simpleQuery.filter.excludeDone)
@@ -200,7 +200,7 @@ class SimpleFilterMapperTest {
         val filter = SimpleFilter(
             books = setOf("personal"),
             excludeDone = true,
-            state = "NEXT",
+            state = setOf("NEXT"),
             priority = "B",
             tags = setOf("home", "work"),
             scheduled = RelativeDateOption.TODAY,

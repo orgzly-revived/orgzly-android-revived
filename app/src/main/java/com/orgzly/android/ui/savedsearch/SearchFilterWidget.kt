@@ -590,8 +590,8 @@ private fun TagsFilter(
 
 @Composable
 private fun StateFilter(
-    currentState: String?,
-    onStateChange: (String?) -> Unit,
+    states: Set<String>,
+    onStateChange: (Set<String>) -> Unit,
     enabled: Boolean = true
 ) {
     val allStatesString by appPreference { AppPreferences.states(it) }
@@ -607,27 +607,27 @@ private fun StateFilter(
         stringResource(R.string.state),
         collapsed,
         { collapsed = it },
-        currentState != null,
+        states.isNotEmpty(),
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
             Modifier.padding(dropdownPadding),
             verticalArrangement = Arrangement.spacedBy(dropdownVerticalSpacing)
         ) {
-            RadioButtonFormLockup(
-                currentState == null,
-                onClick = {
-                    onStateChange(null)
-                },
-                stringResource(R.string.search_filter_state_none),
-                modifier = Modifier.fillMaxWidth(),
-                enabled = enabled
-            )
             for (state in allStates) {
-                RadioButtonFormLockup(
-                    state.equals(currentState, ignoreCase = true),
-                    onClick = {
-                        onStateChange(state)
+                CheckboxFormLockup(
+                    states.any {
+                        it.equals(state, ignoreCase = true)
+                    },
+                    onCheckedChange = {
+                        onStateChange(
+                            when (it) {
+                                true -> states + state
+                                else -> states.filterNot {
+                                    it.equals(state, ignoreCase = true)
+                                }.toSet()
+                            }
+                        )
                     },
                     state,
                     modifier = Modifier.fillMaxWidth(),
