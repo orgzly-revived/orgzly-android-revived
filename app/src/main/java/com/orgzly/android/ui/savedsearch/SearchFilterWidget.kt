@@ -62,6 +62,7 @@ import com.orgzly.android.ui.compose.widgets.OrgzlyTonalButton
 import com.orgzly.android.ui.compose.widgets.RadioButtonFormLockup
 import com.orgzly.android.ui.compose.widgets.TextFieldHoistEffect
 import com.orgzly.android.ui.compose.widgets.painterIcon
+import kotlin.collections.any
 import androidx.compose.runtime.rememberUpdatedState
 
 @Composable
@@ -552,61 +553,13 @@ private fun TagsFilter(
     allTags: List<String>,
     enabled: Boolean = true
 ) {
-    var collapsed by remember { mutableStateOf(true) }
-    val extraTags = remember(allTags, tags) {
-        tags.toMutableSet().apply {
-            removeAll(allTags)
-        }.toSet()
-    }
-
-    FilterCollapsePanel(
+    GenericCheckboxFilter(
         stringResource(R.string.tags),
-        collapsed,
-        { collapsed = it },
-        tags.isNotEmpty(),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(
-            Modifier.padding(dropdownPadding),
-            verticalArrangement = Arrangement.spacedBy(dropdownVerticalSpacing)
-        ) {
-            for (tag in allTags) {
-                CheckboxFormLockup(
-                    tags.any {
-                        it.equals(tag, ignoreCase = true)
-                    },
-                    onCheckedChange = {
-                        onTagChange(
-                            when (it) {
-                                true -> tags + tag
-                                else -> tags.filterNot {
-                                    it.equals(tag, ignoreCase = true)
-                                }.toSet()
-                            }
-                        )
-                    },
-                    tag,
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = enabled
-                )
-            }
-            for (tag in extraTags) {
-                CheckboxFormLockup(
-                    true,
-                    onCheckedChange = {
-                        onTagChange(
-                            tags.filterNot {
-                                it.equals(tag, ignoreCase = true)
-                            }.toSet()
-                        )
-                    },
-                    tag,
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = enabled
-                )
-            }
-        }
-    }
+        tags,
+        onTagChange,
+        allTags,
+        enabled,
+    )
 }
 
 @Composable
@@ -623,61 +576,13 @@ private fun StateFilter(
         }
     }
 
-    val extraStates = remember(allStates, states) {
-        states.toMutableSet().apply {
-            removeAll(allStates)
-        }.toSet()
-    }
-
-    var collapsed by remember { mutableStateOf(true) }
-    FilterCollapsePanel(
+    GenericCheckboxFilter(
         stringResource(R.string.state),
-        collapsed,
-        { collapsed = it },
-        states.isNotEmpty(),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(
-            Modifier.padding(dropdownPadding),
-            verticalArrangement = Arrangement.spacedBy(dropdownVerticalSpacing)
-        ) {
-            for (state in allStates) {
-                CheckboxFormLockup(
-                    states.any {
-                        it.equals(state, ignoreCase = true)
-                    },
-                    onCheckedChange = {
-                        onStateChange(
-                            when (it) {
-                                true -> states + state
-                                else -> states.filterNot {
-                                    it.equals(state, ignoreCase = true)
-                                }.toSet()
-                            }
-                        )
-                    },
-                    state,
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = enabled
-                )
-            }
-            for (state in extraStates) {
-                CheckboxFormLockup(
-                    true,
-                    onCheckedChange = {
-                        onStateChange(
-                            states.filterNot {
-                                it.equals(state, ignoreCase = true)
-                            }.toSet()
-                        )
-                    },
-                    state,
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = enabled
-                )
-            }
-        }
-    }
+        states,
+        onStateChange,
+        allStates,
+        enabled,
+    )
 }
 
 @Composable
@@ -687,53 +592,72 @@ private fun BookFilter(
     allBooks: List<String>,
     enabled: Boolean = true
 ) {
+    GenericCheckboxFilter(
+        stringResource(R.string.notebooks),
+        books,
+        onBooksChange,
+        allBooks,
+        enabled,
+    )
+}
+
+@Composable
+private fun GenericCheckboxFilter(
+    title: String,
+    selected: Set<String>,
+    onSelectChange: (Set<String>) -> Unit,
+    allOptions: List<String>,
+    enabled: Boolean = true,
+) {
     var collapsed by remember { mutableStateOf(true) }
-    val extraBooks = remember(allBooks, books) {
-        books.toMutableSet().apply {
-            removeAll(allBooks)
-        }.toSet()
+    val extraOptions = remember(allOptions, selected) {
+        selected.filterNot { selected ->
+            allOptions.any { it.equals(selected, ignoreCase = true) }
+        }
     }
 
     FilterCollapsePanel(
-        stringResource(R.string.notebooks),
+        title,
         collapsed,
         { collapsed = it },
-        books.isNotEmpty(),
+        selected.isNotEmpty(),
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
             Modifier.padding(dropdownPadding),
             verticalArrangement = Arrangement.spacedBy(dropdownVerticalSpacing)
         ) {
-            for (book in allBooks) {
+            for (option in allOptions) {
                 CheckboxFormLockup(
-                    books.contains(book),
+                    selected.any {
+                        it.equals(option, ignoreCase = true)
+                    },
                     onCheckedChange = {
-                        onBooksChange(
+                        onSelectChange(
                             when (it) {
-                                true -> books + book
-                                else -> books.filterNot {
-                                    it == book
+                                true -> selected + option
+                                else -> selected.filterNot {
+                                    it == option
                                 }.toSet()
                             }
                         )
                     },
-                    book,
+                    option,
                     modifier = Modifier.fillMaxWidth(),
                     enabled = enabled
                 )
             }
-            for (book in extraBooks) {
+            for (option in extraOptions) {
                 CheckboxFormLockup(
                     true,
                     onCheckedChange = {
-                        onBooksChange(
-                            books.filterNot {
-                                it == book
+                        onSelectChange(
+                            selected.filterNot {
+                                it.equals(option, ignoreCase = true)
                             }.toSet()
                         )
                     },
-                    book,
+                    option,
                     modifier = Modifier.fillMaxWidth(),
                     enabled = enabled
                 )
