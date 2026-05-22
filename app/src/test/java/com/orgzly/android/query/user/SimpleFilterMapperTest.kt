@@ -167,7 +167,7 @@ class SimpleFilterMapperTest {
 
     @Test(expected = UnsupportedSimpleFilterException::class)
     fun `fromQuery - OR condition throws`() {
-        val query = Query(Condition.Or(listOf(Condition.InBook("a"), Condition.InBook("b"))))
+        val query = Query(Condition.Or(listOf(Condition.HasTag("a"), Condition.HasTag("b"))))
         mapper.fromQuery(query)
     }
 
