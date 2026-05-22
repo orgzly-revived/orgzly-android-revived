@@ -34,13 +34,30 @@ internal class QueryPullReader(
 
 private fun flattenCondition(condition: Condition): List<Condition> =
     when (condition) {
-        is Condition.And ->
-            condition.operands.flatMap(::flattenCondition)
+        is Condition.And -> {
+            val flattenedOperands = condition.operands.map(::flattenCondition)
+            if (flattenedOperands.count { it.any { c -> c is Condition.InBook } } > 1) {
+                throw UnsupportedSimpleFilterException("Multiple books must be joined by OR")
+            }
+            if (flattenedOperands.count { it.any { c -> c is Condition.HasState } } > 1) {
+                throw UnsupportedSimpleFilterException("Multiple states must be joined by OR")
+            }
+            flattenedOperands.flatten()
+        }
 
-        is Condition.Or ->
-            throw UnsupportedSimpleFilterException(
-                "OR conditions are unsupported"
-            )
+        is Condition.Or -> {
+            val flattenedOperands = condition.operands.flatMap(::flattenCondition)
+            val allInBook = flattenedOperands.all { it is Condition.InBook }
+            val allHasState = flattenedOperands.all { it is Condition.HasState }
+
+            if (allInBook || allHasState) {
+                flattenedOperands
+            } else {
+                throw UnsupportedSimpleFilterException(
+                    "OR conditions are unsupported"
+                )
+            }
+        }
 
         else ->
             listOf(condition)

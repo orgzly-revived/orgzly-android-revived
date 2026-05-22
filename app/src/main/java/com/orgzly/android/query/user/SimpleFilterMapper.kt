@@ -71,11 +71,8 @@ class SimpleFilterMapper @Inject constructor(
                 }
 
                 is Condition.HasState -> {
-                    if (reader.hasNextConditionOfType<Condition.HasState>())
-                        throw UnsupportedSimpleFilterException("Cannot represent multiple HasState")
-
                     rejectIf(c.not)
-                    result.state = c.state
+                    result.state += c.state
                 }
 
                 is Condition.HasStateType -> {
@@ -132,13 +129,13 @@ class SimpleFilterMapper @Inject constructor(
 
     fun toQuery(search: String, filter: SimpleFilter): Query {
         val conditions = buildList {
-            addAll(filter.books.map { Condition.InBook(it) })
+            addOrJoinedConditions(filter.books.map { Condition.InBook(it) })
 
             if (filter.excludeDone) {
                 add(Condition.HasStateType(StateType.DONE, true))
             }
 
-            filter.state?.let { add(Condition.HasState(it, false)) }
+            addOrJoinedConditions(filter.state.map { Condition.HasState(it) })
             filter.priority?.let { add(Condition.HasPriority(it)) }
             addAll(filter.tags.map { Condition.HasTag(it) })
 
@@ -170,6 +167,16 @@ class SimpleFilterMapper @Inject constructor(
             sortOrders = listOfNotNull(mapSimpleSortOrder(filter.sortOrder, filter.sortDescending)),
             options = Options(agendaDays = filter.agendaDays ?: 0)
         )
+    }
+
+    private fun <T: Condition> MutableList<Condition>.addOrJoinedConditions(
+        conditions: Collection<T>
+    ) {
+        when (conditions.size) {
+            0 -> {}
+            1 -> addAll(conditions)
+            else -> add(Condition.Or(conditions.toList()))
+        }
     }
 
     private inline fun <reified T> MutableList<Condition>.addDateConditions(
