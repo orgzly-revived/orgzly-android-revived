@@ -73,8 +73,20 @@ public class BookName {
         /* The content:// repository type requires special handling */
         if ("content".equals(repoUri.getScheme())) {
             String repoUriLastSegment = repoUri.toString().replaceAll("^.*/", "");
-            String repoRootUriSegment = repoUri + "/document/" + repoUriLastSegment + "%2F";
-            return Uri.decode(fileUri.toString().replace(repoRootUriSegment, ""));
+            String base = repoUri + "/document/" + repoUriLastSegment;
+            String fileUriStr = fileUri.toString();
+
+            if (fileUriStr.startsWith(base + "%2F")) {
+                return Uri.decode(fileUriStr.substring((base + "%2F").length()));
+            } else if (fileUriStr.startsWith(base + "%3A")) {
+                return Uri.decode(fileUriStr.substring((base + "%3A").length()));
+            } else if (fileUriStr.startsWith(base + ":")) {
+                return Uri.decode(fileUriStr.substring((base + ":").length()));
+            }
+            return Uri.decode(fileUriStr
+                    .replace(base + "%2F", "")
+                    .replace(base + "%3A", "")
+                    .replace(base + ":", ""));
         } else {
             // Just return the decoded fileUri stripped of the repoUri (if present), and stripped
             // of any leading / (if present).

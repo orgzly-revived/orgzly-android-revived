@@ -27,6 +27,7 @@ class PrefaceItemViewBinder(private val context: Context) {
                 if (AppPreferences.isFontMonospaced(context)) {
                     setTypeface(Typeface.MONOSPACE)
                 }
+                this.bookId = bookId
                 setSourceText(preface)
 
                 /* If content changes (for example by toggling the checkbox), update the note. */

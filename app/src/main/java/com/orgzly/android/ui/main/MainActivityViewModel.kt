@@ -56,12 +56,15 @@ class MainActivityViewModel(private val dataRepository: DataRepository) : Common
         return savedSearches
     }
 
-    fun followLinkToFile(path: String) {
+    fun followLinkToFile(path: String, bookId: Long) {
         App.EXECUTORS.diskIO().execute {
             catchAndPostError {
-                val result = UseCaseRunner.run(LinkFindTarget(path)).userData
+                val result = UseCaseRunner.run(LinkFindTarget(path, bookId)).userData
 
-                if (result is File) {
+                if (result is Uri) {
+                    navigationActions.postValue(MainNavigationAction.OpenUri(result))
+
+                } else if (result is File) {
                     navigationActions.postValue(MainNavigationAction.OpenFile(result))
 
                 } else if (result is Book) {
@@ -162,5 +165,6 @@ sealed class MainNavigationAction {
     data class OpenBookFocusNote(val bookId: Long, val noteId: Long, val foldRest: Boolean) : MainNavigationAction()
     data class OpenNote(val bookId: Long, val noteId: Long) : MainNavigationAction()
     data class OpenFile(val file: File) : MainNavigationAction()
+    data class OpenUri(val uri: Uri) : MainNavigationAction()
     data class DisplayQuery(val query: String) : MainNavigationAction()
 }

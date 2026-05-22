@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.SystemClock
+import androidx.documentfile.provider.DocumentFile
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.setFailureHandler
@@ -11,21 +12,20 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.base.DefaultFailureHandler
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.isRoot
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import com.orgzly.R
 import com.orgzly.android.AppIntent
 import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.RetryTestRule
+import com.orgzly.android.db.entity.Repo
+import com.orgzly.android.db.entity.NoteView
+import com.orgzly.android.espresso.util.EspressoUtils.*
 import com.orgzly.android.espresso.util.EspressoUtils.OrgzlyCustomFailureHandler
-import com.orgzly.android.espresso.util.EspressoUtils.onSnackbar
-import com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard
-import com.orgzly.android.espresso.util.EspressoUtils.scroll
-import com.orgzly.android.espresso.util.EspressoUtils.waitId
 import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.repos.RepoType
+import com.orgzly.android.ui.main.MainActivity
 import com.orgzly.android.ui.share.ShareActivity
+import com.orgzly.android.util.MiscUtils
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.startsWith
@@ -33,6 +33,7 @@ import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
 
 
 class ShareActivityTest : OrgzlyTest() {
@@ -85,6 +86,20 @@ class ShareActivityTest : OrgzlyTest() {
 
     private fun setNoteTitle(title: String = "Dummy title") {
         onView(withId(R.id.title_edit)).perform(*replaceTextCloseKeyboard(title))
+    }
+
+    private fun waitForLastNote(bookName: String, timeoutMs: Long = 5000): NoteView {
+        val deadline = SystemClock.uptimeMillis() + timeoutMs
+        var lastNote: NoteView? = null
+        while (SystemClock.uptimeMillis() < deadline) {
+            val notes = dataRepository.getNotes(bookName)
+            if (notes.isNotEmpty()) {
+                lastNote = notes.last()
+                break
+            }
+            SystemClock.sleep(100)
+        }
+        return requireNotNull(lastNote) { "No notes created in $bookName within ${timeoutMs}ms" }
     }
 
     @Test
@@ -334,17 +349,53 @@ class ShareActivityTest : OrgzlyTest() {
                 extraStreamUri = "content://uri")
 
         onView(withId(R.id.title_view)).check(matches(withText("content://uri")))
-        onView(withId(R.id.content_view)).check(matches(withText("Cannot find image using this URI.")))
+        onView(withId(R.id.content_view)).check(matches(withText("content://uri\n" +
+                "\n" +
+                "Cannot determine fileName to this content.")))
 
         onView(withId(R.id.done)).perform(click()) // Note done
     }
 
     @Test
-    fun testNoMatchingType() {
-        startActivityWithIntent(action = Intent.ACTION_SEND, type = "application/octet-stream")
+    fun testFileCopy_fillBody() {
+        AppPreferences.attachMethod(context, ShareActivity.ATTACH_METHOD_COPY_DIR);
+        startActivityWithIntent(
+            action = Intent.ACTION_SEND,
+            type = "application/pdf",
+            extraStreamUri = "content://uri")
 
-        onView(withId(R.id.content_view)).check(matches(withText("")))
-        onSnackbar().check(matches(withText(context.getString(R.string.share_type_not_supported, "application/octet-stream"))))
+        onView(withId(R.id.title_view)).check(matches(withText("content://uri")))
+        onView(withId(R.id.content_view)).check(matches(withText("content://uri\n\nCannot determine fileName to this content.")))
+
+        onView(withId(R.id.done)).perform(click()) // Note done
+    }
+
+    @Test
+    fun testFileCopy_attachmentsList() {
+        AppPreferences.attachMethod(context, ShareActivity.ATTACH_METHOD_COPY_DIR);
+
+        val file = File(context.cacheDir, "test.pdf")
+        MiscUtils.writeStringToFile("pdf data", file)
+        val uri = DocumentFile.fromFile(file).uri
+
+        val scenario = startActivityWithIntent(
+                action = Intent.ACTION_SEND,
+                type = "application/pdf",
+                extraStreamUri = uri.toString())
+
+        // Check if the file is displayed in the list in portrait mode.
+        scenario.onActivity { activity ->
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+        onView(withText("test.pdf")).check(matches(isDisplayed()));
+
+        // Check in landscape mode, scroll down to right at the body view to make sure we are at the
+        // end of the attachment list.
+        scenario.onActivity { activity ->
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+        onView(withId(R.id.content_view)).perform(scroll())
+        onView(withText("test.pdf")).check(matches(isDisplayed()))
     }
 
     @Test
@@ -413,5 +464,67 @@ class ShareActivityTest : OrgzlyTest() {
                 queryString = "b.foo")
 
         onView(withId(R.id.location_button)).check(matches(withText("foo")))
+    }
+
+    @Test
+    fun testImageShare_OrgAttachMethod() {
+        AppPreferences.attachMethod(context, ShareActivity.ATTACH_METHOD_COPY_ID);
+        val dataDir = File(context.cacheDir, "data-share")
+        testUtils.setupRepo(RepoType.DIRECTORY, dataDir.toURI().toString())
+
+        val file = File(context.cacheDir, "shared_image.png")
+        MiscUtils.writeStringToFile("image data", file)
+        val uri = DocumentFile.fromFile(file).uri
+
+        val scenario = startActivityWithIntent(
+            action = Intent.ACTION_SEND,
+            type = "image/png",
+            extraStreamUri = uri.toString())
+
+        onView(withId(R.id.done)).perform(click())
+
+        // Verify ID property added to the last created note
+        val bookView = dataRepository.getBooks()[0]
+        val lastNoteView = waitForLastNote(bookView.book.name)
+        val lastNote = dataRepository.getNote(lastNoteView.note.id)!!
+        val payload = dataRepository.getNotePayload(lastNoteView.note.id)!!
+        assertTrue(payload.properties.containsKey("ID"))
+        
+        // Verify file in repo
+        var filesFound = false
+        for (i in 1..10) {
+            val files = dataRepository.listFiles(bookView.book.id, payload)
+            if (files.isNotEmpty()) {
+                filesFound = true
+                break
+            }
+            SystemClock.sleep(500)
+        }
+        assertTrue(filesFound)
+    }
+
+    @Test
+    fun testFileShare_RotationPersistence() {
+        val file = File(context.cacheDir, "rotate.pdf")
+        MiscUtils.writeStringToFile("content", file)
+        val uri = DocumentFile.fromFile(file).uri
+
+        val scenario = startActivityWithIntent(
+            action = Intent.ACTION_SEND,
+            type = "application/pdf",
+            extraStreamUri = uri.toString())
+
+        scenario.onActivity { activity ->
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+        onView(allOf(withText("rotate.pdf"), isDisplayed())).check(matches(isDisplayed()))
+
+        scenario.onActivity { activity ->
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+        onView(isRoot()).perform(waitId(R.id.content_view, 5000))
+
+        onView(withId(R.id.content_view)).perform(scroll())
+        onView(allOf(withText("rotate.pdf"), isDisplayed())).check(matches(isDisplayed()))
     }
 }

@@ -6,7 +6,7 @@ import com.orgzly.android.data.DataRepository
 import com.orgzly.android.prefs.AppPreferences
 import java.io.File
 
-class LinkFindTarget(val path: String) : UseCase() {
+class LinkFindTarget(val path: String, val bookId: Long) : UseCase() {
     val context = App.getAppContext();
 
     override fun run(dataRepository: DataRepository): UseCaseResult {
@@ -18,8 +18,13 @@ class LinkFindTarget(val path: String) : UseCase() {
     }
 
     private fun openLink(dataRepository: DataRepository, path: String): Any {
+        if (path.startsWith("content://")) {
+            return android.net.Uri.parse(path)
+        }
+
         return if (isAbsolute(path)) {
-            File(AppPreferences.fileAbsoluteRoot(context), path)
+            val root = AppPreferences.fileAbsoluteRoot(context)
+            File(root, path)
         } else {
             isMaybeBook(path)?.let { bookName ->
                 dataRepository.getBook(bookName.name)?.let {
@@ -27,7 +32,28 @@ class LinkFindTarget(val path: String) : UseCase() {
                 }
             }
 
-            File(AppPreferences.fileRelativeRoot(context), path)
+            val book = dataRepository.getBookView(bookId)
+            if (book != null) {
+                val repoEntity = book.linkRepo ?: book.syncedTo?.let { vrook ->
+                    dataRepository.getRepo(vrook.repoId)
+                }
+
+                if (repoEntity != null) {
+                    val repo = dataRepository.getRepoInstance(repoEntity.id, repoEntity.type, repoEntity.url)
+
+                    if (repo != null) {
+                        val attachDir = AppPreferences.attachDirDefaultPath(context)
+                        val relativePath = File(attachDir, path).path
+                        val uri = repo.getUriForPath(relativePath)
+                        if (uri != null) {
+                            return uri
+                        }
+                        return File(relativePath)
+                    }
+                }
+            }
+
+            File(path)
         }
     }
 

@@ -3,6 +3,7 @@ package com.orgzly.android.ui.views.style
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import com.orgzly.android.OrgFormat
 import com.orgzly.android.ui.views.richtext.ActionableRichTextView
 
 class FileLinkSpan(val type: Int, val link: String, val name: String?) : LinkSpan(), Offsetting {
@@ -24,6 +25,6 @@ class FileLinkSpan(val type: Int, val link: String, val name: String?) : LinkSpa
     }
 
     companion object {
-        const val PREFIX = "file:"
+        const val PREFIX = OrgFormat.LINK_PREFIX_FILE
     }
 }

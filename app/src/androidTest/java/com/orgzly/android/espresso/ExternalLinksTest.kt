@@ -1,6 +1,7 @@
 package com.orgzly.android.espresso
 
 import android.os.Build
+import android.os.SystemClock
 import android.os.Environment
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.action.ViewActions.click
@@ -19,6 +20,8 @@ import com.orgzly.android.espresso.util.EspressoUtils.waitId
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import com.orgzly.android.ui.main.MainActivity
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.endsWith
 import org.hamcrest.Matchers.startsWith
 import org.junit.Rule
 import org.junit.Test
@@ -46,14 +49,16 @@ class ExternalLinksTest(private val param: Parameter) : OrgzlyTest() {
         @Parameterized.Parameters(name = "{index}: {0}")
         fun data(): Collection<Parameter> {
             val cacheDir = App.getAppContext().cacheDir
-            val storageDir = Environment.getExternalStorageDirectory()
 //            val downloadsDir = Environment.getExternalStoragePublicDirectory(
 //                    Environment.DIRECTORY_DOWNLOADS)
 
             return listOf(
                     Parameter("file:./non-existing-file") {
                         onSnackbar().check(matches(
-                                withText("File does not exist: $storageDir/non-existing-file")))
+                                withText(allOf(
+                                        startsWith("File does not exist:"),
+                                        endsWith("/non-existing-file")
+                                ))))
                     },
 
                     Parameter("file:$cacheDir") {

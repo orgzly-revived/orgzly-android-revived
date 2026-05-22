@@ -11,12 +11,14 @@ import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.RetryTestRule
 import com.orgzly.android.espresso.util.EspressoUtils.*
 import com.orgzly.android.ui.main.MainActivity
+import com.orgzly.android.repos.RepoType
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.instanceOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
 
 
 class InternalLinksTest : OrgzlyTest() {
@@ -29,6 +31,11 @@ class InternalLinksTest : OrgzlyTest() {
     @Throws(Exception::class)
     override fun setUp() {
         super.setUp()
+
+        val repo = testUtils.setupRepo(
+                RepoType.DIRECTORY,
+                File(context.cacheDir, "internal-links-repo").toURI().toString()
+        )
 
         testUtils.setupBook(
                 "book-a",
@@ -57,7 +64,8 @@ class InternalLinksTest : OrgzlyTest() {
 
                     * Note [a-7]
                     [[id:dd791937-3fb6-4018-8d5d-b278e0e52c80][Link to book-b by id]]
-                """.trimIndent()
+                """.trimIndent(),
+                repo
         )
 
         testUtils.setupBook(
@@ -81,7 +89,8 @@ class InternalLinksTest : OrgzlyTest() {
                     :PROPERTIES:
                     :CUSTOM_ID: Link to note in a different book
                     :END:
-                """.trimIndent()
+                """.trimIndent(),
+                repo
         )
 
         scenario = ActivityScenario.launch(MainActivity::class.java)

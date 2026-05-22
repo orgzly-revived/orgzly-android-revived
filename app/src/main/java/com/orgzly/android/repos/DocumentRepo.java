@@ -14,6 +14,7 @@ import com.orgzly.R;
 import com.orgzly.android.BookName;
 import com.orgzly.android.db.entity.Repo;
 import com.orgzly.android.prefs.AppPreferences;
+import com.orgzly.android.ui.note.NoteAttachmentData;
 import com.orgzly.android.util.LogUtils;
 import com.orgzly.android.util.MiscUtils;
 
@@ -140,8 +141,27 @@ public class DocumentRepo implements SyncRepo {
     }
 
     private DocumentFile getDocumentFileFromPath(String path) {
-        String fullUri = repoDocumentFile.getUri() + Uri.encode("/" + path);
-        return DocumentFile.fromSingleUri(context, Uri.parse(fullUri));
+        if (path == null || path.isEmpty()) return repoDocumentFile;
+        List<String> levels = new ArrayList<>(Arrays.asList(path.split("/")));
+        DocumentFile currentDir = repoDocumentFile;
+        while (!levels.isEmpty()) {
+            String nextName = levels.remove(0);
+            if (nextName.isEmpty()) continue;
+            currentDir = Objects.requireNonNull(currentDir).findFile(nextName);
+            if (currentDir == null) {
+                return null;
+            }
+        }
+        return currentDir;
+    }
+
+    @Override
+    public Uri getUriForPath(String path) {
+        DocumentFile df = getDocumentFileFromPath(path);
+        if (df != null && df.exists()) {
+            return df.getUri();
+        }
+        return null;
     }
 
     @Override
@@ -170,7 +190,7 @@ public class DocumentRepo implements SyncRepo {
     @Override
     public InputStream openRepoFileInputStream(String repoRelativePath) throws IOException {
         DocumentFile sourceFile = getDocumentFileFromPath(repoRelativePath);
-        if (!sourceFile.exists()) throw new FileNotFoundException();
+        if (sourceFile == null || !sourceFile.exists()) throw new FileNotFoundException();
         return context.getContentResolver().openInputStream(sourceFile.getUri());
     }
 
@@ -240,17 +260,28 @@ public class DocumentRepo implements SyncRepo {
      */
     @Override
     public VersionedRook renameBook(Uri oldFullUri, String newName) throws IOException {
-        DocumentFile oldDocFile = Objects.requireNonNull(DocumentFile.fromSingleUri(context, oldFullUri));
+        String oldRepoRelativePath = BookName.getRepoRelativePath(repoUri, oldFullUri);
+        DocumentFile oldDocFile = getDocumentFileFromPath(oldRepoRelativePath);
+        if (oldDocFile == null) {
+            oldDocFile = DocumentFile.fromSingleUri(context, oldFullUri);
+        }
         long mtime = oldDocFile.lastModified();
         String rev = String.valueOf(mtime);
         String oldDocFileName = oldDocFile.getName();
-        Uri oldDirUri = Uri.parse(
-                oldFullUri.toString().replace(
-                        Uri.encode("/" + oldDocFile.getName()),
-                        ""
-                )
-        );
-        BookName oldBookName = BookName.fromRepoRelativePath(BookName.getRepoRelativePath(repoUri, oldFullUri));
+
+        String oldDirPath = "";
+        int lastSlash = oldRepoRelativePath.lastIndexOf('/');
+        if (lastSlash > 0) {
+            oldDirPath = oldRepoRelativePath.substring(0, lastSlash);
+        }
+
+        DocumentFile oldDirFile = getDocumentFileFromPath(oldDirPath);
+        if (oldDirFile == null) {
+            throw new IOException("Cannot find parent directory for " + oldRepoRelativePath);
+        }
+        Uri oldDirUri = oldDirFile.getUri();
+
+        BookName oldBookName = BookName.fromRepoRelativePath(oldRepoRelativePath);
         String newRelativePath = BookName.repoRelativePath(newName, oldBookName.getFormat());
         String newDocFileName = Objects.requireNonNull(Uri.parse(newRelativePath).getLastPathSegment());
         DocumentFile newDir;
@@ -298,6 +329,77 @@ public class DocumentRepo implements SyncRepo {
         }
 
         return new VersionedRook(repoId, RepoType.DOCUMENT, repoUri, newUri, rev, mtime);
+    }
+
+    @Override
+    public VersionedRook storeFile(File file, String pathInRepo, String fileName) throws IOException {
+        if (!file.exists()) {
+            throw new FileNotFoundException("File " + file + " does not exist");
+        }
+
+        DocumentFile destinationDir = repoDocumentFile;
+        if (pathInRepo != null && !pathInRepo.isEmpty()) {
+            destinationDir = ensureDirectory(pathInRepo);
+        }
+
+        /* Delete existing file. */
+        DocumentFile existingFile = destinationDir.findFile(fileName);
+        if (existingFile != null) {
+            existingFile.delete();
+        }
+
+        /* Create new file. */
+        DocumentFile destinationFile = destinationDir.createFile("application/octet-stream", fileName);
+
+        if (destinationFile == null) {
+            throw new IOException("Failed creating " + fileName + " in " + repoUri);
+        }
+
+        Uri uri = destinationFile.getUri();
+
+        /* Write file content to uri. */
+        try (OutputStream out = context.getContentResolver().openOutputStream(uri, "w")) {
+            MiscUtils.writeFileToStream(file, out);
+        }
+
+        String rev = String.valueOf(destinationFile.lastModified());
+        long mtime = System.currentTimeMillis();
+
+        return new VersionedRook(repoId, RepoType.DOCUMENT, getUri(), uri, rev, mtime);
+    }
+
+    @Override
+    public List<NoteAttachmentData> listFilesInPath(String pathInRepo) {
+        DocumentFile documentFile = ensureDirectory(pathInRepo);
+        DocumentFile[] documentFiles = documentFile.listFiles();
+        ArrayList<NoteAttachmentData> list = new ArrayList<>(documentFiles.length);
+        for (DocumentFile file : documentFiles) {
+            list.add(new NoteAttachmentData(file.getUri(), file.getName(), false, false, null));
+        }
+
+        return list;
+    }
+
+    /**
+     * Given a relative path, ensures that all directory levels are created unless they already
+     * exist.
+     * @param relativePath Path relative to the repository root directory
+     * @return The DocumentFile object of the leaf directory.
+     */
+    private DocumentFile ensureDirectory(String relativePath) {
+        List<String> levels = new ArrayList<>(Arrays.asList(relativePath.split("/")));
+        DocumentFile currentDir = repoDocumentFile;
+        while (!levels.isEmpty()) {
+            String nextDirName = levels.remove(0);
+            if (nextDirName.isEmpty()) continue;
+            DocumentFile nextDir = Objects.requireNonNull(currentDir).findFile(nextDirName);
+            if (nextDir == null) {
+                currentDir = currentDir.createDirectory(nextDirName);
+            } else {
+                currentDir = nextDir;
+            }
+        }
+        return currentDir;
     }
 
     @Override

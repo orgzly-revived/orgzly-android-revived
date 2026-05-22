@@ -270,7 +270,62 @@
 
                 </LinearLayout>
 
-                <View style="@style/HorizontalDivider" />
+                <View
+                    android:id="@+id/attachments_divider"
+                    style="@style/HorizontalDivider" />
+
+            <!-- Attachments header -->
+            <LinearLayout
+                android:id="@+id/attachments_header"
+                style="@style/NoteFragmentMetadataHeaderContainer">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/screen_edge"
+                    android:layout_marginLeft="@dimen/screen_edge"
+                    android:src="@drawable/ic_info_outline"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/screen_edge"
+                    android:layout_marginStart="@dimen/screen_edge"
+                    android:textSize="?attr/fragment_note_content_text_size"
+                    android:text="@string/attachments"/>
+
+                <ImageView
+                    android:id="@+id/attachments_header_up_icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_keyboard_arrow_up"/>
+
+                <ImageView
+                    android:id="@+id/attachments_header_down_icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_keyboard_arrow_down"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+            <!-- Attachments List -->
+            <LinearLayout
+                android:id="@+id/attachments_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="@dimen/space_between_content_areas"
+                android:layout_marginStart="@dimen/screen_edge"
+                android:layout_marginLeft="@dimen/screen_edge"
+                android:layout_marginRight="4dp"
+                android:layout_marginEnd="4dp">
+            </LinearLayout>
+
+            <View style="@style/HorizontalDivider" />
 
                 <!-- Content header -->
                 <LinearLayout
