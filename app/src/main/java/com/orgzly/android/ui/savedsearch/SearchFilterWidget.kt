@@ -553,6 +553,12 @@ private fun TagsFilter(
     enabled: Boolean = true
 ) {
     var collapsed by remember { mutableStateOf(true) }
+    val extraTags = remember(allTags, tags) {
+        tags.toMutableSet().apply {
+            removeAll(allTags)
+        }.toSet()
+    }
+
     FilterCollapsePanel(
         stringResource(R.string.tags),
         collapsed,
@@ -584,6 +590,21 @@ private fun TagsFilter(
                     enabled = enabled
                 )
             }
+            for (tag in extraTags) {
+                CheckboxFormLockup(
+                    true,
+                    onCheckedChange = {
+                        onTagChange(
+                            tags.filterNot {
+                                it.equals(tag, ignoreCase = true)
+                            }.toSet()
+                        )
+                    },
+                    tag,
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = enabled
+                )
+            }
         }
     }
 }
@@ -600,6 +621,12 @@ private fun StateFilter(
             (it.todoKeywords?.toList() ?: emptyList<String>()) +
             (it.doneKeywords?.toList() ?: emptyList<String>())
         }
+    }
+
+    val extraStates = remember(allStates, states) {
+        states.toMutableSet().apply {
+            removeAll(allStates)
+        }.toSet()
     }
 
     var collapsed by remember { mutableStateOf(true) }
@@ -634,6 +661,21 @@ private fun StateFilter(
                     enabled = enabled
                 )
             }
+            for (state in extraStates) {
+                CheckboxFormLockup(
+                    true,
+                    onCheckedChange = {
+                        onStateChange(
+                            states.filterNot {
+                                it.equals(state, ignoreCase = true)
+                            }.toSet()
+                        )
+                    },
+                    state,
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = enabled
+                )
+            }
         }
     }
 }
@@ -646,6 +688,12 @@ private fun BookFilter(
     enabled: Boolean = true
 ) {
     var collapsed by remember { mutableStateOf(true) }
+    val extraBooks = remember(allBooks, books) {
+        books.toMutableSet().apply {
+            removeAll(allBooks)
+        }.toSet()
+    }
+
     FilterCollapsePanel(
         stringResource(R.string.notebooks),
         collapsed,
@@ -668,6 +716,21 @@ private fun BookFilter(
                                     it == book
                                 }.toSet()
                             }
+                        )
+                    },
+                    book,
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = enabled
+                )
+            }
+            for (book in extraBooks) {
+                CheckboxFormLockup(
+                    true,
+                    onCheckedChange = {
+                        onBooksChange(
+                            books.filterNot {
+                                it == book
+                            }.toSet()
                         )
                     },
                     book,
