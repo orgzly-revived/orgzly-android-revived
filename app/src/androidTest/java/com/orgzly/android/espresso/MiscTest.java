@@ -442,7 +442,6 @@ public class MiscTest extends OrgzlyTest {
             fragmentTest(activity, true, withId(R.id.fragment_books_view_flipper));
 
             // Book
-            SystemClock.sleep(1000);
             onBook(0).perform(click());
             fragmentTest(activity, true, withId(R.id.fragment_book_view_flipper));
 
@@ -477,10 +476,12 @@ public class MiscTest extends OrgzlyTest {
             composeFragmentTest(activity, false);
             pressBack();
             closeSoftKeyboard();
+            pressBack();
+            SystemClock.sleep(500);
 
             // Agenda
             searchForTextCloseKeyboard("t.tag3 ad.3");
-            fragmentTest(activity, false, withId(R.id.fragment_query_agenda_view_flipper));
+            composeFragmentTest(activity, false);
         }
     }
 
