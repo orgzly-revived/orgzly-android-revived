@@ -87,6 +87,8 @@ buildscript {
     repositories {
         mavenCentral()
         google()
+        // For org.jetbrains.kotlin.plugin.compose
+        gradlePluginPortal()
     }
 
     dependencies {
