@@ -58,7 +58,7 @@ buildscript {
 
     versions.dagger = '2.59.2'
 
-    versions.gson = '2.13.2'
+    versions.gson = '2.14.0'
 
     versions.dropbox_core_sdk = '7.0.0'
 
