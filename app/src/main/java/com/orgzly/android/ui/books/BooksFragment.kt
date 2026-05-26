@@ -48,6 +48,7 @@ import com.orgzly.android.db.entity.BookView
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.sync.SyncRunner
 import com.orgzly.android.ui.CommonFragment
+import com.orgzly.android.ui.DisplayManager
 import com.orgzly.android.ui.OnViewHolderClickListener
 import com.orgzly.android.ui.books.BooksViewModel.Companion.APP_BAR_DEFAULT_MODE
 import com.orgzly.android.ui.books.BooksViewModel.Companion.APP_BAR_SELECTION_MODE
@@ -189,25 +190,7 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
                         .fillMaxWidth()
                         .padding(horizontal = 1.rdp)
                         .padding(bottom = 1.rdp),
-                    centerContent = {
-                        OrgzlyExtendedFloatingActionButton(
-                            onClick = {
-                                navigator.navigate(
-                                    NavigationDestination.EnterSearch
-                                )
-                            },
-                            modifier = Modifier.testTag("fragment_books_search")
-                        ) {
-                            Icon(
-                                painterIcon(Icons.SEARCH),
-                                contentDescription = null
-                            )
-                            Spacer(Modifier.width(0.5.rdp))
-                            Text(
-                                stringResource(R.string.search)
-                            )
-                        }
-                    }
+                    centerContent = {}
                 ) {
                     OrgzlyFloatingActionButton(
                         onClick = {
@@ -259,6 +242,10 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
                 menu.clear()
                 inflateMenu(R.menu.books_actions)
                 menu.findItem(R.id.search_view).isVisible = AppPreferences.showSearchAction(requireContext())
+                menu.findItem(R.id.search_button).setOnMenuItemClickListener {
+                    DisplayManager.displayEnterSearch(requireActivity().supportFragmentManager)
+                    true
+                }
 
                 setNavigationIcon(R.drawable.ic_menu)
 

@@ -117,9 +117,7 @@ class AgendaFragmentTest : OrgzlyTest() {
         scenario = ActivityScenario.launch<MainActivity?>(MainActivity::class.java)
 
         mainActivityComposeRule.waitForIdle()
-        mainActivityComposeRule
-            .onNodeWithTag("fragment_books_search")
-            .performClick()
+        onView(withId(R.id.search_button)).perform(click())
         mainActivityComposeRule.waitForIdle()
         mainActivityComposeRule
             .onNodeWithTag("search_widget_search_field")
