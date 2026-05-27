@@ -1,7 +1,9 @@
 package com.orgzly.android.ui.notes
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.PopupWindow
@@ -10,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
+import com.orgzly.android.NotesOrgExporter
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.ui.CommonFragment
 import com.orgzly.android.ui.NotePlace
@@ -214,6 +217,44 @@ abstract class NotesFragment : CommonFragment(), TimestampDialogFragment.OnDateT
         fun onClockIn(noteIds: Set<Long>)
         fun onClockOut(noteIds: Set<Long>)
         fun onClockCancel(noteIds: Set<Long>)
+    }
+
+    enum class SharePart { NOTE, TITLE, CONTENT }
+
+    fun shareNoteParts(ids: Set<Long>, part: SharePart) {
+        try {
+            val exporter = NotesOrgExporter(dataRepository)
+
+            val text = when (part) {
+                SharePart.NOTE -> ids.mapNotNull { id ->
+                    try {
+                        exporter.exportNote(id)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Failed to export note $id", e)
+                        null
+                    }
+                }.joinToString("")
+
+                SharePart.TITLE -> ids.mapNotNull { id ->
+                    dataRepository.getNoteView(id)?.note?.title?.takeIf { it.isNotBlank() }
+                }.joinToString("\n")
+
+                SharePart.CONTENT -> ids.mapNotNull { id ->
+                    dataRepository.getNoteView(id)?.note?.content?.takeIf { it.isNotBlank() }
+                }.joinToString("\n")
+            }
+
+            if (text.isNotEmpty()) {
+                val shareIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, text)
+                }
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.share)))
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to share notes", e)
+        }
     }
 
     companion object {
