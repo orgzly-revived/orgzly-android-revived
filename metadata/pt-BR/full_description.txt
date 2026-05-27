@@ -1,0 +1,22 @@
+O Orgzly Revived é um organizador de ideias para fazer anotações e gerenciar listas de tarefas.
+
+Você pode armazenar cadernos em texto simples e sincronizá-los com um diretório no seu dispositivo móvel, cartão SD ou via WebDAV.
+
+Os cadernos são salvos no formato de arquivo do Org mode.
+
+“O Org mode serve para fazer anotações, manter listas de tarefas, planejar projetos e criar documentos com um sistema de texto simples rápido e eficaz.”
+
+Veja <a href='https://orgmode.org/'>orgmode.org</a> para mais informações.
+
+<b>Recursos:</b>
+
+* Crie, edite e exclua notas e tarefas
+* Recolha e expanda subnotas
+* Agende tarefas e defina seus prazos
+* Defina prioridades e etiquetas para notas
+* Deslize as notas para a esquerda ou para a direita para abrir menus rápidos
+* Pesquise notas por diversas propriedades
+* Crie e salve pesquisas para acesso rápido
+* Sincronize cadernos com um ou mais diretórios
+
+Orgzly Revived é uma versão modificada (fork) do aplicativo Orgzly, desenvolvida pela comunidade.
