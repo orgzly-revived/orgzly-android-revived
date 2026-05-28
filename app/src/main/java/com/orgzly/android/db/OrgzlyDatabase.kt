@@ -631,9 +631,10 @@ abstract class OrgzlyDatabase : RoomDatabase() {
                         val filetags = settings?.filetags?.joinToString(" ")
 
                         if (!filetags.isNullOrBlank()) {
+                            val array: Array<Any> = arrayOf(filetags, id)
                             db.execSQL(
                                 "UPDATE books SET filetags = ? WHERE id = ?",
-                                arrayOf(filetags, id)
+                                array
                             )
                         }
                     }
