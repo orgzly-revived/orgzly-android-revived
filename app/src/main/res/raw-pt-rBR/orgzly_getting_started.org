@@ -35,12 +35,12 @@ CLOSED: [2018-01-24 Wed 17:00]
 
 ** As notas principais podem rastrear o estado das notas secundárias [1/3] [33%]
 
-*** TODO Para acompanhar a proporção de itens TODO vs. CONCLUÍDOS, adicione [/] ao título da nota
+*** TODO Para acompanhar a proporção de itens TODO vs. DONE, adicione [/] ao título da nota
 
-*** TODO Para acompanhar a porcentagem de itens CONCLUÍDOS versus A FAZER, adicione [%] ao título da nota
+*** TODO Para acompanhar a porcentagem de itens DONE versus TODO, adicione [%] ao título da nota
 
-*** CONCLUÍDO Ambos podem ser usados em conjunto
-FECHADO: [2025-03-13 Qui 08:37]
+*** DONE Ambos podem ser usados em conjunto
+CLOSED: [2025-03-13 Qui 08:37]
 
 A ordem não importa, e as contagens serão atualizadas automaticamente.
 
