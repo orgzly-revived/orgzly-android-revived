@@ -1,6 +1,7 @@
 package com.orgzly.android.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.annotation.ColorInt
 import com.orgzly.R
@@ -12,7 +13,7 @@ class Selection {
     private val idSet = LinkedHashSet<Long>()
 
     /** Map from adapter ID to real note ID, used for agenda. */
-    private var idMap: HashMap<Long, Long>? = null
+    private var idMap: Map<Long, Long>? = null
 
     fun getIds(): Set<Long> {
         return (idMap?.let { map -> idSet.mapNotNull { map[it] } } ?: idSet).toSet()
@@ -56,12 +57,14 @@ class Selection {
         idSet.clear()
     }
 
-    fun setMap(map: HashMap<Long, Long>) {
+    fun setMap(map: Map<Long, Long>) {
         idMap = map
     }
 
     fun removeNonExistent(dataIds: Set<Long>) {
-        idSet.removeAll { it !in dataIds }
+        idMap?.let { idMap ->
+            idSet.removeAll { idMap[it] !in dataIds }
+        } ?: idSet.removeAll { it !in dataIds }
     }
 
     /**

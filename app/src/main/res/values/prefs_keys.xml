@@ -643,6 +643,9 @@
     <string name="pref_key_create_org_links_from_shared_links" translatable="false">pref_key_create_org_links_from_shared_links</string>
     <bool name="pref_default_create_org_links_from_shared_links" translatable="false">true</bool>
 
+    <string name="pref_key_show_search_action_books" translatable="false">pref_key_show_search_action_books</string>
+    <bool name="pref_default_show_search_action_books" translatable="false">false</bool>
+
     <string-array name="shared_text_placement_options">
         <item>@string/in_note_heading</item>
         <item>@string/in_note_content</item>

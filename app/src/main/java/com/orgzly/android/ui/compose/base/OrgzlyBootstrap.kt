@@ -29,7 +29,6 @@ fun OrgzlyBootstrap(
 /**
  * Used to bootstrap and set the content of a ComposeView with expected configuration and providers
  */
-@Composable
 fun ComposeView.bootstrapContent(content: @Composable () -> Unit) {
     setContent {
         OrgzlyBootstrap(content)

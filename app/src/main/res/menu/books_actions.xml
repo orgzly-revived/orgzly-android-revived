@@ -5,9 +5,17 @@
     tools:ignore="AlwaysShowAction">
 
     <item
+        android:id="@+id/search_button"
+        android:title="@string/options_menu_item_search"
+        android:icon="@drawable/ic_search"
+        app:showAsAction="always"/>
+
+    <!-- Kept for testing purposes -->
+    <item
         android:id="@+id/search_view"
         android:title="@string/options_menu_item_search"
         android:icon="@drawable/ic_search"
+        android:visible="false"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="collapseActionView|always" tools:ignore="AlwaysShowAction"/>
 

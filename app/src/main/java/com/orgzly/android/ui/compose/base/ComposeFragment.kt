@@ -1,5 +1,6 @@
 package com.orgzly.android.ui.compose.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,17 +20,23 @@ abstract class ComposeFragment: CommonFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                OrgzlyBootstrap {
-                    this@ComposeFragment.Content()
-                }
-            }
-        }
+        return createFragmentComposeView(
+            ::Content
+        )
     }
 
     @Composable
     abstract fun Content()
 
+}
+
+fun CommonFragment.createFragmentComposeView(
+    content: @Composable () -> Unit
+) = ComposeView(requireContext()).apply {
+    setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+    setContent {
+        OrgzlyBootstrap {
+            content()
+        }
+    }
 }

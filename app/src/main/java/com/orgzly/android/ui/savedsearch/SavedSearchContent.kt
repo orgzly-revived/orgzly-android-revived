@@ -1,15 +1,14 @@
 package com.orgzly.android.ui.savedsearch
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
@@ -21,15 +20,17 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import cl.emilym.compose.units.rdp
 import com.orgzly.R
@@ -40,11 +41,11 @@ import com.orgzly.android.ui.compose.providers.LaunchedEventEffect
 import com.orgzly.android.ui.compose.widgets.BackButton
 import com.orgzly.android.ui.compose.widgets.Icons
 import com.orgzly.android.ui.compose.widgets.OrgzlyButton
-import com.orgzly.android.ui.compose.widgets.OrgzlyTextButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyTextField
 import com.orgzly.android.ui.compose.widgets.OrgzlyTopAppBar
 import com.orgzly.android.ui.compose.widgets.painterIcon
-import com.orgzly.android.ui.savedsearches.SavedSearchesFragment
+import com.orgzly.android.ui.notes.query.BaseSearchContent
+import com.orgzly.android.ui.notes.query.QueryHelpButton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -85,19 +86,8 @@ fun SavedSearchContent(
                     BackButton()
                 },
                 actions = {
-                    val localUriHandler = LocalUriHandler.current
-                    if (state.mode is SavedSearchModel.Mode.Advanced) {
-                        IconButton(
-                            onClick = {
-                                localUriHandler.openUri(SavedSearchesFragment.SEARCH_DOCUMENTATION_URL)
-                            },
-                            modifier = Modifier.testTag("help_button")
-                        ) {
-                            Icon(
-                                painterIcon(Icons.HELP),
-                                contentDescription = stringResource(R.string.help)
-                            )
-                        }
+                    if (!state.isSimpleMode) {
+                        QueryHelpButton()
                     }
                     IconButton(
                         onClick = onSave
@@ -120,7 +110,7 @@ fun SavedSearchContent(
             testTagsAsResourceId = true
         }
     ) { contentPadding ->
-        if (state.mode == SavedSearchModel.Mode.None) return@Scaffold
+        if (!state.loaded) return@Scaffold
 
         Column(
             Modifier
@@ -133,11 +123,16 @@ fun SavedSearchContent(
                 1.rdp
             )
         ) {
+            val nameFocusRequester = remember { FocusRequester() }
+            val queryFocusRequester = remember { FocusRequester() }
+            val focusManager = LocalFocusManager.current
+
             OrgzlyTextField(
                 nameField,
                 Modifier
                     .fillMaxWidth()
-                    .testTag("fragment_saved_search_name"),
+                    .testTag("fragment_saved_search_name")
+                    .focusRequester(nameFocusRequester),
                 label = {
                     Text(
                         stringResource(R.string.name)
@@ -145,77 +140,29 @@ fun SavedSearchContent(
                 },
                 enabled = state.editable,
                 isError = !state.isNameValid,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next
+                ),
+                onKeyboardAction = {
+                    queryFocusRequester.requestFocus()
+                }
             )
 
-            when (state.mode) {
-                is SavedSearchModel.Mode.Advanced -> {
-                    OrgzlyTextField(
-                        advancedQueryField,
-                        Modifier
-                            .fillMaxWidth()
-                            .testTag("fragment_saved_search_query"),
-                        label = {
-                            Text(
-                                stringResource(R.string.query)
-                            )
-                        },
-                        enabled = state.editable,
-                        isError = !state.isQueryValid
-                    )
-                }
-                is SavedSearchModel.Mode.Simple -> {
-                    OrgzlyTextField(
-                        simpleSearchField,
-                        Modifier
-                            .fillMaxWidth()
-                            .testTag("fragment_saved_search_simple_search"),
-                        label = {
-                            Text(
-                                stringResource(R.string.options_menu_item_search)
-                            )
-                        },
-                        enabled = state.editable,
-                        isError = !state.isQueryValid
-                    )
-                }
-                else -> {}
-            }
-
-            OrgzlyTextButton(
-                onClick = onSwitchSearchStyle,
-                modifier = Modifier
-                    .animateContentSize()
-                    .align(Alignment.End)
-                    .testTag("swap_editor_mode"),
-                enabled = state.editable
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(1.rdp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painterIcon(Icons.SWAP),
-                        contentDescription = null
-                    )
-                    Text(stringResource(
-                        when (state.mode) {
-                            is SavedSearchModel.Mode.Advanced -> R.string.search_filter_swap_to_simple
-                            is SavedSearchModel.Mode.Simple -> R.string.search_filter_swap_to_advanced
-                            else -> R.string.search_filter_swap_to_simple
-                        }
-                    ))
-                }
-            }
-
-            (state.mode as? SavedSearchModel.Mode.Simple)?.let { mode ->
-                SearchFilterWidget(
-                    mode.filter,
-                    updateFilter,
-                    state.allTags,
-                    state.allBooks,
-                    enabled = state.editable
-                )
-            }
+            BaseSearchContent(
+                state,
+                simpleSearchField,
+                advancedQueryField,
+                onSwitchSearchStyle,
+                updateFilter,
+                Modifier.fillMaxWidth(),
+                fieldKeyboardOption = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                fieldKeyboardAction = {
+                    focusManager.clearFocus()
+                },
+                fieldFocusRequester = queryFocusRequester
+            )
 
             Spacer(Modifier.weight(1f))
 
@@ -228,6 +175,10 @@ fun SavedSearchContent(
             ) {
                 Text(stringResource(R.string.save))
             }
+
+            LaunchedEffect(Unit) {
+                nameFocusRequester.requestFocus()
+            }
         }
     }
 }
@@ -238,7 +189,7 @@ fun SavedSearchContentAdvancedPreview() {
     PreviewOrgzlyBootstrap {
         SavedSearchContent(
             state = SavedSearchModel(
-                mode = SavedSearchModel.Mode.Advanced,
+                isSimpleMode = false,
                 isNameValid = true,
                 isQueryValid = true
             ),
@@ -260,12 +211,10 @@ fun SavedSearchContentSimplePreview() {
     PreviewOrgzlyBootstrap {
         SavedSearchContent(
             state = SavedSearchModel(
-                mode = SavedSearchModel.Mode.Simple(
-                    filter = SimpleFilter(
-                        books = setOf("Work", "Personal"),
-                        tags = setOf("urgent"),
-                        agendaDays = 7
-                    )
+                filter = SimpleFilter(
+                    books = setOf("Work", "Personal"),
+                    tags = setOf("urgent"),
+                    agendaDays = 7
                 ),
                 isNameValid = true,
                 isQueryValid = true
