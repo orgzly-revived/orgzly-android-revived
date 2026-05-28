@@ -42,7 +42,7 @@
     <string name="new_folder">Ny mapp</string>
     <string name="scheduled">Schemalagd</string>
     <string name="agenda">Agenda</string>
-    <string name="state">Sätt status</string>
+    <string name="state">Status</string>
     <string name="priority">Prioritet</string>
     <string name="open">Öppna</string>
     <string name="widget">Widget</string>
@@ -621,13 +621,13 @@
     <string name="search_filter_exclude_done">Dölj klarmarkerade anteckningar</string>
     <string name="search_filter_show_as_agenda">Visa som agenda</string>
     <string name="search_filter_default_sort_order">Standard</string>
-    <string name="search_filter_book_sort_order">Anteckningsbok</string>
+    <string name="search_filter_book_sort_order">Anteckningsbokens namn</string>
     <string name="search_filter_title_sort_order">Rubrik</string>
-    <string name="search_filter_scheduled_sort_order">Schemalagd datum</string>
-    <string name="search_filter_deadline_sort_order">Deadline datum</string>
-    <string name="search_filter_event_sort_order">Händelse datum</string>
-    <string name="search_filter_closed_sort_order">Avslutad datum</string>
-    <string name="search_filter_created_sort_order">Skapad datum</string>
+    <string name="search_filter_scheduled_sort_order">Schemaläggningsdatum</string>
+    <string name="search_filter_deadline_sort_order">Deadline-datum</string>
+    <string name="search_filter_event_sort_order">Datum för händelse</string>
+    <string name="search_filter_closed_sort_order">Datum för klarmarkering</string>
+    <string name="search_filter_created_sort_order">Datum för skapande</string>
     <string name="search_filter_priority_sort_order">Prioritet</string>
     <string name="search_filter_state_sort_order">Status</string>
     <string name="search_filter_state_none">Ingen</string>
@@ -649,4 +649,5 @@
     <string name="content_description_sort_order_descending">Sortera fallande</string>
     <string name="content_description_subtract">Minska</string>
     <string name="content_description_add">Öka</string>
+    <string name="query_filter_search">Justera sökningen</string>
 </resources>
