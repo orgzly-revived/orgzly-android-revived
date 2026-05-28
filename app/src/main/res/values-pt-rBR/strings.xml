@@ -574,4 +574,5 @@
     <string name="sync_status_saved">Salvo em %s</string>
     <string name="moving_between_subdirectories_requires_api_24">Renomear o caderno para um subdiretório diferente requer Android 7 ou superior</string>
     <string name="subfolder_support_disabled">O suporte para subpastas está desabilitado</string>
+    <string name="insert_timestamp">Inserir carimbo de data/hora</string>
 </resources>

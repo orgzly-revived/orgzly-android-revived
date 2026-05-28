@@ -33,16 +33,16 @@ Você pode configurar quantos estados quiser: TODO, NEXT, DONE, etc.
 *** DONE Isto é uma nota com o tipo de estado concluído (done)
 CLOSED: [2018-01-24 Wed 17:00]
 
-** Parent notes can track state of child notes [1/3] [33%]
+** As notas principais podem rastrear o estado das notas secundárias [1/3] [33%]
 
-*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+*** TODO Para acompanhar a proporção de itens TODO vs. DONE, adicione [/] ao título da nota
 
-*** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
+*** TODO Para acompanhar a porcentagem de itens DONE versus TODO, adicione [%] ao título da nota
 
-*** DONE Both can be used in tandem
-CLOSED: [2025-03-13 Thu 08:37]
+*** DONE Ambos podem ser usados em conjunto
+CLOSED: [2025-03-13 Qui 08:37]
 
-The order doesn't matter, and the counts will be updated automatically.
+A ordem não importa, e as contagens serão atualizadas automaticamente.
 
 ** Uma nota pode ter um horário agendado
 SCHEDULED: <2015-02-20 Fri 15:15>
@@ -53,9 +53,9 @@ SCHEDULED: <2015-02-16 Mon .+2d>
 ** Você também pode definir um prazo limite
 DEADLINE: <2015-02-20 Fri>
 
-** Event times can be used anywhere in the note's content
+**Os horários dos eventos podem ser usados em qualquer lugar no conteúdo da nota.
 
-You can have multiple event times:
+Você pode ter vários horários de evento:
 
 - <2015-02-20 Fri>
 - <2015-02-21 Sat>
