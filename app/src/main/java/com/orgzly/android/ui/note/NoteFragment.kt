@@ -371,8 +371,16 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
                 userDelete()
             }
 
-            R.id.share -> {
-                shareNote()
+            R.id.share_note -> {
+                shareNotePart(SharePart.NOTE)
+            }
+
+            R.id.share_title -> {
+                shareNotePart(SharePart.TITLE)
+            }
+
+            R.id.share_content -> {
+                shareNotePart(SharePart.CONTENT)
             }
 
             R.id.sync -> {
@@ -1054,19 +1062,28 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         viewModel.requestNoteDelete()
     }
 
-    private fun shareNote() {
+    private enum class SharePart { NOTE, TITLE, CONTENT }
+
+    private fun shareNotePart(part: SharePart) {
         viewModel.noteId?.let { noteId ->
             try {
-                val exporter = NotesOrgExporter(dataRepository)
-                val orgContent = exporter.exportNote(noteId)
-
-                val shareIntent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, orgContent)
+                val text = when (part) {
+                    SharePart.NOTE ->
+                        NotesOrgExporter(dataRepository).exportNote(noteId)
+                    SharePart.TITLE ->
+                        dataRepository.getNoteView(noteId)?.note?.title?.takeIf { it.isNotBlank() } ?: ""
+                    SharePart.CONTENT ->
+                        dataRepository.getNoteView(noteId)?.note?.content?.takeIf { it.isNotBlank() } ?: ""
                 }
 
-                startActivity(Intent.createChooser(shareIntent, getString(R.string.share)))
+                if (text.isNotEmpty()) {
+                    val shareIntent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, text)
+                    }
+                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share)))
+                }
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to share note", e)
                 activity?.showSnackbar(R.string.failed_sharing_note)
