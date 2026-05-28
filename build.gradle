@@ -64,7 +64,7 @@ buildscript {
 
     versions.juniversalchardet = '1.0.3'
 
-    versions.joda_time = '2.14.1'
+    versions.joda_time = '2.14.2'
 
     versions.glide = '5.0.7'
 
