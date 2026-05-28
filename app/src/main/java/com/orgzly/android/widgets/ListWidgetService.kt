@@ -92,15 +92,14 @@ class ListWidgetService : RemoteViewsService() {
             val notes = dataRepository.selectNotesFromQuery(query)
 
             if (query.isAgenda()) {
-                val idMap = mutableMapOf<Long, Long>()
                 val hideEmptyDaysInAgenda = AppPreferences.hideEmptyDaysInAgenda(context)
                 val groupScheduledWithToday = AppPreferences.groupScheduledWithTodayInAgenda(context)
                 val agendaItems = AgendaItems(
                     hideEmptyDaysInAgenda,
                     groupScheduledWithToday
-                ).getList(notes, query, idMap)
+                ).getList(notes, query)
 
-                dataList = agendaItems.map {
+                dataList = agendaItems.items.map {
                     when (it) {
                         is AgendaItem.Overdue -> WidgetEntry.Overdue(it.id)
                         is AgendaItem.Day -> WidgetEntry.Day(it.id, it.day)

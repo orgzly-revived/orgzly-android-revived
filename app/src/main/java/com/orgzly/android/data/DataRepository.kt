@@ -60,6 +60,7 @@ import com.orgzly.org.utils.StateChangeLogic
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.orgzly.android.calendar.CalendarWorker
+import kotlinx.coroutines.flow.Flow
 import java.io.*
 import java.util.*
 import java.util.concurrent.Callable
@@ -1203,14 +1204,14 @@ class DataRepository @Inject constructor(
         }
     }
 
-    fun selectNotesFromQueryLiveData(queryString: String): LiveData<List<NoteView>> {
+    fun selectNotesFromQueryFlow(queryString: String): Flow<List<NoteView>> {
         val parser = InternalQueryParser()
 
         val query = parser.parse(queryString)
 
         val sqlQuery = buildSqlQuery(query)
 
-        return db.noteView().runQueryLiveData(sqlQuery)
+        return db.noteView().runQueryFlow(sqlQuery)
     }
 
     fun selectNotesFromQuery(query: Query): List<NoteView> {

@@ -1,4 +1,4 @@
-package com.orgzly.android.ui.savedsearch
+package com.orgzly.android.ui.compose.widgets.search
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
@@ -53,6 +53,7 @@ import com.orgzly.android.query.SimpleSortOrder
 import com.orgzly.android.ui.compose.modifiers.circularReveal
 import com.orgzly.android.ui.compose.modifiers.noRippleClickable
 import com.orgzly.android.ui.compose.providers.appPreference
+import androidx.compose.runtime.rememberUpdatedState
 import com.orgzly.android.ui.compose.widgets.BaseCollapsePanel
 import com.orgzly.android.ui.compose.widgets.CheckboxFormLockup
 import com.orgzly.android.ui.compose.widgets.CollapseHeaderScaffold
@@ -63,7 +64,6 @@ import com.orgzly.android.ui.compose.widgets.RadioButtonFormLockup
 import com.orgzly.android.ui.compose.widgets.TextFieldHoistEffect
 import com.orgzly.android.ui.compose.widgets.painterIcon
 import kotlin.collections.any
-import androidx.compose.runtime.rememberUpdatedState
 
 @Composable
 fun SearchFilterWidget(

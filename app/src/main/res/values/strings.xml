@@ -764,6 +764,8 @@
     <string name="book_names_cannot_contain">Book names cannot contain \'../\'</string>
     <string name="is_active_label">Active</string>
 
+    <string name="query_filter_search">Refine search</string>
+
     <string name="search_filter_exclude_done">Exclude done items</string>
     <string name="search_filter_show_as_agenda">Show as agenda</string>
     <string name="search_filter_default_sort_order">Default</string>

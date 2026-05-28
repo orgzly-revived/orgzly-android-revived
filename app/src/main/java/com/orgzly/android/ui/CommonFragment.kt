@@ -13,6 +13,7 @@ import com.orgzly.R
 import com.orgzly.android.sync.SyncState
 import com.orgzly.android.sync.SyncState.Type.*
 import com.orgzly.android.util.LogUtils
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 /*
@@ -74,6 +75,14 @@ open class CommonFragment : Fragment() {
             FAILED_NO_BOOKS_FOUND,
             FAILED_EXCEPTION ->
                 progressIndicator.visibility = View.GONE
+        }
+    }
+
+    fun <T> Flow<T>.collectWithLifecycle(onChanged: (T) -> Unit) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                collect(onChanged)
+            }
         }
     }
 

@@ -8,6 +8,7 @@ import androidx.sqlite.db.SupportSQLiteQuery
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.Note
 import com.orgzly.android.db.entity.NoteView
+import kotlinx.coroutines.flow.Flow
 import org.intellij.lang.annotations.Language
 
 @Dao
@@ -57,7 +58,7 @@ abstract class NoteViewDao {
     abstract fun getVisibleLiveDataNarrowed(bookId: Long, narrowedNoteId: Long): LiveData<List<NoteView>>
 
     @RawQuery(observedEntities = [ Note::class, Book::class ])
-    abstract fun runQueryLiveData(query: SupportSQLiteQuery): LiveData<List<NoteView>>
+    abstract fun runQueryFlow(query: SupportSQLiteQuery): Flow<List<NoteView>>
 
     @RawQuery(observedEntities = [ Note::class, Book::class ])
     abstract fun runQuery(query: SupportSQLiteQuery): List<NoteView>

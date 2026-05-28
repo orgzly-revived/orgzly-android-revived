@@ -4,15 +4,38 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.lifecycle.ViewModelProvider
+import cl.emilym.compose.units.rdp
 import com.orgzly.R
 import com.orgzly.android.NotesOrgExporter
 import com.orgzly.android.sync.SyncRunner
+import com.orgzly.android.ui.compose.base.bootstrapContent
+import com.orgzly.android.ui.compose.widgets.Icons
+import com.orgzly.android.ui.compose.widgets.OrgzlySearchTextField
+import com.orgzly.android.ui.compose.widgets.painterIcon
 import com.orgzly.android.ui.dialogs.TimestampDialogFragment
 import com.orgzly.android.ui.drawer.DrawerItem
 import com.orgzly.android.ui.main.SharedMainActivityViewModel
 import com.orgzly.android.ui.notes.NotesFragment
 import com.orgzly.android.ui.settings.SettingsActivity
+import javax.inject.Inject
 
 /**
  * Displays query results.
@@ -32,7 +55,10 @@ abstract class QueryFragment :
 
     protected lateinit var sharedMainActivityViewModel: SharedMainActivityViewModel
 
-    protected lateinit var viewModel: QueryViewModel
+    @Inject
+    lateinit var viewModelFactory: QueryViewModelFactory
+
+    protected abstract val viewModel: QueryViewModel
 
     override fun getCurrentListener(): Listener? {
         return listener
@@ -152,6 +178,7 @@ abstract class QueryFragment :
         private val TAG = QueryFragment::class.java.name
 
         const val ARG_QUERY = "query"
+        const val ARG_IS_RAW_QUERY = "is_raw_query"
         const val ARG_QUERY_NAME = "query_name"
 
         fun getDrawerItemId(query: String?): String {

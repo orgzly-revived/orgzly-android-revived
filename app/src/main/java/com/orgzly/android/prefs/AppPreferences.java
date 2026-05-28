@@ -5,7 +5,6 @@ import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Environment;
 
 import androidx.annotation.StringRes;
 
@@ -1268,6 +1267,13 @@ public class AppPreferences {
         );
     }
 
+    public static void setDefaultToAdvancedQueryEnabled(Context context, boolean value) {
+        getDefaultSharedPreferences(context).edit().putBoolean(
+                context.getResources().getString(R.string.pref_key_default_advanced_search),
+                value
+        ).apply();
+    }
+
     /*
      * Where to put incoming shared text in new note
      */
@@ -1288,6 +1294,17 @@ public class AppPreferences {
         return getDefaultSharedPreferences(context).getBoolean(
                 context.getResources().getString(R.string.pref_key_create_org_links_from_shared_links),
                 context.getResources().getBoolean(R.bool.pref_default_create_org_links_from_shared_links));
+    }
+
+    public static void showSearchAction(Context context, Boolean value) {
+        String key = context.getResources().getString(R.string.pref_key_show_search_action_books);
+        getDefaultSharedPreferences(context).edit().putBoolean(key, value).apply();
+    }
+
+    public static Boolean showSearchAction(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_show_search_action_books),
+                context.getResources().getBoolean(R.bool.pref_default_show_search_action_books));
     }
 
     // Added for test purposes

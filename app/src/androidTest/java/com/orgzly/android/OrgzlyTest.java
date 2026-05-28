@@ -153,6 +153,12 @@ public class OrgzlyTest {
 
         /* Log major events. */
         AppPreferences.logMajorEvents(context, true);
+
+        /* Historical: Default to advanced queries in search box */
+        AppPreferences.setDefaultToAdvancedQueryEnabled(context, true);
+
+        /* Historical: Enable query button in ActionBar */
+        AppPreferences.showSearchAction(context, true);
     }
 
     /**
