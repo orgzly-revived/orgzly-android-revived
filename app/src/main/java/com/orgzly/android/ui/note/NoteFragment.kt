@@ -1065,15 +1065,18 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
     private enum class SharePart { NOTE, TITLE, CONTENT }
 
     private fun shareNotePart(part: SharePart) {
-        viewModel.noteId?.let { noteId ->
+        // Sync on-screen content to payload before sharing
+        updatePayloadFromViews()
+
+        viewModel.notePayload?.let { payload ->
             try {
                 val text = when (part) {
                     SharePart.NOTE ->
-                        NotesOrgExporter(dataRepository).exportNote(noteId)
+                        NotesOrgExporter(dataRepository).exportNote(payload)
                     SharePart.TITLE ->
-                        dataRepository.getNoteView(noteId)?.note?.title?.takeIf { it.isNotBlank() } ?: ""
+                        payload.title.takeIf { it.isNotBlank() } ?: ""
                     SharePart.CONTENT ->
-                        dataRepository.getNoteView(noteId)?.note?.content?.takeIf { it.isNotBlank() } ?: ""
+                        payload.content?.takeIf { it.isNotBlank() } ?: ""
                 }
 
                 if (text.isNotEmpty()) {
