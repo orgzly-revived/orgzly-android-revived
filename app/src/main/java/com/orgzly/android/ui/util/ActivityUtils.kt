@@ -149,11 +149,7 @@ object ActivityUtils {
 
     @JvmStatic
     fun immutable(flags: Int): Int {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            flags or PendingIntent.FLAG_IMMUTABLE
-        } else {
-            flags
-        }
+        return flags or PendingIntent.FLAG_IMMUTABLE
     }
 
     @JvmStatic

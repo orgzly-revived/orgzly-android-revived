@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Setup Java
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
@@ -21,7 +21,7 @@ jobs:
           java-version: 21
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
+        uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
 
       - name: Setup build tool version variable
         shell: bash
@@ -55,7 +55,7 @@ jobs:
         run: mv ${{steps.sign_fdroid_apk.outputs.signedReleaseFile}} orgzly-revived-fdroid-${{ env.COMMIT_SHA }}.apk
 
       - name: Store F-Droid release APK
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: orgzly-revived-fdroid-${{ env.COMMIT_SHA }}.apk
           path: orgzly-revived-fdroid-${{ env.COMMIT_SHA }}.apk
@@ -88,7 +88,7 @@ jobs:
         run: mv ${{steps.sign_premium_apk.outputs.signedReleaseFile}} orgzly-revived-premium-${{ env.COMMIT_SHA }}.apk
 
       - name: Store "premium" release APK
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: orgzly-revived-premium-${{ env.COMMIT_SHA }}.apk
           path: orgzly-revived-premium-${{ env.COMMIT_SHA }}.apk

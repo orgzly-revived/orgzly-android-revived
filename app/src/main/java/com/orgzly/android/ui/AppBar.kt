@@ -1,26 +1,32 @@
 package com.orgzly.android.ui
 
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
 class AppBar(var modes: Map<Int, Int?>) {
 
     val mode: SingleLiveEvent<Int> = SingleLiveEvent()
+    private val _currentMode = MutableStateFlow(0)
+    val currentMode = _currentMode.asStateFlow()
 
     fun toModeFromSelectionCount(count: Int) {
         if (count == 0) {
             // No selection, default mode
-            mode.postValue(0)
+            toMode(0)
         } else {
             if (mode.value == 0) {
                 // Selection, from default mode
-                mode.postValue(1)
+                toMode(1)
             } else {
                 // Keep mode
-                mode.postValue(mode.value)
+                mode.value = mode.value
             }
         }
     }
 
     fun toMode(id: Int) {
-        this.mode.postValue(id)
+        this.mode.value = id
+        _currentMode.value = id
     }
 
     fun handleOnBackPressed() {

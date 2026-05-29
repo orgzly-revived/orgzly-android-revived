@@ -5,7 +5,6 @@ import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Environment;
 import android.util.Log;
 
 import androidx.annotation.StringRes;
@@ -1081,7 +1080,10 @@ public class AppPreferences {
     }
     
     public static String defaultRepositoryStorageDirectory(Context context) {
-        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        // Use app-specific external storage to avoid EPERM from FUSE on public external storage
+        // (Android 11+ FUSE layer for public dirs doesn't support O_EXCL used by JGit)
+        File externalFilesDir = context.getExternalFilesDir(null);
+        File path = externalFilesDir != null ? externalFilesDir : context.getFilesDir();
         return getStringFromSelector(
                 context, R.string.pref_key_git_default_repository_directory, path.toString());
     }
@@ -1285,6 +1287,20 @@ public class AppPreferences {
         getDefaultSharedPreferences(context).edit().putString(key, value).apply();
     }
 
+    public static Boolean isDefaultToAdvancedQueryEnabled(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+            context.getResources().getString(R.string.pref_key_default_advanced_search),
+            context.getResources().getBoolean(R.bool.pref_default_default_advanced_search)
+        );
+    }
+
+    public static void setDefaultToAdvancedQueryEnabled(Context context, boolean value) {
+        getDefaultSharedPreferences(context).edit().putBoolean(
+                context.getResources().getString(R.string.pref_key_default_advanced_search),
+                value
+        ).apply();
+    }
+
     /*
      * Where to put incoming shared text in new note
      */
@@ -1305,6 +1321,17 @@ public class AppPreferences {
         return getDefaultSharedPreferences(context).getBoolean(
                 context.getResources().getString(R.string.pref_key_create_org_links_from_shared_links),
                 context.getResources().getBoolean(R.bool.pref_default_create_org_links_from_shared_links));
+    }
+
+    public static void showSearchAction(Context context, Boolean value) {
+        String key = context.getResources().getString(R.string.pref_key_show_search_action_books);
+        getDefaultSharedPreferences(context).edit().putBoolean(key, value).apply();
+    }
+
+    public static Boolean showSearchAction(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_show_search_action_books),
+                context.getResources().getBoolean(R.bool.pref_default_show_search_action_books));
     }
 
     // Added for test purposes

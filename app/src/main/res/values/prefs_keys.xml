@@ -5,6 +5,9 @@
     <string name="pref_key_ignore_system_locale" translatable="false">pref_key_ignore_system_locale</string>
     <bool name="pref_default_ignore_system_locale" translatable="false">false</bool>
 
+    <string name="pref_key_default_advanced_search" translatable="false">pref_key_default_advanced_search</string>
+    <bool name="pref_default_default_advanced_search" translatable="false">false</bool>
+
     <!-- How to display notebook's preface in notebook -->
     <string name="pref_key_preface_in_book" translatable="false">pref_key_preface_in_book</string>
     <string name="pref_default_preface_in_book" translatable="false">@string/pref_value_preface_in_book_full</string>
@@ -641,6 +644,9 @@
     <string name="pref_default_shared_text_placement" translatable="false">in_note_content</string>
     <string name="pref_key_create_org_links_from_shared_links" translatable="false">pref_key_create_org_links_from_shared_links</string>
     <bool name="pref_default_create_org_links_from_shared_links" translatable="false">true</bool>
+
+    <string name="pref_key_show_search_action_books" translatable="false">pref_key_show_search_action_books</string>
+    <bool name="pref_default_show_search_action_books" translatable="false">false</bool>
 
     <string-array name="shared_text_placement_options">
         <item>@string/in_note_heading</item>

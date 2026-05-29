@@ -23,6 +23,7 @@ import com.orgzly.android.ui.note.NoteFragment;
 import com.orgzly.android.ui.notes.book.BookFragment;
 import com.orgzly.android.ui.notes.book.BookPrefaceFragment;
 import com.orgzly.android.ui.notes.query.agenda.AgendaFragment;
+import com.orgzly.android.ui.notes.query.enter.EnterSearchFragment;
 import com.orgzly.android.ui.notes.query.search.SearchFragment;
 import com.orgzly.android.ui.savedsearch.SavedSearchFragment;
 import com.orgzly.android.ui.savedsearches.SavedSearchesFragment;
@@ -202,11 +203,26 @@ public class DisplayManager {
                 true);
     }
 
+    public static void displayEnterSearch(FragmentManager fragmentManager) {
+        Fragment fragment = EnterSearchFragment.getInstance();
+
+        replaceFragment(
+                fragmentManager,
+                R.id.single_pane_container,
+                fragment,
+                EnterSearchFragment.getFRAGMENT_TAG(),
+                true);
+    }
+
     public static void displayQuery(FragmentManager fragmentManager, @NonNull String queryString) {
         displayQuery(fragmentManager, queryString, null);
     }
 
     public static void displayQuery(FragmentManager fragmentManager, @NonNull String queryString, @Nullable String searchName) {
+        displayQuery(fragmentManager, queryString, searchName, false, true);
+    }
+
+    public static void displayQuery(FragmentManager fragmentManager, @NonNull String queryString, @Nullable String searchName, @NonNull boolean isRawQuery, @NonNull boolean addToBackStack) {
         // If the same query is already displayed, don't do anything.
         String displayedQuery = getDisplayedQuery(fragmentManager);
         if (displayedQuery != null && displayedQuery.equals(queryString)) {
@@ -222,11 +238,11 @@ public class DisplayManager {
 
         // Display agenda or query fragment
         if (query.getOptions().getAgendaDays() > 0) {
-            fragment = AgendaFragment.getInstance(queryString, searchName);
+            fragment = AgendaFragment.getInstance(queryString, searchName, isRawQuery);
             tag = AgendaFragment.FRAGMENT_TAG;
 
         } else {
-            fragment = SearchFragment.getInstance(queryString, searchName);
+            fragment = SearchFragment.getInstance(queryString, searchName, isRawQuery);
             tag = SearchFragment.FRAGMENT_TAG;
         }
 
@@ -235,7 +251,7 @@ public class DisplayManager {
                 R.id.single_pane_container,
                 fragment,
                 tag,
-                true);
+                addToBackStack);
     }
 
     public static void displayEditor(FragmentManager fragmentManager, Book book) {

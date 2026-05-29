@@ -16,14 +16,19 @@ sealed class Condition {
     data class HasTag(val tag: String, val not: Boolean = false) : Condition()
     data class HasOwnTag(val tag: String, val not: Boolean = false) : Condition()
 
-    data class Event(val interval: QueryInterval, val relation: Relation) : Condition()
-    data class Scheduled(val interval: QueryInterval, val relation: Relation) : Condition()
-    data class Deadline(val interval: QueryInterval, val relation: Relation) : Condition()
-    data class Closed(val interval: QueryInterval, val relation: Relation) : Condition()
-    data class Created(val interval: QueryInterval, val relation: Relation) : Condition()
+    data class Event(override val interval: QueryInterval, override val relation: Relation) : Condition(), DateCondition
+    data class Scheduled(override val interval: QueryInterval, override val relation: Relation) : Condition(), DateCondition
+    data class Deadline(override val interval: QueryInterval, override val relation: Relation) : Condition(), DateCondition
+    data class Closed(override val interval: QueryInterval, override val relation: Relation) : Condition(), DateCondition
+    data class Created(override val interval: QueryInterval, override val relation: Relation) : Condition(), DateCondition
 
     data class HasText(val text: String, val isQuoted: Boolean) : Condition()
 
     data class And(val operands: List<Condition>) : Condition()
     data class Or(val operands: List<Condition>) : Condition()
+}
+
+interface DateCondition {
+    val interval: QueryInterval
+    val relation: Relation
 }

@@ -6,11 +6,11 @@ buildscript {
 
     versions.android_gradle_plugin = '8.13.2'
 
-    versions.kotlin = '2.2.21'
+    versions.kotlin = '2.3.21'
 
     versions.kotlin_coroutines = '1.10.2'
 
-    versions.jetbrains_annotations = '26.0.2-1'
+    versions.jetbrains_annotations = '26.1.0'
 
     versions.android_multidex = '2.0.1'
 
@@ -27,11 +27,11 @@ buildscript {
     versions.android_material = '1.13.0'
     versions.android_swiperefreshlayout = '1.2.0'
 
-    versions.android_room = '2.7.2'
+    versions.android_room = '2.8.4'
 
-    versions.android_lifecycle = '2.9.4'
+    versions.android_lifecycle = '2.10.0'
 
-    versions.android_workmanager = '2.10.5'
+    versions.android_workmanager = '2.11.2'
 
     versions.junit = '4.13.2'
 
@@ -46,9 +46,9 @@ buildscript {
     versions.android_test_uiautomator = '2.3.0'
 
     // Last version to support API 21 by default
-    versions.compose = '2025.11.01'
+    versions.compose = '2026.04.01'
 
-    versions.compose_activity = '1.11.0'
+    versions.compose_activity = '1.13.0'
 
     versions.compose_emily_units = '2.0.3'
 
@@ -56,17 +56,17 @@ buildscript {
 
     versions.loremipsum = '1.0'
 
-    versions.dagger = '2.57.2'
+    versions.dagger = '2.59.2'
 
-    versions.gson = '2.13.2'
+    versions.gson = '2.14.0'
 
     versions.dropbox_core_sdk = '7.0.0'
 
     versions.juniversalchardet = '1.0.3'
 
-    versions.joda_time = '2.14.0'
+    versions.joda_time = '2.14.2'
 
-    versions.glide = '5.0.5'
+    versions.glide = '5.0.7'
 
     versions.sardine = '0.8'
 
@@ -87,6 +87,8 @@ buildscript {
     repositories {
         mavenCentral()
         google()
+        // For org.jetbrains.kotlin.plugin.compose
+        gradlePluginPortal()
     }
 
     dependencies {

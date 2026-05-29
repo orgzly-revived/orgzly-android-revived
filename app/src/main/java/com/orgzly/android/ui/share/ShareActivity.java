@@ -109,17 +109,18 @@ public class ShareActivity extends CommonActivity
                 // Both "text" and "subject" received. Subject goes in heading, text goes in
                 // body.
                 String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+                data.content = intent.getStringExtra(Intent.EXTRA_TEXT);
                 if (subject != null && !subject.isEmpty()) {
                     data.title = subject;
-                }
-                data.content = intent.getStringExtra(Intent.EXTRA_TEXT);
-                if (AppPreferences.createOrgLinksFromSharedLinks(this) &&
-                        !data.title.contains("\n")) {
-                    try {
-                        new URI(data.content);
-                        data.title = "[[" + data.content + "][" + data.title + "]]";
-                        data.content = null;
-                    } catch (URISyntaxException ignored) {}
+                    if (AppPreferences.createOrgLinksFromSharedLinks(this) &&
+                            !data.title.contains("\n")) {
+                        // If content is a URL, turn the heading into a clickable link.
+                        try {
+                            new URI(data.content);
+                            data.title = "[[" + data.content + "][" + data.title + "]]";
+                            data.content = null;
+                        } catch (URISyntaxException ignored) {}
+                    }
                 }
             } else {
                 // A single text string was shared. Put it in heading or body, depending on the

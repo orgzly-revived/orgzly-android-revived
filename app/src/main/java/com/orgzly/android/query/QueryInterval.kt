@@ -44,6 +44,24 @@ class QueryInterval(val u: QueryInterval.Unit, val v: Int = 0) {
         }
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as QueryInterval
+
+        if (value != other.value) return false
+        if (unit != other.unit) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = value
+        result = 31 * result + unit.hashCode()
+        return result
+    }
+
     companion object {
         private val REGEX = Regex("^([-+]?\\d+)([hdwmy])$")
 

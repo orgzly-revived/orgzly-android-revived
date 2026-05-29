@@ -45,6 +45,7 @@ import com.orgzly.android.widgets.ListWidgetProvider
 import com.orgzly.android.widgets.ListWidgetSelectionActivity
 import com.orgzly.android.widgets.ListWidgetService
 import com.orgzly.android.calendar.CalendarWorker
+import com.orgzly.android.ui.notes.query.enter.EnterSearchFragment
 import dagger.Component
 import javax.inject.Singleton
 
@@ -74,6 +75,7 @@ interface AppComponent {
     fun inject(arg: NotesFragment)
     fun inject(arg: BookFragment)
     fun inject(arg: BookPrefaceFragment)
+    fun inject(arg: EnterSearchFragment)
     fun inject(arg: SearchFragment)
     fun inject(arg: AgendaFragment)
     fun inject(arg: NoteFragment)

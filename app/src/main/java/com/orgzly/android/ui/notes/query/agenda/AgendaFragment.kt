@@ -1,5 +1,6 @@
 package com.orgzly.android.ui.notes.query.agenda
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,25 +8,35 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.orgzly.BuildConfig
 import com.orgzly.R
+import com.orgzly.android.App
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.sync.SyncRunner
+import com.orgzly.android.ui.DisplayManager
 import com.orgzly.android.ui.OnViewHolderClickListener
 import com.orgzly.android.ui.SelectableItemAdapter
-import com.orgzly.android.ui.main.setupSearchView
+import com.orgzly.android.ui.compose.base.createFragmentComposeView
 import com.orgzly.android.ui.notes.ItemGestureDetector
 import com.orgzly.android.ui.notes.NoteItemViewHolder
 import com.orgzly.android.ui.notes.NotePopup
+import com.orgzly.android.ui.notes.query.QueryEvent
 import com.orgzly.android.ui.notes.query.QueryFragment
 import com.orgzly.android.ui.notes.query.QueryViewModel
 import com.orgzly.android.ui.notes.query.QueryViewModel.Companion.APP_BAR_DEFAULT_MODE
 import com.orgzly.android.ui.notes.query.QueryViewModel.Companion.APP_BAR_SELECTION_MODE
 import com.orgzly.android.ui.notes.query.QueryViewModelFactory
+import com.orgzly.android.ui.notes.query.QueryViewModelOwner
+import com.orgzly.android.ui.notes.query.SearchFilterScaffold
 import com.orgzly.android.ui.settings.SettingsActivity
 import com.orgzly.android.ui.stickyheaders.StickyHeadersLinearLayoutManager
 import com.orgzly.android.ui.util.ActivityUtils
@@ -33,6 +44,7 @@ import com.orgzly.android.ui.util.setDecorFitsSystemWindowsForBottomToolbar
 import com.orgzly.android.ui.util.setup
 import com.orgzly.android.util.LogUtils
 import com.orgzly.databinding.FragmentQueryAgendaBinding
+import kotlin.getValue
 
 
 /**
@@ -41,9 +53,19 @@ import com.orgzly.databinding.FragmentQueryAgendaBinding
 class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
     private lateinit var binding: FragmentQueryAgendaBinding
 
-    private val item2databaseIds = hashMapOf<Long, Long>()
+    private var item2databaseIds = mapOf<Long, Long>()
 
     lateinit var viewAdapter: AgendaAdapter
+
+    override val viewModel: QueryViewModel  by viewModels {
+        QueryViewModelFactory.provideFactory(
+            viewModelFactory,
+            requireArguments().getString(ARG_QUERY) ?: "",
+            requireArguments().getBoolean(ARG_IS_RAW_QUERY, false),
+            QueryViewModelOwner.AGENDA,
+            requireContext()
+        )
+    }
 
     private val appBarBackPressHandler = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
@@ -67,7 +89,23 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
         binding = FragmentQueryAgendaBinding.inflate(inflater, container, false)
 
-        return binding.root
+        return createFragmentComposeView {
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
+            SearchFilterScaffold(
+                state,
+                viewModel.events,
+                viewModel.searchTextField,
+                viewModel::swapQueryMode,
+                viewModel::updateFilter,
+                viewModel::commitFilter,
+            ) {
+                AndroidView(
+                    factory = { binding.root },
+                    Modifier.fillMaxSize()
+                )
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -107,6 +145,28 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
         }
 
         binding.swipeContainer.setup()
+
+        viewModel.state.collectWithLifecycle { state ->
+            binding.topToolbar.subtitle = state.query
+        }
+
+        viewModel.events.collectWithLifecycle { event ->
+            when (event) {
+                is QueryEvent.ChangeQueryView -> DisplayManager.displayQuery(
+                    requireActivity().supportFragmentManager,
+                    event.query,
+                    currentQueryName,
+                    true,
+                    false
+                )
+                else -> {}
+            }
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        App.appComponent.inject(this)
     }
 
     override fun onResume() {
@@ -147,14 +207,11 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
                 true
             }
 
-            requireActivity().setupSearchView(menu)
-
             setOnClickListener {
                 binding.topToolbar.menu.findItem(R.id.search_view)?.expandActionView()
             }
 
             title = currentQueryName ?: getString(R.string.agenda)
-            subtitle = currentQuery
         }
     }
 
@@ -212,10 +269,6 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, savedInstanceState)
 
-        val factory = QueryViewModelFactory.forQuery(dataRepository)
-
-        viewModel = ViewModelProvider(this, factory).get(QueryViewModel::class.java)
-
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Observed load state: $state")
 
@@ -226,29 +279,34 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             }
         })
 
-        viewModel.data.observe(viewLifecycleOwner, Observer { notes ->
+        viewModel.state.collectWithLifecycle { state ->
+            val notes = state.notes
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Observed notes: ${notes.size}")
 
             val hideEmptyDaysInAgenda = AppPreferences.hideEmptyDaysInAgenda(context)
             val groupScheduledWithToday = AppPreferences.groupScheduledWithTodayInAgenda(context)
-            val items = AgendaItems(
+            val list = AgendaItems(
                 hideEmptyDaysInAgenda,
                 groupScheduledWithToday
-            ).getList(notes, currentQuery, item2databaseIds)
+            ).getList(
+                notes,
+                state.agendaDays
+            )
+            item2databaseIds = list.mapping
 
             if (BuildConfig.LOG_DEBUG)
-                LogUtils.d(TAG, "Replacing data with ${items.size} agenda items")
+                LogUtils.d(TAG, "Replacing data with ${list.items.size} agenda items")
 
-            viewAdapter.submitList(items)
+            viewAdapter.submitList(list.items)
 
             val ids = notes.mapTo(hashSetOf()) { it.note.id }
 
             viewAdapter.getSelection().removeNonExistent(ids)
 
-            viewAdapter.getSelection().setMap(item2databaseIds)
+            viewAdapter.getSelection().setMap(list.mapping)
 
             viewModel.appBar.toModeFromSelectionCount(viewAdapter.getSelection().count)
-        })
+        }
 
         viewModel.appBar.mode.observeSingle(viewLifecycleOwner) { mode ->
             when (mode) {
@@ -275,8 +333,6 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
                 }
             }
         }
-
-        viewModel.refresh(currentQuery, AppPreferences.defaultPriority(context))
     }
 
     override fun onClick(view: View, position: Int, item: AgendaItem) {
@@ -325,15 +381,16 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
         @JvmStatic
         fun getInstance(query: String): AgendaFragment {
-            return getInstance(query, null)
+            return getInstance(query, null, false)
         }
 
         @JvmStatic
-        fun getInstance(query: String, queryName: String? = null): AgendaFragment {
+        fun getInstance(query: String, queryName: String? = null, isRawQuery: Boolean = false): AgendaFragment {
             val fragment = AgendaFragment()
 
             val args = Bundle()
             args.putString(ARG_QUERY, query)
+            args.putBoolean(ARG_IS_RAW_QUERY, isRawQuery)
             if (queryName != null) {
                 args.putString(ARG_QUERY_NAME, queryName)
             }
