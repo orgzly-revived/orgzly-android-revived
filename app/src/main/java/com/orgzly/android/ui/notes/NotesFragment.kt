@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.PopupWindow
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
@@ -53,17 +54,27 @@ abstract class NotesFragment : CommonFragment(), TimestampDialogFragment.OnDateT
 
         notePopup = NotePopup.showWindow(noteId, anchor, location, direction, e1, e2) { _, buttonId ->
             listener.onPopupButtonClick(noteId, buttonId)
-        }
+        }?.also {
+            // On popup shown
 
-        // Enable back handler if popup is shown
-        if (notePopup != null) {
+            // Add highlight to popup parent
+            val oldItemViewBackground = itemView.background
+            itemView.background =
+                AppCompatResources.getDrawable(requireContext(), R.drawable.item_head_background_highlighted)
+
+            // Enable back handler
             notePopupDismissOnBackPress.isEnabled = true
-        }
 
-        // Disable back handler on dismiss
-        notePopup?.setOnDismissListener {
-            notePopup = null
-            notePopupDismissOnBackPress.isEnabled = false
+            // On popup dismiss
+            it.setOnDismissListener {
+                // Disable back handler
+                notePopupDismissOnBackPress.isEnabled = false
+
+                // Remove highlight from popup parent
+                itemView.background = oldItemViewBackground
+
+                notePopup = null
+            }
         }
 
         return notePopup
