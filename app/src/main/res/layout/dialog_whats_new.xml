@@ -22,6 +22,32 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.21.0"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Add new, simplified search UI." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Improve support for partially-checked checkboxes." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Various bug fixes." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Upgrade dependencies." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Update translations." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.20.0"
             tools:ignore="HardcodedText"
             android:autoLink="web" />
