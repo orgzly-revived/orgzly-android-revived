@@ -1,0 +1,5 @@
+• Add new, simplified search UI.
+• Improve support for partially-checked checkboxes.
+• Various bug fixes.
+• Upgrade dependencies.
+• Update translations.
