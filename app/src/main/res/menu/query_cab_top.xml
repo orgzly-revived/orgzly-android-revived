@@ -29,6 +29,24 @@
         android:id="@+id/share"
         app:showAsAction="never"
         android:icon="@drawable/ic_share"
-        android:title="@string/share"/>
+        android:title="@string/share">
+
+        <menu>
+            <item
+                android:id="@+id/share_note"
+                android:icon="@drawable/ic_notes"
+                android:title="@string/share_note"/>
+
+            <item
+                android:id="@+id/share_title"
+                android:icon="@drawable/ic_title"
+                android:title="@string/share_title"/>
+
+            <item
+                android:id="@+id/share_content"
+                android:icon="@drawable/ic_article"
+                android:title="@string/share_content"/>
+        </menu>
+    </item>
 
 </menu>

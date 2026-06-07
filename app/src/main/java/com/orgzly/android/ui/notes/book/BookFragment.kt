@@ -21,7 +21,6 @@ import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.BookUtils
-import com.orgzly.android.NotesOrgExporter
 import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.NoteView
@@ -482,34 +481,6 @@ class BookFragment :
         viewModel.requestNotesDelete(ids)
     }
 
-    private fun shareNotes(ids: Set<Long>) {
-        try {
-            val exporter = NotesOrgExporter(dataRepository)
-            val exportedNotes = mutableListOf<String>()
-
-            for (noteId in ids) {
-                try {
-                    exportedNotes.add(exporter.exportNote(noteId))
-                } catch (e: Exception) {
-                    Log.e(TAG, "Failed to export note $noteId", e)
-                }
-            }
-
-            val content = exportedNotes.joinToString("")
-
-            if (content.isNotEmpty()) {
-                val shareIntent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, content)
-                }
-                startActivity(Intent.createChooser(shareIntent, getString(R.string.share)))
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to share notes", e)
-        }
-    }
-
     override fun getCurrentDrawerItemId(): String {
         return getDrawerItemId(mBookId)
     }
@@ -886,8 +857,18 @@ class BookFragment :
                 viewModel.appBar.toMode(APP_BAR_DEFAULT_MODE)
             }
 
-            R.id.share -> {
-                shareNotes(ids)
+            R.id.share_note -> {
+                shareNoteParts(ids, SharePart.NOTE)
+                viewModel.appBar.toMode(APP_BAR_DEFAULT_MODE)
+            }
+
+            R.id.share_title -> {
+                shareNoteParts(ids, SharePart.TITLE)
+                viewModel.appBar.toMode(APP_BAR_DEFAULT_MODE)
+            }
+
+            R.id.share_content -> {
+                shareNoteParts(ids, SharePart.CONTENT)
                 viewModel.appBar.toMode(APP_BAR_DEFAULT_MODE)
             }
 
