@@ -1,0 +1,3 @@
+# Copy/symlink to .envrc if you want to use this file with direnv.
+# Beware of the security and trust implications.
+use flake
