@@ -431,7 +431,7 @@
     </style>
 
     <style name="Fab.JumpToEnd">
-        <item name="android:layout_marginBottom">@dimen/fab_stack_spacing_double</item>
+        <item name="android:layout_marginBottom">@dimen/fab_stack_spacing</item>
         <item name="android:src">@drawable/ic_arrow_downward_to_bottom</item>
     </style>
     <style name="JumpToEnd">

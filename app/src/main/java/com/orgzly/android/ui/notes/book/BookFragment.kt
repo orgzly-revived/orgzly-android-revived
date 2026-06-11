@@ -296,32 +296,11 @@ class BookFragment :
                                 } else {
                                     NotePlace(mBookId)
                                 }
-                                listener?.onNoteNewRequest(notePlace)
-                            }
-                            show()
-                        } else {
-                            hide()
-                        }
-                    }
-
-                    binding.captureFab.run {
-                        val bookName = currentBook?.name
-                        val templates = AppPreferences.captureTemplates(requireContext())
-                            .filter { it.targetBook.isBlank() || it.targetBook == bookName }
-                        if (currentBook != null && templates.isNotEmpty()) {
-                            // Position above the main FAB
-                            val lp = layoutParams as androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams
-                            lp.bottomMargin = resources.getDimensionPixelSize(R.dimen.fab_stack_spacing)
-                            layoutParams = lp
-                            setOnClickListener {
-                                val narrowedId = viewModel.narrowedNoteId.value
-                                val notePlace = if (narrowedId != null) {
-                                    NotePlace(mBookId, narrowedId, Place.UNDER)
-                                } else {
-                                    NotePlace(mBookId)
-                                }
-                                if (templates.size == 1) {
-                                    applyTemplateInBook(templates[0], notePlace)
+                                val bookName = currentBook?.name
+                                val templates = AppPreferences.captureTemplates(requireContext())
+                                    .filter { it.targetBook.isBlank() || it.targetBook == bookName }
+                                if (templates.isEmpty()) {
+                                    listener?.onNoteNewRequest(notePlace)
                                 } else {
                                     showCaptureTemplateChooser(templates, notePlace)
                                 }
@@ -342,7 +321,6 @@ class BookFragment :
                     bottomToolbarToMainSelection()
 
                     binding.fab.hide()
-                    binding.captureFab.hide()
 
                     sharedMainActivityViewModel.lockDrawer()
 
@@ -354,7 +332,6 @@ class BookFragment :
                     bottomToolbarToNextSelection()
 
                     binding.fab.hide()
-                    binding.captureFab.hide()
 
                     sharedMainActivityViewModel.lockDrawer()
 
@@ -457,13 +434,17 @@ class BookFragment :
         templates: List<CaptureTemplate>,
         notePlace: NotePlace
     ) {
-        val items = templates.map {
+        val items = (listOf(getString(R.string.new_note)) + templates.map {
             it.getDisplayName(getString(R.string.capture_template))
-        }.toTypedArray()
+        }).toTypedArray()
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.select_capture_template)
             .setItems(items) { _, index ->
-                applyTemplateInBook(templates[index], notePlace)
+                if (index == 0) {
+                    listener?.onNoteNewRequest(notePlace)
+                } else {
+                    applyTemplateInBook(templates[index - 1], notePlace)
+                }
             }
             .setNegativeButton(R.string.cancel, null)
             .show()
