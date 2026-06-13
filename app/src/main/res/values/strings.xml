@@ -413,6 +413,7 @@
 
     <string name="no_notes_deleted">No notes deleted</string>
 
+    <string name="none">None</string>
     <string name="duplicate_keywords_not_allowed">Keyword %s already used</string>
     <string name="no_states_defined">No states defined</string>
     <string name="book_name_in_search">Notebook name in search results</string>
@@ -798,4 +799,31 @@
     <string name="content_description_sort_order_descending">Sort descending</string>
     <string name="content_description_subtract">Subtract</string>
     <string name="content_description_add">Add</string>
+
+    <!-- Capture Templates -->
+    <string name="capture_templates">Capture templates</string>
+    <string name="capture_templates_summary">Define templates for quickly capturing notes</string>
+    <string name="no_capture_templates">No capture templates</string>
+    <string name="capture_template">Capture template</string>
+    <string name="widget_capture_template_default_note">Default note</string>
+    <string name="template_description">Description</string>
+    <string name="template_title">Title template</string>
+    <string name="template_content">Content</string>
+    <string name="template_tokens_hint">Tokens: %t %T (date/time) %u %U (inactive) %c (clipboard)</string>
+    <string name="template_target_book">Target notebook</string>
+    <string name="template_state">Initial state</string>
+    <string name="template_priority">Initial priority</string>
+    <string name="template_tags">Initial tags</string>
+    <string name="template_scheduled">Schedule for today</string>
+    <string name="select_capture_template">Select template</string>
+    <string name="template_no_target_book">Default (current notebook)</string>
+    <string name="capture_template_saved">Template saved</string>
+    <string name="capture_template_deleted">Template deleted</string>
+    <string name="new_capture_template">New template</string>
+    <string name="cannot_be_empty_short">Required</string>
+    <string name="capture_template_numbered">Template %1$d</string>
+    <string name="edit_capture_template">Edit template</string>
+    <string name="capture_template_target_book_not_found">Notebook \"%1$s\" not found, using default</string>
+    <string name="template_target_headline">Headline</string>
+    <string name="template_target_headline_hint">e.g. Inbox or Projects/Active</string>
 </resources>

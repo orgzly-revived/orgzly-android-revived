@@ -39,4 +39,10 @@
         android:icon="@drawable/ic_info_outline"
         android:key="prefs_screen_app"/>
 
+    <androidx.preference.Preference
+        android:title="@string/capture_templates"
+        android:summary="@string/capture_templates_summary"
+        android:icon="@drawable/ic_content_paste"
+        android:key="prefs_screen_capture_templates"/>
+
 </androidx.preference.PreferenceScreen>

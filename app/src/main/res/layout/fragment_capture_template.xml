@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/CoordinatorLayoutFitsSystemWindows">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                app:boxBackgroundMode="none">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/template_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/screen_edge"
+                    android:paddingVertical="12dp"
+                    android:background="@null"
+                    android:inputType="text|textCapSentences"
+                    android:hint="@string/template_description"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View style="@style/HorizontalDivider" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp"
+                app:boxBackgroundMode="none"
+                app:helperTextEnabled="true"
+                app:helperText="@string/template_tokens_hint">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/template_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/screen_edge"
+                    android:paddingVertical="12dp"
+                    android:background="@null"
+                    android:inputType="text|textCapSentences"
+                    android:hint="@string/template_title"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View style="@style/HorizontalDivider" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp"
+                app:boxBackgroundMode="none"
+                app:helperTextEnabled="true"
+                app:helperText="@string/template_tokens_hint">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/template_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/screen_edge"
+                    android:paddingVertical="12dp"
+                    android:background="@null"
+                    android:inputType="textMultiLine"
+                    android:hint="@string/template_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View style="@style/HorizontalDivider" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                app:boxBackgroundMode="none">
+                <AutoCompleteTextView
+                    android:id="@+id/template_target_book"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/screen_edge"
+                    android:paddingVertical="12dp"
+                    android:background="@null"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/template_target_book"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/template_target_headline_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View style="@style/HorizontalDivider" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/template_target_headline_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="8dp"
+                    app:boxBackgroundMode="none"
+                    app:helperTextEnabled="true"
+                    app:helperText="@string/template_target_headline_hint">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/template_target_headline"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="@dimen/screen_edge"
+                        android:paddingVertical="12dp"
+                        android:background="@null"
+                        android:inputType="text"
+                        android:hint="@string/template_target_headline"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <View style="@style/HorizontalDivider" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                app:boxBackgroundMode="none">
+                <AutoCompleteTextView
+                    android:id="@+id/template_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/screen_edge"
+                    android:paddingVertical="12dp"
+                    android:background="@null"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/template_state"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View style="@style/HorizontalDivider" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                app:boxBackgroundMode="none">
+                <AutoCompleteTextView
+                    android:id="@+id/template_priority"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/screen_edge"
+                    android:paddingVertical="12dp"
+                    android:background="@null"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/template_priority"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View style="@style/HorizontalDivider" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                app:boxBackgroundMode="none">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/template_tags"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/screen_edge"
+                    android:paddingVertical="12dp"
+                    android:background="@null"
+                    android:inputType="text"
+                    android:hint="@string/template_tags"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View style="@style/HorizontalDivider" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/template_scheduled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/screen_edge"
+                android:minHeight="56dp"
+                android:text="@string/template_scheduled"/>
+
+            <View style="@style/HorizontalDivider" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

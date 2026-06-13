@@ -5,6 +5,7 @@ import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.StringRes;
 
@@ -994,6 +995,32 @@ public class AppPreferences {
                 context.getResources().getBoolean(R.bool.pref_default_widget_display_book_name));
     }
 
+    @Nullable
+    public static String widgetCaptureTemplateId(Context context) {
+        String key = context.getResources().getString(R.string.pref_key_widget_capture_template);
+        String id = getDefaultSharedPreferences(context).getString(key, null);
+        if (id == null || id.isEmpty()) {
+            return null;
+        }
+
+        for (com.orgzly.android.ui.capture.CaptureTemplate template : captureTemplates(context)) {
+            if (id.equals(template.getId())) {
+                return id;
+            }
+        }
+
+        return null;
+    }
+
+    public static void widgetCaptureTemplateId(Context context, @Nullable String value) {
+        String key = context.getResources().getString(R.string.pref_key_widget_capture_template);
+        if (value == null || value.isEmpty()) {
+            getDefaultSharedPreferences(context).edit().remove(key).apply();
+        } else {
+            getDefaultSharedPreferences(context).edit().putString(key, value).apply();
+        }
+    }
+
     /*
      * RichTextView
      */
@@ -1390,5 +1417,24 @@ public class AppPreferences {
      */
     private static String repoPropsMapKeyPrefix(long id) {
         return "id-" + id + "-";
+    }
+
+    /* Capture templates - stored as JSON array */
+    public static List<com.orgzly.android.ui.capture.CaptureTemplate> captureTemplates(Context context) {
+        String json = getDefaultSharedPreferences(context).getString(context.getResources().getString(R.string.pref_key_capture_templates), "[]");
+        com.google.gson.reflect.TypeToken<List<com.orgzly.android.ui.capture.CaptureTemplate>> typeToken =
+            new com.google.gson.reflect.TypeToken<List<com.orgzly.android.ui.capture.CaptureTemplate>>(){};
+        try {
+            List<com.orgzly.android.ui.capture.CaptureTemplate> result = new Gson().fromJson(json, typeToken.getType());
+            return result != null ? result : new ArrayList<>();
+        } catch (Exception e) {
+            Log.e("AppPreferences", "Failed to parse capture templates JSON", e);
+            return new ArrayList<>();
+        }
+    }
+
+    public static void setCaptureTemplates(Context context, List<com.orgzly.android.ui.capture.CaptureTemplate> templates) {
+        String json = new Gson().toJson(templates);
+        getDefaultSharedPreferences(context).edit().putString(context.getResources().getString(R.string.pref_key_capture_templates), json).apply();
     }
 }

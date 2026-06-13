@@ -15,6 +15,7 @@ import com.orgzly.android.sync.SyncWorker
 import com.orgzly.android.ui.BookChooserActivity
 import com.orgzly.android.ui.TemplateChooserActivity
 import com.orgzly.android.ui.books.BooksFragment
+import com.orgzly.android.ui.capture.CaptureTemplateEditFragment
 import com.orgzly.android.ui.logs.AppLogsActivity
 import com.orgzly.android.ui.main.MainActivity
 import com.orgzly.android.ui.note.NoteFragment
@@ -86,6 +87,8 @@ interface AppComponent {
     fun inject(arg: SyncFragment)
 
     fun inject(arg: SettingsFragment)
+
+    fun inject(arg: CaptureTemplateEditFragment)
 
     fun inject(arg: CalendarWorker)
 

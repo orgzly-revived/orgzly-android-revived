@@ -108,7 +108,13 @@ public class ListWidgetProvider extends AppWidgetProvider {
                 remoteViews.setPendingIntentTemplate(R.id.list_widget_list_view, onClickPendingIntent);
 
                 // Plus icon - new note
-                remoteViews.setOnClickPendingIntent(R.id.list_widget_header_add, ShareActivity.createNewNotePendingIntent(context, "widget-" + appWidgetId, savedSearch));
+                remoteViews.setOnClickPendingIntent(
+                        R.id.list_widget_header_add,
+                        ShareActivity.createNewNotePendingIntent(
+                                context,
+                                "widget-" + appWidgetId,
+                                savedSearch,
+                                AppPreferences.widgetCaptureTemplateId(context)));
 
                 // Sync icon - sync start
                 final Intent onSyncIntent = new Intent(context, ActionReceiver.class);
