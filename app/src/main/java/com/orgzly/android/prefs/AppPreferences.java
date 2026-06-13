@@ -13,6 +13,7 @@ import com.google.gson.JsonElement;
 import com.orgzly.R;
 import com.orgzly.android.App;
 import com.orgzly.android.LocalStorage;
+import com.orgzly.BuildConfig;
 import com.orgzly.org.OrgStatesWorkflow;
 
 import org.eclipse.jgit.transport.URIish;
@@ -804,6 +805,9 @@ public class AppPreferences {
      * Allow inlining images
      */
     public static boolean imagesEnabled(Context context) {
+        if (!BuildConfig.IS_EXTERNAL_FILES_ACCESS_ALLOWED) {
+            return false;
+        }
         return getDefaultSharedPreferences(context).getBoolean(
                 context.getResources().getString(R.string.pref_key_images_enabled),
                 context.getResources().getBoolean(R.bool.pref_default_images_enabled));
