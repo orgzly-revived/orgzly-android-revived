@@ -13,7 +13,7 @@ import com.google.gson.JsonElement;
 import com.orgzly.R;
 import com.orgzly.android.App;
 import com.orgzly.android.LocalStorage;
-import com.orgzly.BuildConfig
+import com.orgzly.BuildConfig;
 import com.orgzly.org.OrgStatesWorkflow;
 
 import org.eclipse.jgit.transport.URIish;
