@@ -78,6 +78,9 @@ android {
             // Remove Git feature because of Play restrictions on external storage permissions
             buildConfigField "boolean", "IS_GIT_REMOVED", "true"
 
+            // Remove inline image rendering because of Play store restrictions on private data access
+            buildConfigField "boolean", "IS_IMAGE_ACCESS_ALLOWED", "false"
+
             buildConfigField "String", "VERSION_NAME_SUFFIX", '""'
 
             dimension "store"
@@ -91,6 +94,8 @@ android {
             buildConfigField "boolean", "IS_DROPBOX_ENABLED", "false"
 
             buildConfigField "boolean", "IS_GIT_REMOVED", "false"
+
+            buildConfigField "boolean", "IS_IMAGE_ACCESS_ALLOWED", "true"
 
             buildConfigField "String", "VERSION_NAME_SUFFIX", '" (fdroid)"'
 
