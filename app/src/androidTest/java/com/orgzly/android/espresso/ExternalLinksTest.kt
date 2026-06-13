@@ -16,6 +16,7 @@ import com.orgzly.android.espresso.util.EspressoUtils.onBook
 import com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook
 import com.orgzly.android.espresso.util.EspressoUtils.onSnackbar
 import com.orgzly.android.espresso.util.EspressoUtils.waitId
+import com.orgzly.BuildConfig
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import com.orgzly.android.ui.main.MainActivity
@@ -35,7 +36,7 @@ class ExternalLinksTest(private val param: Parameter) : OrgzlyTest() {
     val retryTestRule = RetryTestRule()
 
     @get:Rule
-    val grantPermissionRule: GrantPermissionRule = if (Build.VERSION.SDK_INT >= 33) {
+    val grantPermissionRule: GrantPermissionRule = if (Build.VERSION.SDK_INT >= 33 && BuildConfig.IS_IMAGE_ACCESS_ALLOWED) {
         GrantPermissionRule.grant(android.Manifest.permission.READ_MEDIA_IMAGES)
     } else {
         GrantPermissionRule.grant()
