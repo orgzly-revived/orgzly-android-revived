@@ -22,6 +22,20 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.21.1"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Disallow external files access in the Google Play store build." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Update dependencies." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.21.0"
             tools:ignore="HardcodedText"
             android:autoLink="web" />
