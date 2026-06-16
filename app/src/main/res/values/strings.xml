@@ -831,6 +831,7 @@
     <string name="template_new_headline">New headline here</string>
     <string name="template_new_headline_name">Headline name</string>
     <string name="template_select_notebook_first">Select a notebook first</string>
+    <string name="template_notebook_required">Select a notebook</string>
     <string name="template_headline_no_slash">Headline cannot contain \"/\"</string>
     <string name="template_headline_ambiguous">This headline is ambiguous (duplicate titles). Capture may target a different note.</string>
 </resources>

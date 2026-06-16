@@ -78,6 +78,7 @@
             <View style="@style/HorizontalDivider" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/template_target_book_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="16dp"

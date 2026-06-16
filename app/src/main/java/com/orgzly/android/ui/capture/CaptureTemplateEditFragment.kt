@@ -109,33 +109,31 @@ class CaptureTemplateEditFragment : Fragment() {
 
     private fun setupNotebookSelector(existingTargetBook: String?) {
         val books = dataRepository.getBooks()
-        val none = getString(R.string.default_notebook)
-        val bookNames = mutableListOf(none)
-        bookNames.addAll(books.map { it.book.name })
+        val bookNames = books.map { it.book.name }
 
-        selectedBookName = existingTargetBook ?: ""
-        val currentDisplay = if (selectedBookName.isNotBlank() && bookNames.contains(selectedBookName)) {
-            selectedBookName
-        } else {
-            none
+        // Every template targets a concrete notebook so a headline can be picked.
+        // Default a new template to the first available notebook; preserve an
+        // existing (possibly now-deleted) target name as-is.
+        selectedBookName = when {
+            !existingTargetBook.isNullOrBlank() -> existingTargetBook
+            bookNames.isNotEmpty() -> bookNames.first()
+            else -> ""
         }
-        binding.templateTargetBook.setText(currentDisplay)
+        binding.templateTargetBook.setText(selectedBookName)
         updateHeadlineVisibility()
 
         binding.templateTargetBook.setOnClickListener {
-            val currentText = binding.templateTargetBook.text.toString()
-            val checkedItem = bookNames.indexOf(currentText).coerceAtLeast(0)
+            if (bookNames.isEmpty()) {
+                return@setOnClickListener
+            }
+            val checkedItem = bookNames.indexOf(selectedBookName).coerceAtLeast(0)
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.template_target_book)
                 .setSingleChoiceItems(bookNames.toTypedArray(), checkedItem) { dialog, which ->
                     val previousBookName = selectedBookName
-                    if (which == 0) {
-                        selectedBookName = ""
-                        binding.templateTargetBook.setText(none)
-                    } else {
-                        selectedBookName = bookNames[which]
-                        binding.templateTargetBook.setText(selectedBookName)
-                    }
+                    selectedBookName = bookNames[which]
+                    binding.templateTargetBook.setText(selectedBookName)
+                    binding.templateTargetBookLayout.error = null
                     if (selectedBookName != previousBookName) {
                         // A headline belongs to a specific book; clear it when the book changes.
                         selectedHeadline = null
@@ -251,6 +249,11 @@ class CaptureTemplateEditFragment : Fragment() {
         val description = binding.templateDescription.text?.toString()?.trim() ?: ""
         if (description.isBlank()) {
             binding.templateDescription.error = getString(R.string.cannot_be_empty_short)
+            return
+        }
+
+        if (selectedBookName.isBlank()) {
+            binding.templateTargetBookLayout.error = getString(R.string.template_notebook_required)
             return
         }
 
