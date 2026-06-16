@@ -663,7 +663,8 @@ public class MainActivity extends CommonActivity
         DisplayManager.displayNewNote(
                 getSupportFragmentManager(),
                 target,
-                com.orgzly.android.ui.note.NoteBuilder.newPayload(this, template));
+                com.orgzly.android.ui.note.NoteBuilder.newPayload(this, template),
+                true);
     }
 
     @Override

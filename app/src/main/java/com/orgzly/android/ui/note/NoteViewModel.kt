@@ -34,7 +34,8 @@ data class NoteInitialData(
     val place: Place? = null, // Relative location, used for new notes
     val title: String? = null, // Initial title, used for when sharing
     val content: String? = null, // Initial content, used for when sharing
-    val payload: NotePayload? = null // Initial payload, used for capture templates
+    val payload: NotePayload? = null, // Initial payload, used for capture templates
+    val focusTitle: Boolean = false // Open the keyboard and focus the title (in-app new note from a capture template)
 )
 
 class NoteViewModel(
@@ -246,6 +247,10 @@ class NoteViewModel(
 
     fun hasInitialTitleData(): Boolean {
         return !TextUtils.isEmpty(initialData.title) || initialData.payload != null
+    }
+
+    fun shouldFocusNewNoteTitle(): Boolean {
+        return initialData.focusTitle
     }
 
     fun setBook(b: BookView) {

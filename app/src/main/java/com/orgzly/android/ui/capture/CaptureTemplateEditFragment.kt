@@ -55,20 +55,57 @@ class CaptureTemplateEditFragment : Fragment() {
             binding.templateDescription.setText(existingTemplate.description)
             binding.templateTitle.setText(existingTemplate.title)
             binding.templateContent.setText(existingTemplate.content)
-            binding.templateTargetHeadline.setText(existingTemplate.targetHeadline.orEmpty())
             binding.templateTags.setText(existingTemplate.tags)
             binding.templateScheduled.isChecked = existingTemplate.isScheduled
         }
 
+        // selectedBookName/selectedHeadline are plain logic state (not view state), so restore
+        // them from savedInstanceState on recreation; otherwise seed from the existing template.
+        val initialBook = savedInstanceState?.getString(STATE_BOOK) ?: existingTemplate?.targetBook
+        val initialHeadline = if (savedInstanceState != null) {
+            savedInstanceState.getString(STATE_HEADLINE)
+        } else {
+            existingTemplate?.targetHeadline
+        }
+        selectedHeadline = initialHeadline
+        binding.templateTargetHeadline.setText(initialHeadline.orEmpty())
+
         val title = getString(if (existingTemplate != null) R.string.edit_capture_template else R.string.capture_template)
         (activity as? SettingsFragment.Listener)?.onTitleChange(title)
 
-        setupNotebookSelector(existingTemplate?.targetBook)
+        setupNotebookSelector(initialBook)
+        setupHeadlinePicker()
         setupStateSpinner(existingTemplate?.state)
         setupPrioritySpinner(existingTemplate?.priority)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(STATE_BOOK, selectedBookName)
+        outState.putString(STATE_HEADLINE, selectedHeadline)
+    }
+
     private var selectedBookName: String = ""
+    private var selectedHeadline: String? = null
+
+    private fun setupHeadlinePicker() {
+        parentFragmentManager.setFragmentResultListener(
+            CaptureTemplateHeadlinePickerFragment.REQUEST_KEY, viewLifecycleOwner
+        ) { _, bundle ->
+            val path = bundle.getString(CaptureTemplateHeadlinePickerFragment.RESULT_PATH).orEmpty()
+            selectedHeadline = path.ifBlank { null }
+            binding.templateTargetHeadline.setText(path)
+        }
+
+        binding.templateTargetHeadline.setOnClickListener {
+            if (selectedBookName.isBlank()) {
+                return@setOnClickListener
+            }
+            val book = dataRepository.getBook(selectedBookName) ?: return@setOnClickListener
+            CaptureTemplateHeadlinePickerFragment.getInstance(book.id)
+                .show(parentFragmentManager, CaptureTemplateHeadlinePickerFragment.FRAGMENT_TAG)
+        }
+    }
 
     private fun setupNotebookSelector(existingTargetBook: String?) {
         val books = dataRepository.getBooks()
@@ -91,12 +128,18 @@ class CaptureTemplateEditFragment : Fragment() {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.template_target_book)
                 .setSingleChoiceItems(bookNames.toTypedArray(), checkedItem) { dialog, which ->
+                    val previousBookName = selectedBookName
                     if (which == 0) {
                         selectedBookName = ""
                         binding.templateTargetBook.setText(none)
                     } else {
                         selectedBookName = bookNames[which]
                         binding.templateTargetBook.setText(selectedBookName)
+                    }
+                    if (selectedBookName != previousBookName) {
+                        // A headline belongs to a specific book; clear it when the book changes.
+                        selectedHeadline = null
+                        binding.templateTargetHeadline.setText("")
                     }
                     updateHeadlineVisibility()
                     dialog.dismiss()
@@ -107,7 +150,13 @@ class CaptureTemplateEditFragment : Fragment() {
     }
 
     private fun updateHeadlineVisibility() {
-        binding.templateTargetHeadlineGroup.visibility = View.VISIBLE
+        val enabled = selectedBookName.isNotBlank()
+        binding.templateTargetHeadline.isEnabled = enabled
+        binding.templateTargetHeadlineLayout.isEnabled = enabled
+        binding.templateTargetHeadlineLayout.helperText = getString(
+            if (enabled) R.string.template_target_headline_hint
+            else R.string.template_select_notebook_first
+        )
     }
 
     private fun setupStateSpinner(selectedState: String?) {
@@ -217,7 +266,7 @@ class CaptureTemplateEditFragment : Fragment() {
         val priorityIndex = priorityEntries.indexOf(priorityText)
         val priority = if (priorityIndex != -1) priorityValues[priorityIndex] else ""
 
-        val headline = normalizeHeadlinePath(binding.templateTargetHeadline.text?.toString())
+        val headline = normalizeHeadlinePath(selectedHeadline)
 
         val template = CaptureTemplate(
             id = existingId ?: java.util.UUID.randomUUID().toString(),
@@ -248,6 +297,8 @@ class CaptureTemplateEditFragment : Fragment() {
     companion object {
         val FRAGMENT_TAG: String = CaptureTemplateEditFragment::class.java.name
         private const val ARG_TEMPLATE_ID = "template_id"
+        private const val STATE_BOOK = "state_selected_book"
+        private const val STATE_HEADLINE = "state_selected_headline"
 
         fun getInstance(templateId: String? = null): CaptureTemplateEditFragment {
             val fragment = CaptureTemplateEditFragment()

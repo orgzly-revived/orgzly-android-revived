@@ -119,7 +119,11 @@
                         android:paddingHorizontal="@dimen/screen_edge"
                         android:paddingVertical="12dp"
                         android:background="@null"
-                        android:inputType="text"
+                        android:inputType="none"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:cursorVisible="false"
+                        android:clickable="true"
                         android:hint="@string/template_target_headline"/>
                 </com.google.android.material.textfield.TextInputLayout>
 

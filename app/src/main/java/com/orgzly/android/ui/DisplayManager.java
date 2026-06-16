@@ -176,7 +176,11 @@ public class DisplayManager {
     }
 
     public static void displayNewNote(FragmentManager fragmentManager, NotePlace target, NotePayload initialPayload) {
-        Fragment fragment = NoteFragment.forNewNote(target, initialPayload);
+        displayNewNote(fragmentManager, target, initialPayload, false);
+    }
+
+    public static void displayNewNote(FragmentManager fragmentManager, NotePlace target, NotePayload initialPayload, boolean focusTitle) {
+        Fragment fragment = NoteFragment.forNewNote(target, initialPayload, focusTitle);
 
         if (fragment != null) {
             displayNoteFragment(fragmentManager, fragment);

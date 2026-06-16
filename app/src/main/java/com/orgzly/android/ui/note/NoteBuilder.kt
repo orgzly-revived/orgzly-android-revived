@@ -132,7 +132,7 @@ class NoteBuilder {
             return basePayload.copy(
                     state = template.state.ifBlank { basePayload.state },
                     priority = template.priority.ifBlank { null },
-                    scheduled = if (template.isScheduled) initialScheduledTime(context) else null,
+                    scheduled = if (template.isScheduled) todayScheduledTime() else null,
                     tags = Tags.fromString(template.tags).tags
             )
         }
@@ -149,20 +149,23 @@ class NoteBuilder {
 
         private fun initialScheduledTime(context: Context): String? {
             return if (AppPreferences.isNewNoteScheduled(context)) {
-                val cal = Calendar.getInstance()
-
-                val timestamp = OrgDateTime.Builder()
-                        .setIsActive(true)
-                        .setYear(cal.get(Calendar.YEAR))
-                        .setMonth(cal.get(Calendar.MONTH))
-                        .setDay(cal.get(Calendar.DAY_OF_MONTH))
-                        .build()
-
-                OrgRange(timestamp).toString()
-
+                todayScheduledTime()
             } else {
                 null
             }
+        }
+
+        private fun todayScheduledTime(): String {
+            val cal = Calendar.getInstance()
+
+            val timestamp = OrgDateTime.Builder()
+                    .setIsActive(true)
+                    .setYear(cal.get(Calendar.YEAR))
+                    .setMonth(cal.get(Calendar.MONTH))
+                    .setDay(cal.get(Calendar.DAY_OF_MONTH))
+                    .build()
+
+            return OrgRange(timestamp).toString()
         }
 
         private fun initialState(context: Context): String? {

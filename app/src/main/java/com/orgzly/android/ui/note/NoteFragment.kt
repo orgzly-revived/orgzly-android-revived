@@ -137,7 +137,9 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
                 args.getParcelable(ARG_PAYLOAD) as? NotePayload
             }
 
-            return NoteInitialData(bookId, noteId, place, title, content, payload)
+            val focusTitle = args.getBoolean(ARG_FOCUS_TITLE, false)
+
+            return NoteInitialData(bookId, noteId, place, title, content, payload, focusTitle)
         }
     }
 
@@ -683,9 +685,13 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
             /* Open the keyboard for new notes, unless fragment was given
              * some initial values (for example from ShareActivity).
+             * Capture-template notes carry a payload but still request focus
+             * via focusTitle, so the keyboard opens with the cursor in the heading.
              */
-            if (viewModel.isNew() && !viewModel.hasInitialTitleData()) {
-                binding.title.toEditMode(0)
+            if (viewModel.isNew()
+                && (!viewModel.hasInitialTitleData() || viewModel.shouldFocusNewNoteTitle())) {
+                val titleOffset = viewModel.notePayload?.title?.length ?: 0
+                binding.title.toEditMode(titleOffset)
                 binding.topToolbar.menu.findItem(R.id.insert_inline_timestamp).isVisible = true
             }
         }
@@ -1198,6 +1204,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         private const val ARG_TITLE = "title"
         private const val ARG_CONTENT = "content"
         private const val ARG_PAYLOAD = "payload"
+        private const val ARG_FOCUS_TITLE = "focus_title"
 
         @JvmStatic
         @JvmOverloads
@@ -1220,16 +1227,19 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         }
 
         @JvmStatic
+        @JvmOverloads
         fun forNewNote(
             notePlace: NotePlace,
-            initialPayload: NotePayload
+            initialPayload: NotePayload,
+            focusTitle: Boolean = false
         ): NoteFragment? {
             return if (notePlace.bookId > 0) {
                 getInstance(
                     notePlace.bookId,
                     notePlace.noteId,
                     notePlace.place,
-                    initialPayload = initialPayload)
+                    initialPayload = initialPayload,
+                    focusTitle = focusTitle)
             } else {
                 Log.e(TAG, "Invalid book id ${notePlace.bookId}")
                 null
@@ -1253,7 +1263,8 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             place: Place? = null,
             initialTitle: String? = null,
             initialContent: String? = null,
-            initialPayload: NotePayload? = null): NoteFragment {
+            initialPayload: NotePayload? = null,
+            focusTitle: Boolean = false): NoteFragment {
 
             val fragment = NoteFragment()
 
@@ -1279,6 +1290,10 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
             if (initialPayload != null) {
                 args.putParcelable(ARG_PAYLOAD, initialPayload)
+            }
+
+            if (focusTitle) {
+                args.putBoolean(ARG_FOCUS_TITLE, true)
             }
 
             fragment.arguments = args
