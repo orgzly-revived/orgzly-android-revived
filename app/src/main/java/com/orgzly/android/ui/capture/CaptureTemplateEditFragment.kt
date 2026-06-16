@@ -67,14 +67,20 @@ class CaptureTemplateEditFragment : Fragment() {
         } else {
             existingTemplate?.targetHeadline
         }
-        selectedHeadline = initialHeadline
-        binding.templateTargetHeadline.setText(initialHeadline.orEmpty())
+
+        // Every template targets a concrete notebook. Default a new template to the first
+        // available notebook; preserve an existing (possibly now-deleted) target name as-is.
+        selectedBookName = when {
+            !initialBook.isNullOrBlank() -> initialBook
+            else -> dataRepository.getBooks().map { it.book.name }.firstOrNull() ?: ""
+        }
+        selectedHeadline = initialHeadline?.ifBlank { null }
+        binding.templateTargetBook.setText(formatTarget(selectedBookName, selectedHeadline))
 
         val title = getString(if (existingTemplate != null) R.string.edit_capture_template else R.string.capture_template)
         (activity as? SettingsFragment.Listener)?.onTitleChange(title)
 
-        setupNotebookSelector(initialBook)
-        setupHeadlinePicker()
+        setupTargetPicker()
         setupStateSpinner(existingTemplate?.state)
         setupPrioritySpinner(existingTemplate?.priority)
     }
@@ -88,73 +94,31 @@ class CaptureTemplateEditFragment : Fragment() {
     private var selectedBookName: String = ""
     private var selectedHeadline: String? = null
 
-    private fun setupHeadlinePicker() {
+    private fun setupTargetPicker() {
         parentFragmentManager.setFragmentResultListener(
             CaptureTemplateHeadlinePickerFragment.REQUEST_KEY, viewLifecycleOwner
         ) { _, bundle ->
+            val book = bundle.getString(CaptureTemplateHeadlinePickerFragment.RESULT_BOOK).orEmpty()
             val path = bundle.getString(CaptureTemplateHeadlinePickerFragment.RESULT_PATH).orEmpty()
+            selectedBookName = book
             selectedHeadline = path.ifBlank { null }
-            binding.templateTargetHeadline.setText(path)
+            binding.templateTargetBook.setText(formatTarget(selectedBookName, selectedHeadline))
+            binding.templateTargetBookLayout.error = null
         }
 
-        binding.templateTargetHeadline.setOnClickListener {
-            if (selectedBookName.isBlank()) {
-                return@setOnClickListener
-            }
-            val book = dataRepository.getBook(selectedBookName) ?: return@setOnClickListener
-            CaptureTemplateHeadlinePickerFragment.getInstance(book.id)
+        binding.templateTargetBook.setOnClickListener {
+            CaptureTemplateHeadlinePickerFragment.getInstance()
                 .show(parentFragmentManager, CaptureTemplateHeadlinePickerFragment.FRAGMENT_TAG)
         }
     }
 
-    private fun setupNotebookSelector(existingTargetBook: String?) {
-        val books = dataRepository.getBooks()
-        val bookNames = books.map { it.book.name }
-
-        // Every template targets a concrete notebook so a headline can be picked.
-        // Default a new template to the first available notebook; preserve an
-        // existing (possibly now-deleted) target name as-is.
-        selectedBookName = when {
-            !existingTargetBook.isNullOrBlank() -> existingTargetBook
-            bookNames.isNotEmpty() -> bookNames.first()
-            else -> ""
+    /** "" when no book, "Book" when no headline, otherwise "Book / Heading". */
+    private fun formatTarget(book: String, headline: String?): String {
+        return when {
+            book.isBlank() -> ""
+            headline.isNullOrBlank() -> book
+            else -> "$book / $headline"
         }
-        binding.templateTargetBook.setText(selectedBookName)
-        updateHeadlineVisibility()
-
-        binding.templateTargetBook.setOnClickListener {
-            if (bookNames.isEmpty()) {
-                return@setOnClickListener
-            }
-            val checkedItem = bookNames.indexOf(selectedBookName).coerceAtLeast(0)
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.template_target_book)
-                .setSingleChoiceItems(bookNames.toTypedArray(), checkedItem) { dialog, which ->
-                    val previousBookName = selectedBookName
-                    selectedBookName = bookNames[which]
-                    binding.templateTargetBook.setText(selectedBookName)
-                    binding.templateTargetBookLayout.error = null
-                    if (selectedBookName != previousBookName) {
-                        // A headline belongs to a specific book; clear it when the book changes.
-                        selectedHeadline = null
-                        binding.templateTargetHeadline.setText("")
-                    }
-                    updateHeadlineVisibility()
-                    dialog.dismiss()
-                }
-                .setNegativeButton(android.R.string.cancel, null)
-                .show()
-        }
-    }
-
-    private fun updateHeadlineVisibility() {
-        val enabled = selectedBookName.isNotBlank()
-        binding.templateTargetHeadline.isEnabled = enabled
-        binding.templateTargetHeadlineLayout.isEnabled = enabled
-        binding.templateTargetHeadlineLayout.helperText = getString(
-            if (enabled) R.string.template_target_headline_hint
-            else R.string.template_select_notebook_first
-        )
     }
 
     private fun setupStateSpinner(selectedState: String?) {

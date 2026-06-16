@@ -49,9 +49,7 @@ class CaptureTemplateHeadlinePickerFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val bookId = arguments?.getLong(ARG_BOOK_ID) ?: 0L
-
-        val factory = CaptureTemplateHeadlinePickerViewModelFactory.forBook(dataRepository, bookId)
+        val factory = CaptureTemplateHeadlinePickerViewModelFactory.create(dataRepository)
 
         viewModel = ViewModelProvider(this, factory)
             .get(CaptureTemplateHeadlinePickerViewModel::class.java)
@@ -74,7 +72,7 @@ class CaptureTemplateHeadlinePickerFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.dialogRefileToolbar.apply {
-            title = getString(R.string.template_select_headline)
+            title = getString(R.string.template_select_target)
 
             setNavigationOnClickListener {
                 dismiss()
@@ -92,6 +90,12 @@ class CaptureTemplateHeadlinePickerFragment : DialogFragment() {
             }
         }
 
+        // "Add heading" only makes sense inside a notebook, and selecting the current
+        // location is meaningless at the notebook list. Start hidden; the data observer
+        // reveals them once we drill into a notebook.
+        val newHeadingItem = binding.dialogRefileToolbar.menu.findItem(R.id.new_heading)
+        newHeadingItem?.isVisible = false
+
         val adapter = RefileAdapter(binding.root.context, object : RefileAdapter.OnClickListener {
             override fun onItem(item: RefileViewModel.Item) {
                 viewModel.open(item)
@@ -107,8 +111,9 @@ class CaptureTemplateHeadlinePickerFragment : DialogFragment() {
             it.adapter = adapter
         }
 
-        binding.dialogRefileRefileHere.apply {
+        val selectHereButton = binding.dialogRefileRefileHere.apply {
             contentDescription = getString(R.string.template_select_this_headline)
+            visibility = View.INVISIBLE
             setOnClickListener {
                 viewModel.selectHere()
             }
@@ -121,6 +126,11 @@ class CaptureTemplateHeadlinePickerFragment : DialogFragment() {
             val list = data.second
 
             adapter.submitList(list)
+
+            // breadcrumbs == [Home] means we're at the notebook list.
+            val atNotebookList = breadcrumbs.size <= 1
+            selectHereButton.visibility = if (atNotebookList) View.INVISIBLE else View.VISIBLE
+            newHeadingItem?.isVisible = !atNotebookList
 
             binding.dialogRefileBreadcrumbs.text = generateBreadcrumbs(breadcrumbs)
             binding.dialogRefileBreadcrumbsScrollView.post {
@@ -139,7 +149,11 @@ class CaptureTemplateHeadlinePickerFragment : DialogFragment() {
 
             parentFragmentManager.setFragmentResult(
                 REQUEST_KEY,
-                bundleOf(RESULT_PATH to result.path, RESULT_LABEL to result.label)
+                bundleOf(
+                    RESULT_BOOK to result.book,
+                    RESULT_PATH to result.path,
+                    RESULT_LABEL to result.label
+                )
             )
 
             dismiss()
@@ -203,6 +217,8 @@ class CaptureTemplateHeadlinePickerFragment : DialogFragment() {
             }
 
             when (val payload = item.payload) {
+                is RefileViewModel.Home ->
+                    breadcrumbs.add(getString(R.string.notebooks), 0, onClick = onClick)
                 is Book ->
                     breadcrumbs.add(payload.title ?: payload.name, 0, onClick = onClick)
                 is Note ->
@@ -232,19 +248,14 @@ class CaptureTemplateHeadlinePickerFragment : DialogFragment() {
 
     companion object {
         const val REQUEST_KEY = "capture_template_headline_picker"
+        const val RESULT_BOOK = "book"
         const val RESULT_PATH = "path"
         const val RESULT_LABEL = "label"
 
-        private const val ARG_BOOK_ID = "book_id"
-
         val FRAGMENT_TAG: String = CaptureTemplateHeadlinePickerFragment::class.java.name
 
-        fun getInstance(bookId: Long): CaptureTemplateHeadlinePickerFragment {
-            return CaptureTemplateHeadlinePickerFragment().also { fragment ->
-                fragment.arguments = Bundle().apply {
-                    putLong(ARG_BOOK_ID, bookId)
-                }
-            }
+        fun getInstance(): CaptureTemplateHeadlinePickerFragment {
+            return CaptureTemplateHeadlinePickerFragment()
         }
     }
 }

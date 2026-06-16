@@ -811,6 +811,8 @@
     <string name="template_content">Content</string>
     <string name="template_tokens_hint">Tokens: %t %T (date/time) %u %U (inactive) %c (clipboard)</string>
     <string name="template_target_book">Target notebook</string>
+    <string name="template_target">Target</string>
+    <string name="template_select_target">Select target</string>
     <string name="template_state">Initial state</string>
     <string name="template_priority">Initial priority</string>
     <string name="template_tags">Initial tags</string>

@@ -93,14 +93,15 @@
                     android:inputType="none"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="@string/template_target_book"/>
+                    android:hint="@string/template_target"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:id="@+id/template_target_headline_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <View style="@style/HorizontalDivider" />
 
