@@ -830,7 +830,7 @@
     <string name="template_target_headline_hint">e.g. Inbox or Projects/Active</string>
     <string name="template_select_headline">Select headline</string>
     <string name="template_select_this_headline">Select this headline</string>
-    <string name="template_new_headline">New headline here</string>
+    <string name="template_new_headline">New headline</string>
     <string name="template_new_headline_name">Headline name</string>
     <string name="template_select_notebook_first">Select a notebook first</string>
     <string name="template_notebook_required">Select a notebook</string>
