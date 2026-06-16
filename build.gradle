@@ -8,7 +8,7 @@ buildscript {
 
     versions.kotlin = '2.3.21'
 
-    versions.kotlin_coroutines = '1.10.2'
+    versions.kotlin_coroutines = '1.11.0'
 
     versions.jetbrains_annotations = '26.1.0'
 
