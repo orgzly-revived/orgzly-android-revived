@@ -55,7 +55,7 @@ DEADLINE: <2015-02-20 Fri>
 
 ** Event times can be used anywhere in the note's content
 
-You can have multiple event times:
+您可以设置多个活动时间：
 
 - <2015-02-20 Fri>
 - <2015-02-21 Sat>
