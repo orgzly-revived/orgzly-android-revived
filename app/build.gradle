@@ -11,8 +11,8 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 36
-        versionCode 284
-        versionName "1.21.0"
+        versionCode 286
+        versionName "1.21.1"
         applicationId = "com.orgzlyrevived"
         resValue "string", "application_id", "com.orgzlyrevived"
 
@@ -78,6 +78,9 @@ android {
             // Remove Git feature because of Play restrictions on external storage permissions
             buildConfigField "boolean", "IS_GIT_REMOVED", "true"
 
+            // Remove external files general access because of Play store restrictions on external storage permissions
+            buildConfigField "boolean", "IS_EXTERNAL_FILES_ACCESS_ALLOWED", "false"
+
             buildConfigField "String", "VERSION_NAME_SUFFIX", '""'
 
             dimension "store"
@@ -91,6 +94,8 @@ android {
             buildConfigField "boolean", "IS_DROPBOX_ENABLED", "false"
 
             buildConfigField "boolean", "IS_GIT_REMOVED", "false"
+
+            buildConfigField "boolean", "IS_EXTERNAL_FILES_ACCESS_ALLOWED", "true"
 
             buildConfigField "String", "VERSION_NAME_SUFFIX", '" (fdroid)"'
 

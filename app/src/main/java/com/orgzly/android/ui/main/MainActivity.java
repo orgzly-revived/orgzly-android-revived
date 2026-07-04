@@ -194,6 +194,7 @@ public class MainActivity extends CommonActivity
             long bookId = getIntent().getLongExtra(AppIntent.EXTRA_BOOK_ID, 0L);
             long noteId = getIntent().getLongExtra(AppIntent.EXTRA_NOTE_ID, 0L);
             String queryString = getIntent().getStringExtra(AppIntent.EXTRA_QUERY_STRING);
+            boolean isRawQuery = getIntent().getBooleanExtra(AppIntent.EXTRA_IS_RAW_QUERY, false);
 
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, bookId, noteId, queryString);
 
@@ -206,7 +207,13 @@ public class MainActivity extends CommonActivity
                     DisplayManager.displayExistingNote(getSupportFragmentManager(), bookId, noteId);
                 }
             } else if (queryString != null) {
-                DisplayManager.displayQuery(getSupportFragmentManager(), queryString, null);
+                DisplayManager.displayQuery(
+                        getSupportFragmentManager(),
+                        queryString,
+                        null,
+                        isRawQuery,
+                        true
+                );
 
             } else {
                 handleOrgProtocolIntent(getIntent());
@@ -255,7 +262,7 @@ public class MainActivity extends CommonActivity
 
             @Override
             public void onQuery(@NonNull String query) {
-                viewModel.displayQuery(query);
+                viewModel.displayQuery(query, true);
             }
 
             @Override
@@ -423,7 +430,10 @@ public class MainActivity extends CommonActivity
                 DisplayManager.displayQuery(
                         getSupportFragmentManager(),
                         thisAction.getQuery(),
-                        null);
+                        null,
+                        thisAction.isRawQuery(),
+                        true
+                );
             }
         });
 
@@ -998,13 +1008,13 @@ public class MainActivity extends CommonActivity
                 case AppIntent.ACTION_OPEN_QUERY: {
                     String query = intent.getStringExtra(AppIntent.EXTRA_QUERY_STRING);
                     String searchName = intent.getStringExtra(AppIntent.EXTRA_SEARCH_NAME);
-                    Boolean isRawQuery = intent.getBooleanExtra(AppIntent.EXTRA_IS_RAW_QUERY, false);
+                    boolean isRawQuery = intent.getBooleanExtra(AppIntent.EXTRA_IS_RAW_QUERY, false);
                     DisplayManager.displayQuery(
                             getSupportFragmentManager(),
                             query,
                             searchName,
-                            true,
-                            isRawQuery
+                            isRawQuery,
+                            true
                     );
                     break;
                 }
