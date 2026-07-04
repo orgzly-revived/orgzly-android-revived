@@ -548,4 +548,7 @@
     <string name="delete_amount_of_books">删除 %d 个笔记本</string>
     <string name="ssh_keygen_preference_summary">生成用于 Git 存储库同步的密钥对</string>
     <string name="ssh_show_public_key_preference_title">浏览生成的 SSH 公钥</string>
+    <string name="insert_timestamp">插入时间戳</string>
+    <string name="failed_sharing_note">未能分享笔记</string>
+    <string name="export_settings_to_note">导出设定至笔记</string>
 </resources>
