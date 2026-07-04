@@ -798,4 +798,5 @@
     <string name="content_description_sort_order_descending">Sort descending</string>
     <string name="content_description_subtract">Subtract</string>
     <string name="content_description_add">Add</string>
+    <string name="external_files_access_is_no_longer_allowed">External files access is no longer allowed.</string>
 </resources>
