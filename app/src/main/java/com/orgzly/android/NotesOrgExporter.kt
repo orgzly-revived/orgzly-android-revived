@@ -7,6 +7,7 @@ import com.orgzly.android.data.mappers.OrgMapper
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.ui.note.NotePayload
 import com.orgzly.org.parser.OrgParserSettings
 import com.orgzly.org.parser.OrgParserWriter
 import java.io.File
@@ -51,6 +52,16 @@ class NotesOrgExporter(val dataRepository: DataRepository) {
             ?: throw IllegalArgumentException("Note with id $noteId not found")
 
         return exportNote(noteView, false)
+    }
+
+    /**
+     * Exports a [NotePayload] (in-memory, possibly unsaved note) to Org format string.
+     */
+    fun exportNote(notePayload: NotePayload): String {
+        val orgParserSettings = getOrgParserSettingsFromPreferences()
+        val orgWriter = OrgParserWriter(orgParserSettings)
+        val head = OrgMapper.toOrgHead(notePayload)
+        return orgWriter.whiteSpacedHead(head, 1, false)
     }
 
     /**
