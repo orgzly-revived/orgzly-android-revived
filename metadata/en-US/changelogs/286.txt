@@ -1,0 +1,2 @@
+• Disallow external files access in the Google Play store build.
+• Update dependencies.
