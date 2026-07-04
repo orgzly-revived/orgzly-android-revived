@@ -304,17 +304,28 @@ abstract class CommonActivity : AppCompatActivity() {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, file)
 
         if (file.exists()) {
-            runWithPermission(
-                AppPermissions.Usage.EXTERNAL_FILES_ACCESS,
-                Runnable {
-                    try {
-                        openFile(file)
-                    } catch (e: Exception) {
-                        showSnackbar(getString(
-                            R.string.failed_to_open_linked_file_with_reason,
-                            e.localizedMessage))
-                    }
-                })
+            if (BuildConfig.IS_EXTERNAL_FILES_ACCESS_ALLOWED) {
+                runWithPermission(
+                    AppPermissions.Usage.EXTERNAL_FILES_ACCESS, Runnable {
+                        try {
+                            openFile(file)
+                        } catch (e: Exception) {
+                            showSnackbar(
+                                getString(
+                                    R.string.failed_to_open_linked_file_with_reason,
+                                    e.localizedMessage
+                                )
+                            )
+                        }
+                    })
+            } else {
+                showSnackbar(
+                    getString(
+                        R.string.failed_to_open_linked_file_with_reason,
+                        getString(R.string.external_files_access_is_no_longer_allowed)
+                    )
+                )
+            }
         } else {
             showSnackbar(getString(R.string.file_does_not_exist, file.canonicalFile))
         }
