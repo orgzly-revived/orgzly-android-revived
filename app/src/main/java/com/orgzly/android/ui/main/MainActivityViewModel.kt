@@ -71,8 +71,8 @@ class MainActivityViewModel(private val dataRepository: DataRepository) : Common
         }
     }
 
-    fun displayQuery(query: String) {
-        navigationActions.postValue(MainNavigationAction.DisplayQuery(query))
+    fun displayQuery(query: String, isRawQuery: Boolean) {
+        navigationActions.postValue(MainNavigationAction.DisplayQuery(query, isRawQuery))
     }
 
     fun followLinkToNoteOrBookWithProperty(name: String, value: String) {
@@ -162,5 +162,5 @@ sealed class MainNavigationAction {
     data class OpenBookFocusNote(val bookId: Long, val noteId: Long, val foldRest: Boolean) : MainNavigationAction()
     data class OpenNote(val bookId: Long, val noteId: Long) : MainNavigationAction()
     data class OpenFile(val file: File) : MainNavigationAction()
-    data class DisplayQuery(val query: String) : MainNavigationAction()
+    data class DisplayQuery(val query: String, val isRawQuery: Boolean) : MainNavigationAction()
 }
