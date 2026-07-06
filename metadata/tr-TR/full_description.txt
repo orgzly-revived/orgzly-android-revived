@@ -1,20 +1,29 @@
-Orgzly, not almak ve yapılacaklar listelerini yönetmek için genel bir uygulamadır.
+Orgzly Diriliş, not almak ve yapılacaklar listelerini yönetmek için kullanılan bir taslak oluşturma aracıdır.
 
-Not defterlerini düz metin olarak saklayabilir ve mobil cihazdaki, SD karttaki veya WebDAV üzerindeki bir dizinle senkronize edebilirsin.
+Not defterlerinizi düz metin olarak saklayabilir ve mobil cihazınızdaki, SD kartınızdaki veya WebDAV üzerinden bir dizinle senkronize edebilirsiniz.
 
-Not defterleri Org mod dosya biçiminde kaydedilir.
-“Org mod, not tutmak, TODO listelerini takip etmek, projeleri planlamak ve belgeleri hızlı ve etkili bir düz metin sistemiyle oluşturmak içindir.”
-Daha fazla bilgi için <a href='https://orgmode.org/'>https://orgmode.org/</a> adresine bak.
+Not defterleri Org mode dosya biçiminde kaydedilir.
 
-<b>Özellikler:</b>
+“Org mode, hızlı ve etkili bir düz metin sistemiyle not tutmak, yapılacaklar listelerini yönetmek, projeleri planlamak ve belgeler oluşturmak içindir.”
 
-* Notlar ve görevler oluşturma, düzenleme ve silme
-* Alt notları daraltma ve genişletme
-* Görevleri planlama ve son tarihlerini belirleme
-* Notlar için öncelikler ve etiketler ayarlama
-* Hızlı menüleri açmak için notları sola veya sağa kaydırma
-* Notları çeşitli özelliklere göre arama
-* Hızlı erişim için aramalar oluşturma ve kaydetme
-* Not defterlerini bir veya daha fazla dizinle senkronize etme
+Daha fazla bilgi için <a href='https://orgmode.org/'>orgmode.org</a> adresini ziyaret edin.
 
-Orgzly Diriliş, orijinal Orgzly uygulamasının bir topluluk çatalıdır.
+ <b>Özellikler:</b>
+
+* Notlar ve görevler oluşturun, düzenleyin ve silin
+
+* Alt notları daraltın ve genişletin
+
+* Görevleri planlayın ve son tarihlerini belirleyin
+
+* Notlar için öncelikler ve etiketler belirleyin
+
+* Hızlı menüleri açmak için notları sola veya sağa kaydırın
+
+* Notları çeşitli özelliklere göre arayın
+
+* Hızlı erişim için aramalar oluşturun ve kaydedin
+
+* Not defterlerini bir veya daha fazla dizinle senkronize edin
+
+Orgzly Diriliş, Orgzly uygulamasının topluluk tarafından geliştirilmiş bir sürümüdür.
