@@ -35,9 +35,7 @@ class TimestampDialogViewModel(val timeType: TimeType, orgDateTime: String?) : C
                 val orgDateTime = OrgDateTime.parseOrNull(str)
 
                 // TODO: Make default configurable
-                val defaultTime = Calendar.getInstance().apply {
-                    add(Calendar.HOUR, 1)
-                }
+                val defaultTime = Calendar.getInstance()
 
                 val cal = if (orgDateTime != null) {
                     orgDateTime.calendar

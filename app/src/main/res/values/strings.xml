@@ -690,6 +690,9 @@
     <string name="log_major_events">Log major events</string>
     <string name="logs">Logs</string>
     <string name="share">Share</string>
+    <string name="share_note">Share note</string>
+    <string name="share_title">Share title</string>
+    <string name="share_content">Share content</string>
     <string name="refresh_data">Refresh</string>
 
     <string name="clock">Clock</string>
@@ -836,4 +839,5 @@
     <string name="template_notebook_required">Select a notebook</string>
     <string name="template_headline_no_slash">Headline cannot contain \"/\"</string>
     <string name="template_headline_ambiguous">This headline is ambiguous (duplicate titles). Capture may target a different note.</string>
+    <string name="external_files_access_is_no_longer_allowed">External files access is no longer allowed.</string>
 </resources>
