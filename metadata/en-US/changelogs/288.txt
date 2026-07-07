@@ -1,0 +1,6 @@
+• Fix bug when opening saved search from the widget.
+• Sharing note now uses on-screen content, instead of stored content.
+• Add menu actions for sharing note title and content separately.
+• Don't add extra hour when insert timestamp during note editing.
+• Upgrade dependencies.
+• Update translations.

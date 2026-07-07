@@ -40,7 +40,7 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Don't add extra hour when insert timestamp during note editing." />
+            app:text="Don't add extra hour when inserting in-line timestamps." />
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
