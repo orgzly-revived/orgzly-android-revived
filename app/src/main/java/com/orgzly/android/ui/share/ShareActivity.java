@@ -272,7 +272,7 @@ public class ShareActivity extends CommonActivity
 
             try {
                 if (data.notePlace != null && data.payload != null) {
-                    noteFragment = NoteFragment.forNewNote(data.notePlace, data.payload);
+                    noteFragment = NoteFragment.forNewNote(data.notePlace, data.payload, true);
                 } else {
                     long bookId;
                     if (data.bookId == null) {

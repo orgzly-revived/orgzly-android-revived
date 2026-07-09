@@ -104,7 +104,10 @@ class CaptureTemplateHeadlinePickerFragment : DialogFragment() {
             override fun onButton(item: RefileViewModel.Item) {
                 viewModel.select(item)
             }
-        })
+        }).apply {
+            // Avoid reusing the refile ("move to inbox") icon, which is misleading here.
+            selectIcon = R.drawable.ic_done
+        }
 
         binding.dialogRefileTargets.let {
             it.layoutManager = LinearLayoutManager(context)
@@ -113,6 +116,7 @@ class CaptureTemplateHeadlinePickerFragment : DialogFragment() {
 
         val selectHereButton = binding.dialogRefileRefileHere.apply {
             contentDescription = getString(R.string.template_select_this_headline)
+            setImageResource(R.drawable.ic_done)
             visibility = View.INVISIBLE
             setOnClickListener {
                 viewModel.selectHere()

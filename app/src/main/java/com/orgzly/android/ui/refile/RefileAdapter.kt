@@ -22,6 +22,14 @@ class RefileAdapter(val context: Context, val listener: OnClickListener) :
 
     var icons: Icons? = null
 
+    /**
+     * When set, overrides the per-row action button icon. Used by the capture-template
+     * target picker so it doesn't reuse the refile ("move to inbox") icon, which would be
+     * misleading in that context. Null keeps the layout default used by the refile dialog.
+     */
+    @DrawableRes
+    var selectIcon: Int? = null
+
     private val noteItemViewBinder = NoteItemViewBinder(context, true)
 
     interface OnClickListener {
@@ -59,6 +67,8 @@ class RefileAdapter(val context: Context, val listener: OnClickListener) :
         }
 
         val item = getItem(position)
+
+        selectIcon?.let { holder.binding.itemRefileButton.setImageResource(it) }
 
         when (val payload = item.payload) {
             is Book -> {
