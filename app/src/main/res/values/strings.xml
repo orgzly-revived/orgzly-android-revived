@@ -353,20 +353,12 @@
     <string name="calendar">Calendar</string>
     <string name="calendar_view">Calendar view</string>
 
-    <string name="agenda_view">Agenda view</string>
-    <string name="week_view">Week view</string>
-    <string name="month_view">Month view</string>
-
     <string name="previous_month">Previous month</string>
     <string name="next_month">Next month</string>
 
     <string name="default_agenda_view">Default agenda view</string>
     <string name="calendar_views">Calendar views</string>
     <string name="calendar_text_size">Calendar text size</string>
-
-    <string name="agenda_mode_agenda">Agenda</string>
-    <string name="agenda_mode_week">Week</string>
-    <string name="agenda_mode_month">Month</string>
 
     <string name="calendar_show_book_name">Show notebook name in calendar</string>
 

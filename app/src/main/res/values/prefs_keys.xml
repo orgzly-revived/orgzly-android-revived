@@ -384,9 +384,9 @@
     </string>
 
     <string-array name="calendar_default_views">
-        <item>@string/agenda_mode_agenda</item>
-        <item>@string/agenda_mode_month</item>
-        <item>@string/agenda_mode_week</item>
+        <item>@string/agenda</item>
+        <item>@string/month</item>
+        <item>@string/week</item>
     </string-array>
 
     <string-array name="calendar_default_views_values">
