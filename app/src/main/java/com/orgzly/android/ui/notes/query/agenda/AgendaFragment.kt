@@ -233,12 +233,6 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
         sharedMainActivityViewModel.setCurrentFragment(FRAGMENT_TAG)
     }
 
-    private fun toggleTitleForMode(mode: CalendarDisplayMode): String = when (mode) {
-        CalendarDisplayMode.AGENDA -> getString(R.string.toggle_week_view)
-        CalendarDisplayMode.WEEK   -> getString(R.string.toggle_calendar_view)
-        CalendarDisplayMode.MONTH  -> getString(R.string.toggle_agenda_view)
-    }
-
     private fun applyDisplayMode(mode: CalendarDisplayMode) {
         when (mode) {
             CalendarDisplayMode.MONTH -> {
@@ -260,6 +254,19 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
         }
     }
 
+    private fun updateCalendarViewMenu() {
+        binding.topToolbar.menu.run {
+            findItem(R.id.calendar_view_agenda)?.isChecked =
+                displayMode == CalendarDisplayMode.AGENDA
+
+            findItem(R.id.calendar_view_week)?.isChecked =
+                displayMode == CalendarDisplayMode.WEEK
+
+            findItem(R.id.calendar_view_month)?.isChecked =
+                displayMode == CalendarDisplayMode.MONTH
+        }
+    }
+
     private fun topToolbarToDefault() {
         viewAdapter.clearSelection()
 
@@ -269,24 +276,32 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
             ActivityUtils.keepScreenOnUpdateMenuItem(activity, menu)
 
+            updateCalendarViewMenu()
+
             setNavigationIcon(R.drawable.ic_menu)
 
             setNavigationOnClickListener {
                 sharedMainActivityViewModel.openDrawer()
             }
 
-            menu.findItem(R.id.toggle_calendar_view)?.title = toggleTitleForMode(displayMode)
-
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.toggle_calendar_view -> {
-                        displayMode = when (displayMode) {
-                            CalendarDisplayMode.AGENDA -> CalendarDisplayMode.WEEK
-                            CalendarDisplayMode.WEEK   -> CalendarDisplayMode.MONTH
-                            CalendarDisplayMode.MONTH  -> CalendarDisplayMode.AGENDA
-                        }
+                    R.id.calendar_view_agenda -> {
+                        displayMode = CalendarDisplayMode.AGENDA
                         applyDisplayMode(displayMode)
-                        menu.findItem(R.id.toggle_calendar_view)?.title = toggleTitleForMode(displayMode)
+                        updateCalendarViewMenu()
+                    }
+
+                    R.id.calendar_view_week -> {
+                        displayMode = CalendarDisplayMode.WEEK
+                        applyDisplayMode(displayMode)
+                        updateCalendarViewMenu()
+                    }
+
+                    R.id.calendar_view_month -> {
+                        displayMode = CalendarDisplayMode.MONTH
+                        applyDisplayMode(displayMode)
+                        updateCalendarViewMenu()
                     }
 
                     R.id.sync -> {
