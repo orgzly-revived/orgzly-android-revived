@@ -8,6 +8,11 @@
         android:title="@string/keep_screen_on"/>
 
     <item
+        android:id="@+id/toggle_calendar_view"
+        app:showAsAction="never"
+        android:title="@string/toggle_calendar_view"/>
+
+    <item
         android:id="@+id/sync"
         app:showAsAction="never"
         android:title="@string/sync"/>

@@ -265,7 +265,7 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
         binding.topToolbar.run {
             menu.clear()
-            inflateMenu(R.menu.query_actions)
+            inflateMenu(R.menu.query_actions_agenda)
 
             ActivityUtils.keepScreenOnUpdateMenuItem(activity, menu)
 
