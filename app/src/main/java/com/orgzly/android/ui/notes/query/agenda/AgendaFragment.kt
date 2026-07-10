@@ -490,24 +490,52 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
     private fun setupMonthNavigation() {
         binding.monthPrevButton.setOnClickListener {
+            val selectedDayOfMonth = selectedMonthDay.dayOfMonth
+
             currentMonth = currentMonth.minusMonths(1)
-            if (!isSameMonth(selectedMonthDay, currentMonth)) selectedMonthDay = currentMonth
+
+            val maxDay = currentMonth.dayOfMonth().withMaximumValue().dayOfMonth
+            selectedMonthDay = currentMonth.withDayOfMonth(
+                minOf(selectedDayOfMonth, maxDay)
+            )
+
             monthView.render(currentMonth, selectedMonthDay)
         }
+
         binding.monthNextButton.setOnClickListener {
+            val selectedDayOfMonth = selectedMonthDay.dayOfMonth
+
             currentMonth = currentMonth.plusMonths(1)
-            if (!isSameMonth(selectedMonthDay, currentMonth)) selectedMonthDay = currentMonth
+
+            val maxDay = currentMonth.dayOfMonth().withMaximumValue().dayOfMonth
+            selectedMonthDay = currentMonth.withDayOfMonth(
+                minOf(selectedDayOfMonth, maxDay)
+            )
+
             monthView.render(currentMonth, selectedMonthDay)
         }
     }
 
     private fun setupWeekNavigation() {
         binding.monthPrevButton.setOnClickListener {
+            val selectedDow = selectedMonthDay.dayOfWeek
+
             currentWeekStart = currentWeekStart.minusWeeks(1)
+            selectedMonthDay = currentWeekStart.plusDays(
+                (selectedDow - currentWeekStart.dayOfWeek + 7) % 7
+            )
+
             weekView.render(currentWeekStart, selectedMonthDay)
         }
+
         binding.monthNextButton.setOnClickListener {
+            val selectedDow = selectedMonthDay.dayOfWeek
+
             currentWeekStart = currentWeekStart.plusWeeks(1)
+            selectedMonthDay = currentWeekStart.plusDays(
+                (selectedDow - currentWeekStart.dayOfWeek + 7) % 7
+            )
+
             weekView.render(currentWeekStart, selectedMonthDay)
         }
     }
