@@ -569,7 +569,6 @@
     <string name="sync_status_dummy_without_link_and_multiple_rooks">O notebook não tem link e existem vários notebooks remotos com o mesmo nome</string>
     <string name="sync_status_no_book_multiple_rooks">Não existe nenhum notebook e existem vários notebooks remotos com o mesmo nome</string>
     <string name="sync_status_rook_no_longer_exists">O arquivo remoto não existe mais; link do repositório removido. Defina um link se quiser sincronizar com um repositório.</string>
-    <string name="sync_status_no_link_and_previous_error">O notebook não tem link para repositório</string>
     <string name="sync_status_loaded">Carregado de %s</string>
     <string name="sync_status_saved">Salvo em %s</string>
     <string name="moving_between_subdirectories_requires_api_24">Renomear o caderno para um subdiretório diferente requer Android 7 ou superior</string>

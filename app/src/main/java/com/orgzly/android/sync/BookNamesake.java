@@ -110,6 +110,7 @@ public class BookNamesake {
      *
      * - Book exists
      *   - Book is dummy
+     *   - Book has no repository link
      *   - Book has a link
      *     - Linked remote book exists
      *   - Book has a last-synced-with remote book
@@ -148,19 +149,7 @@ public class BookNamesake {
                         status = BookSyncStatus.ONLY_BOOK_WITH_LINK;
                     }
                 } else { /* Only local book without link. */
-                    if (reposCount > 1) {
-                        status = BookSyncStatus.ONLY_BOOK_WITHOUT_LINK_AND_MULTIPLE_REPOS;
-                    } else { // Only one repository configured
-                        BookAction lastAction = book.getBook().getLastAction();
-                        if (lastAction != null && lastAction.getType() == BookAction.Type.ERROR) {
-                            // Book is an error state.
-                            status = BookSyncStatus.BOOK_WITH_PREVIOUS_ERROR_AND_NO_LINK;
-                        } else {
-                            // Book is not in an error state (automatic linking may be
-                            // attempted).
-                            status = BookSyncStatus.ONLY_BOOK_WITHOUT_LINK_AND_ONE_REPO;
-                        }
-                    }
+                    status = BookSyncStatus.ONLY_BOOK_WITHOUT_LINK;
                 }
             }
             return;

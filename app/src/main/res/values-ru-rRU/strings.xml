@@ -599,7 +599,6 @@
     <string name="sync_status_dummy_without_link_and_multiple_rooks">Блокнот не имеет ссылки и существует несколько удаленных блокнотов с одинаковым именем</string>
     <string name="sync_status_no_book_multiple_rooks">Нет блокнотов и нескольких удаленных блокнотов с одинаковым именем</string>
     <string name="sync_status_rook_no_longer_exists">Удаленный файл больше не существует; ссылка на репозиторий удалена. Установите ссылку, если хотите синхронизировать с репозиторием.</string>
-    <string name="sync_status_no_link_and_previous_error">Блокнот не имеет ссылки на репозиторий</string>
     <string name="sync_status_loaded">Загружено из %s</string>
     <string name="sync_status_saved">Сохранено в %s</string>
     <string name="moving_between_subdirectories_requires_api_24">Переименование блокнота в другую подпапку требует Android 7 или выше</string>

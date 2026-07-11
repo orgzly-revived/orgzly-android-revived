@@ -220,7 +220,7 @@ class SyncTest {
 
         book = dataRepository.getBookView("book")!!
         assertEquals(
-            BookSyncStatus.ONLY_BOOK_WITHOUT_LINK_AND_ONE_REPO.toString(),
+            BookSyncStatus.ONLY_BOOK_WITHOUT_LINK.toString(),
             book.book.syncStatus
         )
         assertEquals("mock://repo-b", book.linkRepo?.url)
@@ -259,7 +259,7 @@ class SyncTest {
 
         book = dataRepository.getBookView("book")!!
         assertEquals(
-            BookSyncStatus.ONLY_BOOK_WITHOUT_LINK_AND_ONE_REPO.toString(),
+            BookSyncStatus.ONLY_BOOK_WITHOUT_LINK.toString(),
             book.book.syncStatus
         )
         assertEquals("mock://repo-b", book.linkRepo?.url)
@@ -346,7 +346,7 @@ class SyncTest {
 
         val book = dataRepository.getBooks()[0]
         assertEquals(
-            BookSyncStatus.ONLY_BOOK_WITHOUT_LINK_AND_ONE_REPO.toString(),
+            BookSyncStatus.ONLY_BOOK_WITHOUT_LINK.toString(),
             book.book.syncStatus
         )
         assertEquals(
@@ -368,7 +368,7 @@ class SyncTest {
 
         val book = dataRepository.getBooks()[0]
         assertEquals(
-            BookSyncStatus.ONLY_BOOK_WITHOUT_LINK_AND_MULTIPLE_REPOS.toString(),
+            BookSyncStatus.ONLY_BOOK_WITHOUT_LINK.toString(),
             book.book.syncStatus
         )
     }
@@ -497,7 +497,7 @@ class SyncTest {
         book = dataRepository.getBookView("booky")!!
 
         assertEquals(
-            BookSyncStatus.ONLY_BOOK_WITHOUT_LINK_AND_ONE_REPO,
+            BookSyncStatus.ONLY_BOOK_WITHOUT_LINK,
             namesakes["booky"]?.status
         )
 
@@ -780,7 +780,7 @@ class SyncTest {
         book = dataRepository.getBooks()[0]
         assertNull(book.linkRepo)
         assertEquals(
-            BookSyncStatus.BOOK_WITH_PREVIOUS_ERROR_AND_NO_LINK.toString(),
+            BookSyncStatus.ONLY_BOOK_WITHOUT_LINK.toString(),
             book.book.syncStatus
         )
     }

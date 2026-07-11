@@ -592,7 +592,6 @@
     <string name="sync_status_dummy_without_link_and_multiple_rooks">Užrašinė nėra susieta ir yra nuotolinių užrašinių su tokiu pat vardu</string>
     <string name="sync_status_no_book_multiple_rooks">Nėra užrašinės ir yra nuotolinės užrašinės su tokiu pat vardu</string>
     <string name="sync_status_rook_no_longer_exists">Nuotolinis failas nebeegzistuoja; saugyklos siejimas pašalintas. Nustatykite siejimą, jei norite sinchronizuoti su saugykla.</string>
-    <string name="sync_status_no_link_and_previous_error">Užrašinė neturi susietos saugyklos</string>
     <string name="sync_status_loaded">Įkrauta iš %s</string>
     <string name="sync_status_saved">Išsaugota į %s</string>
     <string name="moving_between_subdirectories_requires_api_24">Pervadinti užrašinę į kitą pakatalogį reikalauja Android 7 ar naujesnės versijos</string>

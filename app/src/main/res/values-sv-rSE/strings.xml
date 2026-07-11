@@ -577,7 +577,6 @@
     <string name="sync_status_dummy_without_link_and_multiple_rooks">Anteckningsboken saknar länk och det finns flera fjärranteckningsböcker med samma namn</string>
     <string name="sync_status_no_book_multiple_rooks">Ingen lokal anteckningsbok och det finns flera fjärranteckningsböcker med samma namn</string>
     <string name="sync_status_rook_no_longer_exists">Fjärrfilen finns inte längre; länken till lagringsplatsen har tagits bort. Länka anteckningsboken om du vill synka den till en lagringsplats.</string>
-    <string name="sync_status_no_link_and_previous_error">Anteckningsboken är inte länkad till en lagringsplats</string>
     <string name="sync_status_loaded">Lästes in från %s</string>
     <string name="sync_status_saved">Sparades till %s</string>
     <string name="moving_between_subdirectories_requires_api_24">Android 7 eller nyare krävs för att flytta en anteckningsbok till en annan underkatalog</string>

@@ -154,7 +154,7 @@
 
     <string name="tags">Tags</string>
     <string name="book_mtime">Notebook modification time</string>
-    <string name="book_link">Notebook link</string>
+    <string name="book_link">Set notebook repository link</string>
     <string name="book_link_details">Notebook link details</string>
     <string name="book_last_action">Notebook last action</string>
     <string name="book_notes_count">Notes count</string>
@@ -735,7 +735,7 @@
     <string name="sync_status_dummy_without_link_and_multiple_rooks">Notebook has no link and multiple remote notebooks with the same name exist</string>
     <string name="sync_status_no_book_multiple_rooks">No notebook and multiple remote notebooks with the same name exist</string>
     <string name="sync_status_rook_no_longer_exists">Remote file no longer exists; repository link removed. Set a link if you want to sync to a repository.</string>
-    <string name="sync_status_no_link_and_previous_error">Notebook has no repository link</string>
+    <string name="sync_status_no_link">No repository link</string>
     <string name="sync_status_loaded">Loaded from %s</string>
     <string name="sync_status_saved">Saved to %s</string>
 
@@ -840,4 +840,5 @@
     <string name="template_headline_no_slash">Headline cannot contain \"/\"</string>
     <string name="template_headline_ambiguous">This headline is ambiguous (duplicate titles). Capture may target a different note.</string>
     <string name="external_files_access_is_no_longer_allowed">External files access is no longer allowed.</string>
+    <string name="no_link">No link</string>
 </resources>

@@ -119,8 +119,12 @@ class BooksViewModel(private val dataRepository: DataRepository) : CommonViewMod
                     if (bookIds.size == 1) {
                         val bookView = dataRepository.getBookView(bookIds.first())
                         val currentLink = bookView?.linkRepo
-                        val selectedLink = repos.indexOfFirst {
-                            it.url == currentLink?.url
+                        val selectedLink: Int = if (currentLink != null) {
+                            repos.indexOfFirst {
+                                it.url == currentLink.url
+                            }
+                        } else {
+                            repos.size
                         }
                         BookLinkOptions(bookIds, repos, repos.map { it.url }, selectedLink)
                     } else {
@@ -195,6 +199,18 @@ class BooksViewModel(private val dataRepository: DataRepository) : CommonViewMod
         App.EXECUTORS.diskIO().execute {
             catchAndPostError {
                 UseCaseRunner.run(BookCreate(name))
+            }
+            val repos = dataRepository.getRepos()
+            if (!repos.isEmpty()) {
+                val book = dataRepository.getBook(name)
+                if (book != null) {
+                    setBookLinkRequestEvent.postValue(
+                        BookLinkOptions(
+                            setOf(book.id),
+                            repos,
+                            repos.map { it.url },
+                            -1))
+                }
             }
         }
     }

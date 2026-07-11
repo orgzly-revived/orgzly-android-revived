@@ -563,7 +563,6 @@
     <string name="sync_status_dummy_without_link_and_multiple_rooks">Il taccuino non ha link e ci sono diversi taccuini remoti con lo stesso identico nome</string>
     <string name="sync_status_no_book_multiple_rooks">Taccuino inesistente e ci sono diversi taccuini remoti con lo stesso identico nome</string>
     <string name="sync_status_rook_no_longer_exists">Il file remoto non esiste più; link al repository rimosso. Definisci un link se vuoi sincronizzare con un repository.</string>
-    <string name="sync_status_no_link_and_previous_error">Il taccuino non ha link al repository</string>
     <string name="sync_status_loaded">Caricato da %s</string>
     <string name="sync_status_saved">Salvato in %s</string>
     <string name="export_settings_to_note">Esporta i settaggi a una nota</string>

@@ -19,16 +19,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
@@ -53,10 +49,8 @@ import com.orgzly.android.ui.OnViewHolderClickListener
 import com.orgzly.android.ui.books.BooksViewModel.Companion.APP_BAR_DEFAULT_MODE
 import com.orgzly.android.ui.books.BooksViewModel.Companion.APP_BAR_SELECTION_MODE
 import com.orgzly.android.ui.compose.base.LocalNavigator
-import com.orgzly.android.ui.compose.base.NavigationDestination
 import com.orgzly.android.ui.compose.base.bootstrapContent
 import com.orgzly.android.ui.compose.widgets.Icons
-import com.orgzly.android.ui.compose.widgets.OrgzlyExtendedFloatingActionButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyFloatingActionButton
 import com.orgzly.android.ui.compose.widgets.PushableCenteredLayout
 import com.orgzly.android.ui.compose.widgets.painterIcon
@@ -543,18 +537,21 @@ class BooksFragment : CommonFragment(), DrawerItem, OnViewHolderClickListener<Bo
                     }
                 }
             } else {
+                val items = urls + getString(R.string.no_link)
                 dialog = MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.book_link)
                     .setSingleChoiceItems(
-                        urls.toTypedArray(),
+                        items.toTypedArray(),
                         checked
                     ) { _: DialogInterface, which: Int ->
-                        viewModel.setBookLinks(bookIds, links[which])
+                        if (which == links.size) {
+                            // User chose not to link to a repository
+                            viewModel.setBookLinks(bookIds)
+                        } else {
+                            viewModel.setBookLinks(bookIds, links[which])
+                        }
                         dialog?.dismiss()
                         dialog = null
-                    }
-                    .setNeutralButton(R.string.remove_notebook_link) { _, _ ->
-                        viewModel.setBookLinks(bookIds)
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .show()

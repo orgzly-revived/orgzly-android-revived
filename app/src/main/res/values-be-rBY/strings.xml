@@ -588,7 +588,6 @@
     <string name="sync_status_dummy_without_link_and_multiple_rooks">Нататнік ня мае спасылкі, ды маюцца мноства аддаленых нататнікаў з такім жа імем</string>
     <string name="sync_status_no_book_multiple_rooks">Нататнік не існуе, ды маюцца мноства аддаленых нататнікаў з такім жа імем</string>
     <string name="sync_status_rook_no_longer_exists">Аддалены файл ужо не існуе, спасылка на рэпазітар прыбраная. Задайце спасылку, калі хочаце сынхранізаваць з рэпазітарам.</string>
-    <string name="sync_status_no_link_and_previous_error">Нататнік ня мае спасылкі на рэпазітар</string>
     <string name="sync_status_loaded">Загружана з %s</string>
     <string name="sync_status_saved">Захавана ў %s</string>
     <string name="moving_between_subdirectories_requires_api_24">Зьмена назвы нататніка на іншы ўкладзены каталёг патрабуе Android 7 або вышэй</string>

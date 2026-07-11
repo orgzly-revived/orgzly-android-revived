@@ -604,7 +604,6 @@
     <string name="clock_cancel">Annuler</string>
     <string name="error_file_matches_repo_ignore_rule">Erreur : le nom du fichier de dépôt correspond à une règle dans %s</string>
     <string name="sync_status_no_book_multiple_rooks">Pas de bloc-notes et il existe plusieurs bloc-notes avec le même nom</string>
-    <string name="sync_status_no_link_and_previous_error">Le bloc-notes n\'a pas de lien de dépôt</string>
     <string name="sync_status_saved">Sauvegardé dans %s</string>
     <string name="subfolder_support_disabled">Le support des sous-dossiers est désactivé</string>
     <string name="export_settings_to_note">Exporter les paramètres dans une note</string>

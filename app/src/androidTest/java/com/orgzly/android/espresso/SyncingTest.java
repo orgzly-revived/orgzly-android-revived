@@ -441,7 +441,7 @@ public class SyncingTest extends OrgzlyTest {
         sync();
 
         onBook(0, R.id.item_book_last_action)
-                .check(matches(allOf(withText(containsString(BookSyncStatus.ONLY_BOOK_WITHOUT_LINK_AND_MULTIPLE_REPOS.msg())), isDisplayed())));
+                .check(matches(allOf(withText(containsString(BookSyncStatus.ONLY_BOOK_WITHOUT_LINK.msg())), isDisplayed())));
         onBook(1, R.id.item_book_last_action)
                 .check(matches(allOf(withText(containsString(BookSyncStatus.CONFLICT_BOOK_WITH_LINK_AND_ROOK_BUT_NEVER_SYNCED_BEFORE.msg())), isDisplayed())));
         onBook(2, R.id.item_book_last_action)
@@ -467,7 +467,7 @@ public class SyncingTest extends OrgzlyTest {
         sync();
 
         onBook(0, R.id.item_book_last_action)
-                .check(matches(allOf(withText(containsString(BookSyncStatus.ONLY_BOOK_WITHOUT_LINK_AND_MULTIPLE_REPOS.msg())), isDisplayed())));
+                .check(matches(allOf(withText(containsString(BookSyncStatus.ONLY_BOOK_WITHOUT_LINK.msg())), isDisplayed())));
 
         onBook(1, R.id.item_book_last_action)
                 .check(matches(allOf(withText(containsString(BookSyncStatus.CONFLICT_BOOK_WITH_LINK_AND_ROOK_BUT_NEVER_SYNCED_BEFORE.msg())), isDisplayed())));

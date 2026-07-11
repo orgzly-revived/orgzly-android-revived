@@ -3,13 +3,14 @@ package com.orgzly.android.sync
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
-import androidx.work.WorkerParameters
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.WorkerParameters
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.SharingShortcutsManager
+import com.orgzly.android.calendar.CalendarWorker
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.data.logs.AppLogsRepository
 import com.orgzly.android.db.entity.BookAction
@@ -29,7 +30,6 @@ import com.orgzly.android.widgets.ListWidgetProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.concurrent.CancellationException
-import com.orgzly.android.calendar.CalendarWorker
 import javax.inject.Inject
 
 class SyncWorker(val context: Context, val params: WorkerParameters) :

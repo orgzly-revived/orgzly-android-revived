@@ -570,7 +570,6 @@
     <string name="sync_status_dummy_without_link_and_multiple_rooks">Not defterinin bağlantısı yok ve aynı ada sahip birden fazla uzak not defteri mevcut</string>
     <string name="sync_status_no_book_multiple_rooks">Aynı ada sahip not defteri ve birden fazla uzak not defteri mevcut değil</string>
     <string name="sync_status_rook_no_longer_exists">Uzak dosya artık mevcut değil; depo bağlantısı kaldırıldı. Bir depoyla senkronize etmek istiyorsan bir bağlantı ayarla</string>
-    <string name="sync_status_no_link_and_previous_error">Not defterinde depo bağlantısı yok</string>
     <string name="sync_status_loaded">%s konumundan yüklendi</string>
     <string name="sync_status_saved">%s kaydedildi</string>
     <string name="moving_between_subdirectories_requires_api_24">Not defterini farklı bir alt dizinde yeniden adlandırmak için Android 7 veya üzeri gerekir</string>

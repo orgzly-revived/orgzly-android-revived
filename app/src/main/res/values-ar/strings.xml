@@ -625,7 +625,6 @@
     <string name="log_major_events">تسجيل الأحداث الرئيسية</string>
     <string name="sync_status_no_book_multiple_rooks">لا يوجد دفتر ملاحظات وعدة دفاتر ملاحظات عن بُعد بنفس الاسم</string>
     <string name="sync_status_rook_no_longer_exists">الملف البعيد لم يعد موجودًا؛ تمت إزالة رابط المستودع. قم بتعيين رابط إذا كنت ترغب في المزامنة مع مستودع.</string>
-    <string name="sync_status_no_link_and_previous_error">دفتر الملاحظات لا يحتوي على رابط مستودع</string>
     <string name="import_settings">استيراد إعدادات التطبيق</string>
     <string name="error">خطأ</string>
 </resources>
