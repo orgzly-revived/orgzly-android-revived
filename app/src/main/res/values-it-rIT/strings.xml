@@ -533,4 +533,21 @@
     <string name="clock_in">Registra inizio</string>
     <string name="clock_out">Ferma registrazione</string>
     <string name="clock_cancel">Cancella registrazione</string>
+    <string name="ssh_keygen_generate">Genera</string>
+    <string name="ssh_keygen_existing_title">Chiave SSH</string>
+    <string name="ssh_keygen_existing_message">Sostituisco l\'attuale chiave SSH ? Potresti perdere l\'accesso al tuo server</string>
+    <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 bit)</b>\nSupportata da server più vecchi</string>
+    <string name="ssh_keygen_generating_progress">Sto generando le chiavi …</string>
+    <string name="ssh_key_failed_get_public">L\'ottenimento della chiave pubblica SSH non è andato a buon fine</string>
+    <string name="ssh_key_failed_get_private">L\'ottenimento della chiave privata SSH non è andato a buon fine</string>
+    <string name="biometric_prompt_title_ssh_keygen">Generare la chiave SSH</string>
+    <string name="biometric_prompt_title_unlock_ssh_key">"Sblocca la  chiave SSH di Orgzly"</string>
+    <string name="biometric_auth_not_available">Riconoscimento biometrico non disponibile</string>
+    <string name="ssh_keygen_message">%1$s\n\n\n\nFornisci questa chiave pubblica al tuo server Git</string>
+    <string name="your_public_key">La tua chiave pubblica</string>
+    <string name="ssh_keygen_share">Condividi</string>
+    <string name="error_generate_ssh_key">Errore nel tentativo di generare la coppia di chiavi SSH</string>
+    <string name="ssh_key_error_dialog_text">Messaggio: \n</string>
+    <string name="sync_status_no_change">Nessun cambiamento</string>
+    <string name="sync_status_no_link_and_multiple_repos">Il taccuino non ha link ed esiste più di un repository</string>
 </resources>
