@@ -550,4 +550,34 @@
     <string name="ssh_key_error_dialog_text">Messaggio: \n</string>
     <string name="sync_status_no_change">Nessun cambiamento</string>
     <string name="sync_status_no_link_and_multiple_repos">Il taccuino non ha link ed esiste più di un repository</string>
+    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">Il taccuino non ha link ed esiste un taccuino remoto (o più di uno) con lo stesso identico nome</string>
+    <string name="sync_status_dummy_without_link_and_multiple_rooks">Il taccuino non ha link e ci sono diversi taccuini remoti con lo stesso identico nome</string>
+    <string name="sync_status_no_book_multiple_rooks">Taccuino inesistente e ci sono diversi taccuini remoti con lo stesso identico nome</string>
+    <string name="sync_status_rook_no_longer_exists">Il file remoto non esiste più; link al repository rimosso. Definisci un link se vuoi sincronizzare con un repository</string>
+    <string name="sync_status_no_link_and_previous_error">Il taccuino non ha link al repository</string>
+    <string name="sync_status_loaded">Caricato da %s</string>
+    <string name="sync_status_saved">Salvato in %s</string>
+    <string name="export_settings_to_note">Esporta il settaggio a una nota</string>
+    <string name="import_settings_from_note">Importa i settaggi da una nota</string>
+    <string name="settings_exported_to">I settaggi e le ricerche salvate sono state esportate alla nota “%1$s”</string>
+    <string name="settings_imported_from">I settaggi e le ricerche salvate sono state importate dalla nota “%1$s”</string>
+    <string name="export_settings_summary">Scrivi una rappresentazione JSON di tutti i settaggi e delle ricerche salvate in una nota di tua scelta</string>
+    <string name="import_settings">Importa i settaggi dell\'app</string>
+    <string name="import_settings_summary">Importa una rappresentazione JSON di tutti i settaggi e delle ricerche salvate da una nota di tua scelta</string>
+    <string name="export_settings_warning_text">ATTENZIONE !! La nota scelta verrà sovrascritta !</string>
+    <string name="error">Errore</string>
+    <string name="note_does_not_contain_valid_json">La nota non contiene un JSON valido</string>
+    <string name="imported_json_is_missing_mandatory_fields">Il JSON importato non contiene dei campi obbligatori.</string>
+    <string name="note_has_no_content">La nota non ha contenuto</string>
+    <string name="is_active_label">Attivo</string>
+    <string name="search_filter_show_as_agenda">Mostra come agenda</string>
+    <string name="search_filter_default_sort_order">Default</string>
+    <string name="search_filter_title_sort_order">Titolo</string>
+    <plurals name="search_filter_agenda_days">
+        <item quantity="one">%1$d giorno</item>
+        <item quantity="many">%1$d giorni</item>
+    </plurals>
+    <string name="content_description_back_button">Torna indietro</string>
+    <string name="content_description_sort_order_ascending">Ordine ascendente</string>
+    <string name="content_description_sort_order_descending">Ordine discendente</string>
 </resources>
