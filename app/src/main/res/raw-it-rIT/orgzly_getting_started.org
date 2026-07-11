@@ -22,7 +22,7 @@ Fare clic sull'icona per dispiegare l'intero sotto-albero.
 
 Se si cerca note con tag “tag1” utilizzando la query “t.tag1”, questa nota sarà inclusa nei risultati di ricerca.
 
-*** A note that has the =ARCHIVE= tag set is grayed out :ARCHIVE:
+*** La nota con il tag =ARCHIVE= settato è colorata in grigio:ARCHIVE:
 
 ** TODO La nota può avere uno stato
 
@@ -33,7 +33,7 @@ Se si cerca note con tag “tag1” utilizzando la query “t.tag1”, questa no
 *** DONE Questa è una nota con il tipo di stato /Done/
 CLOSED: [2018-01-24 Mer 17:00]
 
-** Parent notes can track state of child notes [1/3] [33%]
+** Le note gerarchicamente superiori possono tracciare lo stato di quelle sotto di loro [1/3] [33%]
 
 *** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
 
