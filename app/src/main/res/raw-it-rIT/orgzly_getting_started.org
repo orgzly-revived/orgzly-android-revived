@@ -35,7 +35,7 @@ CLOSED: [2018-01-24 Mer 17:00]
 
 ** Le note gerarchicamente superiori possono tracciare lo stato di quelle sotto di loro [1/3] [33%]
 
-*** TODO To track the ratio of TODO vs DONE items, add [/] to the note's title
+*** TODO Per tenere traccia del rapporto TODO/ DONE aggiungere [/] al titolo della nota
 
 *** TODO To track the percentage of DONE vs TODO items, add [%] to the note's title
 
