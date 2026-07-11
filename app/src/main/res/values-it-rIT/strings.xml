@@ -516,4 +516,21 @@
     <string name="share">Share</string>
     <string name="refresh_data">Refresh</string>
     <string name="insert_timestamp">Inserisci orario</string>
+    <string name="enable_repo_subfolders_preferences_summary">Leggi e scrivi dalle sottodirectories</string>
+    <string name="ssh_keygen_preference_title">Generazione della chiave SSH</string>
+    <string name="ssh_show_public_key_preference_title">Guarda la chiave SSH pubblica generata</string>
+    <string name="git_ssh_on_missing_key_dialog_text">Coppia di chiavi SSH non trovata. Ne vuoi generare una ?</string>
+    <string name="git_ssh_on_missing_key_dialog_title">Chiave SSH non trovata</string>
+    <string name="widen_view">Allarga la vista</string>
+    <string name="color_theme_light">Chiaro</string>
+    <string name="color_theme_dark">Scuro</string>
+    <string name="pref_title_sync_at_interval">Periodicamente</string>
+    <string name="pref_key_auto_sync_interval_title">Intervallo in minuti (15 al minimo)</string>
+    <string name="share_note">Condividi la nota</string>
+    <string name="share_title">Condividi il titolo</string>
+    <string name="share_content">Condividi il contenuto</string>
+    <string name="clock">Orario</string>
+    <string name="clock_in">Registra inizio</string>
+    <string name="clock_out">Ferma registrazione</string>
+    <string name="clock_cancel">Cancella registrazione</string>
 </resources>
