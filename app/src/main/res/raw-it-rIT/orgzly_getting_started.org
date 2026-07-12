@@ -20,7 +20,7 @@ Fare clic sull'icona per dispiegare l'intero sotto-albero.
 *** Ora puoi avere anche le etichette :tag1:tag2:
 *** La sotto-nota eredita l'etichetta :tag3:
 
-Se si cerca note con tag “tag1” utilizzando la query “t.tag1”, questa nota sarà inclusa nei risultati di ricerca.
+Se si cercano note con tag “tag1” utilizzando la query “t.tag1”, questa nota sarà inclusa nei risultati di ricerca.
 
 *** La nota con il tag =ARCHIVE= settato è colorata in grigio:ARCHIVE:
 
@@ -62,7 +62,7 @@ You can have multiple event times:
 
 ** Sono supportati i promemoria per i task pianificati e per le scadenze
 
-Sono disabilitati di default e devono essere abilitati nelle impostazioni.
+Contrassegna la nota come  conclusa (DONE) per spostarne la ripetizione
 
 ** [#A] Le note possono avere una priorità
 
@@ -76,17 +76,17 @@ Puoi anche collegarti a un'altra nota o a un taccuino all'interno dell'app.
 
 Vai su https://www.orgzlyrevived.com/docs#links per maggiori informazioni.
 
-** Sono supportati i livelli di formattazione base
+** Sono supportate le formattazioni di base
 
 Puoi usare parole in *grassetto*, /corsivo/, _sottolineato_, =scandito=, ~tipo codice~ e +barrato+.
 
-** È disponibile una lista di checkbox
+** È disponibile una lista di spunte
 
 - [X] Attività 1
 - [ ] Attività 2
 - [ ] Attività 3
 
-Fare clic sulla casella per cambiare lo stato. Premere il pulsante nuova riga alla fine della linea per creare un nuovo elemento.
+Fare clic sulla casella per cambiarne lo stato. Premere il pulsante nuova riga alla fine della linea per creare un nuovo elemento.
 
 ** A note's title can also track checkbox list states [66%] [2/3]
 
@@ -97,15 +97,15 @@ Fare clic sulla casella per cambiare lo stato. Premere il pulsante nuova riga al
 * Cerca
 ** Sono supportati molti operatori di ricerca
 
-Puoi cercare nelle note a seconda dello stato, del tag, della programmazione o della scadenza ecc.
+Le note possono essere cercate per stato, per tag, per  programmazione o per scadenza ecc.
 
 Vai su [[https://www.orgzlyrevived.com/docs#search]] per saperne di più.
 
 ** Le stringhe di ricerca possono essere salvate per un rapido accesso
 
-Prova a fare ricerche semplici dal cassetto di navigazione e nota quali stringhe usino.
+Prova a fare ricerche semplici dal cassetto di navigazione e annota quali stringhe usino.
 
-Puoi creare le proprie ricerche salvate premendo su "Ricerche" nel menu di navigazione.
+Puoi creare le tue ricerche salvate premendo su "Ricerche" nel menu di navigazione.
 
 * Sincronizzazione
 
