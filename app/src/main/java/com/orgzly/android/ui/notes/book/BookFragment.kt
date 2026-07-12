@@ -1,13 +1,16 @@
 package com.orgzly.android.ui.notes.book
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.*
 import androidx.activity.OnBackPressedCallback
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
+import com.orgzly.android.AppIntent
 import com.orgzly.android.BookUtils
 import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.entity.Book
@@ -94,6 +98,14 @@ class BookFragment :
     private var hideButtonJob: Job? = null
 
     private var jumpButtonDirection = ScrollDirection.DOWN
+
+    private val clipboardChangedReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (::viewAdapter.isInitialized) {
+                viewAdapter.notifyDataSetChanged()
+            }
+        }
+    }
 
     override fun getAdapter(): BookAdapter? {
         return if (::viewAdapter.isInitialized) viewAdapter else null
@@ -207,6 +219,10 @@ class BookFragment :
             // Add scroll listener for jump-to-end button
             setupJumpToEndButton(rv)
         }
+
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
+                clipboardChangedReceiver,
+                IntentFilter(AppIntent.ACTION_CLIPBOARD_CHANGED))
 
         binding.swipeContainer.setup()
 
@@ -360,6 +376,8 @@ class BookFragment :
     }
 
     override fun onDestroyView() {
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(clipboardChangedReceiver)
+
         super.onDestroyView()
 
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG)

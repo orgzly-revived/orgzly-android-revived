@@ -9,6 +9,7 @@ import androidx.annotation.ColorInt
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orgzly.R
 import com.orgzly.android.App
+import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.entity.Note
 import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.db.entity.toList
@@ -190,8 +191,9 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
 
         val isDone = state != null && AppPreferences.doneKeywordsSet(context).contains(state)
         val isArchived = tags.contains(ARCHIVE_TAG) || inheritedTags.contains(ARCHIVE_TAG)
+        val isCut = NotesClipboard.cutNoteIds().contains(noteView.note.id)
 
-        val alphaValue = if (isDone || isArchived) {
+        val alphaValue = if (isDone || isArchived || isCut) {
             0.45f
         } else {
             1.0f

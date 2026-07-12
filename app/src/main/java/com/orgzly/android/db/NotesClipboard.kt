@@ -51,6 +51,10 @@ data class NotesClipboard(val entries: List<Entry> = emptyList()) {
             return NotesClipboard(alignedNotes)
         }
 
+        fun cutNoteIds(): Set<Long> {
+            return load().entries.filter { it.isCut }.map { it.note.id }.toSet()
+        }
+
         fun load(): NotesClipboard {
             if (count() > 0) {
                 try {

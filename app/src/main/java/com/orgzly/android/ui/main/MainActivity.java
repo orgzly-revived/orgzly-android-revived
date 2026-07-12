@@ -896,6 +896,8 @@ public class MainActivity extends CommonActivity
                 AppSnackbarUtils.showSnackbar(this, message);
             }
 
+            notifyClipboardChanged();
+
         } else if (action instanceof NoteCopy) {
             NotesClipboard clipboard = (NotesClipboard) result.getUserData();
 
@@ -908,6 +910,8 @@ public class MainActivity extends CommonActivity
                 }
             }
 
+            notifyClipboardChanged();
+
         } else if (action instanceof NotePaste) {
             int count = (int) result.getUserData();
 
@@ -919,7 +923,14 @@ public class MainActivity extends CommonActivity
             }
 
             AppSnackbarUtils.showSnackbar(this, message);
+
+            notifyClipboardChanged();
         }
+    }
+
+    private void notifyClipboardChanged() {
+        LocalBroadcastManager.getInstance(this).sendBroadcast(
+                new Intent(AppIntent.ACTION_CLIPBOARD_CHANGED));
     }
 
     /**

@@ -37,6 +37,7 @@ public class AppIntent {
     public static final String ACTION_OPEN_SETTINGS = "com.orgzly.intent.action.OPEN_SETTINGS";
 
     public static final String ACTION_SHOW_SNACKBAR = "com.orgzly.intent.action.SHOW_SNACKBAR";
+    public static final String ACTION_CLIPBOARD_CHANGED = "com.orgzly.intent.action.CLIPBOARD_CHANGED";
 
     public static final String ACTION_REJECT_REMOTE_HOST_KEY = "com.orgzly.intent.action.REJECT_REMOTE_HOST_KEY";
     public static final String ACTION_ACCEPT_REMOTE_HOST_KEY = "com.orgzly.intent.action.ACCEPT_REMOTE_HOST_KEY";
