@@ -15,7 +15,7 @@
     <string name="save">Salva</string>
     <string name="discard">Ignora</string>
     <string name="remove_notebook_link">Rimuovi il collegamento</string>
-    <string name="browse">Cerca</string>
+    <string name="browse">Sfoglia</string>
     <string name="dropbox">Dropbox</string>
     <string name="delete">Cancella</string>
     <string name="delete_with_quoted_argument">Elimina \"%s\"</string>
@@ -47,15 +47,18 @@
     <string name="event">Evento</string>
     <plurals name="notes_cut">
         <item quantity="one">Nota tagliata</item>
+        <item quantity="many">Taglia <b>%d</b> note</item>
         <item quantity="other">Tagliate <b>%d</b> note</item>
     </plurals>
     <string name="no_notes_cut">Nessuna nota tagliata</string>
     <plurals name="notes_copied">
         <item quantity="one">Nota copiata</item>
+        <item quantity="many">Copiate <b>%d</b> note</item>
         <item quantity="other">Nota<b>%d</b> copiata</item>
     </plurals>
     <plurals name="notes_pasted">
         <item quantity="one">Nota incollata</item>
+        <item quantity="many">Incollate <b>%d</b> note</item>
         <item quantity="other">Incollate <b>%d</b> note</item>
     </plurals>
     <string name="no_notes_pasted">Niente da incollare</string>
@@ -98,7 +101,7 @@
     <string name="tap_to_create_new_note">Tocca per creare una nuova nota</string>
     <string name="options_menu_item_search">Cerca</string>
     <string name="repos_options_menu_new_repo">Nuovo deposito</string>
-    <string name="book_name_already_exists">Il taccuino %s esiste già.</string>
+    <string name="book_name_already_exists">Il taccuino %s esiste già</string>
     <string name="filter_name_already_exists">Cerca con lo stesso nome che esiste già</string>
     <string name="failed_creating_directory">Impossibile creare la cartella \"%s\"</string>
     <string name="version">Cosa c\'è di nuovo</string>
@@ -320,12 +323,14 @@
     <string name="notebooks_sort_order_name">Nome</string>
     <string name="notebooks_sort_order_modification_time">Ora modifica</string>
     <plurals name="delete_note_or_notes_with_count_question">
-        <item quantity="one">Elimina nota?</item>
+        <item quantity="one">Elimino nota?</item>
+        <item quantity="many">Elimino <b>%d</b> note ?</item>
         <item quantity="other">Elimina <b>%d</b> note?</item>
     </plurals>
     <!-- Unused -->
     <plurals name="notes_deleted">
         <item quantity="one">Nota cancellata</item>
+        <item quantity="many">Cancellate <b>%d</b> note</item>
         <item quantity="other">Cancellate <b>%d</b> note</item>
     </plurals>
     <string name="no_notes_deleted">Nessuna nota cancellata</string>
@@ -411,10 +416,12 @@
     <string name="no_such_link_target">La nota con la proprietà “%1$s” fissata a “%2$s” non è stata trovata</string>
     <plurals name="imported_searches">
         <item quantity="one">Importata una ricerca</item>
+        <item quantity="many">Importate <b>%d</b> ricerche</item>
         <item quantity="other">Importate <b>%d</b> ricerche</item>
     </plurals>
     <plurals name="exported_searches">
         <item quantity="one">Esportata una ricerca</item>
+        <item quantity="many">Esportate <b>%d</b> ricerche</item>
         <item quantity="other">Esportate <b>%d</b> ricerche</item>
     </plurals>
     <string name="storage_permissions_missing">Nessun permesso di memorizzazione</string>
@@ -479,6 +486,7 @@
     <string name="notebook_and_focus_on_note">Taccuino (focus sulla nota)</string>
     <plurals name="refile_notes">
         <item quantity="one">Sposta nota</item>
+        <item quantity="many">Sposta <b>%d</b> note</item>
         <item quantity="other">Sposta <b>%d</b> note</item>
     </plurals>
     <string name="display_checkmarks">Visualizza checkmarks</string>
@@ -491,6 +499,7 @@
     <string name="edit_trusted_certificates">Modifica certificati attendibili</string>
     <plurals name="paste_note_or_notes_with_count">
         <item quantity="one">Incolla nota</item>
+        <item quantity="many">Incolla <b>%d</b> note</item>
         <item quantity="other">Incolla <b>%d</b> note</item>
     </plurals>
     <string name="timestamp_dialog_day">Giorno</string>
@@ -515,4 +524,71 @@
     <string name="logs">Logs</string>
     <string name="share">Share</string>
     <string name="refresh_data">Refresh</string>
+    <string name="insert_timestamp">Inserisci orario</string>
+    <string name="enable_repo_subfolders_preferences_summary">Leggi e scrivi dalle sottodirectories</string>
+    <string name="ssh_keygen_preference_title">Generazione della chiave SSH</string>
+    <string name="ssh_show_public_key_preference_title">Guarda la chiave SSH pubblica generata</string>
+    <string name="git_ssh_on_missing_key_dialog_text">Coppia di chiavi SSH non trovata. Ne vuoi generare una ?</string>
+    <string name="git_ssh_on_missing_key_dialog_title">Chiave SSH non trovata</string>
+    <string name="widen_view">Allarga la vista</string>
+    <string name="color_theme_light">Chiaro</string>
+    <string name="color_theme_dark">Scuro</string>
+    <string name="pref_title_sync_at_interval">Periodicamente</string>
+    <string name="pref_key_auto_sync_interval_title">Intervallo in minuti (15 al minimo)</string>
+    <string name="share_note">Condividi la nota</string>
+    <string name="share_title">Condividi il titolo</string>
+    <string name="share_content">Condividi il contenuto</string>
+    <string name="clock">Orario</string>
+    <string name="clock_in">Registra inizio</string>
+    <string name="clock_out">Ferma registrazione</string>
+    <string name="clock_cancel">Cancella registrazione</string>
+    <string name="ssh_keygen_generate">Genera</string>
+    <string name="ssh_keygen_existing_title">Chiave SSH</string>
+    <string name="ssh_keygen_existing_message">Sostituisco l\'attuale chiave SSH? Potresti perdere l\'accesso al tuo server.</string>
+    <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 bit)</b>\nSupportata da server più vecchi</string>
+    <string name="ssh_keygen_generating_progress">Sto generando le chiavi …</string>
+    <string name="ssh_key_failed_get_public">L\'ottenimento della chiave pubblica SSH non è andato a buon fine</string>
+    <string name="ssh_key_failed_get_private">L\'ottenimento della chiave privata SSH non è andato a buon fine</string>
+    <string name="biometric_prompt_title_ssh_keygen">Generare la chiave SSH</string>
+    <string name="biometric_prompt_title_unlock_ssh_key">Sblocca la chiave SSH di Orgzly</string>
+    <string name="biometric_auth_not_available">Riconoscimento biometrico non disponibile</string>
+    <string name="ssh_keygen_message">%1$s\n\nFornisci questa chiave pubblica al tuo server Git</string>
+    <string name="your_public_key">La tua chiave pubblica</string>
+    <string name="ssh_keygen_share">Condividi</string>
+    <string name="error_generate_ssh_key">Errore nel tentativo di generare la coppia di chiavi SSH</string>
+    <string name="ssh_key_error_dialog_text">Messaggio: \n</string>
+    <string name="sync_status_no_change">Nessun cambiamento</string>
+    <string name="sync_status_no_link_and_multiple_repos">Il taccuino non ha link ed esiste più di un repository</string>
+    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">Il taccuino non ha link ed esiste un taccuino remoto (o più di uno) con lo stesso identico nome</string>
+    <string name="sync_status_dummy_without_link_and_multiple_rooks">Il taccuino non ha link e ci sono diversi taccuini remoti con lo stesso identico nome</string>
+    <string name="sync_status_no_book_multiple_rooks">Taccuino inesistente e ci sono diversi taccuini remoti con lo stesso identico nome</string>
+    <string name="sync_status_rook_no_longer_exists">Il file remoto non esiste più; link al repository rimosso. Definisci un link se vuoi sincronizzare con un repository.</string>
+    <string name="sync_status_no_link_and_previous_error">Il taccuino non ha link al repository</string>
+    <string name="sync_status_loaded">Caricato da %s</string>
+    <string name="sync_status_saved">Salvato in %s</string>
+    <string name="export_settings_to_note">Esporta il settaggio a una nota</string>
+    <string name="import_settings_from_note">Importa i settaggi da una nota</string>
+    <string name="settings_exported_to">I settaggi e le ricerche salvate sono state esportate alla nota “%1$s”</string>
+    <string name="settings_imported_from">I settaggi e le ricerche salvate sono state importate dalla nota “%1$s”</string>
+    <string name="export_settings_summary">Scrivi una rappresentazione JSON di tutti i settaggi e delle ricerche salvate in una nota di tua scelta</string>
+    <string name="import_settings">Importa i settaggi dell\'app</string>
+    <string name="import_settings_summary">Importa una rappresentazione JSON di tutti i settaggi e delle ricerche salvate da una nota di tua scelta</string>
+    <string name="export_settings_warning_text">ATTENZIONE !! La nota scelta verrà sovrascritta !</string>
+    <string name="error">Errore</string>
+    <string name="note_does_not_contain_valid_json">La nota non contiene un JSON valido.</string>
+    <string name="imported_json_is_missing_mandatory_fields">Il JSON importato non contiene dei campi obbligatori.</string>
+    <string name="note_has_no_content">La nota non ha contenuto.</string>
+    <string name="is_active_label">Attivo</string>
+    <string name="search_filter_show_as_agenda">Mostra come agenda</string>
+    <string name="search_filter_default_sort_order">Default</string>
+    <string name="search_filter_title_sort_order">Titolo</string>
+    <plurals name="search_filter_agenda_days">
+        <item quantity="one">%1$d giorno</item>
+        <item quantity="many">%1$d giorni</item>
+    </plurals>
+    <string name="content_description_back_button">Torna indietro</string>
+    <string name="content_description_sort_order_ascending">Ordine ascendente</string>
+    <string name="content_description_sort_order_descending">Ordine discendente</string>
+    <string name="content_description_subtract">Sottrai</string>
+    <string name="content_description_add">Aggiungi</string>
 </resources>
