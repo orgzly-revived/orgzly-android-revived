@@ -11,7 +11,7 @@
     <string name="create">Crea</string>
     <!-- "new" is reserved -->
     <string name="set">Imposta</string>
-    <string name="not_now">Non ora</string>
+    <string name="not_now">Non adesso</string>
     <string name="save">Salva</string>
     <string name="discard">Ignora</string>
     <string name="remove_notebook_link">Rimuovi il collegamento</string>
@@ -30,7 +30,7 @@
     <!-- Reserved keyword -->
     <string name="export">Esporta</string>
     <string name="overwrite">Sovrascrivi</string>
-    <string name="imported">Importa</string>
+    <string name="imported">Importato</string>
     <string name="created">Creato</string>
     <string name="states">Stati</string>
     <string name="note">Nota</string>
@@ -64,16 +64,16 @@
     <string name="no_notes_pasted">Niente da incollare</string>
     <string name="fragment_note_title_hint">Titolo</string>
     <string name="import_org_file">Importa file Org</string>
-    <string name="message_dropbox_unlinked">Scollega da Dropbox</string>
+    <string name="message_dropbox_unlinked">Scollegato da Dropbox</string>
     <string name="message_dropbox_linked">Collegato a Dropbox con successo</string>
     <!-- Preferences (Settings). -->
     <string name="repos_preference_title">Depositi</string>
-    <string name="repos_preference_summary">Posizione con cui sincronizzare i tuoi taccuini</string>
-    <string name="message_book_has_no_link">Nessun collegamento stabilito</string>
+    <string name="repos_preference_summary">Posizione dove sincronizzare i tuoi taccuini</string>
+    <string name="message_book_has_no_link">Il taccuino non è collegato a nessun repository</string>
     <string name="message_note_created">Nota creata</string>
     <string name="drawer_close">Chiudi Menu</string>
     <string name="drawer_open">Apri Menu</string>
-    <string name="schedule">Programma</string>
+    <string name="schedule">Pianifica</string>
     <string name="refile">Sposta in</string>
     <string name="deadline">Data di scadenza</string>
     <string name="closed">Chiuso</string>
@@ -107,12 +107,12 @@
     <string name="version">Cosa c\'è di nuovo</string>
     <string name="search_hint">Cerca nelle note</string>
     <string name="clear_database">Cancella il database</string>
-    <string name="clear_database_dialog_message">Cancella il database locale?</string>
-    <string name="clear_database_summary">Cancella il database locale</string>
+    <string name="clear_database_dialog_message">Cancello il database locale?</string>
+    <string name="clear_database_summary">Database locale cancellato</string>
     <string name="clear_database_performed">Il database è stato ottimizzato</string>
     <string name="getting_started_notebook_name">Come iniziare con Orgzly</string>
     <string name="reload_getting_started">Importa “Come iniziare con Orgzly”</string>
-    <string name="reload_getting_started_summary">Importa l\'ultima versione del quaderno</string>
+    <string name="reload_getting_started_summary">Importa l\'ultima versione del taccuino</string>
     <string name="notebook_imported">Taccuino importato</string>
     <string name="book_does_not_exist_anymore">Questo taccuino non esiste più.</string>
     <string name="note_does_not_exist_anymore">Questa nota non esiste più.</string>
@@ -120,13 +120,13 @@
     <string name="repo_dropbox_button_not_linked">Collega a Dropbox</string>
     <string name="repo_dropbox_button_linked">Scollega da Dropbox</string>
     <string name="notes_update_needed_dialog_title">Le preferenze influiscono sulle note</string>
-    <string name="notes_update_needed_dialog_message">Aggiorno le note per mostrare le modifiche?</string>
+    <string name="notes_update_needed_dialog_message">Aggiorno le note per mostrarne le modifiche?</string>
     <string name="updating_notes">Aggiornamento note…</string>
     <string name="no_notes_found_after_search">La tua ricerca non corrisponde ad alcuna nota</string>
     <string name="today">Oggi</string>
     <string name="tomorrow">Domani</string>
     <string name="next_week">La prossima settimana</string>
-    <string name="tags">Etichetta</string>
+    <string name="tags">Etichette</string>
     <string name="book_mtime">Ora di modifica del taccuino</string>
     <string name="book_link">Collegamento del taccuino</string>
     <string name="book_link_details">Dettagli di collegamento al taccuino</string>
@@ -139,21 +139,21 @@
     <string name="search">Cerca</string>
     <string name="multiple_repos">Esistono depositi multipli</string>
     <string name="no_repos">Nessun deposito è configurato</string>
-    <string name="no_books">No notebooks found</string>
+    <string name="no_books">Non trovato alcun taccuino</string>
     <string name="book_encoding">Codifica del taccuino</string>
-    <string name="collecting_notebooks_in_progress">Sincronizzando i taccuini…</string>
+    <string name="collecting_notebooks_in_progress">Sto raccogliendo i taccuini…</string>
     <string name="syncing_in_progress">Sincronizzazione…</string>
     <string name="syncing_book">Sincronizzazione di %s…</string>
     <string name="syncing_failed_title">Sincronizzazione non riuscita</string>
     <string name="canceled">Annullato</string>
     <string name="canceling">Annullamento…</string>
-    <string name="directory">Directory</string>
-    <string name="fragment_repo_dropbox_directory_desc">La directory all\'interno di Dropbox (es. “/Documenti/Orgzly”)</string>
+    <string name="directory">Cartella</string>
+    <string name="fragment_repo_dropbox_directory_desc">La cartella dentro Dropbox (es. “/Documenti/Orgzly”)</string>
     <string name="directory_uri">Directory dell\'URL</string>
-    <string name="git_clone_progress">Cloning repository</string>
-    <string name="git_verifying_settings">Ensuring repository settings will work.</string>
+    <string name="git_clone_progress">Sto clonando il repository</string>
+    <string name="git_verifying_settings">Sto verificando che le impostazioni del repository funzionino.</string>
     <string name="git_url_hint">Indirizzo remoto (es. git@github.com:orgzly / orgzly-android.git)</string>
-    <string name="git_directory_hint">Percorso directory (es. \"file:/sdcard/orgzly\")</string>
+    <string name="git_directory_hint">Percorso cartella (es. \"file:/sdcard/orgzly\")</string>
     <string name="git_https_username_hint">Username</string>
     <string name="git_author_hint">Autore (es. Sergio Rossi)</string>
     <string name="git_email_hint">E-mail (es. sergio@email.com)</string>
@@ -161,9 +161,9 @@
     <string name="git_auth_https_password_hint">Password</string>
     <!-- Git sync repo errors -->
     <!-- TODO: I don't think we can say more than this for ssh authentication failures, but we probably want to -->
-    <string name="git_clone_error_invalid_repo">L\'indirizzo remoto non è un git repo</string>
+    <string name="git_clone_error_invalid_repo">L\'indirizzo remoto non è un repository Git</string>
     <string name="git_clone_error_invalid_target_dir">Il percorso specificato non esiste</string>
-    <string name="git_clone_error_target_not_empty">La directory di destinazione non è vuota</string>
+    <string name="git_clone_error_target_not_empty">La cartella di destinazione non è vuota</string>
     <string name="git_clone_error_uri_not_supported">L\'indirizzo remoto non è supportato</string>
     <string name="webdav_url_hint">URL (es. webdavs://example.com/my-org-files/)</string>
     <string name="webdav_auth_username_hint">Nome utente</string>
@@ -175,14 +175,14 @@
     <string name="share_type_not_supported">Il tipo di condivisione %s non è supportata</string>
     <string name="repositories">Depositi</string>
     <string name="repository_not_valid_with_reason">Repository non valido: %s</string>
-    <string name="invalid_repo_url">URL \"%s\" del deposito non valido</string>
+    <string name="invalid_repo_url">URL \"%s\" del repository non valido</string>
     <string name="repository_url_already_exists">Un repository con questo URL esiste già</string>
     <string name="new_above">Sopra</string>
     <string name="new_under">Indentata</string>
     <string name="new_below">Sotto</string>
-    <string name="confirm_unlinking_from_dropbox_title">Scollega da Dropbox?</string>
-    <string name="confirm_unlinking_from_dropbox_message">Non sarai in grado di sincronizzare fino a che non ti ricollegherai di nuovo a Dropbox.</string>
-    <string name="note_book_not_set">Taccuino non stabilito</string>
+    <string name="confirm_unlinking_from_dropbox_title">Scollego da Dropbox?</string>
+    <string name="confirm_unlinking_from_dropbox_message">Non potrai più sincronizzare fino a che non ti ricollegherai di nuovo a Dropbox.</string>
+    <string name="note_book_not_set">Taccuino non impostato</string>
     <string name="title_can_not_be_empty">Il campo \"Titolo\" non può essere vuoto</string>
     <string name="can_not_be_empty">Non può essere vuoto</string>
     <string name="invalid_url">URL non valido</string>
