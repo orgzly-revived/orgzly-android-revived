@@ -613,4 +613,21 @@
     <string name="add_id_property">Aggiungi la proprietà ID</string>
     <string name="populate_the_id_property">Imposta la proprietà \"ID\" in tutte le nuove note</string>
     <string name="search_results">Risultati della ricerca</string>
+    <string name="ssh_keygen_require_authentication">Proteggi con le credenziali blocca schermo</string>
+    <string name="ssh_keygen_existing_replace">Sostituisci</string>
+    <string name="ssh_keygen_existing_keep">Mantieni</string>
+    <string name="ssh_keygen_explanation_ed25519"><b>ED25519</b>\nAutenticazione rapida, supportata solo da server piuttosto recenti.</string>
+    <string name="moving_between_subdirectories_requires_api_24">È necessario Android 7 o superiore per rinominare il taccuino in una diversa subdir</string>
+    <string name="subfolder_support_disabled">Il supporto per le subdir è disattivato</string>
+    <string name="failed_sharing_note">Condivisione della nota non completata</string>
+    <string name="export_settings">Esporta le impostazioni dell\'app</string>
+    <string name="in_note_content">Nel contenuto della nota</string>
+    <string name="create_org_links_from_shared_links">Crea collegamenti org da quelli condivisi</string>
+    <string name="book_names_cannot_contain">I nomi dei taccuini non possono contenere \"../\"</string>
+    <string name="query_filter_search">Perfeziona la ricerca</string>
+    <string name="search_filter_exclude_done">Escludi le cose fatte (DONE)</string>
+    <string name="search_filter_book_sort_order">Taccuino</string>
+    <string name="search_filter_scheduled_sort_order">Data programmata</string>
+    <string name="search_filter_deadline_sort_order">Data ultima</string>
+    <string name="external_files_access_is_no_longer_allowed">L\'accesso ai file esterni non è più permesso.</string>
 </resources>
