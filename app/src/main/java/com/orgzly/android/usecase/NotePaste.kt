@@ -8,6 +8,16 @@ class NotePaste(val bookId: Long, val noteId: Long, val place: Place) : UseCase(
     override fun run(dataRepository: DataRepository): UseCaseResult {
         val clipboard = NotesClipboard.load()
 
+        if (clipboard.entries.any { it.isCut }) {
+            val entryIds = clipboard.entries.map { it.note.id }.toSet()
+            val rootIds = clipboard.entries
+                    .filter { it.note.position.parentId !in entryIds }
+                    .map { it.note.id }
+                    .toSet()
+            val sourceBookId = clipboard.entries.first().note.position.bookId
+            dataRepository.deleteNotes(sourceBookId, rootIds)
+        }
+
         val count = dataRepository.pasteNotes(clipboard, bookId, noteId, place)
 
         return UseCaseResult(

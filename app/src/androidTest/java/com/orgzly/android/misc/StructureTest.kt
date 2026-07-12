@@ -104,18 +104,14 @@ class StructureTest : OrgzlyTest() {
                 getNote("Note A-01").id,
                 getNote("Note A-03").id)
 
+        val countBeforeCut = dataRepository.getNoteCount(book.book.id)
+
         UseCaseRunner.run(NoteCut(book.book.id, ids))
 
-        Assert.assertEquals(8, dataRepository.getNoteCount(book.book.id))
+        Assert.assertEquals(countBeforeCut, dataRepository.getNoteCount(book.book.id))
 
-        val notes = dataRepository.getNotes(book.book.name)
-
-        Assert.assertEquals("Title for book should match", "Note A-02", notes[0].note.title)
-        Assert.assertEquals("Level for book should match", 1, notes[0].note.position.level)
-        Assert.assertEquals("Title for book should match", "Note A-04", notes[1].note.title)
-        Assert.assertEquals("Level for book should match", 2, notes[1].note.position.level)
-        Assert.assertEquals("Title for book should match", "Note A-05", notes[2].note.title)
-        Assert.assertEquals("Level for book should match", 3, notes[2].note.position.level)
+        Assert.assertNotNull(getNote("Note A-01"))
+        Assert.assertNotNull(getNote("Note A-03"))
     }
 
     @Test
@@ -1186,7 +1182,21 @@ class StructureTest : OrgzlyTest() {
         }
 
         Assert.assertEquals(
-                "* Note A-03\n** Note A-01\n",
+                "* Note A-03\n** Note A-01\n*** Note A-02\n",
+                dataRepository.getBookContent("Book A", BookFormat.ORG))
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun testCutThenCopyPreservesNotes() {
+        val book = testUtils.setupBook("Book A", "* Note A-01\n* Note A-02\n")
+
+        UseCaseRunner.run(NoteCut(book.book.id, setOf(getNote("Note A-01").id)))
+        UseCaseRunner.run(NoteCopy(book.book.id, setOf(getNote("Note A-02").id)))
+
+        Assert.assertNotNull(getNote("Note A-01"))
+        Assert.assertEquals(
+                "* Note A-01\n* Note A-02\n",
                 dataRepository.getBookContent("Book A", BookFormat.ORG))
     }
 
