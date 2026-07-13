@@ -204,7 +204,7 @@ class StructureTest : OrgzlyTest() {
         Assert.assertEquals(1, getNote("Note A-01").position.descendantsCount)
         UseCaseRunner.run(NoteCut(
                 book.book.id, setOf(getNote("Note A-02").id)))
-        Assert.assertEquals(0, getNote("Note A-01").position.descendantsCount)
+        Assert.assertEquals(1, getNote("Note A-01").position.descendantsCount)
     }
 
     @Test
@@ -1486,7 +1486,7 @@ class StructureTest : OrgzlyTest() {
                 book.book.id, setOf(getNote("Note A-02").id)))
 
         Assert.assertEquals(
-                "* Note A-01\n",
+                "* Note A-01\n* Note A-02\n",
                 dataRepository.getBookContent("Book A", BookFormat.ORG))
 
         getNote("Note A-01").let { note ->
