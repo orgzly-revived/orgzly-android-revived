@@ -331,10 +331,6 @@ public class BookTest extends OrgzlyTest {
         onNoteInBook(2).perform(longClick());
         onActionItemClick(R.id.cut, R.string.cut);
 
-        onNoteInBook(1, R.id.item_head_title_view).check(matches(withText(endsWith("Note #1."))));
-        onNoteInBook(2, R.id.item_head_title_view).check(matches(withText(endsWith("Note #8."))));
-        onNoteInBook(3, R.id.item_head_title_view).check(matches(withText(endsWith("Note #9."))));
-
         onNoteInBook(1).perform(longClick());
         onActionItemClick(R.id.paste, R.string.paste);
         onView(withText(R.string.heads_action_menu_item_paste_above)).perform(click());
@@ -355,11 +351,7 @@ public class BookTest extends OrgzlyTest {
         onNoteInBook(2).perform(longClick());
         onActionItemClick(R.id.cut, R.string.cut);
 
-        onNoteInBook(1, R.id.item_head_title_view).check(matches(withText(endsWith("Note #1."))));
-        onNoteInBook(2, R.id.item_head_title_view).check(matches(withText(endsWith("Note #8."))));
-        onNoteInBook(3, R.id.item_head_title_view).check(matches(withText(endsWith("Note #9."))));
-
-        onNoteInBook(2).perform(longClick());
+        onNoteInBook(8).perform(longClick());
         onActionItemClick(R.id.paste, R.string.paste);
         onView(withText(R.string.heads_action_menu_item_paste_under)).perform(click());
 

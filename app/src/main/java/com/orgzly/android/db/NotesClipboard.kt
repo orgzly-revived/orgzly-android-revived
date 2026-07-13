@@ -15,7 +15,8 @@ data class NotesClipboard(val entries: List<Entry> = emptyList()) {
 
     data class Entry(
             @SerializedName("note") val note: Note,
-            @SerializedName("properties") val properties: List<NoteProperty>
+            @SerializedName("properties") val properties: List<NoteProperty>,
+            @SerializedName("isCut") val isCut: Boolean = false
     )
 
     val count: Int
@@ -42,12 +43,16 @@ data class NotesClipboard(val entries: List<Entry> = emptyList()) {
             return AppPreferences.notesClipboard(App.getAppContext())?.toInt() ?: 0
         }
 
-        fun create(dataRepository: DataRepository, ids: Set<Long>): NotesClipboard {
+        fun create(dataRepository: DataRepository, ids: Set<Long>, isCut: Boolean = false): NotesClipboard {
             val alignedNotes = dataRepository.getSubtreesAligned(ids).map { note ->
-                Entry(note, dataRepository.getNoteProperties(note.id))
+                Entry(note, dataRepository.getNoteProperties(note.id), isCut)
             }
 
             return NotesClipboard(alignedNotes)
+        }
+
+        fun cutNoteIds(): Set<Long> {
+            return load().entries.filter { it.isCut }.map { it.note.id }.toSet()
         }
 
         fun load(): NotesClipboard {
