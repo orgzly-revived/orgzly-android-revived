@@ -54,7 +54,7 @@
     <plurals name="notes_copied">
         <item quantity="one">Nota copiata</item>
         <item quantity="many">Copiate <b>%d</b> note</item>
-        <item quantity="other">Nota<b>%d</b> copiata</item>
+        <item quantity="other">Copiate<b>%d</b> note</item>
     </plurals>
     <plurals name="notes_pasted">
         <item quantity="one">Nota incollata</item>
@@ -630,4 +630,35 @@
     <string name="search_filter_scheduled_sort_order">Data programmata</string>
     <string name="search_filter_deadline_sort_order">Data ultima</string>
     <string name="external_files_access_is_no_longer_allowed">L\'accesso ai file esterni non è più permesso.</string>
+    <string name="git_clone_error_public_external_storage">Questo percorso non è ammesso da Android 11+. Al suo posto usa la memoria dell\'apparato, ad es. %1$s</string>
+    <string name="pref_title_on_suspend_sync">App sospesa</string>
+    <string name="ssh_key_locked_and_no_activity">Errore: la chiave SSH può essere sbloccata solo da un\'attività</string>
+    <string name="in_note_heading">Nell\'intestazione della nota</string>
+    <string name="search_filter_unable_to_switch_to_simple">La query non può essere modificata con un editor semplice</string>
+    <string name="capture_templates_summary">Definisci i modelli per catturare velocemente le note</string>
+    <string name="no_capture_templates">Nessun modello di cattura</string>
+    <string name="capture_template">Modello di cattura</string>
+    <string name="widget_capture_template_default_note">Nota predefinita</string>
+    <string name="template_description">Descrizione</string>
+    <string name="template_title">Titolo del modello</string>
+    <string name="template_content">Contenuto</string>
+    <string name="template_target_book">Taccuino di destinazione</string>
+    <string name="template_target">Destinazione</string>
+    <string name="template_select_target">Scegli la destinazione</string>
+    <string name="template_state">Stato iniziale</string>
+    <string name="template_priority">Priorità iniziale</string>
+    <string name="template_tags">Etichette iniziali</string>
+    <string name="template_scheduled">Appuntamenti odierni</string>
+    <string name="select_capture_template">Scegli il modello</string>
+    <string name="template_no_target_book">Predefinito (taccuino attuale)</string>
+    <string name="capture_template_saved">Modello salvato</string>
+    <string name="capture_template_deleted">Modello eliminato</string>
+    <string name="new_capture_template">Nuovo modello</string>
+    <string name="cannot_be_empty_short">Richiesto</string>
+    <string name="capture_template_numbered">Modello %1$d</string>
+    <string name="edit_capture_template">Modifica modello</string>
+    <string name="capture_template_target_book_not_found">Taccuino \"%1$s\" non trovato, usando il predefinito</string>
+    <string name="template_select_notebook_first">Prima seleziona un taccuino</string>
+    <string name="template_notebook_required">Seleziona un taccuino</string>
+    <string name="popup_menu_buttons">Bottoni popup</string>
 </resources>

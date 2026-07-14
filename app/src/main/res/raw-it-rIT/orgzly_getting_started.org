@@ -39,7 +39,7 @@ CLOSED: [2018-01-24 Mer 17:00]
 
 *** TODO Per avere il rapporto DONE/TODO in percentuale, aggiungere [%] al titolo della nota
 
-*** DONE Both can be used in tandem
+*** DONE Possono essere usate entrambe in tandem
 CLOSED: [2025-03-13 Thu 08:37]
 
 Non importa l'ordine e i conteggi verranno aggiornati automaticamente .
