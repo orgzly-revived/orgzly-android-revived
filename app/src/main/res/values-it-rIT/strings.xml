@@ -648,4 +648,16 @@
     <string name="template_state">Stato iniziale</string>
     <string name="template_priority">Priorità iniziale</string>
     <string name="template_tags">Etichette iniziali</string>
+    <string name="template_scheduled">Appuntamenti odierni</string>
+    <string name="select_capture_template">Scegli il modello</string>
+    <string name="template_no_target_book">Predefinito (taccuino attuale)</string>
+    <string name="capture_template_saved">Modello salvato</string>
+    <string name="capture_template_deleted">Modello eliminato</string>
+    <string name="new_capture_template">Nuovo modello</string>
+    <string name="cannot_be_empty_short">Richiesto</string>
+    <string name="capture_template_numbered">Modello %1$d</string>
+    <string name="edit_capture_template">Modifica modello</string>
+    <string name="capture_template_target_book_not_found">Taccuino \"%1$s\" non trovato, usando il predefinito</string>
+    <string name="template_select_notebook_first">Prima seleziona un taccuino</string>
+    <string name="template_notebook_required">Seleziona un taccuino</string>
 </resources>
