@@ -660,4 +660,5 @@
     <string name="capture_template_target_book_not_found">Taccuino \"%1$s\" non trovato, usando il predefinito</string>
     <string name="template_select_notebook_first">Prima seleziona un taccuino</string>
     <string name="template_notebook_required">Seleziona un taccuino</string>
+    <string name="popup_menu_buttons">Bottoni popup</string>
 </resources>
