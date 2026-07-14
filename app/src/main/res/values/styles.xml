@@ -425,6 +425,11 @@
         <item name="android:src">@drawable/ic_add</item>
     </style>
 
+    <style name="Fab.Capture">
+        <item name="android:src">@drawable/ic_add</item>
+        <item name="fabSize">mini</item>
+    </style>
+
     <style name="Fab.JumpToEnd">
         <item name="android:layout_marginBottom">@dimen/fab_stack_spacing</item>
         <item name="android:src">@drawable/ic_arrow_downward_to_bottom</item>

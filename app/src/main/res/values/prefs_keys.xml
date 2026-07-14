@@ -580,6 +580,8 @@
     <string name="pref_key_widget_display_book_name" translatable="false">pref_key_widget_display_book_name</string>
     <bool name="pref_default_widget_display_book_name" translatable="false">false</bool>
 
+    <string name="pref_key_widget_capture_template" translatable="false">pref_key_widget_capture_template</string>
+
     <string name="pref_key_highlight_edited_rich_text" translatable="false">pref_key_highlight_edited_rich_text</string>
     <bool name="pref_default_highlight_edited_rich_text" translatable="false">false</bool>
 
@@ -655,4 +657,7 @@
         <item>in_note_heading</item>
         <item>in_note_content</item>
     </string-array>
+
+    <!-- Capture templates stored as JSON -->
+    <string name="pref_key_capture_templates" translatable="false">pref_key_capture_templates</string>
 </resources>

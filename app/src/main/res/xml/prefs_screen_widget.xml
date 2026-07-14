@@ -41,6 +41,11 @@
         android:title="@string/display_notebook_name"
         android:defaultValue="@bool/pref_default_widget_display_book_name" />
 
+    <androidx.preference.Preference
+        android:key="@string/pref_key_widget_capture_template"
+        android:title="@string/capture_template"
+        android:summary="@string/widget_capture_template_default_note" />
+
     <ListPreference
         android:key="@string/pref_key_widget_update_frequency"
         android:title="@string/update_frequency"

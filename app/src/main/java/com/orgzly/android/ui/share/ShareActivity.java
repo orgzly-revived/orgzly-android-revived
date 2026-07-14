@@ -30,9 +30,13 @@ import com.orgzly.android.sync.AutoSync;
 import com.orgzly.android.ui.AppSnackbarUtils;
 import com.orgzly.android.ui.CommonActivity;
 import com.orgzly.android.ui.NotePlace;
+import com.orgzly.android.ui.capture.CaptureTemplate;
+import com.orgzly.android.ui.capture.CaptureTemplateResolver;
+import com.orgzly.android.ui.note.NoteBuilder;
 import com.orgzly.android.SharingShortcutsManager;
 import com.orgzly.android.ui.sync.SyncFragment;
 import com.orgzly.android.ui.note.NoteFragment;
+import com.orgzly.android.ui.note.NotePayload;
 import com.orgzly.android.ui.util.ActivityUtils;
 import com.orgzly.android.usecase.UseCase;
 import com.orgzly.android.usecase.UseCaseResult;
@@ -183,6 +187,38 @@ public class ShareActivity extends CommonActivity
                 LogUtils.d(TAG, "Using book " + data.bookId
                         + " from passed shortcut ID");
         }
+
+        if (intent.hasExtra(AppIntent.EXTRA_CAPTURE_TEMPLATE_ID)) {
+            String templateId = intent.getStringExtra(AppIntent.EXTRA_CAPTURE_TEMPLATE_ID);
+            if (templateId != null && !templateId.isEmpty()) {
+                CaptureTemplate template = null;
+                for (CaptureTemplate candidate : AppPreferences.captureTemplates(this)) {
+                    if (templateId.equals(candidate.getId())) {
+                        template = candidate;
+                        break;
+                    }
+                }
+
+                if (template != null) {
+                    String fallbackBookName = null;
+                    if (template.getTargetBook().isBlank() && data.bookId != null) {
+                        Book fallbackBook = dataRepository.getBook(data.bookId);
+                        if (fallbackBook != null) {
+                            fallbackBookName = fallbackBook.getName();
+                        }
+                    }
+                    CaptureTemplateResolver.Result result =
+                            CaptureTemplateResolver.INSTANCE.resolve(this, dataRepository, template, fallbackBookName);
+                    data.notePlace = result.getNotePlace();
+                    data.bookId = result.getNotePlace().getBookId();
+                    data.payload = NoteBuilder.newPayload(this, template);
+
+                    if ("notebook_not_found".equals(result.getWarning())) {
+                        mError = getString(R.string.capture_template_target_book_not_found, template.getTargetBook());
+                    }
+                }
+            }
+        }
         return data;
     }
 
@@ -235,15 +271,19 @@ public class ShareActivity extends CommonActivity
                     .commit();
 
             try {
-                long bookId;
-                if (data.bookId == null) {
-                    bookId = dataRepository.getTargetBook(this).getBook().getId();
+                if (data.notePlace != null && data.payload != null) {
+                    noteFragment = NoteFragment.forNewNote(data.notePlace, data.payload, true);
                 } else {
-                    bookId = data.bookId;
-                }
+                    long bookId;
+                    if (data.bookId == null) {
+                        bookId = dataRepository.getTargetBook(this).getBook().getId();
+                    } else {
+                        bookId = data.bookId;
+                    }
 
-                noteFragment = NoteFragment.forNewNote(
-                        new NotePlace(bookId), data.title, data.content);
+                    noteFragment = NoteFragment.forNewNote(
+                            new NotePlace(bookId), data.title, data.content);
+                }
 
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -279,10 +319,18 @@ public class ShareActivity extends CommonActivity
     }
 
     public static PendingIntent createNewNotePendingIntent(Context context, String category, SavedSearch savedSearch) {
+        return createNewNotePendingIntent(context, category, savedSearch, null);
+    }
+
+    public static PendingIntent createNewNotePendingIntent(Context context, String category, SavedSearch savedSearch, String captureTemplateId) {
         Intent resultIntent = createNewNoteIntent(context);
 
         // For distinguishing pending events
         resultIntent.addCategory(category);
+
+        if (captureTemplateId != null && !captureTemplateId.isEmpty()) {
+            resultIntent.putExtra(AppIntent.EXTRA_CAPTURE_TEMPLATE_ID, captureTemplateId);
+        }
 
         if (savedSearch != null) {
             resultIntent.putExtra(AppIntent.EXTRA_QUERY_STRING, savedSearch.getQuery());
@@ -345,6 +393,8 @@ public class ShareActivity extends CommonActivity
         String title;
         String content;
         Long bookId = null;
+        NotePlace notePlace = null;
+        NotePayload payload = null;
     }
 
     /**

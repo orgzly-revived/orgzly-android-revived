@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.lifecycle.Observer
@@ -51,6 +52,10 @@ import com.orgzly.android.ui.notes.book.BookViewModel.Companion.APP_BAR_DEFAULT_
 import com.orgzly.android.ui.notes.book.BookViewModel.Companion.APP_BAR_SELECTION_MODE
 import com.orgzly.android.ui.notes.book.BookViewModel.Companion.APP_BAR_SELECTION_MOVE_MODE
 import com.orgzly.android.ui.refile.RefileFragment
+import com.orgzly.android.ui.capture.CaptureTemplate
+import com.orgzly.android.ui.capture.CaptureTemplateResolver
+import com.orgzly.android.ui.capture.getDisplayName
+import com.orgzly.android.ui.capture.normalizeHeadlinePath
 import com.orgzly.android.ui.settings.SettingsActivity
 import com.orgzly.android.ui.util.ActivityUtils
 import com.orgzly.android.ui.util.setDecorFitsSystemWindowsForBottomToolbar
@@ -300,14 +305,20 @@ class BookFragment :
                     binding.fab.run {
                         if (currentBook != null) {
                             setOnClickListener {
-                                // If narrowed, add note under the narrowed root
                                 val narrowedId = viewModel.narrowedNoteId.value
                                 val notePlace = if (narrowedId != null) {
                                     NotePlace(mBookId, narrowedId, Place.UNDER)
                                 } else {
                                     NotePlace(mBookId)
                                 }
-                                listener?.onNoteNewRequest(notePlace)
+                                val bookName = currentBook?.name
+                                val templates = AppPreferences.captureTemplates(requireContext())
+                                    .filter { it.targetBook.isBlank() || it.targetBook == bookName }
+                                if (templates.isEmpty()) {
+                                    listener?.onNoteNewRequest(notePlace)
+                                } else {
+                                    showCaptureTemplateChooser(templates, notePlace)
+                                }
                             }
                             show()
                         } else {
@@ -415,6 +426,45 @@ class BookFragment :
 
     private fun newNoteRelativeToSelection(place: Place, noteId: Long) {
         listener?.onNoteNewRequest(NotePlace(mBookId, noteId, place))
+    }
+
+    private fun applyTemplateInBook(template: CaptureTemplate, contextualPlace: NotePlace) {
+        if (normalizeHeadlinePath(template.targetHeadline) != null) {
+            // Template has explicit headline — use the resolver (creates heading if missing)
+            val result = CaptureTemplateResolver.resolve(requireContext(), dataRepository, template)
+            if (result.warning == "notebook_not_found") {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.capture_template_target_book_not_found, template.targetBook),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return
+            }
+            listener?.onNoteNewRequestWithTemplate(result.notePlace, template)
+        } else {
+            // No headline — use contextual placement (narrowed view or book root)
+            listener?.onNoteNewRequestWithTemplate(contextualPlace, template)
+        }
+    }
+
+    private fun showCaptureTemplateChooser(
+        templates: List<CaptureTemplate>,
+        notePlace: NotePlace
+    ) {
+        val items = (listOf(getString(R.string.new_note)) + templates.map {
+            it.getDisplayName(getString(R.string.capture_template))
+        }).toTypedArray()
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.select_capture_template)
+            .setItems(items) { _, index ->
+                if (index == 0) {
+                    listener?.onNoteNewRequest(notePlace)
+                } else {
+                    applyTemplateInBook(templates[index - 1], notePlace)
+                }
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
 
     private fun moveNotes(offset: Int) {

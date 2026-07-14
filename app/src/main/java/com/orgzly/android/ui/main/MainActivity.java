@@ -668,6 +668,16 @@ public class MainActivity extends CommonActivity
     }
 
     @Override
+    public void onNoteNewRequestWithTemplate(NotePlace target, com.orgzly.android.ui.capture.CaptureTemplate template) {
+        if (template == null) return;
+        DisplayManager.displayNewNote(
+                getSupportFragmentManager(),
+                target,
+                com.orgzly.android.ui.note.NoteBuilder.newPayload(this, template),
+                true);
+    }
+
+    @Override
     public void onNoteCreated(Note note) {
         popBackStackAndCloseKeyboard();
 
