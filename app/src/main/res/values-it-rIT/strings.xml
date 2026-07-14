@@ -54,7 +54,7 @@
     <plurals name="notes_copied">
         <item quantity="one">Nota copiata</item>
         <item quantity="many">Copiate <b>%d</b> note</item>
-        <item quantity="other">Nota<b>%d</b> copiata</item>
+        <item quantity="other">Copiate<b>%d</b> note</item>
     </plurals>
     <plurals name="notes_pasted">
         <item quantity="one">Nota incollata</item>
