@@ -62,6 +62,7 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             viewModelFactory,
             requireArguments().getString(ARG_QUERY) ?: "",
             requireArguments().getBoolean(ARG_IS_RAW_QUERY, false),
+            requireArguments().getBoolean(ARG_FORCE_HIDE_REFINE_BUTTON, false),
             QueryViewModelOwner.AGENDA,
             requireContext()
         )
@@ -385,7 +386,12 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
         }
 
         @JvmStatic
-        fun getInstance(query: String, queryName: String? = null, isRawQuery: Boolean = false): AgendaFragment {
+        fun getInstance(
+            query: String,
+            queryName: String? = null,
+            isRawQuery: Boolean = false,
+            forceHideRefineButton: Boolean = false,
+        ): AgendaFragment {
             val fragment = AgendaFragment()
 
             val args = Bundle()
@@ -394,6 +400,7 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             if (queryName != null) {
                 args.putString(ARG_QUERY_NAME, queryName)
             }
+            args.putBoolean(ARG_FORCE_HIDE_REFINE_BUTTON, forceHideRefineButton)
             fragment.arguments = args
 
             return fragment

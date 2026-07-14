@@ -11,6 +11,7 @@ interface QueryViewModelFactory : ViewModelProvider.Factory {
     fun create(
         initialQuery: String,
         isRawQuery: Boolean,
+        forceHideRefineButton: Boolean,
         owner: QueryViewModelOwner,
         context: Context
     ): QueryViewModel
@@ -20,12 +21,19 @@ interface QueryViewModelFactory : ViewModelProvider.Factory {
             assistedFactory: QueryViewModelFactory,
             initialQuery: String,
             isRawQuery: Boolean,
+            forceHideRefineButton: Boolean,
             owner: QueryViewModelOwner,
             context: Context
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
-                return assistedFactory.create(initialQuery, isRawQuery, owner, context) as T
+                return assistedFactory.create(
+                    initialQuery,
+                    isRawQuery,
+                    forceHideRefineButton,
+                    owner,
+                    context
+                ) as T
             }
         }
     }
