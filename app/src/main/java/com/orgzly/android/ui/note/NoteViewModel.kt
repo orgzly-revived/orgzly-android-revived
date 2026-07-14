@@ -158,6 +158,15 @@ class NoteViewModel(
             properties = properties)
     }
 
+    fun updatePayloadContent(content: String) {
+        notePayload = notePayload?.copy(content = content)
+    }
+
+    fun onContentSavedImmediately(content: String) {
+        updatePayloadContent(content)
+        notePayload?.let { originalHash = notePayloadHash(it) }
+    }
+
     fun updatePayloadState(state: String?) {
         notePayload?.let {
             notePayload = NoteBuilder.changeState(App.getAppContext(), it, state)

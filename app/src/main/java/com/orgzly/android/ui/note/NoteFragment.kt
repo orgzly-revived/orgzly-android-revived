@@ -61,6 +61,8 @@ import com.orgzly.android.ui.util.invisibleIf
 import com.orgzly.android.ui.util.invisibleUnless
 import com.orgzly.android.ui.views.richtext.RichText
 import com.orgzly.android.ui.views.richtext.RichTextEdit
+import com.orgzly.android.usecase.NoteUpdateContent
+import com.orgzly.android.usecase.UseCaseRunner
 import com.orgzly.android.util.LogUtils
 import com.orgzly.android.util.OrgFormatter
 import com.orgzly.android.util.SpaceTokenizer
@@ -233,6 +235,20 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
         binding.content.setOnUserTextChangeListener { str ->
             binding.content.setSourceText(str)
+
+            if (viewModel.isNew()) {
+                viewModel.updatePayloadContent(str)
+            } else {
+                val useCase = NoteUpdateContent(viewModel.noteId, str)
+
+                App.EXECUTORS.diskIO().execute {
+                    UseCaseRunner.run(useCase)
+
+                    App.EXECUTORS.mainThread().execute {
+                        viewModel.onContentSavedImmediately(str)
+                    }
+                }
+            }
         }
 
         /*

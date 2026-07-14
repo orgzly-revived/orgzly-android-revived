@@ -749,6 +749,13 @@ public class MiscTest extends OrgzlyTest {
 
             onView(allOf(withId(R.id.content_view), withText(containsString("- [X] Item"))))
                     .check(matches(isDisplayed()));
+
+            SystemClock.sleep(500);
+
+            pressBack();
+
+            onNoteInBook(1, R.id.item_head_content_view)
+                    .check(matches(allOf(isDisplayed(), withText(containsString("- [X] Item")))));
         }
     }
 
