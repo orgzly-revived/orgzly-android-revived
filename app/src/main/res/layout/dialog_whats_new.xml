@@ -22,6 +22,20 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.23.0"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Add basic support for capture templates." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix cut notes behavior to eliminate risk of data loss." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.22.0"
             tools:ignore="HardcodedText"
             android:autoLink="web" />
