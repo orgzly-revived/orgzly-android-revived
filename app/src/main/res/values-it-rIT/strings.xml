@@ -630,4 +630,22 @@
     <string name="search_filter_scheduled_sort_order">Data programmata</string>
     <string name="search_filter_deadline_sort_order">Data ultima</string>
     <string name="external_files_access_is_no_longer_allowed">L\'accesso ai file esterni non è più permesso.</string>
+    <string name="git_clone_error_public_external_storage">Questo percorso non è ammesso da Android 11+. Al suo posto usa la memoria dell\'apparato, ad es. %1$s</string>
+    <string name="pref_title_on_suspend_sync">App sospesa</string>
+    <string name="ssh_key_locked_and_no_activity">Errore: la chiave SSH può essere sbloccata solo da un\'attività</string>
+    <string name="in_note_heading">Nell\'intestazione della nota</string>
+    <string name="search_filter_unable_to_switch_to_simple">La query non può essere modificata con un editor semplice</string>
+    <string name="capture_templates_summary">Definisci i modelli per catturare velocemente le note</string>
+    <string name="no_capture_templates">Nessun modello di cattura</string>
+    <string name="capture_template">Modello di cattura</string>
+    <string name="widget_capture_template_default_note">Nota predefinita</string>
+    <string name="template_description">Descrizione</string>
+    <string name="template_title">Titolo del modello</string>
+    <string name="template_content">Contenuto</string>
+    <string name="template_target_book">Taccuino di destinazione</string>
+    <string name="template_target">Destinazione</string>
+    <string name="template_select_target">Scegli la destinazione</string>
+    <string name="template_state">Stato iniziale</string>
+    <string name="template_priority">Priorità iniziale</string>
+    <string name="template_tags">Etichette iniziali</string>
 </resources>
