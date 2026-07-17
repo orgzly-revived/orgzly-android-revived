@@ -50,6 +50,8 @@ public class AppIntent {
     public static final String EXTRA_NOTE_CONTENT = "com.orgzly.intent.extra.NOTE_CONTENT";
     public static final String EXTRA_QUERY_STRING = "com.orgzly.intent.extra.QUERY_STRING";
     public static final String EXTRA_IS_RAW_QUERY = "com.orgzly.intent.extra.IS_RAW_QUERY";
+    public static final String EXTRA_QUERY_FORCE_HIDE_REFINE_BUTTON =
+            "com.orgzly.intent.extra.QUERY_FORCE_HIDE_REFINE_BUTTON";
     public static final String EXTRA_SEARCH_NAME = "com.orgzly.intent.extra.SEARCH_NAME";
     public static final String EXTRA_PROPERTY_NAME  = "com.orgzly.intent.extra.PROPERTY_NAME";
     public static final String EXTRA_PROPERTY_VALUE  = "com.orgzly.intent.extra.PROPERTY_VALUE";

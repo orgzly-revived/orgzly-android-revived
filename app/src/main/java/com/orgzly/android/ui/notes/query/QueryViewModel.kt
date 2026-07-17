@@ -80,8 +80,8 @@ class QueryViewModel @AssistedInject constructor(
     private val queryBuilder: InternalQueryBuilder,
     private val filterMapper: SimpleFilterMapper,
     @Assisted private val initialQuery: String,
-    @Assisted private val isRawQuery: Boolean,
-    @Assisted private val forceHideRefineButton: Boolean,
+    @Assisted("isRawQuery") private val isRawQuery: Boolean,
+    @Assisted("forceHideRefineButton") private val forceHideRefineButton: Boolean,
     @Assisted private val owner: QueryViewModelOwner,
     @Assisted context: Context
 ) : CommonViewModel() {

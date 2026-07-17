@@ -3,15 +3,17 @@ package com.orgzly.android.ui.notes.query
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
 @AssistedFactory
 interface QueryViewModelFactory : ViewModelProvider.Factory {
 
     fun create(
         initialQuery: String,
-        isRawQuery: Boolean,
-        forceHideRefineButton: Boolean,
+        @Assisted("isRawQuery") isRawQuery: Boolean,
+        @Assisted("forceHideRefineButton") forceHideRefineButton: Boolean,
         owner: QueryViewModelOwner,
         context: Context
     ): QueryViewModel
