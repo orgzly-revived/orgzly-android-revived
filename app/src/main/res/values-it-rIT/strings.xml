@@ -6,7 +6,7 @@
     <string name="yes">Sì</string>
     <string name="unlink">Scollega</string>
     <!-- Unlink from Dropbox -->
-    <string name="clear">Annulla</string>
+    <string name="clear">Cancella data</string>
     <string name="cancel">Annulla</string>
     <string name="create">Crea</string>
     <!-- "new" is reserved -->
@@ -78,9 +78,9 @@
     <string name="deadline">Data di scadenza</string>
     <string name="closed">Chiuso</string>
     <!-- TODO: Not hints, rename -->
-    <string name="schedule_button_hint">Ora pianificata</string>
+    <string name="schedule_button_hint">Data pianificata</string>
     <string name="deadline_button_hint">Data di scadenza</string>
-    <string name="closed_button_hint">Ora di chiusura</string>
+    <string name="closed_button_hint">Data di chiusura</string>
     <string name="books_context_menu_item_rename">Rinomina</string>
     <string name="books_context_menu_item_set_link">Imposta il collegamento</string>
     <string name="books_context_menu_item_force_save">Forza salvataggio</string>
