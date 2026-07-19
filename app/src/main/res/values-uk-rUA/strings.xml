@@ -25,7 +25,6 @@
     <string name="mark_as_done">Позначити як виконане</string>
     <string name="mark_as_done_with_repeater">Перепланувати %s</string>
     <string name="reminder_snooze">Відкласти</string>
-    <string name="close">Закрити</string>
     <string name="import_">Імпорт</string>
     <!-- Reserved keyword -->
     <string name="export">Експорт</string>
@@ -105,7 +104,6 @@
     <string name="options_menu_item_search">Пошук</string>
     <string name="repos_options_menu_new_repo">Новий репозиторій</string>
     <string name="book_name_already_exists">Записник %s вже існує</string>
-    <string name="filter_name_already_exists">Пошук із такою назвою вже існує</string>
     <string name="failed_creating_directory">Не вдалося створити каталог %s</string>
     <string name="version">Що нового</string>
     <string name="search_hint">Пошук нотаток</string>
@@ -119,7 +117,6 @@
     <string name="notebook_imported">Записник імпортовано</string>
     <string name="book_does_not_exist_anymore">Такий записник уже не існує.</string>
     <string name="note_does_not_exist_anymore">Така нотатка вже не існує.</string>
-    <string name="search_does_not_exist_anymore">Такий пошуковий запит уже не існує.</string>
     <string name="repo_dropbox_button_not_linked">Приєднати до Dropbox</string>
     <string name="repo_dropbox_button_linked">Від\'єднати від Dropbox</string>
     <string name="notes_update_needed_dialog_title">Впливає на нотатки</string>
@@ -478,9 +475,6 @@
     <string name="argument_detected">%s виявлено</string>
     <string name="argument_selected">%s вибрано</string>
     <string name="fixed_width_value">Ширина (в пікселях)</string>
-    <string name="under">Нижче</string>
-    <string name="above">Вище</string>
-    <string name="below">Нижче</string>
     <string name="go_to">Перейти</string>
     <string name="cannot_refile_to_the_same_subtree">Неможливо повторити на тій самій гілці</string>
     <string name="notification_maximum_priority">Максимальний</string>

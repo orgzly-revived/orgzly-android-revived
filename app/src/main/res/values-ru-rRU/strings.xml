@@ -27,7 +27,6 @@
     <string name="mark_as_done">Пометить как выполненное</string>
     <string name="mark_as_done_with_repeater">Перепланировать %s</string>
     <string name="reminder_snooze">Отложить</string>
-    <string name="close">Закрыть</string>
     <string name="import_">Импорт</string>
     <!-- Reserved keyword -->
     <string name="export">Экспорт</string>
@@ -112,7 +111,6 @@
     <string name="options_menu_item_search">Поиск</string>
     <string name="repos_options_menu_new_repo">Новое хранилище</string>
     <string name="book_name_already_exists">Блокнот %s уже существует</string>
-    <string name="filter_name_already_exists">Поиск с тем же именем уже существует</string>
     <string name="failed_creating_directory">Невозможно создать каталог %s</string>
     <string name="version">Что нового</string>
     <string name="search_hint">Поиск заметок</string>
@@ -126,7 +124,6 @@
     <string name="notebook_imported">Блокнот импортирован</string>
     <string name="book_does_not_exist_anymore">Этот блокнот больше не существует.</string>
     <string name="note_does_not_exist_anymore">Эта заметка больше не существует.</string>
-    <string name="search_does_not_exist_anymore">Этот запрос больше не существует.</string>
     <string name="repo_dropbox_button_not_linked">Привязать к Dropbox</string>
     <string name="repo_dropbox_button_linked">Отвязать от Dropbox</string>
     <string name="notes_update_needed_dialog_title">Влияет на заметки</string>
@@ -502,9 +499,6 @@
     <string name="argument_detected">%s обнаружен</string>
     <string name="argument_selected">%s выбран</string>
     <string name="fixed_width_value">Ширина (в пикселях)</string>
-    <string name="under">В</string>
-    <string name="above">Выше</string>
-    <string name="below">Ниже</string>
     <string name="go_to">Перейти к</string>
     <string name="cannot_refile_to_the_same_subtree">Невозможно переместить в то же поддерево</string>
     <string name="notification_maximum_priority">Максимальный</string>

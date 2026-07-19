@@ -25,7 +25,6 @@
     <string name="mark_as_done">Contrassegna come completato</string>
     <string name="mark_as_done_with_repeater">Ripianifica %s</string>
     <string name="reminder_snooze">Rinvia</string>
-    <string name="close">Chiudi</string>
     <string name="import_">Importa</string>
     <!-- Reserved keyword -->
     <string name="export">Esporta</string>
@@ -102,7 +101,6 @@
     <string name="options_menu_item_search">Cerca</string>
     <string name="repos_options_menu_new_repo">Nuovo deposito</string>
     <string name="book_name_already_exists">Il taccuino %s esiste già</string>
-    <string name="filter_name_already_exists">Cerca con lo stesso nome che esiste già</string>
     <string name="failed_creating_directory">Impossibile creare la cartella \"%s\"</string>
     <string name="version">Cosa c\'è di nuovo</string>
     <string name="search_hint">Cerca nelle note</string>
@@ -116,7 +114,6 @@
     <string name="notebook_imported">Taccuino importato</string>
     <string name="book_does_not_exist_anymore">Questo taccuino non esiste più.</string>
     <string name="note_does_not_exist_anymore">Questa nota non esiste più.</string>
-    <string name="search_does_not_exist_anymore">Questa ricerca non esiste più.</string>
     <string name="repo_dropbox_button_not_linked">Collega a Dropbox</string>
     <string name="repo_dropbox_button_linked">Scollega da Dropbox</string>
     <string name="notes_update_needed_dialog_title">Le preferenze influiscono sulle note</string>
@@ -469,9 +466,6 @@
     <string name="argument_detected">%s rilevato</string>
     <string name="argument_selected">%s selezionati</string>
     <string name="fixed_width_value">Larghezza ( in pixel)</string>
-    <string name="under">Sotto</string>
-    <string name="above">Sopra</string>
-    <string name="below">Sotto</string>
     <string name="go_to">Vai a</string>
     <string name="cannot_refile_to_the_same_subtree">Impossibile riferirsi allo stesso sotto-albero</string>
     <string name="notification_maximum_priority">Massimo</string>
@@ -642,7 +636,6 @@
     <string name="template_description">Descrizione</string>
     <string name="template_title">Titolo del modello</string>
     <string name="template_content">Contenuto</string>
-    <string name="template_target_book">Taccuino di destinazione</string>
     <string name="template_target">Destinazione</string>
     <string name="template_select_target">Scegli la destinazione</string>
     <string name="template_state">Stato iniziale</string>
@@ -650,7 +643,6 @@
     <string name="template_tags">Etichette iniziali</string>
     <string name="template_scheduled">Appuntamenti odierni</string>
     <string name="select_capture_template">Scegli il modello</string>
-    <string name="template_no_target_book">Predefinito (taccuino attuale)</string>
     <string name="capture_template_saved">Modello salvato</string>
     <string name="capture_template_deleted">Modello eliminato</string>
     <string name="new_capture_template">Nuovo modello</string>
@@ -658,7 +650,6 @@
     <string name="capture_template_numbered">Modello %1$d</string>
     <string name="edit_capture_template">Modifica modello</string>
     <string name="capture_template_target_book_not_found">Taccuino \"%1$s\" non trovato, usando il predefinito</string>
-    <string name="template_select_notebook_first">Prima seleziona un taccuino</string>
     <string name="template_notebook_required">Seleziona un taccuino</string>
     <string name="popup_menu_buttons">Bottoni popup</string>
 </resources>

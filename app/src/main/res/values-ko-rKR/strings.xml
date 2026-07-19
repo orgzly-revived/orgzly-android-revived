@@ -25,7 +25,6 @@
     <string name="mark_as_done">완료로 표시</string>
     <string name="mark_as_done_with_repeater">%s 재일정</string>
     <string name="reminder_snooze">알림 일시중지</string>
-    <string name="close">닫기</string>
     <string name="import_">가져오기</string>
     <!-- Reserved keyword -->
     <string name="export">내보내기</string>
@@ -96,7 +95,6 @@
     <string name="options_menu_item_search">찾기</string>
     <string name="repos_options_menu_new_repo">새 저장소</string>
     <string name="book_name_already_exists">노트북 %s 이미 존재합니다.</string>
-    <string name="filter_name_already_exists">이미 존재 하는 같은 이름으로 검색</string>
     <string name="failed_creating_directory">디렉토리 %s 생성에 실패하였습니다.</string>
     <string name="version">새로운 기능</string>
     <string name="search_hint">메모 검색</string>
@@ -110,7 +108,6 @@
     <string name="notebook_imported">메모장을 가져왔습니다.</string>
     <string name="book_does_not_exist_anymore">이 메모장은 더 이상 사용할 수 없습니다.</string>
     <string name="note_does_not_exist_anymore">이 메모는 더 이상 사용할 수 없습니다.</string>
-    <string name="search_does_not_exist_anymore">이 검색 조건은 더 이상 사용할 수 없습니다.</string>
     <string name="repo_dropbox_button_not_linked">Dropbox로 연결하기</string>
     <string name="repo_dropbox_button_linked">Dropbox에서 연결 끊기</string>
     <string name="notes_update_needed_dialog_title">메모에 영향을 미치는 설정</string>
@@ -452,9 +449,6 @@
     <string name="argument_detected">%s 감지됨</string>
     <string name="argument_selected">%s 선택됨</string>
     <string name="fixed_width_value">너비 (픽셀단위)</string>
-    <string name="under">Under</string>
-    <string name="above">Above</string>
-    <string name="below">Below</string>
     <string name="go_to">Go to</string>
     <string name="cannot_refile_to_the_same_subtree">Cannot refile to the same subtree</string>
     <string name="notification_maximum_priority">Maximum</string>
