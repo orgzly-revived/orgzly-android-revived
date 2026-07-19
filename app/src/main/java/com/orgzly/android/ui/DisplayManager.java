@@ -219,34 +219,53 @@ public class DisplayManager {
     }
 
     public static void displayQuery(FragmentManager fragmentManager, @NonNull String queryString) {
-        displayQuery(fragmentManager, queryString, null);
+        displayQuery(fragmentManager, queryString, null, false, true);
     }
 
-    public static void displayQuery(FragmentManager fragmentManager, @NonNull String queryString, @Nullable String searchName) {
-        displayQuery(fragmentManager, queryString, searchName, false, true);
+    /**
+     * @deprecated Use displayQuery(FragmentManager, DisplayQueryArgs)
+     */
+    public static void displayQuery(FragmentManager fragmentManager, @NonNull String queryString, @Nullable String searchName, boolean isRawQuery, boolean addToBackStack) {
+        displayQuery(
+                fragmentManager,
+                new DisplayQueryArgs(queryString)
+                        .setSearchName(searchName)
+                        .setRawQuery(isRawQuery)
+                        .setAddToBackStack(addToBackStack)
+        );
     }
 
-    public static void displayQuery(FragmentManager fragmentManager, @NonNull String queryString, @Nullable String searchName, @NonNull boolean isRawQuery, @NonNull boolean addToBackStack) {
+    public static void displayQuery(FragmentManager fragmentManager, DisplayQueryArgs args) {
+        assert args.queryString != null;
+
         // If the same query is already displayed, don't do anything.
         String displayedQuery = getDisplayedQuery(fragmentManager);
-        if (displayedQuery != null && displayedQuery.equals(queryString)) {
+        if (displayedQuery != null && displayedQuery.equals(args.queryString)) {
             return;
         }
 
         // Parse query
         QueryParser queryParser = new InternalQueryParser();
-        Query query = queryParser.parse(queryString);
+        Query query = queryParser.parse(args.queryString);
 
         Fragment fragment;
         String tag;
 
         // Display agenda or query fragment
         if (query.getOptions().getAgendaDays() > 0) {
-            fragment = AgendaFragment.getInstance(queryString, searchName, isRawQuery);
+            fragment = AgendaFragment.getInstance(
+                    args.queryString,
+                    args.searchName,
+                    args.isRawQuery,
+                    args.forceHideRefineButton);
             tag = AgendaFragment.FRAGMENT_TAG;
 
         } else {
-            fragment = SearchFragment.getInstance(queryString, searchName, isRawQuery);
+            fragment = SearchFragment.getInstance(
+                    args.queryString,
+                    args.searchName,
+                    args.isRawQuery,
+                    args.forceHideRefineButton);
             tag = SearchFragment.FRAGMENT_TAG;
         }
 
@@ -255,7 +274,7 @@ public class DisplayManager {
                 R.id.single_pane_container,
                 fragment,
                 tag,
-                addToBackStack);
+                args.addToBackStack);
     }
 
     public static void displayEditor(FragmentManager fragmentManager, Book book) {
@@ -322,4 +341,42 @@ public class DisplayManager {
             return null;
         }
     }
+
+    public static class DisplayQueryArgs {
+        private String queryString;
+        private String searchName = null;
+        private boolean isRawQuery = false;
+        private boolean addToBackStack = true;
+        private boolean forceHideRefineButton = false;
+
+        public DisplayQueryArgs(@NonNull String queryString) {
+            this.queryString = queryString;
+        }
+
+        public DisplayQueryArgs setQueryString(@NonNull String queryString) {
+            this.queryString = queryString;
+            return this;
+        }
+
+        public DisplayQueryArgs setSearchName(@Nullable String searchName) {
+            this.searchName = searchName;
+            return this;
+        }
+
+        public DisplayQueryArgs setRawQuery(boolean rawQuery) {
+            isRawQuery = rawQuery;
+            return this;
+        }
+
+        public DisplayQueryArgs setAddToBackStack(boolean addToBackStack) {
+            this.addToBackStack = addToBackStack;
+            return this;
+        }
+
+        public DisplayQueryArgs setForceHideRefineButton(boolean forceHideRefineButton) {
+            this.forceHideRefineButton = forceHideRefineButton;
+            return this;
+        }
+    }
+
 }

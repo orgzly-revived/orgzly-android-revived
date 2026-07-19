@@ -1028,14 +1028,19 @@ public class MainActivity extends CommonActivity
 
                 case AppIntent.ACTION_OPEN_QUERY: {
                     String query = intent.getStringExtra(AppIntent.EXTRA_QUERY_STRING);
+                    if (query == null) return;
                     String searchName = intent.getStringExtra(AppIntent.EXTRA_SEARCH_NAME);
                     boolean isRawQuery = intent.getBooleanExtra(AppIntent.EXTRA_IS_RAW_QUERY, false);
+                    boolean forceHideRefineButton = intent.getBooleanExtra(
+                            AppIntent.EXTRA_QUERY_FORCE_HIDE_REFINE_BUTTON,
+                            false
+                    );
                     DisplayManager.displayQuery(
                             getSupportFragmentManager(),
-                            query,
-                            searchName,
-                            isRawQuery,
-                            true
+                            new DisplayManager.DisplayQueryArgs(query)
+                                    .setRawQuery(isRawQuery)
+                                    .setForceHideRefineButton(forceHideRefineButton)
+                                    .setSearchName(searchName)
                     );
                     break;
                 }

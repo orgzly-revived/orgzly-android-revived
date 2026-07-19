@@ -4,26 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.input.TextFieldLineLimits
-import androidx.compose.foundation.text.input.clearText
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.lifecycle.ViewModelProvider
-import cl.emilym.compose.units.rdp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.orgzly.R
@@ -32,10 +14,6 @@ import com.orgzly.android.sync.SyncRunner
 import com.orgzly.android.ui.capture.CaptureTemplate
 import com.orgzly.android.ui.capture.CaptureTemplateResolver
 import com.orgzly.android.ui.capture.getDisplayName
-import com.orgzly.android.ui.compose.base.bootstrapContent
-import com.orgzly.android.ui.compose.widgets.Icons
-import com.orgzly.android.ui.compose.widgets.OrgzlySearchTextField
-import com.orgzly.android.ui.compose.widgets.painterIcon
 import com.orgzly.android.ui.dialogs.TimestampDialogFragment
 import com.orgzly.android.ui.drawer.DrawerItem
 import com.orgzly.android.ui.main.SharedMainActivityViewModel
@@ -215,6 +193,7 @@ abstract class QueryFragment :
         const val ARG_IS_RAW_QUERY = "is_raw_query"
         const val ARG_QUERY_NAME = "query_name"
 
+        const val ARG_FORCE_HIDE_REFINE_BUTTON = "show_refine_button"
         fun getDrawerItemId(query: String?): String {
             return "$TAG $query"
         }

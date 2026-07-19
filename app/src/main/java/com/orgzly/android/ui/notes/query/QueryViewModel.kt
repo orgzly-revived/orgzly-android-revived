@@ -80,7 +80,8 @@ class QueryViewModel @AssistedInject constructor(
     private val queryBuilder: InternalQueryBuilder,
     private val filterMapper: SimpleFilterMapper,
     @Assisted private val initialQuery: String,
-    @Assisted private val isRawQuery: Boolean,
+    @Assisted("isRawQuery") private val isRawQuery: Boolean,
+    @Assisted("forceHideRefineButton") private val forceHideRefineButton: Boolean,
     @Assisted private val owner: QueryViewModelOwner,
     @Assisted context: Context
 ) : CommonViewModel() {
@@ -137,7 +138,7 @@ class QueryViewModel @AssistedInject constructor(
                 else -> ViewState.LOADED
             },
             isSimpleMode,
-            appBarMode == APP_BAR_DEFAULT_MODE,
+            appBarMode == APP_BAR_DEFAULT_MODE && !forceHideRefineButton,
             queryParser.parse(query).options.agendaDays
         )
     }.state(QueryState.default)
