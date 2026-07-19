@@ -802,8 +802,8 @@
     <string name="no_capture_templates">No capture templates</string>
     <string name="capture_template">Capture template</string>
     <string name="widget_capture_template_default_note">Default note</string>
-    <string name="template_description">Description</string>
-    <string name="template_title">Title template</string>
+    <string name="template_name">Name</string>
+    <string name="template_title">Title</string>
     <string name="template_content">Content</string>
     <string name="template_tokens_hint" formatted="false">Tokens: %t %T (date/time) %u %U (inactive) %c (clipboard)</string>
     <string name="template_target">Target</string>

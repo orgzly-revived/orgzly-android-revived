@@ -633,7 +633,7 @@
     <string name="no_capture_templates">Nessun modello di cattura</string>
     <string name="capture_template">Modello di cattura</string>
     <string name="widget_capture_template_default_note">Nota predefinita</string>
-    <string name="template_description">Descrizione</string>
+    <string name="template_name">Nome</string>
     <string name="template_title">Titolo del modello</string>
     <string name="template_content">Contenuto</string>
     <string name="template_target">Destinazione</string>

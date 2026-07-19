@@ -23,14 +23,14 @@
                 android:paddingTop="16dp"
                 app:boxBackgroundMode="none">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/template_description"
+                    android:id="@+id/template_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="@dimen/screen_edge"
                     android:paddingVertical="12dp"
                     android:background="@null"
                     android:inputType="text|textCapSentences"
-                    android:hint="@string/template_description"/>
+                    android:hint="@string/template_name"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <View style="@style/HorizontalDivider" />
