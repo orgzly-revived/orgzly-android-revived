@@ -662,4 +662,24 @@
     <string name="template_description">Beskrivning</string>
     <string name="template_title">Rubrik</string>
     <string name="template_content">Innehåll</string>
+    <string name="template_target">Placering</string>
+    <string name="template_select_target">Välj placering</string>
+    <string name="template_state">Ursprunglig status</string>
+    <string name="template_priority">Ursprunglig prioritet</string>
+    <string name="template_tags">Ursprungliga taggar</string>
+    <string name="template_scheduled">Schemalägg till idag</string>
+    <string name="select_capture_template">Välj mall</string>
+    <string name="capture_template_saved">Mallen sparades</string>
+    <string name="capture_template_deleted">Mallen raderades</string>
+    <string name="new_capture_template">Ny mall</string>
+    <string name="cannot_be_empty_short">Måste anges</string>
+    <string name="capture_template_numbered">Mall %1$d</string>
+    <string name="edit_capture_template">Redigera anteckningsmall</string>
+    <string name="capture_template_target_book_not_found">Anteckningsboken \"%1$s\" hittades inte; använder standardboken</string>
+    <string name="template_new_headline">Ny rubrik</string>
+    <string name="template_new_headline_name">Rubrikens namn</string>
+    <string name="template_notebook_required">Du måste välja en anteckningsbok.</string>
+    <string name="template_headline_no_slash">Rubriken får inte innehålla \"/\".</string>
+    <string name="template_headline_ambiguous">Det finns flera rubriker med samma namn. Din anteckning kan placeras på fel ställe.</string>
+    <string name="external_files_access_is_no_longer_allowed">Åtkomst till externa filer tillåts inte längre.</string>
 </resources>
