@@ -35,7 +35,6 @@ enum class BookSyncStatus {
     /* Local book with no link */
     ONLY_BOOK_WITHOUT_LINK;
 
-    // TODO: Extract string resources
     @JvmOverloads
     fun msg(arg: Any = ""): String {
         val context = App.getAppContext()
@@ -53,25 +52,25 @@ enum class BookSyncStatus {
                 return context.getString(R.string.sync_status_no_book_multiple_rooks)
 
             BOOK_WITH_LINK_AND_ROOK_EXISTS_BUT_LINK_POINTING_TO_DIFFERENT_ROOK ->
-                return "Notebook has link and remote notebook with the same name exists, but link is pointing to a different remote notebook which does not exist"
+                return context.getString(R.string.sync_status_link_points_to_different_rook)
 
             ONLY_DUMMY ->
-                return "Only local dummy exists"
+                return context.getString(R.string.sync_status_only_dummy)
 
             ROOK_AND_VROOK_HAVE_DIFFERENT_REPOS ->
-                return "Linked and synced notebooks have different repositories"
+                return context.getString(R.string.sync_status_rook_and_vrook_have_different_repos)
 
             ONLY_BOOK_WITHOUT_LINK ->
-                return context.getString(R.string.sync_status_no_link)
+                return context.getString(R.string.sync_status_only_book_without_link)
 
             CONFLICT_BOTH_BOOK_AND_ROOK_MODIFIED ->
-                return "Both local and remote notebook have been modified"
+                return context.getString(R.string.sync_status_conflict_both_book_and_rook_modified)
 
             CONFLICT_BOOK_WITH_LINK_AND_ROOK_BUT_NEVER_SYNCED_BEFORE ->
-                return "Link and remote notebook exist but notebook hasn't been synced before"
+                return context.getString(R.string.sync_status_conflict_book_never_synced_but_has_rook)
 
             CONFLICT_LAST_SYNCED_ROOK_AND_LATEST_ROOK_ARE_DIFFERENT ->
-                return "Last synced notebook and latest remote notebook differ"
+                return context.getString(R.string.sync_status_conflict_rooks_are_different)
 
             NO_BOOK_ONE_ROOK, DUMMY_WITHOUT_LINK_AND_ONE_ROOK, BOOK_WITH_LINK_AND_ROOK_MODIFIED, DUMMY_WITH_LINK ->
                 return context.getString(R.string.sync_status_loaded, "$arg")

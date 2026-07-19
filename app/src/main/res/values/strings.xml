@@ -735,7 +735,7 @@
     <string name="sync_status_dummy_without_link_and_multiple_rooks">Notebook has no link and multiple remote notebooks with the same name exist</string>
     <string name="sync_status_no_book_multiple_rooks">No notebook and multiple remote notebooks with the same name exist</string>
     <string name="sync_status_rook_no_longer_exists">Remote file no longer exists; repository link removed. Set a link if you want to sync to a repository.</string>
-    <string name="sync_status_no_link">No repository link</string>
+    <string name="sync_status_only_book_without_link">No repository link</string>
     <string name="sync_status_loaded">Loaded from %s</string>
     <string name="sync_status_saved">Saved to %s</string>
 
@@ -841,4 +841,10 @@
     <string name="template_headline_ambiguous">This headline is ambiguous (duplicate titles). Capture may target a different note.</string>
     <string name="external_files_access_is_no_longer_allowed">External files access is no longer allowed.</string>
     <string name="no_link">No link</string>
+    <string name="sync_status_conflict_rooks_are_different">Last synced notebook and latest remote notebook differ</string>
+    <string name="sync_status_conflict_book_never_synced_but_has_rook">Link and remote notebook exist but notebook hasn\'t been synced before</string>
+    <string name="sync_status_conflict_both_book_and_rook_modified">Both local and remote notebook have been modified</string>
+    <string name="sync_status_rook_and_vrook_have_different_repos">Linked and synced notebooks have different repositories</string>
+    <string name="sync_status_only_dummy">Only local dummy exists</string>
+    <string name="sync_status_link_points_to_different_rook">Notebook has link and remote notebook with the same name exists, but link is pointing to a different remote notebook which does not exist</string>
 </resources>
