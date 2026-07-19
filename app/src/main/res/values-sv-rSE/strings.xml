@@ -650,4 +650,16 @@
     <string name="content_description_subtract">Minska</string>
     <string name="content_description_add">Öka</string>
     <string name="query_filter_search">Justera sökningen</string>
+    <string name="none">Ingen</string>
+    <string name="share_note">Dela anteckning</string>
+    <string name="share_title">Dela rubriken</string>
+    <string name="share_content">Dela innehållet</string>
+    <string name="capture_templates">Mallar för nya anteckningar</string>
+    <string name="capture_templates_summary">Skapa anteckningar snabbare med fördefinierat innehåll</string>
+    <string name="no_capture_templates">Det finns inga mallar.</string>
+    <string name="capture_template">Ny anteckningsmall</string>
+    <string name="widget_capture_template_default_note">Vanlig anteckning</string>
+    <string name="template_description">Beskrivning</string>
+    <string name="template_title">Rubrik</string>
+    <string name="template_content">Innehåll</string>
 </resources>
