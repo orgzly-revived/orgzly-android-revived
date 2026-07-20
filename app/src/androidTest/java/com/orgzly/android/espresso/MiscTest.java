@@ -750,12 +750,23 @@ public class MiscTest extends OrgzlyTest {
             onView(allOf(withId(R.id.content_view), withText(containsString("- [X] Item"))))
                     .check(matches(isDisplayed()));
 
-            SystemClock.sleep(500);
+            long deadline = SystemClock.uptimeMillis() + 5000;
+            boolean saved = false;
+            while (SystemClock.uptimeMillis() < deadline) {
+                com.orgzly.android.db.entity.Note note = dataRepository.getLastNote("Title");
+                if (note != null && note.getContent() != null && note.getContent().contains("- [X] Item")) {
+                    saved = true;
+                    break;
+                }
+                SystemClock.sleep(50);
+            }
+            assertTrue(saved);
 
             pressBack();
+            onNoteInBook(1).perform(click());
 
-            onNoteInBook(1, R.id.item_head_content_view)
-                    .check(matches(allOf(isDisplayed(), withText(containsString("- [X] Item")))));
+            onView(allOf(withId(R.id.content_view), withText(containsString("- [X] Item"))))
+                    .check(matches(isDisplayed()));
         }
     }
 
