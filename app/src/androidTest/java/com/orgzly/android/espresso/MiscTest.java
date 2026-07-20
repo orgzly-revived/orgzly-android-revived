@@ -36,6 +36,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.matchesPattern;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
@@ -761,6 +762,8 @@ public class MiscTest extends OrgzlyTest {
                 SystemClock.sleep(50);
             }
             assertTrue(saved);
+
+            getInstrumentation().waitForIdleSync();
 
             pressBack();
             onNoteInBook(1).perform(click());
