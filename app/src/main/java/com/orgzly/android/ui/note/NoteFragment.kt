@@ -233,6 +233,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
         binding.content.setOnUserTextChangeListener { str ->
             binding.content.setSourceText(str)
+            viewModel.onUserContentChange(str)
         }
 
         /*
