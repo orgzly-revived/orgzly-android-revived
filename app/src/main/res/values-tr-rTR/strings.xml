@@ -27,7 +27,6 @@
     <string name="mark_as_done">Tamamlandı olarak işaretle</string>
     <string name="mark_as_done_with_repeater">Yeniden planla %s</string>
     <string name="reminder_snooze">Ertele</string>
-    <string name="close">Kapat</string>
     <string name="import_">İçe aktar</string>
     <!-- Reserved keyword -->
     <string name="export">Dışa aktar</string>
@@ -106,7 +105,6 @@
     <string name="options_menu_item_search">Arama</string>
     <string name="repos_options_menu_new_repo">Yeni Depo</string>
     <string name="book_name_already_exists">%s defteri zaten mevcut</string>
-    <string name="filter_name_already_exists">Aynı isim ile arama zaten var</string>
     <string name="failed_creating_directory">%s dizini oluşturulamadı</string>
     <string name="version">Yenilikler</string>
     <string name="search_hint">Notlarda ara</string>
@@ -120,7 +118,6 @@
     <string name="notebook_imported">Defter içe aktarıldı</string>
     <string name="book_does_not_exist_anymore">Bu defter artık mevcut değil.</string>
     <string name="note_does_not_exist_anymore">Bu not artık mevcut değil.</string>
-    <string name="search_does_not_exist_anymore">Bu arama artık mevcut değil.</string>
     <string name="repo_dropbox_button_not_linked">Dropbox bağlantısı</string>
     <string name="repo_dropbox_button_linked">Dropbox bağlantısını kaldır</string>
     <string name="notes_update_needed_dialog_title">Tercih notları etkiler</string>
@@ -479,9 +476,6 @@
     <string name="argument_detected">%s algılandı</string>
     <string name="argument_selected">%s seçildi</string>
     <string name="fixed_width_value">Genişlik (piksel cinsinden)</string>
-    <string name="under">Altında</string>
-    <string name="above">Üzerinde</string>
-    <string name="below">Altında</string>
     <string name="go_to">Git</string>
     <string name="cannot_refile_to_the_same_subtree">Aynı alt ağaca yeniden dosyalanamıyor</string>
     <string name="notification_maximum_priority">Maksimum</string>

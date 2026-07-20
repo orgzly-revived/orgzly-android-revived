@@ -23,14 +23,14 @@
                 android:paddingTop="16dp"
                 app:boxBackgroundMode="none">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/template_description"
+                    android:id="@+id/template_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="@dimen/screen_edge"
                     android:paddingVertical="12dp"
                     android:background="@null"
                     android:inputType="text|textCapSentences"
-                    android:hint="@string/template_description"/>
+                    android:hint="@string/template_name"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <View style="@style/HorizontalDivider" />
@@ -95,41 +95,6 @@
                     android:focusableInTouchMode="false"
                     android:hint="@string/template_target"/>
             </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
-                android:id="@+id/template_target_headline_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <View style="@style/HorizontalDivider" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/template_target_headline_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="8dp"
-                    app:boxBackgroundMode="none"
-                    app:helperTextEnabled="true"
-                    app:helperText="@string/template_target_headline_hint">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/template_target_headline"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="@dimen/screen_edge"
-                        android:paddingVertical="12dp"
-                        android:background="@null"
-                        android:inputType="none"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:cursorVisible="false"
-                        android:clickable="true"
-                        android:hint="@string/template_target_headline"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
 
             <View style="@style/HorizontalDivider" />
 

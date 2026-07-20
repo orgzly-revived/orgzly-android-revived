@@ -331,14 +331,6 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
-    <style name="WhatsNewNotice">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:layout_marginTop">16dp</item>
-    </style>
-
     <style name="WhatsNewVersion">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -433,8 +425,6 @@
     <style name="Fab.JumpToEnd">
         <item name="android:layout_marginBottom">@dimen/fab_stack_spacing</item>
         <item name="android:src">@drawable/ic_arrow_downward_to_bottom</item>
-    </style>
-    <style name="JumpToEnd">
     </style>
 
 
