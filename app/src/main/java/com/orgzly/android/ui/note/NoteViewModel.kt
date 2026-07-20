@@ -22,6 +22,7 @@ import com.orgzly.android.usecase.BookSparseTreeForNote
 import com.orgzly.android.usecase.NoteCreate
 import com.orgzly.android.usecase.NoteDelete
 import com.orgzly.android.usecase.NoteUpdate
+import com.orgzly.android.usecase.NoteUpdateContent
 import com.orgzly.android.usecase.UseCaseRunner
 import com.orgzly.android.util.MiscUtils
 import com.orgzly.org.OrgProperties
@@ -156,6 +157,31 @@ class NoteViewModel(
             priority = priority,
             tags = tags,
             properties = properties)
+    }
+
+    fun updatePayloadContent(content: String) {
+        notePayload = notePayload?.copy(content = content)
+    }
+
+    fun onUserContentChange(content: String) {
+        if (isNew()) {
+            updatePayloadContent(content)
+        } else {
+            App.EXECUTORS.diskIO().execute {
+                catchAndPostError {
+                    UseCaseRunner.run(NoteUpdateContent(noteId, content))
+
+                    App.EXECUTORS.mainThread().execute {
+                        onContentSavedImmediately(content)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun onContentSavedImmediately(content: String) {
+        updatePayloadContent(content)
+        notePayload?.let { originalHash = notePayloadHash(it) }
     }
 
     fun updatePayloadState(state: String?) {

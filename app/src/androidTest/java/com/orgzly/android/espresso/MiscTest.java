@@ -36,6 +36,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.matchesPattern;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
@@ -746,6 +747,26 @@ public class MiscTest extends OrgzlyTest {
             onNoteInBook(1).perform(click());
 
             onView(withId(R.id.content_view)).perform(clickClickableSpan("[ ]"));
+
+            onView(allOf(withId(R.id.content_view), withText(containsString("- [X] Item"))))
+                    .check(matches(isDisplayed()));
+
+            long deadline = SystemClock.uptimeMillis() + 5000;
+            boolean saved = false;
+            while (SystemClock.uptimeMillis() < deadline) {
+                com.orgzly.android.db.entity.Note note = dataRepository.getLastNote("Title");
+                if (note != null && note.getContent() != null && note.getContent().contains("- [X] Item")) {
+                    saved = true;
+                    break;
+                }
+                SystemClock.sleep(50);
+            }
+            assertTrue(saved);
+
+            getInstrumentation().waitForIdleSync();
+
+            pressBack();
+            onNoteInBook(1).perform(click());
 
             onView(allOf(withId(R.id.content_view), withText(containsString("- [X] Item"))))
                     .check(matches(isDisplayed()));
