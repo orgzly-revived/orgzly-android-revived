@@ -25,7 +25,6 @@
     <string name="mark_as_done">Marcar como feito</string>
     <string name="mark_as_done_with_repeater">Reagendar %s</string>
     <string name="reminder_snooze">Adiar</string>
-    <string name="close">Fechar</string>
     <string name="import_">Importar</string>
     <!-- Reserved keyword -->
     <string name="export">Exportar</string>
@@ -99,7 +98,6 @@
     <string name="options_menu_item_search">Busca</string>
     <string name="repos_options_menu_new_repo">Novo repositório</string>
     <string name="book_name_already_exists">Bloco de notas %s já existe.</string>
-    <string name="filter_name_already_exists">Busca com o mesmo nome já existe</string>
     <string name="failed_creating_directory">Falha ao criar a pasta %s</string>
     <string name="version">O que há de novo</string>
     <string name="search_hint">Buscar notas</string>
@@ -113,7 +111,6 @@
     <string name="notebook_imported">Notas importadas</string>
     <string name="book_does_not_exist_anymore">Este caderno não existe mais.</string>
     <string name="note_does_not_exist_anymore">Esta nota não existe mais.</string>
-    <string name="search_does_not_exist_anymore">Esta pesquisa não existe mais.</string>
     <string name="repo_dropbox_button_not_linked">Associar com Dropbox</string>
     <string name="repo_dropbox_button_linked">Desassociar da Dropbox</string>
     <string name="notes_update_needed_dialog_title">Preferência afeta notas</string>
@@ -462,9 +459,6 @@
     <string name="argument_detected">%s detected</string>
     <string name="argument_selected">%s selected</string>
     <string name="fixed_width_value">Width (in pixels)</string>
-    <string name="under">Under</string>
-    <string name="above">Above</string>
-    <string name="below">Below</string>
     <string name="go_to">Go to</string>
     <string name="cannot_refile_to_the_same_subtree">Cannot refile to the same subtree</string>
     <string name="notification_maximum_priority">Maximum</string>

@@ -2,7 +2,12 @@ package com.orgzly.android.ui.capture
 
 import android.content.Context
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -52,7 +57,7 @@ class CaptureTemplateEditFragment : Fragment() {
         } else null
 
         if (existingTemplate != null) {
-            binding.templateDescription.setText(existingTemplate.description)
+            binding.templateName.setText(existingTemplate.name)
             binding.templateTitle.setText(existingTemplate.title)
             binding.templateContent.setText(existingTemplate.content)
             binding.templateTags.setText(existingTemplate.tags)
@@ -191,7 +196,7 @@ class CaptureTemplateEditFragment : Fragment() {
         val templateId = existingTemplateId ?: return
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.delete)
-            .setMessage(binding.templateDescription.text?.toString()?.ifBlank {
+            .setMessage(binding.templateName.text?.toString()?.ifBlank {
                 getString(R.string.capture_template)
             } ?: getString(R.string.capture_template))
             .setPositiveButton(R.string.delete) { _, _ ->
@@ -210,9 +215,9 @@ class CaptureTemplateEditFragment : Fragment() {
     }
 
     private fun saveTemplate(existingId: String?) {
-        val description = binding.templateDescription.text?.toString()?.trim() ?: ""
-        if (description.isBlank()) {
-            binding.templateDescription.error = getString(R.string.cannot_be_empty_short)
+        val name = binding.templateName.text?.toString()?.trim() ?: ""
+        if (name.isBlank()) {
+            binding.templateName.error = getString(R.string.cannot_be_empty_short)
             return
         }
 
@@ -237,7 +242,7 @@ class CaptureTemplateEditFragment : Fragment() {
 
         val template = CaptureTemplate(
             id = existingId ?: java.util.UUID.randomUUID().toString(),
-            description = description,
+            name = name,
             title = binding.templateTitle.text?.toString()?.trim() ?: "",
             content = binding.templateContent.text?.toString()?.trim() ?: "",
             targetBook = selectedBookName,
