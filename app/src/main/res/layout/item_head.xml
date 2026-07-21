@@ -4,6 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/item_head_background"
     android:id="@+id/item_head_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">

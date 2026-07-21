@@ -9,6 +9,8 @@
     <dimen name="item_head_below_title_padding_cozy">1dp</dimen>
     <dimen name="item_head_below_title_padding_compact">0dp</dimen>
 
+    <dimen name="item_head_highlight_width">2dp</dimen>
+
     <dimen name="dropdown_item_height">48dp</dimen>
     <dimen name="dropdown_item_min_width">96dp</dimen>
 
