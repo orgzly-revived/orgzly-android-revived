@@ -584,7 +584,6 @@
     <!-- Sync status -->
     <string name="sync_status_no_change">Бяз зьменаў</string>
     <string name="sync_status_no_link_and_multiple_repos">Нататнік ня мае спасылкі, ды маюцца некалькі рэпазітараў</string>
-    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">Нататнік ня мае спасылкі, ды маюцца адзін ці болей аддаленых нататнікаў з такім жа імем</string>
     <string name="sync_status_dummy_without_link_and_multiple_rooks">Нататнік ня мае спасылкі, ды маюцца мноства аддаленых нататнікаў з такім жа імем</string>
     <string name="sync_status_no_book_multiple_rooks">Нататнік не існуе, ды маюцца мноства аддаленых нататнікаў з такім жа імем</string>
     <string name="sync_status_rook_no_longer_exists">Аддалены файл ужо не існуе, спасылка на рэпазітар прыбраная. Задайце спасылку, калі хочаце сынхранізаваць з рэпазітарам.</string>

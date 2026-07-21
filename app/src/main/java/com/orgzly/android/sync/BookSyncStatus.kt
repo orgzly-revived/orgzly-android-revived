@@ -7,7 +7,6 @@ import com.orgzly.android.App
 enum class BookSyncStatus {
     NO_CHANGE,
 
-    BOOK_WITHOUT_LINK_AND_ONE_OR_MORE_ROOKS_EXIST,
     DUMMY_WITHOUT_LINK_AND_MULTIPLE_ROOKS,
     NO_BOOK_MULTIPLE_ROOKS, // TODO: This should never be the case, as we already add dummy (dummy = there was no book)
     BOOK_WITH_LINK_AND_ROOK_EXISTS_BUT_LINK_POINTING_TO_DIFFERENT_ROOK,
@@ -41,9 +40,6 @@ enum class BookSyncStatus {
         when (this) {
             NO_CHANGE ->
                 return context.getString(R.string.sync_status_no_change)
-
-            BOOK_WITHOUT_LINK_AND_ONE_OR_MORE_ROOKS_EXIST ->
-                return context.getString(R.string.sync_status_book_without_link_and_one_or_more_rooks_exist)
 
             DUMMY_WITHOUT_LINK_AND_MULTIPLE_ROOKS ->
                 return context.getString(R.string.sync_status_dummy_without_link_and_multiple_rooks)

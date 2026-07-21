@@ -565,7 +565,6 @@
     <!-- Sync status -->
     <string name="sync_status_no_change">Nenhuma mudança</string>
     <string name="sync_status_no_link_and_multiple_repos">O notebook não tem link e existem vários repositórios</string>
-    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">O notebook não tem link e existe um ou mais notebooks remotos com o mesmo nome</string>
     <string name="sync_status_dummy_without_link_and_multiple_rooks">O notebook não tem link e existem vários notebooks remotos com o mesmo nome</string>
     <string name="sync_status_no_book_multiple_rooks">Não existe nenhum notebook e existem vários notebooks remotos com o mesmo nome</string>
     <string name="sync_status_rook_no_longer_exists">O arquivo remoto não existe mais; link do repositório removido. Defina um link se quiser sincronizar com um repositório.</string>

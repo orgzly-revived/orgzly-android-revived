@@ -232,7 +232,7 @@ class SyncTest {
 
         book = dataRepository.getBookView("book")!!
         assertEquals(
-            BookSyncStatus.BOOK_WITHOUT_LINK_AND_ONE_OR_MORE_ROOKS_EXIST.toString(),
+            BookSyncStatus.ONLY_BOOK_WITHOUT_LINK.toString(),
             book.book.syncStatus
         )
         assertNull(book.linkRepo)
@@ -272,7 +272,7 @@ class SyncTest {
 
         book = dataRepository.getBookView("book")!!
         assertEquals(
-            BookSyncStatus.BOOK_WITHOUT_LINK_AND_ONE_OR_MORE_ROOKS_EXIST.toString(),
+            BookSyncStatus.ONLY_BOOK_WITHOUT_LINK.toString(),
             book.book.syncStatus
         )
         assertNull(book.linkRepo)

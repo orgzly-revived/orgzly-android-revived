@@ -588,7 +588,6 @@
     <!-- Sync status -->
     <string name="sync_status_no_change">Be pokyčio</string>
     <string name="sync_status_no_link_and_multiple_repos">Užrašinė nėra susieta ir yra kelios saugyklos</string>
-    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">Užrašinė nėra susieta ir yra viena ar daugiau nuotolinių užrašinių su tokiu pat vardu</string>
     <string name="sync_status_dummy_without_link_and_multiple_rooks">Užrašinė nėra susieta ir yra nuotolinių užrašinių su tokiu pat vardu</string>
     <string name="sync_status_no_book_multiple_rooks">Nėra užrašinės ir yra nuotolinės užrašinės su tokiu pat vardu</string>
     <string name="sync_status_rook_no_longer_exists">Nuotolinis failas nebeegzistuoja; saugyklos siejimas pašalintas. Nustatykite siejimą, jei norite sinchronizuoti su saugykla.</string>

@@ -503,7 +503,6 @@
     <string name="error_file_matches_repo_ignore_rule">خطأ: اسم ملف المستودع يطابق قاعدة في %s</string>
     <string name="sync_status_no_change">لا يوجد تغيير</string>
     <string name="sync_status_no_link_and_multiple_repos">دفتر الملاحظات لا يحتوي على رابط وتوجد مستودعات متعددة</string>
-    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">دفتر الملاحظات لا يحتوي على رابط وتوجد دفتر (دفاتر) ملاحظات بعيدة بنفس الاسم</string>
     <string name="sync_status_dummy_without_link_and_multiple_rooks">دفتر الملاحظات لا يحتوي على رابط وتوجد دفاتر ملاحظات بعيدة متعددة بنفس الاسم</string>
     <string name="sync_status_loaded">تم التحميل من %s</string>
     <string name="sync_status_saved">تم الحفظ إلى %s</string>

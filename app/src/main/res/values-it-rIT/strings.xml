@@ -559,7 +559,6 @@
     <string name="ssh_key_error_dialog_text">Messaggio: \n</string>
     <string name="sync_status_no_change">Immutato</string>
     <string name="sync_status_no_link_and_multiple_repos">Il taccuino non ha link ed esiste più di un repository</string>
-    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">Il taccuino non ha link ed esiste un taccuino remoto (o più di uno) con lo stesso identico nome</string>
     <string name="sync_status_dummy_without_link_and_multiple_rooks">Il taccuino non ha link e ci sono diversi taccuini remoti con lo stesso identico nome</string>
     <string name="sync_status_no_book_multiple_rooks">Taccuino inesistente e ci sono diversi taccuini remoti con lo stesso identico nome</string>
     <string name="sync_status_rook_no_longer_exists">Il file remoto non esiste più; link al repository rimosso. Definisci un link se vuoi sincronizzare con un repository.</string>

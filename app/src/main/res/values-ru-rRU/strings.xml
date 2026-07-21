@@ -595,7 +595,6 @@
     <!-- Sync status -->
     <string name="sync_status_no_change">Без изменений</string>
     <string name="sync_status_no_link_and_multiple_repos">Блокнот не имеет ссылки и несколько репозиториев существуют</string>
-    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">Блокнот не имеет ссылки и существует один или несколько удаленных блокнотов с таким же именем</string>
     <string name="sync_status_dummy_without_link_and_multiple_rooks">Блокнот не имеет ссылки и существует несколько удаленных блокнотов с одинаковым именем</string>
     <string name="sync_status_no_book_multiple_rooks">Нет блокнотов и нескольких удаленных блокнотов с одинаковым именем</string>
     <string name="sync_status_rook_no_longer_exists">Удаленный файл больше не существует; ссылка на репозиторий удалена. Установите ссылку, если хотите синхронизировать с репозиторием.</string>

@@ -573,7 +573,6 @@
     <!-- Sync status -->
     <string name="sync_status_no_change">Oförändrad</string>
     <string name="sync_status_no_link_and_multiple_repos">Anteckningsboken saknar länk och det finns flera lagringsplatser</string>
-    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">Anteckningsboken saknar länk och det finns en eller flera fjärranteckningsböcker med samma namn</string>
     <string name="sync_status_dummy_without_link_and_multiple_rooks">Anteckningsboken saknar länk och det finns flera fjärranteckningsböcker med samma namn</string>
     <string name="sync_status_no_book_multiple_rooks">Ingen lokal anteckningsbok och det finns flera fjärranteckningsböcker med samma namn</string>
     <string name="sync_status_rook_no_longer_exists">Fjärrfilen finns inte längre; länken till lagringsplatsen har tagits bort. Länka anteckningsboken om du vill synka den till en lagringsplats.</string>

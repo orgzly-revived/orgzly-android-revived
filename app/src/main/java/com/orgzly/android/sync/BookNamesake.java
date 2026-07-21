@@ -205,12 +205,10 @@ public class BookNamesake {
                 }
             }
 
-        } else { /* Local book without link. */
-
-            if (! book.getBook().isDummy()) {
-                status = BookSyncStatus.BOOK_WITHOUT_LINK_AND_ONE_OR_MORE_ROOKS_EXIST;
-
-            } else {
+        } else {
+            /* The local book has no repository link. Only interesting if it's a
+               dummy, i.e. in the process of being added from the repo. */
+            if (book.getBook().isDummy()) {
                 if (versionedRooks.size() == 1) {
                     status = BookSyncStatus.DUMMY_WITHOUT_LINK_AND_ONE_ROOK;
                 } else {

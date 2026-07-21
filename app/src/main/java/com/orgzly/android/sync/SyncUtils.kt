@@ -114,7 +114,6 @@ object SyncUtils {
 
             /* Error states */
 
-            BookSyncStatus.BOOK_WITHOUT_LINK_AND_ONE_OR_MORE_ROOKS_EXIST,
             BookSyncStatus.DUMMY_WITHOUT_LINK_AND_MULTIPLE_ROOKS,
             BookSyncStatus.NO_BOOK_MULTIPLE_ROOKS,
             BookSyncStatus.BOOK_WITH_LINK_AND_ROOK_EXISTS_BUT_LINK_POINTING_TO_DIFFERENT_ROOK,

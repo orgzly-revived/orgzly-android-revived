@@ -566,7 +566,6 @@
     <!-- Sync status -->
     <string name="sync_status_no_change">Değişiklik yok</string>
     <string name="sync_status_no_link_and_multiple_repos">Not defterinin bağlantısı yok ve birden fazla depo mevcut</string>
-    <string name="sync_status_book_without_link_and_one_or_more_rooks_exist">Not defterinin bağlantısı yok ve aynı ada sahip bir veya daha fazla uzak not defteri mevcut</string>
     <string name="sync_status_dummy_without_link_and_multiple_rooks">Not defterinin bağlantısı yok ve aynı ada sahip birden fazla uzak not defteri mevcut</string>
     <string name="sync_status_no_book_multiple_rooks">Aynı ada sahip not defteri ve birden fazla uzak not defteri mevcut değil</string>
     <string name="sync_status_rook_no_longer_exists">Uzak dosya artık mevcut değil; depo bağlantısı kaldırıldı. Bir depoyla senkronize etmek istiyorsan bir bağlantı ayarla</string>
