@@ -117,8 +117,8 @@ class SyncTest {
 
     @Test
     fun testSync1() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
-        testUtils.setupBook("todo", "hum hum")
+        val repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
+        testUtils.setupBook("todo", "hum hum", repo)
 
         assertEquals(1, dataRepository.getRepos().size)
         assertEquals(1, dataRepository.getBooks().size)
@@ -195,6 +195,12 @@ class SyncTest {
         assertEquals(2, dataRepository.getBooks().size)
     }
 
+    /**
+    * If the URL of a repository is changed, then the repository link and
+    * "synced to" information of its linked books should be removed. Any subsequent
+    * syncing should NOT automatically link the books to any repository; all
+    * repository linking must be done manually by the user.
+    */
     @Test
     fun testRenameUsedRepo() {
         val repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
@@ -223,9 +229,8 @@ class SyncTest {
             BookSyncStatus.ONLY_BOOK_WITHOUT_LINK.toString(),
             book.book.syncStatus
         )
-        assertEquals("mock://repo-b", book.linkRepo?.url)
-        assertEquals("mock://repo-b", book.syncedTo?.repoUri.toString())
-        assertEquals("mock://repo-b/book.org", book.syncedTo?.uri.toString())
+        assertNull(book.linkRepo)
+        assertNull(book.syncedTo)
 
         testUtils.renameRepo("mock://repo-b", "mock://repo-a")
         testUtils.sync()
@@ -239,6 +244,9 @@ class SyncTest {
         assertNull(book.syncedTo)
     }
 
+    /**
+    * No auto-linking should happen.
+    */
     @Test
     fun testDeletingUsedRepo() {
         var book: BookView
@@ -262,9 +270,8 @@ class SyncTest {
             BookSyncStatus.ONLY_BOOK_WITHOUT_LINK.toString(),
             book.book.syncStatus
         )
-        assertEquals("mock://repo-b", book.linkRepo?.url)
-        assertEquals("mock://repo-b", book.syncedTo?.repoUri.toString())
-        assertEquals("mock://repo-b/book.org", book.syncedTo?.uri.toString())
+        assertNull(book.linkRepo)
+        assertNull(book.syncedTo)
 
         testUtils.deleteRepo("mock://repo-b")
         testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
@@ -338,6 +345,9 @@ class SyncTest {
         )
     }
 
+    /**
+    * No auto-linking should happen.
+    */
     @Test
     fun testOnlyBookWithoutLinkAndOneRepo() {
         val repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
@@ -350,15 +360,18 @@ class SyncTest {
             book.book.syncStatus
         )
         assertEquals(
-            context.getString(R.string.sync_status_saved, repo.url),
+            context.getString(R.string.sync_status_only_book_without_link),
             book.book.lastAction?.message
         )
-        assertEquals(repo.url, book.linkRepo?.url)
+        assertNull(book.linkRepo)
         val syncRepo = testUtils.repoInstance(RepoType.MOCK, repo.url)
-        assertEquals(1, syncRepo.books.size)
-        assertEquals(syncRepo.books[0].toString(), book.syncedTo.toString())
+        assertEquals(0, syncRepo.books.size)
+        assertNull(book.syncedTo)
     }
 
+    /**
+    * No auto-linking should happen.
+    */
     @Test
     fun testOnlyBookWithoutLinkAndMultipleRepos() {
         testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
@@ -468,8 +481,11 @@ class SyncTest {
         assertTrue(book.isDummy)
     }
 
+    /**
+    * No auto-linking should happen.
+    */
     @Test
-    fun testDeletedRepoShouldStayAsBookLink() {
+    fun testDeleteUsedRepoAndAddNewOne() {
         val repoA = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
         testUtils.setupRepo(RepoType.MOCK, "mock://repo-b")
         testUtils.setupRook(repoA, "mock://repo-a/booky.org", "", "1abcdef", 1400067155)
@@ -502,8 +518,8 @@ class SyncTest {
         )
 
         assertFalse(book.book.isDummy)
-        assertEquals("mock://repo-c", book.linkRepo?.url)
-        assertEquals("mock://repo-c", book.syncedTo?.repoUri.toString())
+        assertNull(book.linkRepo)
+        assertNull(book.syncedTo)
     }
 
     @Test
@@ -521,14 +537,14 @@ class SyncTest {
 
     @Test
     fun testMockFileRename() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
-        val repo = testUtils.repoInstance(RepoType.MOCK, "mock://repo-a")
+        val repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
+        val syncRepo = testUtils.repoInstance(RepoType.MOCK, "mock://repo-a")
 
-        val book = testUtils.setupBook("Booky", "1 2 3")
+        val book = testUtils.setupBook("Booky", "1 2 3", repo)
 
         testUtils.sync()
 
-        var vrooks = repo.books
+        var vrooks = syncRepo.books
 
         assertEquals(1, vrooks.size)
         assertEquals("Booky", BookName.fromRook(vrooks[0]).name)
@@ -540,9 +556,9 @@ class SyncTest {
         dataRepository.renameBook(book, "BookyRenamed")
 
         // Rename rook
-        repo.renameBook(Uri.parse("mock://repo-a/Booky.org"), "BookyRenamed")
+        syncRepo.renameBook(Uri.parse("mock://repo-a/Booky.org"), "BookyRenamed")
 
-        vrooks = repo.books
+        vrooks = syncRepo.books
 
         assertEquals(1, vrooks.size)
         assertEquals("BookyRenamed", BookName.fromRook(vrooks[0]).name)
@@ -588,8 +604,8 @@ class SyncTest {
 
     @Test
     fun testRenameSyncedBook() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
-        testUtils.setupBook("Booky", "1 2 3")
+        val repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
+        testUtils.setupBook("Booky", "1 2 3", repo)
 
         testUtils.sync()
 
@@ -610,8 +626,8 @@ class SyncTest {
 
     @Test
     fun testRenameBookToNameWithSpace() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
-        testUtils.setupBook("Booky", "1 2 3")
+        val repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
+        testUtils.setupBook("Booky", "1 2 3", repo)
 
         testUtils.sync()
 
@@ -693,10 +709,11 @@ class SyncTest {
         // Add ignore rules using repo properties (N.B. MockRepo-specific solution)
         val repoPropsMap = hashMapOf(MockRepo.IGNORE_RULES_PREF_KEY to ignoreRules)
         val repoWithProps = RepoWithProps(repo, repoPropsMap)
-        dataRepository.updateRepo(repoWithProps)
+        val newRepoId = dataRepository.updateRepo(repoWithProps)
+        val updatedRepo = dataRepository.getRepo(newRepoId)!!
 
         // Create book and sync it
-        testUtils.setupBook("good name", "")
+        testUtils.setupBook("good name", "", updatedRepo)
         testUtils.sync()
         val bookView = dataRepository.getBookView("good name")!!
 
@@ -719,18 +736,20 @@ class SyncTest {
         // Add ignore rules using repo properties (N.B. MockRepo-specific solution)
         val repoPropsMap = hashMapOf(MockRepo.IGNORE_RULES_PREF_KEY to ignoreRules)
         val repoWithProps = RepoWithProps(repo, repoPropsMap)
-        dataRepository.updateRepo(repoWithProps)
+        val newRepoId = dataRepository.updateRepo(repoWithProps)
+        val updatedRepo = dataRepository.getRepo(newRepoId)!!
 
         // Create book and sync it
         testUtils.setupBook("booky", "")
-        val exception = assertThrows(IOException::class.java) { testUtils.syncOrThrow() }
+        val book = dataRepository.getBook("booky")!!
+        val exception = assertThrows(IOException::class.java) { dataRepository.setLink(book.id, updatedRepo) }
         assertTrue(exception.message?.contains("matches a rule in .orgzlyignore") == true)
     }
 
     @Test
     fun testForceLoadBookInSubfolder() {
         val repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
-        val bookView = testUtils.setupBook("a folder/a book", "content")
+        val bookView = testUtils.setupBook("a folder/a book", "content", repo)
         testUtils.sync()
         var books = dataRepository.getBooks()
         assertEquals(1, books.size)
