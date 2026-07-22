@@ -453,7 +453,8 @@ class BooksTest : OrgzlyTest() {
 
     @Test
     fun testSetLinkOnSingleBookCurrentRepoIsSelected() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo")
+        val repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo")
+        dataRepository.setLink(dataRepository.getBook("book-1")!!.id, repo)
         EspressoUtils.sync()
         EspressoUtils.onBook(0, R.id.item_book_link_repo)
             .check(ViewAssertions.matches(ViewMatchers.withText("mock://repo")))
@@ -473,7 +474,9 @@ class BooksTest : OrgzlyTest() {
      */
     @Test
     fun testSetLinkOnMultipleBooksNoRepoIsSelected() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo")
+        val repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo")
+        dataRepository.setLink(dataRepository.getBook("book-1")!!.id, repo)
+        dataRepository.setLink(dataRepository.getBook("book-2")!!.id, repo)
         EspressoUtils.sync()
         EspressoUtils.onBook(0, R.id.item_book_link_repo)
             .check(ViewAssertions.matches(ViewMatchers.withText("mock://repo")))
@@ -490,7 +493,8 @@ class BooksTest : OrgzlyTest() {
 
     @Test
     fun testDeleteSingleBookLinkedUrlIsShown() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo")
+        val repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo")
+        dataRepository.setLink(dataRepository.getBook("book-1")!!.id, repo)
         EspressoUtils.sync()
         EspressoUtils.onBook(0, R.id.item_book_link_repo)
             .check(ViewAssertions.matches(ViewMatchers.withText("mock://repo")))
@@ -505,7 +509,9 @@ class BooksTest : OrgzlyTest() {
 
     @Test
     fun testDeleteMultipleBooksLinkedUrlIsNotShown() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo")
+        val repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo")
+        dataRepository.setLink(dataRepository.getBook("book-1")!!.id, repo)
+        dataRepository.setLink(dataRepository.getBook("book-2")!!.id, repo)
         EspressoUtils.sync()
         EspressoUtils.onBook(0, R.id.item_book_link_repo)
             .check(ViewAssertions.matches(ViewMatchers.withText("mock://repo")))
@@ -533,7 +539,9 @@ class BooksTest : OrgzlyTest() {
 
     @Test
     fun testDeleteMultipleBooksAndRooks() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo")
+        val repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo")
+        dataRepository.setLink(dataRepository.getBook("book-1")!!.id, repo)
+        dataRepository.setLink(dataRepository.getBook("book-2")!!.id, repo)
         EspressoUtils.sync()
         EspressoUtils.onBook(0, R.id.item_book_link_repo)
             .check(ViewAssertions.matches(ViewMatchers.withText("mock://repo")))

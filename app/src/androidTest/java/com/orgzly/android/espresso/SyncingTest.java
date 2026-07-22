@@ -179,9 +179,9 @@ public class SyncingTest extends OrgzlyTest {
 
     @Test
     public void testForceLoadingMultipleBooks() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
-        testUtils.setupBook("book-one", "First book used for testing\n* Note A");
-        testUtils.setupBook("book-two", "Second book used for testing\n* Note 1\n* Note 2");
+        Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
+        testUtils.setupBook("book-one", "First book used for testing\n* Note A", repo);
+        testUtils.setupBook("book-two", "Second book used for testing\n* Note 1\n* Note 2", repo);
         scenario = ActivityScenario.launch(MainActivity.class);
 
         sync(); // To ensure that all books have repo links
@@ -265,12 +265,12 @@ public class SyncingTest extends OrgzlyTest {
 
     @Test
     public void testSavingAndLoadingBookBySyncing() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
+        Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
         testUtils.setupBook("booky",
                 "Sample book used for tests\n" +
                 "* Note #1.\n" +
-                "* Note #2.\n" +
-                "");
+                "* Note #2.\n",
+                repo);
         scenario = ActivityScenario.launch(MainActivity.class);
 
         sync();
@@ -304,8 +304,8 @@ public class SyncingTest extends OrgzlyTest {
                 "* Note #8.\n" +
                 "**** Note #9.\n" +
                 "** ANTIVIVISECTIONISTS Note #10.\n" +
-                "** Note #11. DIE PERSER (Ü: Andreas Röhler) Schauspiel 1 D 3 H Stand:\n" +
-                "");
+                "** Note #11. DIE PERSER (Ü: Andreas Röhler) Schauspiel 1 D 3 H Stand:\n",
+                repo);
         scenario = ActivityScenario.launch(MainActivity.class);
 
         sync();
@@ -331,7 +331,7 @@ public class SyncingTest extends OrgzlyTest {
 
     @Test
     public void testBookParsingAfterKeywordsSettingChange() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
+        Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
         testUtils.setupBook("booky",
                 "Sample book used for tests\n" +
                 "* Note #1.\n" +
@@ -344,8 +344,8 @@ public class SyncingTest extends OrgzlyTest {
                 "* Note #8.\n" +
                 "**** Note #9.\n" +
                 "** ANTIVIVISECTIONISTS Note #10.\n" +
-                "** Note #11. DIE PERSER (Ü: Andreas Röhler) Schauspiel 1 D 3 H Stand:\n" +
-                "");
+                "** Note #11. DIE PERSER (Ü: Andreas Röhler) Schauspiel 1 D 3 H Stand:\n",
+                repo);
         scenario = ActivityScenario.launch(MainActivity.class);
 
         sync();
@@ -615,7 +615,7 @@ public class SyncingTest extends OrgzlyTest {
         onView(allOf(withText("booky"), isDisplayed())).perform(longClick());
         contextualToolbarOverflowMenu().perform(click());
         onView(withText(R.string.books_context_menu_item_set_link)).perform(click());
-        onView(withText(R.string.remove_notebook_link)).perform(click());
+        onView(withText(R.string.no_link)).perform(click());
 
         onBook(0, R.id.item_book_link_container).check(matches(not(isDisplayed())));
     }
@@ -642,8 +642,8 @@ public class SyncingTest extends OrgzlyTest {
 
     @Test
     public void testRenameModifiedBook() {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
-        testUtils.setupBook("booky", "* Note");
+        Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
+        testUtils.setupBook("booky", "* Note", repo);
         scenario = ActivityScenario.launch(MainActivity.class);
 
         sync();
@@ -711,8 +711,8 @@ public class SyncingTest extends OrgzlyTest {
 
     @Test
     public void testDeleteNonExistentRemoteFile() throws IOException {
-        testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
-        testUtils.setupBook("booky", "Sample book used for tests");
+        Repo repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a");
+        testUtils.setupBook("booky", "Sample book used for tests", repo);
         scenario = ActivityScenario.launch(MainActivity.class);
 
         sync();

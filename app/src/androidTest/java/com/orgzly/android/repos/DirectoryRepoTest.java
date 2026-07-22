@@ -122,8 +122,8 @@ public class DirectoryRepoTest extends OrgzlyTest {
     public void testRenameBook() {
         BookView bookView;
 
-        testUtils.setupRepo(RepoType.DIRECTORY, repoUriString);
-        testUtils.setupBook("booky", "");
+        Repo repo = testUtils.setupRepo(RepoType.DIRECTORY, repoUriString);
+        testUtils.setupBook("booky", "", repo);
 
         testUtils.sync();
         bookView = dataRepository.getBookView("booky");

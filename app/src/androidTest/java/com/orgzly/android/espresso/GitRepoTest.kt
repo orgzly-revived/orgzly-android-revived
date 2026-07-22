@@ -49,7 +49,7 @@ class GitRepoTest : OrgzlyTest() {
         gitWorkingTree = File(gitPreferences.repositoryFilepath())
         gitWorkingTree.mkdirs()
         GitRepo.ensureRepositoryExists(gitPreferences, true, null)
-        testUtils.setupRepo(RepoType.GIT, repo.url)
+        repo = testUtils.setupRepo(RepoType.GIT, repo.url)
     }
 
     @After
@@ -65,9 +65,9 @@ class GitRepoTest : OrgzlyTest() {
      */
     @Test
     fun testDeleteMultipleBooks() {
-        testUtils.setupBook("book-1", "...")
-        testUtils.setupBook("book-2", "...")
-        testUtils.setupBook("book-3", "...")
+        testUtils.setupBook("book-1", "...", repo)
+        testUtils.setupBook("book-2", "...", repo)
+        testUtils.setupBook("book-3", "...", repo)
         assertEquals(3, dataRepository.getBooks().size)
         ActivityScenario.launch(MainActivity::class.java).use {
             sync()
