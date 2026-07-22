@@ -34,6 +34,14 @@
             style="@style/WhatsNewChange"
             app:text="Fix cut notes behavior to eliminate risk of data loss." />
 
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Hide “Refine Search” button on saved search queries." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Save checkbox toggles immediately in single note view." />
+
         <TextView
             style="@style/WhatsNewVersion"
             android:text="v1.22.0"
