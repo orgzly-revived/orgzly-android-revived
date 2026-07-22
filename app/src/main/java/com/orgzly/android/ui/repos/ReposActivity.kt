@@ -225,7 +225,12 @@ class ReposActivity : CommonActivity(), AdapterView.OnItemClickListener, Activit
             }
 
             R.id.repos_options_menu_item_new_git -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
+                val declaresManageStorage = packageManager.getPackageInfo(
+                    packageName, PackageManager.GET_PERMISSIONS
+                ).requestedPermissions?.contains(Manifest.permission.MANAGE_EXTERNAL_STORAGE) == true
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                    declaresManageStorage &&
+                    !Environment.isExternalStorageManager()) {
                     val uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
                     startActivity(
                         Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri))
