@@ -545,4 +545,9 @@
     <string name="insert_timestamp">插入时间戳</string>
     <string name="failed_sharing_note">未能分享笔记</string>
     <string name="export_settings_to_note">导出设定至笔记</string>
+    <string name="none">无</string>
+    <string name="search_filter_date_today">今日</string>
+    <string name="search_filter_date_this_week">本周</string>
+    <string name="search_filter_state_none">无状态</string>
+    <string name="search_filter_default_sort_order">默认顺序</string>
 </resources>
