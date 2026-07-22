@@ -820,8 +820,6 @@
     <string name="capture_template_numbered">Template %1$d</string>
     <string name="edit_capture_template">Edit template</string>
     <string name="capture_template_target_book_not_found">Notebook \"%1$s\" not found, using default</string>
-    <string name="template_target_headline">Headline</string>
-    <string name="template_target_headline_hint">e.g. Inbox or Projects/Active</string>
     <string name="template_select_this_headline">Select this headline</string>
     <string name="template_new_headline">New headline</string>
     <string name="template_new_headline_name">Headline name</string>
