@@ -676,4 +676,5 @@
     <string name="template_headline_no_slash">Rubriken får inte innehålla \"/\".</string>
     <string name="template_headline_ambiguous">Det finns flera rubriker med samma namn. Din anteckning kan placeras på fel ställe.</string>
     <string name="external_files_access_is_no_longer_allowed">Åtkomst till externa filer tillåts inte längre.</string>
+    <string name="template_name">Namn</string>
 </resources>
