@@ -677,4 +677,5 @@
     <string name="template_headline_ambiguous">Det finns flera rubriker med samma namn. Din anteckning kan placeras på fel ställe.</string>
     <string name="external_files_access_is_no_longer_allowed">Åtkomst till externa filer tillåts inte längre.</string>
     <string name="template_name">Namn</string>
+    <string name="template_tokens_hint" formatted="false">Variabler: %t/%T (datum/tid, aktiv) %u/%U (datum/tid, inaktiv) %c (urklipp)</string>
 </resources>
