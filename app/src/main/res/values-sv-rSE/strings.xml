@@ -653,7 +653,6 @@
     <string name="no_capture_templates">Det finns inga mallar.</string>
     <string name="capture_template">Ny anteckningsmall</string>
     <string name="widget_capture_template_default_note">Vanlig anteckning</string>
-    <string name="template_description">Beskrivning</string>
     <string name="template_title">Rubrik</string>
     <string name="template_content">Innehåll</string>
     <string name="template_target">Placering</string>
