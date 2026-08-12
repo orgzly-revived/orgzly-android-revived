@@ -232,13 +232,13 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
         } else {
             File(Environment.getExternalStorageDirectory().path)
         }
-        val orgzlyGitPath = File(baseDir, "orgzly-git")
-        var success = false
-        try {
-            success = orgzlyGitPath.mkdirs()
-        } catch(error: SecurityException) {}
-        if (success || (orgzlyGitPath.exists() && orgzlyGitPath.list().size == 0)) {
-            binding.activityRepoGitDirectory.setText(orgzlyGitPath.path)
+        // Find an available directory name: orgzly-git, orgzly-git-2, orgzly-git-3, ...
+        val candidate = generateSequence(1) { it + 1 }
+            .map { n -> File(baseDir, if (n == 1) "orgzly-git" else "orgzly-git-$n") }
+            .first { !it.exists() || it.list()?.isEmpty() != false }
+        val created = try { candidate.mkdirs() } catch (_: SecurityException) { false }
+        if (created || (candidate.exists() && candidate.list()?.isEmpty() != false)) {
+            binding.activityRepoGitDirectory.setText(candidate.path)
         }
     }
 
@@ -307,7 +307,7 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
                         getString(R.string.git_clone_error_invalid_target_dir)
                     return
                 }
-                if (targetDirectory.list()!!.isNotEmpty()) {
+                if (targetDirectory.list()?.isNotEmpty() == true) {
                     binding.activityRepoGitDirectoryLayout.error =
                         getString(R.string.git_clone_error_target_not_empty)
                     return
