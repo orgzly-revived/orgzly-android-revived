@@ -59,6 +59,7 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
             viewModelFactory,
             requireArguments().getString(ARG_QUERY) ?: "",
             requireArguments().getBoolean(ARG_IS_RAW_QUERY, false),
+            requireArguments().getBoolean(ARG_FORCE_HIDE_REFINE_BUTTON, false),
             QueryViewModelOwner.SEARCH,
             requireContext()
         )
@@ -296,6 +297,8 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
                     topToolbarToDefault()
                     bottomToolbarToDefault()
 
+                    setupCaptureFab(binding.captureFab)
+
                     sharedMainActivityViewModel.unlockDrawer()
 
                     appBarBackPressHandler.isEnabled = false
@@ -304,6 +307,8 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
                 APP_BAR_SELECTION_MODE -> {
                     topToolbarToMainSelection()
                     bottomToolbarToMainSelection()
+
+                    hideCaptureFab(binding.captureFab)
 
                     sharedMainActivityViewModel.lockDrawer()
 
@@ -360,7 +365,12 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
         }
 
         @JvmStatic
-        fun getInstance(query: String, queryName: String? = null, isRawQuery: Boolean = false): SearchFragment {
+        fun getInstance(
+            query: String,
+            queryName: String? = null,
+            isRawQuery: Boolean = false,
+            forceHideRefineButton: Boolean = false,
+        ): SearchFragment {
             val fragment = SearchFragment()
 
             val args = Bundle()
@@ -369,6 +379,7 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
             if (queryName != null) {
                 args.putString(ARG_QUERY_NAME, queryName)
             }
+            args.putBoolean(ARG_FORCE_HIDE_REFINE_BUTTON, forceHideRefineButton)
             fragment.arguments = args
 
             return fragment

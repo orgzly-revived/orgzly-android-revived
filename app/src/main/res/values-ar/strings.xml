@@ -17,12 +17,10 @@
     <string name="mark_as_done">وضع علامة تم</string>
     <string name="mark_as_done_with_repeater">إعادة جدولة %s</string>
     <string name="reminder_snooze">غفوة</string>
-    <string name="close">إغلاق</string>
     <string name="import_">استيراد</string>
     <string name="export">تصدير</string>
     <string name="note">ملاحظة</string>
     <string name="property">خاصية</string>
-    <string name="below">أدناه</string>
     <string name="import_as">استيراد كـ…</string>
     <string name="new_notebook">دفتر ملاحظات جديد</string>
     <string name="new_folder">مجلد جديد</string>
@@ -91,7 +89,6 @@
     <string name="options_menu_item_search">بحث</string>
     <string name="repos_options_menu_new_repo">مستودع جديد</string>
     <string name="book_name_already_exists">دفتر الملاحظات %s موجود بالفعل</string>
-    <string name="filter_name_already_exists">بحث بنفس الاسم موجود بالفعل</string>
     <string name="failed_creating_directory">فشل إنشاء الدليل %s</string>
     <string name="version">ما الجديد</string>
     <string name="search_hint">البحث في الملاحظات</string>
@@ -105,7 +102,6 @@
     <string name="notebook_imported">تم استيراد دفتر الملاحظات</string>
     <string name="book_does_not_exist_anymore">دفتر الملاحظات هذا لم يعد موجودًا.</string>
     <string name="note_does_not_exist_anymore">هذه الملاحظة لم تعد موجودة.</string>
-    <string name="search_does_not_exist_anymore">هذا البحث لم يعد موجودًا.</string>
     <string name="repo_dropbox_button_not_linked">الربط بدروب بوكس</string>
     <string name="repo_dropbox_button_linked">إلغاء الربط من دروب بوكس</string>
     <string name="next_week">الأسبوع القادم</string>
@@ -419,8 +415,6 @@
     <string name="argument_detected">تم اكتشاف %s</string>
     <string name="argument_selected">تم تحديد %s</string>
     <string name="fixed_width_value">العرض (بالبكسل)</string>
-    <string name="under">تحت</string>
-    <string name="above">فوق</string>
     <string name="go_to">انتقال إلى</string>
     <string name="cannot_refile_to_the_same_subtree">لا يمكن إعادة الترتيب إلى نفس الفرع الفرعي</string>
     <string name="notification_maximum_priority">قصوى</string>

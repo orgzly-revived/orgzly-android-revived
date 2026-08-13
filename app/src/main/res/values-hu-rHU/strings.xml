@@ -25,7 +25,6 @@
     <string name="mark_as_done">Késznek jelölés</string>
     <string name="mark_as_done_with_repeater">%s átütemezése</string>
     <string name="reminder_snooze">Szundi</string>
-    <string name="close">Bezárás</string>
     <string name="import_">Betöltés</string>
     <!-- Reserved keyword -->
     <string name="export">Mentés</string>
@@ -99,7 +98,6 @@
     <string name="options_menu_item_search">Keresés</string>
     <string name="repos_options_menu_new_repo">Új tároló</string>
     <string name="book_name_already_exists">%s jegyzetfüzet már létezik.</string>
-    <string name="filter_name_already_exists">Ugyenezzel a névvel már van keresés</string>
     <string name="failed_creating_directory">Nem sikerült létrehozni e könyvtárat: %s</string>
     <string name="version">Mi újság</string>
     <string name="search_hint">Keresés a jegyzetekben</string>
@@ -113,7 +111,6 @@
     <string name="notebook_imported">Jegyzetfüzet betöltve</string>
     <string name="book_does_not_exist_anymore">Ez a jegyzetfüzet már nem létezik.</string>
     <string name="note_does_not_exist_anymore">Ez a bejegyzés már nem létezik.</string>
-    <string name="search_does_not_exist_anymore">Ilyen keresés már nem létezik.</string>
     <string name="repo_dropbox_button_not_linked">Kapcsolódás a Dropbox-hoz</string>
     <string name="repo_dropbox_button_linked">Leválasztás a Dropbox-ról</string>
     <string name="notes_update_needed_dialog_title">A beállítás hatással van bejegyzésekre</string>
@@ -460,9 +457,6 @@
     <string name="argument_detected">%s észlelve</string>
     <string name="argument_selected">%s kiválasztva</string>
     <string name="fixed_width_value">Szélesség (képpontokban)</string>
-    <string name="under">Alatt</string>
-    <string name="above">Felett</string>
-    <string name="below">Alatta</string>
     <string name="go_to">Ugrás</string>
     <string name="cannot_refile_to_the_same_subtree">Nem lehet ugyabba a részfába újraírni</string>
     <string name="notification_maximum_priority">Maximális</string>

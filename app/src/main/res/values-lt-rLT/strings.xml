@@ -27,7 +27,6 @@
     <string name="mark_as_done">Pažymėti kaip atliktą</string>
     <string name="mark_as_done_with_repeater">Perplanuoti %s</string>
     <string name="reminder_snooze">Snausti</string>
-    <string name="close">Uždaryti</string>
     <string name="import_">Importuoti</string>
     <!-- Reserved keyword -->
     <string name="export">Eksportuoti</string>
@@ -112,7 +111,6 @@
     <string name="options_menu_item_search">Paiešką</string>
     <string name="repos_options_menu_new_repo">Nauja saugykla</string>
     <string name="book_name_already_exists">Užrašinė %s jau egzistuoja</string>
-    <string name="filter_name_already_exists">Paieška su tokiu pavadinimu jau egzistuoja</string>
     <string name="failed_creating_directory">Nepavyko sukurti katalogo %s</string>
     <string name="version">Kas naujo</string>
     <string name="search_hint">Ieškoti įrašų</string>
@@ -126,7 +124,6 @@
     <string name="notebook_imported">Užrašinė importuota</string>
     <string name="book_does_not_exist_anymore">Ši užrašinė nebeegzistuoja.</string>
     <string name="note_does_not_exist_anymore">Šis įrašas nebeegzistuoja.</string>
-    <string name="search_does_not_exist_anymore">Ši paieška nebeegzistuoja.</string>
     <string name="repo_dropbox_button_not_linked">Susieti su Dropbox</string>
     <string name="repo_dropbox_button_linked">Atsieti nuo Dropbox</string>
     <string name="notes_update_needed_dialog_title">Nuostata veikia įrašus</string>
@@ -497,9 +494,6 @@
     <string name="argument_detected">%s aptikta</string>
     <string name="argument_selected">%s pasirinkta</string>
     <string name="fixed_width_value">Plotis (pikseliais)</string>
-    <string name="under">Po</string>
-    <string name="above">Virš</string>
-    <string name="below">Žemiau</string>
     <string name="go_to">Eiti į</string>
     <string name="cannot_refile_to_the_same_subtree">Negalima perkelti į tą patį pomedį</string>
     <string name="notification_maximum_priority">Aukščiausia</string>

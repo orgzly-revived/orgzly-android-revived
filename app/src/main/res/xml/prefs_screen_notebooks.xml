@@ -262,6 +262,11 @@
             android:key="@string/pref_key_create_org_links_from_shared_links"
             android:title="@string/create_org_links_from_shared_links"
             android:defaultValue="@bool/pref_default_create_org_links_from_shared_links" />
+
+        <androidx.preference.Preference
+            android:title="@string/capture_templates"
+            android:summary="@string/capture_templates_summary"
+            android:key="prefs_screen_capture_templates"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/images">

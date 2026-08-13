@@ -668,6 +668,16 @@ public class MainActivity extends CommonActivity
     }
 
     @Override
+    public void onNoteNewRequestWithTemplate(NotePlace target, com.orgzly.android.ui.capture.CaptureTemplate template) {
+        if (template == null) return;
+        DisplayManager.displayNewNote(
+                getSupportFragmentManager(),
+                target,
+                com.orgzly.android.ui.note.NoteBuilder.newPayload(this, template),
+                true);
+    }
+
+    @Override
     public void onNoteCreated(Note note) {
         popBackStackAndCloseKeyboard();
 
@@ -896,6 +906,8 @@ public class MainActivity extends CommonActivity
                 AppSnackbarUtils.showSnackbar(this, message);
             }
 
+            notifyClipboardChanged();
+
         } else if (action instanceof NoteCopy) {
             NotesClipboard clipboard = (NotesClipboard) result.getUserData();
 
@@ -908,6 +920,8 @@ public class MainActivity extends CommonActivity
                 }
             }
 
+            notifyClipboardChanged();
+
         } else if (action instanceof NotePaste) {
             int count = (int) result.getUserData();
 
@@ -919,7 +933,14 @@ public class MainActivity extends CommonActivity
             }
 
             AppSnackbarUtils.showSnackbar(this, message);
+
+            notifyClipboardChanged();
         }
+    }
+
+    private void notifyClipboardChanged() {
+        LocalBroadcastManager.getInstance(this).sendBroadcast(
+                new Intent(AppIntent.ACTION_CLIPBOARD_CHANGED));
     }
 
     /**
@@ -1007,14 +1028,19 @@ public class MainActivity extends CommonActivity
 
                 case AppIntent.ACTION_OPEN_QUERY: {
                     String query = intent.getStringExtra(AppIntent.EXTRA_QUERY_STRING);
+                    if (query == null) return;
                     String searchName = intent.getStringExtra(AppIntent.EXTRA_SEARCH_NAME);
                     boolean isRawQuery = intent.getBooleanExtra(AppIntent.EXTRA_IS_RAW_QUERY, false);
+                    boolean forceHideRefineButton = intent.getBooleanExtra(
+                            AppIntent.EXTRA_QUERY_FORCE_HIDE_REFINE_BUTTON,
+                            false
+                    );
                     DisplayManager.displayQuery(
                             getSupportFragmentManager(),
-                            query,
-                            searchName,
-                            isRawQuery,
-                            true
+                            new DisplayManager.DisplayQueryArgs(query)
+                                    .setRawQuery(isRawQuery)
+                                    .setForceHideRefineButton(forceHideRefineButton)
+                                    .setSearchName(searchName)
                     );
                     break;
                 }

@@ -1,0 +1,4 @@
+• Add basic support for capture templates.
+• Fix cut notes behavior to eliminate risk of data loss.
+• Hide “Refine Search” button on saved search queries.
+• Save checkbox toggles immediately in single note view.

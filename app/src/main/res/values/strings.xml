@@ -27,7 +27,6 @@
     <string name="mark_as_done">Mark as done</string>
     <string name="mark_as_done_with_repeater">Reschedule %s</string>
     <string name="reminder_snooze">Snooze</string>
-    <string name="close">Close</string>
     <string name="import_">Import</string> <!-- Reserved keyword -->
     <string name="export">Export</string>
     <string name="overwrite">Overwrite</string>
@@ -120,7 +119,6 @@
 
     <string name="repos_options_menu_new_repo">New Repository</string>
     <string name="book_name_already_exists">Notebook %s already exists</string>
-    <string name="filter_name_already_exists">Search with the same name already exists</string>
     <string name="failed_creating_directory">Failed creating directory %s</string>
     <string name="version">What\'s new</string>
     <string name="search_hint">Search notes</string>
@@ -136,7 +134,6 @@
 
     <string name="book_does_not_exist_anymore">This notebook does not exist any more.</string>
     <string name="note_does_not_exist_anymore">This note does not exist any more.</string>
-    <string name="search_does_not_exist_anymore">This search does not exist any more.</string>
 
     <string name="repo_dropbox_button_not_linked">Link to Dropbox</string>
     <string name="repo_dropbox_button_linked">Unlink from Dropbox</string>
@@ -428,6 +425,7 @@
 
     <string name="no_notes_deleted">No notes deleted</string>
 
+    <string name="none">None</string>
     <string name="duplicate_keywords_not_allowed">Keyword %s already used</string>
     <string name="no_states_defined">No states defined</string>
     <string name="book_name_in_search">Notebook name in search results</string>
@@ -631,10 +629,6 @@
 
     <string name="fixed_width_value">Width (in pixels)</string>
 
-    <string name="under">Under</string>
-    <string name="above">Above</string>
-    <string name="below">Below</string>
-
     <string name="go_to">Go to</string>
 
     <string name="cannot_refile_to_the_same_subtree">Cannot refile to the same subtree</string>
@@ -816,5 +810,36 @@
     <string name="content_description_sort_order_descending">Sort descending</string>
     <string name="content_description_subtract">Subtract</string>
     <string name="content_description_add">Add</string>
+
+    <!-- Capture Templates -->
+    <string name="capture_templates">Capture templates</string>
+    <string name="capture_templates_summary">Define templates for quickly capturing notes</string>
+    <string name="no_capture_templates">No capture templates</string>
+    <string name="capture_template">Capture template</string>
+    <string name="widget_capture_template_default_note">Default note</string>
+    <string name="template_name">Name</string>
+    <string name="template_title">Title</string>
+    <string name="template_content">Content</string>
+    <string name="template_tokens_hint" formatted="false">Tokens: %t %T (date/time) %u %U (inactive) %c (clipboard)</string>
+    <string name="template_target">Target</string>
+    <string name="template_select_target">Select target</string>
+    <string name="template_state">Initial state</string>
+    <string name="template_priority">Initial priority</string>
+    <string name="template_tags">Initial tags</string>
+    <string name="template_scheduled">Schedule for today</string>
+    <string name="select_capture_template">Select template</string>
+    <string name="capture_template_saved">Template saved</string>
+    <string name="capture_template_deleted">Template deleted</string>
+    <string name="new_capture_template">New template</string>
+    <string name="cannot_be_empty_short">Required</string>
+    <string name="capture_template_numbered">Template %1$d</string>
+    <string name="edit_capture_template">Edit template</string>
+    <string name="capture_template_target_book_not_found">Notebook \"%1$s\" not found, using default</string>
+    <string name="template_select_this_headline">Select this headline</string>
+    <string name="template_new_headline">New headline</string>
+    <string name="template_new_headline_name">Headline name</string>
+    <string name="template_notebook_required">Select a notebook</string>
+    <string name="template_headline_no_slash">Headline cannot contain \"/\"</string>
+    <string name="template_headline_ambiguous">This headline is ambiguous (duplicate titles). Capture may target a different note.</string>
     <string name="external_files_access_is_no_longer_allowed">External files access is no longer allowed.</string>
 </resources>

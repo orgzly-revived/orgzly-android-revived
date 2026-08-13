@@ -25,7 +25,6 @@
     <string name="mark_as_done">標記為已完成</string>
     <string name="mark_as_done_with_repeater">重設日程表 %s</string>
     <string name="reminder_snooze">延後</string>
-    <string name="close">關閉</string>
     <string name="import_">匯入</string>
     <!-- Reserved keyword -->
     <string name="export">匯出</string>
@@ -96,7 +95,6 @@
     <string name="options_menu_item_search">搜尋</string>
     <string name="repos_options_menu_new_repo">新增資料庫</string>
     <string name="book_name_already_exists">筆記本%s 已存在</string>
-    <string name="filter_name_already_exists">已存在相同的搜尋名稱</string>
     <string name="failed_creating_directory">創建資料夾%s 失敗</string>
     <string name="version">新增內容</string>
     <string name="search_hint">搜尋筆記</string>
@@ -110,7 +108,6 @@
     <string name="notebook_imported">已匯入筆記本</string>
     <string name="book_does_not_exist_anymore">這個筆記本已不存在</string>
     <string name="note_does_not_exist_anymore">這筆記已不存在</string>
-    <string name="search_does_not_exist_anymore">這個搜尋已不存在</string>
     <string name="repo_dropbox_button_not_linked">連結到 Dropbox</string>
     <string name="repo_dropbox_button_linked">取消 Dropbox 連結</string>
     <string name="notes_update_needed_dialog_title">筆記影響偏好設定</string>
@@ -451,9 +448,6 @@
     <string name="argument_detected">偵測到 %s</string>
     <string name="argument_selected">已選取 %s</string>
     <string name="fixed_width_value">寬度 (像素)</string>
-    <string name="under">在下</string>
-    <string name="above">以上</string>
-    <string name="below">以下</string>
     <string name="go_to">前往</string>
     <string name="cannot_refile_to_the_same_subtree">無法轉移到相同的子目錄</string>
     <string name="notification_maximum_priority">最大</string>

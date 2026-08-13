@@ -4,31 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.input.TextFieldLineLimits
-import androidx.compose.foundation.text.input.clearText
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import cl.emilym.compose.units.rdp
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.orgzly.R
+import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.sync.SyncRunner
-import com.orgzly.android.ui.compose.base.bootstrapContent
-import com.orgzly.android.ui.compose.widgets.Icons
-import com.orgzly.android.ui.compose.widgets.OrgzlySearchTextField
-import com.orgzly.android.ui.compose.widgets.painterIcon
+import com.orgzly.android.ui.capture.CaptureTemplate
+import com.orgzly.android.ui.capture.CaptureTemplateResolver
+import com.orgzly.android.ui.capture.getDisplayName
 import com.orgzly.android.ui.dialogs.TimestampDialogFragment
 import com.orgzly.android.ui.drawer.DrawerItem
 import com.orgzly.android.ui.main.SharedMainActivityViewModel
@@ -153,6 +138,54 @@ abstract class QueryFragment :
         }
     }
 
+    protected fun setupCaptureFab(captureFab: FloatingActionButton) {
+        val templates = AppPreferences.captureTemplates(requireContext())
+        if (templates.isNotEmpty()) {
+            captureFab.setOnClickListener {
+                if (templates.size == 1) {
+                    applyTemplate(templates[0])
+                } else {
+                    showCaptureTemplateChooser(templates)
+                }
+            }
+            captureFab.show()
+        } else {
+            captureFab.hide()
+        }
+    }
+
+    protected fun hideCaptureFab(captureFab: FloatingActionButton) {
+        captureFab.hide()
+    }
+
+    private fun showCaptureTemplateChooser(templates: List<CaptureTemplate>) {
+        val items = templates.map {
+            it.getDisplayName(getString(R.string.capture_template))
+        }.toTypedArray()
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.select_capture_template)
+            .setItems(items) { _, index ->
+                applyTemplate(templates[index])
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun applyTemplate(template: CaptureTemplate) {
+        val result = CaptureTemplateResolver.resolve(requireContext(), dataRepository, template)
+
+        if (result.warning == "notebook_not_found") {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.capture_template_target_book_not_found, template.targetBook),
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        listener?.onNoteNewRequestWithTemplate(result.notePlace, template)
+    }
+
     companion object {
         private val TAG = QueryFragment::class.java.name
 
@@ -160,6 +193,7 @@ abstract class QueryFragment :
         const val ARG_IS_RAW_QUERY = "is_raw_query"
         const val ARG_QUERY_NAME = "query_name"
 
+        const val ARG_FORCE_HIDE_REFINE_BUTTON = "show_refine_button"
         fun getDrawerItemId(query: String?): String {
             return "$TAG $query"
         }

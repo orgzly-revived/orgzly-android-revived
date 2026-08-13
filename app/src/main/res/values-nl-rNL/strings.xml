@@ -25,7 +25,6 @@
     <string name="mark_as_done">Markeer als gedaan</string>
     <string name="mark_as_done_with_repeater">Opnieuw plannen %s</string>
     <string name="reminder_snooze">Sluimeren</string>
-    <string name="close">Sluiten</string>
     <string name="import_">Importeren</string>
     <!-- Reserved keyword -->
     <string name="export">Exporteren</string>
@@ -99,7 +98,6 @@
     <string name="options_menu_item_search">Zoeken</string>
     <string name="repos_options_menu_new_repo">Nieuwe Repository</string>
     <string name="book_name_already_exists">Shrift %s bestaat al.</string>
-    <string name="filter_name_already_exists">Zoekopdracht met dezelfde naam bestaat al</string>
     <string name="failed_creating_directory">Map %s maken mislukt</string>
     <string name="version">Wat er nieuw is</string>
     <string name="search_hint">Doorzoek notities</string>
@@ -113,7 +111,6 @@
     <string name="notebook_imported">Notitieboekje geïmporteerd</string>
     <string name="book_does_not_exist_anymore">Dit notitieboekje bestaat niet meer.</string>
     <string name="note_does_not_exist_anymore">Deze notitie bestaat niet meer.</string>
-    <string name="search_does_not_exist_anymore">Deze zoekopdracht bestaat niet meer.</string>
     <string name="repo_dropbox_button_not_linked">Koppelen met Dropbox</string>
     <string name="repo_dropbox_button_linked">Ontkoppel van Dropbox</string>
     <string name="notes_update_needed_dialog_title">Voorkeur is van invloed op notities</string>
@@ -460,9 +457,6 @@
     <string name="argument_detected">%s gedetecteerd</string>
     <string name="argument_selected">%s geselecteerd</string>
     <string name="fixed_width_value">Breedte (in pixels)</string>
-    <string name="under">Onder</string>
-    <string name="above">Boven</string>
-    <string name="below">Onder</string>
     <string name="go_to">Ga naar</string>
     <string name="cannot_refile_to_the_same_subtree">Kan niet opbergen naar dezelfde tak</string>
     <string name="notification_maximum_priority">Maximum</string>

@@ -90,6 +90,7 @@ internal class DrawerNavigationView(
             intent.putExtra(AppIntent.EXTRA_QUERY_STRING, savedSearch.query)
             intent.putExtra(AppIntent.EXTRA_SEARCH_NAME, savedSearch.name)
             intent.putExtra(AppIntent.EXTRA_IS_RAW_QUERY, true)
+            intent.putExtra(AppIntent.EXTRA_QUERY_FORCE_HIDE_REFINE_BUTTON, true)
 
             val id = generateRandomUniqueId()
             val item = menu.add(R.id.drawer_group, id, 1, savedSearch.name)

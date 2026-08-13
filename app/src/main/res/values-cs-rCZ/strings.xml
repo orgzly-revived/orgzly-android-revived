@@ -25,7 +25,6 @@
     <string name="mark_as_done">Označit jako dokončeno</string>
     <string name="mark_as_done_with_repeater">Přeplánovat %s</string>
     <string name="reminder_snooze">Připomenout</string>
-    <string name="close">Zavřít</string>
     <string name="import_">Importovat</string>
     <!-- Reserved keyword -->
     <string name="export">Exportovat</string>
@@ -105,7 +104,6 @@
     <string name="options_menu_item_search">Hledání</string>
     <string name="repos_options_menu_new_repo">Přidat repositář</string>
     <string name="book_name_already_exists">Sešit %s již existuje</string>
-    <string name="filter_name_already_exists">Hledání se stejným názvem již existuje</string>
     <string name="failed_creating_directory">Nezdařilo se vytvořit adresář %s</string>
     <string name="version">Novinky</string>
     <string name="search_hint">Hledat poznámky</string>
@@ -119,7 +117,6 @@
     <string name="notebook_imported">Sešit importován</string>
     <string name="book_does_not_exist_anymore">Tento sešit již neexistuje.</string>
     <string name="note_does_not_exist_anymore">Tato poznámka už neexistuje.</string>
-    <string name="search_does_not_exist_anymore">Toto hledání již neexistuje.</string>
     <string name="repo_dropbox_button_not_linked">Propojit s Dropboxem</string>
     <string name="repo_dropbox_button_linked">Odpojit od Dropboxu</string>
     <string name="notes_update_needed_dialog_title">Preference ovlivňují poznámky</string>
@@ -478,9 +475,6 @@
     <string name="argument_detected">%s detekováno</string>
     <string name="argument_selected">%s vybráno</string>
     <string name="fixed_width_value">Šířka (v pixelech)</string>
-    <string name="under">Pod</string>
-    <string name="above">Nad</string>
-    <string name="below">Pod</string>
     <string name="go_to">Přejít na</string>
     <string name="cannot_refile_to_the_same_subtree">Nemohu přeuložit do stejného podstromu</string>
     <string name="notification_maximum_priority">Maximální</string>

@@ -20,22 +20,15 @@
     <dimen name="padding_bottom_for_fab">104dp</dimen>
 
     <!-- Padding for sync button -->
-    <dimen name="design_navigation_padding_bottom" tools:override="true">64dp</dimen>
-
-    <dimen name="design_navigation_icon_padding" tools:override="true">16dp</dimen>
 
     <dimen name="bullet_inner_size">8dp</dimen>
     <dimen name="bullet_inner_inset">4dp</dimen>
-    <dimen name="bullet_outer_inset">4dp</dimen>
     <dimen name="bullet_total_size">16dp</dimen>
 
     <dimen name="screen_edge">16dp</dimen>
-    <dimen name="screen_edge_minus_2dp">14dp</dimen>
-    <dimen name="screen_edge_minus_4dp">12dp</dimen>
 
     <dimen name="space_between_content_areas">8dp</dimen>
 
-    <dimen name="fragment_note_field_min_width">200dp</dimen>
     <dimen name="fragment_note_icon_margin">24dp</dimen>
 
     <dimen name="widget_title_text_size_14">14sp</dimen>
@@ -62,8 +55,6 @@
     <dimen name="quick_bar_height">48dp</dimen>
 
     <dimen name="fold_button_width">48dp</dimen>
-
-    <dimen name="horizontal_divider_height">1dp</dimen>
 
     <dimen name="fab_stack_spacing">80dp</dimen>
 </resources>

@@ -25,7 +25,6 @@
     <string name="mark_as_done">Marquer comme fait</string>
     <string name="mark_as_done_with_repeater">Replanifier %s</string>
     <string name="reminder_snooze">Reporter</string>
-    <string name="close">Fermer</string>
     <string name="import_">Importer</string>
     <!-- Reserved keyword -->
     <string name="export">Exporter</string>
@@ -102,7 +101,6 @@
     <string name="options_menu_item_search">Rechercher</string>
     <string name="repos_options_menu_new_repo">Nouveau dépôt</string>
     <string name="book_name_already_exists">Le bloc-notes %s existe déjà</string>
-    <string name="filter_name_already_exists">Une recherche avec le même nom existe déjà</string>
     <string name="failed_creating_directory">Impossible de créer le répertoire %s</string>
     <string name="version">Nouveautés</string>
     <string name="search_hint">Rechercher dans les notes</string>
@@ -116,7 +114,6 @@
     <string name="notebook_imported">Bloc-notes importé</string>
     <string name="book_does_not_exist_anymore">Ce bloc-notes n’existe plus.</string>
     <string name="note_does_not_exist_anymore">Cette note n’existe plus.</string>
-    <string name="search_does_not_exist_anymore">Cette recherche n’existe plus.</string>
     <string name="repo_dropbox_button_not_linked">Associer à Dropbox</string>
     <string name="repo_dropbox_button_linked">Dissocier de Dropbox</string>
     <string name="notes_update_needed_dialog_title">La préférence s\'appliquera aux notes</string>
@@ -472,9 +469,6 @@
     <string name="argument_detected">%s détecté</string>
     <string name="argument_selected">%s sélectionné</string>
     <string name="fixed_width_value">Largeur (en pixels)</string>
-    <string name="under">Sous</string>
-    <string name="above">Au-dessus</string>
-    <string name="below">En-dessous</string>
     <string name="go_to">Aller à</string>
     <string name="cannot_refile_to_the_same_subtree">Reclassement impossible dans la même sous-arborescence</string>
     <string name="notification_maximum_priority">Maximum</string>

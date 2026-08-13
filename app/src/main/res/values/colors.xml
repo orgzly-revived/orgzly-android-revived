@@ -4,75 +4,44 @@
     <!-- https://material.io/guidelines/style/color.html#color-color-palette -->
 
     <color name="red_200">#EF9A9A</color>
-    <color name="red_300">#E57373</color>
     <color name="red_900">#B71C1C</color>
 
     <color name="green_200">#A5D6A7</color>
     <color name="green_900">#1B5E20</color>
 
-    <color name="blue_200">#90CAF9</color>
-    <color name="blue_900">#0D47A1</color>
-
-    <color name="grey_50">#FAFAFA</color>
     <color name="grey_100">#F5F5F5</color>
     <color name="grey_200">#EEEEEE</color>
     <color name="grey_300">#E0E0E0</color>
     <color name="grey_400">#BDBDBD</color>
-    <color name="grey_500">#9E9E9E</color>
-    <color name="grey_600">#757575</color>
     <color name="grey_700">#616161</color>
     <color name="grey_800">#424242</color>
     <color name="grey_900">#212121</color>
 
-    <color name="blue_grey_50">#ECEFF1</color>
-    <color name="blue_grey_100">#CFD8DC</color>
     <color name="blue_grey_200">#B0BEC5</color>
     <color name="blue_grey_300">#90A4AE</color>
-    <color name="blue_grey_400">#78909C</color>
     <color name="blue_grey_500">#607D8B</color>
     <color name="blue_grey_600">#546E7A</color>
     <color name="blue_grey_700">#455A64</color>
-    <color name="blue_grey_800">#37474F</color>
-    <color name="blue_grey_900">#263238</color>
-
-    <color name="brown_700">#5D4037</color>
-    <color name="brown_900">#3E2723</color>
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
 
     <!-- http://www.google.com/design/spec/style/color.html#color-themes -->
 
-    <color name="light_theme_status_bar">@color/grey_300</color>
-    <color name="light_theme_app_bar">@color/grey_100</color>
-    <color name="light_theme_background">@color/grey_50</color>
-    <color name="light_theme_cards_and_dialogs">@color/white</color>
-
-    <color name="dark_theme_status_bar">#292929</color>
     <color name="dark_theme_app_bar">#292929</color>
-    <color name="dark_theme_background">#121212</color>
     <color name="dark_theme_cards_and_dialogs">#242424</color>
-
-    <color name="black_theme_status_bar">#000000</color>
-    <color name="black_theme_app_bar">#000000</color>
-    <color name="black_theme_background">#000000</color>
-    <color name="black_theme_cards_and_dialogs">#242424</color>
 
     <!-- https://material.io/guidelines/style/color.html#color-usability -->
 
     <color name="dark_text_primary_color">#DE000000</color> <!-- 87% -->
     <color name="dark_text_secondary_color">#8A000000</color> <!-- 54% -->
-    <color name="dark_text_disabled_color">#61000000</color> <!-- 38% -->
+    <!-- 38% -->
 
     <color name="white_text_primary_color">#FFFFFF</color> <!-- 100% -->
     <color name="white_text_secondary_color">#B3FFFFFF</color> <!-- 70% -->
-    <color name="white_text_disabled_color">#80FFFFFF</color> <!-- 50% -->
+    <!-- 50% -->
 
     <color name="notification">@color/blue_grey_700</color>
-
-    <color name="item_selected_light_bg_color">#3278909C</color> <!-- 20% blue_grey_400 -->
-    <color name="item_selected_dark_bg_color">#3290A4AE</color>  <!-- 20% blue_grey_300 -->
-    <color name="item_selected_black_bg_color">#32B0BEC5</color> <!-- 20% blue_grey_200 -->
 
     <color name="widget_light_header_bg_color">@color/blue_grey_600</color>
     <color name="widget_light_header_text_color">@color/white_text_primary_color</color>

@@ -5,14 +5,14 @@
     tools:ignore="AlwaysShowAction">
 
     <item
-        android:id="@+id/close"
-        android:icon="@drawable/ic_close"
-        app:showAsAction="always"
-        android:title="@string/close"/>
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="ifRoom"
+        android:title="@string/delete" />
 
     <item
         android:id="@+id/done"
         android:icon="@drawable/ic_done"
         app:showAsAction="always"
-        android:title="@string/done"/>
+        android:title="@string/done" />
 </menu>

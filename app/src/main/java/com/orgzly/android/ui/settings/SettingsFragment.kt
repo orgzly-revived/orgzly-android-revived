@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.annotation.StringRes
 import androidx.preference.*
 import androidx.work.OneTimeWorkRequestBuilder
@@ -23,6 +24,7 @@ import com.orgzly.android.reminders.RemindersScheduler
 import com.orgzly.android.sync.AutoSyncScheduler
 import com.orgzly.android.ui.CommonActivity
 import com.orgzly.android.ui.NoteStates
+import com.orgzly.android.ui.capture.getDisplayName
 import com.orgzly.android.ui.dialogs.ShowSshKeyDialogFragment
 import com.orgzly.android.ui.notifications.Notifications
 import com.orgzly.android.ui.util.KeyboardUtils
@@ -103,6 +105,13 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             }
         }
 
+        preference(R.string.pref_key_widget_capture_template)?.let {
+            it.setOnPreferenceClickListener {
+                showWidgetCaptureTemplateDialog()
+                true
+            }
+        }
+
         setupVersionPreference()
 
         setupGitCommitPreference()
@@ -158,6 +167,11 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         updateRemindersScreen()
         updateWidgetScreen()
         setupCalendarSyncSearchPreference()
+
+        findPreference<androidx.preference.Preference>("prefs_screen_capture_templates")?.setOnPreferenceClickListener {
+            listener?.onCaptureTemplatesRequest()
+            true
+        }
     }
 
     private fun setupCalendarSyncSearchPreference() {
@@ -254,6 +268,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         super.onResume()
 
         listener?.onTitleChange(preferenceScreen?.title)
+        updateWidgetScreen()
 
         /* Start to listen for any preference changes. */
         PreferenceManager.getDefaultSharedPreferences(requireActivity())
@@ -366,7 +381,8 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             getString(R.string.pref_key_widget_font_size),
             getString(R.string.pref_key_widget_display_checkmarks),
             getString(R.string.pref_key_widget_display_book_name),
-            getString(R.string.pref_key_widget_update_frequency) -> {
+            getString(R.string.pref_key_widget_update_frequency),
+            getString(R.string.pref_key_widget_capture_template) -> {
                 val intent = Intent(context, ListWidgetProvider::class.java).apply {
                     action = AppIntent.ACTION_UPDATE_LAYOUT_LIST_WIDGET
                 }
@@ -516,6 +532,44 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             val opacityEnabled = (colorScheme as ListPreference).value != "dynamic"
             preference(R.string.pref_key_widget_opacity)?.isEnabled = opacityEnabled
         }
+
+        preference(R.string.pref_key_widget_capture_template)?.summary =
+            widgetCaptureTemplateSummary()
+    }
+
+    private fun showWidgetCaptureTemplateDialog() {
+        val templates = AppPreferences.captureTemplates(requireContext())
+        val defaultLabel = getString(R.string.widget_capture_template_default_note)
+        val selectedId = AppPreferences.widgetCaptureTemplateId(requireContext())
+        val labels = buildList {
+            add(defaultLabel)
+            addAll(templates.mapIndexed { index, template ->
+                template.getDisplayName(getString(R.string.capture_template_numbered, index + 1))
+            })
+        }.toTypedArray()
+        val checkedItem = templates.indexOfFirst { it.id == selectedId }
+            .let { if (it >= 0) it + 1 else 0 }
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.capture_template)
+            .setSingleChoiceItems(labels, checkedItem) { dialog, which ->
+                AppPreferences.widgetCaptureTemplateId(
+                    requireContext(),
+                    if (which == 0) null else templates[which - 1].id
+                )
+                updateWidgetScreen()
+                dialog.dismiss()
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    private fun widgetCaptureTemplateSummary(): String {
+        val selectedId = AppPreferences.widgetCaptureTemplateId(requireContext())
+        val selectedTemplate = AppPreferences.captureTemplates(requireContext())
+            .find { it.id == selectedId }
+        return selectedTemplate?.getDisplayName(getString(R.string.capture_template))
+            ?: getString(R.string.widget_capture_template_default_note)
     }
 
     /**
@@ -569,6 +623,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         fun onWhatsNewDisplayRequest()
         fun onPreferenceScreen(resource: String)
         fun onTitleChange(title: CharSequence?)
+        fun onCaptureTemplatesRequest()
     }
 
     companion object {
