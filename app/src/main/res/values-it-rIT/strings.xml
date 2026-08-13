@@ -6,7 +6,7 @@
     <string name="yes">Sì</string>
     <string name="unlink">Scollega</string>
     <!-- Unlink from Dropbox -->
-    <string name="clear">Cancella data</string>
+    <string name="clear">Cancella</string>
     <string name="cancel">Annulla</string>
     <string name="create">Crea</string>
     <!-- "new" is reserved -->
