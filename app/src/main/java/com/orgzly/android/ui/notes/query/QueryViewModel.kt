@@ -46,6 +46,7 @@ data class QueryState(
     val isSimpleMode: Boolean,
     val showRefineButton: Boolean,
     val agendaDays: Int,
+    val isForcingHideRefineButton: Boolean,
 ) {
 
     companion object {
@@ -57,8 +58,9 @@ data class QueryState(
             emptyList(),
             QueryViewModel.ViewState.LOADING,
             isSimpleMode = true,
-            showRefineButton = true,
-            agendaDays = 0
+            showRefineButton = false,
+            agendaDays = 0,
+            isForcingHideRefineButton = false
         )
     }
 
@@ -72,6 +74,8 @@ sealed interface QueryEvent {
     data class ChangeQueryView(val query: String): QueryEvent
 
     data class Snackbar(val snackbar: QuerySnackbar): QueryEvent
+
+    data object OpenRefineSearch: QueryEvent
 }
 
 class QueryViewModel @AssistedInject constructor(
@@ -81,7 +85,7 @@ class QueryViewModel @AssistedInject constructor(
     private val filterMapper: SimpleFilterMapper,
     @Assisted private val initialQuery: String,
     @Assisted("isRawQuery") private val isRawQuery: Boolean,
-    @Assisted("forceHideRefineButton") private val forceHideRefineButton: Boolean,
+    @Assisted("forceHideRefineButton") forceHideRefineButton: Boolean,
     @Assisted private val owner: QueryViewModelOwner,
     @Assisted context: Context
 ) : CommonViewModel() {
@@ -101,6 +105,7 @@ class QueryViewModel @AssistedInject constructor(
     private val query = MutableStateFlow("")
     private val search = MutableStateFlow("")
     private val filter = MutableStateFlow(SimpleFilter())
+    private val _forceHideRefineButton = MutableStateFlow(forceHideRefineButton)
 
     private val allTags = dataRepository.selectAllTagsLiveData().asFlow()
     private val allBooks = dataRepository.getBooksLiveData().asFlow().mapLatest {
@@ -122,8 +127,9 @@ class QueryViewModel @AssistedInject constructor(
         allBooks,
         filter,
         appBar.currentMode,
-        isSimpleMode
-    ) { query, search, queryResult, allTags, allBooks, filter, appBarMode, isSimpleMode ->
+        isSimpleMode,
+        _forceHideRefineButton
+    ) { query, search, queryResult, allTags, allBooks, filter, appBarMode, isSimpleMode, forceHideRefineButton ->
         QueryState(
             when (isSimpleMode) {
                 true -> search
@@ -139,7 +145,8 @@ class QueryViewModel @AssistedInject constructor(
             },
             isSimpleMode,
             appBarMode == APP_BAR_DEFAULT_MODE && !forceHideRefineButton,
-            queryParser.parse(query).options.agendaDays
+            queryParser.parse(query).options.agendaDays,
+            forceHideRefineButton
         )
     }.state(QueryState.default)
 
@@ -281,6 +288,13 @@ class QueryViewModel @AssistedInject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun showRefineSearchButton() {
+        _forceHideRefineButton.value = false
+        viewModelScope.launch {
+            _events.send(QueryEvent.OpenRefineSearch)
         }
     }
 
