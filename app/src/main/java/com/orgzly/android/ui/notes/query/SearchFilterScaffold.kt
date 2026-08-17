@@ -71,6 +71,7 @@ fun SearchFilterScaffold(
                 )
             }
             is QueryEvent.ChangeQueryView -> {}
+            is QueryEvent.OpenRefineSearch -> { sheetVisible = true }
         }
     }
 

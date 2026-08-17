@@ -16,4 +16,10 @@
         android:id="@+id/activity_action_settings"
         app:showAsAction="never"
         android:title="@string/settings"/>
+
+    <item
+        android:id="@+id/refine_search"
+        app:showAsAction="never"
+        android:visible="false"
+        android:title="@string/query_filter_search"/>
 </menu>

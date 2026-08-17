@@ -4,8 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.orgzly.R
@@ -184,6 +186,16 @@ abstract class QueryFragment :
         }
 
         listener?.onNoteNewRequestWithTemplate(result.notePlace, template)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.state.collectWithLifecycle { state ->
+            view.findViewById<MaterialToolbar?>(R.id.top_toolbar)?.let { topToolbar ->
+                topToolbar.menu.findItem(R.id.refine_search)?.isVisible =
+                    state.isForcingHideRefineButton
+            }
+        }
     }
 
     companion object {
