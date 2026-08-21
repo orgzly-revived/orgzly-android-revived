@@ -191,6 +191,8 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
                 sharedMainActivityViewModel.openDrawer()
             }
 
+            menu.findItem(R.id.refine_search)?.isVisible = viewModel.state.value.isForcingHideRefineButton
+
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.sync -> {
@@ -203,6 +205,10 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
                     R.id.keep_screen_on -> {
                         dialog = ActivityUtils.keepScreenOnToggle(activity, menuItem)
+                    }
+
+                    R.id.refine_search -> {
+                        viewModel.showRefineSearchButton()
                     }
                 }
                 true

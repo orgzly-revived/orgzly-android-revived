@@ -187,6 +187,8 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
                 sharedMainActivityViewModel.openDrawer()
             }
 
+            menu.findItem(R.id.refine_search)?.isVisible = viewModel.state.value.isForcingHideRefineButton
+
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.sync -> {
@@ -199,6 +201,10 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
 
                     R.id.keep_screen_on -> {
                         dialog = ActivityUtils.keepScreenOnToggle(activity, menuItem)
+                    }
+
+                    R.id.refine_search -> {
+                        viewModel.showRefineSearchButton()
                     }
                 }
                 true
