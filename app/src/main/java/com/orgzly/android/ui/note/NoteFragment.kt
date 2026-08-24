@@ -284,10 +284,18 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
             ActivityUtils.keepScreenOnUpdateMenuItem(activity, menu)
 
-            setNavigationIcon(R.drawable.ic_menu)
+            if (activity is ShareActivity) {
+                setNavigationIcon(R.drawable.ic_close)
 
-            setNavigationOnClickListener {
-                sharedMainActivityViewModel.openDrawer()
+                setNavigationOnClickListener {
+                    userCancel()
+                }
+            } else {
+                setNavigationIcon(R.drawable.ic_menu)
+
+                setNavigationOnClickListener {
+                    sharedMainActivityViewModel.openDrawer()
+                }
             }
 
             if (viewModel.notePayload == null) {
