@@ -358,6 +358,42 @@
     <string name="pref_key_group_scheduled_with_today" translatable="false">pref_key_group_scheduled_with_today</string>
     <bool name="pref_default_group_scheduled_with_today" translatable="false">true</bool>
 
+    <string name="pref_key_calendar_month_text_size" translatable="false">pref_key_calendar_month_text_size</string>
+    <string name="pref_default_calendar_month_text_size" translatable="false">14</string>
+    <string-array name="calendar_text_sizes">
+        <item>@string/font_size_small</item>
+        <item>@string/font_size_default</item>
+        <item>@string/font_size_large</item>
+    </string-array>
+    <string-array name="calendar_text_sizes_values">
+        <item>10</item>
+        <item>12</item>
+        <item>14</item>
+    </string-array>
+
+    <string name="pref_key_calendar_show_book_name" translatable="false">pref_key_calendar_show_book_name</string>
+    <bool name="pref_default_calendar_show_book_name" translatable="false">true</bool>
+
+    <string name="pref_key_calendar_default_view" translatable="false">
+        pref_key_calendar_default_view
+    </string>
+
+    <string name="pref_default_calendar_default_view" translatable="false">
+        agenda
+    </string>
+
+    <string-array name="calendar_default_views">
+        <item>@string/agenda</item>
+        <item>@string/month</item>
+        <item>@string/week</item>
+    </string-array>
+
+    <string-array name="calendar_default_views_values">
+        <item>agenda</item>
+        <item>month</item>
+        <item>week</item>
+    </string-array>
+
     <string name="pref_key_selected_note_metadata" translatable="false">pref_key_selected_note_metadata</string>
     <string-array name="note_metadata">
         <item>@string/tags</item>
