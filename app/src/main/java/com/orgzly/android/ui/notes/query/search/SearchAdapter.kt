@@ -50,7 +50,7 @@ class SearchAdapter(
 
         noteItemViewBinder.bind(holder, noteView)
 
-        getSelection().setBackgroundIfSelected(holder.itemView, note.id)
+        getSelection().setActivatedIfSelected(holder.itemView, note.id)
     }
 
     override fun getItemId(position: Int): Long {
