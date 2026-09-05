@@ -1,7 +1,5 @@
 package com.orgzly.android.repos
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.prefs.AppPreferences
@@ -49,7 +47,6 @@ class RepoIgnoreNode(repo: SyncRepo) : IgnoreNode() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun ensurePathIsNotIgnored(filePath: String) {
         if (isPathIgnored(filePath, false)) {
             throw IOException(
