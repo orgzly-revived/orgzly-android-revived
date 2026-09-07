@@ -73,7 +73,9 @@ object OrgFormatter {
             val start: Int,
             val end: Int,
             val content: CharSequence,
-            val spans: List<Any?> = listOf())
+            val spans: List<Any?> = listOf(),
+            val sourceOffsets: IntArray? = null,
+            val removeWrapper: Boolean = false)
 
     // TODO: Pass to OrgFormatter, don't pass context
     private data class Config(
@@ -97,7 +99,16 @@ object OrgFormatter {
         return this.parse(str, Config(context, linkify, parseCheckboxes))
     }
 
-    private fun parse(str: CharSequence, config: Config): SpannableStringBuilder {
+    fun parseForEditing(
+        str: CharSequence, context: Context, linkify: Boolean, parseCheckboxes: Boolean,
+        sourceMap: SourceTextMap?, foldedDrawers: List<Boolean>? = null
+    ): SpannableStringBuilder =
+        parse(str, Config(context, linkify, parseCheckboxes), sourceMap, foldedDrawers)
+
+    private fun parse(
+        str: CharSequence, config: Config, sourceMap: SourceTextMap? = null,
+        foldedDrawers: List<Boolean>? = null
+    ): SpannableStringBuilder {
         val t0 = System.currentTimeMillis()
 
         var ssb = SpannableStringBuilder(str)
@@ -107,11 +118,11 @@ object OrgFormatter {
             parseCheckboxes(ssb)
         }
 
-        ssb = parseLinks(config, ssb)
+        ssb = parseLinks(config, ssb, sourceMap)
 
-        ssb = parseMarkup(ssb, config)
+        ssb = parseMarkup(ssb, config, sourceMap)
 
-        ssb = parseDrawers(ssb, config.foldDrawers)
+        ssb = parseDrawers(ssb, config.foldDrawers, sourceMap, foldedDrawers)
 
         if (BuildConfig.LOG_DEBUG) {
             val t1 = System.currentTimeMillis()
@@ -121,8 +132,8 @@ object OrgFormatter {
         return ssb
     }
 
-    private fun parseLinks(config: Config, ssb: SpannableStringBuilder): SpannableStringBuilder {
-        return collectRegions(ssb) { result ->
+    private fun parseLinks(config: Config, ssb: SpannableStringBuilder, sourceMap: SourceTextMap?): SpannableStringBuilder {
+        return collectRegions(ssb, sourceMap) { result ->
             LINK_REGEX.findAll(ssb).forEach { match ->
                 val spans = mutableListOf<Any>()
 
@@ -138,7 +149,9 @@ object OrgFormatter {
                         matchLink.all.range.first,
                         matchLink.all.range.last + 1,
                         matchLink.name.value,
-                        spans)
+                        spans,
+                        sourceMap?.let { IntArray(matchLink.name.value.length) { matchLink.name.range.first + it } },
+                        removeWrapper = true)
 
                 result.add(spanRegion)
             }
@@ -257,7 +270,7 @@ object OrgFormatter {
         }
     }
 
-    private fun parseMarkup(ssb: SpannableStringBuilder, config: Config): SpannableStringBuilder {
+    private fun parseMarkup(ssb: SpannableStringBuilder, config: Config, sourceMap: SourceTextMap?): SpannableStringBuilder {
         if (!config.style) {
             return ssb
         }
@@ -286,7 +299,8 @@ object OrgFormatter {
                 // Content only, without markers
                 val content = str.substring(found, str.length - found)
 
-                spanRegions.add(SpanRegion(start, end, content, spans))
+                spanRegions.add(SpanRegion(start, end, content, spans,
+                    sourceMap?.let { IntArray(content.length) { start + found + it } }, removeWrapper = true))
             }
         }
 
@@ -297,7 +311,7 @@ object OrgFormatter {
             setMarkupSpan(m)
         }
 
-        return buildFromRegions(ssb, spanRegions)
+        return buildFromRegions(ssb, spanRegions, sourceMap)
     }
 
     /**
@@ -320,10 +334,13 @@ object OrgFormatter {
         }
     }
 
-    private fun parseDrawers(ssb: SpannableStringBuilder, foldDrawers: Boolean): SpannableStringBuilder {
+    private fun parseDrawers(
+        ssb: SpannableStringBuilder, foldDrawers: Boolean, sourceMap: SourceTextMap?,
+        foldedDrawers: List<Boolean>?
+    ): SpannableStringBuilder {
         val m = ANY_DRAWER_PATTERN.matcher(ssb)
 
-        return collectRegions(ssb) { spanRegions ->
+        return collectRegions(ssb, sourceMap) { spanRegions ->
             while (m.find()) {
                 val name = m.group(1)!!
 
@@ -335,25 +352,32 @@ object OrgFormatter {
 
                 // if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Found drawer", name, content, "All:'${m.group()}'")
 
-                val drawerSpanned = drawerSpanned(name, content, foldDrawers)
+                val folded = foldedDrawers?.getOrNull(spanRegions.size) ?: foldDrawers
+                val drawerSpanned = drawerSpanned(name, content, folded)
+                // Drawer controls are generated text, not editable source content.
+                val sourceOffsets = sourceMap?.let { IntArray(drawerSpanned.length) { -1 } }
+                if (!folded && sourceOffsets != null) {
+                    val renderedContentStart = name.length + 3
+                    for (i in content.indices) sourceOffsets[renderedContentStart + i] = contentStart + i
+                }
 
                 val start = if (m.group().startsWith("\n")) m.start() + 1 else m.start()
                 val end = if (m.group().endsWith("\n")) m.end() - 1 else m.end()
 
-                spanRegions.add(SpanRegion(start, end, drawerSpanned))
+                spanRegions.add(SpanRegion(start, end, drawerSpanned, sourceOffsets = sourceOffsets))
             }
         }
     }
 
-    private fun collectRegions(ssb: SpannableStringBuilder, collect: (MutableList<SpanRegion>) -> Any): SpannableStringBuilder {
+    private fun collectRegions(ssb: SpannableStringBuilder, sourceMap: SourceTextMap?, collect: (MutableList<SpanRegion>) -> Any): SpannableStringBuilder {
         val spanRegions: MutableList<SpanRegion> = mutableListOf()
 
         collect(spanRegions)
 
-        return buildFromRegions(ssb, spanRegions)
+        return buildFromRegions(ssb, spanRegions, sourceMap)
     }
 
-    private fun buildFromRegions(ssb: SpannableStringBuilder, spanRegions: MutableList<SpanRegion>): SpannableStringBuilder {
+    private fun buildFromRegions(ssb: SpannableStringBuilder, spanRegions: MutableList<SpanRegion>, sourceMap: SourceTextMap?): SpannableStringBuilder {
         if (spanRegions.isNotEmpty()) {
             val builder = SpannableStringBuilder()
 
@@ -382,6 +406,13 @@ object OrgFormatter {
             // Append the rest
             if (pos < ssb.length) {
                 builder.append(ssb.subSequence(pos, ssb.length))
+            }
+
+            // Apply from the end so each replacement still uses the pre-replacement offsets.
+            spanRegions.asReversed().forEach { region ->
+                region.sourceOffsets?.let { offsets ->
+                    sourceMap?.replace(region.start, region.end, offsets, region.removeWrapper)
+                }
             }
 
             return builder
