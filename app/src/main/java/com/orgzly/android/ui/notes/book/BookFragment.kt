@@ -274,19 +274,20 @@ class BookFragment :
         })
 
         viewModel.refileRequestEvent.observeSingle(viewLifecycleOwner, Observer {
-            RefileFragment.getInstance(it.selected, it.count)
+            RefileFragment.getInstance(it.selected, it.count, it.titlePreview)
                     .show(childFragmentManager, RefileFragment.FRAGMENT_TAG)
         })
 
-        viewModel.notesDeleteRequest.observeSingle(viewLifecycleOwner, Observer { pair ->
-            val ids = pair.first
-            val count = pair.second
+        viewModel.notesDeleteRequest.observeSingle(viewLifecycleOwner, Observer { request ->
+            val ids = request.selected
+            val count = request.count
 
             val question = resources.getQuantityString(
                     R.plurals.delete_note_or_notes_with_count_question, count, count)
 
             dialog = MaterialAlertDialogBuilder(requireContext())
                     .setTitle(question)
+                    .setMessage(request.titlePreview?.ifBlank { getString(R.string.untitled_note) })
                     .setPositiveButton(R.string.delete) { _, _ ->
                         listener?.onNotesDeleteRequest(mBookId, ids)
                     }
