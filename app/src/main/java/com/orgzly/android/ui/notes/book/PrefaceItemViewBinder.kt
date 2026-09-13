@@ -1,7 +1,6 @@
 package com.orgzly.android.ui.notes.book
 
 import android.content.Context
-import android.graphics.Typeface
 import android.view.View
 import com.orgzly.R
 import com.orgzly.android.App
@@ -24,9 +23,10 @@ class PrefaceItemViewBinder(private val context: Context) {
             }
 
             if (preface != null) {
-                if (AppPreferences.isFontMonospaced(context)) {
-                    setTypeface(Typeface.MONOSPACE)
-                }
+                setTypeface(
+                    AppPreferences.typefaceForViewing(context),
+                    AppPreferences.typefaceForEditing(context)
+                )
                 setSourceText(preface)
 
                 /* If content changes (for example by toggling the checkbox), update the note. */

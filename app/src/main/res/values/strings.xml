@@ -299,8 +299,10 @@
     <string name="theme">Theme</string>
     <string name="light_scheme">Light scheme</string>
     <string name="dark_scheme">Dark scheme</string>
-    <string name="monospaced_font">Monospaced font</string>
-    <string name="monospaced_font_summary">Use monospaced font for note\'s content and notebook\'s preface</string>
+    <string name="monospaced_font">Monospaced font when viewing</string>
+    <string name="monospaced_font_summary">Use monospaced font when viewing note content and notebook preface</string>
+    <string name="monospaced_font_when_editing">Monospaced font when editing</string>
+    <string name="monospaced_font_when_editing_summary">Use monospaced font when editing note content and notebook preface</string>
     <string name="reversed_note_click_action">Swap note click and long-click actions</string>
     <string name="reversed_note_click_action_summary">Click to select note, long-click to open</string>
     <string name="look_and_feel">Look &amp; Feel</string>

@@ -1,7 +1,6 @@
 package com.orgzly.android.ui.notes.book
 
 import android.content.Context
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -68,9 +67,10 @@ class BookPrefaceFragment : CommonFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (AppPreferences.isFontMonospaced(context)) {
-            binding.fragmentBookPrefaceContent.setTypeface(Typeface.MONOSPACE)
-        }
+        binding.fragmentBookPrefaceContent.setTypeface(
+            AppPreferences.typefaceForViewing(context),
+            AppPreferences.typefaceForEditing(context)
+        )
 
         binding.fragmentBookPrefaceContent.setOnUserTextChangeListener { str ->
             binding.fragmentBookPrefaceContent.setSourceText(str)

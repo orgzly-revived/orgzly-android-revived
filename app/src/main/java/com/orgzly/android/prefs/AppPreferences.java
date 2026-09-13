@@ -206,6 +206,34 @@ public class AppPreferences {
                 context.getResources().getBoolean(R.bool.pref_default_is_font_monospaced));
     }
 
+    /**
+     * Monospaced font for edit mode. If the editing preference has never been set,
+     * copies {@link #isFontMonospaced(Context)} so existing users keep the same look
+     * and the Settings switch matches runtime behavior.
+     */
+    public static boolean isFontMonospacedWhenEditing(Context context) {
+        String key = context.getResources().getString(R.string.pref_key_is_font_monospaced_when_editing);
+        SharedPreferences prefs = getDefaultSharedPreferences(context);
+        if (!prefs.contains(key)) {
+            boolean value = isFontMonospaced(context);
+            prefs.edit().putBoolean(key, value).apply();
+            return value;
+        }
+        return prefs.getBoolean(key, context.getResources().getBoolean(R.bool.pref_default_is_font_monospaced_when_editing));
+    }
+
+    public static android.graphics.Typeface typefaceForViewing(Context context) {
+        return isFontMonospaced(context)
+                ? android.graphics.Typeface.MONOSPACE
+                : android.graphics.Typeface.SANS_SERIF;
+    }
+
+    public static android.graphics.Typeface typefaceForEditing(Context context) {
+        return isFontMonospacedWhenEditing(context)
+                ? android.graphics.Typeface.MONOSPACE
+                : android.graphics.Typeface.SANS_SERIF;
+    }
+
     public static boolean styleText(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(
                 context.getResources().getString(R.string.pref_key_style_text),
