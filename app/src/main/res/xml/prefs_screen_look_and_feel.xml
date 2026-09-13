@@ -60,6 +60,12 @@
             android:defaultValue="@bool/pref_default_is_font_monospaced"/>
 
         <SwitchPreference
+            android:key="@string/pref_key_is_font_monospaced_when_editing"
+            android:title="@string/monospaced_font_when_editing"
+            android:summary="@string/monospaced_font_when_editing_summary"
+            android:defaultValue="@bool/pref_default_is_font_monospaced_when_editing"/>
+
+        <SwitchPreference
             android:key="@string/pref_key_style_text"
             android:title="@string/style_text_title"
             android:summary="@string/style_text_summary"
