@@ -1,6 +1,8 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
+
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+apply plugin: 'com.android.legacy-kapt'
 apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 android {
@@ -17,8 +19,6 @@ android {
         resValue "string", "application_id", "com.orgzlyrevived"
 
         testInstrumentationRunner "com.orgzly.android.OrgzlyTestRunner"
-
-        multiDexEnabled = true
 
         buildConfigField "String", "DROPBOX_APP_KEY", gradle.ext.appProperties.getProperty("dropbox.app_key", '""')
 
@@ -51,7 +51,7 @@ android {
             shrinkResources = true
             minifyEnabled true
 
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             buildConfigField "boolean", "LOG_DEBUG", "false"
 
@@ -112,10 +112,6 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = 17
-    }
-
     packagingOptions {
         resources {
             excludes += ['META-INF/DEPENDENCIES', 'plugin.properties']
@@ -136,8 +132,6 @@ dependencies {
     kapt "org.jetbrains.kotlin:kotlin-metadata-jvm:$versions.kotlin"
 
     implementation "org.jetbrains:annotations:$versions.jetbrains_annotations"
-
-    implementation "androidx.multidex:multidex:$versions.android_multidex"
 
     implementation "androidx.appcompat:appcompat:$versions.android_appcompat"
 
@@ -194,6 +188,7 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$versions.android_test_ext_junit"
     androidTestImplementation "androidx.test.uiautomator:uiautomator:$versions.android_test_uiautomator"
     androidTestImplementation "de.sven-jacobs:loremipsum:$versions.loremipsum"
+    androidTestImplementation 'org.hamcrest:hamcrest:2.2'
 
     /* For running tests on lower API versions (e.g. 18) to avoid:
      * Didn't find class "androidx.test.core.app.InstrumentationActivityInvoker$BootstrapActivity"
