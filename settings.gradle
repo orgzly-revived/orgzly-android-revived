@@ -1,3 +1,9 @@
+pluginManagement {
+    repositories {
+        google()
+    }
+}
+
 /**
  * Load Orgzly-specific properties from app.properties.
  * File is not included, see sample.app.properties file.
