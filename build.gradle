@@ -12,8 +12,6 @@ buildscript {
 
     versions.jetbrains_annotations = '26.1.0'
 
-    versions.android_multidex = '2.0.1'
-
     versions.android_appcompat = '1.7.1'
 
     versions.android_documentfile = '1.1.0'

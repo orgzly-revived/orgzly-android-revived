@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 apply plugin: 'com.android.application'
@@ -18,8 +19,6 @@ android {
         resValue "string", "application_id", "com.orgzlyrevived"
 
         testInstrumentationRunner "com.orgzly.android.OrgzlyTestRunner"
-
-        multiDexEnabled = true
 
         buildConfigField "String", "DROPBOX_APP_KEY", gradle.ext.appProperties.getProperty("dropbox.app_key", '""')
 
@@ -133,8 +132,6 @@ dependencies {
     kapt "org.jetbrains.kotlin:kotlin-metadata-jvm:$versions.kotlin"
 
     implementation "org.jetbrains:annotations:$versions.jetbrains_annotations"
-
-    implementation "androidx.multidex:multidex:$versions.android_multidex"
 
     implementation "androidx.appcompat:appcompat:$versions.android_appcompat"
 
