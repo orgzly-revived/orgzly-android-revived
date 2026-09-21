@@ -1,0 +1,40 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/keep_screen_on"
+        app:showAsAction="never"
+        android:checkable="true"
+        android:title="@string/keep_screen_on"/>
+
+    <item
+        android:id="@+id/calendar_view"
+        android:title="@string/calendar_view"
+        app:showAsAction="never">
+
+        <menu>
+            <item
+                android:id="@+id/calendar_view_agenda"
+                android:title="@string/agenda"/>
+
+            <item
+                android:id="@+id/calendar_view_week"
+                android:title="@string/week"/>
+
+            <item
+                android:id="@+id/calendar_view_month"
+                android:title="@string/month"/>
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/sync"
+        app:showAsAction="never"
+        android:title="@string/sync"/>
+
+    <item
+        android:id="@+id/activity_action_settings"
+        app:showAsAction="never"
+        android:title="@string/settings"/>
+</menu>
