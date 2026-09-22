@@ -3,6 +3,7 @@ package com.orgzly.android.reminders
 import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.db.dao.ReminderTimeDao
 import com.orgzly.android.reminders.NoteReminders.getNoteReminders
+import org.joda.time.DateTime
 import org.joda.time.Instant
 import org.junit.Assert
 import org.junit.Test
@@ -57,6 +58,58 @@ class NoteRemindersTest : OrgzlyTest() {
         notes[1].apply {
             Assert.assertEquals("Note 2", payload.title)
             Assert.assertEquals("2017-03-20T16:00:00.000", runTime.toLocalDateTime().toString())
+        }
+    }
+
+    @Test
+    fun testRecurringEventSchedulesNextOccurrence() {
+        testUtils.setupBook(
+                "notebook",
+                """
+                    * Note 1
+                    <2017-03-10 Fri 16:00 +1h>
+                """.trimIndent())
+
+        val now = Instant.parse("2017-03-10T16:30:00")
+
+        val notes = getNoteReminders(
+                context, dataRepository, now, LastRun(), NoteReminders.INTERVAL_FROM_NOW)
+
+        Assert.assertEquals(1, notes.size.toLong())
+
+        notes[0].apply {
+            Assert.assertEquals("Note 1", payload.title)
+            Assert.assertEquals(ReminderTimeDao.EVENT_TIME, payload.timeType)
+            Assert.assertEquals("2017-03-10T17:00:00.000", runTime.toLocalDateTime().toString())
+        }
+    }
+
+    @Test
+    fun testRecurringEventOccurrenceSinceLastRun() {
+        testUtils.setupBook(
+                "notebook",
+                """
+                    * Note 1
+                    <2017-03-10 Fri 16:00 +1h>
+                """.trimIndent())
+
+        val now = Instant.parse("2017-03-10T17:01:00")
+        val lastRun = LastRun(
+                event = DateTime.parse("2017-03-10T16:59:00"))
+
+        val notes = getNoteReminders(
+                context,
+                dataRepository,
+                now,
+                lastRun,
+                NoteReminders.INTERVAL_FROM_LAST_TO_NOW)
+
+        Assert.assertEquals(1, notes.size.toLong())
+
+        notes[0].apply {
+            Assert.assertEquals("Note 1", payload.title)
+            Assert.assertEquals(ReminderTimeDao.EVENT_TIME, payload.timeType)
+            Assert.assertEquals("2017-03-10T17:00:00.000", runTime.toLocalDateTime().toString())
         }
     }
 

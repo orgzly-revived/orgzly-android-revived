@@ -49,11 +49,16 @@ object NoteReminders {
                     null
                 }
 
+                // Preserve existing scheduled/deadline reminder behavior;
+                // expand repeaters for event timestamps.
+                val useRepeater = noteTime.timeType == ReminderTimeDao.EVENT_TIME
+
                 val time = getFirstTime(
                     orgDateTime,
                     interval,
                     AppPreferences.reminderDailyTime(context),
-                    warningPeriod
+                    warningPeriod,
+                    useRepeater
                 )
 
 //                    if (BuildConfig.LOG_DEBUG) {
@@ -136,14 +141,15 @@ object NoteReminders {
         orgDateTime: OrgDateTime,
         interval: Pair<ReadableInstant, ReadableInstant?>,
         defaultTimeOfDay: Int,
-        warningPeriod: OrgInterval?): DateTime? {
+        warningPeriod: OrgInterval?,
+        useRepeater: Boolean): DateTime? {
 
         val times = OrgDateTimeUtils.getTimesInInterval(
             orgDateTime,
             interval.first,
             interval.second,
             defaultTimeOfDay,
-            false, // Do not use repeater for reminders
+            useRepeater,
             warningPeriod,
             1)
 
