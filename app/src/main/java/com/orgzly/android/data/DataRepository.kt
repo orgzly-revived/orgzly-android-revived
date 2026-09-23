@@ -1124,9 +1124,14 @@ class DataRepository @Inject constructor(
                 var updated = 0
 
                 val doneKeywords = AppPreferences.doneKeywordsSet(context)
-                val logDone = LogDonePolicy.resolve(context)
+                // A null preface is a cacheable answer, which getOrPut cannot represent.
+                val prefaces = HashMap<Long, String?>()
 
                 db.note().getNoteForStateChange(noteIds, state).forEach { note ->
+                    if (!prefaces.containsKey(note.bookId)) {
+                        prefaces[note.bookId] = db.book().get(note.bookId)?.preface
+                    }
+                    val logDone = LogDonePolicy.resolve(context, prefaces[note.bookId])
 
                     var title = note.title
                     var content = note.content

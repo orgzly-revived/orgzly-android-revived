@@ -334,7 +334,7 @@ abstract class NoteDao : BaseDao<Note> {
     abstract fun updateStateAndRemoveClosedTime(ids: Set<Long>, state: String?): Int
 
     @Query("""
-        SELECT notes.id as noteId, state, title, content,
+        SELECT notes.id as noteId, notes.book_id AS bookId, state, title, content,
                st.string AS scheduled, dt.string AS deadline, ct.string AS closed
 
         FROM notes
@@ -438,6 +438,7 @@ abstract class NoteDao : BaseDao<Note> {
 
     data class NoteForStateUpdate(
             val noteId: Long,
+            val bookId: Long,
             val state: String?,
             val title: String,
             val content: String?,

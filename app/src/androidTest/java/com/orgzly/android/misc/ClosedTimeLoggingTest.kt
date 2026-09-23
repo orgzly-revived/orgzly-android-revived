@@ -14,10 +14,33 @@ class ClosedTimeLoggingTest : OrgzlyTest() {
     }
 
     @Test
+    fun testNotebookStartupAppliesWithoutTheProperty() {
+        AppPreferences.logDone(context, true)
+
+        val book = testUtils.setupBook("book-a", "#+STARTUP: nologdone\n\n* TODO Task\n")
+
+        markDone("Task")
+
+        assertFalse(exportBook(book).contains("CLOSED:"))
+    }
+
+    @Test
     fun testSettingAppliesWithoutPropertyOrStartup() {
         AppPreferences.logDone(context, false)
 
         val book = testUtils.setupBook("book-a", "* TODO Task\n")
+
+        markDone("Task")
+
+        assertFalse(exportBook(book).contains("CLOSED:"))
+    }
+
+    /** Org matches in-buffer keyword names case-insensitively too. */
+    @Test
+    fun testStartupKeywordIsCaseInsensitive() {
+        AppPreferences.logDone(context, true)
+
+        val book = testUtils.setupBook("book-a", "#+startup: nologdone\n\n* TODO Task\n")
 
         markDone("Task")
 

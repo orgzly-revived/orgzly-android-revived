@@ -188,7 +188,10 @@ class NoteViewModel(
     fun updatePayloadState(state: String?) {
         notePayload?.let {
             notePayload = NoteBuilder.changeState(
-                App.getAppContext(), it, state, LogDonePolicy.resolve(App.getAppContext()))
+                App.getAppContext(),
+                it,
+                state,
+                LogDonePolicy.resolve(App.getAppContext(), bookView.value?.book?.preface))
         }
     }
 
