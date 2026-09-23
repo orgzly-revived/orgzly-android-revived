@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.data.DataRepository
+import com.orgzly.android.data.LogDonePolicy
 import com.orgzly.android.data.mappers.OrgMapper
 import com.orgzly.android.db.entity.BookView
 import com.orgzly.android.db.entity.Note
@@ -186,7 +187,8 @@ class NoteViewModel(
 
     fun updatePayloadState(state: String?) {
         notePayload?.let {
-            notePayload = NoteBuilder.changeState(App.getAppContext(), it, state)
+            notePayload = NoteBuilder.changeState(
+                App.getAppContext(), it, state, LogDonePolicy.resolve(App.getAppContext()))
         }
     }
 

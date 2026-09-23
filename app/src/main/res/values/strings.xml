@@ -597,6 +597,8 @@
     <string name="overwrite_remote_notebook_question">Overwrite remote notebook(s)?</string>
     <string name="drawers_folded_by_default">Drawers folded</string>
     <string name="drawers_folded_by_default_summary">Fold drawers by default</string>
+    <string name="log_done">Record closed time</string>
+    <string name="log_done_summary">Add a CLOSED timestamp when a note is marked as done</string>
     <string name="log_on_time_shift">Log to drawer on time shift</string>
     <string name="log_on_time_shift_summary">Log time when note with repeater is marked as done</string>
     <string name="set_last_repeat_on_time_shift">Set property on time shift</string>

@@ -1124,6 +1124,7 @@ class DataRepository @Inject constructor(
                 var updated = 0
 
                 val doneKeywords = AppPreferences.doneKeywordsSet(context)
+                val logDone = LogDonePolicy.resolve(context)
 
                 db.note().getNoteForStateChange(noteIds, state).forEach { note ->
 
@@ -1132,13 +1133,14 @@ class DataRepository @Inject constructor(
 
                     val eventsInNote = EventsInNote(title, content)
 
-                    val scl = StateChangeLogic(doneKeywords)
+                    val scl = StateChangeLogic(doneKeywords, logDone)
 
                     scl.setState(
                             state,
                             note.state,
                             OrgRange.parseOrNull(note.scheduled),
                             OrgRange.parseOrNull(note.deadline),
+                            OrgRange.parseOrNull(note.closed),
                             eventsInNote.timestamps.map { OrgRange(it) })
 
                     if (scl.isShifted) {

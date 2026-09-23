@@ -23,6 +23,7 @@ import com.orgzly.android.espresso.ShareActivityTest
 import com.orgzly.android.espresso.SyncingTest
 import com.orgzly.android.misc.BookNameTest
 import com.orgzly.android.misc.BookParsingTest
+import com.orgzly.android.misc.ClosedTimeLoggingTest
 import com.orgzly.android.misc.ContentCheckboxesTitleUpdateViaUpdateNoteContentTest
 import com.orgzly.android.misc.ContentCheckboxesTitleUpdateViaUpdateNoteTest
 import com.orgzly.android.misc.DataTest
@@ -106,6 +107,7 @@ import org.junit.runners.Suite
         ContentCheckboxesTitleUpdateViaUpdateNoteTest::class,
         ContentCheckboxesTitleUpdateViaUpdateNoteContentTest::class,
         NewNoteContentCheckboxesTitleUpdateTest::class,
+        ClosedTimeLoggingTest::class,
         StateChangeParentTitleUpdateTest::class,
         UriUtilsTest::class
 )

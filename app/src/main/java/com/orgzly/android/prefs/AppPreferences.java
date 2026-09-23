@@ -757,6 +757,21 @@ public class AppPreferences {
     }
 
     /*
+     * Record CLOSED time when a note is marked as done
+     */
+
+    public static boolean logDone(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(
+                context.getResources().getString(R.string.pref_key_log_done),
+                context.getResources().getBoolean(R.bool.pref_default_log_done));
+    }
+
+    public static void logDone(Context context, boolean value) {
+        String key = context.getResources().getString(R.string.pref_key_log_done);
+        getDefaultSharedPreferences(context).edit().putBoolean(key, value).apply();
+    }
+
+    /*
      * Log on time shift
      */
 
