@@ -109,4 +109,80 @@ class LogDonePolicyTest {
     fun `the app setting applies when nothing else says`() {
         assertEquals(LogDone.TIME, LogDonePolicy.resolve(null, "#+TITLE: Notes", LogDone.TIME))
     }
+
+    // --- writing the keyword back into a preface ---
+
+    @Test
+    fun `writing into an empty preface creates the line`() {
+        assertEquals("#+STARTUP: nologdone", LogDonePolicy.withLogDoneInPreface(null, LogDone.NONE))
+        assertEquals("#+STARTUP: logdone", LogDonePolicy.withLogDoneInPreface("", LogDone.TIME))
+    }
+
+    @Test
+    fun `writing keeps other content and puts the line first`() {
+        assertEquals(
+            "#+STARTUP: nologdone\n#+TITLE: Notes",
+            LogDonePolicy.withLogDoneInPreface("#+TITLE: Notes", LogDone.NONE))
+    }
+
+    @Test
+    fun `writing replaces an existing done token`() {
+        assertEquals(
+            "#+STARTUP: nologdone",
+            LogDonePolicy.withLogDoneInPreface("#+STARTUP: logdone", LogDone.NONE))
+    }
+
+    /** `#+STARTUP:` holds unrelated tokens, so only the done token may change. */
+    @Test
+    fun `writing preserves unrelated startup tokens`() {
+        assertEquals(
+            "#+STARTUP: overview logrepeat nologdone",
+            LogDonePolicy.withLogDoneInPreface("#+STARTUP: overview logdone logrepeat", LogDone.NONE))
+    }
+
+    @Test
+    fun `clearing removes only the done token`() {
+        assertEquals(
+            "#+STARTUP: overview",
+            LogDonePolicy.withLogDoneInPreface("#+STARTUP: overview nologdone", null))
+    }
+
+    @Test
+    fun `clearing drops a line left with nothing`() {
+        assertEquals(
+            "#+TITLE: Notes",
+            LogDonePolicy.withLogDoneInPreface("#+STARTUP: nologdone\n#+TITLE: Notes", null))
+    }
+
+    @Test
+    fun `writing collapses done tokens spread over several lines`() {
+        assertEquals(
+            "#+STARTUP: overview\n#+STARTUP: indent logdone",
+            LogDonePolicy.withLogDoneInPreface(
+                "#+STARTUP: overview logdone\n#+STARTUP: indent nologdone", LogDone.TIME))
+    }
+
+    @Test
+    fun `writing matches the keyword case-insensitively`() {
+        assertEquals(
+            "#+startup: nologdone",
+            LogDonePolicy.withLogDoneInPreface("#+startup: logdone", LogDone.NONE))
+    }
+
+    @Test
+    fun `lognotedone survives being written back`() {
+        assertEquals(
+            "#+STARTUP: lognotedone",
+            LogDonePolicy.withLogDoneInPreface("#+STARTUP: lognotedone", LogDone.NOTE))
+    }
+
+    @Test
+    fun `what is written is what is read back`() {
+        for (value in listOf(LogDone.NONE, LogDone.TIME, LogDone.NOTE)) {
+            val preface = LogDonePolicy.withLogDoneInPreface("#+TITLE: Notes", value)
+            assertEquals(value, LogDonePolicy.fromPreface(preface))
+        }
+        assertNull(LogDonePolicy.fromPreface(
+            LogDonePolicy.withLogDoneInPreface("#+STARTUP: logdone", null)))
+    }
 }
