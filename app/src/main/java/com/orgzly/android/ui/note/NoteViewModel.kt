@@ -191,9 +191,27 @@ class NoteViewModel(
                 App.getAppContext(),
                 it,
                 state,
-                LogDonePolicy.resolve(App.getAppContext(), bookView.value?.book?.preface))
+                LogDonePolicy.resolve(
+                    loggingProperty(it),
+                    bookView.value?.book?.preface,
+                    LogDonePolicy.fromPreferences(App.getAppContext())))
         }
     }
+
+    /** Unsaved edits to LOGGING apply at once; the ancestors decide only when there are none. */
+    private fun loggingProperty(payload: NotePayload): String? =
+        payload.properties.all
+            .lastOrNull { it.name.equals(LogDonePolicy.LOGGING, ignoreCase = true) }
+            ?.value
+            ?: ancestorLoggingProperty()
+
+    /** A new note is placed against [noteId], which is its ancestor only when placed under it. */
+    private fun ancestorLoggingProperty(): String? =
+        if (place == Place.UNDER) {
+            dataRepository.getInheritedProperty(noteId, LogDonePolicy.LOGGING)
+        } else {
+            dataRepository.getAncestorProperty(noteId, LogDonePolicy.LOGGING)
+        }
 
     fun updatePayloadScheduledTime(range: OrgRange?) {
         notePayload = notePayload?.copy(scheduled = range?.toString())

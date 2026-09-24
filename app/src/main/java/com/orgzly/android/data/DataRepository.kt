@@ -1124,6 +1124,7 @@ class DataRepository @Inject constructor(
                 var updated = 0
 
                 val doneKeywords = AppPreferences.doneKeywordsSet(context)
+                val appLogDone = LogDonePolicy.fromPreferences(context)
                 // A null preface is a cacheable answer, which getOrPut cannot represent.
                 val prefaces = HashMap<Long, String?>()
 
@@ -1131,7 +1132,10 @@ class DataRepository @Inject constructor(
                     if (!prefaces.containsKey(note.bookId)) {
                         prefaces[note.bookId] = db.book().get(note.bookId)?.preface
                     }
-                    val logDone = LogDonePolicy.resolve(context, prefaces[note.bookId])
+                    val logDone = LogDonePolicy.resolve(
+                        db.noteProperty().getInherited(note.noteId, LogDonePolicy.LOGGING),
+                        prefaces[note.bookId],
+                        appLogDone)
 
                     var title = note.title
                     var content = note.content
@@ -1370,6 +1374,14 @@ class DataRepository @Inject constructor(
 
     fun getNoteProperties(noteId: Long): List<NoteProperty> {
         return db.noteProperty().get(noteId)
+    }
+
+    fun getInheritedProperty(noteId: Long, name: String): String? {
+        return db.noteProperty().getInherited(noteId, name)
+    }
+
+    fun getAncestorProperty(noteId: Long, name: String): String? {
+        return db.noteProperty().getInheritedFromAncestors(noteId, name)
     }
 
     fun getNotePropertyNames(): List<String> {

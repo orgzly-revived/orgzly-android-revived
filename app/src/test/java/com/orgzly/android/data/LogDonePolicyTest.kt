@@ -57,4 +57,56 @@ class LogDonePolicyTest {
             LogDone.NONE,
             LogDonePolicy.fromPreface("#+TITLE: Notes\n#+STARTUP: nologdone\n#+FILETAGS: :work:\n"))
     }
+
+    @Test
+    fun `an absent logging property defers to the caller`() {
+        assertNull(LogDonePolicy.fromLoggingProperty(null))
+    }
+
+    /** LOGGING replaces all logging settings, so a value without a done keyword means off. */
+    @Test
+    fun `a logging property silent on done means off`() {
+        assertEquals(LogDone.NONE, LogDonePolicy.fromLoggingProperty("nil"))
+        assertEquals(LogDone.NONE, LogDonePolicy.fromLoggingProperty("logrepeat"))
+        assertEquals(LogDone.NONE, LogDonePolicy.fromLoggingProperty(""))
+        assertEquals(LogDone.NONE, LogDonePolicy.fromLoggingProperty("   "))
+    }
+
+    @Test
+    fun `a logging property can turn done-logging back on`() {
+        assertEquals(LogDone.TIME, LogDonePolicy.fromLoggingProperty("logdone"))
+        assertEquals(LogDone.NOTE, LogDonePolicy.fromLoggingProperty("lognotedone"))
+        assertEquals(LogDone.NONE, LogDonePolicy.fromLoggingProperty("nologdone"))
+    }
+
+    @Test
+    fun `the last done token in a logging property wins`() {
+        assertEquals(LogDone.NONE, LogDonePolicy.fromLoggingProperty("logdone nologdone"))
+        assertEquals(LogDone.TIME, LogDonePolicy.fromLoggingProperty("nologdone logdone"))
+    }
+
+    @Test
+    fun `a done token is found among other logging tokens`() {
+        assertEquals(
+            LogDone.TIME, LogDonePolicy.fromLoggingProperty("logrepeat logdone logdrawer"))
+    }
+
+    // --- which scope decides ---
+
+    @Test
+    fun `a logging property beats the preface`() {
+        assertEquals(
+            LogDone.TIME,
+            LogDonePolicy.resolve("logdone", "#+STARTUP: nologdone", LogDone.NONE))
+    }
+
+    @Test
+    fun `the preface beats the app setting`() {
+        assertEquals(LogDone.NONE, LogDonePolicy.resolve(null, "#+STARTUP: nologdone", LogDone.TIME))
+    }
+
+    @Test
+    fun `the app setting applies when nothing else says`() {
+        assertEquals(LogDone.TIME, LogDonePolicy.resolve(null, "#+TITLE: Notes", LogDone.TIME))
+    }
 }

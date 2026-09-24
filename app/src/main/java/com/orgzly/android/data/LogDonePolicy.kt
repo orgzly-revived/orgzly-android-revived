@@ -6,29 +6,34 @@ import com.orgzly.org.OrgFileSettings
 import com.orgzly.org.utils.LogDone
 
 /**
- * Resolves what to record when a note is marked as done.
- *
- * Follows org's `org-log-done`: a notebook's `#+STARTUP:` overrides the app setting, and a
- * scope that says nothing about done-logging defers to the one above it.
+ * What to record when a note is marked done, as org's `org-log-done`: an inherited `LOGGING`
+ * property beats a notebook's `#+STARTUP:`, which beats the app setting.
  */
 object LogDonePolicy {
 
     private val WHITESPACE = Regex("\\s+")
 
-    fun resolve(context: Context, preface: String?): LogDone =
-        fromPreface(preface) ?: fromPreferences(context)
+    const val LOGGING = "LOGGING"
 
-    /** Null when the preface carries no done-logging token, so the caller falls back. */
+    fun resolve(loggingProperty: String?, preface: String?, appSetting: LogDone): LogDone =
+        fromLoggingProperty(loggingProperty) ?: fromPreface(preface) ?: appSetting
+
+    /** Null when absent. LOGGING replaces all logging settings, so silence on done means off. */
+    fun fromLoggingProperty(value: String?): LogDone? =
+        value?.let { lastLogDone(it.trim().split(WHITESPACE)) ?: LogDone.NONE }
+
+    /** Null when no done token is set, because `#+STARTUP:` changes only what it names. */
     fun fromPreface(preface: String?): LogDone? =
         preface
             ?.let { OrgFileSettings.fromPreface(it) }
             ?.getKeywordValues(STARTUP)
-            ?.flatMap { it.trim().split(WHITESPACE) }
-            ?.mapNotNull(LogDone::fromToken)
-            ?.lastOrNull()
+            ?.let { values -> lastLogDone(values.flatMap { it.trim().split(WHITESPACE) }) }
 
-    private fun fromPreferences(context: Context): LogDone =
+    fun fromPreferences(context: Context): LogDone =
         if (AppPreferences.logDone(context)) LogDone.TIME else LogDone.NONE
+
+    private fun lastLogDone(tokens: List<String>): LogDone? =
+        tokens.mapNotNull(LogDone::fromToken).lastOrNull()
 
     private const val STARTUP = "STARTUP"
 }
