@@ -1,7 +1,6 @@
 package com.orgzly.android.ui.notes
 
 import android.content.Context
-import android.graphics.Typeface
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -103,9 +102,10 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
 
     private fun setupContent(holder: NoteItemViewHolder, note: Note) {
         if (note.hasContent() && titleGenerator.shouldDisplayContent(note)) {
-            if (AppPreferences.isFontMonospaced(context)) {
-                holder.binding.itemHeadContent.setTypeface(Typeface.MONOSPACE)
-            }
+            holder.binding.itemHeadContent.setTypeface(
+                AppPreferences.typefaceForViewing(context),
+                AppPreferences.typefaceForEditing(context)
+            )
 
             holder.binding.itemHeadContent.setSourceText(note.content)
 
