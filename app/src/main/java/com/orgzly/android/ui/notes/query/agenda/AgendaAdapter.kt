@@ -81,7 +81,7 @@ class AgendaAdapter(
 
                 noteViewBinder.bind(holder, item.note, item.timeType)
 
-                getSelection().setBackgroundIfSelected(holder.itemView, item.id)
+                getSelection().setActivatedIfSelected(holder.itemView, item.id)
             }
         }
     }

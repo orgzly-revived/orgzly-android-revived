@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <stroke
+        android:width="@dimen/item_head_highlight_width"
+        android:color="?colorSecondary" />
+    <solid
+        android:color="@color/item_head_background" />
+</shape>
