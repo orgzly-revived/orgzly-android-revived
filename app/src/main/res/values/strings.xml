@@ -805,6 +805,8 @@
     <string name="template_name">Name</string>
     <string name="template_title">Title</string>
     <string name="template_content">Content</string>
+    <string name="template_properties">Properties</string>
+    <string name="template_properties_hint" formatted="false">One per line, e.g. CREATED: %U</string>
     <string name="template_tokens_hint" formatted="false">Tokens: %t %T (date/time) %u %U (inactive) %c (clipboard)</string>
     <string name="template_target">Target</string>
     <string name="template_select_target">Select target</string>

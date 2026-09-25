@@ -78,6 +78,27 @@
             <View style="@style/HorizontalDivider" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp"
+                app:boxBackgroundMode="none"
+                app:helperTextEnabled="true"
+                app:helperText="@string/template_properties_hint">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/template_properties"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/screen_edge"
+                    android:paddingVertical="12dp"
+                    android:background="@null"
+                    android:inputType="textMultiLine"
+                    android:hint="@string/template_properties"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View style="@style/HorizontalDivider" />
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/template_target_book_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

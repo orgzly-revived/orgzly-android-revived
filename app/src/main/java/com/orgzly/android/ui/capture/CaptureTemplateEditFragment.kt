@@ -60,6 +60,7 @@ class CaptureTemplateEditFragment : Fragment() {
             binding.templateName.setText(existingTemplate.name)
             binding.templateTitle.setText(existingTemplate.title)
             binding.templateContent.setText(existingTemplate.content)
+            binding.templateProperties.setText(existingTemplate.properties)
             binding.templateTags.setText(existingTemplate.tags)
             binding.templateScheduled.isChecked = existingTemplate.isScheduled
         }
@@ -245,6 +246,7 @@ class CaptureTemplateEditFragment : Fragment() {
             name = name,
             title = binding.templateTitle.text?.toString()?.trim() ?: "",
             content = binding.templateContent.text?.toString()?.trim() ?: "",
+            properties = binding.templateProperties.text?.toString()?.trim(),
             targetBook = selectedBookName,
             targetHeadline = headline,
             state = state,

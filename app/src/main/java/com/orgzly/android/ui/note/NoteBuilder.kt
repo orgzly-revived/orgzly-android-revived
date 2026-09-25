@@ -9,6 +9,7 @@ import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.NoteStates
 import com.orgzly.android.ui.capture.CaptureTemplate
 import com.orgzly.android.ui.capture.TemplateExpander
+import com.orgzly.android.ui.capture.parseTemplateProperties
 import com.orgzly.android.util.EventsInNote
 import com.orgzly.android.util.OrgFormatter
 import com.orgzly.org.OrgProperties
@@ -129,11 +130,20 @@ class NoteBuilder {
             }
             val basePayload = newPayload(context, expandedTitle, expandedContent)
 
+            // Template properties are applied on top of the initial ones (ID), and win over the
+            // created-at property, which DataRepository.createNote only sets if absent.
+            val properties = basePayload.properties.apply {
+                parseTemplateProperties(template.properties).forEach { (name, value) ->
+                    set(name, TemplateExpander.expand(value, context))
+                }
+            }
+
             return basePayload.copy(
                     state = template.state.ifBlank { basePayload.state },
                     priority = template.priority.ifBlank { null },
                     scheduled = if (template.isScheduled) todayScheduledTime() else null,
-                    tags = Tags.fromString(template.tags).tags
+                    tags = Tags.fromString(template.tags).tags,
+                    properties = properties
             )
         }
 
