@@ -82,6 +82,12 @@ class RefileFragment : DialogFragment() {
             }
         }
 
+        binding.dialogRefileSource.apply {
+            val preview = arguments?.getString(ARG_TITLE_PREVIEW)
+            text = preview?.ifBlank { getString(R.string.untitled_note) }
+            visibility = if (preview == null) View.GONE else View.VISIBLE
+        }
+
         val adapter = RefileAdapter(binding.root.context, object: RefileAdapter.OnClickListener {
             override fun onItem(item: RefileViewModel.Item) {
                 viewModel.open(item)
@@ -196,17 +202,19 @@ class RefileFragment : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(noteIds: Set<Long>, count: Int): RefileFragment {
+        fun getInstance(noteIds: Set<Long>, count: Int, titlePreview: String? = null): RefileFragment {
             return RefileFragment().also { fragment ->
                 fragment.arguments = Bundle().apply {
                     putLongArray(ARG_NOTE_IDS, noteIds.toLongArray())
                     putInt(ARG_COUNT, count)
+                    putString(ARG_TITLE_PREVIEW, titlePreview)
                 }
             }
         }
 
         private const val ARG_NOTE_IDS = "note_ids"
         private const val ARG_COUNT = "count"
+        private const val ARG_TITLE_PREVIEW = "title_preview"
 
         private val TAG = RefileFragment::class.java.name
 
