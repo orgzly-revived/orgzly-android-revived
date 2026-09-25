@@ -1,7 +1,6 @@
 package com.orgzly.android.repos
 
 import android.net.Uri
-import android.os.Build
 import com.burgstaller.okhttp.AuthenticationCacheInterceptor
 import com.burgstaller.okhttp.CachingAuthenticatorDecorator
 import com.burgstaller.okhttp.DispatchingAuthenticator
@@ -178,18 +177,10 @@ class WebdavRepo(
         return sardine
                 .list(url, listDepth)
                 .mapNotNull {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        if (!BookName.isSupportedFormatFileName(it.name) || ignores.isPathIgnored(it.getRelativePath(), it.isDirectory)) {
-                            null
-                        } else {
-                            it.toVersionedRook()
-                        }
+                    if (!BookName.isSupportedFormatFileName(it.name) || ignores.isPathIgnored(it.getRelativePath(), it.isDirectory)) {
+                        null
                     } else {
-                        if (!BookName.isSupportedFormatFileName(it.name)) {
-                            null
-                        } else {
-                            it.toVersionedRook()
-                        }
+                        it.toVersionedRook()
                     }
                 }
                 .toMutableList()
