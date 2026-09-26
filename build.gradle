@@ -72,7 +72,7 @@ buildscript {
 
     versions.okhttp_digest = '3.1.1'
 
-    versions.jgit = '5.13.5.202508271544-r'
+    versions.jgit = '7.7.0.202606012155-r'
 
     versions.security_crypto = '1.1.0'
 
@@ -81,6 +81,8 @@ buildscript {
     versions.robolectric = '4.16.1'
 
     versions.webdav_embedded_server = '0.2.1'
+
+    versions.net_i2p_crypto_eddsa = '0.3.0'
 
     ext.versions = versions
 
