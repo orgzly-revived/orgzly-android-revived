@@ -24,7 +24,7 @@ import java.text.DateFormatSymbols
 import java.util.Calendar
 import java.util.Locale
 
-enum class CalendarDisplayMode { AGENDA, MONTH, WEEK }
+enum class CalendarDisplayMode { AGENDA, MONTH, WEEK, TWO_WEEKS }
 
 
 fun isSameMonth(day: DateTime, month: DateTime): Boolean =
@@ -66,6 +66,24 @@ private fun systemFirstDOWJoda(): Int {
 public fun weekStartForDay(day: DateTime): DateTime {
     val firstDOWJoda = systemFirstDOWJoda()
     return day.withTimeAtStartOfDay().minusDays((7 + day.dayOfWeek - firstDOWJoda) % 7)
+}
+
+private fun renderTodayButton(
+    ctx: Context,
+    container: LinearLayout,
+    isAtToday: Boolean,
+    onToday: () -> Unit
+) {
+    container.removeViews(1, (container.childCount - 1).coerceAtLeast(0))
+    container.addView(ImageButton(ctx).apply {
+        setImageResource(R.drawable.ic_today)
+        setBackgroundColor(Color.TRANSPARENT)
+        scaleType = ImageView.ScaleType.CENTER_INSIDE
+        val dp36 = (36 * ctx.resources.displayMetrics.density).toInt()
+        layoutParams = LinearLayout.LayoutParams(dp36, dp36)
+        setColorFilter(if (isAtToday) Color.GRAY else Color.WHITE)
+        setOnClickListener { if (!isAtToday) onToday() }
+    })
 }
 
 private fun buildEventChip(
@@ -183,22 +201,13 @@ class AgendaMonthView(
         val today = DateTime.now().withTimeAtStartOfDay()
         val isAtToday = today.millis == selectedDay.millis
 
-        binding.monthLabelContainer.removeViews(1, (binding.monthLabelContainer.childCount - 1).coerceAtLeast(0))
-        binding.monthLabelContainer.addView(ImageButton(ctx).apply {
-            setImageResource(R.drawable.ic_today)
-            setBackgroundColor(Color.TRANSPARENT)
-            scaleType = ImageView.ScaleType.CENTER_INSIDE
-            val dp36 = (36 * ctx.resources.displayMetrics.density).toInt()
-            layoutParams = LinearLayout.LayoutParams(dp36, dp36)
-            setColorFilter(if (isAtToday) Color.GRAY else Color.WHITE)
-            setOnClickListener { if (!isAtToday) onDaySelected(today) }
-        })
+        renderTodayButton(ctx, binding.monthLabelContainer, isAtToday) { onDaySelected(today) }
 
         val grid           = binding.monthGrid
         val textSize       = AppPreferences.calendarTextSize(ctx).toFloat()
         val showBook       = AppPreferences.calendarShowBookName(ctx)
         val systemFirstDOW = Calendar.getInstance().firstDayOfWeek
-        val firstDOWJoda   = if (systemFirstDOW == Calendar.SUNDAY) DateTimeConstants.SUNDAY else DateTimeConstants.MONDAY
+        val firstDOWJoda   = systemFirstDOWJoda()
         val firstDay       = month.withDayOfMonth(1).withTimeAtStartOfDay()
         val gridStart      = firstDay.minusDays((7 + firstDay.dayOfWeek - firstDOWJoda) % 7)
         val dayLabels      = DateFormatSymbols(Locale.getDefault()).shortWeekdays
@@ -206,7 +215,7 @@ class AgendaMonthView(
 
         val colorOnSurface = themeColor(com.google.android.material.R.attr.colorOnSurface)
         val selectedBg     = (colorOnSurface and 0x00FFFFFF) or 0x44000000
-        val todayBg     = (colorOnSurface and 0x00FFFFFF) or 0x22000000
+        val todayBg        = (colorOnSurface and 0x00FFFFFF) or 0x22000000
         val barColor       = themeColor(com.google.android.material.R.attr.colorSecondary)
 
         grid.removeAllViews()
@@ -275,15 +284,8 @@ class AgendaMonthView(
             allDay.take(2).forEach {
                 cell.addView(
                     buildEventChip(
-                        ctx,
-                        it,
-                        textSize,
-                        showBook,
-                        density,
-                        barColor,
-                        colorOnSurface,
-                        openNote,
-                        onSelectionToggle
+                        ctx, it, textSize, showBook, density,
+                        barColor, colorOnSurface, openNote, onSelectionToggle
                     )
                 )
             }
@@ -291,15 +293,8 @@ class AgendaMonthView(
             timed.take(2).forEach {
                 cell.addView(
                     buildEventChip(
-                        ctx,
-                        it,
-                        textSize,
-                        showBook,
-                        density,
-                        barColor,
-                        colorOnSurface,
-                        openNote,
-                        onSelectionToggle,
+                        ctx, it, textSize, showBook, density,
+                        barColor, colorOnSurface, openNote, onSelectionToggle,
                         showTime = true
                     )
                 )
@@ -321,7 +316,8 @@ class AgendaWeekView(
     private val getItems: () -> List<AgendaItem>,
     private val onDaySelected: (DateTime) -> Unit,
     private val openNote: (AgendaItem) -> Unit,
-    private val onSelectionToggle: (AgendaItem.Note) -> Unit
+    private val onSelectionToggle: (AgendaItem.Note) -> Unit,
+    private val weekCount: Int = 1
 ) {
     private fun themeColor(attr: Int): Int {
         val tv = TypedValue()
@@ -332,39 +328,25 @@ class AgendaWeekView(
     fun render(weekStart: DateTime, selectedDay: DateTime) {
         val ctx = fragment.requireContext()
         val selectedDayStart = selectedDay.withTimeAtStartOfDay()
+        val totalDays = weekCount * 7
 
         binding.monthLabel.text = DateUtils.formatDateRange(
             ctx,
             weekStart.millis,
-            weekStart.plusDays(6).millis,
-            DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_YEAR
+            weekStart.plusDays(totalDays - 1).millis,
+            DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_YEAR or DateUtils.FORMAT_NUMERIC_DATE
         )
 
         val today = DateTime.now().withTimeAtStartOfDay()
         val isAtToday = selectedDayStart.millis == today.millis
 
-        binding.monthLabelContainer.removeViews(
-            1,
-            (binding.monthLabelContainer.childCount - 1).coerceAtLeast(0)
-        )
-
-        binding.monthLabelContainer.addView(ImageButton(ctx).apply {
-            setImageResource(R.drawable.ic_today)
-            setBackgroundColor(Color.TRANSPARENT)
-            scaleType = ImageView.ScaleType.CENTER_INSIDE
-            val dp36 = (36 * ctx.resources.displayMetrics.density).toInt()
-            layoutParams = LinearLayout.LayoutParams(dp36, dp36)
-            setColorFilter(if (isAtToday) Color.GRAY else Color.WHITE)
-            setOnClickListener { onDaySelected(today) }
-        })
+        renderTodayButton(ctx, binding.monthLabelContainer, isAtToday) { onDaySelected(today) }
 
         val grid = binding.monthGrid
         val textSize = AppPreferences.calendarTextSize(ctx).toFloat()
         val showBook = AppPreferences.calendarShowBookName(ctx)
         val systemFirstDOW = Calendar.getInstance().firstDayOfWeek
-        val firstDOWJoda =
-            if (systemFirstDOW == Calendar.SUNDAY) DateTimeConstants.SUNDAY
-            else DateTimeConstants.MONDAY
+        val firstDOWJoda = systemFirstDOWJoda()
         val dayLabels = DateFormatSymbols(Locale.getDefault()).shortWeekdays
         val density = fragment.resources.displayMetrics.density
         val colorOnSurface = themeColor(com.google.android.material.R.attr.colorOnSurface)
@@ -374,10 +356,13 @@ class AgendaWeekView(
 
         grid.removeAllViews()
         grid.columnCount = 7
-        grid.rowCount = 1
+        grid.rowCount = weekCount
 
-        repeat(7) { i ->
-            val day = weekStart.plusDays(i)
+        repeat(totalDays) { index ->
+            val row = index / 7
+            val col = index % 7
+
+            val day = weekStart.plusDays(index)
             val dayStart = day.withTimeAtStartOfDay()
             val isSelected = dayStart.millis == selectedDayStart.millis
             val events = eventsForDay(getItems(), day)
@@ -385,93 +370,88 @@ class AgendaWeekView(
             val timed = events.filter { hourForEvent(it) != null }
 
             val dayColumn = LinearLayout(ctx).apply {
-                orientation = LinearLayout.VERTICAL
-                setPadding(4, 4, 4, 4)
+            orientation = LinearLayout.VERTICAL
+            setPadding(4, 4, 4, 4)
 
-                if (isSelected) {
-                    background = android.graphics.drawable.GradientDrawable().apply {
-                        setColor(selectedBg)
-                        cornerRadius = 12f
-                    }
-                }
+            isClickable = true
+            setOnClickListener { onDaySelected(dayStart) }
+        }
 
-                setOnClickListener { onDaySelected(dayStart) }
-            }
+        val dayHeader = LinearLayout(ctx).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER
+            setPadding(4, 4, 4, 4)
 
-            dayColumn.addView(TextView(ctx).apply {
-                val dowIndex = ((day.dayOfWeek - firstDOWJoda + 7) % 7)
-                text = dayLabels[(systemFirstDOW + dowIndex - 1) % 7 + 1]
-                gravity = Gravity.CENTER
-            })
-
-            dayColumn.addView(TextView(ctx).apply {
-                text = day.dayOfMonth.toString()
-                gravity = Gravity.CENTER
-
-                if (today.millis == dayStart.millis && !isSelected) {
-                    background = android.graphics.drawable.GradientDrawable().apply {
-                        setColor(todayBg)
-                        cornerRadius = 12f
-                    }
-                    setTextColor(Color.WHITE)
-                }
-
-                val size = (32 * density).toInt()
-                layoutParams = LinearLayout.LayoutParams(size, size).apply {
-                    gravity = Gravity.CENTER_HORIZONTAL
-                }
-            })
-
-            if (events.isEmpty()) {
-                dayColumn.addView(TextView(ctx).apply {
-                    gravity = Gravity.CENTER
-                    alpha = 0.3f
-                    this.textSize = textSize * 0.8f
-                })
-            } else {
-                allDay.forEach {
-                    dayColumn.addView(
-                        buildEventChip(
-                            ctx,
-                            it,
-                            textSize,
-                            showBook,
-                            density,
-                            barColor,
-                            colorOnSurface,
-                            openNote,
-                            onSelectionToggle
-                        )
-                    )
-                }
-
-                timed.forEach {
-                    dayColumn.addView(
-                        buildEventChip(
-                            ctx,
-                            it,
-                            textSize,
-                            showBook,
-                            density,
-                            barColor,
-                            colorOnSurface,
-                            openNote,
-                            onSelectionToggle,
-                            showTime = true
-                        )
-                    )
+            if (isSelected) {
+                background = android.graphics.drawable.GradientDrawable().apply {
+                    setColor(selectedBg)
+                    cornerRadius = 12f
                 }
             }
+        }
+
+        dayHeader.addView(TextView(ctx).apply {
+            val dowIndex = ((day.dayOfWeek - firstDOWJoda + 7) % 7)
+            text = dayLabels[(systemFirstDOW + dowIndex - 1) % 7 + 1]
+            gravity = Gravity.CENTER
+        })
+
+        dayHeader.addView(TextView(ctx).apply {
+            text = day.dayOfMonth.toString()
+            gravity = Gravity.CENTER
+
+            if (today.millis == dayStart.millis && !isSelected) {
+                background = android.graphics.drawable.GradientDrawable().apply {
+                    setColor(todayBg)
+                    cornerRadius = 12f
+                }
+                setTextColor(Color.WHITE)
+            }
+
+            val size = (32 * density).toInt()
+            layoutParams = LinearLayout.LayoutParams(size, size).apply {
+                gravity = Gravity.CENTER_HORIZONTAL
+            }
+        })
+
+        dayColumn.addView(
+            dayHeader,
+            LinearLayout.LayoutParams(
+                MATCH_PARENT,
+                WRAP_CONTENT
+            )
+        )
+
+        allDay.forEach {
+            dayColumn.addView(
+                buildEventChip(
+                    ctx, it, textSize, showBook, density,
+                    barColor, colorOnSurface, openNote, onSelectionToggle
+                )
+            )
+        }
+
+        timed.forEach {
+            dayColumn.addView(
+                buildEventChip(
+                    ctx, it, textSize, showBook, density,
+                    barColor, colorOnSurface, openNote, onSelectionToggle,
+                    showTime = true
+                )
+            )
+        }
+
 
             grid.addView(
                 androidx.core.widget.NestedScrollView(ctx).apply {
+                    isFillViewport = true
                     addView(dayColumn)
                 },
                 GridLayout.LayoutParams().apply {
                     width = 0
-                    height = WRAP_CONTENT
-                    columnSpec = GridLayout.spec(i, 1f)
-                    rowSpec = GridLayout.spec(0, 1f)
+                    height = 0
+                    columnSpec = GridLayout.spec(col, 1f)
+                    rowSpec = GridLayout.spec(row, 1f)
                 }
             )
         }

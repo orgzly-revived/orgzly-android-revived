@@ -76,6 +76,7 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
     private lateinit var monthView: AgendaMonthView
     private lateinit var weekView: AgendaWeekView
+    private lateinit var twoWeeksView: AgendaWeekView
     private var currentWeekStart: DateTime = weekStartForDay(DateTime.now().withTimeAtStartOfDay())
 
     private val appBarBackPressHandler = object : OnBackPressedCallback(false) {
@@ -95,9 +96,10 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
         requireActivity().onBackPressedDispatcher.addCallback(this, notePopupDismissOnBackPress)
 
         displayMode = when (AppPreferences.calendarDefaultView(requireContext())) {
-            "month" -> CalendarDisplayMode.MONTH
-            "week"  -> CalendarDisplayMode.WEEK
-            else    -> CalendarDisplayMode.AGENDA
+            "month"     -> CalendarDisplayMode.MONTH
+            "week"      -> CalendarDisplayMode.WEEK
+            "two_weeks" -> CalendarDisplayMode.TWO_WEEKS
+            else        -> CalendarDisplayMode.AGENDA
         }
     }
 
@@ -161,6 +163,26 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
                 viewModel.appBar.toModeFromSelectionCount(viewAdapter.getSelection().count)
             }
         )
+        
+        twoWeeksView = AgendaWeekView(
+            fragment          = this,
+            binding           = binding,
+            getItems          = { currentItems },
+            onDaySelected     = { day ->
+                selectedMonthDay = day
+                val d = day.withTimeAtStartOfDay()
+                if (d.isBefore(currentWeekStart) || !d.isBefore(currentWeekStart.plusDays(14))) {
+                    currentWeekStart = weekStartForDay(day)
+                }
+                twoWeeksView.render(currentWeekStart, selectedMonthDay)
+            },
+            openNote          = { openNote(it) },
+            onSelectionToggle = { item: AgendaItem.Note ->
+                viewAdapter.getSelection().toggle(item.id)
+                viewModel.appBar.toModeFromSelectionCount(viewAdapter.getSelection().count)
+            },
+            weekCount         = 2
+        )
 
         val layoutManager = StickyHeadersLinearLayoutManager<AgendaAdapter>(
                 context, LinearLayoutManager.VERTICAL, false)
@@ -198,7 +220,12 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             CalendarDisplayMode.WEEK -> {
                 binding.fragmentQueryAgendaRecyclerView.visibility = View.GONE
                 binding.fragmentQueryAgendaMonthContainer.visibility = View.VISIBLE
-                setupWeekNavigation()
+                setupWeekNavigation(1)
+            }
+            CalendarDisplayMode.TWO_WEEKS -> {
+                binding.fragmentQueryAgendaRecyclerView.visibility = View.GONE
+                binding.fragmentQueryAgendaMonthContainer.visibility = View.VISIBLE
+                setupWeekNavigation(2)
             }
             else -> {}
         }
@@ -239,14 +266,23 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             CalendarDisplayMode.MONTH -> {
                 binding.fragmentQueryAgendaRecyclerView.visibility = View.GONE
                 binding.fragmentQueryAgendaMonthContainer.visibility = View.VISIBLE
+                currentMonth = selectedMonthDay.withDayOfMonth(1)
                 setupMonthNavigation()
                 monthView.render(currentMonth, selectedMonthDay)
             }
             CalendarDisplayMode.WEEK -> {
                 binding.fragmentQueryAgendaRecyclerView.visibility = View.GONE
                 binding.fragmentQueryAgendaMonthContainer.visibility = View.VISIBLE
-                setupWeekNavigation()
+                currentWeekStart = weekStartForDay(selectedMonthDay)
+                setupWeekNavigation(1)
                 weekView.render(currentWeekStart, selectedMonthDay)
+            }
+            CalendarDisplayMode.TWO_WEEKS -> {
+                binding.fragmentQueryAgendaRecyclerView.visibility = View.GONE
+                binding.fragmentQueryAgendaMonthContainer.visibility = View.VISIBLE
+                currentWeekStart = weekStartForDay(selectedMonthDay)
+                setupWeekNavigation(2)
+                twoWeeksView.render(currentWeekStart, selectedMonthDay)
             }
             CalendarDisplayMode.AGENDA -> {
                 binding.fragmentQueryAgendaRecyclerView.visibility = View.VISIBLE
@@ -262,6 +298,9 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
             findItem(R.id.calendar_view_week)?.isChecked =
                 displayMode == CalendarDisplayMode.WEEK
+
+            findItem(R.id.calendar_view_two_weeks)?.isChecked =
+                displayMode == CalendarDisplayMode.TWO_WEEKS
 
             findItem(R.id.calendar_view_month)?.isChecked =
                 displayMode == CalendarDisplayMode.MONTH
@@ -297,6 +336,12 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
 
                     R.id.calendar_view_week -> {
                         displayMode = CalendarDisplayMode.WEEK
+                        applyDisplayMode(displayMode)
+                        updateCalendarViewMenu()
+                    }
+
+                    R.id.calendar_view_two_weeks -> {
+                        displayMode = CalendarDisplayMode.TWO_WEEKS
                         applyDisplayMode(displayMode)
                         updateCalendarViewMenu()
                     }
@@ -426,6 +471,10 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
                 weekView.render(currentWeekStart, selectedMonthDay)
             }
 
+            if (::twoWeeksView.isInitialized && displayMode == CalendarDisplayMode.TWO_WEEKS) {
+                twoWeeksView.render(currentWeekStart, selectedMonthDay)
+            }
+
             val ids = notes.mapTo(hashSetOf()) { it.note.id }
 
             viewAdapter.getSelection().removeNonExistent(ids)
@@ -527,27 +576,19 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
         }
     }
 
-    private fun setupWeekNavigation() {
+    private fun setupWeekNavigation(stepWeeks: Int) {
+        val view = if (stepWeeks == 2) twoWeeksView else weekView
+
         binding.monthPrevButton.setOnClickListener {
-            val selectedDow = selectedMonthDay.dayOfWeek
-
-            currentWeekStart = currentWeekStart.minusWeeks(1)
-            selectedMonthDay = currentWeekStart.plusDays(
-                (selectedDow - currentWeekStart.dayOfWeek + 7) % 7
-            )
-
-            weekView.render(currentWeekStart, selectedMonthDay)
+            currentWeekStart = currentWeekStart.minusWeeks(stepWeeks)
+            selectedMonthDay = selectedMonthDay.minusWeeks(stepWeeks)
+            view.render(currentWeekStart, selectedMonthDay)
         }
 
         binding.monthNextButton.setOnClickListener {
-            val selectedDow = selectedMonthDay.dayOfWeek
-
-            currentWeekStart = currentWeekStart.plusWeeks(1)
-            selectedMonthDay = currentWeekStart.plusDays(
-                (selectedDow - currentWeekStart.dayOfWeek + 7) % 7
-            )
-
-            weekView.render(currentWeekStart, selectedMonthDay)
+            currentWeekStart = currentWeekStart.plusWeeks(stepWeeks)
+            selectedMonthDay = selectedMonthDay.plusWeeks(stepWeeks)
+            view.render(currentWeekStart, selectedMonthDay)
         }
     }
 

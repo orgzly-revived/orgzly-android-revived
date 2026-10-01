@@ -386,12 +386,14 @@
         <item>@string/agenda</item>
         <item>@string/month</item>
         <item>@string/week</item>
+        <item>@string/two_weeks</item>
     </string-array>
 
     <string-array name="calendar_default_views_values">
         <item>agenda</item>
         <item>month</item>
         <item>week</item>
+        <item>two_weeks</item>
     </string-array>
 
     <string name="pref_key_selected_note_metadata" translatable="false">pref_key_selected_note_metadata</string>

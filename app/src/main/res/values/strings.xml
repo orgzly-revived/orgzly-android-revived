@@ -344,6 +344,7 @@
     <string name="hour">Hour</string>
     <string name="day">Day</string>
     <string name="week">Week</string>
+    <string name="two_weeks">Two weeks</string>
     <string name="month">Month</string>
     <string name="year">Year</string>
 
