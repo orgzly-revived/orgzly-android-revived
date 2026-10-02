@@ -55,6 +55,7 @@ object OrgFormatter {
     private val LOGBOOK_DRAWER_PATTERN = drawerPattern(LOGBOOK_DRAWER_NAME)
 
     private const val PLAIN_LIST_CHARS = "-\\+"
+    private val PLAIN_LIST_ITEM_PATTERN = Pattern.compile("""^([ \t]*)[$PLAIN_LIST_CHARS][ \t]+""")
     private val CHECKBOXES_PATTERN = Pattern.compile("""^\s*[$PLAIN_LIST_CHARS]\s+(\[[ -X]])""", Pattern.MULTILINE)
 
     private const val INACTIVE_DATETIME = "(\\[[0-9]{4,}-[0-9]{2}-[0-9]{2} ?[^\\]\\r\\n>]*?[0-9]{1,2}:[0-9]{2}\\])"
@@ -401,12 +402,21 @@ object OrgFormatter {
 
             if (m.find()) {
                 val start = m.start(2) // Content start
-                StringBuilder(content).insert(start, "$entry\n").toString()
+                val indentation = existingListIndentation(m.group(2))
+                StringBuilder(content).insert(start, "$indentation$entry\n").toString()
 
             } else {
                 insertLogbookEntryLineWithoutDrawer(content, entry)
             }
         }
+    }
+
+    private fun existingListIndentation(logbookContent: String): String {
+        // Preserve the indentation of an existing top-level LOGBOOK list.
+        // If there is no list at the insertion point, keep the existing
+        // unindented behavior.
+        val matcher = PLAIN_LIST_ITEM_PATTERN.matcher(logbookContent)
+        return if (matcher.find()) matcher.group(1).orEmpty() else ""
     }
 
     private fun insertLogbookEntryLineWithoutDrawer(content: String?, entry: String): String {
