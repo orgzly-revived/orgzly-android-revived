@@ -22,6 +22,24 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.23.1"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix folder issues when using multiple Git repos." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Various minor UI bug fixes." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Upgrade dependencies." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.23.0"
             tools:ignore="HardcodedText"
             android:autoLink="web" />
