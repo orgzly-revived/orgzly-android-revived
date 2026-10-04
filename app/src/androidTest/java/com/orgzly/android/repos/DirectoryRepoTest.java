@@ -1,6 +1,5 @@
 package com.orgzly.android.repos;
 
-import android.os.Build;
 import android.os.Environment;
 
 import com.orgzly.android.BookName;
@@ -21,7 +20,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assume.assumeTrue;
 
 public class DirectoryRepoTest extends OrgzlyTest {
     private static final String TAG = DirectoryRepoTest.class.getName();
@@ -88,7 +86,6 @@ public class DirectoryRepoTest extends OrgzlyTest {
 
     @Test
     public void testGetBooksRespectsIgnoreRules() throws IOException {
-        assumeTrue(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O);
         RepoWithProps repoWithProps = new RepoWithProps(new Repo(13, RepoType.DIRECTORY, repoUriString));
         DirectoryRepo repo = new DirectoryRepo(repoWithProps, true);
 

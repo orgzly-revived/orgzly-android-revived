@@ -1,7 +1,6 @@
 package com.orgzly.android.repos;
 
 import android.net.Uri;
-import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -88,17 +87,10 @@ public class DirectoryRepo implements SyncRepo {
 
         List<VersionedRook> result = new ArrayList<>();
 
-        File[] files;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            files = mDirectory.listFiles(
-                (dir, filename) -> BookName.isSupportedFormatFileName(filename)
-                    && !ignores.isPathIgnored(filename, false)
-            );
-        } else {
-            files = mDirectory.listFiles(
-                (dir, filename) -> BookName.isSupportedFormatFileName(filename)
-            );
-        }
+        File[] files = mDirectory.listFiles(
+            (dir, filename) -> BookName.isSupportedFormatFileName(filename)
+                && !ignores.isPathIgnored(filename, false)
+        );
 
         if (files != null) {
             Arrays.sort(files);
