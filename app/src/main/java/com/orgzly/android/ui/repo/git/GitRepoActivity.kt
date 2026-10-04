@@ -218,8 +218,6 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
         }
     }
 
-    // TODO: Since we can create multiple syncs, this folder might be re-used, do we want to create
-    //       a new one if this directory is already used up?
     private fun createDefaultRepoFolder() {
         if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
             return
@@ -232,21 +230,10 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
         } else {
             File(Environment.getExternalStorageDirectory().path)
         }
-        val orgzlyGitPath = File(baseDir, "orgzly-git")
-        var success = false
-        try {
-            success = orgzlyGitPath.mkdirs()
-        } catch(error: SecurityException) {}
-        if (success || (orgzlyGitPath.exists() && orgzlyGitPath.list().size == 0)) {
-            binding.activityRepoGitDirectory.setText(orgzlyGitPath.path)
+        val candidate = nextAvailableRepoDir(baseDir)
+        if (candidate.ensureDirectory()) {
+            binding.activityRepoGitDirectory.setText(candidate.path)
         }
-    }
-
-    private fun isOnPublicExternalStorage(dir: File): Boolean {
-        val extDir = Environment.getExternalStorageDirectory().absolutePath
-        val appSpecificDir = getExternalFilesDir(null)?.absolutePath ?: return false
-        val path = dir.absolutePath
-        return path.startsWith(extDir) && !path.startsWith(appSpecificDir)
     }
 
     private fun setFromPreferences() {
@@ -302,23 +289,27 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
                 save()
             } else {
                 val targetDirectory = File(binding.activityRepoGitDirectory.text.toString())
-                if (!targetDirectory.exists()) {
-                    binding.activityRepoGitDirectoryLayout.error =
-                        getString(R.string.git_clone_error_invalid_target_dir)
-                    return
-                }
-                if (targetDirectory.list()!!.isNotEmpty()) {
-                    binding.activityRepoGitDirectoryLayout.error =
-                        getString(R.string.git_clone_error_target_not_empty)
-                    return
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-                    isOnPublicExternalStorage(targetDirectory)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && isOnPublicExternalStorage(
+                        targetDirectory,
+                        Environment.getExternalStorageDirectory(),
+                        getExternalFilesDir(null))) {
                     val suggestedPath = getExternalFilesDir(null)?.let {
                         File(it, targetDirectory.name).absolutePath
                     } ?: targetDirectory.absolutePath
                     binding.activityRepoGitDirectoryLayout.error =
                         getString(R.string.git_clone_error_public_external_storage, suggestedPath)
+                    return
+                }
+                // The app-specific directory is hidden from file managers, so only we can
+                // create the target directory.
+                if (!targetDirectory.ensureDirectory()) {
+                    binding.activityRepoGitDirectoryLayout.error =
+                        getString(R.string.git_clone_error_invalid_target_dir)
+                    return
+                }
+                if (!targetDirectory.isEmptyOrMissing()) {
+                    binding.activityRepoGitDirectoryLayout.error =
+                        getString(R.string.git_clone_error_target_not_empty)
                     return
                 }
                 val repoScheme = getRepoScheme()
