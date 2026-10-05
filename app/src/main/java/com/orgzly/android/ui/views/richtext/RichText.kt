@@ -1,15 +1,19 @@
 package com.orgzly.android.ui.views.richtext
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Typeface
 import android.text.InputType
-import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -25,6 +29,7 @@ import com.orgzly.android.ui.views.style.DrawerMarkerSpan
 import com.orgzly.android.ui.views.style.DrawerSpan
 import com.orgzly.android.util.LogUtils
 import com.orgzly.android.util.OrgFormatter
+import com.orgzly.android.util.SourceTextMap
 
 class RichText(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs), ActionableRichTextView {
@@ -78,6 +83,10 @@ class RichText(context: Context, attrs: AttributeSet?) :
     private val richTextEdit: RichTextEdit
     private val richTextView: RichTextView
 
+    private var sourceMap: SourceTextMap? = null
+    private var mappedSource: String? = null
+    private var mappedText: String? = null
+
     init {
         parseAttrs(attrs)
 
@@ -124,6 +133,25 @@ class RichText(context: Context, attrs: AttributeSet?) :
 
             if (attributes.editable) {
                 setTextIsSelectable(true)
+                customSelectionActionModeCallback = object : ActionMode.Callback {
+                    override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+                        updateCutItem(menu)
+                        return true
+                    }
+
+                    override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
+                        updateCutItem(menu)
+                        return true
+                    }
+
+                    override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
+                        if (item.itemId != android.R.id.cut) return false
+                        cutSelection(mode)
+                        return true
+                    }
+
+                    override fun onDestroyActionMode(mode: ActionMode) = Unit
+                }
             }
 
             setOnTapUpListener { _, _, charOffset ->
@@ -191,7 +219,39 @@ class RichText(context: Context, attrs: AttributeSet?) :
     }
 
     fun setVisibleText(text: CharSequence) {
+        sourceMap = null
         richTextView.text = text
+    }
+
+    private fun selectedSourceAfterCut(): String? {
+        if (!attributes.editable || mappedSource != richTextEdit.text?.toString()
+            || mappedText != richTextView.text.toString()) return null
+        return sourceMap?.cut(
+            minOf(richTextView.selectionStart, richTextView.selectionEnd),
+            maxOf(richTextView.selectionStart, richTextView.selectionEnd))
+    }
+
+    private fun updateCutItem(menu: Menu) {
+        if (selectedSourceAfterCut() != null) {
+            if (menu.findItem(android.R.id.cut) == null) {
+                menu.add(Menu.NONE, android.R.id.cut, 0, android.R.string.cut)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            }
+        } else {
+            menu.removeItem(android.R.id.cut)
+        }
+    }
+
+    private fun cutSelection(mode: ActionMode) {
+        val updatedSource = selectedSourceAfterCut() ?: return
+        val start = minOf(richTextView.selectionStart, richTextView.selectionEnd)
+        val end = maxOf(richTextView.selectionStart, richTextView.selectionEnd)
+        val selectedText = richTextView.text.subSequence(start, end).toString()
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard.setPrimaryClip(ClipData.newPlainText("", selectedText))
+        mode.finish()
+        setSourceText(updatedSource)
+        listeners.onUserTextChange?.onUserTextChange(updatedSource)
     }
 
     fun toEditMode(charOffset: Int) {
@@ -214,14 +274,20 @@ class RichText(context: Context, attrs: AttributeSet?) :
         listeners.onModeChange?.onViewMode()
     }
 
-    private fun parseAndSetViewText() {
+    private fun parseAndSetViewText(foldedDrawers: List<Boolean>? = null) {
         val source = richTextEdit.text
 
+        sourceMap = null
+        mappedSource = source?.toString()
+
         if (source != null) {
-            val parsed = OrgFormatter.parse(
-                source, context, attributes.linkify, attributes.parseCheckboxes)
+            val map = if (attributes.editable) SourceTextMap(source.toString()) else null
+            val parsed = OrgFormatter.parseForEditing(
+                source, context, attributes.linkify, attributes.parseCheckboxes, map, foldedDrawers)
 
             richTextView.setText(parsed, TextView.BufferType.SPANNABLE)
+            sourceMap = map
+            mappedText = parsed.toString()
 
             ImageLoader.loadImages(richTextView)
 
@@ -272,19 +338,11 @@ class RichText(context: Context, attrs: AttributeSet?) :
             return
         }
 
-        val drawerStart = textSpanned.getSpanStart(drawerSpan)
-        val drawerEnd = textSpanned.getSpanEnd(drawerSpan)
-
-        val builder = SpannableStringBuilder(textSpanned)
-
-        val replacement = OrgFormatter.drawerSpanned(
-            drawerSpan.name, drawerSpan.content, isFolded = !drawerSpan.isFolded)
-
-        builder.removeSpan(drawerSpan)
-        builder.removeSpan(markerSpan)
-        builder.replace(drawerStart, drawerEnd, replacement)
-
-        richTextView.text = builder
+        val drawers = textSpanned.getSpans(0, textSpanned.length, DrawerSpan::class.java)
+            .sortedBy { textSpanned.getSpanStart(it) }
+        parseAndSetViewText(drawers.map {
+            if (it === drawerSpan) !it.isFolded else it.isFolded
+        })
     }
 
     override fun toggleCheckbox(checkboxSpan: CheckboxSpan) {
