@@ -12,9 +12,11 @@
         android:id="@+id/item_refile_payload"
         style="@style/BorderlessButton"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:minHeight="36dp"
+        android:minHeight="48dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/item_refile_button"
@@ -35,6 +37,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textColor="?android:textColorPrimary"
+            android:textSize="16sp"
             tools:text="Long title that occupies multiple lines used to test wrapping and icon positioning" />
     </LinearLayout>
 
@@ -43,6 +46,8 @@
         style="@style/BorderlessButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
         android:src="@drawable/ic_move_to_inbox"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
