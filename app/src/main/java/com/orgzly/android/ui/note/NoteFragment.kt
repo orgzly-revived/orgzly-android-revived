@@ -2,7 +2,6 @@ package com.orgzly.android.ui.note
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
@@ -227,9 +226,10 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         binding.closedButton.setOnClickListener(this)
         binding.closedRemove.setOnClickListener(this)
 
-        if (AppPreferences.isFontMonospaced(context)) {
-            binding.content.setTypeface(Typeface.MONOSPACE)
-        }
+        binding.content.setTypeface(
+            AppPreferences.typefaceForViewing(context),
+            AppPreferences.typefaceForEditing(context)
+        )
 
         binding.content.setOnUserTextChangeListener { str ->
             binding.content.setSourceText(str)
