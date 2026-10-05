@@ -1415,8 +1415,12 @@ class DataRepository @Inject constructor(
             val propName = AppPreferences.createdAtProperty(context)
             val propValue = OrgDateTime(createdAt, false).toString()
 
+            // Do not overwrite the property if the note already carries it (a capture template
+            // can set it). put() would also append a second entry with the same name.
             val properties = notePayload.properties.apply {
-                put(propName, propValue)
+                if (!containsKey(propName)) {
+                    set(propName, propValue)
+                }
             }
 
             notePayload.copy(properties = properties)
