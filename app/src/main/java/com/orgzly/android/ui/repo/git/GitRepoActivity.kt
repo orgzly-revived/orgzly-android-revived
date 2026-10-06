@@ -549,6 +549,8 @@ class GitRepoActivity : CommonActivity(), GitPreferences {
         override fun endTask() {
 
         }
+
+        override fun showDuration(p0: Boolean) {}
     }
 
     companion object {
