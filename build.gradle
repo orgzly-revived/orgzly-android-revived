@@ -4,15 +4,13 @@ buildscript {
 
     def versions = [:]
 
-    versions.android_gradle_plugin = '8.13.2'
+    versions.android_gradle_plugin = '9.4.1'
 
     versions.kotlin = '2.4.10'
 
     versions.kotlin_coroutines = '1.11.0'
 
     versions.jetbrains_annotations = '26.1.0'
-
-    versions.android_multidex = '2.0.1'
 
     versions.android_appcompat = '1.7.1'
 
@@ -96,6 +94,10 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
         classpath "org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin:$versions.kotlin"
     }
+}
+
+plugins {
+    id 'com.android.legacy-kapt' version '9.4.1' apply false
 }
 
 allprojects {

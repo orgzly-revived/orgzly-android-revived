@@ -4,7 +4,6 @@ package com.orgzly.android;
 import android.app.Application;
 import android.content.Context;
 
-import androidx.multidex.MultiDex;
 import androidx.preference.PreferenceManager;
 
 import com.orgzly.android.di.AppComponent;
@@ -26,13 +25,6 @@ public class App extends Application {
     public static AppExecutors EXECUTORS = new AppExecutors();
 
     public static AppComponent appComponent;
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-
-        MultiDex.install(this);
-    }
 
     @Override
     public void onCreate() {
