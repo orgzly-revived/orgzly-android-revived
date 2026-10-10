@@ -39,11 +39,13 @@ import com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook
 import com.orgzly.android.espresso.util.EspressoUtils.onSnackbar
 import com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard
 import com.orgzly.android.espresso.util.EspressoUtils.scroll
+import com.orgzly.android.espresso.util.EspressoUtils.setDateInTimestampDialog
 import com.orgzly.android.espresso.util.EspressoUtils.setNumber
 import com.orgzly.android.espresso.util.EspressoUtils.settingsSetTodoKeywords
 import com.orgzly.android.ui.main.MainActivity
 import junit.framework.TestCase.assertTrue
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.endsWith
 import org.hamcrest.Matchers.equalTo
@@ -145,12 +147,15 @@ class NoteFragmentTest : OrgzlyTest() {
     fun testSettingScheduleTime() {
         onNoteInBook(1).perform(click())
         onView(withId(R.id.scheduled_button)).check(matches(withText("")))
+        // Allow midnight to pass while the dialog opens.
+        val dateBeforeOpening = currentUserDate()
         onView(withId(R.id.scheduled_button)).perform(click())
+        val dateAfterOpening = currentUserDate()
         onView(withId(R.id.is_active_label)).check(matches(not(isDisplayed())))
         onView(withId(R.id.is_active_checkbox)).check(matches(not(isDisplayed())))
         onView(withText(R.string.set)).perform(click())
         onView(withId(R.id.scheduled_button))
-                .check(matches(withText(startsWith(defaultDialogUserDate()))))
+                .check(matches(withText(anyOf(equalTo(dateBeforeOpening), equalTo(dateAfterOpening)))))
     }
 
     @Test
@@ -185,12 +190,17 @@ class NoteFragmentTest : OrgzlyTest() {
     fun testSettingDeadlineTime() {
         onNoteInBook(1).perform(click())
         onView(withId(R.id.deadline_button)).check(matches(withText("")))
+        // Allow midnight to pass while the dialog opens.
+        val dateBeforeOpening = currentUserDate()
         onView(withId(R.id.deadline_button)).perform(click())
+        val dateAfterOpening = currentUserDate()
         onView(withId(R.id.is_active_label)).check(matches(not(isDisplayed())))
         onView(withId(R.id.is_active_checkbox)).check(matches(not(isDisplayed())))
         onView(withText(R.string.set)).perform(click())
         onView(withId(R.id.deadline_button))
-                .check(matches(allOf(withText(startsWith(defaultDialogUserDate())), isDisplayed())))
+                .check(matches(allOf(
+                        withText(anyOf(equalTo(dateBeforeOpening), equalTo(dateAfterOpening))),
+                        isDisplayed())))
     }
 
     @Test
@@ -340,16 +350,17 @@ class NoteFragmentTest : OrgzlyTest() {
         onNoteInBook(1).perform(click())
         onView(withId(R.id.scheduled_button)).check(matches(withText("")))
         onView(withId(R.id.scheduled_button)).perform(click())
+        setDateInTimestampDialog(2014, 4, 1)
         onView(withText(R.string.set)).perform(click())
         onView(withId(R.id.scheduled_button))
-                .check(matches(withText(startsWith(defaultDialogUserDate()))))
+                .check(matches(withText(userDateTime("<2014-04-01 Tue>"))))
 
         scenario.onActivity { activity ->
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
         onView(withId(R.id.scheduled_button))
-                .check(matches(withText(startsWith(defaultDialogUserDate()))))
+                .check(matches(withText(userDateTime("<2014-04-01 Tue>"))))
     }
 
     @Test
@@ -362,6 +373,7 @@ class NoteFragmentTest : OrgzlyTest() {
 
         onView(withId(R.id.scheduled_button)).check(matches(withText("")))
         onView(withId(R.id.scheduled_button)).perform(click())
+        setDateInTimestampDialog(2014, 4, 1)
 
         scenario.onActivity { activity ->
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
@@ -369,7 +381,7 @@ class NoteFragmentTest : OrgzlyTest() {
 
         onView(withText(R.string.set)).perform(click())
         onView(withId(R.id.scheduled_button))
-                .check(matches(withText(startsWith(defaultDialogUserDate()))))
+                .check(matches(withText(userDateTime("<2014-04-01 Tue>"))))
     }
 
     @Test
