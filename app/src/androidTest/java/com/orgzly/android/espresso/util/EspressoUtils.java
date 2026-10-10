@@ -9,6 +9,7 @@ import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.contrib.DrawerActions.close;
 import static androidx.test.espresso.contrib.DrawerActions.open;
+import static androidx.test.espresso.contrib.PickerActions.setDate;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -31,6 +32,7 @@ import android.text.Spanned;
 import android.text.style.ClickableSpan;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -90,6 +92,15 @@ public class EspressoUtils {
 
     public static ViewInteraction onRecyclerView() {
         return onView(allOf(isAssignableFrom(RecyclerView.class), isDisplayed()));
+    }
+
+    /**
+     * Select a fixed date in the open timestamp dialog. Month is one-based.
+     */
+    public static void setDateInTimestampDialog(int year, int month, int day) {
+        onView(withId(R.id.date_picker_button)).perform(click());
+        onView(isAssignableFrom(DatePicker.class)).perform(setDate(year, month, day));
+        onView(withText(android.R.string.ok)).perform(click());
     }
 
     /**
