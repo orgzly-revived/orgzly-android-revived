@@ -23,12 +23,12 @@ import com.orgzly.android.espresso.util.EspressoUtils.OrgzlyCustomFailureHandler
 import com.orgzly.android.espresso.util.EspressoUtils.onSnackbar
 import com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard
 import com.orgzly.android.espresso.util.EspressoUtils.scroll
+import com.orgzly.android.espresso.util.EspressoUtils.setDateInTimestampDialog
 import com.orgzly.android.espresso.util.EspressoUtils.waitId
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.share.ShareActivity
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
-import org.hamcrest.Matchers.startsWith
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -369,14 +369,15 @@ class ShareActivityTest : OrgzlyTest() {
         onView(isRoot()).perform(waitId(R.id.scheduled_button, 5000))
         setFailureHandler(OrgzlyCustomFailureHandler(context))
         onView(withId(R.id.scheduled_button)).perform(scrollTo(90), click())
+        setDateInTimestampDialog(2014, 4, 1)
         onView(withText(R.string.set)).perform(click())
-        onView(withId(R.id.scheduled_button)).check(matches(withText(startsWith(defaultDialogUserDate()))))
+        onView(withId(R.id.scheduled_button)).check(matches(withText(userDateTime("<2014-04-01 Tue>"))))
 
         scenario.onActivity { activity ->
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
-        onView(withId(R.id.scheduled_button)).check(matches(withText(startsWith(defaultDialogUserDate()))))
+        onView(withId(R.id.scheduled_button)).check(matches(withText(userDateTime("<2014-04-01 Tue>"))))
     }
 
     @Test

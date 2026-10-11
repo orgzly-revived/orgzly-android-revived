@@ -1,6 +1,7 @@
 package com.orgzly.android.espresso
 
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.SystemClock
 import android.widget.DatePicker
 import android.widget.TextView
@@ -25,6 +26,9 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withClassName
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import androidx.test.runner.lifecycle.Stage
 import com.orgzly.R
 import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.RetryTestRule
@@ -39,11 +43,13 @@ import com.orgzly.android.espresso.util.EspressoUtils.onNoteInBook
 import com.orgzly.android.espresso.util.EspressoUtils.onSnackbar
 import com.orgzly.android.espresso.util.EspressoUtils.replaceTextCloseKeyboard
 import com.orgzly.android.espresso.util.EspressoUtils.scroll
+import com.orgzly.android.espresso.util.EspressoUtils.setDateInTimestampDialog
 import com.orgzly.android.espresso.util.EspressoUtils.setNumber
 import com.orgzly.android.espresso.util.EspressoUtils.settingsSetTodoKeywords
 import com.orgzly.android.ui.main.MainActivity
 import junit.framework.TestCase.assertTrue
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.endsWith
 import org.hamcrest.Matchers.equalTo
@@ -145,12 +151,15 @@ class NoteFragmentTest : OrgzlyTest() {
     fun testSettingScheduleTime() {
         onNoteInBook(1).perform(click())
         onView(withId(R.id.scheduled_button)).check(matches(withText("")))
+        // Allow midnight to pass while the dialog opens.
+        val dateBeforeOpening = currentUserDate()
         onView(withId(R.id.scheduled_button)).perform(click())
+        val dateAfterOpening = currentUserDate()
         onView(withId(R.id.is_active_label)).check(matches(not(isDisplayed())))
         onView(withId(R.id.is_active_checkbox)).check(matches(not(isDisplayed())))
         onView(withText(R.string.set)).perform(click())
         onView(withId(R.id.scheduled_button))
-                .check(matches(withText(startsWith(defaultDialogUserDate()))))
+                .check(matches(withText(anyOf(equalTo(dateBeforeOpening), equalTo(dateAfterOpening)))))
     }
 
     @Test
@@ -185,12 +194,17 @@ class NoteFragmentTest : OrgzlyTest() {
     fun testSettingDeadlineTime() {
         onNoteInBook(1).perform(click())
         onView(withId(R.id.deadline_button)).check(matches(withText("")))
+        // Allow midnight to pass while the dialog opens.
+        val dateBeforeOpening = currentUserDate()
         onView(withId(R.id.deadline_button)).perform(click())
+        val dateAfterOpening = currentUserDate()
         onView(withId(R.id.is_active_label)).check(matches(not(isDisplayed())))
         onView(withId(R.id.is_active_checkbox)).check(matches(not(isDisplayed())))
         onView(withText(R.string.set)).perform(click())
         onView(withId(R.id.deadline_button))
-                .check(matches(allOf(withText(startsWith(defaultDialogUserDate())), isDisplayed())))
+                .check(matches(allOf(
+                        withText(anyOf(equalTo(dateBeforeOpening), equalTo(dateAfterOpening))),
+                        isDisplayed())))
     }
 
     @Test
@@ -333,43 +347,73 @@ class NoteFragmentTest : OrgzlyTest() {
 
     @Test
     fun testSettingScheduledTimeRemainsSetAfterRotation() {
-        scenario.onActivity { activity ->
-            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
+        setOrientationAndWait(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
 
         onNoteInBook(1).perform(click())
         onView(withId(R.id.scheduled_button)).check(matches(withText("")))
         onView(withId(R.id.scheduled_button)).perform(click())
+        setDateInTimestampDialog(2014, 4, 1)
         onView(withText(R.string.set)).perform(click())
         onView(withId(R.id.scheduled_button))
-                .check(matches(withText(startsWith(defaultDialogUserDate()))))
+                .check(matches(withText(userDateTime("<2014-04-01 Tue>"))))
 
-        scenario.onActivity { activity ->
-            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        }
+        setOrientationAndWait(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
 
         onView(withId(R.id.scheduled_button))
-                .check(matches(withText(startsWith(defaultDialogUserDate()))))
+                .check(matches(withText(userDateTime("<2014-04-01 Tue>"))))
     }
 
     @Test
     fun testSetScheduledTimeAfterRotation() {
         onNoteInBook(1).perform(click())
 
-        scenario.onActivity { activity ->
-            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
+        setOrientationAndWait(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
 
         onView(withId(R.id.scheduled_button)).check(matches(withText("")))
         onView(withId(R.id.scheduled_button)).perform(click())
+        setDateInTimestampDialog(2014, 4, 1)
 
-        scenario.onActivity { activity ->
-            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        }
+        setOrientationAndWait(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
 
         onView(withText(R.string.set)).perform(click())
         onView(withId(R.id.scheduled_button))
-                .check(matches(withText(startsWith(defaultDialogUserDate()))))
+                .check(matches(withText(userDateTime("<2014-04-01 Tue>"))))
+    }
+
+    private fun setOrientationAndWait(requestedOrientation: Int) {
+        val orientation = when (requestedOrientation) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT -> Configuration.ORIENTATION_PORTRAIT
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> Configuration.ORIENTATION_LANDSCAPE
+            else -> error("Unsupported test orientation: $requestedOrientation")
+        }
+        scenario.onActivity { activity ->
+            activity.requestedOrientation = requestedOrientation
+        }
+
+        // The orientation request returns before Android recreates and lays out the activity.
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        val deadline = SystemClock.uptimeMillis() + 5000
+        while (SystemClock.uptimeMillis() < deadline) {
+            var ready = false
+            instrumentation.runOnMainSync {
+                ready = ActivityLifecycleMonitorRegistry.getInstance()
+                        .getActivitiesInStage(Stage.RESUMED)
+                        .filterIsInstance<MainActivity>()
+                        .any { activity ->
+                            val decor = activity.window.decorView
+                            val correctDimensions = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                decor.width > decor.height
+                            } else {
+                                decor.height > decor.width
+                            }
+                            activity.resources.configuration.orientation == orientation &&
+                                    correctDimensions && decor.isLaidOut && !decor.isLayoutRequested
+                        }
+            }
+            if (ready) return
+            SystemClock.sleep(50)
+        }
+        throw AssertionError("Activity did not finish changing orientation to $orientation")
     }
 
     @Test
