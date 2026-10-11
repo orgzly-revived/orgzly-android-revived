@@ -104,7 +104,7 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
         if (note.hasContent() && titleGenerator.shouldDisplayContent(note)) {
             holder.binding.itemHeadContent.setTypeface(
                 AppPreferences.typefaceForViewing(context),
-                AppPreferences.typefaceForEditing(context)
+                AppPreferences.typefaceForEditing()
             )
 
             holder.binding.itemHeadContent.setSourceText(note.content)

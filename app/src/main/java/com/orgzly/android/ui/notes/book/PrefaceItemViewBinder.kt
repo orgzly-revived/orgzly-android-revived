@@ -25,7 +25,7 @@ class PrefaceItemViewBinder(private val context: Context) {
             if (preface != null) {
                 setTypeface(
                     AppPreferences.typefaceForViewing(context),
-                    AppPreferences.typefaceForEditing(context)
+                    AppPreferences.typefaceForEditing()
                 )
                 setSourceText(preface)
 

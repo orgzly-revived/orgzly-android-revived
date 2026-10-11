@@ -228,7 +228,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
         binding.content.setTypeface(
             AppPreferences.typefaceForViewing(context),
-            AppPreferences.typefaceForEditing(context)
+            AppPreferences.typefaceForEditing()
         )
 
         binding.content.setOnUserTextChangeListener { str ->

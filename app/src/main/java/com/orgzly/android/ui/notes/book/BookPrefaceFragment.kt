@@ -69,7 +69,7 @@ class BookPrefaceFragment : CommonFragment() {
 
         binding.fragmentBookPrefaceContent.setTypeface(
             AppPreferences.typefaceForViewing(context),
-            AppPreferences.typefaceForEditing(context)
+            AppPreferences.typefaceForEditing()
         )
 
         binding.fragmentBookPrefaceContent.setOnUserTextChangeListener { str ->

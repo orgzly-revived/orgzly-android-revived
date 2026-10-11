@@ -55,9 +55,6 @@ public class App extends Application {
 
         App.setDefaultPreferences(this, false);
 
-        // Migrate separate editing-font preference for upgrades from a single monospaced toggle.
-        AppPreferences.isFontMonospacedWhenEditing(this);
-
         App.context = getApplicationContext();
 
         NotificationChannels.createAll(this);
