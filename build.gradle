@@ -14,7 +14,7 @@ buildscript {
 
     versions.android_multidex = '2.0.1'
 
-    versions.android_appcompat = '1.7.1'
+    versions.android_appcompat = '1.8.0'
 
     versions.android_documentfile = '1.1.0'
     versions.android_localbroadcastmanager = '1.1.0'
@@ -64,7 +64,7 @@ buildscript {
 
     versions.juniversalchardet = '1.0.3'
 
-    versions.joda_time = '2.14.2'
+    versions.joda_time = '2.14.3'
 
     versions.glide = '5.0.7'
 
