@@ -1,0 +1,3 @@
+• Fix folder issues when using multiple Git repos.
+• Various minor UI bug fixes.
+• Upgrade dependencies.
