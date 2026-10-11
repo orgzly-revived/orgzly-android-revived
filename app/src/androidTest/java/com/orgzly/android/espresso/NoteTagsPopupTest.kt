@@ -164,12 +164,30 @@ class NoteTagsPopupTest : OrgzlyTest() {
     fun addingFromSearchSavesTheTagAndPreservesImportedDuplicates() {
         onNoteInBook(1).perform(click())
         onView(withId(R.id.tags_button)).perform(click())
-        searchInput().perform(replaceText("new_tag"))
+        searchInput().perform(replaceText("new tag"))
         searchInput().check(matches(withText("new_tag")))
         searchInput().perform(pressImeActionButton())
         closeTagMenu()
         onView(withId(R.id.done)).perform(click())
         assertEquals(listOf("work", "home", "work", "new_tag"), savedTags("Duplicate tags check"))
+    }
+
+    @Test
+    fun addingUnicodeTagPreservesSupplementaryLettersAndCombiningMarks() {
+        val input = "工作\uD840\uDC00 عَمَل e\u0301 Ⅻ"
+        val tag = "工作\uD840\uDC00_عَمَل_e\u0301_Ⅻ"
+        onNoteInBook(1).perform(click())
+        onView(withId(R.id.tags_button)).perform(click())
+        searchInput().perform(replaceText(input))
+        searchInput().check(matches(withText(tag)))
+        searchInput().perform(pressImeActionButton())
+        closeTagMenu()
+        onView(withId(R.id.done)).perform(click())
+        assertEquals(listOf("work", "home", "work", tag), savedTags("Duplicate tags check"))
+        onNoteInBook(1).perform(click())
+        onView(withId(R.id.tags_button)).perform(click())
+        onView(tagCheckbox(tag)).inRoot(isPlatformPopup()).check(matches(isChecked()))
+        closeTagMenu()
     }
 
     @Test

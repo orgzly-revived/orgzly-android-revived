@@ -2,6 +2,10 @@ package com.orgzly.android.ui.note
 
 import android.content.Context
 import android.graphics.Rect
+import android.text.InputFilter
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,6 +50,8 @@ class NoteTagsPopup(
 
     init {
         popup.inputMethodMode = PopupWindow.INPUT_METHOD_NEEDED
+
+        binding.search.filters = arrayOf(TagCharactersFilter())
 
         binding.search.doAfterTextChanged {
             render()
@@ -203,6 +209,50 @@ class NoteTagsPopup(
         }
 
         binding.search.setText("")
+    }
+
+    /**
+     * Org's [:alnum:] includes letters, decimal digits, combining marks and letter numbers.
+     * The additional tag characters are _ @ # and %. Spaces become _.
+     */
+    internal class TagCharactersFilter : InputFilter {
+        override fun filter(source: CharSequence, start: Int, end: Int, dest: Spanned, dstart: Int, dend: Int): CharSequence? {
+            val input = source.subSequence(start, end)
+            var result: SpannableStringBuilder? = null
+
+            // Work backwards so replacements keep the original offsets and remap the spans.
+            var offset = input.length
+            while (offset > 0) {
+                val codePoint = Character.codePointBefore(input, offset)
+                val previous = offset - Character.charCount(codePoint)
+                val replacement = when {
+                    Character.isWhitespace(codePoint) || Character.isSpaceChar(codePoint) -> "_"
+                    isTagCharacter(codePoint) -> null
+                    else -> ""
+                }
+                if (replacement != null) {
+                    if (result == null) {
+                        result = SpannableStringBuilder(input.toString())
+                        if (source is Spanned) {
+                            TextUtils.copySpansFrom(source, start, end, Any::class.java, result, 0)
+                        }
+                    }
+                    result.replace(previous, offset, replacement)
+                }
+                offset = previous
+            }
+
+            return result
+        }
+
+        private fun isTagCharacter(codePoint: Int): Boolean = when (Character.getType(codePoint)) {
+            Character.NON_SPACING_MARK.toInt(),
+            Character.COMBINING_SPACING_MARK.toInt(),
+            Character.ENCLOSING_MARK.toInt(),
+            Character.LETTER_NUMBER.toInt() -> true
+            else -> Character.isLetterOrDigit(codePoint) ||
+                (codePoint <= Char.MAX_VALUE.code && codePoint.toChar() in "_@#%")
+        }
     }
 
     companion object {
