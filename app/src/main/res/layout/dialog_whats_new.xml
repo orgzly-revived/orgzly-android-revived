@@ -36,10 +36,6 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Fix event reminders not repeating." />
-
-        <com.orgzly.android.ui.views.WhatsNewChange
-            style="@style/WhatsNewChange"
             app:text="Upgrade dependencies." />
 
         <TextView
