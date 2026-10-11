@@ -16,7 +16,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.TextView
@@ -63,7 +62,6 @@ import com.orgzly.android.ui.views.richtext.RichText
 import com.orgzly.android.ui.views.richtext.RichTextEdit
 import com.orgzly.android.util.LogUtils
 import com.orgzly.android.util.OrgFormatter
-import com.orgzly.android.util.SpaceTokenizer
 import com.orgzly.android.util.UserTimeFormatter
 import com.orgzly.databinding.FragmentNoteBinding
 import com.orgzly.org.OrgProperties
@@ -91,11 +89,19 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
     private var dialog: AlertDialog? = null
 
+    private var tagsPopup: NoteTagsPopup? = null
+
+    private var knownTags: List<String> = emptyList()
+
     private lateinit var sharedMainActivityViewModel: SharedMainActivityViewModel
 
     private val userCancelBackPressHandler = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            userCancel()
+            if (tagsPopup?.isShowing == true) {
+                tagsPopup?.dismiss()
+            } else {
+                userCancel()
+            }
         }
     }
 
@@ -193,24 +199,13 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             binding.locationContainer.visibility = View.GONE
         }
 
-        // Hide remove button if there are no tags
-        binding.tagsButton.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                binding.tagsRemove.goneIf(TextUtils.isEmpty(binding.tagsButton.text))
-            }
-
-            override fun afterTextChanged(s: Editable) {}
-        })
-
-        binding.tagsMenu.setOnClickListener {
-            binding.tagsButton.showDropDown()
+        binding.tagsButton.setOnClickListener { showTagsMenu() }
+        binding.tagsContainer.setOnClickListener { showTagsMenu() }
+        binding.tagsRemove.setOnClickListener {
+            viewModel.updatePayloadTags(emptyList())
+            setTagsView(emptyList())
         }
-
-        binding.tagsRemove.setOnClickListener(this)
-
-        setupTagsViewAdapter()
+        setupKnownTags()
 
         binding.priorityButton.setOnClickListener(this)
         binding.priorityRemove.setOnClickListener(this)
@@ -516,11 +511,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         binding.title.setSourceText(payload.title)
 
         // Tags
-        if (payload.tags.isNotEmpty()) {
-            binding.tagsButton.setText(TextUtils.join(" ", payload.tags))
-        } else {
-            binding.tagsButton.text = null
-        }
+        setTagsView(payload.tags)
 
         // Times
         updateTimestampView(TimeType.SCHEDULED, OrgRange.parseOrNull(payload.scheduled))
@@ -644,8 +635,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         else
             binding.priorityButton.text.toString()
 
-        val tags = binding.tagsButton.text.toString()
-            .split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+        val tags = viewModel.notePayload?.tags.orEmpty()
 
         viewModel.updatePayload(title, content, state, priority, tags, properties)
 
@@ -716,17 +706,28 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         viewModel.loadData()
     }
 
-    /**
-     * Set adapter for tags view for auto-complete.
-     */
-    private fun setupTagsViewAdapter() {
+    private fun setupKnownTags() {
         viewModel.tags.observe(viewLifecycleOwner, Observer { tags ->
-            context?.let {
-                val adapter = ArrayAdapter(it, R.layout.dropdown_item, tags)
-                binding.tagsButton.setAdapter(adapter)
-                binding.tagsButton.setTokenizer(SpaceTokenizer())
-            }
+            knownTags = tags
         })
+    }
+
+    private fun setTagsView(tags: List<String>) {
+        binding.tagsButton.tags = tags
+        binding.tagsRemove.goneUnless(tags.isNotEmpty())
+    }
+
+    private fun showTagsMenu() {
+        val payload = viewModel.notePayload ?: return
+
+        binding.note.requestFocus()
+        tagsPopup?.dismiss()
+        tagsPopup = NoteTagsPopup(requireContext(), knownTags, payload.tags) { tags ->
+            viewModel.updatePayloadTags(tags)
+            setTagsView(tags)
+        }.also {
+            it.show(binding.tagsButton)
+        }
     }
 
     override fun onResume() {
@@ -742,6 +743,8 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
         dialog?.dismiss()
         dialog = null
+        tagsPopup?.dismiss()
+        tagsPopup = null
 
         ActivityUtils.keepScreenOnClear(activity)
     }
@@ -751,6 +754,8 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
 
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG)
 
+        tagsPopup?.dismiss()
+        tagsPopup = null
         binding.viewFlipper.displayedChild = 0
     }
 
@@ -822,10 +827,6 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         when (view.id) {
             R.id.location_button -> {
                 viewModel.requestNoteBookChange()
-            }
-
-            R.id.tags_remove -> {
-                binding.tagsButton.text = null
             }
 
             R.id.state_button -> {
@@ -999,7 +1000,7 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
         setMetadataViewsVisibility(
             "tags",
             binding.tagsContainer,
-            !TextUtils.isEmpty(binding.tagsButton.text))
+            !viewModel.notePayload?.tags.isNullOrEmpty())
 
         setMetadataViewsVisibility(
             "state",
