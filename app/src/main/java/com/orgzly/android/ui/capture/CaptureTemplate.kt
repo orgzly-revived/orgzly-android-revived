@@ -15,7 +15,7 @@ data class CaptureTemplate(
     val properties: String? = null,
     val targetBook: String = "",
     val targetHeadline: String? = null,
-    val state: String = "",
+    val state: String? = null,
     val priority: String = "",
     val tags: String = "",
     val isScheduled: Boolean = false
