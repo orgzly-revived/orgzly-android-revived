@@ -181,6 +181,7 @@ dependencies {
     // Local JVM tests ("unit tests")
     testImplementation(project(":shared-test"))
     testImplementation "androidx.test.ext:junit:$versions.android_test_ext_junit"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.kotlin_coroutines"
     testImplementation "org.robolectric:robolectric:$versions.robolectric"
     testImplementation "io.github.atetzner:webdav-embedded-server:$versions.webdav_embedded_server"
 
