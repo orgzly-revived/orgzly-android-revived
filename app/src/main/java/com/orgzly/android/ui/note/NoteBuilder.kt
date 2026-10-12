@@ -139,7 +139,7 @@ class NoteBuilder {
             }
 
             return basePayload.copy(
-                    state = template.state.ifBlank { basePayload.state },
+                    state = template.state ?: "",
                     priority = template.priority.ifBlank { null },
                     scheduled = if (template.isScheduled) todayScheduledTime() else null,
                     tags = Tags.fromString(template.tags).tags,

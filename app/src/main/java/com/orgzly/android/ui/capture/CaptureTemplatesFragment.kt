@@ -71,7 +71,7 @@ class CaptureTemplatesFragment : PreferenceFragmentCompat() {
     private fun buildDetailsString(template: CaptureTemplate): String {
         return buildString {
             if (template.targetBook.isNotBlank()) append(template.targetBook)
-            if (template.state.isNotBlank()) {
+            if (!template.state.isNullOrBlank()) {
                 if (isNotEmpty()) append(" · ")
                 append(template.state)
             }
