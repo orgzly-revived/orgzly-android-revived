@@ -2382,7 +2382,15 @@ class DataRepository @Inject constructor(
      * Keywords that were part of the title can become states and vice versa.
      */
     @Throws(IOException::class)
-    fun reParseNotesStateAndTitles(bookId: Long? = null): Int {
+    fun reParseNotesStateAndTitles(bookId: Long? = null): Int =
+        db.runInTransaction(Callable {
+            reParseNotes(db.noteView().getAll().filter {
+                bookId == null || it.note.position.bookId == bookId
+            })
+        })
+
+    @Throws(IOException::class)
+    private fun reParseNotes(noteViews: List<NoteView>): Int {
         // Each note is re-read with its own notebook's workflow: the parser gets a bare heading
         // here, never the preface, so it cannot find the file's keywords by itself.
         val workflows = BookWorkflow.declaredBy(db.book().getPrefaces())
@@ -2406,12 +2414,8 @@ class DataRepository @Inject constructor(
         val parserWriter = OrgParserWriter()
 
         db.runInTransaction {
-            db.noteView().getAll().forEach { noteView ->
+            noteViews.forEach { noteView ->
                 val note = noteView.note
-
-                if (bookId != null && note.position.bookId != bookId) {
-                    return@forEach
-                }
 
                 val head = OrgMapper.toOrgHead(noteView)
 
