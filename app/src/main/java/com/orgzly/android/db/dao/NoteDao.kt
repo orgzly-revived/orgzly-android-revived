@@ -352,6 +352,9 @@ abstract class NoteDao : BaseDao<Note> {
     """)
     abstract fun getNoteForStateChange(ids: Set<Long>, state: String?): List<NoteForStateUpdate>
 
+    @Query("SELECT DISTINCT book_id FROM notes WHERE id IN (:ids)")
+    abstract fun getBookIdsForNotes(ids: Set<Long>): List<Long>
+
     @Query("""SELECT DISTINCT book_id FROM notes WHERE id IN (:ids) AND COALESCE(state, "") != COALESCE(:state, "")""")
     abstract fun getBookIdsForNotesNotMatchingState(ids: Set<Long>, state: String?): List<Long>
 
