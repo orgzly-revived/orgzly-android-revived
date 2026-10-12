@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.orgzly.R
+import com.orgzly.android.data.NotebookDoneStates
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.Note
 import com.orgzly.android.db.entity.NoteView
@@ -121,6 +122,13 @@ class BookAdapter(
         noteItemViewBinder.levelOffset = levelOffset
         super.submitList(list)
         notifyDataSetChanged()
+    }
+
+    fun setDoneStates(doneStates: NotebookDoneStates) {
+        if (doneStates != noteItemViewBinder.doneStates) {
+            noteItemViewBinder.doneStates = doneStates
+            notifyDataSetChanged()
+        }
     }
 
     override fun getItemId(position: Int): Long {

@@ -61,9 +61,11 @@ import com.orgzly.org.utils.StateChangeLogic
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.orgzly.android.calendar.CalendarWorker
+import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
@@ -278,6 +280,16 @@ class DataRepository @Inject constructor(
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, id)
         return db.book().getLiveData(id)
     }
+
+    fun getNotebookDoneStates(): NotebookDoneStates =
+        NotebookDoneStates.declaredBy(db.book().getPrefaces())
+
+    fun getNotebookDoneStatesLiveData(): LiveData<NotebookDoneStates> =
+        db.book().getPrefacesFlow()
+            .map { NotebookDoneStates.declaredBy(it) }
+            .distinctUntilChanged()
+            .flowOn(Dispatchers.Default)
+            .asLiveData()
 
     /**
      * Returns full string content of the book in format specified. Used by tests.
