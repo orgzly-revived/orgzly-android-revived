@@ -15,7 +15,7 @@ import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.AppIntent
-import com.orgzly.android.data.DataRepository
+import com.orgzly.android.data.SavedSearchRepository
 import com.orgzly.android.db.entity.SavedSearch
 import com.orgzly.android.ui.OnViewHolderClickListener
 import com.orgzly.android.ui.savedsearches.SavedSearchesViewModel
@@ -29,7 +29,7 @@ import javax.inject.Inject
 class ListWidgetSelectionActivity : AppCompatActivity(), OnViewHolderClickListener<SavedSearch> {
 
     @Inject
-    lateinit var dataRepository: DataRepository
+    lateinit var savedSearchRepository: SavedSearchRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         App.appComponent.inject(this)
@@ -50,7 +50,7 @@ class ListWidgetSelectionActivity : AppCompatActivity(), OnViewHolderClickListen
             it.adapter = viewAdapter
         }
 
-        val factory = SavedSearchesViewModelFactory.getInstance(dataRepository)
+        val factory = SavedSearchesViewModelFactory.getInstance(savedSearchRepository)
         val model = ViewModelProvider(this, factory).get(SavedSearchesViewModel::class.java)
 
         model.viewState.observe(this, Observer {

@@ -7,6 +7,7 @@ import com.orgzly.android.NotesOrgExporter
 import com.orgzly.android.TestUtils
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.data.DbRepoBookRepository
+import com.orgzly.android.data.SavedSearchRepository
 import com.orgzly.android.db.OrgzlyDatabase
 import com.orgzly.android.db.entity.toList
 import com.orgzly.android.prefs.AppPreferences
@@ -41,7 +42,7 @@ class FiletagsTest {
         val repoFactory = RepoFactory(context, dbRepoBookRepository)
 
         dataRepository = DataRepository(
-            context, database, repoFactory, context.resources, localStorage
+            context, database, repoFactory, context.resources, localStorage, SavedSearchRepository(database)
         )
 
         testUtils = TestUtils(dataRepository, dbRepoBookRepository)

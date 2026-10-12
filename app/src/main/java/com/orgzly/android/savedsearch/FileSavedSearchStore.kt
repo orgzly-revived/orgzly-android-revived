@@ -2,7 +2,7 @@ package com.orgzly.android.savedsearch
 
 import android.content.Context
 import android.net.Uri
-import com.orgzly.android.data.DataRepository
+import com.orgzly.android.data.SavedSearchRepository
 import com.orgzly.android.LocalStorage
 import com.orgzly.android.db.entity.SavedSearch
 import com.orgzly.android.util.MiscUtils
@@ -15,7 +15,7 @@ import java.io.IOException
 
 class FileSavedSearchStore(
         private val context: Context,
-        private val dataRepository: DataRepository) : SavedSearchStore {
+        private val savedSearchRepository: SavedSearchRepository) : SavedSearchStore {
 
     override fun importSearches(uri: Uri): Int {
         val json = parseJson(uri)
@@ -26,7 +26,7 @@ class FileSavedSearchStore(
             }
         }
 
-        return dataRepository.replaceSavedSearches(savedSearches)
+        return savedSearchRepository.replaceAll(savedSearches)
     }
 
     /**
@@ -60,7 +60,7 @@ class FileSavedSearchStore(
     private fun exportToJson(): JSONArray {
         val jsonArray = JSONArray()
 
-        dataRepository.getSavedSearches().forEach {
+        savedSearchRepository.getAll().forEach {
             val json = JSONObject()
 
             json.put("name", it.name)

@@ -3,12 +3,12 @@ package com.orgzly.android.ui.savedsearches
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
-import com.orgzly.android.data.DataRepository
+import com.orgzly.android.data.SavedSearchRepository
 import com.orgzly.android.db.entity.SavedSearch
 import com.orgzly.android.ui.AppBar
 import com.orgzly.android.ui.CommonViewModel
 
-class SavedSearchesViewModel(dataRepository: DataRepository) : CommonViewModel() {
+class SavedSearchesViewModel(savedSearchRepository: SavedSearchRepository) : CommonViewModel() {
     enum class ViewState {
         LOADING,
         LOADED,
@@ -18,7 +18,7 @@ class SavedSearchesViewModel(dataRepository: DataRepository) : CommonViewModel()
     val viewState = MutableLiveData(ViewState.LOADING)
 
     val data: LiveData<List<SavedSearch>> by lazy {
-        dataRepository.getSavedSearchesLiveData().map { searches ->
+        savedSearchRepository.getLiveData().map { searches ->
             viewState.value = if (searches.isNotEmpty()) {
                 ViewState.LOADED
             } else {
