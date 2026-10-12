@@ -249,6 +249,10 @@ class BookFragment :
             }
         })
 
+        dataRepository.getNotebookDoneStatesLiveData().observe(viewLifecycleOwner) {
+            viewAdapter.setDoneStates(it)
+        }
+
         viewModel.data.observe(viewLifecycleOwner, Observer { data ->
             if (BuildConfig.LOG_DEBUG)
                 LogUtils.d(TAG, "Observed data: book ${data.book} and ${data.notes?.size} notes")

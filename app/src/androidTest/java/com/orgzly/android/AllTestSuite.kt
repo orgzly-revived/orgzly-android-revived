@@ -4,6 +4,7 @@ import com.orgzly.android.espresso.ActionModeTest
 import com.orgzly.android.espresso.AgendaFragmentTest
 import com.orgzly.android.espresso.BookChooserActivityTest
 import com.orgzly.android.espresso.BookPrefaceTest
+import com.orgzly.android.espresso.BookWorkflowDisplayTest
 import com.orgzly.android.espresso.BookWorkflowNoteEditTest
 import com.orgzly.android.espresso.BookTest
 import com.orgzly.android.espresso.BooksSortOrderTest
@@ -61,6 +62,7 @@ import org.junit.runners.Suite
         AgendaFragmentTest::class,
         BookChooserActivityTest::class,
         BookPrefaceTest::class,
+        BookWorkflowDisplayTest::class,
         BookWorkflowNoteEditTest::class,
         BooksSortOrderTest::class,
         BooksTest::class,

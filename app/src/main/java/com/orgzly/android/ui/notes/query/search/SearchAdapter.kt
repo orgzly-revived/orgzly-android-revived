@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.orgzly.android.data.NotebookDoneStates
 import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.ui.OnViewHolderClickListener
 import com.orgzly.android.ui.SelectableItemAdapter
@@ -51,6 +52,13 @@ class SearchAdapter(
         noteItemViewBinder.bind(holder, noteView)
 
         getSelection().setBackgroundIfSelected(holder.itemView, note.id)
+    }
+
+    fun setDoneStates(doneStates: NotebookDoneStates) {
+        if (doneStates != noteItemViewBinder.doneStates) {
+            noteItemViewBinder.doneStates = doneStates
+            notifyDataSetChanged()
+        }
     }
 
     override fun getItemId(position: Int): Long {
