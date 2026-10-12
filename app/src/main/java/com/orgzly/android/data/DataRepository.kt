@@ -457,6 +457,7 @@ class DataRepository @Inject constructor(
         // keep a newly declared keyword in their title and a dropped one as their state.
         if (workflowChanged) {
             reParseNotesStateAndTitles(bookId)
+            triggerCalendarSync()
         }
 
         updateBookIsModified(bookId, true)

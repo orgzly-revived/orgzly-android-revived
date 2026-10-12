@@ -29,6 +29,28 @@ class NoteRemindersTest : OrgzlyTest() {
         Assert.assertEquals(1, notes.size.toLong())
     }
 
+    /** The notebook's workflow replaces the app's, so SEEN is done there and DONE is not. */
+    @Test
+    fun testNotesWithTimesSkipDoneStateDeclaredByTheNotebook() {
+        testUtils.setupBook(
+                "notebook",
+                """
+                    #+TODO: TODO | SEEN
+
+                    * SEEN Note 1
+                    SCHEDULED: <2017-03-20>
+                    * DONE Note 2
+                    SCHEDULED: <2017-03-20>
+                """.trimIndent())
+
+        val now = Instant.parse("2017-03-15")
+
+        val notes = getNoteReminders(
+                context, dataRepository, now, LastRun(), NoteReminders.INTERVAL_FROM_NOW)
+
+        Assert.assertEquals(listOf("DONE Note 2"), notes.map { it.payload.title })
+    }
+
     @Test
     fun testNotesWithTimesWithRepeater() {
         testUtils.setupBook(
