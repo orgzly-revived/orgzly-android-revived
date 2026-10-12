@@ -16,6 +16,7 @@ import com.orgzly.android.NotesOrgExporter
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.ui.CommonFragment
 import com.orgzly.android.ui.NotePlace
+import com.orgzly.android.ui.NoteStates
 import com.orgzly.android.ui.SelectableItemAdapter
 import com.orgzly.android.ui.TimeType
 import com.orgzly.android.ui.dialogs.NoteStateDialog
@@ -135,6 +136,7 @@ abstract class NotesFragment : CommonFragment(), TimestampDialogFragment.OnDateT
         dialog = NoteStateDialog.show(
             requireContext(),
             currentState,
+            NoteStates.fromBooks(requireContext(), dataRepository.getBookPrefaces(noteIds)),
             { state -> listener.onStateChangeRequest(noteIds, state) },
             { listener.onStateChangeRequest(noteIds, null) })
     }

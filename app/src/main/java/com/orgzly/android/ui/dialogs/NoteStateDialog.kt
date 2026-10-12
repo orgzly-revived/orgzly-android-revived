@@ -8,9 +8,13 @@ import com.orgzly.android.ui.NoteStates
 
 object NoteStateDialog {
     @JvmStatic
-    fun show(context: Context, currentState: String?, onSelection: (String) -> Unit, onClear: () -> Unit): AlertDialog {
-        val states = NoteStates.fromPreferences(context)
-
+    fun show(
+        context: Context,
+        currentState: String?,
+        states: NoteStates,
+        onSelection: (String) -> Unit,
+        onClear: () -> Unit
+    ): AlertDialog {
         val currentStateIndex = if (currentState != null) states.indexOf(currentState) else -1
 
         return MaterialAlertDialogBuilder(context)
