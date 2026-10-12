@@ -6,6 +6,7 @@ import com.orgzly.android.BookFormat
 import com.orgzly.android.LocalStorage
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.data.DbRepoBookRepository
+import com.orgzly.android.data.SavedSearchRepository
 import com.orgzly.android.db.OrgzlyDatabase
 import com.orgzly.android.db.entity.BookView
 import com.orgzly.android.db.entity.NoteView
@@ -51,7 +52,7 @@ class QueryResultTest {
         val repoFactory = RepoFactory(context, dbRepoBookRepository)
 
         dataRepository = DataRepository(
-            context, database, repoFactory, context.resources, localStorage)
+            context, database, repoFactory, context.resources, localStorage, SavedSearchRepository(database))
 
         // Set default preferences for tests
         AppPreferences.states(context, "TODO NEXT | DONE")

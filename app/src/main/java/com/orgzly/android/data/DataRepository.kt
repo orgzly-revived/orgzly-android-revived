@@ -74,7 +74,8 @@ class DataRepository @Inject constructor(
         private val db: OrgzlyDatabase,
         private val repoFactory: RepoFactory,
         private val resources: Resources,
-        private val localStorage: LocalStorage) {
+        private val localStorage: LocalStorage,
+        private val savedSearchRepository: SavedSearchRepository) {
 
     private fun triggerCalendarSync() {
         val calendarRequest = OneTimeWorkRequestBuilder<CalendarWorker>().build()
@@ -2209,73 +2210,55 @@ class DataRepository @Inject constructor(
      */
 
     fun getSavedSearch(id: Long): SavedSearch? {
-        return db.savedSearch().get(id)
+        return savedSearchRepository.get(id)
     }
 
     fun getSavedSearches(): List<SavedSearch> {
-        return db.savedSearch().getAll()
+        return savedSearchRepository.getAll()
     }
 
     fun getSavedSearchesLiveData(): LiveData<List<SavedSearch>> {
-        return db.savedSearch().getLiveData()
+        return savedSearchRepository.getLiveData()
     }
 
     /**
      * Get [SavedSearch] by name (case insensitive).
      */
     fun getSavedSearchesByNameIgnoreCase(name: String): List<SavedSearch> {
-        return db.savedSearch().getAllByNameIgnoreCase(name)
+        return savedSearchRepository.getByNameIgnoreCase(name)
     }
 
     fun createSavedSearch(savedSearch: SavedSearch): Long {
-        val nextPosition = db.savedSearch().getNextAvailablePosition()
-        return db.savedSearch().insert(savedSearch.copy(position = nextPosition))
+        return savedSearchRepository.create(savedSearch)
     }
 
     fun updateSavedSearch(savedSearch: SavedSearch) {
-        db.savedSearch().update(savedSearch)
+        savedSearchRepository.update(savedSearch)
     }
 
     fun deleteSavedSearches(ids: Set<Long>) {
-        db.savedSearch().delete(ids)
+        savedSearchRepository.delete(ids)
     }
 
     fun moveSavedSearchUp(id: Long) {
-        db.savedSearch().get(id)?.let { savedSearch ->
-            db.savedSearch().getFirstAbove(savedSearch.position)?.let {
-                swapSavedSearchPositions(savedSearch, it)
-            }
-        }
+        savedSearchRepository.moveUp(id)
     }
 
     fun moveSavedSearchDown(id: Long) {
-        db.savedSearch().get(id)?.let { savedSearch ->
-            db.savedSearch().getFirstBelow(savedSearch.position)?.let {
-                swapSavedSearchPositions(savedSearch, it)
-            }
-        }
-    }
-
-    private fun swapSavedSearchPositions(savedSearch: SavedSearch, other: SavedSearch) {
-        db.runInTransaction {
-            db.savedSearch().update(savedSearch.copy(position = other.position))
-            db.savedSearch().update(other.copy(position = savedSearch.position))
-        }
+        savedSearchRepository.moveDown(id)
     }
 
     fun exportSavedSearches(uri: Uri?): Int {
-        return FileSavedSearchStore(context, this).exportSearches(uri)
+        return FileSavedSearchStore(context, savedSearchRepository).exportSearches(uri)
     }
 
     fun importSavedSearches(uri: Uri): Int {
-        return FileSavedSearchStore(context, this).importSearches(uri)
+        return FileSavedSearchStore(context, savedSearchRepository).importSearches(uri)
     }
 
 
     fun replaceSavedSearches(savedSearches: List<SavedSearch>): Int {
-        db.savedSearch().deleteAll()
-        db.savedSearch().insert(savedSearches)
-        return savedSearches.size
+        return savedSearchRepository.replaceAll(savedSearches)
     }
 
     /*
