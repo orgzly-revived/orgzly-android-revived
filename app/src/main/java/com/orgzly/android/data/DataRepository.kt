@@ -31,6 +31,7 @@ import com.orgzly.android.db.dao.ReminderTimeDao
 import com.orgzly.android.db.entity.*
 import com.orgzly.android.db.mappers.OrgTimestampMapper
 import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.prefs.StateWorkflows
 import com.orgzly.android.query.Query
 import com.orgzly.android.query.sql.SqliteQueryBuilder
 import com.orgzly.android.query.user.InternalQueryParser
@@ -60,7 +61,13 @@ import com.orgzly.org.utils.StateChangeLogic
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.orgzly.android.calendar.CalendarWorker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import java.io.*
 import java.util.*
 import java.util.concurrent.Callable
@@ -1216,14 +1223,18 @@ class DataRepository @Inject constructor(
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun selectNotesFromQueryFlow(queryString: String): Flow<List<NoteView>> {
         val parser = InternalQueryParser()
 
         val query = parser.parse(queryString)
 
-        val sqlQuery = buildSqlQuery(query)
-
-        return db.noteView().runQueryFlow(sqlQuery)
+        // The SQL holds each notebook's workflow, so it is rebuilt whenever one changes.
+        return db.book().getPrefacesFlow()
+            .map { BookWorkflow.declaredBy(it) }
+            .distinctUntilChangedBy { workflows -> workflows.mapValues { it.value.toString() } }
+            .flowOn(Dispatchers.Default)
+            .flatMapLatest { workflows -> db.noteView().runQueryFlow(buildSqlQuery(query, workflows)) }
     }
 
     fun selectNotesFromQuery(query: Query): List<NoteView> {
@@ -1232,8 +1243,11 @@ class DataRepository @Inject constructor(
         return db.noteView().runQuery(sqlQuery)
     }
 
-    private fun buildSqlQuery(query: Query): SupportSQLiteQuery {
-        val queryBuilder = SqliteQueryBuilder(context)
+    private fun buildSqlQuery(
+        query: Query,
+        workflows: Map<Long, StateWorkflows> = BookWorkflow.declaredBy(db.book().getPrefaces())
+    ): SupportSQLiteQuery {
+        val queryBuilder = SqliteQueryBuilder(context, workflows)
 
         val (selection, selectionArgs, having, orderBy) = queryBuilder.build(query)
 

@@ -1,6 +1,7 @@
 package com.orgzly.android.data
 
 import android.content.Context
+import com.orgzly.android.db.dao.BookDao
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.prefs.StateWorkflows
 import com.orgzly.org.OrgFileSettings
@@ -31,6 +32,10 @@ object BookWorkflow {
 
     fun of(context: Context, preface: String?): StateWorkflows =
         fromPreface(preface) ?: StateWorkflows(AppPreferences.states(context))
+
+    /** The workflow of each notebook that declares one; an absent notebook uses the app's. */
+    fun declaredBy(prefaces: List<BookDao.BookPreface>): Map<Long, StateWorkflows> =
+        prefaces.mapNotNull { book -> fromPreface(book.preface)?.let { book.id to it } }.toMap()
 
     fun todoKeywords(context: Context, preface: String?): Set<String> =
         of(context, preface).flatMapTo(LinkedHashSet()) { it.todoKeywords }
