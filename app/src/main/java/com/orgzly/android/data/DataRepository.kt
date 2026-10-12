@@ -1385,6 +1385,9 @@ class DataRepository @Inject constructor(
         return db.noteProperty().getInheritedFromAncestors(noteId, name)
     }
 
+    fun getBookPrefaces(noteIds: Set<Long>): List<String?> =
+        db.note().getBookIdsForNotes(noteIds).map { db.book().get(it)?.preface }
+
     fun getNotePropertyNames(): List<String> {
         return (PropertyUtils.DEFAULT_PROPERTIES + db.noteProperty().allDistinctNames())
             .map { it.trim('+') } // Drop "+" property modifiers
