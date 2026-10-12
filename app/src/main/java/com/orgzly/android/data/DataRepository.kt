@@ -434,8 +434,18 @@ class DataRepository @Inject constructor(
         val settings = OrgFileSettings.fromPreface(preface)
         val filetags = Tags.fromList(settings?.filetags)
 
+        val workflowChanged =
+            BookWorkflow.fromPreface(db.book().get(bookId)?.preface)?.toString() !=
+                    BookWorkflow.fromPreface(preface)?.toString()
+
         db.book().updatePreface(bookId, preface, settings.title, filetags)
         setBookPropertiesFromPreface(bookId, preface)
+
+        // States are decided when a heading is parsed, so notes read under the old workflow
+        // keep a newly declared keyword in their title and a dropped one as their state.
+        if (workflowChanged) {
+            reParseNotesStateAndTitles(bookId)
+        }
 
         updateBookIsModified(bookId, true)
     }
@@ -2372,10 +2382,24 @@ class DataRepository @Inject constructor(
      * Keywords that were part of the title can become states and vice versa.
      */
     @Throws(IOException::class)
-    fun reParseNotesStateAndTitles(): Int {
-        val parserBuilder = OrgParser.Builder()
-                .setTodoKeywords(AppPreferences.todoKeywordsSet(context))
-                .setDoneKeywords(AppPreferences.doneKeywordsSet(context))
+    fun reParseNotesStateAndTitles(bookId: Long? = null): Int {
+        // Each note is re-read with its own notebook's workflow: the parser gets a bare heading
+        // here, never the preface, so it cannot find the file's keywords by itself.
+        val workflows = BookWorkflow.declaredBy(db.book().getPrefaces())
+
+        val builders = HashMap<Long, OrgParser.Builder>()
+
+        fun builderFor(noteBookId: Long): OrgParser.Builder = builders.getOrPut(noteBookId) {
+            val workflow = workflows[noteBookId]
+
+            OrgParser.Builder()
+                .setTodoKeywords(
+                    workflow?.flatMapTo(LinkedHashSet()) { it.todoKeywords }
+                        ?: AppPreferences.todoKeywordsSet(context))
+                .setDoneKeywords(
+                    workflow?.flatMapTo(LinkedHashSet()) { it.doneKeywords }
+                        ?: AppPreferences.doneKeywordsSet(context))
+        }
 
         var updated = 0
 
@@ -2385,12 +2409,16 @@ class DataRepository @Inject constructor(
             db.noteView().getAll().forEach { noteView ->
                 val note = noteView.note
 
+                if (bookId != null && note.position.bookId != bookId) {
+                    return@forEach
+                }
+
                 val head = OrgMapper.toOrgHead(noteView)
 
                 val headString = parserWriter.whiteSpacedHead(head, note.position.level, false)
 
-                /* Re-parse heading using current setting of keywords. */
-                val file = parserBuilder
+                /* Re-parse heading using the keywords in force for its notebook. */
+                val file = builderFor(note.position.bookId)
                         .setInput(headString)
                         .build()
                         .parse()
