@@ -6,11 +6,11 @@ import com.orgzly.android.data.DataRepository
 
 class NoteReparseStateAndTitles : UseCase() {
     override fun run(dataRepository: DataRepository): UseCaseResult {
-        dataRepository.reParseNotesStateAndTitles()
+        val updated = dataRepository.reParseNotesStateAndTitles()
 
         return UseCaseResult(
                 modifiesLocalData = true,
-                triggersSync = SYNC_DATA_MODIFIED
+                triggersSync = if (updated > 0) SYNC_DATA_MODIFIED else SYNC_NOT_REQUIRED
         )
     }
 
