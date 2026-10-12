@@ -3,6 +3,7 @@ package com.orgzly.android.data
 import androidx.lifecycle.LiveData
 import com.orgzly.android.db.OrgzlyDatabase
 import com.orgzly.android.db.entity.SavedSearch
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,6 +16,8 @@ class SavedSearchRepository @Inject constructor(private val db: OrgzlyDatabase) 
     fun getAll(): List<SavedSearch> = savedSearchDao.getAll()
 
     fun getLiveData(): LiveData<List<SavedSearch>> = savedSearchDao.getLiveData()
+
+    fun getFlow(): Flow<List<SavedSearch>> = savedSearchDao.getFlow()
 
     fun getByNameIgnoreCase(name: String): List<SavedSearch> =
         savedSearchDao.getAllByNameIgnoreCase(name)

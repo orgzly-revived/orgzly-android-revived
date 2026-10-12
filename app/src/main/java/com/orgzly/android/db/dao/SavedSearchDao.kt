@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import com.orgzly.android.db.entity.SavedSearch
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SavedSearchDao : BaseDao<SavedSearch> {
@@ -12,6 +13,9 @@ interface SavedSearchDao : BaseDao<SavedSearch> {
 
     @Query("SELECT * FROM searches ORDER BY position, id")
     fun getLiveData(): LiveData<List<SavedSearch>>
+
+    @Query("SELECT * FROM searches ORDER BY position, id")
+    fun getFlow(): Flow<List<SavedSearch>>
 
     @Query("SELECT * FROM searches ORDER BY position, id")
     fun getAll(): List<SavedSearch>
