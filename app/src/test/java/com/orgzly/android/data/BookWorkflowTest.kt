@@ -68,4 +68,60 @@ class BookWorkflowTest {
     fun `no lists share nothing`() {
         assertEquals(emptyList<String>(), BookWorkflow.shared(emptyList()))
     }
+
+    // --- writing the workflow back into a preface ---
+
+    @Test
+    fun `writing into an empty preface creates the line`() {
+        assertEquals("#+TODO: A | B", BookWorkflow.withWorkflowInPreface(null, "A | B"))
+        assertEquals("#+TODO: A | B", BookWorkflow.withWorkflowInPreface("", " A | B "))
+    }
+
+    @Test
+    fun `writing keeps other content and puts the line first`() {
+        assertEquals(
+            "#+TODO: A | B\n#+TITLE: Notes",
+            BookWorkflow.withWorkflowInPreface("#+TITLE: Notes", "A | B"))
+    }
+
+    @Test
+    fun `writing replaces the existing line in place`() {
+        assertEquals(
+            "#+TITLE: Notes\n#+TODO: A | B",
+            BookWorkflow.withWorkflowInPreface("#+TITLE: Notes\n#+TODO: X | Y", "A | B"))
+    }
+
+    @Test
+    fun `clearing removes the line`() {
+        assertEquals(
+            "#+TITLE: Notes",
+            BookWorkflow.withWorkflowInPreface("#+TODO: X | Y\n#+TITLE: Notes", null))
+        assertEquals(
+            "#+TITLE: Notes",
+            BookWorkflow.withWorkflowInPreface("#+TODO: X | Y\n#+TITLE: Notes", "  "))
+    }
+
+    /** The dialog edits one value, so several lines cannot survive a write. */
+    @Test
+    fun `several lines collapse into one`() {
+        assertEquals(
+            "#+TODO: A | B\n#+TITLE: Notes",
+            BookWorkflow.withWorkflowInPreface(
+                "#+TODO: X | Y\n#+TITLE: Notes\n#+TODO: P | Q", "A | B"))
+    }
+
+    /** Nothing in the app writes these, so a file carrying one had it written elsewhere. */
+    @Test
+    fun `the other spellings are left alone`() {
+        assertEquals(
+            "#+TODO: A | B\n#+SEQ_TODO: S | T",
+            BookWorkflow.withWorkflowInPreface("#+SEQ_TODO: S | T", "A | B"))
+    }
+
+    @Test
+    fun `what is written is what is read back`() {
+        val preface = BookWorkflow.withWorkflowInPreface("#+TITLE: Notes", "A NEXT | B")
+        assertEquals("A NEXT | B", BookWorkflow.todoLineValue(preface))
+        assertNull(BookWorkflow.todoLineValue(BookWorkflow.withWorkflowInPreface(preface, null)))
+    }
 }
