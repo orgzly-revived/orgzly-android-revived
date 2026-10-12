@@ -9,6 +9,7 @@ import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import com.orgzly.android.data.NotebookDoneStates
 import com.orgzly.android.db.entity.Note
 import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.db.entity.isNotEmpty
@@ -21,14 +22,14 @@ class TitleGenerator(
     private val inBook: Boolean,
     private val attributes: TitleAttributes
 ) {
-    fun generateTitle(noteView: NoteView): CharSequence {
+    fun generateTitle(noteView: NoteView, doneStates: NotebookDoneStates): CharSequence {
         val note = noteView.note
 
         val builder = SpannableStringBuilder()
 
         /* State. */
         if (note.state != null) {
-            builder.append(generateState(note))
+            builder.append(generateState(note, doneStates))
         }
 
         /* Priority. */
@@ -125,10 +126,10 @@ class TitleGenerator(
         return SpannableString(TextUtils.join(TAGS_SEPARATOR, tags))
     }
 
-    private fun generateState(note: Note): CharSequence {
+    private fun generateState(note: Note, doneStates: NotebookDoneStates): CharSequence {
         val str = SpannableString(note.state)
 
-        val color = if (AppPreferences.doneKeywordsSet(context).contains(note.state)) {
+        val color = if (doneStates.isDone(note.position.bookId, note.state, AppPreferences.doneKeywordsSet(context))) {
             attributes.colorDone
         } else {
             attributes.colorTodo

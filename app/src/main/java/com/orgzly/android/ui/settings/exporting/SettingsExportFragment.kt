@@ -104,6 +104,10 @@ class SettingsExportFragment : DialogFragment() {
         
         binding.dialogExportSettingsBreadcrumbs.movementMethod = LinkMovementMethod.getInstance()
 
+        dataRepository.getNotebookDoneStatesLiveData().observe(viewLifecycleOwner) {
+            adapter.setDoneStates(it)
+        }
+
         viewModel.data.observe(viewLifecycleOwner) { data ->
             val breadcrumbs = data.first
             val list = data.second

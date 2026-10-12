@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.orgzly.R
+import com.orgzly.android.data.NotebookDoneStates
 import com.orgzly.android.ui.OnViewHolderClickListener
 import com.orgzly.android.ui.SelectableItemAdapter
 import com.orgzly.android.ui.Selection
@@ -102,6 +103,13 @@ class AgendaAdapter(
             is AgendaItem.Overdue -> OVERDUE_ITEM_TYPE
             is AgendaItem.Day -> DAY_ITEM_TYPE
             else -> NOTE_ITEM_TYPE
+        }
+    }
+
+    fun setDoneStates(doneStates: NotebookDoneStates) {
+        if (doneStates != noteViewBinder.doneStates) {
+            noteViewBinder.doneStates = doneStates
+            notifyDataSetChanged()
         }
     }
 

@@ -285,6 +285,10 @@ class SearchFragment : QueryFragment(), OnViewHolderClickListener<NoteView> {
             }
         })
 
+        dataRepository.getNotebookDoneStatesLiveData().observe(viewLifecycleOwner) {
+            viewAdapter.setDoneStates(it)
+        }
+
         viewModel.data.observe(viewLifecycleOwner, Observer { notes ->
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Observed notes: ${notes.size}")
 
