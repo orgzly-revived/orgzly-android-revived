@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.orgzly.R
 import com.orgzly.android.App
+import com.orgzly.android.data.BookWorkflow
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.data.LogDonePolicy
 import com.orgzly.android.data.mappers.OrgMapper
@@ -191,6 +192,7 @@ class NoteViewModel(
                 App.getAppContext(),
                 it,
                 state,
+                BookWorkflow.doneKeywords(App.getAppContext(), bookView.value?.book?.preface),
                 LogDonePolicy.resolve(
                     loggingProperty(it),
                     bookView.value?.book?.preface,
