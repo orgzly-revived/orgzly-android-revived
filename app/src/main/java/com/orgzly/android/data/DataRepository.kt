@@ -771,6 +771,9 @@ class DataRepository @Inject constructor(
 
         db.noteAncestor().insertAncestorsForNotes(pastedNoteIds)
 
+        // The clipboard may hold notes from a notebook with another workflow.
+        reParseNotes(db.noteView().get(pastedNoteIds))
+
         // Update descendants count for the target note and its ancestors
         db.note().updateDescendantsCountForNoteAndAncestors(listOf(targetNote.id))
 
@@ -934,6 +937,11 @@ class DataRepository @Inject constructor(
         db.note().updateDescendantsCountForNoteAndAncestors(listOf(targetNote.id))
 
         unfoldTargetIfMovingUnder(place, targetNoteId)
+
+        // A moved note keeps its state, which the target notebook may not declare.
+        if (sourceBookIds.any { it != targetNote.position.bookId }) {
+            reParseNotes(db.noteView().get(ids))
+        }
 
         System.currentTimeMillis().let {
             updateBookIsModified(sourceBookIds, true, it)

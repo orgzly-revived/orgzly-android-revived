@@ -4,13 +4,20 @@ import com.orgzly.android.OrgzlyTest
 import com.orgzly.android.data.BookWorkflow
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.query.user.DottedQueryParser
+import com.orgzly.android.ui.NotePlace
 import com.orgzly.android.ui.NoteStates
+import com.orgzly.android.ui.Place
+import com.orgzly.android.usecase.NoteCopy
+import com.orgzly.android.usecase.NotePaste
+import com.orgzly.android.usecase.NoteRefile
+import com.orgzly.android.usecase.UseCaseRunner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -34,6 +41,8 @@ class BookWorkflowTest : OrgzlyTest() {
 
     private fun noteIds(vararg titles: String): Set<Long> =
         titles.map { dataRepository.getLastNote(it)!!.id }.toSet()
+
+    private fun stateOf(title: String) = dataRepository.getLastNote(title)!!.state
 
     @Test
     fun testStateDeclaredByTheNotebookIsParsed() {
@@ -135,6 +144,39 @@ class BookWorkflowTest : OrgzlyTest() {
         val note = dataRepository.getLastNote("Abandoned")!!
         assertEquals("CNCL", note.state)
         assertEquals("Abandoned", note.title)
+    }
+
+    // --- notes moving between notebooks ---
+
+    @Test
+    fun testRefiledNoteLosesAStateTheTargetDoesNotDeclare() {
+        testUtils.setupBook("book-a", "#+TODO: NEXT | CNCL\n\n* CNCL Abandoned\n")
+        val (target) = testUtils.setupBook("book-b", "* Target\n")
+
+        UseCaseRunner.run(NoteRefile(noteIds("Abandoned"), NotePlace(target.id)))
+
+        assertNull(stateOf("CNCL Abandoned"))
+    }
+
+    @Test
+    fun testRefiledNoteGainsAStateTheTargetDeclares() {
+        testUtils.setupBook("book-a", "* CNCL Abandoned\n")
+        val (target) = testUtils.setupBook("book-b", "#+TODO: NEXT | CNCL\n\n* Target\n")
+
+        UseCaseRunner.run(NoteRefile(noteIds("CNCL Abandoned"), NotePlace(target.id)))
+
+        assertEquals("CNCL", stateOf("Abandoned"))
+    }
+
+    @Test
+    fun testPastedNoteIsReadWithTheTargetsWorkflow() {
+        val (source) = testUtils.setupBook("book-a", "* CNCL Abandoned\n")
+        val (target) = testUtils.setupBook("book-b", "#+TODO: NEXT | CNCL\n\n* Target\n")
+
+        UseCaseRunner.run(NoteCopy(source.id, noteIds("CNCL Abandoned")))
+        UseCaseRunner.run(NotePaste(target.id, dataRepository.getLastNote("Target")!!.id, Place.BELOW))
+
+        assertEquals("CNCL", stateOf("Abandoned"))
     }
 
     // --- which notebook is in scope for a selection ---

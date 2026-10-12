@@ -400,6 +400,24 @@ class StructureTest : OrgzlyTest() {
     }
 
     @Test
+    fun testRefileManyToDifferentBook() {
+        val bookContent = StringBuilder().apply {
+            append("* Note A-01\n")
+
+            for (i in 1..999) {
+                append("** Note A-01 ($i)\n")
+            }
+        }.toString()
+
+        testUtils.setupBook("Book A", bookContent)
+        val (bookB) = testUtils.setupBook("Book B", "* Note B-01\n")
+
+        UseCaseRunner.run(NoteRefile(setOf(getNote("Note A-01").id), NotePlace(bookB.id)))
+
+        Assert.assertEquals(1001, dataRepository.getNotes("Book B").size)
+    }
+
+    @Test
     fun testMoveMany() {
         val bookContent = StringBuilder().apply {
             append("* Note A-01\n")
