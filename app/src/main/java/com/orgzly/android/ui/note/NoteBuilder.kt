@@ -30,9 +30,8 @@ class NoteBuilder {
                 context: Context,
                 notePayload: NotePayload,
                 state: String?,
+                doneKeywords: Set<String>,
                 logDone: LogDone): NotePayload {
-
-            val doneKeywords = AppPreferences.doneKeywordsSet(context)
 
             var title = notePayload.title
             var content = notePayload.content

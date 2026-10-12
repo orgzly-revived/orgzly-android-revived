@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -182,6 +183,33 @@ class BookWorkflowTest : OrgzlyTest() {
     // --- which notebook is in scope for a selection ---
 
     @Test
+    fun testOneNoteResolvesToItsOwnNotebook() {
+        testUtils.setupBook("book-a", "#+TODO: NEXT | CNCL\n\n* CNCL Abandoned\n")
+
+        val preface = dataRepository.getSharedBookPreface(noteIds("Abandoned"))
+
+        assertEquals(listOf("CNCL"), BookWorkflow.doneKeywords(context, preface).toList())
+    }
+
+    @Test
+    fun testSeveralNotesFromOneNotebookResolveToIt() {
+        testUtils.setupBook("book-a", "#+TODO: NEXT | CNCL\n\n* CNCL One\n* NEXT Two\n")
+
+        val preface = dataRepository.getSharedBookPreface(noteIds("One", "Two"))
+
+        assertEquals(listOf("CNCL"), BookWorkflow.doneKeywords(context, preface).toList())
+    }
+
+    /** A mixed selection has no single workflow, so the app's states are the only answer. */
+    @Test
+    fun testNotesFromSeveralNotebooksResolveToNothing() {
+        testUtils.setupBook("book-a", "#+TODO: NEXT | CNCL\n\n* CNCL One\n")
+        testUtils.setupBook("book-b", "* DONE Two\n")
+
+        assertNull(dataRepository.getSharedBookPreface(noteIds("One", "Two")))
+    }
+
+    @Test
     fun testNotesFromSeveralNotebooksOfferTheStatesTheyShare() {
         testUtils.setupBook("book-a", "#+TODO: NEXT | CNCL DONE\n\n* CNCL One\n")
         testUtils.setupBook("book-b", "* DONE Two\n")
@@ -189,5 +217,90 @@ class BookWorkflowTest : OrgzlyTest() {
         val states = NoteStates.fromBooks(context, dataRepository.getBookPrefaces(noteIds("One", "Two")))
 
         assertEquals(listOf("NEXT", "DONE"), states.array.toList())
+    }
+
+    @Test
+    fun testANotebookDeclaringNothingResolvesToTheConfiguredStates() {
+        testUtils.setupBook("book-b", "* DONE Finished\n")
+
+        val preface = dataRepository.getSharedBookPreface(noteIds("Finished"))
+
+        assertEquals(listOf("DONE"), BookWorkflow.doneKeywords(context, preface).toList())
+    }
+
+    // --- the done button ---
+
+    @Test
+    fun testDoneUsesTheNotebooksDoneState() {
+        testUtils.setupBook("book-a", "#+TODO: NEED | FIN\n\n* NEED Task\n")
+
+        dataRepository.setNoteStateToDone(dataRepository.getLastNote("Task")!!.id)
+
+        assertEquals("FIN", stateOf("Task"))
+    }
+
+    @Test
+    fun testToggleUsesTheNotebooksStates() {
+        testUtils.setupBook("book-a", "#+TODO: NEED | FIN\n\n* NEED Task\n")
+
+        val id = dataRepository.getLastNote("Task")!!.id
+
+        dataRepository.toggleNotesState(setOf(id))
+        assertEquals("FIN", stateOf("Task"))
+
+        dataRepository.toggleNotesState(setOf(id))
+        assertEquals("NEED", stateOf("Task"))
+    }
+
+    /** The symptom: the app's first todo state leaking into a notebook that never declared it. */
+    @Test
+    fun testToggleDoesNotWriteAConfiguredStateIntoADeclaringNotebook() {
+        testUtils.setupBook("book-a", "#+TODO: NEED | FIN\n\n* FIN Task\n")
+
+        dataRepository.toggleNotesState(setOf(dataRepository.getLastNote("Task")!!.id))
+
+        assertEquals("NEED", stateOf("Task"))
+    }
+
+    @Test
+    fun testANotebookDeclaringNothingStillUsesTheConfiguredStates() {
+        testUtils.setupBook("book-b", "* TODO Task\n")
+
+        dataRepository.setNoteStateToDone(dataRepository.getLastNote("Task")!!.id)
+
+        assertEquals("DONE", stateOf("Task"))
+    }
+
+    /** Each notebook is toggled against its own workflow, not one answer for the batch. */
+    @Test
+    fun testTogglingAcrossNotebooksUsesEachOwnStates() {
+        testUtils.setupBook("book-a", "#+TODO: NEED | FIN\n\n* NEED One\n")
+        testUtils.setupBook("book-b", "* TODO Two\n")
+
+        dataRepository.toggleNotesState(noteIds("One", "Two"))
+
+        assertEquals("FIN", stateOf("One"))
+        assertEquals("DONE", stateOf("Two"))
+    }
+
+    @Test
+    fun testSettingAStateAcrossNotebooksClosesOnlyWhereItIsDone() {
+        val todoBook = testUtils.setupBook("book-a", "#+TODO: TODO WAIT | DONE\n\n* TODO One\n")
+        val doneBook = testUtils.setupBook("book-b", "#+TODO: TODO | WAIT DONE\n\n* TODO Two\n")
+
+        dataRepository.setNotesState(noteIds("One", "Two"), "WAIT")
+
+        assertFalse(exportBook(todoBook).contains("CLOSED:"))
+        assertTrue(exportBook(doneBook).contains("CLOSED:"))
+    }
+
+    /** Marking done has to close the note even when only the file knows the state is done. */
+    @Test
+    fun testDoneClosesTheNoteForADeclaredState() {
+        val book = testUtils.setupBook("book-a", "#+TODO: NEED | FIN\n\n* NEED Task\n")
+
+        dataRepository.setNoteStateToDone(dataRepository.getLastNote("Task")!!.id)
+
+        assertTrue(exportBook(book).contains("CLOSED:"))
     }
 }
