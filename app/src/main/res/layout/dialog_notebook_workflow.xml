@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/screen_edge"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/notebook_workflow_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textCapCharacters"
+        android:hint="@string/notebook_workflow_hint"
+        android:freezesText="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="12dp"
+        android:textSize="12sp"
+        android:text="@string/notebook_workflow_summary" />
+
+</LinearLayout>
