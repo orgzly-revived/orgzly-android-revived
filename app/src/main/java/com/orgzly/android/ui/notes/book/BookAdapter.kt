@@ -112,7 +112,7 @@ class BookAdapter(
 
                 noteItemViewBinder.bind(holder, noteView)
 
-                getSelection().setBackgroundIfSelected(holder.itemView, note.id)
+                getSelection().setActivatedIfSelected(holder.itemView, note.id)
             }
         }
     }
