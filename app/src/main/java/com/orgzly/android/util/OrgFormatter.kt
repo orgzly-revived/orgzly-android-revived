@@ -54,6 +54,12 @@ object OrgFormatter {
 
     private val LOGBOOK_DRAWER_PATTERN = drawerPattern(LOGBOOK_DRAWER_NAME)
 
+    // `:LOGBOOK:` followed immediately by `:END:` has no body line, so [LOGBOOK_DRAWER_PATTERN]
+    // does not match. Group 1 is the leading whitespace of that `:END:` line.
+    private val EMPTY_LOGBOOK_DRAWER_PATTERN = Pattern.compile(
+            """^[ \t]*:$LOGBOOK_DRAWER_NAME:[ \t]*\n([ \t]*):END:[ \t]*$""",
+            Pattern.CASE_INSENSITIVE or Pattern.MULTILINE)
+
     private const val PLAIN_LIST_CHARS = "-\\+"
     private val CHECKBOXES_PATTERN = Pattern.compile("""^\s*[$PLAIN_LIST_CHARS]\s+(\[[ -X]])""", Pattern.MULTILINE)
 
@@ -401,12 +407,35 @@ object OrgFormatter {
 
             if (m.find()) {
                 val start = m.start(2) // Content start
-                StringBuilder(content).insert(start, "$entry\n").toString()
+                val indent = logbookEntryIndent(content, m)
+                StringBuilder(content).insert(start, "$indent$entry\n").toString()
 
             } else {
-                insertLogbookEntryLineWithoutDrawer(content, entry)
+                val empty = EMPTY_LOGBOOK_DRAWER_PATTERN.matcher(content)
+
+                if (empty.find()) {
+                    val indent = empty.group(1) ?: ""
+                    StringBuilder(content).insert(empty.start(1), "$indent$entry\n").toString()
+
+                } else {
+                    insertLogbookEntryLineWithoutDrawer(content, entry)
+                }
             }
         }
+    }
+
+    // Leading ' ' / '\t' of the first non-blank body line, else of the matched :END: line.
+    private fun logbookEntryIndent(content: String, m: Matcher): String {
+        val body = content.substring(m.start(2), m.end(2))
+
+        for (line in body.split('\n')) {
+            if (line.isNotBlank()) {
+                return line.takeWhile { it == ' ' || it == '\t' }
+            }
+        }
+
+        val endLine = content.substring(m.end(2), m.end()).removePrefix("\n")
+        return endLine.takeWhile { it == ' ' || it == '\t' }
     }
 
     private fun insertLogbookEntryLineWithoutDrawer(content: String?, entry: String): String {
