@@ -1458,7 +1458,17 @@ public class AppPreferences {
 
     /* Capture templates - stored as JSON array */
     public static List<com.orgzly.android.ui.capture.CaptureTemplate> captureTemplates(Context context) {
-        String json = getDefaultSharedPreferences(context).getString(context.getResources().getString(R.string.pref_key_capture_templates), "[]");
+        String key = context.getResources().getString(R.string.pref_key_capture_templates);
+        SharedPreferences prefs = getDefaultSharedPreferences(context);
+        String json = prefs.getString(key, "[]");
+
+        // Templates saved by minified 1.23.x builds use R8's field names; rewrite them once.
+        String migrated = com.orgzly.android.ui.capture.CaptureTemplateKt.migrateLegacyCaptureTemplatesJson(json);
+        if (migrated != null) {
+            prefs.edit().putString(key, migrated).apply();
+            json = migrated;
+        }
+
         com.google.gson.reflect.TypeToken<List<com.orgzly.android.ui.capture.CaptureTemplate>> typeToken =
             new com.google.gson.reflect.TypeToken<List<com.orgzly.android.ui.capture.CaptureTemplate>>(){};
         try {
