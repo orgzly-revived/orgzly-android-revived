@@ -2,6 +2,11 @@
  * Load Orgzly-specific properties from app.properties.
  * File is not included, see sample.app.properties file.
  */
+pluginManagement {
+    repositories {
+        google()
+    }
+}
 def loadAppProperties() {
     Properties properties = new Properties()
 
