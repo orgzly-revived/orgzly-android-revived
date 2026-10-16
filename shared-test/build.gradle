@@ -44,6 +44,7 @@ android {
 
     packagingOptions {
         resources.merges.add("plugin.properties")
+        resources.merges.add("OSGI-INF/l10n/plugin.properties")
     }
 }
 
