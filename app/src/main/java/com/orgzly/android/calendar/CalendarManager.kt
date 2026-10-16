@@ -35,7 +35,7 @@ class CalendarManager(
     companion object {
         private const val TAG = "CalendarManager"
         private val CALENDAR_ACCOUNT_NAME = "Orgzly${if (BuildConfig.DEBUG) " Debug" else ""}"
-        private val CALENDAR_ACCOUNT_TYPE = "com.orgzly.android${if (BuildConfig.DEBUG) ".debug" else ""}"
+        private val CALENDAR_ACCOUNT_TYPE = CalendarContract.ACCOUNT_TYPE_LOCAL
         private val CALENDAR_NAME = CALENDAR_ACCOUNT_NAME
         private val CALENDAR_DISPLAY_NAME = CALENDAR_ACCOUNT_NAME
 
