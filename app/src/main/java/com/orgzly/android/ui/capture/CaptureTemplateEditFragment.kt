@@ -60,6 +60,7 @@ class CaptureTemplateEditFragment : Fragment() {
             binding.templateName.setText(existingTemplate.name)
             binding.templateTitle.setText(existingTemplate.title)
             binding.templateContent.setText(existingTemplate.content)
+            binding.templateProperties.setText(existingTemplate.properties)
             binding.templateTags.setText(existingTemplate.tags)
             binding.templateScheduled.isChecked = existingTemplate.isScheduled
         }
@@ -86,7 +87,11 @@ class CaptureTemplateEditFragment : Fragment() {
         (activity as? SettingsFragment.Listener)?.onTitleChange(title)
 
         setupTargetPicker()
-        setupStateSpinner(existingTemplate?.state)
+        if (existingTemplate != null) {
+            setupStateSpinner(existingTemplate.state)
+        } else {
+            setupStateSpinner(AppPreferences.newNoteState(requireContext()))
+        }
         setupPrioritySpinner(existingTemplate?.priority)
     }
 
@@ -228,7 +233,7 @@ class CaptureTemplateEditFragment : Fragment() {
 
         val none = getString(R.string.none)
         val stateText = binding.templateState.text.toString()
-        val state = if (stateText == none) "" else stateText
+        val state = if (stateText == none) null else stateText
 
         val priorityText = binding.templatePriority.text.toString()
         val priorityEntries = mutableListOf(none)
@@ -245,6 +250,7 @@ class CaptureTemplateEditFragment : Fragment() {
             name = name,
             title = binding.templateTitle.text?.toString()?.trim() ?: "",
             content = binding.templateContent.text?.toString()?.trim() ?: "",
+            properties = binding.templateProperties.text?.toString()?.trim(),
             targetBook = selectedBookName,
             targetHeadline = headline,
             state = state,

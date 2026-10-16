@@ -9,11 +9,13 @@ import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.NoteStates
 import com.orgzly.android.ui.capture.CaptureTemplate
 import com.orgzly.android.ui.capture.TemplateExpander
+import com.orgzly.android.ui.capture.parseTemplateProperties
 import com.orgzly.android.util.EventsInNote
 import com.orgzly.android.util.OrgFormatter
 import com.orgzly.org.OrgProperties
 import com.orgzly.org.datetime.OrgDateTime
 import com.orgzly.org.datetime.OrgRange
+import com.orgzly.org.utils.LogDone
 import com.orgzly.org.utils.StateChangeLogic
 import java.util.Calendar
 import java.util.UUID
@@ -24,7 +26,11 @@ class NoteBuilder {
     companion object {
 
         @JvmStatic
-        fun changeState(context: Context, notePayload: NotePayload, state: String?): NotePayload {
+        fun changeState(
+                context: Context,
+                notePayload: NotePayload,
+                state: String?,
+                logDone: LogDone): NotePayload {
 
             val doneKeywords = AppPreferences.doneKeywordsSet(context)
 
@@ -34,13 +40,14 @@ class NoteBuilder {
 
             val eventsInNote = EventsInNote(title, content)
 
-            val scl = StateChangeLogic(doneKeywords)
+            val scl = StateChangeLogic(doneKeywords, logDone)
 
             scl.setState(
                     state,
                     notePayload.state,
                     OrgRange.parseOrNull(notePayload.scheduled),
                     OrgRange.parseOrNull(notePayload.deadline),
+                    OrgRange.parseOrNull(notePayload.closed),
                     eventsInNote.timestamps.map { OrgRange(it) })
 
 
@@ -129,11 +136,20 @@ class NoteBuilder {
             }
             val basePayload = newPayload(context, expandedTitle, expandedContent)
 
+            // Template properties are applied on top of the initial ones (ID), and win over the
+            // created-at property, which DataRepository.createNote only sets if absent.
+            val properties = basePayload.properties.apply {
+                parseTemplateProperties(template.properties).forEach { (name, value) ->
+                    set(name, TemplateExpander.expand(value, context))
+                }
+            }
+
             return basePayload.copy(
-                    state = template.state.ifBlank { basePayload.state },
+                    state = template.state ?: "",
                     priority = template.priority.ifBlank { null },
                     scheduled = if (template.isScheduled) todayScheduledTime() else null,
-                    tags = Tags.fromString(template.tags).tags
+                    tags = Tags.fromString(template.tags).tags,
+                    properties = properties
             )
         }
 

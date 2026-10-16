@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.Calendar;
 
 import androidx.core.content.pm.PackageInfoCompat;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -170,18 +169,6 @@ public class OrgzlyTest {
 
     protected String userDateTime(String s) {
         return userTimeFormatter.formatAll(OrgDateTime.parse(s));
-    }
-
-    protected String defaultDialogUserDate() {
-        OrgDateTime time = new OrgDateTime(true);
-
-        /* Default time is now + 1h.
-         * TODO: We shouldn't be able to do this - make OrgDateTime immutable.
-         */
-        Calendar cal = time.getCalendar();
-        cal.add(Calendar.HOUR_OF_DAY, 1);
-
-        return userTimeFormatter.formatDate(time);
     }
 
     protected String currentUserDate() {

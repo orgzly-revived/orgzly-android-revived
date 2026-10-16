@@ -26,11 +26,13 @@ import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.AppIntent
 import com.orgzly.android.BookUtils
+import com.orgzly.android.data.LogDonePolicy
 import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.query.Condition
+import com.orgzly.org.utils.LogDone
 import com.orgzly.android.query.Query
 import com.orgzly.android.query.SimpleFilter
 import com.orgzly.android.query.user.InternalQueryBuilder
@@ -644,6 +646,37 @@ class BookFragment :
             .show()
     }
 
+    private fun showClosedTimeDialog() {
+        val book = currentBook ?: return
+
+        val current = LogDonePolicy.fromPreface(book.preface)
+
+        // The picker cannot offer lognotedone, so it shows as "record" and is kept as it is.
+        val choices = arrayOf(
+            null,
+            if (current == LogDone.NOTE) LogDone.NOTE else LogDone.TIME,
+            LogDone.NONE)
+
+        val labels = arrayOf(
+            getString(R.string.closed_time_use_app_setting),
+            getString(R.string.closed_time_record),
+            getString(R.string.closed_time_do_not_record))
+
+        val checked = choices.indexOf(current)
+
+        var selected = checked
+
+        dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.closed_time)
+            .setSingleChoiceItems(labels, checked) { _, which -> selected = which }
+            .setPositiveButton(R.string.set) { _, _ ->
+                listener?.onBookPrefaceUpdate(
+                    mBookId, LogDonePolicy.withLogDoneInPreface(book.preface, choices[selected]))
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
     private fun updateFiletagsInPreface(preface: String?, tagsText: String): String {
         val filetagsLine = if (tagsText.isNotBlank()) {
             val tags = tagsText.split("\\s+".toRegex()).filter { it.isNotBlank() }
@@ -696,6 +729,7 @@ class BookFragment :
             if (currentBook == null) {
                 menu.removeItem(R.id.books_options_menu_book_preface)
                 menu.removeItem(R.id.books_options_menu_book_filetags)
+                menu.removeItem(R.id.books_options_menu_book_closed_time)
             }
 
             // Show/hide widen button based on narrowed state
@@ -1038,6 +1072,10 @@ class BookFragment :
 
             R.id.books_options_menu_book_filetags -> {
                 showFiletagsDialog()
+            }
+
+            R.id.books_options_menu_book_closed_time -> {
+                showClosedTimeDialog()
             }
 
             R.id.keep_screen_on -> {
