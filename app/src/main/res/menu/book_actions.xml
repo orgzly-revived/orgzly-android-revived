@@ -39,6 +39,11 @@
         app:showAsAction="never"
         android:title="@string/file_tags"/>
 
+    <item
+        android:id="@+id/books_options_menu_book_closed_time"
+        app:showAsAction="never"
+        android:title="@string/closed_time"/>
+
     <!-- Title is updated depending on the number of notes in clipboard -->
     <item
         android:id="@+id/book_actions_paste"

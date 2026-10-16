@@ -498,6 +498,9 @@
     <string name="pref_key_drawers_folded" translatable="false">pref_key_drawers_folded</string>
     <bool name="pref_default_drawers_folded" translatable="false">true</bool>
 
+    <string name="pref_key_log_done" translatable="false">pref_key_log_done</string>
+    <bool name="pref_default_log_done" translatable="false">true</bool>
+
     <string name="pref_key_log_on_time_shift" translatable="false">pref_key_log_on_time_shift</string>
     <bool name="pref_default_log_on_time_shift" translatable="false">false</bool>
 

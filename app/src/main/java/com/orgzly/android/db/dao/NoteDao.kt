@@ -334,7 +334,8 @@ abstract class NoteDao : BaseDao<Note> {
     abstract fun updateStateAndRemoveClosedTime(ids: Set<Long>, state: String?): Int
 
     @Query("""
-        SELECT notes.id as noteId, state, title, content, st.string AS scheduled, dt.string AS deadline
+        SELECT notes.id as noteId, notes.book_id AS bookId, state, title, content,
+               st.string AS scheduled, dt.string AS deadline, ct.string AS closed
 
         FROM notes
 
@@ -343,6 +344,9 @@ abstract class NoteDao : BaseDao<Note> {
 
         LEFT JOIN org_ranges dr ON (dr.id = notes.deadline_range_id)
         LEFT JOIN org_timestamps dt ON (dt.id = dr.start_timestamp_id)
+
+        LEFT JOIN org_ranges cr ON (cr.id = notes.closed_range_id)
+        LEFT JOIN org_timestamps ct ON (ct.id = cr.start_timestamp_id)
 
         WHERE notes.id IN (:ids) AND COALESCE(state, "") != COALESCE(:state, "")
     """)
@@ -434,9 +438,11 @@ abstract class NoteDao : BaseDao<Note> {
 
     data class NoteForStateUpdate(
             val noteId: Long,
+            val bookId: Long,
             val state: String?,
             val title: String,
             val content: String?,
             val scheduled: String?,
-            val deadline: String?)
+            val deadline: String?,
+            val closed: String?)
 }

@@ -480,6 +480,10 @@
 
     <string name="edit_book_preface">Edit preface</string>
     <string name="file_tags">Tags</string>
+    <string name="closed_time">Closed time</string>
+    <string name="closed_time_use_app_setting">Use app setting</string>
+    <string name="closed_time_record">Record closed time</string>
+    <string name="closed_time_do_not_record">Don\'t record closed time</string>
     <string name="book_preface_hint">Text displayed before the first note</string>
 
     <string name="keep_screen_on_title">Enable option to keep the screen on</string>
@@ -597,6 +601,8 @@
     <string name="overwrite_remote_notebook_question">Overwrite remote notebook(s)?</string>
     <string name="drawers_folded_by_default">Drawers folded</string>
     <string name="drawers_folded_by_default_summary">Fold drawers by default</string>
+    <string name="log_done">Record closed time</string>
+    <string name="log_done_summary">Add a CLOSED timestamp when a note is marked as done</string>
     <string name="log_on_time_shift">Log to drawer on time shift</string>
     <string name="log_on_time_shift_summary">Log time when note with repeater is marked as done</string>
     <string name="set_last_repeat_on_time_shift">Set property on time shift</string>
