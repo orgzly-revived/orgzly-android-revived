@@ -14,6 +14,31 @@ abstract class NotePropertyDao : BaseDao<NoteProperty> {
     @Query("SELECT * FROM note_properties WHERE note_id = :noteId AND name = :name ORDER BY position")
     abstract fun get(noteId: Long, name: String): List<NoteProperty>
 
+    /** The note's own value, else the nearest ancestor's. Null when no ancestor sets it. */
+    @Query("""
+        SELECT p.value
+        FROM note_properties p
+        JOIN notes n ON (n.id = p.note_id)
+        WHERE p.name = :name COLLATE NOCASE AND (
+            p.note_id = :noteId
+            OR p.note_id IN (SELECT ancestor_note_id FROM note_ancestors WHERE note_id = :noteId))
+        ORDER BY n.level DESC
+        LIMIT 1
+    """)
+    abstract fun getInherited(noteId: Long, name: String): String?
+
+    /** The nearest ancestor's value, ignoring the note's own. */
+    @Query("""
+        SELECT p.value
+        FROM note_properties p
+        JOIN notes n ON (n.id = p.note_id)
+        WHERE p.name = :name COLLATE NOCASE
+            AND p.note_id IN (SELECT ancestor_note_id FROM note_ancestors WHERE note_id = :noteId)
+        ORDER BY n.level DESC
+        LIMIT 1
+    """)
+    abstract fun getInheritedFromAncestors(noteId: Long, name: String): String?
+
     @Query("SELECT name FROM note_properties GROUP BY LOWER(name)")
     abstract fun allDistinctNames(): List<String>
 

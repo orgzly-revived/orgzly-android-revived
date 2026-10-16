@@ -15,6 +15,7 @@ import com.orgzly.android.util.OrgFormatter
 import com.orgzly.org.OrgProperties
 import com.orgzly.org.datetime.OrgDateTime
 import com.orgzly.org.datetime.OrgRange
+import com.orgzly.org.utils.LogDone
 import com.orgzly.org.utils.StateChangeLogic
 import java.util.Calendar
 import java.util.UUID
@@ -25,7 +26,11 @@ class NoteBuilder {
     companion object {
 
         @JvmStatic
-        fun changeState(context: Context, notePayload: NotePayload, state: String?): NotePayload {
+        fun changeState(
+                context: Context,
+                notePayload: NotePayload,
+                state: String?,
+                logDone: LogDone): NotePayload {
 
             val doneKeywords = AppPreferences.doneKeywordsSet(context)
 
@@ -35,13 +40,14 @@ class NoteBuilder {
 
             val eventsInNote = EventsInNote(title, content)
 
-            val scl = StateChangeLogic(doneKeywords)
+            val scl = StateChangeLogic(doneKeywords, logDone)
 
             scl.setState(
                     state,
                     notePayload.state,
                     OrgRange.parseOrNull(notePayload.scheduled),
                     OrgRange.parseOrNull(notePayload.deadline),
+                    OrgRange.parseOrNull(notePayload.closed),
                     eventsInNote.timestamps.map { OrgRange(it) })
 
 
