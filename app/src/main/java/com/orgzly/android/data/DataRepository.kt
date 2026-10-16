@@ -1124,21 +1124,32 @@ class DataRepository @Inject constructor(
                 var updated = 0
 
                 val doneKeywords = AppPreferences.doneKeywordsSet(context)
+                val appLogDone = LogDonePolicy.fromPreferences(context)
+                // A null preface is a cacheable answer, which getOrPut cannot represent.
+                val prefaces = HashMap<Long, String?>()
 
                 db.note().getNoteForStateChange(noteIds, state).forEach { note ->
+                    if (!prefaces.containsKey(note.bookId)) {
+                        prefaces[note.bookId] = db.book().get(note.bookId)?.preface
+                    }
+                    val logDone = LogDonePolicy.resolve(
+                        db.noteProperty().getInherited(note.noteId, LogDonePolicy.LOGGING),
+                        prefaces[note.bookId],
+                        appLogDone)
 
                     var title = note.title
                     var content = note.content
 
                     val eventsInNote = EventsInNote(title, content)
 
-                    val scl = StateChangeLogic(doneKeywords)
+                    val scl = StateChangeLogic(doneKeywords, logDone)
 
                     scl.setState(
                             state,
                             note.state,
                             OrgRange.parseOrNull(note.scheduled),
                             OrgRange.parseOrNull(note.deadline),
+                            OrgRange.parseOrNull(note.closed),
                             eventsInNote.timestamps.map { OrgRange(it) })
 
                     if (scl.isShifted) {
@@ -1363,6 +1374,14 @@ class DataRepository @Inject constructor(
 
     fun getNoteProperties(noteId: Long): List<NoteProperty> {
         return db.noteProperty().get(noteId)
+    }
+
+    fun getInheritedProperty(noteId: Long, name: String): String? {
+        return db.noteProperty().getInherited(noteId, name)
+    }
+
+    fun getAncestorProperty(noteId: Long, name: String): String? {
+        return db.noteProperty().getInheritedFromAncestors(noteId, name)
     }
 
     fun getNotePropertyNames(): List<String> {

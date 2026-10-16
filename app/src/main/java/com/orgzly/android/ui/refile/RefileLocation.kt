@@ -5,10 +5,13 @@ import com.google.gson.JsonSyntaxException
 import com.google.gson.annotations.SerializedName
 
 data class RefileLocation(
+        @SerializedName("type")
         val type: Type? = null,
 
+        @SerializedName("id")
         val id: Long? = null,
 
+        @SerializedName("title")
         val title: String? = null
 ) {
     fun toJson(): String {

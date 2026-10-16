@@ -180,6 +180,12 @@
             android:defaultValue="@bool/pref_default_drawers_folded"/>
 
         <SwitchPreference
+            android:key="@string/pref_key_log_done"
+            android:title="@string/log_done"
+            android:summary="@string/log_done_summary"
+            android:defaultValue="@bool/pref_default_log_done"/>
+
+        <SwitchPreference
             android:key="@string/pref_key_log_on_time_shift"
             android:title="@string/log_on_time_shift"
             android:summary="@string/log_on_time_shift_summary"

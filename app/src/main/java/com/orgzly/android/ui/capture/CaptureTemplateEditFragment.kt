@@ -87,7 +87,11 @@ class CaptureTemplateEditFragment : Fragment() {
         (activity as? SettingsFragment.Listener)?.onTitleChange(title)
 
         setupTargetPicker()
-        setupStateSpinner(existingTemplate?.state)
+        if (existingTemplate != null) {
+            setupStateSpinner(existingTemplate.state)
+        } else {
+            setupStateSpinner(AppPreferences.newNoteState(requireContext()))
+        }
         setupPrioritySpinner(existingTemplate?.priority)
     }
 
@@ -229,7 +233,7 @@ class CaptureTemplateEditFragment : Fragment() {
 
         val none = getString(R.string.none)
         val stateText = binding.templateState.text.toString()
-        val state = if (stateText == none) "" else stateText
+        val state = if (stateText == none) null else stateText
 
         val priorityText = binding.templatePriority.text.toString()
         val priorityEntries = mutableListOf(none)
