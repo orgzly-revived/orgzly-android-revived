@@ -10,7 +10,7 @@ import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.NoteView
 import androidx.lifecycle.LiveData
 import com.orgzly.android.ui.AppBar
-import com.orgzly.android.ui.CommonViewModel
+import com.orgzly.android.ui.notes.NotesViewModel
 import com.orgzly.android.ui.Place
 import com.orgzly.android.ui.SingleLiveEvent
 import com.orgzly.android.usecase.BookCycleVisibility
@@ -23,10 +23,9 @@ import com.orgzly.android.usecase.NoteMove
 import com.orgzly.android.usecase.NotePaste
 import com.orgzly.android.usecase.NotePromote
 import com.orgzly.android.usecase.NoteToggleFoldingSubtree
-import com.orgzly.android.usecase.UseCase
 import com.orgzly.android.usecase.UseCaseRunner
 
-class BookViewModel(private val dataRepository: DataRepository, val bookId: Long) : CommonViewModel() {
+class BookViewModel(private val dataRepository: DataRepository, val bookId: Long) : NotesViewModel() {
 
     enum class FlipperDisplayedChild {
         LOADING,
@@ -162,14 +161,6 @@ class BookViewModel(private val dataRepository: DataRepository, val bookId: Long
 
     fun updatePreface(preface: String) {
         runUseCase(BookUpdatePreface(bookId, preface))
-    }
-
-    private fun runUseCase(useCase: UseCase) {
-        App.EXECUTORS.diskIO().execute {
-            catchAndPostError {
-                UseCaseRunner.run(useCase)
-            }
-        }
     }
 
     fun narrowToSubtree(noteId: Long) {

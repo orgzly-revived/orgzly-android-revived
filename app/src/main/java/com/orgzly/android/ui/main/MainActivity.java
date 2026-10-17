@@ -57,10 +57,6 @@ import com.orgzly.android.usecase.BookExport;
 import com.orgzly.android.usecase.BookImportGettingStarted;
 import com.orgzly.android.usecase.BookSparseTreeForNote;
 import com.orgzly.android.usecase.BookUpdatePreface;
-import com.orgzly.android.usecase.NoteUpdateDeadlineTime;
-import com.orgzly.android.usecase.NoteUpdateScheduledTime;
-import com.orgzly.android.usecase.NoteUpdateState;
-import com.orgzly.android.usecase.NoteUpdateStateToggle;
 import com.orgzly.android.usecase.SavedSearchCreate;
 import com.orgzly.android.usecase.SavedSearchDelete;
 import com.orgzly.android.usecase.SavedSearchMoveDown;
@@ -71,10 +67,8 @@ import com.orgzly.android.usecase.UseCaseResult;
 import com.orgzly.android.usecase.UseCaseWorker;
 import com.orgzly.android.util.AppPermissions;
 import com.orgzly.android.util.LogUtils;
-import com.orgzly.org.datetime.OrgDateTime;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -698,26 +692,6 @@ public class MainActivity extends CommonActivity
         popBackStackAndCloseKeyboard();
     }
 
-    @Override
-    public void onStateChangeRequest(Set<Long> noteIds, @Nullable String state) {
-        mSyncFragment.run(new NoteUpdateState(noteIds, state));
-    }
-
-    @Override
-    public void onStateToggleRequest(@NotNull Set<Long> noteIds) {
-        mSyncFragment.run(new NoteUpdateStateToggle(noteIds));
-    }
-
-    @Override
-    public void onScheduledTimeUpdateRequest(Set<Long> noteIds, OrgDateTime time) {
-        mSyncFragment.run(new NoteUpdateScheduledTime(noteIds, time));
-    }
-
-    @Override
-    public void onDeadlineTimeUpdateRequest(Set<Long> noteIds, OrgDateTime time) {
-        mSyncFragment.run(new NoteUpdateDeadlineTime(noteIds, time));
-    }
-
     @Override /* BookFragment */
     public void onBookPrefaceEditRequest(Book book) {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG);
@@ -878,21 +852,6 @@ public class MainActivity extends CommonActivity
         intent.putExtra(AppIntent.EXTRA_PROPERTY_NAME, name);
         intent.putExtra(AppIntent.EXTRA_PROPERTY_VALUE, value);
         LocalBroadcastManager.getInstance(App.getAppContext()).sendBroadcast(intent);
-    }
-
-    @Override
-    public void onClockIn(@NonNull Set<Long> noteIds) {
-        viewModel.clockingUpdateRequest(noteIds, 0);
-    }
-
-    @Override
-    public void onClockOut(@NonNull Set<Long> noteIds) {
-        viewModel.clockingUpdateRequest(noteIds, 1);
-    }
-
-    @Override
-    public void onClockCancel(@NonNull Set<Long> noteIds) {
-        viewModel.clockingUpdateRequest(noteIds, 2);
     }
 
     private class LocalBroadcastReceiver extends BroadcastReceiver {

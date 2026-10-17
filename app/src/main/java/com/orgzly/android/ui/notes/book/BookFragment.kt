@@ -94,7 +94,7 @@ class BookFragment :
 
     private lateinit var sharedMainActivityViewModel: SharedMainActivityViewModel
 
-    private lateinit var viewModel: BookViewModel
+    override lateinit var viewModel: BookViewModel
 
     @Inject lateinit var simpleFilterMapper: SimpleFilterMapper
     @Inject lateinit var queryBuilder: InternalQueryBuilder
@@ -105,10 +105,6 @@ class BookFragment :
 
     override fun getAdapter(): BookAdapter? {
         return if (::viewAdapter.isInitialized) viewAdapter else null
-    }
-
-    override fun getCurrentListener(): NotesFragment.Listener? {
-        return listener
     }
 
     // TODO: Move to ViewModel
@@ -311,10 +307,6 @@ class BookFragment :
 
             // Notes shown as cut have changed
             viewAdapter.notifyDataSetChanged()
-        }
-
-        viewModel.errorEvent.observeSingle(viewLifecycleOwner) { error ->
-            activity?.showSnackbar((error.cause ?: error).localizedMessage)
         }
 
         viewModel.appBar.mode.observeSingle(viewLifecycleOwner) { mode ->
@@ -1036,28 +1028,26 @@ class BookFragment :
 
             R.id.note_popup_set_state,
             R.id.state ->
-                listener?.let {
-                    openNoteStateDialog(it, ids, null)
-                }
+                openNoteStateDialog(ids, null)
 
             R.id.note_popup_toggle_state,
             R.id.toggle_state -> {
-                listener?.onStateToggleRequest(ids)
+                viewModel.toggleState(ids)
             }
 
             R.id.note_popup_clock_in,
             R.id.clock_in -> {
-                listener?.onClockIn(ids)
+                viewModel.clockIn(ids)
             }
 
             R.id.note_popup_clock_out,
             R.id.clock_out -> {
-                listener?.onClockOut(ids)
+                viewModel.clockOut(ids)
             }
 
             R.id.note_popup_clock_cancel,
             R.id.clock_cancel -> {
-                listener?.onClockCancel(ids)
+                viewModel.clockCancel(ids)
             }
 
             R.id.note_popup_focus,

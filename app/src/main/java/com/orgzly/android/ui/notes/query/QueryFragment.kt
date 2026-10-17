@@ -44,11 +44,7 @@ abstract class QueryFragment :
     @Inject
     lateinit var viewModelFactory: QueryViewModelFactory
 
-    protected abstract val viewModel: QueryViewModel
-
-    override fun getCurrentListener(): Listener? {
-        return listener
-    }
+    abstract override val viewModel: QueryViewModel
 
     override fun getCurrentDrawerItemId(): String {
         return getDrawerItemId(currentQuery)
@@ -90,28 +86,26 @@ abstract class QueryFragment :
 
             R.id.note_popup_set_state,
             R.id.state ->
-                listener?.let {
-                    openNoteStateDialog(it, ids, null)
-                }
+                openNoteStateDialog(ids, null)
 
             R.id.note_popup_toggle_state,
             R.id.toggle_state -> {
-                listener?.onStateToggleRequest(ids)
+                viewModel.toggleState(ids)
             }
 
             R.id.note_popup_clock_in,
             R.id.clock_in -> {
-                listener?.onClockIn(ids)
+                viewModel.clockIn(ids)
             }
 
             R.id.note_popup_clock_out,
             R.id.clock_out -> {
-                listener?.onClockOut(ids)
+                viewModel.clockOut(ids)
             }
 
             R.id.note_popup_clock_cancel,
             R.id.clock_cancel -> {
-                listener?.onClockCancel(ids)
+                viewModel.clockCancel(ids)
             }
 
             R.id.note_popup_focus,
