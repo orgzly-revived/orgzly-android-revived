@@ -75,7 +75,7 @@ class DataRepository @Inject constructor(
         private val repoFactory: RepoFactory,
         private val resources: Resources,
         private val localStorage: LocalStorage,
-        private val savedSearchRepository: SavedSearchRepository) {
+        private val shims: DataRepositoryShims) {
 
     private fun triggerCalendarSync() {
         val calendarRequest = OneTimeWorkRequestBuilder<CalendarWorker>().build()
@@ -2209,56 +2209,68 @@ class DataRepository @Inject constructor(
      * Saved search
      */
 
+    @Deprecated("Use SavedSearchRepository.get instead")
     fun getSavedSearch(id: Long): SavedSearch? {
-        return savedSearchRepository.get(id)
+        return shims.savedSearches.get(id)
     }
 
+    @Deprecated("Use SavedSearchRepository.getAll instead")
     fun getSavedSearches(): List<SavedSearch> {
-        return savedSearchRepository.getAll()
+        return shims.savedSearches.getAll()
     }
 
+    @Deprecated("Use SavedSearchRepository.getLiveData instead")
     fun getSavedSearchesLiveData(): LiveData<List<SavedSearch>> {
-        return savedSearchRepository.getLiveData()
+        return shims.savedSearches.getLiveData()
     }
 
     /**
      * Get [SavedSearch] by name (case insensitive).
      */
+    @Deprecated("Use SavedSearchRepository.getByNameIgnoreCase instead")
     fun getSavedSearchesByNameIgnoreCase(name: String): List<SavedSearch> {
-        return savedSearchRepository.getByNameIgnoreCase(name)
+        return shims.savedSearches.getByNameIgnoreCase(name)
     }
 
+    @Deprecated("Use SavedSearchRepository.create instead")
     fun createSavedSearch(savedSearch: SavedSearch): Long {
-        return savedSearchRepository.create(savedSearch)
+        return shims.savedSearches.create(savedSearch)
     }
 
+    @Deprecated("Use SavedSearchRepository.update instead")
     fun updateSavedSearch(savedSearch: SavedSearch) {
-        savedSearchRepository.update(savedSearch)
+        shims.savedSearches.update(savedSearch)
     }
 
+    @Deprecated("Use SavedSearchRepository.delete instead")
     fun deleteSavedSearches(ids: Set<Long>) {
-        savedSearchRepository.delete(ids)
+        shims.savedSearches.delete(ids)
     }
 
+    @Deprecated("Use SavedSearchRepository.moveUp instead")
     fun moveSavedSearchUp(id: Long) {
-        savedSearchRepository.moveUp(id)
+        shims.savedSearches.moveUp(id)
     }
 
+    @Deprecated("Use SavedSearchRepository.moveDown instead")
     fun moveSavedSearchDown(id: Long) {
-        savedSearchRepository.moveDown(id)
+        shims.savedSearches.moveDown(id)
     }
 
+    @Deprecated("Use FileSavedSearchStore.exportSearches instead")
     fun exportSavedSearches(uri: Uri?): Int {
-        return FileSavedSearchStore(context, savedSearchRepository).exportSearches(uri)
+        return FileSavedSearchStore(context, shims.savedSearches).exportSearches(uri)
     }
 
+    @Deprecated("Use FileSavedSearchStore.importSearches instead")
     fun importSavedSearches(uri: Uri): Int {
-        return FileSavedSearchStore(context, savedSearchRepository).importSearches(uri)
+        return FileSavedSearchStore(context, shims.savedSearches).importSearches(uri)
     }
 
 
+    @Deprecated("Use SavedSearchRepository.replaceAll instead")
     fun replaceSavedSearches(savedSearches: List<SavedSearch>): Int {
-        return savedSearchRepository.replaceAll(savedSearches)
+        return shims.savedSearches.replaceAll(savedSearches)
     }
 
     /*

@@ -39,7 +39,7 @@ class DataRepositoryTest {
         val repoFactory = RepoFactory(context, dbRepoBookRepository)
 
         dataRepository = DataRepository(
-            context, database, repoFactory, context.resources, localStorage, SavedSearchRepository(database))
+            context, database, repoFactory, context.resources, localStorage, DataRepositoryShims.forTest(database))
     }
 
     @After

@@ -5,9 +5,7 @@ import com.orgzly.android.db.OrgzlyDatabase
 import com.orgzly.android.db.entity.SavedSearch
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class SavedSearchRepository @Inject constructor(private val db: OrgzlyDatabase) {
     private val savedSearchDao = db.savedSearch()
 
