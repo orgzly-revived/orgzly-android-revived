@@ -5,14 +5,25 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
 import com.orgzly.android.App
 import com.orgzly.android.data.DataRepository
+import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.NoteView
 import androidx.lifecycle.LiveData
 import com.orgzly.android.ui.AppBar
 import com.orgzly.android.ui.CommonViewModel
+import com.orgzly.android.ui.Place
 import com.orgzly.android.ui.SingleLiveEvent
 import com.orgzly.android.usecase.BookCycleVisibility
+import com.orgzly.android.usecase.BookUpdatePreface
+import com.orgzly.android.usecase.NoteCopy
+import com.orgzly.android.usecase.NoteCut
+import com.orgzly.android.usecase.NoteDelete
+import com.orgzly.android.usecase.NoteDemote
+import com.orgzly.android.usecase.NoteMove
+import com.orgzly.android.usecase.NotePaste
+import com.orgzly.android.usecase.NotePromote
 import com.orgzly.android.usecase.NoteToggleFoldingSubtree
+import com.orgzly.android.usecase.UseCase
 import com.orgzly.android.usecase.UseCaseRunner
 
 class BookViewModel(private val dataRepository: DataRepository, val bookId: Long) : CommonViewModel() {
@@ -94,6 +105,69 @@ class BookViewModel(private val dataRepository: DataRepository, val bookId: Long
                         UseCaseRunner.run(BookCycleVisibility(book))
                     }
                 }
+            }
+        }
+    }
+
+    sealed class ClipboardChange {
+        data class Cut(val count: Int) : ClipboardChange()
+        data class Copied(val count: Int) : ClipboardChange()
+        data class Pasted(val count: Int) : ClipboardChange()
+    }
+
+    val clipboardChangeEvent: SingleLiveEvent<ClipboardChange> = SingleLiveEvent()
+
+    fun cutNotes(ids: Set<Long>) {
+        App.EXECUTORS.diskIO().execute {
+            catchAndPostError {
+                val clipboard = UseCaseRunner.run(NoteCut(bookId, ids)).userData as NotesClipboard
+                clipboardChangeEvent.postValue(ClipboardChange.Cut(clipboard.count))
+            }
+        }
+    }
+
+    fun copyNotes(ids: Set<Long>) {
+        App.EXECUTORS.diskIO().execute {
+            catchAndPostError {
+                val clipboard = UseCaseRunner.run(NoteCopy(bookId, ids)).userData as NotesClipboard
+                clipboardChangeEvent.postValue(ClipboardChange.Copied(clipboard.count))
+            }
+        }
+    }
+
+    fun pasteNotes(noteId: Long, place: Place) {
+        App.EXECUTORS.diskIO().execute {
+            catchAndPostError {
+                val count = UseCaseRunner.run(NotePaste(bookId, noteId, place)).userData as Int
+                clipboardChangeEvent.postValue(ClipboardChange.Pasted(count))
+            }
+        }
+    }
+
+    fun deleteNotes(ids: Set<Long>) {
+        runUseCase(NoteDelete(bookId, ids))
+    }
+
+    fun promoteNotes(ids: Set<Long>) {
+        runUseCase(NotePromote(ids))
+    }
+
+    fun demoteNotes(ids: Set<Long>) {
+        runUseCase(NoteDemote(ids))
+    }
+
+    fun moveNotes(ids: Set<Long>, offset: Int) {
+        runUseCase(NoteMove(bookId, ids, offset))
+    }
+
+    fun updatePreface(preface: String) {
+        runUseCase(BookUpdatePreface(bookId, preface))
+    }
+
+    private fun runUseCase(useCase: UseCase) {
+        App.EXECUTORS.diskIO().execute {
+            catchAndPostError {
+                UseCaseRunner.run(useCase)
             }
         }
     }

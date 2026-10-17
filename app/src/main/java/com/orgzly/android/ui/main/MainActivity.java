@@ -57,13 +57,6 @@ import com.orgzly.android.usecase.BookExport;
 import com.orgzly.android.usecase.BookImportGettingStarted;
 import com.orgzly.android.usecase.BookSparseTreeForNote;
 import com.orgzly.android.usecase.BookUpdatePreface;
-import com.orgzly.android.usecase.NoteCopy;
-import com.orgzly.android.usecase.NoteCut;
-import com.orgzly.android.usecase.NoteDelete;
-import com.orgzly.android.usecase.NoteDemote;
-import com.orgzly.android.usecase.NoteMove;
-import com.orgzly.android.usecase.NotePaste;
-import com.orgzly.android.usecase.NotePromote;
 import com.orgzly.android.usecase.NoteUpdateDeadlineTime;
 import com.orgzly.android.usecase.NoteUpdateScheduledTime;
 import com.orgzly.android.usecase.NoteUpdateState;
@@ -107,8 +100,6 @@ public class MainActivity extends CommonActivity
     protected DrawerNavigationView drawerNavigationView;
 
     private LocalBroadcastManager broadcastManager;
-
-    private boolean mPromoteDemoteOrMoveRequested = false;
 
     private Runnable runnableOnResumeFragments;
 
@@ -735,49 +726,6 @@ public class MainActivity extends CommonActivity
     }
 
     @Override
-    public void onBookPrefaceUpdate(long bookId, String preface) {
-        mSyncFragment.run(new BookUpdatePreface(bookId, preface));
-    }
-
-    @Override
-    public void onNotesDeleteRequest(final long bookId, final Set<Long> noteIds) {
-        mSyncFragment.run(new NoteDelete(bookId, noteIds));
-    }
-
-    @Override
-    public void onNotesCutRequest(long bookId, Set<Long> noteIds) {
-        mSyncFragment.run(new NoteCut(bookId, noteIds));
-    }
-
-    @Override
-    public void onNotesCopyRequest(long bookId, Set<Long> noteIds) {
-        mSyncFragment.run(new NoteCopy(bookId, noteIds));
-    }
-
-    @Override
-    public void onNotesPasteRequest(long bookId, long noteId, Place place) {
-        mSyncFragment.run(new NotePaste(bookId, noteId, place));
-    }
-
-    @Override
-    public void onNotesPromoteRequest(Set<Long> noteIds) {
-        mPromoteDemoteOrMoveRequested = true;
-        mSyncFragment.run(new NotePromote(noteIds));
-    }
-
-    @Override
-    public void onNotesDemoteRequest(Set<Long> noteIds) {
-        mPromoteDemoteOrMoveRequested = true;
-        mSyncFragment.run(new NoteDemote(noteIds));
-    }
-
-    @Override
-    public void onNotesMoveRequest(long bookId, Set<Long> noteIds, int offset) {
-        mPromoteDemoteOrMoveRequested = true;
-        mSyncFragment.run(new NoteMove(bookId, noteIds, offset));
-    }
-
-    @Override
     public void onBookClicked(long bookId) {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, bookId);
 
@@ -819,9 +767,6 @@ public class MainActivity extends CommonActivity
 
     // TODO: Sync when action mode is destroyed
     // autoSync.trigger(AutoSync.Type.DATA_MODIFIED);
-    // TODO: When action mode is destroyed
-//    mPromoteDemoteOrMoveRequested = false;
-//        BottomActionBar.hideBottomBar(findViewById(R.id.bottom_action_bar));
 
     @Override
     public void onSavedSearchNewRequest() {
@@ -889,58 +834,6 @@ public class MainActivity extends CommonActivity
      */
     @Override
     public void onSuccess(UseCase action, UseCaseResult result) {
-        if (action instanceof NoteCut) {
-            NotesClipboard clipboard = (NotesClipboard) result.getUserData();
-
-            if (clipboard != null) {
-                int count = clipboard.getCount();
-
-                String message;
-
-                if (count == 0) {
-                    message = getResources().getString(R.string.no_notes_cut);
-                } else {
-                    message = getResources().getQuantityString(R.plurals.notes_cut, count, count);
-                }
-
-                AppSnackbarUtils.showSnackbar(this, message);
-            }
-
-            notifyClipboardChanged();
-
-        } else if (action instanceof NoteCopy) {
-            NotesClipboard clipboard = (NotesClipboard) result.getUserData();
-
-            if (clipboard != null) {
-                int count = clipboard.getCount();
-
-                if (count > 0) {
-                    String message = getResources().getQuantityString(R.plurals.notes_copied, count, count);
-                    AppSnackbarUtils.showSnackbar(this, message);
-                }
-            }
-
-            notifyClipboardChanged();
-
-        } else if (action instanceof NotePaste) {
-            int count = (int) result.getUserData();
-
-            String message;
-            if (count > 0) {
-                message = getResources().getQuantityString(R.plurals.notes_pasted, count, count);
-            } else {
-                message = getResources().getString(R.string.no_notes_pasted);
-            }
-
-            AppSnackbarUtils.showSnackbar(this, message);
-
-            notifyClipboardChanged();
-        }
-    }
-
-    private void notifyClipboardChanged() {
-        LocalBroadcastManager.getInstance(this).sendBroadcast(
-                new Intent(AppIntent.ACTION_CLIPBOARD_CHANGED));
     }
 
     /**
