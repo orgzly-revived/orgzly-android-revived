@@ -4,8 +4,8 @@ import android.app.Application
 import android.content.res.Resources
 import com.orgzly.android.LocalStorage
 import com.orgzly.android.data.DataRepository
+import com.orgzly.android.data.DataRepositoryShims
 import com.orgzly.android.data.DbRepoBookRepository
-import com.orgzly.android.data.SavedSearchRepository
 import com.orgzly.android.data.logs.AppLogsRepository
 import com.orgzly.android.data.logs.DatabaseAppLogsRepository
 import com.orgzly.android.db.OrgzlyDatabase
@@ -25,9 +25,9 @@ internal open class DataModule {
             repoFactory: RepoFactory,
             resources: Resources,
             localStorage: LocalStorage,
-            savedSearchRepository: SavedSearchRepository
+            shims: DataRepositoryShims
     ): DataRepository {
-        return DataRepository(app, database, repoFactory, resources, localStorage, savedSearchRepository)
+        return DataRepository(app, database, repoFactory, resources, localStorage, shims)
     }
 
     @Provides
