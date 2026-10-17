@@ -851,4 +851,9 @@
     <string name="template_headline_no_slash">Headline cannot contain \"/\"</string>
     <string name="template_headline_ambiguous">This headline is ambiguous (duplicate titles). Capture may target a different note.</string>
     <string name="external_files_access_is_no_longer_allowed">External files access is no longer allowed.</string>
+    <!-- Tags menu -->
+    <string name="no_tags_yet">No tags yet</string>
+    <string name="add_tag">Add tag “%1$s”</string>
+    <string name="select_tag_and_close">Select %1$s and close menu</string>
+    <string name="deselect_tag_and_close">Deselect %1$s and close menu</string>
 </resources>
