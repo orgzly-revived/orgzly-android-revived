@@ -22,6 +22,32 @@
 
         <TextView
             style="@style/WhatsNewVersion"
+            android:text="v1.25.0"
+            tools:ignore="HardcodedText"
+            android:autoLink="web" />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Allow capture templates to set note properties." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Honor basic per-file and per-note settings for DONE logging." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Add setting for disabling DONE logging." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Various bug fixes related to capture templates." />
+
+        <com.orgzly.android.ui.views.WhatsNewChange
+            style="@style/WhatsNewChange"
+            app:text="Fix calendar disappearing randomly." />
+
+        <TextView
+            style="@style/WhatsNewVersion"
             android:text="v1.24.0"
             tools:ignore="HardcodedText"
             android:autoLink="web" />
