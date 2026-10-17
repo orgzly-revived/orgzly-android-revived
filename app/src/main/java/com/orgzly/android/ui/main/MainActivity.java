@@ -46,7 +46,6 @@ import com.orgzly.android.ui.books.BooksFragment;
 import com.orgzly.android.ui.drawer.DrawerNavigationView;
 import com.orgzly.android.ui.note.NoteFragment;
 import com.orgzly.android.ui.notes.book.BookFragment;
-import com.orgzly.android.ui.notes.book.BookPrefaceFragment;
 import com.orgzly.android.ui.notifications.Notifications;
 import com.orgzly.android.ui.savedsearch.SavedSearchFragment;
 import com.orgzly.android.ui.savedsearches.SavedSearchesFragment;
@@ -56,7 +55,6 @@ import com.orgzly.android.ui.util.KeyboardUtils;
 import com.orgzly.android.usecase.BookExport;
 import com.orgzly.android.usecase.BookImportGettingStarted;
 import com.orgzly.android.usecase.BookSparseTreeForNote;
-import com.orgzly.android.usecase.BookUpdatePreface;
 import com.orgzly.android.usecase.SavedSearchCreate;
 import com.orgzly.android.usecase.SavedSearchDelete;
 import com.orgzly.android.usecase.SavedSearchMoveDown;
@@ -81,8 +79,7 @@ public class MainActivity extends CommonActivity
         BooksFragment.Listener,
         BookFragment.Listener,
         NoteFragment.Listener,
-        SyncFragment.Listener,
-        BookPrefaceFragment.Listener {
+        SyncFragment.Listener {
 
     public static final String TAG = MainActivity.class.getName();
 
@@ -727,17 +724,6 @@ public class MainActivity extends CommonActivity
 //            heads.animateNotes(noteIds, HeadAnimator.ANIMATE_FOR_HEAD_MODIFIED);
 //        }
 //    }
-
-    @Override /* EditorFragment */
-    public void onBookPrefaceEditSaveRequest(@NotNull Book book, @NotNull String preface) {
-        popBackStackAndCloseKeyboard();
-        mSyncFragment.run(new BookUpdatePreface(book.getId(), preface));
-    }
-
-    @Override
-    public void onBookPrefaceEditCancelRequest() {
-        popBackStackAndCloseKeyboard();
-    }
 
     // TODO: Sync when action mode is destroyed
     // autoSync.trigger(AutoSync.Type.DATA_MODIFIED);
