@@ -1,33 +1,23 @@
 package com.orgzly.android.ui.savedsearches
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
-import com.orgzly.android.data.DataRepository
+import com.orgzly.android.data.SavedSearchRepository
 import com.orgzly.android.db.entity.SavedSearch
 import com.orgzly.android.ui.AppBar
 import com.orgzly.android.ui.CommonViewModel
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 
-class SavedSearchesViewModel(dataRepository: DataRepository) : CommonViewModel() {
-    enum class ViewState {
-        LOADING,
-        LOADED,
-        EMPTY
-    }
+data class SavedSearchesState(
+    val searches: List<SavedSearch> = emptyList(),
+    val isLoading: Boolean = true
+)
 
-    val viewState = MutableLiveData(ViewState.LOADING)
-
-    val data: LiveData<List<SavedSearch>> by lazy {
-        dataRepository.getSavedSearchesLiveData().map { searches ->
-            viewState.value = if (searches.isNotEmpty()) {
-                ViewState.LOADED
-            } else {
-                ViewState.EMPTY
-            }
-
-            searches
+class SavedSearchesViewModel(savedSearchRepository: SavedSearchRepository) : CommonViewModel() {
+    val state: StateFlow<SavedSearchesState> = savedSearchRepository.getFlow()
+        .map { searches ->
+            SavedSearchesState(searches = searches, isLoading = false)
         }
-    }
+        .state(SavedSearchesState())
 
     companion object {
         const val APP_BAR_DEFAULT_MODE = 0

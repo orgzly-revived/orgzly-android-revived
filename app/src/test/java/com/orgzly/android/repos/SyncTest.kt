@@ -10,6 +10,7 @@ import com.orgzly.android.BookName
 import com.orgzly.android.LocalStorage
 import com.orgzly.android.TestUtils
 import com.orgzly.android.data.DataRepository
+import com.orgzly.android.data.DataRepositoryShims
 import com.orgzly.android.data.DbRepoBookRepository
 import com.orgzly.android.db.OrgzlyDatabase
 import com.orgzly.android.db.entity.Book
@@ -65,7 +66,7 @@ class SyncTest {
         val repoFactory = RepoFactory(context, dbRepoBookRepository)
 
         dataRepository = DataRepository(
-            context, database, repoFactory, context.resources, localStorage
+            context, database, repoFactory, context.resources, localStorage, DataRepositoryShims.forTest(database)
         )
 
         testUtils = TestUtils(dataRepository, dbRepoBookRepository)
@@ -553,11 +554,8 @@ class SyncTest {
 
     @Test
     fun testDirectoryFileRename() {
-        val uuid = UUID.randomUUID().toString()
-
-        val repoDir = "${context.cacheDir}/$uuid"
-
-        val repo = testUtils.repoInstance(RepoType.DIRECTORY, "file:$repoDir")
+        val repoDir = File(context.cacheDir, UUID.randomUUID().toString())
+        val repo = testUtils.repoInstance(RepoType.DIRECTORY, Uri.fromFile(repoDir).toString())
 
         assertNotNull(repo)
         assertEquals(0, repo.books.size)
@@ -583,7 +581,7 @@ class SyncTest {
             BookName.fromRook(repo.books[0]).repoRelativePath
         )
 
-        LocalStorage.deleteRecursive(File(repoDir))
+        LocalStorage.deleteRecursive(repoDir)
     }
 
     @Test

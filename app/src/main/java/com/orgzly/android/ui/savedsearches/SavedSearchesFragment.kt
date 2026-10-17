@@ -10,14 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.orgzly.BuildConfig
 import com.orgzly.R
 import com.orgzly.android.App
-import com.orgzly.android.data.DataRepository
+import com.orgzly.android.data.SavedSearchRepository
 import com.orgzly.android.db.entity.SavedSearch
 import com.orgzly.android.savedsearch.FileSavedSearchStore
 import com.orgzly.android.sync.SyncRunner
@@ -49,7 +48,7 @@ class SavedSearchesFragment : CommonFragment(), DrawerItem, OnViewHolderClickLis
     private lateinit var viewAdapter: SavedSearchesAdapter
 
     @Inject
-    lateinit var dataRepository: DataRepository
+    lateinit var savedSearchRepository: SavedSearchRepository
 
     private lateinit var viewModel: SavedSearchesViewModel
 
@@ -74,7 +73,7 @@ class SavedSearchesFragment : CommonFragment(), DrawerItem, OnViewHolderClickLis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val factory = SavedSearchesViewModelFactory.getInstance(dataRepository)
+        val factory = SavedSearchesViewModelFactory.getInstance(savedSearchRepository)
         viewModel = ViewModelProvider(this, factory).get(SavedSearchesViewModel::class.java)
 
         sharedMainActivityViewModel = ViewModelProvider(requireActivity())
@@ -104,6 +103,8 @@ class SavedSearchesFragment : CommonFragment(), DrawerItem, OnViewHolderClickLis
             it.adapter = viewAdapter
             it.addItemDecoration(dividerItemDecoration)
         }
+
+        observeState()
     }
 
     private fun topToolbarToDefault() {
@@ -225,7 +226,7 @@ class SavedSearchesFragment : CommonFragment(), DrawerItem, OnViewHolderClickLis
 
     private fun importExport(resId: Int, f: (Int, String) -> Any) {
         try {
-            val file = FileSavedSearchStore(requireContext(), dataRepository).file()
+            val file = FileSavedSearchStore(requireContext(), savedSearchRepository).file()
             f(R.string.searches, getString(resId, file))
         } catch (e: IOException) {
             activity?.showSnackbar(e.localizedMessage)
@@ -251,32 +252,26 @@ class SavedSearchesFragment : CommonFragment(), DrawerItem, OnViewHolderClickLis
         viewModel.appBar.toModeFromSelectionCount(viewAdapter.getSelection().count)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    private fun observeState() {
+        viewModel.state.collectWithLifecycle { state ->
+            if (BuildConfig.LOG_DEBUG) {
+                LogUtils.d(TAG, "Observed saved searches: ${state.searches.count()}, loading: ${state.isLoading}")
+            }
 
-        viewModel.viewState.observe(viewLifecycleOwner, Observer {
-            if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Observed view state: $it")
-
-            binding.fragmentSavedSearchesFlipper.displayedChild = when (it) {
-                SavedSearchesViewModel.ViewState.LOADING -> 0
-                SavedSearchesViewModel.ViewState.LOADED -> 1
-                SavedSearchesViewModel.ViewState.EMPTY -> 2
+            binding.fragmentSavedSearchesFlipper.displayedChild = when {
+                state.isLoading -> 0
+                state.searches.isEmpty() -> 2
                 else -> 1
             }
-        })
 
-        viewModel.data.observe(viewLifecycleOwner, Observer { data ->
-            if (BuildConfig.LOG_DEBUG)
-                LogUtils.d(TAG, "Observed saved searches: ${data.count()}")
+            viewAdapter.submitList(state.searches)
 
-            viewAdapter.submitList(data)
-
-            val ids = data.mapTo(hashSetOf()) { it.id }
+            val ids = state.searches.mapTo(hashSetOf()) { it.id }
 
             viewAdapter.getSelection().removeNonExistent(ids)
 
             viewModel.appBar.toModeFromSelectionCount(viewAdapter.getSelection().count)
-        })
+        }
 
         viewModel.appBar.mode.observeSingle(viewLifecycleOwner) { mode ->
             when (mode) {
