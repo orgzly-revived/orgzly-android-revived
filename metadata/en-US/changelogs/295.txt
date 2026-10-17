@@ -1,0 +1,3 @@
+• Add month and week views to agenda search.
+• Fix bug affecting reminders for recurring events.
+• Upgrade dependencies.
