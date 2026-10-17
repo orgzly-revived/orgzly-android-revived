@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.res.Resources
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Build
 import android.os.Handler
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
@@ -405,8 +404,7 @@ class DataRepository @Inject constructor(
             val repo = getRepoInstance(vrook.repoId, vrook.repoType, vrook.repoUri.toString())
 
             /* Do not rename if the new filename will be ignored */
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                RepoUtils.ensurePathIsNotIgnored(repo, BookName.repoRelativePath(name, BookFormat.ORG))
+            RepoUtils.ensurePathIsNotIgnored(repo, BookName.repoRelativePath(name, BookFormat.ORG))
 
             val movedVrook = repo.renameBook(vrook.uri, name)
 
@@ -531,13 +529,11 @@ class DataRepository @Inject constructor(
             "Repo ${repo.url} not found"
         }.id
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Ensure that the resulting file name is not ignored in this repo
-            val syncRepo = getRepoInstance(repo.id, repo.type, repo.url)
-            val bookName = getBook(bookId)!!.name
-            val repoRelativePath = BookName.repoRelativePath(bookName, BookFormat.ORG)
-            RepoUtils.ensurePathIsNotIgnored(syncRepo, repoRelativePath)
-        }
+        // Ensure that the resulting file name is not ignored in this repo
+        val syncRepo = getRepoInstance(repo.id, repo.type, repo.url)
+        val bookName = getBook(bookId)!!.name
+        val repoRelativePath = BookName.repoRelativePath(bookName, BookFormat.ORG)
+        RepoUtils.ensurePathIsNotIgnored(syncRepo, repoRelativePath)
 
         db.bookLink().upsert(bookId, repoId)
     }

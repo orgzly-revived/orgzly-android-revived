@@ -2,7 +2,6 @@ package com.orgzly.android.repos
 
 import android.content.Context
 import android.net.Uri
-import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.orgzly.R
 import com.orgzly.android.BookFormat
@@ -27,7 +26,6 @@ import org.junit.Assert.assertNotSame
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
-import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -686,7 +684,6 @@ class SyncTest {
 
     @Test
     fun testIgnoreRulePreventsRenamingBook() {
-        assumeTrue(Build.VERSION.SDK_INT >= 26)
         val ignoreRules = "bad name*\n"
         val repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
 
@@ -712,7 +709,6 @@ class SyncTest {
 
     @Test
     fun testIgnoreRulePreventsLinkingBook() {
-        assumeTrue(Build.VERSION.SDK_INT >= 26)
         val ignoreRules = "*.org\n"
         val repo = testUtils.setupRepo(RepoType.MOCK, "mock://repo-a")
 
