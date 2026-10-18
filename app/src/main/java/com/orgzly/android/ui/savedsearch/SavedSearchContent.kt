@@ -36,6 +36,7 @@ import cl.emilym.compose.units.rdp
 import com.orgzly.R
 import com.orgzly.android.query.SimpleFilter
 import com.orgzly.android.ui.compose.base.PreviewOrgzlyBootstrap
+import com.orgzly.android.ui.compose.modifiers.addSpaceOnFocus
 import com.orgzly.android.ui.compose.modifiers.scaffoldPadding
 import com.orgzly.android.ui.compose.providers.LaunchedEventEffect
 import com.orgzly.android.ui.compose.widgets.BackButton
@@ -132,7 +133,8 @@ fun SavedSearchContent(
                 Modifier
                     .fillMaxWidth()
                     .testTag("fragment_saved_search_name")
-                    .focusRequester(nameFocusRequester),
+                    .focusRequester(nameFocusRequester)
+                    .addSpaceOnFocus(nameField),
                 label = {
                     Text(
                         stringResource(R.string.name)
@@ -177,7 +179,11 @@ fun SavedSearchContent(
             }
 
             LaunchedEffect(Unit) {
-                nameFocusRequester.requestFocus()
+                if (state.isNew) {
+                    nameFocusRequester.requestFocus()
+                } else {
+                    queryFocusRequester.requestFocus()
+                }
             }
         }
     }

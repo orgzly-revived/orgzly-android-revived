@@ -45,7 +45,8 @@ data class SavedSearchModel(
     override val isQueryValid: Boolean = true,
     override val editable: Boolean = true,
     override val allTags: List<String> = emptyList(),
-    override val allBooks: List<String> = emptyList()
+    override val allBooks: List<String> = emptyList(),
+    val isNew: Boolean = true,
 ): BaseSearchState
 
 enum class SavedSearchSnackbar {
@@ -128,7 +129,8 @@ class SavedSearchViewModel @AssistedInject constructor(
             !shouldShowValidationErrors || isQueryValid,
             editable,
             tags,
-            books
+            books,
+            isNew = existingSearchId == null,
         )
     }.stateIn(
         viewModelScope,
@@ -181,8 +183,8 @@ class SavedSearchViewModel @AssistedInject constructor(
 
             val savedSearch = SavedSearch(
                 existingSearchId ?: 0,
-                nameField.text.toString(),
-                getQueryString(),
+                nameField.text.toString().trim(),
+                getQueryString().trim(),
                 existingSearchPosition ?: 0
             )
             _events.send(

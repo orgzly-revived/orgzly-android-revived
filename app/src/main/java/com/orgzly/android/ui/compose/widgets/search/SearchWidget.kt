@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import cl.emilym.compose.units.rdp
 import com.orgzly.R
 import com.orgzly.android.query.SimpleFilter
+import com.orgzly.android.ui.compose.modifiers.addSpaceOnFocus
 import com.orgzly.android.ui.compose.widgets.Icons
 import com.orgzly.android.ui.compose.widgets.OrgzlyTextButton
 import com.orgzly.android.ui.compose.widgets.OrgzlyTextField
@@ -51,7 +52,8 @@ fun SearchWidget(
             Modifier
                 .fillMaxWidth()
                 .testTag("search_widget_search_field")
-                .focusRequester(fieldFocusRequester),
+                .focusRequester(fieldFocusRequester)
+                .addSpaceOnFocus(searchField),
             label = {
                 Text(
                     stringResource(
