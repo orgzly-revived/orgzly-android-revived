@@ -133,7 +133,8 @@ fun SavedSearchContent(
                 Modifier
                     .fillMaxWidth()
                     .testTag("fragment_saved_search_name")
-                    .focusRequester(nameFocusRequester),
+                    .focusRequester(nameFocusRequester)
+                    .addSpaceOnFocus(nameField),
                 label = {
                     Text(
                         stringResource(R.string.name)
