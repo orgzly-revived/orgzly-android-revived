@@ -12,6 +12,7 @@ import android.os.Build;
 
 import com.orgzly.R;
 import com.orgzly.android.data.DataRepository;
+import com.orgzly.android.data.DataRepositoryShims;
 import com.orgzly.android.data.DbRepoBookRepository;
 import com.orgzly.android.db.OrgzlyDatabase;
 import com.orgzly.android.db.entity.BookView;
@@ -86,7 +87,7 @@ public class OrgzlyTest {
         RepoFactory repoFactory = new RepoFactory(context, dbRepoBookRepository);
 
         dataRepository = new DataRepository(
-                context, database, repoFactory, context.getResources(), localStorage);
+                context, database, repoFactory, context.getResources(), localStorage, DataRepositoryShims.forTest(database));
 
         testUtils = new TestUtils(dataRepository, dbRepoBookRepository);
 

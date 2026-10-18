@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import com.orgzly.android.LocalStorage
 import com.orgzly.android.db.OrgzlyDatabase
+import com.orgzly.android.db.entity.SavedSearch
 import com.orgzly.android.repos.RepoFactory
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.`is`
@@ -38,12 +39,33 @@ class DataRepositoryTest {
         val repoFactory = RepoFactory(context, dbRepoBookRepository)
 
         dataRepository = DataRepository(
-            context, database, repoFactory, context.resources, localStorage)
+            context, database, repoFactory, context.resources, localStorage, DataRepositoryShims.forTest(database))
     }
 
     @After
     fun tearDown() {
         database.close()
+    }
+
+    @Test
+    fun testSavedSearchFacadeSharesStateWithRepository() {
+        val savedSearchRepository = SavedSearchRepository(database)
+        val id = dataRepository.createSavedSearch(SavedSearch(0, "Agenda", "s.today", 0))
+        assertEquals(savedSearchRepository.get(id), dataRepository.getSavedSearch(id))
+
+        savedSearchRepository.update(savedSearchRepository.get(id)!!.copy(name = "Today"))
+        assertEquals("Today", dataRepository.getSavedSearchesByNameIgnoreCase("today").single().name)
+
+        dataRepository.replaceSavedSearches(listOf(
+            SavedSearch(10, "First", "i.todo", 1),
+            SavedSearch(20, "Second", "i.done", 2)
+        ))
+        dataRepository.moveSavedSearchUp(20)
+        assertEquals(listOf(20L, 10L), savedSearchRepository.getAll().map { it.id })
+        dataRepository.moveSavedSearchDown(20)
+        assertEquals(listOf(10L, 20L), savedSearchRepository.getAll().map { it.id })
+        dataRepository.deleteSavedSearches(setOf(10))
+        assertEquals(savedSearchRepository.getAll(), dataRepository.getSavedSearches())
     }
 
     // ===== Tests for createBook() path traversal validation =====
