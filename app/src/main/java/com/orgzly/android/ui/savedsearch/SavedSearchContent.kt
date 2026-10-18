@@ -178,7 +178,11 @@ fun SavedSearchContent(
             }
 
             LaunchedEffect(Unit) {
-                queryFocusRequester.requestFocus()
+                if (state.isNew) {
+                    nameFocusRequester.requestFocus()
+                } else {
+                    queryFocusRequester.requestFocus()
+                }
             }
         }
     }
