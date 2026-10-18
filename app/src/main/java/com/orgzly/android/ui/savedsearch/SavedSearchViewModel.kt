@@ -181,8 +181,8 @@ class SavedSearchViewModel @AssistedInject constructor(
 
             val savedSearch = SavedSearch(
                 existingSearchId ?: 0,
-                nameField.text.toString(),
-                getQueryString(),
+                nameField.text.toString().trim(),
+                getQueryString().trim(),
                 existingSearchPosition ?: 0
             )
             _events.send(
