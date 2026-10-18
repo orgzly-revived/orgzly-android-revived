@@ -54,7 +54,7 @@ class RichText(context: Context, attrs: AttributeSet?) :
     }
 
     private val sourceBackgroundColor: Int by lazy {
-        context.styledAttributes(intArrayOf(R.attr.colorSecondaryContainer)) { typedArray ->
+        context.styledAttributes(intArrayOf(com.google.android.material.R.attr.colorSecondaryContainer)) { typedArray ->
             typedArray.getColor(0, 0)
         }
     }

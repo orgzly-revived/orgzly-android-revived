@@ -1,12 +1,10 @@
 package com.orgzly.android;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 
-import com.orgzly.R;
 import com.orgzly.android.db.entity.Book;
 import com.orgzly.android.db.entity.BookAction;
 import com.orgzly.android.ui.util.ExtensionsKt;
@@ -67,7 +65,7 @@ public class BookUtils {
 
             /* Get error color attribute. */
             int color = ExtensionsKt.styledAttributes(
-                    context, new int[] { R.attr.colorError }, arr -> arr.getColor(0, 0));
+                    context, new int[] { androidx.appcompat.R.attr.colorError }, arr -> arr.getColor(0, 0));
 
             /* Set error color. */
             builder.setSpan(new ForegroundColorSpan(color), 0, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

@@ -81,7 +81,7 @@ class SettingsExportFragment : DialogFragment() {
 
         binding.dialogExportSettingsWarning.apply {
             /* Get error color attribute. */
-            setTextColor(context.styledAttributes(intArrayOf(R.attr.colorError)) { typedArray ->
+            setTextColor(context.styledAttributes(intArrayOf(androidx.appcompat.R.attr.colorError)) { typedArray ->
                 typedArray.getColor(0, 0)
             })
             text = context.getString(R.string.export_settings_warning_text)
