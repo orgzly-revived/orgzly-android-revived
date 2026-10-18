@@ -4,7 +4,7 @@ buildscript {
 
     def versions = [:]
 
-    versions.android_gradle_plugin = '9.5.0-alpha10'
+    versions.android_gradle_plugin = '9.3.3'
 
     versions.kotlin = '2.4.10'
 
@@ -97,7 +97,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.android.legacy-kapt' version '9.4.1' apply false
+    id 'com.android.legacy-kapt' version '9.3.3' apply false
 }
 
 allprojects {
