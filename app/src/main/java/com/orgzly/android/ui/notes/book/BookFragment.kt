@@ -532,7 +532,7 @@ class BookFragment :
 
     @SuppressLint("ClickableViewAccessibility")
     private fun highlightScrolledToView(view: View) {
-        val selectionBgColor = view.context.styledAttributes(intArrayOf(R.attr.colorSurface)) { typedArray ->
+        val selectionBgColor = view.context.styledAttributes(intArrayOf(com.google.android.material.R.attr.colorSurface)) { typedArray ->
             typedArray.getColor(0, 0)
         }
 

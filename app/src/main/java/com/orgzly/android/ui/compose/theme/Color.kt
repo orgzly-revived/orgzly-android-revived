@@ -13,6 +13,8 @@ import androidx.compose.ui.platform.LocalContext
 import com.orgzly.R
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.compose.providers.appPreference
+import androidx.appcompat.R as AppCompatR
+import com.google.android.material.R as MaterialR
 
 enum class OrgzlyColorScheme(
     @field:StyleRes
@@ -70,21 +72,21 @@ enum class OrgzlyColorScheme(
 }
 
 private val themeAttrs = intArrayOf(
-    R.attr.colorSurface,
-    R.attr.colorPrimary,
-    R.attr.colorOnPrimary,
-    R.attr.colorSecondary,
-    R.attr.colorOnSecondary,
-    R.attr.colorTertiary,
-    R.attr.colorOnTertiary,
-    R.attr.colorPrimaryContainer,
-    R.attr.colorOnPrimaryContainer,
-    R.attr.colorSecondaryContainer,
-    R.attr.colorOnSecondaryContainer,
-    R.attr.colorTertiaryContainer,
-    R.attr.colorOnTertiaryContainer,
-    R.attr.colorError,
-    R.attr.colorOnError
+    MaterialR.attr.colorSurface,
+    AppCompatR.attr.colorPrimary,
+    MaterialR.attr.colorOnPrimary,
+    MaterialR.attr.colorSecondary,
+    MaterialR.attr.colorOnSecondary,
+    MaterialR.attr.colorTertiary,
+    MaterialR.attr.colorOnTertiary,
+    MaterialR.attr.colorPrimaryContainer,
+    MaterialR.attr.colorOnPrimaryContainer,
+    MaterialR.attr.colorSecondaryContainer,
+    MaterialR.attr.colorOnSecondaryContainer,
+    MaterialR.attr.colorTertiaryContainer,
+    MaterialR.attr.colorOnTertiaryContainer,
+    AppCompatR.attr.colorError,
+    MaterialR.attr.colorOnError
 )
 
 @Composable
@@ -103,20 +105,20 @@ fun ColorScheme.adjustFromTheme(
         }
 
         copy(
-            primary = getColor(R.attr.colorPrimary, primary),
-            onPrimary = getColor(R.attr.colorOnPrimary, onPrimary),
-            secondary = getColor(R.attr.colorSecondary, secondary),
-            onSecondary = getColor(R.attr.colorOnSecondary, onSecondary),
-            tertiary = getColor(R.attr.colorTertiary, tertiary),
-            onTertiary = getColor(R.attr.colorOnTertiary, onTertiary),
-            primaryContainer = getColor(R.attr.colorPrimaryContainer, primaryContainer),
-            onPrimaryContainer = getColor(R.attr.colorOnPrimaryContainer, onPrimaryContainer),
-            secondaryContainer = getColor(R.attr.colorSecondaryContainer, secondaryContainer),
-            onSecondaryContainer = getColor(R.attr.colorOnSecondaryContainer, onSecondaryContainer),
-            tertiaryContainer = getColor(R.attr.colorTertiaryContainer, tertiaryContainer),
-            onTertiaryContainer = getColor(R.attr.colorOnTertiaryContainer, onTertiaryContainer),
-            error = getColor(R.attr.colorError, error),
-            onError = getColor(R.attr.colorOnError, onError),
+            primary = getColor(AppCompatR.attr.colorPrimary, primary),
+            onPrimary = getColor(MaterialR.attr.colorOnPrimary, onPrimary),
+            secondary = getColor(MaterialR.attr.colorSecondary, secondary),
+            onSecondary = getColor(MaterialR.attr.colorOnSecondary, onSecondary),
+            tertiary = getColor(MaterialR.attr.colorTertiary, tertiary),
+            onTertiary = getColor(MaterialR.attr.colorOnTertiary, onTertiary),
+            primaryContainer = getColor(MaterialR.attr.colorPrimaryContainer, primaryContainer),
+            onPrimaryContainer = getColor(MaterialR.attr.colorOnPrimaryContainer, onPrimaryContainer),
+            secondaryContainer = getColor(MaterialR.attr.colorSecondaryContainer, secondaryContainer),
+            onSecondaryContainer = getColor(MaterialR.attr.colorOnSecondaryContainer, onSecondaryContainer),
+            tertiaryContainer = getColor(MaterialR.attr.colorTertiaryContainer, tertiaryContainer),
+            onTertiaryContainer = getColor(MaterialR.attr.colorOnTertiaryContainer, onTertiaryContainer),
+            error = getColor(AppCompatR.attr.colorError, error),
+            onError = getColor(MaterialR.attr.colorOnError, onError),
         )
     }
 }

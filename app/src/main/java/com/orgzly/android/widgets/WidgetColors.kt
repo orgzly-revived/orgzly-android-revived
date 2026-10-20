@@ -5,7 +5,7 @@ import com.orgzly.R
 object WidgetColors {
     val colors = mapOf(
         "dynamic" to mapOf(
-            R.id.list_widget_header_container to R.attr.colorPrimaryContainer,
+            R.id.list_widget_header_container to com.google.android.material.R.attr.colorPrimaryContainer,
             R.id.list_widget_list_container to android.R.attr.colorBackground,
             R.id.list_widget_header_logo to android.R.attr.textColorPrimary,
             R.id.list_widget_header_selection to android.R.attr.textColorPrimary,
