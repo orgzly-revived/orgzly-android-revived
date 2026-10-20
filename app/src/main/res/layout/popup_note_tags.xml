@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Tags menu: search, the tags to tick and a row to add a new tag.
+  Rows go edge to edge; icons are centered 24dp from the edge, texts start at 52dp.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+
+    <!-- Icon where the check boxes are, text where the tag names are -->
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:background="@null"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="16dp"
+        android:drawableTint="?android:attr/textColorHint"
+        android:paddingStart="12dp"
+        android:paddingEnd="22dp"
+        android:hint="@string/search"
+        android:importantForAutofill="no"
+        android:imeOptions="actionDone|flagNoFullscreen"
+        android:inputType="text|textNoSuggestions"
+        android:maxLines="1"
+        android:textColor="?attr/colorOnSurface"
+        android:textColorHint="?android:attr/textColorHint"
+        android:textSize="?attr/fragment_note_content_text_size" />
+
+    <!-- Separates the search from the tags -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="?attr/colorOutlineVariant" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/tag_list_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false">
+
+        <LinearLayout
+            android:id="@+id/tag_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </androidx.core.widget.NestedScrollView>
+
+    <TextView
+        android:id="@+id/add_tag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:gravity="center_vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="22dp"
+        android:background="?attr/selectableItemBackground"
+        app:drawableStartCompat="@drawable/ic_add"
+        android:drawablePadding="16dp"
+        app:drawableTint="?attr/colorPrimary"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="?attr/fragment_note_content_text_size"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/no_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:text="@string/no_tags_yet"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="?attr/font_small"
+        android:visibility="gone" />
+</LinearLayout>
