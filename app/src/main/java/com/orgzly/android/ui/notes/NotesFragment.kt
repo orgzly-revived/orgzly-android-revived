@@ -20,6 +20,7 @@ import com.orgzly.android.ui.SelectableItemAdapter
 import com.orgzly.android.ui.TimeType
 import com.orgzly.android.ui.dialogs.NoteStateDialog
 import com.orgzly.android.ui.dialogs.TimestampDialogFragment
+import com.orgzly.android.ui.showSnackbar
 import com.orgzly.android.ui.util.ActivityUtils
 import com.orgzly.android.ui.capture.CaptureTemplate
 import com.orgzly.android.util.LogUtils
@@ -36,9 +37,9 @@ abstract class NotesFragment : CommonFragment(), TimestampDialogFragment.OnDateT
     @Inject
     lateinit var dataRepository: DataRepository
 
-    abstract fun getCurrentListener(): Listener?
-
     abstract fun getAdapter(): SelectableItemAdapter?
+
+    protected abstract val viewModel: NotesViewModel
 
 
     private var notePopup: PopupWindow? = null
@@ -129,14 +130,18 @@ abstract class NotesFragment : CommonFragment(), TimestampDialogFragment.OnDateT
         if (savedInstanceState != null) {
             getAdapter()?.getSelection()?.restoreIds(savedInstanceState)
         }
+
+        viewModel.errorEvent.observeSingle(viewLifecycleOwner) { error ->
+            activity?.showSnackbar((error.cause ?: error).localizedMessage)
+        }
     }
 
-    protected fun openNoteStateDialog(listener: Listener, noteIds: Set<Long>, currentState: String?) {
+    protected fun openNoteStateDialog(noteIds: Set<Long>, currentState: String?) {
         dialog = NoteStateDialog.show(
             requireContext(),
             currentState,
-            { state -> listener.onStateChangeRequest(noteIds, state) },
-            { listener.onStateChangeRequest(noteIds, null) })
+            { state -> viewModel.changeState(noteIds, state) },
+            { viewModel.changeState(noteIds, null) })
     }
 
     protected fun displayTimestampDialog(id: Int, noteIds: Set<Long>) {
@@ -183,9 +188,9 @@ abstract class NotesFragment : CommonFragment(), TimestampDialogFragment.OnDateT
 
     override fun onDateTimeSet(originViewId: Int, noteIds: TreeSet<Long>, time: OrgDateTime?) {
         if (originViewId in scheduledTimeButtonIds()) {
-            getCurrentListener()?.onScheduledTimeUpdateRequest(noteIds, time)
+            viewModel.updateScheduledTime(noteIds, time)
         } else {
-            getCurrentListener()?.onDeadlineTimeUpdateRequest(noteIds, time)
+            viewModel.updateDeadlineTime(noteIds, time)
         }
     }
 
@@ -209,17 +214,6 @@ abstract class NotesFragment : CommonFragment(), TimestampDialogFragment.OnDateT
         fun onNoteNewRequest(target: NotePlace)
 
         fun onNoteNewRequestWithTemplate(target: NotePlace, template: CaptureTemplate)
-
-        fun onStateChangeRequest(noteIds: Set<Long>, state: String?)
-
-        fun onStateToggleRequest(noteIds: Set<Long>)
-
-        fun onScheduledTimeUpdateRequest(noteIds: Set<Long>, time: OrgDateTime?)
-        fun onDeadlineTimeUpdateRequest(noteIds: Set<Long>, time: OrgDateTime?)
-
-        fun onClockIn(noteIds: Set<Long>)
-        fun onClockOut(noteIds: Set<Long>)
-        fun onClockCancel(noteIds: Set<Long>)
     }
 
     enum class SharePart { NOTE, TITLE, CONTENT }
