@@ -14,6 +14,20 @@
         android:layout_height="?actionBarSize"
         app:navigationIcon="@drawable/ic_close" />
 
+    <TextView
+        android:id="@+id/dialog_refile_source"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/screen_edge"
+        android:paddingEnd="@dimen/screen_edge"
+        android:paddingBottom="8dp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textColor="?android:textColorPrimary"
+        android:visibility="gone"
+        tools:text="First few words of the selected note…"
+        tools:visibility="visible" />
+
     <!-- Breadcrumbs -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
