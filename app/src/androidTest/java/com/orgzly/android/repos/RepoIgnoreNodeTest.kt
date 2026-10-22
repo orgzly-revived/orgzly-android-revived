@@ -37,6 +37,9 @@ class RepoIgnoreNodeTest : OrgzlyTest() {
         assertEquals(true, ignores.isPathIgnored("OnlyIgnoredInRoot.org", false))
         assertEquals(false, ignores.isPathIgnored("SomeFolder/OnlyIgnoredInRoot.org", false))
         assertEquals(true, ignores.isPathIgnored("CompletelyExcludedFolder/file.org", false))
+        assertEquals(true, ignores.isPathIgnored("CompletelyExcludedFolder//nested/file.org", false))
+        assertEquals(true, ignores.isPathIgnored("CompletelyExcludedFolder/nested/", true))
+        assertEquals(false, ignores.isPathIgnored("SomeFolder//nested/", true))
         assertEquals(true, ignores.isPathIgnored("PartiallyExcludedFolder/whatever.org", false))
         assertEquals(false, ignores.isPathIgnored("PartiallyExcludedFolder/included-file.org", false))
     }
