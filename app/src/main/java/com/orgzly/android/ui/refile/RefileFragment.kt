@@ -105,6 +105,10 @@ class RefileFragment : DialogFragment() {
 
         binding.dialogRefileBreadcrumbs.movementMethod = LinkMovementMethod.getInstance()
 
+        dataRepository.getNotebookDoneStatesLiveData().observe(viewLifecycleOwner) {
+            adapter.setDoneStates(it)
+        }
+
         viewModel.data.observe(viewLifecycleOwner, Observer { data ->
             val breadcrumbs = data.first
             val list = data.second

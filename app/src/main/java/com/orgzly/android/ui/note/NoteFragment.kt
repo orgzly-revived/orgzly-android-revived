@@ -829,7 +829,8 @@ class NoteFragment : CommonFragment(), View.OnClickListener, TimestampDialogFrag
             }
 
             R.id.state_button -> {
-                val states = NoteStates.fromPreferences(requireContext())
+                val states = NoteStates.fromBook(
+                    requireContext(), viewModel.bookView.value?.book?.preface)
 
                 val keywords = states.array
 

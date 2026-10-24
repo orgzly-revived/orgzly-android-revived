@@ -3,11 +3,17 @@ package com.orgzly.android.query.sql
 import android.content.Context
 import android.database.DatabaseUtils
 import com.orgzly.android.prefs.AppPreferences
+import com.orgzly.android.prefs.StateWorkflows
+import com.orgzly.org.OrgStatesWorkflow
 import com.orgzly.android.query.*
 import java.util.*
 
 
-class SqliteQueryBuilder(val context: Context) {
+class SqliteQueryBuilder(
+    val context: Context,
+    /** Notebooks declaring their own workflow; the rest use the app's configured states. */
+    private val bookWorkflows: Map<Long, StateWorkflows> = emptyMap()
+) {
     private var where: String = ""
     private val arguments: MutableList<String> = ArrayList()
 
@@ -29,6 +35,31 @@ class SqliteQueryBuilder(val context: Context) {
         order = buildOrderBy(query.sortOrders)
 
         return SqlQuery(where, arguments, having, order)
+    }
+
+    /**
+     * Whether a note's state is of the given type in its own notebook's workflow. Arguments bind
+     * in the order the branches are emitted, ending with the app's states as the fallback.
+     */
+    private fun stateTypeCondition(
+        configured: Set<String>,
+        keywords: (OrgStatesWorkflow) -> Collection<String>
+    ): String {
+        if (bookWorkflows.isEmpty()) {
+            return inStates(configured)
+        }
+
+        val branches = bookWorkflows.entries.joinToString(" ") { (bookId, workflows) ->
+            "WHEN $bookId THEN " + inStates(workflows.flatMapTo(LinkedHashSet(), keywords))
+        }
+
+        return "(CASE book_id $branches ELSE ${inStates(configured)} END)"
+    }
+
+    private fun inStates(states: Collection<String>): String {
+        arguments.addAll(states)
+        return "COALESCE(state, '') IN (" +
+                Collections.nCopies(states.size, "?").joinToString() + ")"
     }
 
     private fun buildOrderBy(sortOrders: List<SortOrder>): String {
@@ -192,17 +223,13 @@ class SqliteQueryBuilder(val context: Context) {
 
             is Condition.HasStateType -> {
                 when (expr.type) {
-                    StateType.TODO -> {
-                        val states = AppPreferences.todoKeywordsSet(context)
-                        arguments.addAll(states)
-                        not(expr.not, "COALESCE(state, '') IN (" + Collections.nCopies(states.size, "?").joinToString() + ")")
-                    }
-                    StateType.DONE -> {
-                        val states = AppPreferences.doneKeywordsSet(context)
-                        arguments.addAll(states)
-                        not(expr.not, "COALESCE(state, '') IN (" + Collections.nCopies(states.size, "?").joinToString() + ")")
+                    StateType.TODO -> not(
+                        expr.not,
+                        stateTypeCondition(AppPreferences.todoKeywordsSet(context)) { it.todoKeywords })
 
-                    }
+                    StateType.DONE -> not(
+                        expr.not,
+                        stateTypeCondition(AppPreferences.doneKeywordsSet(context)) { it.doneKeywords })
                     StateType.NONE -> not(expr.not, "COALESCE(state, '') = ''")
                 }
             }

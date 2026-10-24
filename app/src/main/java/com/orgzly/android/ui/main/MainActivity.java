@@ -64,6 +64,7 @@ import com.orgzly.android.usecase.NoteDemote;
 import com.orgzly.android.usecase.NoteMove;
 import com.orgzly.android.usecase.NotePaste;
 import com.orgzly.android.usecase.NotePromote;
+import com.orgzly.android.usecase.NoteReparseStateAndTitles;
 import com.orgzly.android.usecase.NoteUpdateDeadlineTime;
 import com.orgzly.android.usecase.NoteUpdateScheduledTime;
 import com.orgzly.android.usecase.NoteUpdateState;
@@ -534,6 +535,11 @@ public class MainActivity extends CommonActivity
             /* Import Getting Started notebook. */
             if (!AppPreferences.isGettingStartedNotebookLoaded(this)) {
                 UseCaseWorker.schedule(this, new BookImportGettingStarted());
+            }
+
+            /* Stored notes keep the states an older version read; this one may read others. */
+            if (currentVersion != 0) {
+                UseCaseWorker.schedule(this, new NoteReparseStateAndTitles());
             }
 
             /* Open drawer for the first time user. */
