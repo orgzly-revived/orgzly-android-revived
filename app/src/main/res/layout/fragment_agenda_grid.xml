@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/CoordinatorLayoutFitsSystemWindows">
+    <com.orgzly.android.ui.notes.query.agenda.AgendaGestureLayout
+        android:id="@+id/agenda_gesture_layout"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/agenda_grid_content"
+            android:layout_width="match_parent" android:layout_height="match_parent" />
+    </com.orgzly.android.ui.notes.query.agenda.AgendaGestureLayout>
+    <com.google.android.material.appbar.AppBarLayout style="@style/AppBarLayoutStyle">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/top_toolbar" style="@style/TopToolbar"
+            app:navigationIcon="@drawable/ic_menu">
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/agenda_month_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start|center_vertical" />
+        </com.google.android.material.appbar.MaterialToolbar>
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/sync_toolbar_progress" style="@style/SyncProgressIndicator" />
+    </com.google.android.material.appbar.AppBarLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/capture_fab" style="@style/Fab.Capture"
+        android:contentDescription="@string/capture_template" android:visibility="gone" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

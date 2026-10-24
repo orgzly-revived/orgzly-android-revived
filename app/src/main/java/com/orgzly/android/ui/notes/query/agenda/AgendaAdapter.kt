@@ -88,10 +88,19 @@ class AgendaAdapter(
 
     private fun bindDividerView(holder: DividerViewHolder, item: AgendaItem.Overdue) {
         holder.binding.itemAgendaDividerText.text = context.getString(R.string.overdue)
+        holder.binding.root.apply {
+            setOnClickListener(null)
+            isClickable = false
+            isFocusable = false
+        }
     }
 
     private fun bindDividerView(holder: DividerViewHolder, item: AgendaItem.Day) {
         holder.binding.itemAgendaDividerText.text = userTimeFormatter.formatDate(item.day)
+        holder.binding.root.apply {
+            setOnClickListener { view -> clickListener.onClick(view, holder.bindingAdapterPosition, item) }
+            isFocusable = true
+        }
     }
 
     inner class DividerViewHolder(val binding: ItemAgendaDividerBinding) :
