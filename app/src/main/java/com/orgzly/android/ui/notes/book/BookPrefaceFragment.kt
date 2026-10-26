@@ -93,8 +93,10 @@ class BookPrefaceFragment : CommonFragment() {
 
         topToolbarToDefault()
 
-        viewModel.prefaceUpdatedEvent.observeSingle(viewLifecycleOwner) {
-            close()
+        viewModel.events.observeSingle(viewLifecycleOwner) { event ->
+            when (event) {
+                BookPrefaceEvent.PrefaceUpdated -> close()
+            }
         }
 
         viewModel.errorEvent.observeSingle(viewLifecycleOwner) { error ->

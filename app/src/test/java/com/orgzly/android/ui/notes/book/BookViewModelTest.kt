@@ -24,7 +24,7 @@ class BookViewModelTest {
     @Test
     fun testCutAndPaste() {
         val viewModel = BookViewModel(data.dataRepository, loadBook("* Note A\n* Note B\n"))
-        val changes = viewModel.clipboardChangeEvent.collected()
+        val changes = viewModel.events.collected()
 
         viewModel.cutNotes(setOf(note("Note A")))
         idle()
@@ -32,7 +32,7 @@ class BookViewModelTest {
         idle()
 
         assertEquals(
-            listOf(BookViewModel.ClipboardChange.Cut(1), BookViewModel.ClipboardChange.Pasted(1)),
+            listOf(BookEvent.ClipboardCut(1), BookEvent.ClipboardPasted(1)),
             changes)
         assertEquals(listOf("Note B", "Note A"), titles())
     }
@@ -40,24 +40,24 @@ class BookViewModelTest {
     @Test
     fun testPasteWithEmptyClipboard() {
         val viewModel = BookViewModel(data.dataRepository, loadBook("* Note A\n"))
-        val changes = viewModel.clipboardChangeEvent.collected()
+        val changes = viewModel.events.collected()
 
         viewModel.pasteNotes(note("Note A"), Place.BELOW)
         idle()
 
-        assertEquals(listOf(BookViewModel.ClipboardChange.Pasted(0)), changes)
+        assertEquals(listOf(BookEvent.ClipboardPasted(0)), changes)
         assertEquals(listOf("Note A"), titles())
     }
 
     @Test
     fun testCopy() {
         val viewModel = BookViewModel(data.dataRepository, loadBook("* Note A\n** Note A.1\n* Note B\n"))
-        val changes = viewModel.clipboardChangeEvent.collected()
+        val changes = viewModel.events.collected()
 
         viewModel.copyNotes(setOf(note("Note A")))
         idle()
 
-        assertEquals(listOf(BookViewModel.ClipboardChange.Copied(2)), changes)
+        assertEquals(listOf(BookEvent.ClipboardCopied(2)), changes)
         assertEquals(listOf("Note A", "Note A.1", "Note B"), titles())
     }
 

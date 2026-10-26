@@ -277,25 +277,25 @@ class BookFragment :
                     .show()
         })
 
-        viewModel.clipboardChangeEvent.observeSingle(viewLifecycleOwner) { change ->
-            val message = when (change) {
-                is BookViewModel.ClipboardChange.Cut ->
-                    if (change.count == 0) {
+        viewModel.events.observeSingle(viewLifecycleOwner) { event ->
+            val message = when (event) {
+                is BookEvent.ClipboardCut ->
+                    if (event.count == 0) {
                         getString(R.string.no_notes_cut)
                     } else {
-                        resources.getQuantityString(R.plurals.notes_cut, change.count, change.count)
+                        resources.getQuantityString(R.plurals.notes_cut, event.count, event.count)
                     }
 
-                is BookViewModel.ClipboardChange.Copied ->
-                    if (change.count > 0) {
-                        resources.getQuantityString(R.plurals.notes_copied, change.count, change.count)
+                is BookEvent.ClipboardCopied ->
+                    if (event.count > 0) {
+                        resources.getQuantityString(R.plurals.notes_copied, event.count, event.count)
                     } else {
                         null
                     }
 
-                is BookViewModel.ClipboardChange.Pasted ->
-                    if (change.count > 0) {
-                        resources.getQuantityString(R.plurals.notes_pasted, change.count, change.count)
+                is BookEvent.ClipboardPasted ->
+                    if (event.count > 0) {
+                        resources.getQuantityString(R.plurals.notes_pasted, event.count, event.count)
                     } else {
                         getString(R.string.no_notes_pasted)
                     }

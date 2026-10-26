@@ -20,14 +20,14 @@ class BookPrefaceViewModelTest {
     fun testRepeatedSaveIsIgnored() {
         val bookId = data.loadBook("book", "Old preface\n* Note A\n")
         val viewModel = BookPrefaceViewModel()
-        var updated = 0
-        viewModel.prefaceUpdatedEvent.observeForever { updated++ }
+        val events = mutableListOf<BookPrefaceEvent>()
+        viewModel.events.observeForever { events.add(it) }
 
         viewModel.updatePreface(bookId, "First")
         viewModel.updatePreface(bookId, "Second")
         shadowOf(Looper.getMainLooper()).idle()
 
         assertEquals("First", data.dataRepository.getBook(bookId)?.preface)
-        assertEquals(1, updated)
+        assertEquals(listOf(BookPrefaceEvent.PrefaceUpdated), events)
     }
 }

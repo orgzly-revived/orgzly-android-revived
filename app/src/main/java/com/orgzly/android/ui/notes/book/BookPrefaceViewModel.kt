@@ -7,8 +7,12 @@ import com.orgzly.android.usecase.BookUpdatePreface
 import com.orgzly.android.usecase.UseCaseRunner
 import java.util.concurrent.atomic.AtomicBoolean
 
+sealed interface BookPrefaceEvent {
+    data object PrefaceUpdated : BookPrefaceEvent
+}
+
 class BookPrefaceViewModel : CommonViewModel() {
-    val prefaceUpdatedEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
+    val events: SingleLiveEvent<BookPrefaceEvent> = SingleLiveEvent()
 
     /** Repeated taps would otherwise save, and close the editor, more than once. */
     private val isSaving = AtomicBoolean(false)
@@ -28,7 +32,7 @@ class BookPrefaceViewModel : CommonViewModel() {
                     throw e
                 }
 
-                prefaceUpdatedEvent.postValue(Unit)
+                events.postValue(BookPrefaceEvent.PrefaceUpdated)
             }
         }
     }

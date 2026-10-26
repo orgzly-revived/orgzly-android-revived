@@ -25,6 +25,12 @@ import com.orgzly.android.usecase.NotePromote
 import com.orgzly.android.usecase.NoteToggleFoldingSubtree
 import com.orgzly.android.usecase.UseCaseRunner
 
+sealed interface BookEvent {
+    data class ClipboardCut(val count: Int) : BookEvent
+    data class ClipboardCopied(val count: Int) : BookEvent
+    data class ClipboardPasted(val count: Int) : BookEvent
+}
+
 class BookViewModel(private val dataRepository: DataRepository, val bookId: Long) : NotesViewModel() {
 
     enum class FlipperDisplayedChild {
@@ -108,19 +114,13 @@ class BookViewModel(private val dataRepository: DataRepository, val bookId: Long
         }
     }
 
-    sealed class ClipboardChange {
-        data class Cut(val count: Int) : ClipboardChange()
-        data class Copied(val count: Int) : ClipboardChange()
-        data class Pasted(val count: Int) : ClipboardChange()
-    }
-
-    val clipboardChangeEvent: SingleLiveEvent<ClipboardChange> = SingleLiveEvent()
+    val events: SingleLiveEvent<BookEvent> = SingleLiveEvent()
 
     fun cutNotes(ids: Set<Long>) {
         App.EXECUTORS.diskIO().execute {
             catchAndPostError {
                 val clipboard = UseCaseRunner.run(NoteCut(bookId, ids)).userData as NotesClipboard
-                clipboardChangeEvent.postValue(ClipboardChange.Cut(clipboard.count))
+                events.postValue(BookEvent.ClipboardCut(clipboard.count))
             }
         }
     }
@@ -129,7 +129,7 @@ class BookViewModel(private val dataRepository: DataRepository, val bookId: Long
         App.EXECUTORS.diskIO().execute {
             catchAndPostError {
                 val clipboard = UseCaseRunner.run(NoteCopy(bookId, ids)).userData as NotesClipboard
-                clipboardChangeEvent.postValue(ClipboardChange.Copied(clipboard.count))
+                events.postValue(BookEvent.ClipboardCopied(clipboard.count))
             }
         }
     }
@@ -138,7 +138,7 @@ class BookViewModel(private val dataRepository: DataRepository, val bookId: Long
         App.EXECUTORS.diskIO().execute {
             catchAndPostError {
                 val count = UseCaseRunner.run(NotePaste(bookId, noteId, place)).userData as Int
-                clipboardChangeEvent.postValue(ClipboardChange.Pasted(count))
+                events.postValue(BookEvent.ClipboardPasted(count))
             }
         }
     }
