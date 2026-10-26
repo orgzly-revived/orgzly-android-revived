@@ -14,6 +14,7 @@ import com.orgzly.android.ui.SingleLiveEvent
 import com.orgzly.android.usecase.BookCycleVisibility
 import com.orgzly.android.usecase.NoteToggleFoldingSubtree
 import com.orgzly.android.usecase.UseCaseRunner
+import com.orgzly.android.util.NoteTitlePreview
 
 class BookViewModel(private val dataRepository: DataRepository, val bookId: Long) : CommonViewModel() {
 
@@ -106,24 +107,30 @@ class BookViewModel(private val dataRepository: DataRepository, val bookId: Long
         narrowedNoteId.value = null
     }
 
-    data class NotesToRefile(val selected: Set<Long>, val count: Int)
+    data class NoteActionRequest(val selected: Set<Long>, val count: Int, val titlePreview: String?)
 
-    val refileRequestEvent: SingleLiveEvent<NotesToRefile> = SingleLiveEvent()
+    val refileRequestEvent: SingleLiveEvent<NoteActionRequest> = SingleLiveEvent()
 
     fun refile(ids: Set<Long>) {
         App.EXECUTORS.diskIO().execute {
             val count = dataRepository.getNotesAndSubtreesCount(ids)
-            refileRequestEvent.postValue(NotesToRefile(ids, count))
+            refileRequestEvent.postValue(NoteActionRequest(ids, count, titlePreview(ids)))
         }
     }
 
 
-    val notesDeleteRequest: SingleLiveEvent<Pair<Set<Long>, Int>> = SingleLiveEvent()
+    val notesDeleteRequest: SingleLiveEvent<NoteActionRequest> = SingleLiveEvent()
 
     fun requestNotesDelete(ids: Set<Long>) {
         App.EXECUTORS.diskIO().execute {
             val count = dataRepository.getNotesAndSubtreesCount(ids)
-            notesDeleteRequest.postValue(Pair(ids, count))
+            notesDeleteRequest.postValue(NoteActionRequest(ids, count, titlePreview(ids)))
         }
+    }
+
+    // Called on the disk executor, using the action's IDs rather than the current selection.
+    private fun titlePreview(ids: Set<Long>): String? {
+        val id = ids.singleOrNull() ?: return null
+        return dataRepository.getNote(id)?.title?.let(NoteTitlePreview::from)
     }
 }
