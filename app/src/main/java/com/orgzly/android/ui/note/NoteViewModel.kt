@@ -277,7 +277,7 @@ class NoteViewModel(
         val parserWriter = OrgParserWriter()
         val str = parserWriter.whiteSpacedHead(head, 1, false)
 
-        return MiscUtils.sha1(str)
+        return MiscUtils.sha256(str)
     }
 
     fun isNoteModified(): Boolean {
