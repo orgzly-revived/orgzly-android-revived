@@ -186,11 +186,11 @@ public class MiscUtils {
         return "“" + str + "”";
     }
 
-    public static long sha1(String s) {
+    public static long sha256(String s) {
         long l = 0L;
 
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(s.getBytes("UTF-8"));
             byte[] digest = md.digest();
 
