@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -25,6 +26,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -36,19 +39,25 @@ internal fun AgendaPendingDialog(expanded: Boolean, onDismissRequest: () -> Unit
                                  content: @Composable () -> Unit) {
     if (!expanded) return
     val colors = agendaGridColors()
+    val styledTitle = remember(title, colors.secondaryText) {
+        buildAnnotatedString {
+            append(title)
+            addStyle(SpanStyle(color = colors.secondaryText), title.lastIndexOf(' ') + 1, title.length)
+        }
+    }
     Dialog(onDismissRequest = onDismissRequest, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(Modifier.fillMaxSize().padding(horizontal = 12.dp, vertical = 16.dp)
             .testTag("agenda_pending_list"), shape = RoundedCornerShape(6.dp), color = colors.background,
             tonalElevation = 0.dp) {
             Column {
-                Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).padding(start = 16.dp, end = 4.dp),
+                Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).padding(start = 4.dp, end = 16.dp),
                     verticalAlignment = Alignment.CenterVertically) {
-                    Text(title, Modifier.weight(1f).semantics { heading() }, color = colors.text,
-                        style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
                     IconButton(onClick = onDismissRequest, modifier = Modifier.testTag("agenda_pending_close")) {
                         Icon(painterResource(R.drawable.ic_close), stringResource(R.string.agenda_grid_collapse_pending),
                             tint = colors.text)
                     }
+                    Text(styledTitle, Modifier.weight(1f).padding(start = 4.dp).semantics { heading() }, color = colors.text,
+                        style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 }
                 Box(Modifier.weight(1f)) { content() }
             }

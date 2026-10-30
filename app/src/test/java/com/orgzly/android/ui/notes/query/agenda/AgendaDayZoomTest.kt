@@ -1,5 +1,7 @@
 package com.orgzly.android.ui.notes.query.agenda
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +25,7 @@ import com.orgzly.android.ui.compose.base.OrgzlyBootstrap
 import com.orgzly.android.ui.notes.query.QueryState
 import com.orgzly.android.ui.notes.query.QueryViewModel
 import org.joda.time.LocalDate
+import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -306,6 +309,59 @@ class AgendaDayZoomTest {
         } finally { compose.mainClock.autoAdvance = true }
         compose.waitForIdle()
         assertDaysFrom(today.plusDays(1), 1)
+        assertNull(opened)
+    }
+
+    @Test fun `overdue text follows the all-day title throughout a horizontal pinch`() {
+        compose.runOnIdle {
+            allDayNotes = listOf(
+                NoteView(Note(30, title = "Past deadline", state = "TODO", position = NotePosition(1)),
+                    deadlineRangeString = "<${today.minusDays(1)}>", bookName = "Work"),
+                NoteView(Note(31, title = "Overdue", position = NotePosition(1)),
+                    eventString = "<$today>", bookName = "Work"),
+            )
+        }
+        val entry = AgendaGridModel.build(allDayNotes, today.toDateTimeAtStartOfDay(), 1).single { it.noteId == 31L }
+        fun assertTitlesMatch() {
+            val summary = compose.onNodeWithTag("agenda_pending_summary").assertIsDisplayed().fetchSemanticsNode()
+            val block = compose.onNodeWithTag("agenda_grid_entry_${entry.key}").assertIsDisplayed().fetchSemanticsNode()
+            assertEquals("The two rows must resize together", block.size, summary.size)
+            compose.runOnIdle {
+                val view = compose.activity.window.decorView
+                val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+                try {
+                    view.draw(Canvas(bitmap))
+                    fun ink(left: Int, top: Int): FloatArray {
+                        val pixels = IntArray(block.size.width * block.size.height)
+                        bitmap.getPixels(pixels, 0, block.size.width, left, top, block.size.width, block.size.height)
+                        val background = android.graphics.Color.red(pixels[block.size.width / 2])
+                        val foreground = pixels.minOf { android.graphics.Color.red(it) }
+                        assertTrue("The title must be painted", foreground < background)
+                        // Compare coverage rather than raw pixels: the two rows have different backgrounds.
+                        return FloatArray(pixels.size) { index ->
+                            ((background - android.graphics.Color.red(pixels[index])).toFloat() / (background - foreground))
+                                .coerceIn(0f, 1f)
+                        }
+                    }
+                    val reference = ink(block.positionInRoot.x.toInt(), block.positionInRoot.y.toInt())
+                    val actual = ink(summary.positionInRoot.x.toInt(), summary.positionInRoot.y.toInt())
+                    val lastLetter = reference.indices.filter { reference[it] > 0.05f }.maxOf { it % block.size.width }
+                    // The label moves as an all-day title; its separate count follows in a subdued color.
+                    actual.indices.filter { it % block.size.width > lastLetter }.forEach { actual[it] = 0f }
+                    assertArrayEquals("Overdue must keep the padding, baseline and clipping of an all-day title",
+                        reference, actual, 0.02f)
+                } finally { bitmap.recycle() }
+            }
+        }
+        assertTitlesMatch()
+        startHorizontalPinch()
+        listOf(0.3f, 0.7f, 1f, 2f, 4f, 6f, 4f, 2f, 1f, 0.7f, 0.3f, 0f).forEach { level ->
+            moveHorizontalPinch(level)
+            assertTitlesMatch()
+        }
+        compose.onNodeWithTag("agenda_time_grid").performTouchInput { up(0); up(1) }
+        compose.waitForIdle()
+        assertTitlesMatch()
         assertNull(opened)
     }
 

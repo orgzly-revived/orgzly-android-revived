@@ -233,9 +233,9 @@ internal fun AgendaTimeGrid(
                         visibleDayCount = visibleDayCount,
                         // A pinch of the hours resizes the days too: those off screen follow once it ends.
                         resizing = { pinching || dayZoom.active },
-                        pendingSummary = if (pending.isNotEmpty()) { modifier ->
+                        pendingSummary = if (pending.isNotEmpty()) { modifier, dayProgress ->
                             AgendaPendingSummary(pending, onNoteOpen, modifier,
-                                mode = mode, onNoteAction = onNoteAction)
+                                mode = mode, dayProgress = dayProgress, onNoteAction = onNoteAction)
                         } else null,
                     ) else key(mode) {
                         AgendaPeriodPager(
@@ -308,8 +308,8 @@ internal fun AgendaTimeGrid(
                                             visibleDayCount = visibleDayCount,
                                             swipeEnabled = false,
                                             resizing = { dayZoom.active },
-                                            pendingSummary = if (pageShowPending) { modifier ->
-                                                AgendaPendingSummary(pending, openNote, modifier, mode = mode,
+                                            pendingSummary = if (pageShowPending) { modifier, dayProgress ->
+                                                AgendaPendingSummary(pending, openNote, modifier, mode = mode, dayProgress = dayProgress,
                                                     onNoteAction = { noteId, actionId -> if (currentPage) onNoteAction(noteId, actionId) })
                                             } else null,
                                         )

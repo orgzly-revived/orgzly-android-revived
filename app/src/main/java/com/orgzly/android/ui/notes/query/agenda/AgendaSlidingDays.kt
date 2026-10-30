@@ -61,7 +61,7 @@ internal fun AgendaSlidingDays(
     visibleDayCount: () -> Float = { mode.dayCount.toFloat() },
     swipeEnabled: Boolean = true,
     resizing: () -> Boolean = { false },
-    pendingSummary: (@Composable (Modifier) -> Unit)? = null,
+    pendingSummary: (@Composable (Modifier, () -> Float) -> Unit)? = null,
 ) {
     // Columns depend on these rather than on the view, so that a pinch between day counts leaves them unchanged.
     val dimensions = mode.gridDimensions

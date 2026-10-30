@@ -78,7 +78,7 @@ internal fun agendaGridHeaderLayout(
 @Composable
 internal fun AgendaAllDayColumn(day: AgendaGridDay, dimensions: AgendaGridDimensions, layout: AgendaGridHeaderLayout,
                                 onNoteOpen: (Long) -> Unit, modifier: Modifier, dayProgress: () -> Float = { 1f },
-                                pendingSummary: (@Composable (Modifier) -> Unit)? = null, onExpand: () -> Unit = {}) {
+                                pendingSummary: (@Composable (Modifier, () -> Float) -> Unit)? = null, onExpand: () -> Unit = {}) {
     val colors = agendaGridColors()
     val titlePaints = rememberAgendaTitlePaints(dimensions.allDayTextSize, colors)
     val count = day.allDay.size + if (pendingSummary != null) 1 else 0
@@ -93,7 +93,7 @@ internal fun AgendaAllDayColumn(day: AgendaGridDay, dimensions: AgendaGridDimens
             val placeable = measurable.measure(constraints.offset(horizontal = -end))
             layout(placeable.width + end, placeable.height) { placeable.placeRelative(0, 0) }
         }) {
-        pendingSummary?.invoke(Modifier.fillMaxWidth().height(layout.rowHeight))
+        pendingSummary?.invoke(Modifier.fillMaxWidth().height(layout.rowHeight), dayProgress)
         day.allDay.take((slots - if (pendingSummary != null) 1 else 0).coerceAtLeast(0)).forEach { entry ->
             AgendaEventBlock(entry, Modifier.fillMaxWidth().height(layout.rowHeight)
                 .padding(bottom = dimensions.allDayBlockSpacing), onNoteOpen, dimensions, colors, titlePaints, dayProgress)

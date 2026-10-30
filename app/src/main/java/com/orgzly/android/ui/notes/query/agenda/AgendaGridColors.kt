@@ -92,7 +92,7 @@ private fun agendaGridColors(surface: Color): AgendaGridColors {
     val accent = if (dark) Color(0xFF8FA2AE) else Color(0xFF5F7582)
     // Blocks of every kind stand out from the grid by the same contrast in every theme, black included, and done
     // ones half as much.
-    val blockContrast = if (dark) 1.32f else 1.20f
+    val blockContrast = if (dark) 1.85f else 1.30f
     val block = towards(surface, text, blockContrast)
     val scheduled = towards(surface, if (dark) Color(0xFF7FA6D9) else Color(0xFF4F7FC0), blockContrast)
     val deadline = towards(surface, if (dark) Color(0xFFD98F84) else Color(0xFFC0574F), blockContrast)

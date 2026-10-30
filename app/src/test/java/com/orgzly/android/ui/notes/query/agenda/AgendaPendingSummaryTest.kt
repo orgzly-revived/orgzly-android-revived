@@ -91,7 +91,7 @@ class AgendaPendingSummaryTest {
         var opened: Long? = null
         show { opened = it }
         compose.onNodeWithTag("agenda_pending_summary").assertIsDisplayed()
-            .assertTextContains("Overdue (3)")
+            .assertTextContains("Overdue 3")
         compose.onNodeWithText("Today", substring = true).assertDoesNotExist()
         compose.onNodeWithText("Pending task 1").assertDoesNotExist()
         assertTrue(AgendaGridModel.build(notes, today, 1).isEmpty())
@@ -204,7 +204,7 @@ class AgendaPendingSummaryTest {
                 compose.onNodeWithTag("agenda_pending_summary").performClick()
                 val bounds = listOf(
                     compose.onNodeWithTag("agenda_pending_list").fetchSemanticsNode().boundsInRoot,
-                    compose.onNode(hasText("Overdue (2)") and hasAnyAncestor(isDialog())).fetchSemanticsNode().boundsInRoot,
+                    compose.onNode(hasText("Overdue 2") and hasAnyAncestor(isDialog())).fetchSemanticsNode().boundsInRoot,
                     compose.onNodeWithTag("agenda_pending_note_1_SCHEDULED").fetchSemanticsNode().boundsInRoot,
                     compose.onNodeWithTag("agenda_pending_note_2_DEADLINE").fetchSemanticsNode().boundsInRoot,
                 )
@@ -240,7 +240,7 @@ class AgendaPendingSummaryTest {
         show()
         compose.onNodeWithTag("agenda_pending_summary").assertDoesNotExist()
         compose.runOnIdle { groupScheduledWithToday = false }
-        compose.onNodeWithTag("agenda_pending_summary").assertIsDisplayed().assertTextContains("Overdue (1)")
+        compose.onNodeWithTag("agenda_pending_summary").assertIsDisplayed().assertTextContains("Overdue 1")
         compose.onNodeWithTag("agenda_pending_summary").performClick()
         compose.onAllNodesWithTag("agenda_pending_note_1_SCHEDULED").assertCountEquals(1)
     }
@@ -299,6 +299,10 @@ class AgendaPendingSummaryTest {
         val list = compose.onNodeWithTag("agenda_pending_list").fetchSemanticsNode().boundsInRoot
         assertTrue("The dialog must use most of the screen width", list.width >= calendar.width * 0.85f)
         assertTrue("The dialog must use most of the screen height", list.height >= calendar.height * 0.8f)
+        val close = compose.onNodeWithTag("agenda_pending_close").assertIsDisplayed().fetchSemanticsNode().boundsInRoot
+        val title = compose.onNode(hasText("Overdue 1") and hasAnyAncestor(isDialog())).fetchSemanticsNode().boundsInRoot
+        assertTrue("The close button must precede the title", close.right <= title.left)
+        assertTrue("The close button must be on the left of the dialog", close.center.x < list.center.x)
         compose.onNodeWithTag("agenda_pending_note_1_DEADLINE").assertIsDisplayed()
         compose.onAllNodes(hasText("Overdue", substring = true) and hasAnyAncestor(isDialog())).assertCountEquals(1)
         screenshot("dialog-short-list")

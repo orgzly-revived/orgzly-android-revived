@@ -1,6 +1,7 @@
 package com.orgzly.android.ui.notes.query.agenda
 
 import android.content.res.Resources
+import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Build
@@ -52,7 +53,7 @@ internal fun agendaGridContentFits(width: Dp, height: Dp, textSize: Dp, lineHeig
     width >= textSize && height >= lineHeight
 
 /** Whether a block of [size] has room for a line of its title. */
-private fun Density.agendaBlockTitleFits(size: Size, padding: AgendaBlockPadding, titleSize: TextUnit): Boolean {
+internal fun Density.agendaBlockTitleFits(size: Size, padding: AgendaBlockPadding, titleSize: TextUnit): Boolean {
     val textSize = titleSize.toDp()
     val contentWidth = (size.width.toDp() - padding.start - padding.end).coerceAtLeast(0.dp)
     return agendaGridContentFits(contentWidth, size.height.toDp(), textSize, textSize * AGENDA_TITLE_LINE_HEIGHT)
@@ -125,6 +126,35 @@ internal fun agendaBlockGeometry(size: Size, density: Density, padding: AgendaBl
         else Rect(size.width - textRight, titleTop, size.width - textLeft, titleBottom), singleLine)
 }
 
+/** Draw a centered single line, clipped to the title area and its font height. */
+internal fun drawAgendaSingleLineTitle(canvas: Canvas, text: String, bounds: Rect, height: Float,
+                                       paint: TextPaint, rtl: Boolean,
+                                       secondaryFrom: Int = text.length, secondaryColor: Int = paint.color) {
+    val metrics = paint.fontMetrics
+    val textHeight = ceil(metrics.descent - metrics.ascent)
+    val textTop = ((height - textHeight) / 2).roundToInt().toFloat()
+    canvas.save()
+    canvas.clipRect(bounds.left, textTop, bounds.right, textTop + textHeight)
+    paint.textAlign = if (rtl) Paint.Align.RIGHT else Paint.Align.LEFT
+    val start = if (rtl) bounds.right else bounds.left
+    val baseline = textTop - metrics.ascent
+    if (secondaryFrom >= text.length) {
+        canvas.drawText(text, start, baseline, paint)
+    } else {
+        val prefixWidth = paint.measureText(text, 0, secondaryFrom)
+        canvas.drawText(text, 0, secondaryFrom, start, baseline, paint)
+        val originalColor = paint.color
+        try {
+            paint.color = secondaryColor
+            canvas.drawText(text, secondaryFrom, text.length,
+                start + if (rtl) -prefixWidth else prefixWidth, baseline, paint)
+        } finally {
+            paint.color = originalColor
+        }
+    }
+    canvas.restore()
+}
+
 /** The last lines a title was broken into, kept while the width and the direction stay the same. */
 private class AgendaTitleLines {
     private var width = 0
@@ -140,7 +170,7 @@ private class AgendaTitleLines {
 }
 
 /** The padding of Day turns into that of the other views as [dayProgress] goes from one day to two. */
-private fun agendaBlockPadding(dayProgress: Float): AgendaBlockPadding {
+internal fun agendaBlockPadding(dayProgress: Float): AgendaBlockPadding {
     val day = AgendaViewMode.DAY.gridDimensions
     val days = AgendaViewMode.TWO_DAYS.gridDimensions
     return AgendaBlockPadding(lerp(day.blockStartPadding, days.blockStartPadding, dayProgress),
@@ -227,21 +257,15 @@ internal fun AgendaEventBlock(entry: AgendaGridEntry, modifier: Modifier, onNote
                 if (geometry == null) return@onDrawBehind
                 val title = geometry.title
                 val canvas = drawContext.canvas.nativeCanvas
-                canvas.save()
                 if (lines != null && linesBottom != null) {
+                    canvas.save()
                     canvas.clipRect(title.left, title.top, title.right, linesBottom)
                     canvas.translate(title.left, title.top)
                     lines.draw(canvas)
+                    canvas.restore()
                 } else {
-                    // As the composed line: as tall as the font, centered on the block and clipped at its own height.
-                    val metrics = paint.fontMetrics
-                    val textHeight = ceil(metrics.descent - metrics.ascent)
-                    val textTop = ((size.height - textHeight) / 2).roundToInt().toFloat()
-                    canvas.clipRect(title.left, textTop, title.right, textTop + textHeight)
-                    paint.textAlign = if (rtl) Paint.Align.RIGHT else Paint.Align.LEFT
-                    canvas.drawText(entry.title, if (rtl) title.right else title.left, textTop - metrics.ascent, paint)
+                    drawAgendaSingleLineTitle(canvas, entry.title, title, size.height, paint, rtl)
                 }
-                canvas.restore()
             }
         })
 }
