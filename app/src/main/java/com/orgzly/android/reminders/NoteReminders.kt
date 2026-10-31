@@ -2,6 +2,7 @@ package com.orgzly.android.reminders
 
 import android.content.Context
 import com.orgzly.android.data.DataRepository
+import com.orgzly.android.data.NotebookDoneStates
 import com.orgzly.android.db.dao.ReminderTimeDao
 import com.orgzly.android.db.dao.ReminderTimeDao.NoteTime
 import com.orgzly.android.prefs.AppPreferences
@@ -29,8 +30,10 @@ object NoteReminders {
 
         val result: MutableList<NoteReminder> = ArrayList()
 
+        val doneStates = dataRepository.getNotebookDoneStates()
+
         for (noteTime in dataRepository.times()) {
-            if (isRelevantNoteTime(context, noteTime)) {
+            if (isRelevantNoteTime(context, noteTime, doneStates)) {
                 val orgDateTime = OrgDateTime.parse(noteTime.orgTimestampString)
 
                 val interval = intervalToConsider(intervalType, now, lastRun, noteTime.timeType)
@@ -89,9 +92,9 @@ object NoteReminders {
         return result
     }
 
-    fun isRelevantNoteTime(context: Context, noteTime: NoteTime): Boolean {
-        val doneStateKeywords = AppPreferences.doneKeywordsSet(context)
-        val isDone = doneStateKeywords.contains(noteTime.state)
+    fun isRelevantNoteTime(context: Context, noteTime: NoteTime, doneStates: NotebookDoneStates): Boolean {
+        val isDone = doneStates.isDone(
+            noteTime.bookId, noteTime.state, AppPreferences.doneKeywordsSet(context))
 
         val isEnabled = AppPreferences.remindersForScheduledEnabled(context)
                 && noteTime.timeType == ReminderTimeDao.SCHEDULED_TIME

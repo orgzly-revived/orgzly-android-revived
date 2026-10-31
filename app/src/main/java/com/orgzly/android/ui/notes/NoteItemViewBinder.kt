@@ -9,6 +9,7 @@ import androidx.annotation.ColorInt
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orgzly.R
 import com.orgzly.android.App
+import com.orgzly.android.data.NotebookDoneStates
 import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.entity.Note
 import com.orgzly.android.db.entity.NoteView
@@ -31,6 +32,8 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
     private val titleGenerator: TitleGenerator
 
     private val userTimeFormatter: UserTimeFormatter
+
+    var doneStates: NotebookDoneStates = NotebookDoneStates.NONE
 
     // Level offset for narrowing - null when not narrowed, offset value when narrowed
     var levelOffset: Int? = null
@@ -98,7 +101,7 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
     }
 
     fun generateTitle(noteView: NoteView): CharSequence {
-        return titleGenerator.generateTitle(noteView)
+        return titleGenerator.generateTitle(noteView, doneStates)
     }
 
     private fun setupContent(holder: NoteItemViewHolder, note: Note) {
@@ -189,7 +192,7 @@ class NoteItemViewBinder(private val context: Context, private val inBook: Boole
         val tags = noteView.note.tags.toList()
         val inheritedTags = noteView.getInheritedTagsList()
 
-        val isDone = state != null && AppPreferences.doneKeywordsSet(context).contains(state)
+        val isDone = doneStates.isDone(noteView.note.position.bookId, state, AppPreferences.doneKeywordsSet(context))
         val isArchived = tags.contains(ARCHIVE_TAG) || inheritedTags.contains(ARCHIVE_TAG)
         val isCut = NotesClipboard.cutNoteIds().contains(noteView.note.id)
 

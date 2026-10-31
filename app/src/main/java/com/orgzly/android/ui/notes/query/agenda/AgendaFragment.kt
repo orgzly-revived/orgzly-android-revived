@@ -443,6 +443,10 @@ class AgendaFragment : QueryFragment(), OnViewHolderClickListener<AgendaItem> {
             }
         })
 
+        dataRepository.getNotebookDoneStatesLiveData().observe(viewLifecycleOwner) {
+            viewAdapter.setDoneStates(it)
+        }
+
         viewModel.state.collectWithLifecycle { state ->
             val notes = state.notes
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, "Observed notes: ${notes.size}")

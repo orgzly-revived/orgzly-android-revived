@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.MultiAutoCompleteTextView
 import androidx.appcompat.widget.SearchView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -26,6 +27,7 @@ import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.AppIntent
 import com.orgzly.android.BookUtils
+import com.orgzly.android.data.BookWorkflow
 import com.orgzly.android.data.LogDonePolicy
 import com.orgzly.android.db.NotesClipboard
 import com.orgzly.android.db.entity.Book
@@ -246,6 +248,10 @@ class BookFragment :
                 }
             }
         })
+
+        dataRepository.getNotebookDoneStatesLiveData().observe(viewLifecycleOwner) {
+            viewAdapter.setDoneStates(it)
+        }
 
         viewModel.data.observe(viewLifecycleOwner, Observer { data ->
             if (BuildConfig.LOG_DEBUG)
@@ -677,6 +683,26 @@ class BookFragment :
             .show()
     }
 
+    private fun showWorkflowDialog() {
+        val book = currentBook ?: return
+
+        val view = layoutInflater.inflate(R.layout.dialog_notebook_workflow, null, false)
+        val input = view.findViewById<EditText>(R.id.notebook_workflow_input)
+
+        input.setText(BookWorkflow.todoLineValue(book.preface).orEmpty())
+
+        dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.notebook_workflow)
+            .setView(view)
+            .setPositiveButton(R.string.set) { _, _ ->
+                listener?.onBookPrefaceUpdate(
+                    mBookId,
+                    BookWorkflow.withWorkflowInPreface(book.preface, input.text.toString()))
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
     private fun updateFiletagsInPreface(preface: String?, tagsText: String): String {
         val filetagsLine = if (tagsText.isNotBlank()) {
             val tags = tagsText.split("\\s+".toRegex()).filter { it.isNotBlank() }
@@ -730,6 +756,7 @@ class BookFragment :
                 menu.removeItem(R.id.books_options_menu_book_preface)
                 menu.removeItem(R.id.books_options_menu_book_filetags)
                 menu.removeItem(R.id.books_options_menu_book_closed_time)
+                menu.removeItem(R.id.books_options_menu_book_workflow)
             }
 
             // Show/hide widen button based on narrowed state
@@ -1076,6 +1103,10 @@ class BookFragment :
 
             R.id.books_options_menu_book_closed_time -> {
                 showClosedTimeDialog()
+            }
+
+            R.id.books_options_menu_book_workflow -> {
+                showWorkflowDialog()
             }
 
             R.id.keep_screen_on -> {
