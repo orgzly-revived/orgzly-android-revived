@@ -16,6 +16,8 @@ import com.orgzly.android.db.entity.Book
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.ui.CommonFragment
 import com.orgzly.android.ui.main.SharedMainActivityViewModel
+import com.orgzly.android.ui.showSnackbar
+import com.orgzly.android.ui.util.KeyboardUtils
 import com.orgzly.android.util.LogUtils
 import com.orgzly.databinding.FragmentBookPrefaceBinding
 import javax.inject.Inject
@@ -31,12 +33,12 @@ class BookPrefaceFragment : CommonFragment() {
 
     private var book: Book? = null
 
-    private var listener: Listener? = null
-
     @Inject
     lateinit var dataRepository: DataRepository
 
     private lateinit var sharedMainActivityViewModel: SharedMainActivityViewModel
+
+    private lateinit var viewModel: BookPrefaceViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -44,8 +46,6 @@ class BookPrefaceFragment : CommonFragment() {
         App.appComponent.inject(this)
 
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, activity)
-
-        listener = activity as Listener
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +55,8 @@ class BookPrefaceFragment : CommonFragment() {
 
         sharedMainActivityViewModel =
             ViewModelProvider(requireActivity())[SharedMainActivityViewModel::class.java]
+
+        viewModel = ViewModelProvider(this)[BookPrefaceViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -90,12 +92,22 @@ class BookPrefaceFragment : CommonFragment() {
         book = dataRepository.getBook(bookId)
 
         topToolbarToDefault()
+
+        viewModel.events.observeSingle(viewLifecycleOwner) { event ->
+            when (event) {
+                BookPrefaceEvent.PrefaceUpdated -> close()
+            }
+        }
+
+        viewModel.errorEvent.observeSingle(viewLifecycleOwner) { error ->
+            activity?.showSnackbar((error.cause ?: error).localizedMessage)
+        }
     }
 
     private fun topToolbarToDefault() {
         binding.topToolbar.run {
             setNavigationOnClickListener {
-                listener?.onBookPrefaceEditCancelRequest()
+                close()
             }
 
             setOnMenuItemClickListener { menuItem ->
@@ -139,23 +151,15 @@ class BookPrefaceFragment : CommonFragment() {
         sharedMainActivityViewModel.lockDrawer()
     }
 
-    override fun onDetach() {
-        super.onDetach()
-
-        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG)
-
-        listener = null
-    }
-
     private fun save(preface: String) {
         book?.let {
-            listener?.onBookPrefaceEditSaveRequest(it, preface)
+            viewModel.updatePreface(it.id, preface)
         }
     }
 
-    interface Listener {
-        fun onBookPrefaceEditSaveRequest(book: Book, preface: String)
-        fun onBookPrefaceEditCancelRequest()
+    private fun close() {
+        parentFragmentManager.popBackStack()
+        KeyboardUtils.closeSoftKeyboard(activity)
     }
 
     companion object {

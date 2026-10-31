@@ -17,8 +17,8 @@ import com.orgzly.android.query.user.InternalQueryParser
 import com.orgzly.android.query.user.SimpleFilterMapper
 import com.orgzly.android.query.user.UnsupportedSimpleFilterException
 import com.orgzly.android.ui.AppBar
-import com.orgzly.android.ui.CommonViewModel
 import com.orgzly.android.ui.compose.base.EventFlow
+import com.orgzly.android.ui.notes.NotesViewModel
 import com.orgzly.android.ui.util.combine
 import com.orgzly.android.util.LogUtils
 import dagger.assisted.Assisted
@@ -88,7 +88,7 @@ class QueryViewModel @AssistedInject constructor(
     @Assisted("forceHideRefineButton") forceHideRefineButton: Boolean,
     @Assisted private val owner: QueryViewModelOwner,
     @Assisted context: Context
-) : CommonViewModel() {
+) : NotesViewModel() {
 
     enum class ViewState {
         LOADING,
