@@ -103,6 +103,7 @@ class QueryViewModel @AssistedInject constructor(
     private var shouldStayInAdvancedMode = AppPreferences.isDefaultToAdvancedQueryEnabled(context)
     private val isSimpleMode = MutableStateFlow(!shouldStayInAdvancedMode)
     private val query = MutableStateFlow("")
+    val committedQuery: String get() = query.value
     private val search = MutableStateFlow("")
     private val filter = MutableStateFlow(SimpleFilter())
     private val _forceHideRefineButton = MutableStateFlow(forceHideRefineButton)
