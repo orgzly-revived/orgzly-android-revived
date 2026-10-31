@@ -25,6 +25,7 @@ on:
       - 'metadata/**'
       - 'app/src/main/res/raw-*/*'
       - 'app/src/main/res/values-*/*'
+  merge_group:
   workflow_dispatch:
 
 jobs:
