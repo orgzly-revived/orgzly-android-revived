@@ -1,0 +1,5 @@
+• Allow capture templates to set note properties.
+• Honor basic per-file and per-note settings for DONE logging.
+• Add setting for disabling DONE logging.
+• Various bug fixes related to capture templates.
+• Fix exported calendar disappearing randomly.
