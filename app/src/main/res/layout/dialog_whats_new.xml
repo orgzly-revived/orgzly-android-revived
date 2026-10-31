@@ -44,7 +44,7 @@
 
         <com.orgzly.android.ui.views.WhatsNewChange
             style="@style/WhatsNewChange"
-            app:text="Fix calendar disappearing randomly." />
+            app:text="Fix exported calendar disappearing randomly." />
 
         <TextView
             style="@style/WhatsNewVersion"
