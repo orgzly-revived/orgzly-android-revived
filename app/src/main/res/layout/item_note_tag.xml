@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  A tag in the tags menu. Tapping the row ticks the tag and closes the menu;
+  tapping the check box (48dp × 48dp) only ticks it, so more tags can be picked.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="48dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingEnd="22dp"
+    android:background="?attr/selectableItemBackground">
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/check"
+        android:layout_width="48dp"
+        android:layout_height="48dp" />
+
+    <TextView
+        android:id="@+id/label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="4dp"
+        android:singleLine="true"
+        android:ellipsize="middle"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="?attr/fragment_note_content_text_size" />
+</LinearLayout>
