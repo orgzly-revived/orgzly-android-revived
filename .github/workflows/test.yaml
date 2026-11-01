@@ -53,6 +53,16 @@ jobs:
       - name: Gradle test Premium
         run: ./gradlew testPremiumDebugUnitTest
 
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: local-unit-test-results
+          path: |
+            ./app/build/reports/tests/*
+          if-no-files-found: ignore
+          retention-days: 14
+
   instrumentedTests:
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -130,6 +140,17 @@ jobs:
           profile: Nexus 6
           # Tests should use the build which includes Dropbox code.
           script: ./gradlew --no-configuration-cache connected${{matrix.flavor}}DebugAndroidTest --no-watch-fs --build-cache --info || { ./gradlew pullScreenshot; exit 1; }
+
+      - name: Upload Gradle reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: build-problems-and-test-results-${{ matrix.flavor }}-${{ matrix.api-level }}
+          path: |
+            ./build/reports/problems/
+            ./app/build/reports/androidTests/connected/*/*/*
+          if-no-files-found: ignore
+          retention-days: 14
 
       - name: Upload screenshot
         if: failure()
