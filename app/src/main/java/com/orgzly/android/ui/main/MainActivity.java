@@ -46,7 +46,6 @@ import com.orgzly.android.ui.books.BooksFragment;
 import com.orgzly.android.ui.drawer.DrawerNavigationView;
 import com.orgzly.android.ui.note.NoteFragment;
 import com.orgzly.android.ui.notes.book.BookFragment;
-import com.orgzly.android.ui.notes.book.BookPrefaceFragment;
 import com.orgzly.android.ui.notifications.Notifications;
 import com.orgzly.android.ui.savedsearch.SavedSearchFragment;
 import com.orgzly.android.ui.savedsearches.SavedSearchesFragment;
@@ -56,18 +55,6 @@ import com.orgzly.android.ui.util.KeyboardUtils;
 import com.orgzly.android.usecase.BookExport;
 import com.orgzly.android.usecase.BookImportGettingStarted;
 import com.orgzly.android.usecase.BookSparseTreeForNote;
-import com.orgzly.android.usecase.BookUpdatePreface;
-import com.orgzly.android.usecase.NoteCopy;
-import com.orgzly.android.usecase.NoteCut;
-import com.orgzly.android.usecase.NoteDelete;
-import com.orgzly.android.usecase.NoteDemote;
-import com.orgzly.android.usecase.NoteMove;
-import com.orgzly.android.usecase.NotePaste;
-import com.orgzly.android.usecase.NotePromote;
-import com.orgzly.android.usecase.NoteUpdateDeadlineTime;
-import com.orgzly.android.usecase.NoteUpdateScheduledTime;
-import com.orgzly.android.usecase.NoteUpdateState;
-import com.orgzly.android.usecase.NoteUpdateStateToggle;
 import com.orgzly.android.usecase.SavedSearchCreate;
 import com.orgzly.android.usecase.SavedSearchDelete;
 import com.orgzly.android.usecase.SavedSearchMoveDown;
@@ -78,10 +65,8 @@ import com.orgzly.android.usecase.UseCaseResult;
 import com.orgzly.android.usecase.UseCaseWorker;
 import com.orgzly.android.util.AppPermissions;
 import com.orgzly.android.util.LogUtils;
-import com.orgzly.org.datetime.OrgDateTime;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -94,8 +79,7 @@ public class MainActivity extends CommonActivity
         BooksFragment.Listener,
         BookFragment.Listener,
         NoteFragment.Listener,
-        SyncFragment.Listener,
-        BookPrefaceFragment.Listener {
+        SyncFragment.Listener {
 
     public static final String TAG = MainActivity.class.getName();
 
@@ -107,8 +91,6 @@ public class MainActivity extends CommonActivity
     protected DrawerNavigationView drawerNavigationView;
 
     private LocalBroadcastManager broadcastManager;
-
-    private boolean mPromoteDemoteOrMoveRequested = false;
 
     private Runnable runnableOnResumeFragments;
 
@@ -707,74 +689,11 @@ public class MainActivity extends CommonActivity
         popBackStackAndCloseKeyboard();
     }
 
-    @Override
-    public void onStateChangeRequest(Set<Long> noteIds, @Nullable String state) {
-        mSyncFragment.run(new NoteUpdateState(noteIds, state));
-    }
-
-    @Override
-    public void onStateToggleRequest(@NotNull Set<Long> noteIds) {
-        mSyncFragment.run(new NoteUpdateStateToggle(noteIds));
-    }
-
-    @Override
-    public void onScheduledTimeUpdateRequest(Set<Long> noteIds, OrgDateTime time) {
-        mSyncFragment.run(new NoteUpdateScheduledTime(noteIds, time));
-    }
-
-    @Override
-    public void onDeadlineTimeUpdateRequest(Set<Long> noteIds, OrgDateTime time) {
-        mSyncFragment.run(new NoteUpdateDeadlineTime(noteIds, time));
-    }
-
     @Override /* BookFragment */
     public void onBookPrefaceEditRequest(Book book) {
         if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG);
 
         DisplayManager.displayEditor(getSupportFragmentManager(), book);
-    }
-
-    @Override
-    public void onBookPrefaceUpdate(long bookId, String preface) {
-        mSyncFragment.run(new BookUpdatePreface(bookId, preface));
-    }
-
-    @Override
-    public void onNotesDeleteRequest(final long bookId, final Set<Long> noteIds) {
-        mSyncFragment.run(new NoteDelete(bookId, noteIds));
-    }
-
-    @Override
-    public void onNotesCutRequest(long bookId, Set<Long> noteIds) {
-        mSyncFragment.run(new NoteCut(bookId, noteIds));
-    }
-
-    @Override
-    public void onNotesCopyRequest(long bookId, Set<Long> noteIds) {
-        mSyncFragment.run(new NoteCopy(bookId, noteIds));
-    }
-
-    @Override
-    public void onNotesPasteRequest(long bookId, long noteId, Place place) {
-        mSyncFragment.run(new NotePaste(bookId, noteId, place));
-    }
-
-    @Override
-    public void onNotesPromoteRequest(Set<Long> noteIds) {
-        mPromoteDemoteOrMoveRequested = true;
-        mSyncFragment.run(new NotePromote(noteIds));
-    }
-
-    @Override
-    public void onNotesDemoteRequest(Set<Long> noteIds) {
-        mPromoteDemoteOrMoveRequested = true;
-        mSyncFragment.run(new NoteDemote(noteIds));
-    }
-
-    @Override
-    public void onNotesMoveRequest(long bookId, Set<Long> noteIds, int offset) {
-        mPromoteDemoteOrMoveRequested = true;
-        mSyncFragment.run(new NoteMove(bookId, noteIds, offset));
     }
 
     @Override
@@ -806,22 +725,8 @@ public class MainActivity extends CommonActivity
 //        }
 //    }
 
-    @Override /* EditorFragment */
-    public void onBookPrefaceEditSaveRequest(@NotNull Book book, @NotNull String preface) {
-        popBackStackAndCloseKeyboard();
-        mSyncFragment.run(new BookUpdatePreface(book.getId(), preface));
-    }
-
-    @Override
-    public void onBookPrefaceEditCancelRequest() {
-        popBackStackAndCloseKeyboard();
-    }
-
     // TODO: Sync when action mode is destroyed
     // autoSync.trigger(AutoSync.Type.DATA_MODIFIED);
-    // TODO: When action mode is destroyed
-//    mPromoteDemoteOrMoveRequested = false;
-//        BottomActionBar.hideBottomBar(findViewById(R.id.bottom_action_bar));
 
     @Override
     public void onSavedSearchNewRequest() {
@@ -889,58 +794,6 @@ public class MainActivity extends CommonActivity
      */
     @Override
     public void onSuccess(UseCase action, UseCaseResult result) {
-        if (action instanceof NoteCut) {
-            NotesClipboard clipboard = (NotesClipboard) result.getUserData();
-
-            if (clipboard != null) {
-                int count = clipboard.getCount();
-
-                String message;
-
-                if (count == 0) {
-                    message = getResources().getString(R.string.no_notes_cut);
-                } else {
-                    message = getResources().getQuantityString(R.plurals.notes_cut, count, count);
-                }
-
-                AppSnackbarUtils.showSnackbar(this, message);
-            }
-
-            notifyClipboardChanged();
-
-        } else if (action instanceof NoteCopy) {
-            NotesClipboard clipboard = (NotesClipboard) result.getUserData();
-
-            if (clipboard != null) {
-                int count = clipboard.getCount();
-
-                if (count > 0) {
-                    String message = getResources().getQuantityString(R.plurals.notes_copied, count, count);
-                    AppSnackbarUtils.showSnackbar(this, message);
-                }
-            }
-
-            notifyClipboardChanged();
-
-        } else if (action instanceof NotePaste) {
-            int count = (int) result.getUserData();
-
-            String message;
-            if (count > 0) {
-                message = getResources().getQuantityString(R.plurals.notes_pasted, count, count);
-            } else {
-                message = getResources().getString(R.string.no_notes_pasted);
-            }
-
-            AppSnackbarUtils.showSnackbar(this, message);
-
-            notifyClipboardChanged();
-        }
-    }
-
-    private void notifyClipboardChanged() {
-        LocalBroadcastManager.getInstance(this).sendBroadcast(
-                new Intent(AppIntent.ACTION_CLIPBOARD_CHANGED));
     }
 
     /**
@@ -985,21 +838,6 @@ public class MainActivity extends CommonActivity
         intent.putExtra(AppIntent.EXTRA_PROPERTY_NAME, name);
         intent.putExtra(AppIntent.EXTRA_PROPERTY_VALUE, value);
         LocalBroadcastManager.getInstance(App.getAppContext()).sendBroadcast(intent);
-    }
-
-    @Override
-    public void onClockIn(@NonNull Set<Long> noteIds) {
-        viewModel.clockingUpdateRequest(noteIds, 0);
-    }
-
-    @Override
-    public void onClockOut(@NonNull Set<Long> noteIds) {
-        viewModel.clockingUpdateRequest(noteIds, 1);
-    }
-
-    @Override
-    public void onClockCancel(@NonNull Set<Long> noteIds) {
-        viewModel.clockingUpdateRequest(noteIds, 2);
     }
 
     private class LocalBroadcastReceiver extends BroadcastReceiver {

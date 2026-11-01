@@ -19,7 +19,6 @@ import com.orgzly.android.usecase.BookScrollToNote
 import com.orgzly.android.usecase.BookSparseTreeForNote
 import com.orgzly.android.usecase.LinkFindTarget
 import com.orgzly.android.usecase.NoteOrBookFindWithProperty
-import com.orgzly.android.usecase.NoteUpdateClockingState
 import com.orgzly.android.usecase.SavedSearchExport
 import com.orgzly.android.usecase.SavedSearchImport
 import com.orgzly.android.usecase.UseCaseRunner
@@ -140,14 +139,6 @@ class MainActivityViewModel(private val dataRepository: DataRepository) : Common
             catchAndPostError {
                 val result = UseCaseRunner.run(SavedSearchImport(uri))
                 savedSearchedImportEvent.postValue(result.userData as Int)
-            }
-        }
-    }
-
-    fun clockingUpdateRequest(noteIds: Set<Long>, type: Int) {
-        App.EXECUTORS.diskIO().execute {
-            catchAndPostError {
-                UseCaseRunner.run(NoteUpdateClockingState(noteIds, type))
             }
         }
     }
