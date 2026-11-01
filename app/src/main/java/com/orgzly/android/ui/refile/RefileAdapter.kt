@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.orgzly.R
+import com.orgzly.android.data.NotebookDoneStates
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.Note
 import com.orgzly.android.db.entity.NoteView
@@ -31,6 +32,13 @@ class RefileAdapter(val context: Context, val listener: OnClickListener) :
     var selectIcon: Int? = null
 
     private val noteItemViewBinder = NoteItemViewBinder(context, true)
+
+    fun setDoneStates(doneStates: NotebookDoneStates) {
+        if (doneStates != noteItemViewBinder.doneStates) {
+            noteItemViewBinder.doneStates = doneStates
+            notifyDataSetChanged()
+        }
+    }
 
     interface OnClickListener {
         fun onItem(item: RefileViewModel.Item)

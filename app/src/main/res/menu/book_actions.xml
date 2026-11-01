@@ -44,6 +44,11 @@
         app:showAsAction="never"
         android:title="@string/closed_time"/>
 
+    <item
+        android:id="@+id/books_options_menu_book_workflow"
+        app:showAsAction="never"
+        android:title="@string/notebook_workflow"/>
+
     <!-- Title is updated depending on the number of notes in clipboard -->
     <item
         android:id="@+id/book_actions_paste"

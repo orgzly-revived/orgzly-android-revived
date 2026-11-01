@@ -94,8 +94,11 @@ class CalendarManager(
         }
 
         LogUtils.d(TAG, "Using default search (all notes with scheduled/deadline, no DONE)")
+        val doneStates = dataRepository.getNotebookDoneStates()
+        val appDoneStates = AppPreferences.doneKeywordsSet(context)
+
         return dataRepository.getNotesWithScheduledOrDeadline().filter { noteView ->
-            !AppPreferences.isDoneKeyword(context, noteView.note.state)
+            !doneStates.isDone(noteView.note.position.bookId, noteView.note.state, appDoneStates)
         }
     }
 

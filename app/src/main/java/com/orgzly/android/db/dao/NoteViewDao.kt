@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.RawQuery
 import androidx.sqlite.db.SupportSQLiteQuery
+import com.orgzly.android.db.OrgzlyDatabase
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.Note
 import com.orgzly.android.db.entity.NoteView
@@ -65,6 +66,12 @@ abstract class NoteViewDao {
 
     @Query("$QUERY WHERE notes.id = :id GROUP BY notes.id")
     abstract fun get(id: Long): NoteView?
+
+    fun get(ids: Set<Long>): List<NoteView> =
+        ids.chunked(OrgzlyDatabase.SQLITE_MAX_VARIABLE_NUMBER).flatMap { getChunk(it) }
+
+    @Query("$QUERY WHERE notes.id IN (:ids) GROUP BY notes.id")
+    abstract fun getChunk(ids: List<Long>): List<NoteView>
 
     @Query("$QUERY WHERE (notes.scheduled_range_id IS NOT NULL OR notes.deadline_range_id IS NOT NULL) AND notes.level > 0 GROUP BY notes.id")
     abstract fun getAllWithScheduledOrDeadline(): List<NoteView>

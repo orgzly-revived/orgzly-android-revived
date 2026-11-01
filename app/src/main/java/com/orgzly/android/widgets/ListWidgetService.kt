@@ -11,6 +11,7 @@ import com.orgzly.R
 import com.orgzly.android.App
 import com.orgzly.android.AppIntent
 import com.orgzly.android.data.DataRepository
+import com.orgzly.android.data.NotebookDoneStates
 import com.orgzly.android.db.entity.NoteView
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.query.Query
@@ -74,6 +75,8 @@ class ListWidgetService : RemoteViewsService() {
 
         private var dataList: List<WidgetEntry> = emptyList()
 
+        private var doneStates = NotebookDoneStates.NONE
+
         override fun onCreate() {
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG)
         }
@@ -90,6 +93,8 @@ class ListWidgetService : RemoteViewsService() {
             if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG)
 
             val notes = dataRepository.selectNotesFromQuery(query)
+
+            doneStates = dataRepository.getNotebookDoneStates()
 
             if (query.isAgenda()) {
                 val hideEmptyDaysInAgenda = AppPreferences.hideEmptyDaysInAgenda(context)
@@ -177,11 +182,12 @@ class ListWidgetService : RemoteViewsService() {
 
             val displayPlanningTimes = AppPreferences.displayPlanning(context)
             val displayBookName = AppPreferences.widgetDisplayBookName(context)
-            val doneStates = AppPreferences.doneKeywordsSet(context)
+            val isDone = doneStates.isDone(
+                noteView.note.position.bookId, noteView.note.state, AppPreferences.doneKeywordsSet(context))
 
             // Title (colors depend on current theme)
             val titleGenerator = TitleGenerator(context, false, WidgetStyle.getTitleAttributes(context))
-            row.setTextViewText(R.id.item_list_widget_title, titleGenerator.generateTitle(noteView))
+            row.setTextViewText(R.id.item_list_widget_title, titleGenerator.generateTitle(noteView, doneStates))
 
             // Notebook name
             if (displayBookName) {
@@ -251,7 +257,7 @@ class ListWidgetService : RemoteViewsService() {
 
 
             // Check mark
-            if (!AppPreferences.widgetDisplayCheckmarks(context) || doneStates.contains(noteView.note.state)) {
+            if (!AppPreferences.widgetDisplayCheckmarks(context) || isDone) {
                 row.setViewVisibility(R.id.item_list_widget_done, View.GONE)
             } else {
                 row.setViewVisibility(R.id.item_list_widget_done, View.VISIBLE)

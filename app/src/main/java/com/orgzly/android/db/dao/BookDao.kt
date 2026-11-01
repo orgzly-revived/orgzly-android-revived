@@ -8,6 +8,7 @@ import androidx.room.Update
 import com.orgzly.android.db.entity.Book
 import com.orgzly.android.db.entity.BookAction
 import com.orgzly.android.db.entity.Tags
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
@@ -20,6 +21,15 @@ abstract class BookDao : BaseDao<Book> {
 
     @Query("SELECT * FROM books WHERE id = :id")
     abstract fun getLiveData(id: Long): LiveData<Book> // null not allowed, use List
+
+    /** Only the notebooks that declare a workflow can differ from the app's states. */
+    @Query("SELECT id, preface FROM books WHERE preface IS NOT NULL AND preface != ''")
+    abstract fun getPrefaces(): List<BookPreface>
+
+    @Query("SELECT id, preface FROM books WHERE preface IS NOT NULL AND preface != ''")
+    abstract fun getPrefacesFlow(): Flow<List<BookPreface>>
+
+    data class BookPreface(val id: Long, val preface: String)
 
     @Query("SELECT * FROM books WHERE last_action_type = :type")
     abstract fun getWithActionType(type: BookAction.Type): List<Book>

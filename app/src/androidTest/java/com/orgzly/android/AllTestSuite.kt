@@ -4,6 +4,8 @@ import com.orgzly.android.espresso.ActionModeTest
 import com.orgzly.android.espresso.AgendaFragmentTest
 import com.orgzly.android.espresso.BookChooserActivityTest
 import com.orgzly.android.espresso.BookPrefaceTest
+import com.orgzly.android.espresso.BookWorkflowDisplayTest
+import com.orgzly.android.espresso.BookWorkflowNoteEditTest
 import com.orgzly.android.espresso.BookTest
 import com.orgzly.android.espresso.BooksSortOrderTest
 import com.orgzly.android.espresso.BooksTest
@@ -26,6 +28,7 @@ import com.orgzly.android.misc.BookParsingTest
 import com.orgzly.android.misc.ClosedTimeLoggingTest
 import com.orgzly.android.misc.ContentCheckboxesTitleUpdateViaUpdateNoteContentTest
 import com.orgzly.android.misc.ContentCheckboxesTitleUpdateViaUpdateNoteTest
+import com.orgzly.android.misc.BookWorkflowTest
 import com.orgzly.android.misc.DataTest
 import com.orgzly.android.misc.NewNoteContentCheckboxesTitleUpdateTest
 import com.orgzly.android.misc.SettingsTest
@@ -59,6 +62,8 @@ import org.junit.runners.Suite
         AgendaFragmentTest::class,
         BookChooserActivityTest::class,
         BookPrefaceTest::class,
+        BookWorkflowDisplayTest::class,
+        BookWorkflowNoteEditTest::class,
         BooksSortOrderTest::class,
         BooksTest::class,
         BookTest::class,
@@ -79,6 +84,7 @@ import org.junit.runners.Suite
 
         BookNameTest::class,
         BookParsingTest::class,
+        BookWorkflowTest::class,
         CreatedAtPropertyTest::class,
         DataTest::class,
         SettingsTest::class,

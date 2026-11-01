@@ -184,10 +184,12 @@ class RemindersBroadcastReceiver : BroadcastReceiver() {
 
         val reminders = mutableListOf<NoteReminder>()
 
+        val doneStates = dataRepository.getNotebookDoneStates()
+
         for (noteTime in dataRepository.times()) {
             if (noteTime.noteId == noteId
                 && noteTime.timeType == noteTimeType
-                && NoteReminders.isRelevantNoteTime(context, noteTime)) {
+                && NoteReminders.isRelevantNoteTime(context, noteTime, doneStates)) {
 
                 val orgDateTime = OrgDateTime.parse(noteTime.orgTimestampString)
 
