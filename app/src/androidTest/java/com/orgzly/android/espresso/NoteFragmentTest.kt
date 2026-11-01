@@ -12,6 +12,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.action.ViewActions.swipeUp
@@ -652,12 +653,16 @@ class NoteFragmentTest : OrgzlyTest() {
         onView(withId(R.id.insert_inline_timestamp))
             .check(matches(isDisplayed()))
         onView(withId(R.id.tags_button)).perform(scroll(), click())
+        onView(withId(R.id.search)).perform(closeSoftKeyboard())
+        pressBack()
         onView(withId(R.id.insert_inline_timestamp))
             .check(doesNotExist())
         onView(withId(R.id.title_view)).perform(scroll(), click())
         onView(withId(R.id.insert_inline_timestamp))
             .check(matches(isDisplayed()))
         onView(withId(R.id.tags_button)).perform(scroll(), click())
+        onView(withId(R.id.search)).perform(closeSoftKeyboard())
+        pressBack()
         onView(withId(R.id.insert_inline_timestamp))
             .check(doesNotExist())
     }

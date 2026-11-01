@@ -160,6 +160,10 @@ class NoteViewModel(
             properties = properties)
     }
 
+    fun updatePayloadTags(tags: List<String>) {
+        notePayload = notePayload?.copy(tags = tags)
+    }
+
     fun updatePayloadContent(content: String) {
         notePayload = notePayload?.copy(content = content)
     }

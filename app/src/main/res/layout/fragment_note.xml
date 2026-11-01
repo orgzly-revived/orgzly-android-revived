@@ -140,24 +140,18 @@
                             android:src="@drawable/ic_label_outline"
                             android:contentDescription="@string/tags"/>
 
-                        <MultiAutoCompleteTextView
+                        <com.orgzly.android.ui.note.NoteTagsView
                             android:id="@+id/tags_button"
                             style="@style/NoteFragmentMetadataItemValueButton"
-                            android:popupBackground="?attr/popupMenuBackground"
-                            android:inputType="text"
                             android:hint="@string/tags"
-                            android:completionThreshold="0"
-                            android:freezesText="true" />
-
-                        <ImageButton
-                            android:id="@+id/tags_menu"
-                            style="@style/NoteFragmentMetadataItemButton"
-                            android:src="@drawable/ic_more_horiz" />
-
+                            android:maxLines="1"
+                            android:saveEnabled="false" />
                         <ImageButton
                             android:id="@+id/tags_remove"
                             style="@style/NoteFragmentMetadataItemButton"
-                            android:src="@drawable/ic_close" />
+                            android:src="@drawable/ic_close"
+                            android:contentDescription="@string/clear"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <!-- State -->

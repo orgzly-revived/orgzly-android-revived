@@ -587,4 +587,5 @@
     <string name="sync_status_saved">Захавана ў %s</string>
     <string name="moving_between_subdirectories_requires_api_24">Зьмена назвы нататніка на іншы ўкладзены каталёг патрабуе Android 7 або вышэй</string>
     <string name="subfolder_support_disabled">Падтрымка ўкладзеных тэчак адключаная</string>
+    <string name="widen_view">Пашыраны выгляд</string>
 </resources>
