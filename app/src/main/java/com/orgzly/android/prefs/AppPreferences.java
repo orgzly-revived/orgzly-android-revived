@@ -919,6 +919,21 @@ public class AppPreferences {
     }
 
     /*
+     * Last agenda view
+     */
+
+    /** The name of the view agenda searches were last shown in, or null before they are first shown. */
+    public static String lastAgendaView(Context context) {
+        return getStateSharedPreferences(context).getString(
+                context.getResources().getString(R.string.pref_key_agenda_last_view), null);
+    }
+
+    public static void lastAgendaView(Context context, String value) {
+        String key = context.getResources().getString(R.string.pref_key_agenda_last_view);
+        getStateSharedPreferences(context).edit().putString(key, value).apply();
+    }
+
+    /*
      * Folding in search
      */
 
@@ -956,24 +971,6 @@ public class AppPreferences {
         return getDefaultSharedPreferences(context).getBoolean(
                 context.getResources().getString(R.string.pref_key_group_scheduled_with_today),
                 context.getResources().getBoolean(R.bool.pref_default_group_scheduled_with_today));
-    }
-
-    public static int calendarTextSize(Context context) {
-        return Integer.parseInt(getDefaultSharedPreferences(context).getString(
-                context.getResources().getString(R.string.pref_key_calendar_month_text_size),
-                context.getResources().getString(R.string.pref_default_calendar_month_text_size)));
-    }
-
-    public static boolean calendarShowBookName(Context context) {
-        return getDefaultSharedPreferences(context).getBoolean(
-                context.getResources().getString(R.string.pref_key_calendar_show_book_name),
-                context.getResources().getBoolean(R.bool.pref_default_calendar_show_book_name));
-    }
-
-    public static String calendarDefaultView(Context context) {
-        return getDefaultSharedPreferences(context).getString(
-                context.getResources().getString(R.string.pref_key_calendar_default_view),
-                context.getResources().getString(R.string.pref_default_calendar_default_view));
     }
 
     public static void groupScheduledWithTodayInAgenda(Context context, boolean value) {
