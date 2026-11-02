@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.view.MotionEvent
 import android.view.View
@@ -16,6 +17,7 @@ import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orgzly.BuildConfig
 import com.orgzly.R
+import com.orgzly.android.ui.util.ActivityUtils
 import com.orgzly.android.AppIntent
 import com.orgzly.android.data.DataRepository
 import com.orgzly.android.prefs.AppPreferences
@@ -305,19 +307,32 @@ abstract class CommonActivity : AppCompatActivity() {
 
         if (file.exists()) {
             if (BuildConfig.IS_EXTERNAL_FILES_ACCESS_ALLOWED) {
-                runWithPermission(
-                    AppPermissions.Usage.EXTERNAL_FILES_ACCESS, Runnable {
-                        try {
-                            openFile(file)
-                        } catch (e: Exception) {
-                            showSnackbar(
-                                getString(
-                                    R.string.failed_to_open_linked_file_with_reason,
-                                    e.localizedMessage
-                                )
+                val openLinkedFile = Runnable {
+                    try {
+                        openFile(file)
+                    } catch (e: Exception) {
+                        showSnackbar(
+                            getString(
+                                R.string.failed_to_open_linked_file_with_reason,
+                                e.localizedMessage
                             )
+                        )
+                    }
+                }
+
+                // Other apps read the file through our FileProvider, which needs "All files access"
+                // for anything but media images. READ_MEDIA_IMAGES alone is not enough.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    if (Environment.isExternalStorageManager()) {
+                        openLinkedFile.run()
+                    } else {
+                        showSnackbar(R.string.permissions_rationale_for_all_files_access, R.string.settings) {
+                            ActivityUtils.openAppAllFilesAccessSettings(this)
                         }
-                    })
+                    }
+                } else {
+                    runWithPermission(AppPermissions.Usage.EXTERNAL_FILES_ACCESS, openLinkedFile)
+                }
             } else {
                 showSnackbar(
                     getString(

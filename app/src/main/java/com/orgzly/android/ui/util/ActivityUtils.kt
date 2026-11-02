@@ -41,6 +41,16 @@ object ActivityUtils {
         activity.startActivity(intent)
     }
 
+    /**
+     * Open "All files access" settings for the app.
+     */
+    @RequiresApi(Build.VERSION_CODES.R)
+    fun openAppAllFilesAccessSettings(activity: Activity) {
+        val intent = Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+        intent.data = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+        activity.startActivity(intent)
+    }
+
     @RequiresApi(Build.VERSION_CODES.S)
     fun openAppScheduleExactAlarmsPermissionSetting(activity: Activity) {
         val intent = Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
