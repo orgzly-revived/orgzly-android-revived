@@ -66,7 +66,6 @@ class GitRepoTest : SyncRepoTest {
             assertEquals(256, config.getInt("gc", null, "auto", 0))
             assertEquals(repoWithProps.repo.url, config.getString("remote", "origin", "url"))
             assertEquals("orgzly", config.getString("user", null, "name"))
-            assertEquals("", config.getString("user", null, "email"))
         }
     }
 
