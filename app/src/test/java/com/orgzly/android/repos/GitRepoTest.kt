@@ -10,10 +10,15 @@ import com.orgzly.android.git.GitPreferencesFromRepoPrefs
 import com.orgzly.android.prefs.AppPreferences
 import com.orgzly.android.prefs.RepoPreferences
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.storage.pack.PackConfig
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 import java.io.File
 import java.io.IOException
 import kotlin.io.path.createTempDirectory
@@ -25,6 +30,7 @@ class GitRepoTest : SyncRepoTest {
     private lateinit var bareRepoDir: File
     private lateinit var gitFileSynchronizer: GitFileSynchronizer
     private lateinit var syncRepo: SyncRepo
+    private lateinit var repoWithProps: RepoWithProps
     private val context: Context = ApplicationProvider.getApplicationContext()
 
     @Before
@@ -40,7 +46,7 @@ class GitRepoTest : SyncRepoTest {
         val git = GitRepo.ensureRepositoryExists(gitPreferences, true, null)
         gitFileSynchronizer = GitFileSynchronizer(git, gitPreferences)
         val repoPropsMap = HashMap<String, String>()
-        val repoWithProps = RepoWithProps(repo, repoPropsMap)
+        repoWithProps = RepoWithProps(repo, repoPropsMap)
         syncRepo = GitRepo.getInstance(repoWithProps, context)
     }
 
@@ -48,6 +54,62 @@ class GitRepoTest : SyncRepoTest {
     fun tearDown() {
         gitWorkingTree.deleteRecursively()
         bareRepoDir.deleteRecursively()
+    }
+
+    @Test
+    @Config(sdk = [31])
+    fun testInitialization_disablesDeltaCompressionOnAndroid12() {
+        Git.open(gitWorkingTree).use { git ->
+            val config = git.repository.config
+            assertEquals("false", config.getString("pack", null, "deltaCompression"))
+            assertFalse(PackConfig(git.repository).isDeltaCompress)
+            assertEquals(256, config.getInt("gc", null, "auto", 0))
+            assertEquals(repoWithProps.repo.url, config.getString("remote", "origin", "url"))
+            assertEquals("orgzly", config.getString("user", null, "name"))
+            assertEquals("", config.getString("user", null, "email"))
+        }
+    }
+
+    @Test
+    @Config(sdk = [31])
+    fun testInitialization_overridesExistingDeltaCompressionOnAndroid12() {
+        Git.open(gitWorkingTree).use { git ->
+            git.repository.config.apply {
+                setBoolean("pack", null, "deltaCompression", true)
+                save()
+            }
+        }
+
+        repeat(2) {
+            GitRepo.getInstance(repoWithProps, context)
+            Git.open(gitWorkingTree).use { git ->
+                assertEquals("false", git.repository.config.getString("pack", null, "deltaCompression"))
+                assertFalse(PackConfig(git.repository).isDeltaCompress)
+            }
+        }
+    }
+
+    @Test
+    @Config(sdk = [30, 32, 33])
+    fun testInitialization_preservesDeltaCompressionOnOtherAndroidVersions() {
+        Git.open(gitWorkingTree).use { git ->
+            assertNull(git.repository.config.getString("pack", null, "deltaCompression"))
+            assertEquals(true, PackConfig(git.repository).isDeltaCompress)
+        }
+
+        for (enabled in listOf(true, false)) {
+            Git.open(gitWorkingTree).use { git ->
+                git.repository.config.apply {
+                    setBoolean("pack", null, "deltaCompression", enabled)
+                    save()
+                }
+            }
+            GitRepo.getInstance(repoWithProps, context)
+            Git.open(gitWorkingTree).use { git ->
+                assertEquals(enabled.toString(), git.repository.config.getString("pack", null, "deltaCompression"))
+                assertEquals(enabled, PackConfig(git.repository).isDeltaCompress)
+            }
+        }
     }
 
     @Test
