@@ -3,7 +3,6 @@ package com.orgzly.android.repos;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
-import android.os.Build;
 
 import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
@@ -159,10 +158,8 @@ public class DropboxClient {
                             if (metadata instanceof FileMetadata) {
                                 FileMetadata file = (FileMetadata) metadata;
 
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    if (ignores.isPathIgnored(pathRelativeToRepoRoot, false)) {
-                                        continue;
-                                    }
+                                if (ignores.isPathIgnored(pathRelativeToRepoRoot, false)) {
+                                    continue;
                                 }
 
                                 if (BookName.isSupportedFormatFileName(file.getName())) {
@@ -180,10 +177,8 @@ public class DropboxClient {
                                 }
                             }
                             if (metadata instanceof FolderMetadata && AppPreferences.subfolderSupport(mContext)) {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    if (ignores.isPathIgnored(pathRelativeToRepoRoot, true)) {
-                                        continue;
-                                    }
+                                if (ignores.isPathIgnored(pathRelativeToRepoRoot, true)) {
+                                    continue;
                                 }
                                 folderPaths.add(metadata.getPathDisplay());
                             }

@@ -2,7 +2,6 @@ package com.orgzly.android.repos;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.DocumentsContract;
 import android.util.Log;
 
@@ -121,18 +120,15 @@ public class DocumentRepo implements SyncRepo {
                 if (node.isDirectory()) {
                     if (!AppPreferences.subfolderSupport(context))
                         continue;
-                    if (Build.VERSION.SDK_INT >= 26) {
-                        if (ignores.isPathIgnored(repoRelativePath, true)) {
-                            continue;
-                        }
+                    if (ignores.isPathIgnored(repoRelativePath, true)) {
+                        continue;
                     }
                     directoryNodes.add(node);
                 } else {
-                    if (Build.VERSION.SDK_INT >= 26) {
-                        if (ignores.isPathIgnored(repoRelativePath, false)) {
-                            continue;
-                        }
-                    } result.add(node);
+                    if (ignores.isPathIgnored(repoRelativePath, false)) {
+                        continue;
+                    }
+                    result.add(node);
                 }
             }
         }
