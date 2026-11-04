@@ -2,7 +2,6 @@ package com.orgzly.android.prefs
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.InputFilter
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
@@ -31,9 +30,7 @@ class StatesPreferenceFragment : PreferenceDialogFragmentCompat() {
         doneLayout = view.findViewById(R.id.done_states_layout)
         doneStates = view.findViewById(R.id.done_states)
 
-        // Force all uppercase
-        todoStates.filters = todoStates.filters + InputFilter.AllCaps()
-        doneStates.filters = doneStates.filters + InputFilter.AllCaps()
+
 
         val watcher = object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
