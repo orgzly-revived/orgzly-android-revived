@@ -4,6 +4,7 @@ import static com.orgzly.android.git.GitFileSynchronizer.PRE_SYNC_MARKER_BRANCH;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
 import com.orgzly.BuildConfig;
@@ -79,6 +80,10 @@ public class GitRepo implements SyncRepo, TwoWaySyncRepo {
         config.setString("user", null, "name", prefs.getAuthor());
         config.setString("user", null, "email", prefs.getEmail());
         config.setString("gc", null, "auto", "256");
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.S) {
+            // Avoid the Android 12 ART delta-compression crash (issue #1091).
+            config.setBoolean("pack", null, "deltaCompression", false);
+        }
         config.save();
 
         return new GitRepo(id, git, prefs);
