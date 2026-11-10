@@ -11,7 +11,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.orgzly.BuildConfig;
 import com.orgzly.R;
+import com.orgzly.android.App;
 import com.orgzly.android.db.entity.Book;
+import com.orgzly.android.prefs.AppPreferences;
 import com.orgzly.android.query.Query;
 import com.orgzly.android.query.QueryParser;
 import com.orgzly.android.query.user.InternalQueryParser;
@@ -23,6 +25,8 @@ import com.orgzly.android.ui.note.NoteFragment;
 import com.orgzly.android.ui.notes.book.BookFragment;
 import com.orgzly.android.ui.notes.book.BookPrefaceFragment;
 import com.orgzly.android.ui.notes.query.agenda.AgendaFragment;
+import com.orgzly.android.ui.notes.query.agenda.AgendaGridFragment;
+import com.orgzly.android.ui.notes.query.agenda.AgendaViewMode;
 import com.orgzly.android.ui.notes.query.enter.EnterSearchFragment;
 import com.orgzly.android.ui.notes.query.search.SearchFragment;
 import com.orgzly.android.ui.savedsearch.SavedSearchFragment;
@@ -238,9 +242,11 @@ public class DisplayManager {
     public static void displayQuery(FragmentManager fragmentManager, DisplayQueryArgs args) {
         assert args.queryString != null;
 
-        // If the same query is already displayed, don't do anything.
+        // Reopening a query from a grid must still display the Simple agenda.
         String displayedQuery = getDisplayedQuery(fragmentManager);
-        if (displayedQuery != null && displayedQuery.equals(args.queryString)) {
+        boolean sameQuery = displayedQuery != null && displayedQuery.equals(args.queryString);
+        boolean gridDisplayed = isFragmentDisplayed(fragmentManager, AgendaGridFragment.FRAGMENT_TAG) != null;
+        if (sameQuery && !gridDisplayed) {
             return;
         }
 
@@ -251,8 +257,20 @@ public class DisplayManager {
         Fragment fragment;
         String tag;
 
-        // Display agenda or query fragment
-        if (query.getOptions().getAgendaDays() > 0) {
+        // Display agenda, in the view it was last shown in unless leaving a grid for Simple, or query fragment
+        boolean isAgenda = query.getOptions().getAgendaDays() > 0;
+        AgendaViewMode agendaView = !isAgenda || sameQuery ? AgendaViewMode.SIMPLE
+                : AgendaViewMode.fromPreference(AppPreferences.lastAgendaView(App.getAppContext()));
+        if (isAgenda && agendaView != AgendaViewMode.SIMPLE) {
+            fragment = AgendaGridFragment.getInstance(
+                    args.queryString,
+                    args.searchName,
+                    agendaView,
+                    args.forceHideRefineButton,
+                    null);
+            tag = AgendaGridFragment.FRAGMENT_TAG;
+
+        } else if (isAgenda) {
             fragment = AgendaFragment.getInstance(
                     args.queryString,
                     args.searchName,
@@ -291,15 +309,38 @@ public class DisplayManager {
     public static String getDisplayedQuery(FragmentManager fragmentManager) {
         Fragment qf = fragmentManager.findFragmentByTag(SearchFragment.FRAGMENT_TAG);
         Fragment af = fragmentManager.findFragmentByTag(AgendaFragment.FRAGMENT_TAG);
+        Fragment gf = fragmentManager.findFragmentByTag(AgendaGridFragment.FRAGMENT_TAG);
 
         if (qf != null && qf.isVisible()) {
             return ((SearchFragment) qf).getCurrentQuery();
 
         } else if (af != null && af.isVisible()) {
             return ((AgendaFragment) af).getCurrentQuery();
+        } else if (gf != null && gf.isVisible()) {
+            return ((AgendaGridFragment) gf).getCurrentQuery();
         }
 
         return null;
+    }
+
+    public static void displayAgendaView(FragmentManager fragmentManager, String query,
+            @Nullable String searchName, AgendaViewMode mode, boolean forceHideRefineButton) {
+        displayAgendaView(fragmentManager, query, searchName, mode, forceHideRefineButton, null);
+    }
+
+    public static void displayAgendaView(FragmentManager fragmentManager, String query,
+            @Nullable String searchName, AgendaViewMode mode, boolean forceHideRefineButton,
+            @Nullable String initialDate) {
+        Fragment fragment;
+        String tag;
+        if (mode == AgendaViewMode.SIMPLE) {
+            fragment = AgendaFragment.getInstance(query, searchName, true, forceHideRefineButton, initialDate);
+            tag = AgendaFragment.FRAGMENT_TAG;
+        } else {
+            fragment = AgendaGridFragment.getInstance(query, searchName, mode, forceHideRefineButton, initialDate);
+            tag = AgendaGridFragment.FRAGMENT_TAG;
+        }
+        replaceFragment(fragmentManager, R.id.single_pane_container, fragment, tag, true);
     }
 
     private static BookFragment getFragmentDisplayingBook(FragmentManager fragmentManager, long bookId) {

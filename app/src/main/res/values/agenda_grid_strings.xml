@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="agenda_grid_today">Today</string>
+    <string name="agenda_grid_previous_month">Previous month</string>
+    <string name="agenda_grid_next_month">Next month</string>
+    <string name="agenda_grid_expand_calendar">Expand calendar</string>
+    <string name="agenda_grid_collapse_calendar">Collapse calendar</string>
+    <string name="agenda_grid_choose_date">Choose date</string>
+    <string name="agenda_grid_all_day">All day</string>
+    <string name="agenda_grid_more">%1$d more</string>
+    <string name="agenda_grid_expand_all_day">Show all all-day entries</string>
+    <string name="agenda_grid_collapse_all_day">Show fewer all-day entries</string>
+    <string name="agenda_grid_time">%1$s, %2$s, %3$s, %4$s</string>
+    <string name="agenda_grid_zoom">Hour scale: %1$d%%</string>
+    <string name="agenda_grid_zoom_in">Expand hours</string>
+    <string name="agenda_grid_zoom_out">Shrink hours</string>
+    <string name="agenda_grid_open_day">Open day</string>
+    <string name="agenda_grid_expand_pending">Show pending activities</string>
+    <string name="agenda_grid_collapse_pending">Hide pending activities</string>
+    <string name="agenda_grid_repeat_from_completion">Next date depends on completion</string>
+    <plurals name="agenda_grid_month_items">
+        <item quantity="one">%1$d entry</item>
+        <item quantity="other">%1$d entries</item>
+    </plurals>
+    <string name="agenda_grid_views">Calendar views</string>
+    <string name="agenda_grid_day">Day</string>
+    <string name="agenda_grid_three_days">3 days</string>
+    <string name="agenda_grid_seven_days">7 days</string>
+    <string name="agenda_grid_month">Month</string>
+</resources>

@@ -24,6 +24,7 @@ import com.orgzly.android.ui.notes.NotesFragment
 import com.orgzly.android.ui.notes.book.BookFragment
 import com.orgzly.android.ui.notes.book.BookPrefaceFragment
 import com.orgzly.android.ui.notes.query.agenda.AgendaFragment
+import com.orgzly.android.ui.notes.query.agenda.AgendaGridFragment
 import com.orgzly.android.ui.notes.query.search.SearchFragment
 import com.orgzly.android.ui.refile.RefileFragment
 import com.orgzly.android.ui.repo.BrowserActivity
@@ -79,6 +80,7 @@ interface AppComponent {
     fun inject(arg: EnterSearchFragment)
     fun inject(arg: SearchFragment)
     fun inject(arg: AgendaFragment)
+    fun inject(arg: AgendaGridFragment)
     fun inject(arg: NoteFragment)
     fun inject(arg: SavedSearchesFragment)
     fun inject(arg: SavedSearchFragment)

@@ -152,6 +152,7 @@ dependencies {
     def composeBom = platform("androidx.compose:compose-bom:$versions.compose")
     implementation composeBom
     androidTestImplementation composeBom
+    implementation 'androidx.compose.animation:animation'
     implementation 'androidx.compose.material3:material3'
     implementation "androidx.activity:activity-compose:$versions.compose_activity"
     implementation 'androidx.compose.runtime:runtime-livedata'
@@ -160,6 +161,9 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview"
     debugImplementation "androidx.compose.ui:ui-test-manifest"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4"
+    testImplementation composeBom
+    testImplementation "androidx.compose.ui:ui-test-junit4"
+    testImplementation "androidx.test.espresso:espresso-core:$versions.android_test_espresso"
 
     // Room
     implementation "androidx.room:room-runtime:$versions.android_room"

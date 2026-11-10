@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/agenda_today" android:title="@string/agenda_grid_today"
+        android:icon="@drawable/ic_today" app:showAsAction="always" />
+    <item android:id="@+id/agenda_views" android:title="@string/agenda_grid_views"
+        android:icon="@drawable/ic_agenda_grid" app:showAsAction="always">
+        <menu>
+            <group android:id="@+id/agenda_view_choices" android:checkableBehavior="single">
+                <item android:id="@+id/agenda_view_simple" android:title="@string/agenda" />
+                <item android:id="@+id/agenda_view_day" android:title="@string/agenda_grid_day" />
+                <item android:id="@+id/agenda_view_three_days" android:title="@string/agenda_grid_three_days" />
+                <item android:id="@+id/agenda_view_seven_days" android:title="@string/agenda_grid_seven_days" />
+                <item android:id="@+id/agenda_view_month" android:title="@string/agenda_grid_month" />
+            </group>
+        </menu>
+    </item>
+</menu>

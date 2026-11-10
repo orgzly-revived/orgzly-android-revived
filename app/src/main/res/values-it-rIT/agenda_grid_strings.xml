@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="agenda_grid_today">Oggi</string>
+    <string name="agenda_grid_previous_month">Mese precedente</string>
+    <string name="agenda_grid_next_month">Mese successivo</string>
+    <string name="agenda_grid_expand_calendar">Apri calendario</string>
+    <string name="agenda_grid_collapse_calendar">Chiudi calendario</string>
+    <string name="agenda_grid_choose_date">Scegli data</string>
+    <string name="agenda_grid_all_day">Tutto il giorno</string>
+    <string name="agenda_grid_more">Altri %1$d</string>
+    <string name="agenda_grid_expand_all_day">Mostra tutte le voci di tutto il giorno</string>
+    <string name="agenda_grid_collapse_all_day">Mostra meno voci di tutto il giorno</string>
+    <string name="agenda_grid_time">%1$s, %2$s, %3$s, %4$s</string>
+    <string name="agenda_grid_zoom">Scala oraria: %1$d%%</string>
+    <string name="agenda_grid_zoom_in">Allarga gli orari</string>
+    <string name="agenda_grid_zoom_out">Restringi gli orari</string>
+    <string name="agenda_grid_open_day">Apri giorno</string>
+    <string name="agenda_grid_expand_pending">Mostra attività da completare</string>
+    <string name="agenda_grid_collapse_pending">Nascondi attività da completare</string>
+    <string name="agenda_grid_repeat_from_completion">La prossima data dipende dal completamento</string>
+    <plurals name="agenda_grid_month_items">
+        <item quantity="one">%1$d voce</item>
+        <item quantity="other">%1$d voci</item>
+    </plurals>
+    <string name="agenda_grid_views">Viste agenda</string>
+    <string name="agenda_grid_day">Giorno</string>
+    <string name="agenda_grid_three_days">3 giorni</string>
+    <string name="agenda_grid_seven_days">7 giorni</string>
+    <string name="agenda_grid_month">Mese</string>
+</resources>
