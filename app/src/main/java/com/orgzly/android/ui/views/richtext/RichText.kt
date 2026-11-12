@@ -242,8 +242,12 @@ class RichText(context: Context, attrs: AttributeSet?) :
     }
 
     fun setTypeface(typeface: Typeface) {
-        richTextView.typeface = typeface
-        richTextEdit.typeface = typeface
+        setTypeface(typeface, typeface)
+    }
+
+    fun setTypeface(viewTypeface: Typeface, editTypeface: Typeface) {
+        richTextView.typeface = viewTypeface
+        richTextEdit.typeface = editTypeface
     }
 
     fun setMaxLines(lines: Int) {

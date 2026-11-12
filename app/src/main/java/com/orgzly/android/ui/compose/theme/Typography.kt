@@ -87,11 +87,11 @@ val typography: Typography
     }
 
 @Composable
-fun TextStyle.asMonospacedIfConfigured(): TextStyle {
+fun TextStyle.asMonospacedIfConfigured(forEditing: Boolean = false): TextStyle {
     val isFontMonospaced by appPreference { AppPreferences.isFontMonospaced(it) }
-    return remember(isFontMonospaced) {
-        when (isFontMonospaced) {
-            true -> copy(
+    return remember(isFontMonospaced, forEditing) {
+        when {
+            forEditing || isFontMonospaced -> copy(
                 fontFamily = FontFamily.Monospace
             )
             else -> this
