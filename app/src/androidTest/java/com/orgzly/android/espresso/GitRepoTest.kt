@@ -1,5 +1,6 @@
 package com.orgzly.android.espresso
 
+import android.os.Build
 import androidx.core.net.toUri
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
@@ -23,6 +24,7 @@ import com.orgzly.android.ui.main.MainActivity
 import org.eclipse.jgit.api.Git
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assume
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -48,6 +50,7 @@ class GitRepoTest : OrgzlyTest() {
         val gitPreferences = GitPreferencesFromRepoPrefs(repoPreferences)
         gitWorkingTree = File(gitPreferences.repositoryFilepath())
         gitWorkingTree.mkdirs()
+        Assume.assumeTrue((Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU)) // Test should never run on API <33
         GitRepo.ensureRepositoryExists(gitPreferences, true, null)
         testUtils.setupRepo(RepoType.GIT, repo.url)
     }

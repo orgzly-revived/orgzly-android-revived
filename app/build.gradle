@@ -115,7 +115,7 @@ android {
 
     packagingOptions {
         resources {
-            excludes += ['META-INF/DEPENDENCIES', 'plugin.properties']
+            excludes += ['META-INF/DEPENDENCIES', 'plugin.properties', 'OSGI-INF/l10n/plugin.properties']
         }
     }
 
@@ -178,7 +178,9 @@ dependencies {
     testImplementation "androidx.test.ext:junit:$versions.android_test_ext_junit"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.kotlin_coroutines"
     testImplementation "org.robolectric:robolectric:$versions.robolectric"
-    testImplementation "io.github.atetzner:webdav-embedded-server:$versions.webdav_embedded_server"
+    testImplementation("io.github.atetzner:webdav-embedded-server:$versions.webdav_embedded_server") {
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
 
     // Android instrumented tests
     androidTestImplementation(project(":shared-test"))
@@ -232,6 +234,9 @@ dependencies {
     }
     implementation("androidx.security:security-crypto:$versions.security_crypto") {
         because 'SSH key generation'
+    }
+    implementation("net.i2p.crypto:eddsa:$versions.net_i2p_crypto_eddsa") {
+        because 'SSH Ed25519 key generation'
     }
     implementation("androidx.biometric:biometric-ktx:$versions.biometric_ktx") {
         because 'Protect SSH key with biometric prompt'
